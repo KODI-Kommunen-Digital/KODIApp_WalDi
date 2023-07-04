@@ -1,0 +1,101 @@
+{
+    "status": "success",
+    "data": [
+        {
+            "id": 1,
+            "name": "Nachricht",
+            "noOfSubcategories": 8,
+            "icon": "fas fa-newspaper",
+            "color": "#ff8a65",
+            "categoryType" : "category"
+        },
+        {
+            "id": 2,
+            "name": "Straßenarbeiten/Verkehr",
+            "noOfSubcategories": 0,
+            "icon": "fas fa-traffic-light",
+            "color": "#5d6d7e",
+            "categoryType" : "category"
+        },
+        {
+            "id": 3,
+            "name": "Veranstaltungen",
+            "noOfSubcategories": 0,
+            "icon": "far fa-calendar-check",
+            "color": "#a569bd",
+            "categoryType" : "category"
+        },
+        {
+            "id": 4,
+            "name": "Vereine",
+            "noOfSubcategories": 0,
+            "icon": "far fa-handshake",
+            "color": "#5dade2",
+            "categoryType" : "category"
+        },
+        {
+            "id": 5,
+            "name": "Regionale Produkte",
+            "noOfSubcategories": 0,                
+            "icon": "fas fa-cart-shopping",
+            "color": "#4a90a4",
+            "categoryType" : "category"
+        },
+        {
+            "id": 6,
+            "name": "Angebot/Suche",
+            "noOfSubcategories": 0,
+            "icon": "fas fa-magnifying-glass",
+            "color": "#58d68d",
+            "categoryType" : "category"
+        },
+        {
+            "id": 7,
+            "name": "Bürgerinfo",
+            "noOfSubcategories": 0,                
+            "icon": "fas fa-circle-info",
+            "color": "#fdc60a",
+            "categoryType" : "category"
+        },
+        {
+            "id": 8,
+            "name": "Mängelbericht",
+            "noOfSubcategories": 0,            
+            "icon": "fas fa-triangle-exclamation",
+            "color": "#ff8a65",
+            "categoryType" : "category"
+        },
+        {
+            "id": 9,
+            "name": "Verloren/Gefunden",
+            "noOfSubcategories": 0,
+            "icon": "fas fa-search",
+            "color": "#58d68d",
+            "categoryType" : "category"
+        },
+        {
+            "id": 10,
+            "name": "Firmenportraits",
+            "noOfSubcategories": 0,
+            "icon": "fas fa-briefcase",
+            "color": "#fdc60a",
+            "categoryType" : "category"
+        },
+        {
+            "id": 11,
+            "name": "Mitfahrgelegenheit/Öffentliche Verkehrsmittel",
+            "noOfSubcategories": 0,
+            "icon": "fas fa-bus",
+            "color": "#ff8a65",
+            "categoryType" : "category"
+        },
+        {
+            "id": 12,
+            "name": "Angebote",
+            "noOfSubcategories": 0,
+            "icon": "fas fa-gift",
+            "color": "#58d68d",
+            "categoryType" : "category"
+        }
+    ]
+}

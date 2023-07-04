@@ -1,0 +1,215 @@
+{
+    "status": "success",
+    "data": [
+        {
+            "ID": 1269,
+            "post_author": "2",
+            "post_date": "2020-08-16 18:27:38",
+            "post_date_gmt": "2020-08-16 10:27:38",
+            "post_content": "A coffeehouse, coffee shop, or café is an establishment that primarily serves coffee of various types, notably espresso, latte, and cappuccino. Some coffeehouses may serve cold drinks, such as iced coffee and iced tea, as well as other non-caffeinated beverages. In continental Europe, cafés serve alcoholic drinks.",
+            "title": "Listing 1",
+            "post_excerpt": "A coffeehouse, coffee shop, or café is an establishment that primarily serves coffee of various types, notably espresso, latte, and cappuccino. Some coffeehouses may serve cold drinks, such as iced coffee and iced tea, as well as other non-caffeinated beverages. In continental Europe, cafés serve alcoholic drinks.",
+            "post_status": "publish",
+            "comment_status": "open",
+            "ping_status": "closed",
+            "post_password": "",
+            "post_name": "lounge-coffee-bar",
+            "to_ping": "",
+            "pinged": "",
+            "post_modified": "2022-09-04 14:05:32",
+            "post_modified_gmt": "2022-09-04 07:05:32",
+            "post_content_filtered": "",
+            "post_parent": 0,
+            "guid": "https://heidiapp.com/listing/lounge-coffee-bar/",
+            "menu_order": 0,
+            "post_type": "heidi",
+            "post_mime_type": "",
+            "comment_count": "1",
+            "filter": "raw",
+            "address": "62999 Sutteridge Avenue",
+            "phone": "130-554-1670",
+            "status": "Open 24/7",
+            "longitude": "23.25",
+            "latitude": "5.033333",
+            "image": {
+                "id": 20,
+                "full": {
+                    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Apfeldorf.jpg/375px-Apfeldorf.jpg"
+                },
+                "medium": {
+                    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Apfeldorf.jpg/375px-Apfeldorf.jpg"
+                },
+                "thumb": {
+                    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Apfeldorf.jpg/375px-Apfeldorf.jpg"
+                }
+            },
+            "category": {
+                "term_id": 120,
+                "name": "Category 1",
+                "slug": "Category 1",
+                "term_group": 0,
+                "term_taxonomy_id": 120,
+                "taxonomy": "heidi_category",
+                "description": "",
+                "parent": 61,
+                "count": 9,
+                "filter": "raw"
+            },
+            "links": {
+                "self": {
+                    "href": "https://heidiapp.com/wp-json/base/1269"
+                },
+                "collection": {
+                    "href": "https://heidiapp.com/wp-json/base"
+                }
+            },
+            "rating_avg": 1,
+            "rating_count": 1,
+            "wishlist": false,
+            "booking_use": true,
+            "booking_style": "hourly",
+            "booking_price": "49",
+            "booking_price_display": "$49"
+        },
+        {
+            "ID": 1268,
+            "post_author": "2",
+            "post_date": "2020-08-16 18:27:38",
+            "post_date_gmt": "2020-08-16 10:27:38",
+            "post_content": "A coffeehouse, coffee shop, or café is an establishment that primarily serves coffee of various types, notably espresso, latte, and cappuccino. Some coffeehouses may serve cold drinks, such as iced coffee and iced tea, as well as other non-caffeinated beverages. In continental Europe, cafés serve alcoholic drinks.",
+            "title": "Listing 2",
+            "post_excerpt": "A coffeehouse, coffee shop, or café is an establishment that primarily serves coffee of various types, notably espresso, latte, and cappuccino. Some coffeehouses may serve cold drinks, such as iced coffee and iced tea, as well as other non-caffeinated beverages. In continental Europe, cafés serve alcoholic drinks.",
+            "post_status": "publish",
+            "comment_status": "open",
+            "ping_status": "closed",
+            "post_password": "",
+            "post_name": "cozy-royal-room",
+            "to_ping": "",
+            "pinged": "",
+            "post_modified": "2022-09-04 14:12:15",
+            "post_modified_gmt": "2022-09-04 07:12:15",
+            "post_content_filtered": "",
+            "post_parent": 0,
+            "guid": "https://heidiapp.com/listing/cozy-royal-room/",
+            "menu_order": 0,
+            "post_type": "heidi",
+            "post_mime_type": "",
+            "comment_count": "9",
+            "filter": "raw",
+            "address": "0 Sutteridge Pass",
+            "phone": "726-367-2312",
+            "status": "Closed",
+            "longitude": "108.6442835",
+            "latitude": "-7.5180957",
+            "image": {
+                "id": 20,
+                "full": {
+                    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Apfeldorf.jpg/375px-Apfeldorf.jpg"
+                },
+                "medium": {
+                    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Apfeldorf.jpg/375px-Apfeldorf.jpg"
+                },
+                "thumb": {
+                    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Apfeldorf.jpg/375px-Apfeldorf.jpg"
+                }
+            },
+            "category": {
+                "term_id": 27,
+                "name": "Category 2",
+                "slug": "Category 2",
+                "term_group": 0,
+                "term_taxonomy_id": 27,
+                "taxonomy": "heidi_category",
+                "description": "",
+                "parent": 61,
+                "count": 11,
+                "filter": "raw"
+            },
+            "links": {
+                "self": {
+                    "href": "https://heidiapp.com/wp-json/base/1268"
+                },
+                "collection": {
+                    "href": "https://heidiapp.com/wp-json/base"
+                }
+            },
+            "rating_avg": 3.6,
+            "rating_count": 9,
+            "wishlist": false,
+            "booking_use": true,
+            "booking_style": "hourly",
+            "booking_price": "49",
+            "booking_price_display": "$49"
+        },
+        {
+            "ID": 1267,
+            "post_author": "2",
+            "post_date": "2020-08-16 18:27:38",
+            "post_date_gmt": "2020-08-16 10:27:38",
+            "post_content": "A coffeehouse, coffee shop, or café is an establishment that primarily serves coffee of various types, notably espresso, latte, and cappuccino. Some coffeehouses may serve cold drinks, such as iced coffee and iced tea, as well as other non-caffeinated beverages. In continental Europe, cafés serve alcoholic drinks.",
+            "title": "Listing 3",
+            "post_excerpt": "A coffeehouse, coffee shop, or café is an establishment that primarily serves coffee of various types, notably espresso, latte, and cappuccino. Some coffeehouses may serve cold drinks, such as iced coffee and iced tea, as well as other non-caffeinated beverages. In continental Europe, cafés serve alcoholic drinks.",
+            "post_status": "publish",
+            "comment_status": "open",
+            "ping_status": "closed",
+            "post_password": "",
+            "post_name": "adorable-room-2",
+            "to_ping": "",
+            "pinged": "",
+            "post_modified": "2022-09-04 14:12:03",
+            "post_modified_gmt": "2022-09-04 07:12:03",
+            "post_content_filtered": "",
+            "post_parent": 0,
+            "guid": "https://heidiapp.com/listing/adorable-room-2/",
+            "menu_order": 0,
+            "post_type": "heidi",
+            "post_mime_type": "",
+            "comment_count": "7",
+            "filter": "raw",
+            "address": "4170 Welch Alley",
+            "phone": "761-232-4234",
+            "status": "Out Of Service",
+            "longitude": "12.0592344",
+            "latitude": "57.5275396",
+            "image": {
+                "id": 20,
+                "full": {
+                    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Apfeldorf.jpg/375px-Apfeldorf.jpg"
+                },
+                "medium": {
+                    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Apfeldorf.jpg/375px-Apfeldorf.jpg"
+                },
+                "thumb": {
+                    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Apfeldorf.jpg/375px-Apfeldorf.jpg"
+                }
+            },
+            "category": {
+                "term_id": 61,
+                "name": "Category 3",
+                "slug": "Category 3",
+                "term_group": 0,
+                "term_taxonomy_id": 61,
+                "taxonomy": "heidi_category",
+                "description": "",
+                "parent": 0,
+                "count": 36,
+                "filter": "raw"
+            },
+            "links": {
+                "self": {
+                    "href": "https://heidiapp.com/wp-json/base/1267"
+                },
+                "collection": {
+                    "href": "https://heidiapp.com/wp-json/base"
+                }
+            },
+            "rating_avg": 3.3,
+            "rating_count": 7,
+            "wishlist": false,
+            "booking_use": true,
+            "booking_style": "standard",
+            "booking_price": "69",
+            "booking_price_display": "$69"
+        }
+    ]
+}

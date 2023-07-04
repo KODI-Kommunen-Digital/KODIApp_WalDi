@@ -1,0 +1,56 @@
+{
+    "success": true,
+    "data": {
+
+        "locations": [
+            {
+                "id": 70,
+                "name": "Apfeldorf",
+                "image": {
+                    "id": 54,
+                    "thumb": {
+                        "url": "https://www.smart-city-dialog.de/wp-content/uploads/2021/12/Fuchstal-web-1.jpg.png"
+                    },
+                    "medium": {
+                        "url": "https://www.smart-city-dialog.de/wp-content/uploads/2021/12/Fuchstal-web-1.jpg.png"
+                    },
+                    "full": {
+                        "url": "https://www.smart-city-dialog.de/wp-content/uploads/2021/12/Fuchstal-web-1.jpg.png"
+                    }
+                }
+            },
+            {
+                "id": 71,
+                "name": "Fuchstal",
+                "image": {
+                    "id": 55,
+                    "thumb": {
+                        "url": "https://www.smart-city-dialog.de/wp-content/uploads/2021/12/Apfeldorf-web.jpg.png"
+                    },
+                    "medium": {
+                        "url": "https://www.smart-city-dialog.de/wp-content/uploads/2021/12/Apfeldorf-web.jpg.png"
+                    },
+                    "full": {
+                        "url": "https://www.smart-city-dialog.de/wp-content/uploads/2021/12/Apfeldorf-web.jpg.png"
+                    }
+                }
+            },
+            {
+                "id": 72,
+                "name": "Unterdießen",
+                "image": {
+                    "id": 56,
+                    "thumb": {
+                        "url": "https://www.smart-city-dialog.de/wp-content/uploads/2022/01/Schloss_Unterdiessen_web-1.jpg"
+                    },
+                    "medium": {
+                        "url": "https://www.smart-city-dialog.de/wp-content/uploads/2022/01/Schloss_Unterdiessen_web-1.jpg"
+                    },
+                    "full": {
+                        "url": "https://www.smart-city-dialog.de/wp-content/uploads/2022/01/Schloss_Unterdiessen_web-1.jpg"
+                    }
+                }
+            }
+        ]
+    }
+}
