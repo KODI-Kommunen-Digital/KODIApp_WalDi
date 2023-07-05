@@ -20,6 +20,7 @@ dependencies:
   intl: ^0.18.0
 
   ### State Management
+  bloc: 8.1.0
   flutter_bloc: ^8.1.1
   bloc_concurrency: ^0.2.0
   equatable: ^2.0.5
@@ -39,6 +40,13 @@ dependencies:
   freezed_annotation: ^2.2.0
   json_annotation: ^4.8.0
 
+  ### Info
+#  package_info_plus: 3.0.2
+  device_info: 2.0.3
+
+  ### Location
+  location: 4.4.0
+
   ### ui
 
 dev_dependencies:
@@ -46,6 +54,8 @@ dev_dependencies:
     sdk: flutter
 
   build_runner: ^2.3.3
+  retrofit_generator: ^4.2.0
+
   freezed: ^2.3.2
   json_serializable: ^6.6.0
   flutter_lints: ^2.0.0
@@ -134,3 +144,4 @@ flutter:
         - asset: assets/fonts/Merriweather-LightItalic.ttf
         - asset: assets/fonts/Merriweather-Regular.ttf
   uses-material-design: true
+
