@@ -46,11 +46,11 @@ class UserCubit extends Cubit<UserModel?> {
   // }
   //
   // ///Event delete user
-  // void onDeleteUser() {
-  //   // FirebaseMessaging.instance.deleteToken();
-  //   UserRepository.deleteUser();
-  //   emit(null);
-  // }
+  void onDeleteUser() {
+    // FirebaseMessaging.instance.deleteToken();
+    // UserRepository.deleteUser();
+    emit(null);
+  }
   //
   // ///Event update user
   // Future<bool> onUpdateUser({

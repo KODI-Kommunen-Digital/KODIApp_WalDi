@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:heidi/src/data/remote/remote_repository.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/main_screen.dart';
 import 'package:heidi/src/presentation/cubit/bloc.dart';
@@ -29,24 +28,25 @@ Future<void> main() async {
     ],
   );
   await Hive.initFlutter();
-
   final prefBox = await Preferences.openBox();
-  final remoteRepo =
-      RemoteRepository(prefBox.getKeyValue(Preferences.sessionTokenKey, ''))
-        ..addLogger();
+
+  // final
+  // final remoteRepo =
+  //     RemoteRepository(prefBox.getKeyValue(Preferences.sessionTokenKey, ''))
+  //       ..addLogger();
   // final localRepo = LocalRepository(prefBox, SegelDatabase());
 
-  runApp(HeidiApp(remoteRepo));
+  runApp(HeidiApp(prefBox));
   Bloc.observer = HeidiBlocObserver();
 }
 
 final globalNavKey = GlobalKey<NavigatorState>();
 
 class HeidiApp extends StatefulWidget {
-  final RemoteRepository remoteRepo;
+  final Preferences prefBox;
 
   const HeidiApp(
-    this.remoteRepo, {
+    this.prefBox, {
     super.key,
   });
 
@@ -68,33 +68,30 @@ class _HeidiAppState extends State<HeidiApp> {
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider(
-          create: (context) => UserRepository(widget.remoteRepo),
+          create: (context) => UserRepository(),
         ),
-        // RepositoryProvider(
-        //   create: (context) =>
-        //       LogbookRepository(widget.localRepo, widget.remoteRepo),
-        // ),
-        // RepositoryProvider(
-        //   create: (context) => StatisticsRepository(widget.localRepo),
-        // ),
-        // RepositoryProvider(
-        //   create: (context) => courseRepo,
-        // ),
-        // RepositoryProvider(
-        //   create: (context) => inAppPurchaseRepo,
-        // ),
       ],
       child: MultiBlocProvider(
         providers: AppBloc.providers,
-        // [
+        // providers: [
         //   BlocProvider<LoginCubit>(
         //     create: (context) => LoginCubit(),
         //   ),
-        //   // BlocProvider<LogbookCubit>(
-        //   //   create: (context) => LogbookCubit(
-        //   //     LogbookRepository(widget.localRepo, widget.remoteRepo),
-        //   //   ),
-        //   // ),
+        //   BlocProvider<ApplicationCubit>(
+        //     create: (context) => ApplicationCubit(),
+        //   ),
+        //   BlocProvider<UserCubit>(
+        //     create: (context) => UserCubit(),
+        //   ),
+        //   BlocProvider<LanguageCubit>(
+        //     create: (context) => LanguageCubit(),
+        //   ),
+        //   BlocProvider<ThemeCubit>(
+        //     create: (context) => ThemeCubit(),
+        //   ),
+        //   BlocProvider<AuthenticationCubit>(
+        //     create: (context) => AuthenticationCubit(),
+        //   ),
         // ],
         child: BlocBuilder<LanguageCubit, Locale>(
           builder: (context, lang) {
@@ -115,14 +112,14 @@ class _HeidiAppState extends State<HeidiApp> {
                   supportedLocales: AppLanguage.supportLanguage,
                   home: Scaffold(
                     body: BlocBuilder<ApplicationCubit, ApplicationState>(
-                      builder: (context, application) {
-                        if(application == ApplicationState.completed){
+                      builder: (context, state) {
+                        if (state == const ApplicationState.loaded()) {
                           return const AppContainer();
                         }
-                        // else {
-                        //   return const SplashScreen();
-                        // }
-                        return const SplashScreen();
+                        if (state == const ApplicationState.loading()) {
+                          return const SplashScreen();
+                        }
+                        return const AppContainer();
                       },
                     ),
                   ),

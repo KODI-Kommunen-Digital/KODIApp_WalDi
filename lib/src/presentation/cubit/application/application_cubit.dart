@@ -10,9 +10,10 @@ import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/theme.dart';
 import 'package:heidi/src/utils/logger.dart';
+import 'package:heidi/src/utils/logging/loggy_exp.dart';
 
 class ApplicationCubit extends Cubit<ApplicationState> {
-  ApplicationCubit() : super(ApplicationState.loading);
+  ApplicationCubit() : super(const ApplicationLoading());
 
   ///On Setup Application
   void onSetup() async {
@@ -29,10 +30,18 @@ class ApplicationCubit extends Cubit<ApplicationState> {
     String? font;
     ThemeModel? theme;
 
-    emit(ApplicationState.loading);
-    Timer(const Duration(seconds: 3), () {
-      emit(ApplicationState.completed);
-    });
+    final hasShownSplash =
+        prefBox.getKeyValue(Preferences.hasShownSplash, false);
+
+    if (hasShownSplash == false) {
+      emit(const ApplicationState.loading());
+      prefBox.setKeyValue(Preferences.hasShownSplash, true);
+      Timer(const Duration(seconds: 4), () {
+        emit(const ApplicationState.loaded());
+      });
+    } else {
+        emit(const ApplicationState.loaded());
+    }
 
     if (oldDomain != '') {
       Application.domain = oldDomain;

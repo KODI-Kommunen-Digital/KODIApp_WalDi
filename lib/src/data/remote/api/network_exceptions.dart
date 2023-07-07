@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:heidi/src/utils/logging/loggy_exp.dart';
 
 part 'network_exceptions.freezed.dart';
 
@@ -67,7 +66,6 @@ class NetworkExceptions with _$NetworkExceptions {
   }
 
   factory NetworkExceptions.fromError(Object error, [StackTrace? stackTrace]) {
-    logError('NetworkException', error, stackTrace);
     if (error is Exception) {
       try {
         var networkExceptions = const NetworkExceptions.unexpectedError();

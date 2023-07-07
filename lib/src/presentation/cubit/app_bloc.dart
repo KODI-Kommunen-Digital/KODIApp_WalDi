@@ -44,7 +44,7 @@ class AppBloc {
     //   create: (context) => accountCubit,
     // ),
     BlocProvider<LoginCubit>(
-      create: (context) => loginCubit,
+      create: (context) => LoginCubit(),
     ),
     // BlocProvider<HomeCubit>(
     //   create: (context) => homeCubit,

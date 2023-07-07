@@ -1,9 +1,11 @@
+import 'package:dio/dio.dart';
 import 'package:hive/hive.dart';
 
 class Preferences {
   final Box<dynamic> _box;
 
   static const _preferencesBox = '_preferencesBox';
+  static const hasShownSplash  = 'hasShownSplash';
   static const String domain = 'domain';
   static const String reviewIntro = 'review';
   static const String user = 'user';
@@ -16,7 +18,11 @@ class Preferences {
   static const String setting = 'setting';
   static const String search = 'search';
   static const String token = 'token';
+  static const String refreshToken = 'refreshToken';
+  static const String userId = 'userId';
+  static const String cityId = 'cityId';
   static const sessionTokenKey = '_sessionTokenKey';
+  static const _pickedFileKey = 'pickedFile';
 
   Preferences._(this._box);
 
@@ -27,7 +33,16 @@ class Preferences {
 
   Future<void> setKeyValue(String key, dynamic value) => _setValue(key, value);
 
-  String getKeyValue(String key, dynamic defaultValue) => _getValue(key, defaultValue);
+  dynamic getKeyValue(String key, dynamic defaultValue) => _getValue(key, defaultValue);
+
+  FormData? getPickedFile() => _getValue<FormData?>(_pickedFileKey, null);
+
+  Future<void> setPickedFile(FormData pickedFile) =>
+      _setValue<FormData>(_pickedFileKey, pickedFile);
+
+  Future<void> deleteKey(String key) async{
+    await _box.delete(key);
+  }
   //
   //
   // String getSessionToken() => _getValue(_sessionTokenKey, '');

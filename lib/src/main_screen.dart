@@ -2,9 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/presentation/cubit/authentication/cubit.dart';
-import 'package:heidi/src/presentation/main/account/account.dart';
 import 'package:heidi/src/presentation/main/discovery/discovery.dart';
 import 'package:heidi/src/presentation/main/home/home.dart';
+import 'package:heidi/src/presentation/main/login/signin/signin_screen.dart';
 import 'package:heidi/src/presentation/main/wishlist/wishlist_screen.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
@@ -54,19 +54,6 @@ class _AppContainerState extends State<AppContainer> {
     }
   }
 
-  ///Handle When Press Notification
-  // void _notificationHandle(RemoteMessage message) {
-  //   final notification = NotificationModel.fromJson(message);
-  //   if (notification.target != null) {
-  //     Navigator.pushNamed(
-  //       context,
-  //       notification.target!,
-  //       arguments: notification.item,
-  //     );
-  //   }
-  // }
-
-  ///Force switch home when authentication state change
   void _listenAuthenticateChange(AuthenticationState authentication) async {
     if (authentication == const AuthenticationState.failed() &&
         _requireAuth(_selectedPage)) {
@@ -128,7 +115,7 @@ class _AppContainerState extends State<AppContainer> {
         break;
       default:
         iconData = Icons.home_outlined;
-        title = 'home';
+        title = 'account';
         break;
     }
     if (route == _selectedPage) {
@@ -207,7 +194,7 @@ class _AppContainerState extends State<AppContainer> {
             HomeScreen(),
             DiscoveryScreen(),
             WishlistScreen(),
-            AccountScreen()
+            SignInScreen()
           ],
         ),
       ),

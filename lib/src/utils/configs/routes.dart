@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:heidi/src/presentation/main/login/signin/signin.dart';
+import 'package:heidi/src/presentation/main/login/signin/signin_screen.dart';
 import 'package:heidi/src/presentation/main/login/signup/signup.dart';
 
 class RouteArguments<T> {
