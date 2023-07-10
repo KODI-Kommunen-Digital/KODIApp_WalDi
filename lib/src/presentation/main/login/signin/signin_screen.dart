@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/login/signin/cubit/login_cubit.dart';
+import 'package:heidi/src/presentation/main/login/signin/cubit/login_state.dart';
 import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/presentation/widget/app_text_input.dart';
 import 'package:heidi/src/utils/common.dart';
@@ -79,8 +80,8 @@ class _SignInScreenState extends State<SignInScreen> {
         ),
       ),
       body: BlocListener<LoginCubit, LoginState>(
-        listener: (context, login) async {
-          if (login == LoginState.success) {
+        listener: (context, state) async {
+          if (state == const LoginState.loaded()) {
             if(!mounted) {
               return;
             }
@@ -143,12 +144,12 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                   const SizedBox(height: 16),
                   BlocBuilder<LoginCubit, LoginState>(
-                    builder: (context, login) {
+                    builder: (context, state) {
                       return AppButton(
                         Translate.of(context).translate('sign_in'),
                         mainAxisSize: MainAxisSize.max,
                         onPressed: _login,
-                        loading: login == LoginState.loading,
+                        loading: state == const LoginState.loading(),
                       );
                     },
                   ),

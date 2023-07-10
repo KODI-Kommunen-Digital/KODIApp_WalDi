@@ -1,23 +1,24 @@
-// import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/cubit/authentication/cubit.dart';
+import 'package:heidi/src/presentation/main/account/account.dart';
 import 'package:heidi/src/presentation/main/discovery/discovery.dart';
 import 'package:heidi/src/presentation/main/home/home.dart';
-import 'package:heidi/src/presentation/main/login/signin/signin_screen.dart';
 import 'package:heidi/src/presentation/main/wishlist/wishlist_screen.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
+import 'package:heidi/src/utils/logger.dart';
 import 'package:heidi/src/utils/translate.dart';
 
-class AppContainer extends StatefulWidget {
-  const AppContainer({Key? key}) : super(key: key);
+class MainScreen extends StatefulWidget {
+  const MainScreen({Key? key}) : super(key: key);
 
   @override
-  State<AppContainer> createState() => _AppContainerState();
+  State<MainScreen> createState() => _MainScreenState();
 
 }
 
-class _AppContainerState extends State<AppContainer> {
+class _MainScreenState extends State<MainScreen> {
   String _selectedPage = Routes.home;
 
   late bool login;
@@ -55,8 +56,11 @@ class _AppContainerState extends State<AppContainer> {
   }
 
   void _listenAuthenticateChange(AuthenticationState authentication) async {
+    UtilLogger.log('AuthCheck1', authentication);
+    UtilLogger.log('AuthCheck', _selectedPage);
     if (authentication == const AuthenticationState.failed() &&
         _requireAuth(_selectedPage)) {
+
       final result = await Navigator.pushNamed(
         context,
         Routes.signIn,
@@ -78,14 +82,14 @@ class _AppContainerState extends State<AppContainer> {
 
   ///On change tab bottom menu and handle when not yet authenticate
   void _onItemTapped(String route) async {
-    // if (AppBloc.userCubit.state == null && _requireAuth(route)) {
-    //   final result = await Navigator.pushNamed(
-    //     context,
-    //     Routes.signIn,
-    //     arguments: route,
-    //   );
-    //   if (result == null) return;
-    // }
+    if (AppBloc.userCubit.state == null && _requireAuth(route)) {
+      final result = await Navigator.pushNamed(
+        context,
+        Routes.signIn,
+        arguments: route,
+      );
+      if (result == null) return;
+    }
     setState(() {
       _selectedPage = route;
     });
@@ -152,12 +156,26 @@ class _AppContainerState extends State<AppContainer> {
   Widget? _buildSubmit() {
       return FloatingActionButton(
         backgroundColor: Theme.of(context).primaryColor,
-        onPressed: (){},
+        onPressed: _onSubmit,
         child: const Icon(
           Icons.add,
           color: Colors.white,
         ),
       );
+  }
+
+  ///On handle submit post
+  void _onSubmit() async {
+    if (AppBloc.userCubit.state == null) {
+      final result = await Navigator.pushNamed(
+        context,
+        Routes.signIn,
+        arguments: Routes.submit,
+      );
+      if (result == null) return;
+    }
+    if (!mounted) return;
+    Navigator.pushNamed(context, Routes.submit);
   }
 
   ///Build bottom menu
@@ -194,7 +212,7 @@ class _AppContainerState extends State<AppContainer> {
             HomeScreen(),
             DiscoveryScreen(),
             WishlistScreen(),
-            SignInScreen()
+            AccountScreen()
           ],
         ),
       ),

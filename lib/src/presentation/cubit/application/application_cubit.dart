@@ -10,7 +10,6 @@ import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/theme.dart';
 import 'package:heidi/src/utils/logger.dart';
-import 'package:heidi/src/utils/logging/loggy_exp.dart';
 
 class ApplicationCubit extends Cubit<ApplicationState> {
   ApplicationCubit() : super(const ApplicationLoading());
@@ -80,7 +79,8 @@ class ApplicationCubit extends Cubit<ApplicationState> {
       theme: theme,
       font: font,
       darkOption: darkOption,
-      // textScaleFactor: double.tryParse(oldTextScale),
     );
+
+    AppBloc.authenticateCubit.onCheck();
   }
 }

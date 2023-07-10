@@ -114,12 +114,12 @@ class _HeidiAppState extends State<HeidiApp> {
                     body: BlocBuilder<ApplicationCubit, ApplicationState>(
                       builder: (context, state) {
                         if (state == const ApplicationState.loaded()) {
-                          return const AppContainer();
+                          return const MainScreen();
                         }
                         if (state == const ApplicationState.loading()) {
                           return const SplashScreen();
                         }
-                        return const AppContainer();
+                        return const MainScreen();
                       },
                     ),
                   ),

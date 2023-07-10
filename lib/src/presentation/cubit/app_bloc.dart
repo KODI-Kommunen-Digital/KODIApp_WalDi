@@ -1,7 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/presentation/cubit/authentication/authentication_cubit.dart';
-import 'package:heidi/src/presentation/main/account/cubit/user_cubit.dart';
+import 'package:heidi/src/presentation/cubit/user/user_cubit.dart';
+import 'package:heidi/src/presentation/main/account/cubit/account_cubit.dart';
+import 'package:heidi/src/presentation/main/login/forgot_password/cubit/forgot_password_cubit.dart';
 import 'package:heidi/src/presentation/main/login/signin/cubit/login_cubit.dart';
+import 'package:heidi/src/presentation/main/login/signup/cubit/signup_cubit.dart';
 
 import 'bloc.dart';
 
@@ -11,8 +14,10 @@ class AppBloc {
   static final languageCubit = LanguageCubit();
   static final themeCubit = ThemeCubit();
   static final authenticateCubit = AuthenticationCubit();
-  // static final accountCubit = AccountCubit();
+  static final accountCubit = AccountCubit();
   static final loginCubit = LoginCubit();
+  static final signupCubit = SignUpCubit();
+  static final forgotPasswordCubit = ForgotPasswordCubit();
   // static final homeCubit = HomeCubit();
   // static final wishListCubit = WishListCubit();
   // static final reviewCubit = ReviewCubit();
@@ -40,11 +45,17 @@ class AppBloc {
     BlocProvider<AuthenticationCubit>(
       create: (context) => authenticateCubit,
     ),
-    // BlocProvider<AccountCubit>(
-    //   create: (context) => accountCubit,
-    // ),
+    BlocProvider<AccountCubit>(
+      create: (context) => accountCubit,
+    ),
     BlocProvider<LoginCubit>(
-      create: (context) => LoginCubit(),
+      create: (context) => loginCubit,
+    ),
+    BlocProvider<SignUpCubit>(
+      create: (context) => signupCubit,
+    ),
+    BlocProvider<ForgotPasswordCubit>(
+      create: (context) => forgotPasswordCubit,
     ),
     // BlocProvider<HomeCubit>(
     //   create: (context) => homeCubit,

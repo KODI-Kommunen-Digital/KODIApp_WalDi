@@ -49,6 +49,7 @@ dependencies:
 
   ### ui
   flutter_svprogresshud: 1.0.0
+  shimmer: 2.0.0
 
   ### File Reading
   open_filex: 4.3.1

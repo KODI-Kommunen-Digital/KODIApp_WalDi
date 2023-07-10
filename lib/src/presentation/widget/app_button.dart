@@ -26,23 +26,6 @@ class AppButton extends StatelessWidget {
     this.size = ButtonSize.large,
   }) : super(key: key);
 
-  Widget _buildLoading(BuildContext context) {
-    if (!loading) return Container();
-    return Row(
-      children: [
-        const SizedBox(width: 8),
-        SizedBox(
-          width: 14,
-          height: 14,
-          child: CircularProgressIndicator(
-            strokeWidth: 1.5,
-            color: Theme.of(context).colorScheme.secondary,
-          ),
-        )
-      ],
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     Size buttonSize = const Size(64, 48);
@@ -72,7 +55,6 @@ class AppButton extends StatelessWidget {
                       color: Theme.of(context).primaryColor,
                       fontWeight: FontWeight.bold),
                 ),
-                _buildLoading(context)
               ],
             ),
           );
@@ -96,7 +78,6 @@ class AppButton extends StatelessWidget {
                     color: Theme.of(context).primaryColor,
                     fontWeight: FontWeight.bold),
               ),
-              _buildLoading(context)
             ],
           ),
         );
@@ -117,7 +98,6 @@ class AppButton extends StatelessWidget {
                       color: Theme.of(context).primaryColor,
                       fontWeight: FontWeight.bold),
                 ),
-                _buildLoading(context)
               ],
             ),
           );
@@ -135,7 +115,6 @@ class AppButton extends StatelessWidget {
                     color: Theme.of(context).primaryColor,
                     fontWeight: FontWeight.bold),
               ),
-              _buildLoading(context)
             ],
           ),
         );
@@ -160,7 +139,6 @@ class AppButton extends StatelessWidget {
                   style: Theme.of(context).textTheme.labelLarge!.copyWith(
                       color: Colors.white, fontWeight: FontWeight.bold),
                 ),
-                _buildLoading(context)
               ],
             ),
           );
@@ -185,7 +163,6 @@ class AppButton extends StatelessWidget {
                     .labelLarge!
                     .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
               ),
-              _buildLoading(context)
             ],
           ),
         );

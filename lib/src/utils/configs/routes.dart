@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:heidi/src/presentation/main/login/forgot_password/forgot_password_screen.dart';
 import 'package:heidi/src/presentation/main/login/signin/signin_screen.dart';
 import 'package:heidi/src/presentation/main/login/signup/signup.dart';
 
@@ -69,19 +70,15 @@ class Routes {
           },
         );
 
+      case forgotPassword:
+        return MaterialPageRoute(
+          builder: (context) {
+            return const ForgotPasswordScreen();
+          },
+        );
 
       default:
         const SignInScreen();
-        // if (settings.name != null && settings.name!.contains('?type=')) {
-        //   final deeplink = DeepLinkModel.fromString(settings.name!);
-        //   if (deeplink.target.isNotEmpty) {
-        //     return MaterialPageRoute(
-        //       builder: (context) {
-        //         return DeepLink(deeplink: deeplink);
-        //       },
-        //     );
-        //   }
-        // }
 
         return MaterialPageRoute(
           builder: (context) {

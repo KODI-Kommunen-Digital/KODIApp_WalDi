@@ -1,0 +1,231 @@
+import 'package:flutter/material.dart';
+import 'package:heidi/src/data/model/model.dart';
+
+import 'app_placeholder.dart';
+
+enum UserViewType { basic, information, qrcode }
+
+class AppUserInfo extends StatelessWidget {
+  final UserModel? user;
+  final VoidCallback? onPressed;
+  final UserViewType type;
+
+  const AppUserInfo({
+    Key? key,
+    this.user,
+    this.onPressed,
+    this.type = UserViewType.basic,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    switch (type) {
+      case UserViewType.information:
+        if (user == null) {
+          return AppPlaceholder(
+            child: Row(
+              children: <Widget>[
+                Container(
+                  width: 60,
+                  height: 60,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                        height: 10,
+                        width: 100,
+                        color: Colors.white,
+                      ),
+                      const SizedBox(height: 4),
+                      Container(
+                        height: 10,
+                        width: 100,
+                        color: Colors.white,
+                      ),
+                      const SizedBox(height: 4),
+                      Container(
+                        height: 10,
+                        width: 150,
+                        color: Colors.white,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+        if (user!.description.isNotEmpty) {
+         Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 4),
+              Text(
+                user!.description,
+                maxLines: 1,
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+            ],
+          );
+        }
+        Widget networkImage = SizedBox(
+          width: 60,
+          height: 60,
+          child: ClipOval(
+              child: Image.network(
+            "http://testing.heidi.obs.eu-de.otc.t-systems.com/${user!.image}",
+            width: 100,
+            height: 100,
+            fit: BoxFit.cover,
+          )),
+        );
+        return InkWell(
+          onTap: () {},
+          child: Row(
+            children: <Widget>[
+              networkImage,
+
+              const SizedBox(width: 8),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      user!.username,
+                      maxLines: 1,
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
+                    // description,
+                    const SizedBox(height: 4),
+                    Text(
+                      user!.email,
+                      maxLines: 1,
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+
+      case UserViewType.qrcode:
+        return Container();
+
+      default:
+        if (user == null) {
+          return AppPlaceholder(
+            child: Row(
+              children: <Widget>[
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      height: 10,
+                      width: 100,
+                      color: Colors.white,
+                    ),
+                    const SizedBox(height: 4),
+                    Container(
+                      height: 10,
+                      width: 150,
+                      color: Colors.white,
+                    ),
+                  ],
+                )
+              ],
+            ),
+          );
+        }
+        return InkWell(
+          onTap: onPressed,
+          child: Row(
+            children: <Widget>[
+              ClipOval(
+                  child: Image.network(
+                "http://testing.heidi.obs.eu-de.otc.t-systems.com/${user!.image}",
+                width: 100,
+                height: 100,
+                fit: BoxFit.cover,
+              )),
+              // CachedNetworkImage(
+              //   imageUrl:
+              //       "http://testing.heidi.obs.eu-de.otc.t-systems.com/${user!.image}",
+              //   placeholder: (context, url) {
+              //     return AppPlaceholder(
+              //       child: Container(
+              //         width: 40,
+              //         height: 40,
+              //         decoration: const BoxDecoration(
+              //           color: Colors.white,
+              //           shape: BoxShape.circle,
+              //         ),
+              //       ),
+              //     );
+              //   },
+              //   imageBuilder: (context, imageProvider) {
+              //     return Container(
+              //       width: 40,
+              //       height: 40,
+              //       decoration: BoxDecoration(
+              //         image: DecorationImage(
+              //           image: imageProvider,
+              //           fit: BoxFit.cover,
+              //         ),
+              //         shape: BoxShape.circle,
+              //       ),
+              //     );
+              //   },
+              //   errorWidget: (context, url, error) {
+              //     return AppPlaceholder(
+              //       child: Container(
+              //         width: 40,
+              //         height: 40,
+              //         decoration: const BoxDecoration(
+              //           color: Colors.white,
+              //           shape: BoxShape.circle,
+              //         ),
+              //         child: const Icon(Icons.error),
+              //       ),
+              //     );
+              //   },
+              // ),
+              const SizedBox(width: 8),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    user!.username,
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium!
+                        .copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    user!.email,
+                    style: Theme.of(context).textTheme.bodySmall,
+                  )
+                ],
+              )
+            ],
+          ),
+        );
+    }
+  }
+}
