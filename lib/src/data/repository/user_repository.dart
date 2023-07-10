@@ -66,7 +66,6 @@ class UserRepository {
     if (response.success) {
       return UserModel.fromJson(response.data);
     }
-    UtilLogger.log('FetchUserResponse', userId);
     return null;
   }
 

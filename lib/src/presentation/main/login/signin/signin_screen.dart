@@ -18,23 +18,58 @@ class SignInScreen extends StatefulWidget {
   State<SignInScreen> createState() => _SignInScreenState();
 }
 
-
 class _SignInScreenState extends State<SignInScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text(
+            Translate.of(context).translate('sign_in'),
+          ),
+        ),
+        body: BlocConsumer<LoginCubit, LoginState>(
+          listener: (context, state) {},
+          builder: (context, state) => state.maybeWhen(
+            loading: () => const SignInLoading(),
+            loaded: () {
+              return const SignInLoaded();
+            },
+            orElse: () => ErrorWidget('Failed to load Result.'),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class SignInLoading extends StatelessWidget {
+  const SignInLoading({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: CircularProgressIndicator(),
+    );
+  }
+}
+
+class SignInLoaded extends StatefulWidget {
+  const SignInLoaded({Key? key}) : super(key: key);
+
+  @override
+  State<SignInLoaded> createState() => _SignInLoadedState();
+}
+
+class _SignInLoadedState extends State<SignInLoaded> {
   final _textIDController = TextEditingController();
   final _textPassController = TextEditingController();
   final _focusID = FocusNode();
   final _focusPass = FocusNode();
-
   bool _showPassword = false;
   String? _errorID;
   String? _errorPass;
-
-  @override
-  void initState() {
-    super.initState();
-    // _textIDController.text = "heidi";
-    // _textPassController.text = "heidi";
-  }
 
   @override
   void dispose() {
@@ -45,44 +80,12 @@ class _SignInScreenState extends State<SignInScreen> {
     super.dispose();
   }
 
-  ///On navigate forgot password
-  void _forgotPassword() {
-    Navigator.pushNamed(context, Routes.forgotPassword);
-  }
-
-  ///On navigate sign up
-  void _signUp() {
-    Navigator.pushNamed(context, Routes.signUp);
-  }
-
-  ///On login
-  void _login() async {
-    Utils.hiddenKeyboard(context);
-    setState(() {
-      _errorID = UtilValidator.validate(_textIDController.text);
-      _errorPass = UtilValidator.validate(_textPassController.text);
-    });
-    if (_errorID == null && _errorPass == null) {
-      AppBloc.loginCubit.onLogin(
-        username: _textIDController.text,
-        password: _textPassController.text,
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          Translate.of(context).translate('sign_in'),
-        ),
-      ),
-      body: BlocListener<LoginCubit, LoginState>(
+    return BlocListener<LoginCubit, LoginState>(
         listener: (context, state) async {
           if (state == const LoginState.loaded()) {
-            if(!mounted) {
+            if (!mounted) {
               return;
             }
             Navigator.pop(context);
@@ -174,7 +177,28 @@ class _SignInScreenState extends State<SignInScreen> {
             ),
           ),
         ),
-      ),
-    );
+      );
+  }
+
+  void _forgotPassword() {
+    Navigator.pushNamed(context, Routes.forgotPassword);
+  }
+
+  void _signUp() {
+    Navigator.pushNamed(context, Routes.signUp);
+  }
+
+  void _login() async {
+    Utils.hiddenKeyboard(context);
+    setState(() {
+      _errorID = UtilValidator.validate(_textIDController.text);
+      _errorPass = UtilValidator.validate(_textPassController.text);
+    });
+    if (_errorID == null && _errorPass == null) {
+      AppBloc.loginCubit.onLogin(
+        username: _textIDController.text,
+        password: _textPassController.text,
+      );
+    }
   }
 }

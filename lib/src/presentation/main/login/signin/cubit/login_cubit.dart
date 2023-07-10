@@ -7,13 +7,12 @@ import 'package:heidi/src/utils/logging/loggy_exp.dart';
 
 class LoginCubit extends Cubit<LoginState> {
 
-  LoginCubit() : super(const LoginState.loading());
+  LoginCubit() : super(const LoginState.loaded());
 
   void onLogin({
     required String username,
     required String password,
   }) async {
-    ///Notify
     emit(const LoginState.loading());
 
     final result = await UserRepository.login(
@@ -22,7 +21,6 @@ class LoginCubit extends Cubit<LoginState> {
     );
 
     if (result != null) {
-      logError('LoginResult', result.email);
       await AppBloc.authenticateCubit.onSave(result);
 
       emit(const LoginState.loaded());

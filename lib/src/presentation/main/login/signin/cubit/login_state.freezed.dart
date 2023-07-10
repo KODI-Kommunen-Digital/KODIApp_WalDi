@@ -18,6 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$LoginState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
+    required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function() loaded,
     required TResult Function() error,
@@ -25,6 +26,7 @@ mixin _$LoginState {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function()? loaded,
     TResult? Function()? error,
@@ -32,6 +34,7 @@ mixin _$LoginState {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
     TResult Function()? loading,
     TResult Function()? loaded,
     TResult Function()? error,
@@ -40,6 +43,7 @@ mixin _$LoginState {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
+    required TResult Function(LoginStateInitial value) initial,
     required TResult Function(LoginStateLoading value) loading,
     required TResult Function(LoginStateLoaded value) loaded,
     required TResult Function(LoginStateError value) error,
@@ -47,6 +51,7 @@ mixin _$LoginState {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(LoginStateInitial value)? initial,
     TResult? Function(LoginStateLoading value)? loading,
     TResult? Function(LoginStateLoaded value)? loaded,
     TResult? Function(LoginStateError value)? error,
@@ -54,6 +59,7 @@ mixin _$LoginState {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
+    TResult Function(LoginStateInitial value)? initial,
     TResult Function(LoginStateLoading value)? loading,
     TResult Function(LoginStateLoaded value)? loaded,
     TResult Function(LoginStateError value)? error,
@@ -78,6 +84,120 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+}
+
+/// @nodoc
+abstract class _$$LoginStateInitialCopyWith<$Res> {
+  factory _$$LoginStateInitialCopyWith(
+          _$LoginStateInitial value, $Res Function(_$LoginStateInitial) then) =
+      __$$LoginStateInitialCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$LoginStateInitialCopyWithImpl<$Res>
+    extends _$LoginStateCopyWithImpl<$Res, _$LoginStateInitial>
+    implements _$$LoginStateInitialCopyWith<$Res> {
+  __$$LoginStateInitialCopyWithImpl(
+      _$LoginStateInitial _value, $Res Function(_$LoginStateInitial) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+class _$LoginStateInitial implements LoginStateInitial {
+  const _$LoginStateInitial();
+
+  @override
+  String toString() {
+    return 'LoginState.initial()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$LoginStateInitial);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function() loaded,
+    required TResult Function() error,
+  }) {
+    return initial();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function()? loaded,
+    TResult? Function()? error,
+  }) {
+    return initial?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function()? loaded,
+    TResult Function()? error,
+    required TResult orElse(),
+  }) {
+    if (initial != null) {
+      return initial();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(LoginStateInitial value) initial,
+    required TResult Function(LoginStateLoading value) loading,
+    required TResult Function(LoginStateLoaded value) loaded,
+    required TResult Function(LoginStateError value) error,
+  }) {
+    return initial(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(LoginStateInitial value)? initial,
+    TResult? Function(LoginStateLoading value)? loading,
+    TResult? Function(LoginStateLoaded value)? loaded,
+    TResult? Function(LoginStateError value)? error,
+  }) {
+    return initial?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(LoginStateInitial value)? initial,
+    TResult Function(LoginStateLoading value)? loading,
+    TResult Function(LoginStateLoaded value)? loaded,
+    TResult Function(LoginStateError value)? error,
+    required TResult orElse(),
+  }) {
+    if (initial != null) {
+      return initial(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class LoginStateInitial implements LoginState {
+  const factory LoginStateInitial() = _$LoginStateInitial;
 }
 
 /// @nodoc
@@ -118,6 +238,7 @@ class _$LoginStateLoading implements LoginStateLoading {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
+    required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function() loaded,
     required TResult Function() error,
@@ -128,6 +249,7 @@ class _$LoginStateLoading implements LoginStateLoading {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function()? loaded,
     TResult? Function()? error,
@@ -138,6 +260,7 @@ class _$LoginStateLoading implements LoginStateLoading {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
     TResult Function()? loading,
     TResult Function()? loaded,
     TResult Function()? error,
@@ -152,6 +275,7 @@ class _$LoginStateLoading implements LoginStateLoading {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
+    required TResult Function(LoginStateInitial value) initial,
     required TResult Function(LoginStateLoading value) loading,
     required TResult Function(LoginStateLoaded value) loaded,
     required TResult Function(LoginStateError value) error,
@@ -162,6 +286,7 @@ class _$LoginStateLoading implements LoginStateLoading {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(LoginStateInitial value)? initial,
     TResult? Function(LoginStateLoading value)? loading,
     TResult? Function(LoginStateLoaded value)? loaded,
     TResult? Function(LoginStateError value)? error,
@@ -172,6 +297,7 @@ class _$LoginStateLoading implements LoginStateLoading {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
+    TResult Function(LoginStateInitial value)? initial,
     TResult Function(LoginStateLoading value)? loading,
     TResult Function(LoginStateLoaded value)? loaded,
     TResult Function(LoginStateError value)? error,
@@ -226,6 +352,7 @@ class _$LoginStateLoaded implements LoginStateLoaded {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
+    required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function() loaded,
     required TResult Function() error,
@@ -236,6 +363,7 @@ class _$LoginStateLoaded implements LoginStateLoaded {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function()? loaded,
     TResult? Function()? error,
@@ -246,6 +374,7 @@ class _$LoginStateLoaded implements LoginStateLoaded {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
     TResult Function()? loading,
     TResult Function()? loaded,
     TResult Function()? error,
@@ -260,6 +389,7 @@ class _$LoginStateLoaded implements LoginStateLoaded {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
+    required TResult Function(LoginStateInitial value) initial,
     required TResult Function(LoginStateLoading value) loading,
     required TResult Function(LoginStateLoaded value) loaded,
     required TResult Function(LoginStateError value) error,
@@ -270,6 +400,7 @@ class _$LoginStateLoaded implements LoginStateLoaded {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(LoginStateInitial value)? initial,
     TResult? Function(LoginStateLoading value)? loading,
     TResult? Function(LoginStateLoaded value)? loaded,
     TResult? Function(LoginStateError value)? error,
@@ -280,6 +411,7 @@ class _$LoginStateLoaded implements LoginStateLoaded {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
+    TResult Function(LoginStateInitial value)? initial,
     TResult Function(LoginStateLoading value)? loading,
     TResult Function(LoginStateLoaded value)? loaded,
     TResult Function(LoginStateError value)? error,
@@ -334,6 +466,7 @@ class _$LoginStateError implements LoginStateError {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
+    required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function() loaded,
     required TResult Function() error,
@@ -344,6 +477,7 @@ class _$LoginStateError implements LoginStateError {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function()? loaded,
     TResult? Function()? error,
@@ -354,6 +488,7 @@ class _$LoginStateError implements LoginStateError {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
     TResult Function()? loading,
     TResult Function()? loaded,
     TResult Function()? error,
@@ -368,6 +503,7 @@ class _$LoginStateError implements LoginStateError {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
+    required TResult Function(LoginStateInitial value) initial,
     required TResult Function(LoginStateLoading value) loading,
     required TResult Function(LoginStateLoaded value) loaded,
     required TResult Function(LoginStateError value) error,
@@ -378,6 +514,7 @@ class _$LoginStateError implements LoginStateError {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(LoginStateInitial value)? initial,
     TResult? Function(LoginStateLoading value)? loading,
     TResult? Function(LoginStateLoaded value)? loaded,
     TResult? Function(LoginStateError value)? error,
@@ -388,6 +525,7 @@ class _$LoginStateError implements LoginStateError {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
+    TResult Function(LoginStateInitial value)? initial,
     TResult Function(LoginStateLoading value)? loading,
     TResult Function(LoginStateLoaded value)? loaded,
     TResult Function(LoginStateError value)? error,

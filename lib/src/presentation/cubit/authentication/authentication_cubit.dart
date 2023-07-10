@@ -3,7 +3,6 @@ import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/cubit/authentication/authentication_state.dart';
-import 'package:heidi/src/utils/logger.dart';
 
 class AuthenticationCubit extends Cubit<AuthenticationState> {
   AuthenticationCubit() : super(const AuthenticationState.loading());
@@ -11,27 +10,21 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
   Future<void> onCheck() async {
     emit(const AuthenticationState.loading());
 
-    ///Event load user
+
     UserModel? user = await AppBloc.userCubit.onLoadUser();
 
-    UtilLogger.log('UserResult', user);
     if (user != null) {
-      ///Attach token push
-      // Application.device?.token = await Utils.getDeviceToken();
 
-      ///Save user
       // await AppBloc.userCubit.onSaveUser(user);
 
       // AppBloc.wishListCubit.onLoad();
 
-      ///Fetch user
       AppBloc.userCubit.onFetchUser();
 
-      ///Notify
       emit(const AuthenticationState.loaded());
       AppBloc.userCubit.onFetchUser();
     } else {
-      ///Notify
+
       emit(const AuthenticationState.failed());
     }
   }

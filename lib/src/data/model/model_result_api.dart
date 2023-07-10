@@ -25,23 +25,12 @@ class ResultApiModel {
   factory ResultApiModel.fromJson(Map<String, dynamic> json) {
     UserModel? user;
     PaginationModel? pagination;
-    String message;
-    String? token;
-    int id = 0;
 
     if (json['user'] != null) {
-      // user = UserModel.fromJson(json['user']);
       user = UserModel.fromJson(json['data']);
     }
     if (json['pagination'] != null) {
       pagination = PaginationModel.fromJson(json['pagination']);
-    }
-    if (json['success'] == true) {
-      message = "save_data_success";
-    }
-
-    if (json['success'] == true) {
-      token = json['data']['accessToken'];
     }
 
     return ResultApiModel(

@@ -143,7 +143,7 @@ class _AccountLoadedState extends State<AccountLoaded> {
                           Navigator.pushNamed(context, Routes.editProfile)
                               .then((value) {
                             setState(() {});
-                          });;
+                          });
                         },
                       ),
                       AppListTitle(

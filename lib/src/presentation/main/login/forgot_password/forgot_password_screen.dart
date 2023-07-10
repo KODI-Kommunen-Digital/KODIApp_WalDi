@@ -15,7 +15,7 @@ class ForgotPasswordScreen extends StatefulWidget {
 }
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
-  final _textuserNameController = TextEditingController();
+  final textUserNameController = TextEditingController();
 
   String? _errorUsername;
 
@@ -26,7 +26,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   @override
   void dispose() {
-    _textuserNameController.dispose();
+    textUserNameController.dispose();
     super.dispose();
   }
 
@@ -35,13 +35,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     Utils.hiddenKeyboard(context);
     setState(() {
       _errorUsername = UtilValidator.validate(
-        _textuserNameController.text,
+        textUserNameController.text,
         type: ValidateType.normal,
       );
     });
     if (_errorUsername == null) {
       final result = await AppBloc.forgotPasswordCubit.onForgotPassword(
-        _textuserNameController.text,
+        textUserNameController.text,
       );
       if (result) {
         if (!mounted) return;
@@ -86,12 +86,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   onChanged: (text) {
                     setState(() {
                       _errorUsername = UtilValidator.validate(
-                        _textuserNameController.text,
+                        textUserNameController.text,
                         type: ValidateType.normal,
                       );
                     });
                   },
-                  controller: _textuserNameController,
+                  controller: textUserNameController,
                   keyboardType: TextInputType.name,
                 ),
                 Padding(
