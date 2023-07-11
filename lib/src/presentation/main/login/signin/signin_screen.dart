@@ -30,12 +30,17 @@ class _SignInScreenState extends State<SignInScreen> {
           ),
         ),
         body: BlocConsumer<LoginCubit, LoginState>(
-          listener: (context, state) {},
+          listener: (context, state) {
+            if(state == const LoginState.loaded()){
+              Navigator.pop(context);
+            }
+          },
           builder: (context, state) => state.maybeWhen(
-            loading: () => const SignInLoading(),
-            loaded: () {
+            initial: () {
               return const SignInLoaded();
             },
+            loading: () => const SignInLoading(),
+            loaded: () => Container(),
             orElse: () => ErrorWidget('Failed to load Result.'),
           ),
         ),
@@ -83,14 +88,7 @@ class _SignInLoadedState extends State<SignInLoaded> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<LoginCubit, LoginState>(
-        listener: (context, state) async {
-          if (state == const LoginState.loaded()) {
-            if (!mounted) {
-              return;
-            }
-            Navigator.pop(context);
-          }
-        },
+        listener: (context, state) async {},
         child: SafeArea(
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 16),

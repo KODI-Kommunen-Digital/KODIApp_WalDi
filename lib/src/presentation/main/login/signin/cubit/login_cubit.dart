@@ -7,7 +7,7 @@ import 'package:heidi/src/utils/logging/loggy_exp.dart';
 
 class LoginCubit extends Cubit<LoginState> {
 
-  LoginCubit() : super(const LoginState.loaded());
+  LoginCubit() : super(const LoginState.initial());
 
   void onLogin({
     required String username,
@@ -32,6 +32,7 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   void onLogout() async {
+    emit(const LoginState.initial());
     final prefs = await Preferences.openBox();
     prefs.deleteKey(Preferences.userId);
     AppBloc.authenticateCubit.onClear();

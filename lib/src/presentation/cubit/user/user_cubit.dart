@@ -22,7 +22,6 @@ class UserCubit extends Cubit<UserModel?> {
         username: remote.username,
         firstname: remote.firstname,
         lastname: remote.lastname,
-        // name: remote.name,
         email: remote.email,
         url: remote.url,
         description: remote.description,

@@ -3,7 +3,6 @@ import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/cubit/authentication/authentication_state.dart';
-
 class AuthenticationCubit extends Cubit<AuthenticationState> {
   AuthenticationCubit() : super(const AuthenticationState.loading());
 
@@ -12,6 +11,8 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
 
 
     UserModel? user = await AppBloc.userCubit.onLoadUser();
+
+
 
     if (user != null) {
 

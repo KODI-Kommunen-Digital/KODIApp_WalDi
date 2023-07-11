@@ -21,6 +21,7 @@ class AppUserInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (type) {
       case UserViewType.information:
+
         if (user == null) {
           return AppPlaceholder(
             child: Row(

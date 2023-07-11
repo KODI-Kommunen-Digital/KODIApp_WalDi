@@ -104,7 +104,7 @@ class UserModel {
       'firstname': firstname,
       'lastname': lastname,
       'user_nicename': nickname,
-      'user_photo': image,
+      'image': image,
       'user_url': url,
       'user_level': level,
       'description': description,
