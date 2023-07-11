@@ -12,13 +12,38 @@ class UserCubit extends Cubit<UserModel?> {
     return user;
   }
 
+  Future<bool> onUpdateUser({
+    required String username,
+    required String firstname,
+    required String lastname,
+    required String email,
+    required String url,
+    required String description,
+    String? image,
+  }) async {
+    final result = await UserRepository.changeProfile(
+      username: username,
+      firstname: firstname,
+      lastname: lastname,
+      email: email,
+      url: url,
+      description: description,
+      image: image,
+    );
+
+    if (result) {
+      await onFetchUser();
+    }
+    return result;
+  }
+
   Future<UserModel?> onFetchUser() async {
     final prefs = await Preferences.openBox();
     final userId = prefs.getKeyValue(Preferences.userId, '');
     UserModel? local = await UserRepository.loadUser();
     UserModel? remote = await UserRepository.fetchUser(userId);
     if (local != null && remote != null) {
-      final sync = local.updateUser(
+       final sync = local.updateUser(
         username: remote.username,
         firstname: remote.firstname,
         lastname: remote.lastname,
@@ -27,6 +52,7 @@ class UserCubit extends Cubit<UserModel?> {
         description: remote.description,
         image: remote.image,
       );
+      onSaveUser(sync);
       return sync;
     }
     return null;

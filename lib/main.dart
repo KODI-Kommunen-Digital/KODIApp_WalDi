@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/main_screen.dart';
 import 'package:heidi/src/presentation/cubit/bloc.dart';
@@ -69,6 +70,9 @@ class _HeidiAppState extends State<HeidiApp> {
       providers: [
         RepositoryProvider(
           create: (context) => UserRepository(),
+        ),
+        RepositoryProvider(
+          create: (context) => ListRepository(),
         ),
       ],
       child: MultiBlocProvider(

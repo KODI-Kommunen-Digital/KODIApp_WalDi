@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:heidi/src/presentation/main/account/edit_profile/edit_profile_screen.dart';
 import 'package:heidi/src/presentation/main/login/forgot_password/forgot_password_screen.dart';
 import 'package:heidi/src/presentation/main/login/signin/signin_screen.dart';
 import 'package:heidi/src/presentation/main/login/signup/signup.dart';
@@ -74,6 +75,13 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) {
             return const ForgotPasswordScreen();
+          },
+        );
+
+        case editProfile:
+        return MaterialPageRoute(
+          builder: (context) {
+            return const EditProfileScreen();
           },
         );
 

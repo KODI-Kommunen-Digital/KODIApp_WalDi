@@ -60,8 +60,6 @@ class UserRepository {
 
   ///Fetch User
   static Future<UserModel?> fetchUser(userId) async {
-    // final response = await Api.requestUser(
-    //     userId: userId, accessToken: accessToken, refreshToken: refreshToken);
     final response = await Api.requestUser(userId: userId);
     if (response.success) {
       return UserModel.fromJson(response.data);
@@ -120,6 +118,35 @@ class UserRepository {
     }
     else{
       logError('Forgot Password Response Error');
+    }
+    return false;
+  }
+
+  static Future<bool> changeProfile({
+    required String username,
+    required String firstname,
+    required String lastname,
+    required String email,
+    required String url,
+    required String description,
+    String? image,
+  }) async {
+    Map<String, dynamic> params = {
+      "username": username,
+      "firstname": firstname,
+      "lastname": lastname,
+      "email": email,
+      "website": url,
+      "description": description,
+    };
+    if (image != null) {
+      params['image'] = image;
+    }
+    final prefs = await Preferences.openBox();
+    final userId = prefs.getKeyValue(Preferences.userId, '');
+    final response = await Api.requestChangeProfile(params, userId);
+    if (response.success) {
+      return true;
     }
     return false;
   }
