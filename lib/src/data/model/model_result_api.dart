@@ -1,4 +1,4 @@
-import 'package:heidi/src/data/model/model.dart';
+import 'model.dart';
 
 class ResultApiModel {
   final bool success;
@@ -13,14 +13,14 @@ class ResultApiModel {
 
   ResultApiModel(
       {required this.success,
-      required this.message,
-      this.data,
-      this.pagination,
-      this.attr,
-      this.payment,
-      this.user,
-      this.id,
-      this.token});
+        required this.message,
+        this.data,
+        this.pagination,
+        this.attr,
+        this.payment,
+        this.user,
+        this.id,
+        this.token});
 
   factory ResultApiModel.fromJson(Map<String, dynamic> json) {
     UserModel? user;
@@ -34,12 +34,12 @@ class ResultApiModel {
     }
 
     return ResultApiModel(
-      success: json['status'] == "success",
-      data: json['data'],
-      id: json['id'],
+      success: json['status'] == 'error' ? false : true,
+      data: json['data'] ?? '',
+      id: json['id'] ?? 0,
       pagination: pagination,
-      attr: json['attr'],
-      payment: json['payment'],
+      attr: json['attr'] ?? '',
+      payment: json['payment'] ?? '',
       user: user,
       message: json['message'] ?? '',
     );

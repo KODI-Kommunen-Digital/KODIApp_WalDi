@@ -10,5 +10,5 @@ class LoginState with _$LoginState {
 
   const factory LoginState.loaded() = LoginStateLoaded;
 
-  const factory LoginState.error() = LoginStateError;
+  const factory LoginState.error(String error) = LoginStateError;
 }

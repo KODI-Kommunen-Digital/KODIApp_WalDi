@@ -3,14 +3,12 @@ import 'dart:convert';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
-import 'package:heidi/src/utils/logger.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
 
 class UserRepository {
-
   UserRepository();
 
-  static Future<UserModel?> login({
+  static Future<ResultApiModel?> login({
     required String username,
     required String password,
   }) async {
@@ -23,32 +21,40 @@ class UserRepository {
       "password": password,
     };
 
-    final response = await Api.requestLogin(params);
-    if (response.success) {
+    try {
+      final response = await Api.requestLogin(params);
+      if (response.success) {
+
       final userId = response.data['userId'];
       final cityUsers = response.data['cityUsers'];
-
       for (final cities in cityUsers) {
         cityIds.add(cities['cityId']);
       }
-
       List<String> cityIdsList = cityIds.map((i) => i.toString()).toList();
+
+
       prefs.setKeyValue(Preferences.userId, userId);
-      final response1 = await Api.requestUser(userId: userId);
       prefs.setKeyValue(Preferences.token, response.data['accessToken']);
       prefs.setKeyValue(
           Preferences.refreshToken, response.data['refreshToken']);
       prefs.setKeyValue(Preferences.cityId, cityIdsList);
-      // setCityIds(prefs, cityIdsList);
-      return UserModel.fromJson(response1.data);
+
+        return response;
+    } else {
+      logError('Login Request Error', response.message);
+      return response;
     }
-    // AppBloc.messageCubit.onShow(response.message);
-    UtilLogger.log('Login Response', response.message);
-    // setToken(prefs, response.data);
+    } catch (e) {
+      logError('request Login Response Error', e);
+    }
     return null;
   }
 
-  ///Load User
+  static Future<UserModel?> requestUserDetails(userId)async{
+    final response1 = await Api.requestUser(userId: userId);
+    return UserModel.fromJson(response1.data);
+  }
+
   static Future<UserModel?> loadUser() async {
     final prefs = await Preferences.openBox();
     final result = prefs.getKeyValue(Preferences.user, '');
@@ -58,7 +64,6 @@ class UserRepository {
     return null;
   }
 
-  ///Fetch User
   static Future<UserModel?> fetchUser(userId) async {
     final response = await Api.requestUser(userId: userId);
     if (response.success) {
@@ -75,21 +80,19 @@ class UserRepository {
     );
   }
 
-  ///Delete User
   static Future<void> deleteUser() async {
     final prefs = await Preferences.openBox();
     return prefs.deleteKey(Preferences.user);
   }
 
-  ///Fetch api register account
   static Future<bool> register(
       {required String username,
-        required String firstname,
-        required String lastname,
-        required String password,
-        required String email,
-        required String confirmPassword,
-        required String role}) async {
+      required String firstname,
+      required String lastname,
+      required String password,
+      required String email,
+      required String confirmPassword,
+      required String role}) async {
     final Map<String, dynamic> params = {
       "firstname": firstname,
       "lastname": lastname,
@@ -102,9 +105,8 @@ class UserRepository {
     final response = await Api.requestRegister(params);
     if (response.success) {
       return true;
-    }
-    else{
-      logError('Register ResponseError',response.message);
+    } else {
+      logError('Register Response Error', response.message);
     }
     return false;
   }
@@ -115,8 +117,7 @@ class UserRepository {
     // AppBloc.messageCubit.onShow(response.message);
     if (response.success) {
       return true;
-    }
-    else{
+    } else {
       logError('Forgot Password Response Error');
     }
     return false;
@@ -150,5 +151,4 @@ class UserRepository {
     }
     return false;
   }
-
 }

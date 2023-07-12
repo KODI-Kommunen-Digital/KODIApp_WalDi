@@ -20,10 +20,15 @@ class Api {
   static const String cities = "/cities";
   static const String listings = "/listings?statusId=1";
 
-  ///Login api
   static Future<ResultApiModel> requestLogin(params) async {
-    final result = await httpManager.post(url: login, data: params);
-    return ResultApiModel.fromJson(result);
+
+    try{
+      final result = await httpManager.post(url: login, data: params);
+      return ResultApiModel.fromJson(result);}
+    catch(e){
+      return await httpManager.post(url: login, data: params);
+    }
+
   }
 
   static Future<ResultApiModel> requestFavorites(userId) async {

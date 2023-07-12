@@ -4,6 +4,7 @@ import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/presentation/widget/app_text_input.dart';
 import 'package:heidi/src/presentation/widget/app_upload_image.dart';
 import 'package:heidi/src/utils/common.dart';
+import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:heidi/src/utils/validate.dart';
 import 'package:image_picker/image_picker.dart';
@@ -41,7 +42,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   void initState() {
     super.initState();
-    final user = AppBloc.userCubit.state!;
+    final user = AppBloc.editProfileCubit.getUserDetails();
     _textUNameController.text = user.username;
     _textFNameController.text = user.firstname;
     _textLNameController.text = user.lastname;
@@ -56,7 +57,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     super.dispose();
   }
 
-  ///On update image
   void _updateProfile() async {
     Utils.hiddenKeyboard(context);
     setState(() {
@@ -76,7 +76,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         _errorEmail == null &&
         _errorWebsite == null &&
         _errorInfo == null) {
-      final result = await AppBloc.userCubit.onUpdateUser(
+      final result = await AppBloc.editProfileCubit.onUpdateUser(
         username: _textUNameController.text,
         firstname: _textFNameController.text,
         lastname: _textLNameController.text,
@@ -89,6 +89,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       if (result) {
         if (!mounted) return;
         Navigator.pop(context);
+      }
+      else{
+        logError('Update User Result Error', result);
       }
     }
   }

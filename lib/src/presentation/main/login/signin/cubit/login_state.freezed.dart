@@ -21,7 +21,7 @@ mixin _$LoginState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function() loaded,
-    required TResult Function() error,
+    required TResult Function(String error) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -29,7 +29,7 @@ mixin _$LoginState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function()? loaded,
-    TResult? Function()? error,
+    TResult? Function(String error)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -37,7 +37,7 @@ mixin _$LoginState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function()? loaded,
-    TResult Function()? error,
+    TResult Function(String error)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -127,7 +127,7 @@ class _$LoginStateInitial implements LoginStateInitial {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function() loaded,
-    required TResult Function() error,
+    required TResult Function(String error) error,
   }) {
     return initial();
   }
@@ -138,7 +138,7 @@ class _$LoginStateInitial implements LoginStateInitial {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function()? loaded,
-    TResult? Function()? error,
+    TResult? Function(String error)? error,
   }) {
     return initial?.call();
   }
@@ -149,7 +149,7 @@ class _$LoginStateInitial implements LoginStateInitial {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function()? loaded,
-    TResult Function()? error,
+    TResult Function(String error)? error,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -241,7 +241,7 @@ class _$LoginStateLoading implements LoginStateLoading {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function() loaded,
-    required TResult Function() error,
+    required TResult Function(String error) error,
   }) {
     return loading();
   }
@@ -252,7 +252,7 @@ class _$LoginStateLoading implements LoginStateLoading {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function()? loaded,
-    TResult? Function()? error,
+    TResult? Function(String error)? error,
   }) {
     return loading?.call();
   }
@@ -263,7 +263,7 @@ class _$LoginStateLoading implements LoginStateLoading {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function()? loaded,
-    TResult Function()? error,
+    TResult Function(String error)? error,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -355,7 +355,7 @@ class _$LoginStateLoaded implements LoginStateLoaded {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function() loaded,
-    required TResult Function() error,
+    required TResult Function(String error) error,
   }) {
     return loaded();
   }
@@ -366,7 +366,7 @@ class _$LoginStateLoaded implements LoginStateLoaded {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function()? loaded,
-    TResult? Function()? error,
+    TResult? Function(String error)? error,
   }) {
     return loaded?.call();
   }
@@ -377,7 +377,7 @@ class _$LoginStateLoaded implements LoginStateLoaded {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function()? loaded,
-    TResult Function()? error,
+    TResult Function(String error)? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -433,6 +433,8 @@ abstract class _$$LoginStateErrorCopyWith<$Res> {
   factory _$$LoginStateErrorCopyWith(
           _$LoginStateError value, $Res Function(_$LoginStateError) then) =
       __$$LoginStateErrorCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String error});
 }
 
 /// @nodoc
@@ -442,26 +444,50 @@ class __$$LoginStateErrorCopyWithImpl<$Res>
   __$$LoginStateErrorCopyWithImpl(
       _$LoginStateError _value, $Res Function(_$LoginStateError) _then)
       : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? error = null,
+  }) {
+    return _then(_$LoginStateError(
+      null == error
+          ? _value.error
+          : error // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
 }
 
 /// @nodoc
 
 class _$LoginStateError implements LoginStateError {
-  const _$LoginStateError();
+  const _$LoginStateError(this.error);
+
+  @override
+  final String error;
 
   @override
   String toString() {
-    return 'LoginState.error()';
+    return 'LoginState.error(error: $error)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$LoginStateError);
+        (other.runtimeType == runtimeType &&
+            other is _$LoginStateError &&
+            (identical(other.error, error) || other.error == error));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(runtimeType, error);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$LoginStateErrorCopyWith<_$LoginStateError> get copyWith =>
+      __$$LoginStateErrorCopyWithImpl<_$LoginStateError>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -469,9 +495,9 @@ class _$LoginStateError implements LoginStateError {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function() loaded,
-    required TResult Function() error,
+    required TResult Function(String error) error,
   }) {
-    return error();
+    return error(this.error);
   }
 
   @override
@@ -480,9 +506,9 @@ class _$LoginStateError implements LoginStateError {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function()? loaded,
-    TResult? Function()? error,
+    TResult? Function(String error)? error,
   }) {
-    return error?.call();
+    return error?.call(this.error);
   }
 
   @override
@@ -491,11 +517,11 @@ class _$LoginStateError implements LoginStateError {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function()? loaded,
-    TResult Function()? error,
+    TResult Function(String error)? error,
     required TResult orElse(),
   }) {
     if (error != null) {
-      return error();
+      return error(this.error);
     }
     return orElse();
   }
@@ -539,5 +565,10 @@ class _$LoginStateError implements LoginStateError {
 }
 
 abstract class LoginStateError implements LoginState {
-  const factory LoginStateError() = _$LoginStateError;
+  const factory LoginStateError(final String error) = _$LoginStateError;
+
+  String get error;
+  @JsonKey(ignore: true)
+  _$$LoginStateErrorCopyWith<_$LoginStateError> get copyWith =>
+      throw _privateConstructorUsedError;
 }

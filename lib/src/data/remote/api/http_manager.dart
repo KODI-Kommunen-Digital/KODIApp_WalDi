@@ -7,6 +7,7 @@ import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/logger.dart';
+import 'package:heidi/src/utils/logging/loggy_exp.dart';
 
 class HTTPManager {
   final exceptionCode = ['jwt_auth_bad_iss', 'jwt_auth_invalid_token'];
@@ -51,63 +52,75 @@ class HTTPManager {
           return handler.next(options);
         },
         onError: (DioError error, handler) async {
-          final prefs = await Preferences.openBox();
-          if (error.type != DioErrorType.response) {
-            return handler.next(error);
+          if (error.response?.data['status'] == 'error'){
+            final response = Response(
+              requestOptions: error.requestOptions,
+              data: error.response?.data,
+            );
+            return handler.resolve(response);
           }
-
-          if (error.response?.statusCode == 401) {
-            var rToken = prefs.getKeyValue(Preferences.refreshToken, '');
-            final userId = prefs.getKeyValue(Preferences.userId, '');
-
-            final Map<String, dynamic> params = {
-              "refreshToken": rToken,
-            };
-
-            final result =
-                await post(url: '/users/$userId/refresh', data: params);
-            final response = ResultApiModel.fromJson(result);
-            if (response.success) {
-              prefs.setKeyValue(Preferences.token, response.data['accessToken']);
-              prefs.setKeyValue(Preferences.refreshToken, response.data['refreshToken']);
-
-              _dio.interceptors.add(QueuedInterceptorsWrapper(
-                  onRequest: (options, handler) async {
-                var options = error.response!.requestOptions;
-                Map<String, dynamic> headers = {
-                  "Device-Id": Application.device?.uuid,
-                  "osName": Application.device?.model,
-                  "Device-Version": Application.device?.version,
-                  "deviceType": Application.device?.type,
-                  "browserName": null,
-                  "Device-Token": Application.device?.token,
-                  HttpHeaders.contentTypeHeader: 'application/json',
-                };
-
-                var token = prefs.getKeyValue(Preferences.token, '');
-                if (token != '') {
-                  headers["Authorization"] = "Bearer $token";
-                }
-                options.headers.addAll(headers);
-                _printRequest(options);
-
-                return handler.next(options);
-              }, onError: (DioError error, handler) async {
-                if (error.response?.statusCode == 401) {
-                  AppBloc.loginCubit.onLogout();
-                }
-              }));
-            } else {
-              AppBloc.loginCubit.onLogout();
+          else{
+            final prefs = await Preferences.openBox();
+            logError('error.response', error.response?.data['status']);
+            if (error.type != DioErrorType.response) {
+              return handler.next(error);
             }
-          }
 
-          final response = Response(
-            requestOptions: error.requestOptions,
-            data: error.response?.data,
-          );
-          return handler.resolve(response);
-        },
+            if (error.response?.statusCode == 401) {
+              var rToken = prefs.getKeyValue(Preferences.refreshToken, '');
+              final userId = prefs.getKeyValue(Preferences.userId, '');
+
+              final Map<String, dynamic> params = {
+                "refreshToken": rToken,
+              };
+
+              final result =
+              await post(url: '/users/$userId/refresh', data: params);
+              final response = ResultApiModel.fromJson(result);
+              if (response.success) {
+                prefs.setKeyValue(
+                    Preferences.token, response.data['accessToken']);
+                prefs.setKeyValue(
+                    Preferences.refreshToken, response.data['refreshToken']);
+
+                _dio.interceptors.add(QueuedInterceptorsWrapper(
+                    onRequest: (options, handler) async {
+                      var options = error.response!.requestOptions;
+                      Map<String, dynamic> headers = {
+                        "Device-Id": Application.device?.uuid,
+                        "osName": Application.device?.model,
+                        "Device-Version": Application.device?.version,
+                        "deviceType": Application.device?.type,
+                        "browserName": null,
+                        "Device-Token": Application.device?.token,
+                        HttpHeaders.contentTypeHeader: 'application/json',
+                      };
+
+                      var token = prefs.getKeyValue(Preferences.token, '');
+                      if (token != '') {
+                        headers["Authorization"] = "Bearer $token";
+                      }
+                      options.headers.addAll(headers);
+                      _printRequest(options);
+
+                      return handler.next(options);
+                    }, onError: (DioError error, handler) async {
+                  if (error.response?.statusCode == 401) {
+                    AppBloc.loginCubit.onLogout();
+                  }
+                }));
+              } else {
+                AppBloc.loginCubit.onLogout();
+              }
+            }
+
+            final response = Response(
+              requestOptions: error.requestOptions,
+              data: error.response?.data,
+            );
+            return handler.resolve(response);
+          }
+        }
       ),
     );
   }

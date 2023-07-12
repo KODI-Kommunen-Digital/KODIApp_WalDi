@@ -31,12 +31,6 @@ Future<void> main() async {
   await Hive.initFlutter();
   final prefBox = await Preferences.openBox();
 
-  // final
-  // final remoteRepo =
-  //     RemoteRepository(prefBox.getKeyValue(Preferences.sessionTokenKey, ''))
-  //       ..addLogger();
-  // final localRepo = LocalRepository(prefBox, SegelDatabase());
-
   runApp(HeidiApp(prefBox));
   Bloc.observer = HeidiBlocObserver();
 }
@@ -64,8 +58,6 @@ class _HeidiAppState extends State<HeidiApp> {
 
   @override
   Widget build(BuildContext context) {
-    // final courseRepo = CourseRepository(widget.localRepo, widget.remoteRepo);
-    // final inAppPurchaseRepo = InAppPurchaseRepository();
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider(
@@ -77,26 +69,6 @@ class _HeidiAppState extends State<HeidiApp> {
       ],
       child: MultiBlocProvider(
         providers: AppBloc.providers,
-        // providers: [
-        //   BlocProvider<LoginCubit>(
-        //     create: (context) => LoginCubit(),
-        //   ),
-        //   BlocProvider<ApplicationCubit>(
-        //     create: (context) => ApplicationCubit(),
-        //   ),
-        //   BlocProvider<UserCubit>(
-        //     create: (context) => UserCubit(),
-        //   ),
-        //   BlocProvider<LanguageCubit>(
-        //     create: (context) => LanguageCubit(),
-        //   ),
-        //   BlocProvider<ThemeCubit>(
-        //     create: (context) => ThemeCubit(),
-        //   ),
-        //   BlocProvider<AuthenticationCubit>(
-        //     create: (context) => AuthenticationCubit(),
-        //   ),
-        // ],
         child: BlocBuilder<LanguageCubit, Locale>(
           builder: (context, lang) {
             return BlocBuilder<ThemeCubit, ThemeState>(

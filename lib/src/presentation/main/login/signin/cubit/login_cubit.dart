@@ -13,21 +13,27 @@ class LoginCubit extends Cubit<LoginState> {
     required String username,
     required String password,
   }) async {
-    emit(const LoginState.loading());
-
-    final result = await UserRepository.login(
+    final response = await UserRepository.login(
       username: username,
       password: password,
     );
+    if(response!.success) {
+      final userDetailResponse = await UserRepository.requestUserDetails(response.data['userId']);
+      if (userDetailResponse != null) {
+        await AppBloc.authenticateCubit.onSave(userDetailResponse);
 
-    if (result != null) {
-      await AppBloc.authenticateCubit.onSave(result);
+        emit(const LoginState.loaded());
+      } else {
+        const LoginState.initial();
+        logError('Login Result Failed', userDetailResponse);
 
-      emit(const LoginState.loaded());
-    } else {
-      logError('LoginResultFailed');
-      ///Notify
-      emit(const LoginState.error());
+        ///Notify
+        // emit(const LoginState.error());
+      }
+    }
+    else{
+      emit(LoginStateError(response.message));
+      logError('Request User Detail Error', response.message);
     }
   }
 

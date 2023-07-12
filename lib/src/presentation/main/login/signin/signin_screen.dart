@@ -31,9 +31,14 @@ class _SignInScreenState extends State<SignInScreen> {
         ),
         body: BlocConsumer<LoginCubit, LoginState>(
           listener: (context, state) {
-            if(state == const LoginState.loaded()){
+            if (state == const LoginState.loaded()) {
               Navigator.pop(context);
             }
+            state.maybeWhen(
+              error: (msg) => ScaffoldMessenger.of(context)
+                  .showSnackBar(SnackBar(content: Text(msg))),
+              orElse: () {},
+            );
           },
           builder: (context, state) => state.maybeWhen(
             initial: () {
@@ -41,7 +46,10 @@ class _SignInScreenState extends State<SignInScreen> {
             },
             loading: () => const SignInLoading(),
             loaded: () => Container(),
-            orElse: () => ErrorWidget('Failed to load Result.'),
+            error: (msg) => const SignInLoaded(),
+            orElse: () {
+              return Container();
+            },
           ),
         ),
       ),
@@ -88,94 +96,94 @@ class _SignInLoadedState extends State<SignInLoaded> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<LoginCubit, LoginState>(
-        listener: (context, state) async {},
-        child: SafeArea(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            alignment: Alignment.center,
-            child: SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  AppTextInput(
-                    hintText: Translate.of(context).translate('account'),
-                    errorText: _errorID,
-                    controller: _textIDController,
-                    focusNode: _focusID,
-                    textInputAction: TextInputAction.next,
-                    onChanged: (text) {
-                      setState(() {
-                        _errorID = UtilValidator.validate(
-                          _textIDController.text,
-                        );
-                      });
-                    },
-                    onSubmitted: (text) {
-                      Utils.fieldFocusChange(context, _focusID, _focusPass);
-                    },
-                  ),
-                  const SizedBox(height: 8),
-                  AppTextInput(
-                    hintText: Translate.of(context).translate('password'),
-                    errorText: _errorPass,
-                    textInputAction: TextInputAction.done,
-                    onChanged: (text) {
-                      setState(() {
-                        _errorPass = UtilValidator.validate(
-                          _textPassController.text,
-                        );
-                      });
-                    },
-                    onSubmitted: (text) {
-                      _login();
-                    },
-                    trailing: GestureDetector(
-                      dragStartBehavior: DragStartBehavior.down,
-                      onTap: () {
-                        setState(() {
-                          _showPassword = !_showPassword;
-                        });
-                      },
-                      child: Icon(_showPassword
-                          ? Icons.visibility
-                          : Icons.visibility_off),
-                    ),
-                    obscureText: !_showPassword,
-                    controller: _textPassController,
-                    focusNode: _focusPass,
-                  ),
-                  const SizedBox(height: 16),
-                  BlocBuilder<LoginCubit, LoginState>(
-                    builder: (context, state) {
-                      return AppButton(
-                        Translate.of(context).translate('sign_in'),
-                        mainAxisSize: MainAxisSize.max,
-                        onPressed: _login,
-                        loading: state == const LoginState.loading(),
+      listener: (context, state) async {},
+      child: SafeArea(
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          alignment: Alignment.center,
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                AppTextInput(
+                  hintText: Translate.of(context).translate('account'),
+                  errorText: _errorID,
+                  controller: _textIDController,
+                  focusNode: _focusID,
+                  textInputAction: TextInputAction.next,
+                  onChanged: (text) {
+                    setState(() {
+                      _errorID = UtilValidator.validate(
+                        _textIDController.text,
                       );
+                    });
+                  },
+                  onSubmitted: (text) {
+                    Utils.fieldFocusChange(context, _focusID, _focusPass);
+                  },
+                ),
+                const SizedBox(height: 8),
+                AppTextInput(
+                  hintText: Translate.of(context).translate('password'),
+                  errorText: _errorPass,
+                  textInputAction: TextInputAction.done,
+                  onChanged: (text) {
+                    setState(() {
+                      _errorPass = UtilValidator.validate(
+                        _textPassController.text,
+                      );
+                    });
+                  },
+                  onSubmitted: (text) {
+                    _login();
+                  },
+                  trailing: GestureDetector(
+                    dragStartBehavior: DragStartBehavior.down,
+                    onTap: () {
+                      setState(() {
+                        _showPassword = !_showPassword;
+                      });
                     },
+                    child: Icon(_showPassword
+                        ? Icons.visibility
+                        : Icons.visibility_off),
                   ),
-                  const SizedBox(height: 4),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      AppButton(
-                        Translate.of(context).translate('forgot_password'),
-                        onPressed: _forgotPassword,
-                        type: ButtonType.text,
-                      ),
-                      AppButton(
-                        Translate.of(context).translate('sign_up'),
-                        onPressed: _signUp,
-                        type: ButtonType.text,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                  obscureText: !_showPassword,
+                  controller: _textPassController,
+                  focusNode: _focusPass,
+                ),
+                const SizedBox(height: 16),
+                BlocBuilder<LoginCubit, LoginState>(
+                  builder: (context, state) {
+                    return AppButton(
+                      Translate.of(context).translate('sign_in'),
+                      mainAxisSize: MainAxisSize.max,
+                      onPressed: _login,
+                      loading: state == const LoginState.loading(),
+                    );
+                  },
+                ),
+                const SizedBox(height: 4),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    AppButton(
+                      Translate.of(context).translate('forgot_password'),
+                      onPressed: _forgotPassword,
+                      type: ButtonType.text,
+                    ),
+                    AppButton(
+                      Translate.of(context).translate('sign_up'),
+                      onPressed: _signUp,
+                      type: ButtonType.text,
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ),
-      );
+      ),
+    );
   }
 
   void _forgotPassword() {
