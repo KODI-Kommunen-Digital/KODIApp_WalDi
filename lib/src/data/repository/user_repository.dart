@@ -114,7 +114,6 @@ class UserRepository {
   static Future<bool> forgotPassword({required String username}) async {
     final Map<String, dynamic> params = {"username": username};
     final response = await Api.requestForgotPassword(params);
-    // AppBloc.messageCubit.onShow(response.message);
     if (response.success) {
       return true;
     } else {
@@ -146,6 +145,24 @@ class UserRepository {
     final prefs = await Preferences.openBox();
     final userId = prefs.getKeyValue(Preferences.userId, '');
     final response = await Api.requestChangeProfile(params, userId);
+    if (response.success) {
+      return true;
+    }
+    return false;
+  }
+
+  static Future<bool> changePassword({
+    required String currentPassword,
+    required String password,
+  }) async {
+    final prefs = await Preferences.openBox();
+    final userId = prefs.getKeyValue(Preferences.userId, 0);
+    final Map<String, dynamic> params = {
+      "currentPassword": currentPassword,
+      "newPassword": password
+    };
+    final response = await Api.requestChangeProfile(params, userId);
+    logError('Change Password Response', response.message);
     if (response.success) {
       return true;
     }

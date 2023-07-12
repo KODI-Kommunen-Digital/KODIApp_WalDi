@@ -41,4 +41,6 @@ class UserCubit extends Cubit<UserModel?> {
     UserRepository.deleteUser();
     emit(null);
   }
+
 }
+

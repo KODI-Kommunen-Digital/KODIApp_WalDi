@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:heidi/src/presentation/main/account/change_password/change_password_screen.dart';
 import 'package:heidi/src/presentation/main/account/edit_profile/edit_profile_screen.dart';
+import 'package:heidi/src/presentation/main/account/legal/imprint/imprint.dart';
+import 'package:heidi/src/presentation/main/account/legal/legal.dart';
+import 'package:heidi/src/presentation/main/account/legal/privacy_policy/privacy.dart';
+import 'package:heidi/src/presentation/main/account/setting/settings_screen.dart';
 import 'package:heidi/src/presentation/main/login/forgot_password/forgot_password_screen.dart';
 import 'package:heidi/src/presentation/main/login/signin/signin_screen.dart';
 import 'package:heidi/src/presentation/main/login/signup/signup.dart';
@@ -82,6 +87,41 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) {
             return const EditProfileScreen();
+          },
+        );
+
+        case setting:
+        return MaterialPageRoute(
+          builder: (context) {
+            return const SettingsScreen();
+          },
+        );
+
+        case changePassword:
+        return MaterialPageRoute(
+          builder: (context) {
+            return const ChangePasswordScreen();
+          },
+        );
+
+        case legal:
+        return MaterialPageRoute(
+          builder: (context) {
+            return const LegalScreen();
+          },
+        );
+
+        case imprint:
+        return MaterialPageRoute(
+          builder: (context) {
+            return const ImprintScreen();
+          },
+        );
+
+        case privacy:
+        return MaterialPageRoute(
+          builder: (context) {
+            return const PrivacyScreen();
           },
         );
 
