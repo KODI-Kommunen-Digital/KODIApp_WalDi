@@ -4,6 +4,7 @@ import 'package:heidi/src/presentation/cubit/user/user_cubit.dart';
 import 'package:heidi/src/presentation/main/account/account_profile/cubit/account_cubit.dart';
 import 'package:heidi/src/presentation/main/account/change_password/cubit/change_password_cubit.dart';
 import 'package:heidi/src/presentation/main/account/edit_profile/cubit/edit_profile_cubit.dart';
+import 'package:heidi/src/presentation/main/home/cubit/home_cubit.dart';
 import 'package:heidi/src/presentation/main/login/forgot_password/cubit/forgot_password_cubit.dart';
 import 'package:heidi/src/presentation/main/login/signin/cubit/login_cubit.dart';
 import 'package:heidi/src/presentation/main/login/signup/cubit/signup_cubit.dart';
@@ -22,6 +23,7 @@ class AppBloc {
   static final editProfileCubit = EditProfileCubit();
   static final forgotPasswordCubit = ForgotPasswordCubit();
   static final changePasswordCubit = ChangePasswordCubit();
+  static final homeCubit = HomeCubit();
   // static final homeCubit = HomeCubit();
   // static final wishListCubit = WishListCubit();
   // static final reviewCubit = ReviewCubit();
@@ -66,6 +68,9 @@ class AppBloc {
     ),
     BlocProvider<ChangePasswordCubit>(
       create: (context) => changePasswordCubit,
+    ),
+    BlocProvider<HomeCubit>(
+      create: (context) => homeCubit,
     ),
     // BlocProvider<HomeCubit>(
     //   create: (context) => homeCubit,

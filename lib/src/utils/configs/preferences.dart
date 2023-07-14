@@ -23,6 +23,8 @@ class Preferences {
   static const String cityId = 'cityId';
   static const sessionTokenKey = '_sessionTokenKey';
   static const _pickedFileKey = 'pickedFile';
+  static const String categoryId = 'categoryId';
+  static const String type = 'type';
 
   Preferences._(this._box);
 
@@ -43,12 +45,6 @@ class Preferences {
   Future<void> deleteKey(String key) async{
     await _box.delete(key);
   }
-  //
-  //
-  // String getSessionToken() => _getValue(_sessionTokenKey, '');
-  //
-  // Future<void> setSessionToken(String token) =>
-  //     _setValue(_sessionTokenKey, token);
 
   T _getValue<T>(dynamic key, T defaultValue) =>
       _box.get(key, defaultValue: defaultValue) as T;

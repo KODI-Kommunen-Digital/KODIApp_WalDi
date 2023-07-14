@@ -46,6 +46,7 @@ dependencies:
   device_info: 2.0.3
   permission_handler: ^10.2.0
   url_launcher: 6.1.12
+  connectivity: ^3.0.6
 
   ### Location
   location: 4.4.0
@@ -54,6 +55,9 @@ dependencies:
   flutter_svprogresshud: 1.0.0
   shimmer: 2.0.0
   dotted_border: 2.0.0+3
+  font_awesome_flutter: 10.2.1
+  card_swiper: 2.0.4
+  cached_network_image: 3.2.3
 
   ### File Reading
   open_filex: 4.3.1
