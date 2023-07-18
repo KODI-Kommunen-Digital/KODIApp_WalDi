@@ -52,6 +52,10 @@ class HTTPManager {
           return handler.next(options);
         },
         onError: (DioError error, handler) async {
+          logError('error.response', error.response?.data['status']);
+          logError('error.data', error.response?.data);
+          logError('error.data', error.response?.statusCode);
+
           if (error.response?.data['status'] == 'error'){
             final response = Response(
               requestOptions: error.requestOptions,
@@ -66,6 +70,7 @@ class HTTPManager {
               return handler.next(error);
             }
 
+            ///Change the condition from status code to status message because status reponse doesnt contain status code
             if (error.response?.statusCode == 401) {
               var rToken = prefs.getKeyValue(Preferences.refreshToken, '');
               final userId = prefs.getKeyValue(Preferences.userId, '');

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:heidi/src/data/model/model.dart';
+import 'package:heidi/src/data/model/model_favorite.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
@@ -167,5 +168,19 @@ class UserRepository {
       return true;
     }
     return false;
+  }
+
+  static Future<List<FavoriteModel>> loadFavorites(userId) async {
+    final favoriteList = <FavoriteModel>[];
+    final response = await Api.requestFavorites(userId);
+    if (response.success) {
+      final responseData = response.data;
+      for (final data in responseData) {
+        favoriteList.add(FavoriteModel(
+            data['id'], data['userId'], data['cityId'], data['listingId']));
+      }
+      return favoriteList;
+    } else {}
+    return favoriteList;
   }
 }

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/presentation/main/account/change_password/change_password_screen.dart';
 import 'package:heidi/src/presentation/main/account/edit_profile/edit_profile_screen.dart';
 import 'package:heidi/src/presentation/main/account/legal/imprint/imprint.dart';
 import 'package:heidi/src/presentation/main/account/legal/legal.dart';
 import 'package:heidi/src/presentation/main/account/legal/privacy_policy/privacy.dart';
 import 'package:heidi/src/presentation/main/account/setting/settings_screen.dart';
+import 'package:heidi/src/presentation/main/home/list_product/list_product.dart';
+import 'package:heidi/src/presentation/main/home/product_detail/product_detail.dart';
 import 'package:heidi/src/presentation/main/login/forgot_password/forgot_password_screen.dart';
 import 'package:heidi/src/presentation/main/login/signin/signin_screen.dart';
 import 'package:heidi/src/presentation/main/login/signup/signup.dart';
@@ -61,6 +64,20 @@ class Routes {
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
+      case listProduct:
+        return MaterialPageRoute(
+          builder: (context) {
+            return ListProductScreen(selectedCityId: settings.arguments as int);
+          },
+        );
+
+      case productDetail:
+        return MaterialPageRoute(
+          builder: (context) {
+            return ProductDetailScreen(item: settings.arguments as ProductModel);
+          },
+        );
+
       case signIn:
         return MaterialPageRoute(
           builder: (context) {

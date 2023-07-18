@@ -5,6 +5,8 @@ import 'package:heidi/src/presentation/main/account/account_profile/cubit/accoun
 import 'package:heidi/src/presentation/main/account/change_password/cubit/change_password_cubit.dart';
 import 'package:heidi/src/presentation/main/account/edit_profile/cubit/edit_profile_cubit.dart';
 import 'package:heidi/src/presentation/main/home/cubit/home_cubit.dart';
+import 'package:heidi/src/presentation/main/home/list_product/cubit/cubit.dart';
+import 'package:heidi/src/presentation/main/home/product_detail/cubit/cubit.dart';
 import 'package:heidi/src/presentation/main/login/forgot_password/cubit/forgot_password_cubit.dart';
 import 'package:heidi/src/presentation/main/login/signin/cubit/login_cubit.dart';
 import 'package:heidi/src/presentation/main/login/signup/cubit/signup_cubit.dart';
@@ -24,13 +26,14 @@ class AppBloc {
   static final forgotPasswordCubit = ForgotPasswordCubit();
   static final changePasswordCubit = ChangePasswordCubit();
   static final homeCubit = HomeCubit();
+  static final listCubit = ListCubit();
   // static final homeCubit = HomeCubit();
   // static final wishListCubit = WishListCubit();
   // static final reviewCubit = ReviewCubit();
   // static final messageCubit = MessageCubit();
   // static final submitCubit = SubmitCubit();
   // static final searchCubit = SearchCubit();
-  // static final productDetailCubit = ProductDetailCubit();
+  static final productDetailCubit = ProductDetailCubit();
 
   static final List<BlocProvider> providers = [
     BlocProvider<ApplicationCubit>(
@@ -39,9 +42,9 @@ class AppBloc {
     BlocProvider<UserCubit>(
       create: (context) => userCubit,
     ),
-    // BlocProvider<ProductDetailCubit>(
-    //   create: (context) => productDetailCubit,
-    // ),
+    BlocProvider<ProductDetailCubit>(
+      create: (context) => productDetailCubit,
+    ),
     BlocProvider<LanguageCubit>(
       create: (context) => languageCubit,
     ),
@@ -71,6 +74,9 @@ class AppBloc {
     ),
     BlocProvider<HomeCubit>(
       create: (context) => homeCubit,
+    ),
+    BlocProvider<ListCubit>(
+      create: (context) => listCubit,
     ),
     // BlocProvider<HomeCubit>(
     //   create: (context) => homeCubit,

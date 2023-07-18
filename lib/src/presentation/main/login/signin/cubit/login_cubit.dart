@@ -24,15 +24,13 @@ class LoginCubit extends Cubit<LoginState> {
 
         emit(const LoginState.loaded());
       } else {
-        const LoginState.initial();
+        emit(const LoginState.initial());
         logError('Login Result Failed', userDetailResponse);
-
-        ///Notify
-        // emit(const LoginState.error());
       }
     }
     else{
-      emit(LoginStateError(response.message));
+      emit(const LoginState.initial());
+      emit(LoginState.error(response.message));
       logError('Request User Detail Error', response.message);
     }
   }

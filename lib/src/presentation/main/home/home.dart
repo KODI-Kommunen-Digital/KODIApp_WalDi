@@ -199,7 +199,7 @@ class _HomeScreenState extends State<HomeScreen> {
       prefs.setKeyValue(Preferences.categoryId, item.id);
       prefs.setKeyValue(Preferences.categoryId, item.id);
       prefs.setKeyValue(Preferences.type, "category");
-      if (mounted) return;
+      if (!mounted) return;
       Navigator.pushNamed(context, Routes.listProduct,
           arguments: selectedCityId);
     } else if (item.id != -1 && !item.hasChild) {
@@ -217,7 +217,7 @@ class _HomeScreenState extends State<HomeScreen> {
       final prefs = await Preferences.openBox();
       prefs.setKeyValue(Preferences.cityId, item.id);
       prefs.setKeyValue(Preferences.type, "location");
-      if (mounted) return;
+      if (!mounted) return;
       Navigator.pushNamed(context, Routes.listProduct, arguments: item.id);
     } else if (item.id != -1 && !item.hasChild) {
       _onPopUpCatError();
