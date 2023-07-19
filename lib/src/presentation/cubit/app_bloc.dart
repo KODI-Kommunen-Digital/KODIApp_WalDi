@@ -4,7 +4,7 @@ import 'package:heidi/src/presentation/cubit/user/user_cubit.dart';
 import 'package:heidi/src/presentation/main/account/account_profile/cubit/account_cubit.dart';
 import 'package:heidi/src/presentation/main/account/change_password/cubit/change_password_cubit.dart';
 import 'package:heidi/src/presentation/main/account/edit_profile/cubit/edit_profile_cubit.dart';
-import 'package:heidi/src/presentation/main/home/cubit/home_cubit.dart';
+import 'package:heidi/src/presentation/main/home/home_screen/cubit/home_cubit.dart';
 import 'package:heidi/src/presentation/main/home/list_product/cubit/cubit.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/cubit/cubit.dart';
 import 'package:heidi/src/presentation/main/login/forgot_password/cubit/forgot_password_cubit.dart';

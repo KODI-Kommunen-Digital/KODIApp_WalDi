@@ -2,7 +2,8 @@ import 'package:bloc/bloc.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
-import 'package:heidi/src/presentation/main/home/cubit/home_state.dart';
+
+import 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
   dynamic category;

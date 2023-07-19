@@ -17,7 +17,7 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
     final userId = prefs.getKeyValue(Preferences.userId, '');
     bool isLoggedIn = false;
 
-    if (userId == null) {
+    if (userId == '') {
       isLoggedIn = false;
     } else {
       isLoggedIn = true;

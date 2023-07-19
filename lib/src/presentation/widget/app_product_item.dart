@@ -5,6 +5,7 @@ import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:heidi/src/presentation/main/home/widget/empty_product_item.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/utils/configs/application.dart';
+import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class AppProductItem extends StatelessWidget {
@@ -28,7 +29,7 @@ class AppProductItem extends StatelessWidget {
         if (item == null) {
           return const EmptyProductItem();
         }
-
+        logError('ImageUrl:',item!.image );
         return InkWell(
           onTap: onPressed,
           child: Row(
@@ -82,7 +83,8 @@ class AppProductItem extends StatelessWidget {
                     Text(
                       item!.title,
                       maxLines: 1,
-                      style: Theme.of(context)
+                      style: Theme
+                          .of(context)
                           .textTheme
                           .bodyLarge!
                           .copyWith(fontWeight: FontWeight.bold),
@@ -90,7 +92,8 @@ class AppProductItem extends StatelessWidget {
                     const SizedBox(height: 2),
                     Text(
                       item?.category ?? '',
-                      style: Theme.of(context)
+                      style: Theme
+                          .of(context)
                           .textTheme
                           .bodySmall!
                           .copyWith(fontWeight: FontWeight.bold),
@@ -180,7 +183,8 @@ class AppProductItem extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                 item?.category ?? '',
-                style: Theme.of(context)
+                style: Theme
+                    .of(context)
                     .textTheme
                     .bodySmall!
                     .copyWith(fontWeight: FontWeight.bold),
@@ -189,7 +193,8 @@ class AppProductItem extends StatelessWidget {
               Text(
                 item!.title,
                 maxLines: 1,
-                style: Theme.of(context)
+                style: Theme
+                    .of(context)
                     .textTheme
                     .titleSmall!
                     .copyWith(fontWeight: FontWeight.bold),
@@ -199,7 +204,10 @@ class AppProductItem extends StatelessWidget {
               Text(
                 item!.address,
                 maxLines: 1,
-                style: Theme.of(context).textTheme.bodySmall,
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .bodySmall,
               ),
             ],
           ),
@@ -234,15 +242,20 @@ class AppProductItem extends StatelessWidget {
                         Text(
                           item?.category ?? '',
                           style:
-                              Theme.of(context).textTheme.bodySmall!.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                          Theme
+                              .of(context)
+                              .textTheme
+                              .bodySmall!
+                              .copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           item!.title,
                           maxLines: 1,
-                          style: Theme.of(context)
+                          style: Theme
+                              .of(context)
                               .textTheme
                               .titleSmall!
                               .copyWith(fontWeight: FontWeight.bold),
@@ -250,12 +263,17 @@ class AppProductItem extends StatelessWidget {
                         const SizedBox(height: 8),
                         Text(
                           item?.categoryId == 3
-                              ? "${item?.startDate} ${Translate.of(context).translate('to')} ${item?.endDate}"
+                              ? "${item?.startDate} ${Translate.of(context)
+                              .translate('to')} ${item?.endDate}"
                               : "",
                           style:
-                              Theme.of(context).textTheme.bodySmall!.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                          Theme
+                              .of(context)
+                              .textTheme
+                              .bodySmall!
+                              .copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         const SizedBox(height: 4),
                         const SizedBox(height: 8),

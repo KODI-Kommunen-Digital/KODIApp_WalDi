@@ -56,6 +56,8 @@ class HTTPManager {
           logError('error.data', error.response?.data);
           logError('error.data', error.response?.statusCode);
 
+          ///Change the condition from status code to status message because status code is always 401 when there is any error
+          ///So set if condition on error message of UnAuthorize token expire
           if (error.response?.data['status'] == 'error'){
             final response = Response(
               requestOptions: error.requestOptions,
@@ -70,7 +72,6 @@ class HTTPManager {
               return handler.next(error);
             }
 
-            ///Change the condition from status code to status message because status reponse doesnt contain status code
             if (error.response?.statusCode == 401) {
               var rToken = prefs.getKeyValue(Preferences.refreshToken, '');
               final userId = prefs.getKeyValue(Preferences.userId, '');
