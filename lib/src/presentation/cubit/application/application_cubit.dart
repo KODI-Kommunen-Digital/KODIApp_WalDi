@@ -14,9 +14,7 @@ import 'package:heidi/src/utils/logger.dart';
 class ApplicationCubit extends Cubit<ApplicationState> {
   ApplicationCubit() : super(const ApplicationLoading());
 
-  ///On Setup Application
   void onSetup() async {
-    ///Get old Theme & Font & Language & Dark Mode & Domain
     final prefBox = await Preferences.openBox();
 
     final oldTheme = prefBox.getKeyValue(Preferences.theme, '');

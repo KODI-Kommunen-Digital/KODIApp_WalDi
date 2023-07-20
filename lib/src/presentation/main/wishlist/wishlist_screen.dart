@@ -104,8 +104,10 @@ class _WishListLoadedState extends State<WishListLoaded> {
                           Row(
                             children: <Widget>[
                               CachedNetworkImage(
-                                imageUrl:
-                                    "${Application.picturesURL}${(widget.favoritesList[index].logo)}",
+                                imageUrl: widget.favoritesList[index].logo ==
+                                        null
+                                    ? "${Application.picturesURL}admin/News.jpeg"
+                                    : "${Application.picturesURL}${(widget.favoritesList[index].logo)}",
                                 imageBuilder: (context, imageProvider) {
                                   return Container(
                                     width: 120,
@@ -207,7 +209,7 @@ class _WishListLoadedState extends State<WishListLoaded> {
     ProductModel product = ProductModel(
         id: favoritesList.id,
         title: favoritesList.title,
-        image: favoritesList.logo!,
+        image: favoritesList.logo ?? 'admin/News.jpeg',
         description: favoritesList.description,
         userId: favoritesList.userId,
         statusId: favoritesList.statusId!,
