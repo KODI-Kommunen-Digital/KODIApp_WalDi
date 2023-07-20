@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model.dart';
+import 'package:heidi/src/utils/configs/application.dart';
 
 import 'app_placeholder.dart';
 
@@ -81,7 +82,7 @@ class AppUserInfo extends StatelessWidget {
           height: 60,
           child: ClipOval(
               child: Image.network(
-            "http://testing.heidi.obs.eu-de.otc.t-systems.com/${user!.image}",
+            "${Application.picturesURL}${user!.image}",
             width: 100,
             height: 100,
             fit: BoxFit.cover,
@@ -160,53 +161,11 @@ class AppUserInfo extends StatelessWidget {
             children: <Widget>[
               ClipOval(
                   child: Image.network(
-                "http://testing.heidi.obs.eu-de.otc.t-systems.com/${user!.image}",
+                "${Application.picturesURL}${user!.image}",
                 width: 100,
                 height: 100,
                 fit: BoxFit.cover,
               )),
-              // CachedNetworkImage(
-              //   imageUrl:
-              //       "http://testing.heidi.obs.eu-de.otc.t-systems.com/${user!.image}",
-              //   placeholder: (context, url) {
-              //     return AppPlaceholder(
-              //       child: Container(
-              //         width: 40,
-              //         height: 40,
-              //         decoration: const BoxDecoration(
-              //           color: Colors.white,
-              //           shape: BoxShape.circle,
-              //         ),
-              //       ),
-              //     );
-              //   },
-              //   imageBuilder: (context, imageProvider) {
-              //     return Container(
-              //       width: 40,
-              //       height: 40,
-              //       decoration: BoxDecoration(
-              //         image: DecorationImage(
-              //           image: imageProvider,
-              //           fit: BoxFit.cover,
-              //         ),
-              //         shape: BoxShape.circle,
-              //       ),
-              //     );
-              //   },
-              //   errorWidget: (context, url, error) {
-              //     return AppPlaceholder(
-              //       child: Container(
-              //         width: 40,
-              //         height: 40,
-              //         decoration: const BoxDecoration(
-              //           color: Colors.white,
-              //           shape: BoxShape.circle,
-              //         ),
-              //         child: const Icon(Icons.error),
-              //       ),
-              //     );
-              //   },
-              // ),
               const SizedBox(width: 8),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

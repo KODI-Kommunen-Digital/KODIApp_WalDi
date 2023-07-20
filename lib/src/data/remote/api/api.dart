@@ -5,6 +5,7 @@ import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/remote/api/http_manager.dart';
 import 'package:heidi/src/utils/asset.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
+import 'package:heidi/src/utils/logging/loggy_exp.dart';
 
 class Api {
   static final httpManager = HTTPManager();
@@ -21,14 +22,13 @@ class Api {
   static const String listings = "/listings?statusId=1";
 
   static Future<ResultApiModel> requestLogin(params) async {
-
-    try{
+    try {
       final result = await httpManager.post(url: login, data: params);
-      return ResultApiModel.fromJson(result);}
-    catch(e){
+      return ResultApiModel.fromJson(result);
+    } catch (e) {
+      logError('Http Request', e);
       return await httpManager.post(url: login, data: params);
     }
-
   }
 
   static Future<ResultApiModel> requestFavorites(userId) async {
@@ -43,7 +43,6 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
-  ///Forgot password
   static Future<ResultApiModel> requestForgotPassword(params) async {
     Map<String, dynamic> result = await httpManager.post(
       url: forgotPassword,

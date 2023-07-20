@@ -10,6 +10,7 @@ import 'package:heidi/src/presentation/main/home/product_detail/cubit/cubit.dart
 import 'package:heidi/src/presentation/main/login/forgot_password/cubit/forgot_password_cubit.dart';
 import 'package:heidi/src/presentation/main/login/signin/cubit/login_cubit.dart';
 import 'package:heidi/src/presentation/main/login/signup/cubit/signup_cubit.dart';
+import 'package:heidi/src/presentation/main/wishlist/cubit/cubit.dart';
 
 import 'bloc.dart';
 
@@ -28,7 +29,7 @@ class AppBloc {
   static final homeCubit = HomeCubit();
   static final listCubit = ListCubit();
   // static final homeCubit = HomeCubit();
-  // static final wishListCubit = WishListCubit();
+  static final wishListCubit = WishListCubit();
   // static final reviewCubit = ReviewCubit();
   // static final messageCubit = MessageCubit();
   // static final submitCubit = SubmitCubit();
@@ -81,9 +82,9 @@ class AppBloc {
     // BlocProvider<HomeCubit>(
     //   create: (context) => homeCubit,
     // ),
-    // BlocProvider<WishListCubit>(
-    //   create: (context) => wishListCubit,
-    // ),
+    BlocProvider<WishListCubit>(
+      create: (context) => wishListCubit,
+    ),
     // BlocProvider<ReviewCubit>(
     //   create: (context) => reviewCubit,
     // ),

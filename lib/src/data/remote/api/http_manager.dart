@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
 import 'package:heidi/src/data/model/model.dart';
-import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/logger.dart';
@@ -14,13 +13,9 @@ class HTTPManager {
   late final Dio _dio;
 
   HTTPManager() {
-    ///Dio
     _dio = Dio(
       BaseOptions(
         baseUrl: 'https://app.smartregion-auf.de/api',
-        // baseUrl: 'http://80.158.43.3:3001',
-        // baseUrl: 'http://192.168.100.26:8002',
-        // baseUrl: 'http://10.5.22.172:8002',
         connectTimeout: 30000,
         receiveTimeout: 30000,
         contentType: Headers.formUrlEncodedContentType,
@@ -28,110 +23,74 @@ class HTTPManager {
       ),
     );
 
-    ///Interceptors dio
     _dio.interceptors.add(
-      QueuedInterceptorsWrapper(
-        onRequest: (options, handler) async {
-          final prefs = await Preferences.openBox();
-          Map<String, dynamic> headers = {
-            "Device-Id": Application.device?.uuid,
-            "osName": Application.device?.model,
-            "Device-Version": Application.device?.version,
-            "deviceType":
-                '${Application.device?.type} ${Application.device?.model}',
-            "Device-Token": Application.device?.token,
-            HttpHeaders.contentTypeHeader: 'application/json',
-          };
+      InterceptorsWrapper(onRequest: (options, handler) async {
+        final prefs = await Preferences.openBox();
+        Map<String, dynamic> headers = {
+          "Device-Id": Application.device?.uuid,
+          "osName": Application.device?.model,
+          "Device-Version": Application.device?.version,
+          "deviceType":
+              '${Application.device?.type} ${Application.device?.model}',
+          "Device-Token": Application.device?.token,
+          HttpHeaders.contentTypeHeader: 'application/json',
+        };
 
-          var token = prefs.getKeyValue(Preferences.token, '');
-          if (token != '') {
-            headers["Authorization"] = "Bearer $token";
-          }
-          options.headers.addAll(headers);
-          _printRequest(options);
-          return handler.next(options);
-        },
-        onError: (DioError error, handler) async {
-          logError('error.response', error.response?.data['status']);
-          logError('error.data', error.response?.data);
-          logError('error.data', error.response?.statusCode);
-
-          ///Change the condition from status code to status message because status code is always 401 when there is any error
-          ///So set if condition on error message of UnAuthorize token expire
-          if (error.response?.data['status'] == 'error'){
-            final response = Response(
-              requestOptions: error.requestOptions,
-              data: error.response?.data,
-            );
-            return handler.resolve(response);
-          }
-          else{
-            final prefs = await Preferences.openBox();
-            logError('error.response', error.response?.data['status']);
-            if (error.type != DioErrorType.response) {
-              return handler.next(error);
-            }
-
-            if (error.response?.statusCode == 401) {
-              var rToken = prefs.getKeyValue(Preferences.refreshToken, '');
-              final userId = prefs.getKeyValue(Preferences.userId, '');
-
-              final Map<String, dynamic> params = {
-                "refreshToken": rToken,
-              };
-
-              final result =
-              await post(url: '/users/$userId/refresh', data: params);
-              final response = ResultApiModel.fromJson(result);
-              if (response.success) {
-                prefs.setKeyValue(
-                    Preferences.token, response.data['accessToken']);
-                prefs.setKeyValue(
-                    Preferences.refreshToken, response.data['refreshToken']);
-
-                _dio.interceptors.add(QueuedInterceptorsWrapper(
-                    onRequest: (options, handler) async {
-                      var options = error.response!.requestOptions;
-                      Map<String, dynamic> headers = {
-                        "Device-Id": Application.device?.uuid,
-                        "osName": Application.device?.model,
-                        "Device-Version": Application.device?.version,
-                        "deviceType": Application.device?.type,
-                        "browserName": null,
-                        "Device-Token": Application.device?.token,
-                        HttpHeaders.contentTypeHeader: 'application/json',
-                      };
-
-                      var token = prefs.getKeyValue(Preferences.token, '');
-                      if (token != '') {
-                        headers["Authorization"] = "Bearer $token";
-                      }
-                      options.headers.addAll(headers);
-                      _printRequest(options);
-
-                      return handler.next(options);
-                    }, onError: (DioError error, handler) async {
-                  if (error.response?.statusCode == 401) {
-                    AppBloc.loginCubit.onLogout();
-                  }
-                }));
-              } else {
-                AppBloc.loginCubit.onLogout();
-              }
-            }
-
-            final response = Response(
-              requestOptions: error.requestOptions,
-              data: error.response?.data,
-            );
-            return handler.resolve(response);
-          }
+        var token = prefs.getKeyValue(Preferences.token, '');
+        if (token != '') {
+          headers["Authorization"] = "Bearer $token";
         }
-      ),
+        options.headers.addAll(headers);
+        _printRequest(options);
+        return handler.next(options);
+      }, onResponse: (response, handler) {
+        handler.next(response);
+      }, onError: (error, handler) async {
+        if (error.response?.data['message'] ==
+            'Unauthorized! Token was expired!') {
+          final prefs = await Preferences.openBox();
+          var rToken = prefs.getKeyValue(Preferences.refreshToken, '');
+          final userId = prefs.getKeyValue(Preferences.userId, '');
+          final Map<String, dynamic> params = {
+            "refreshToken": rToken,
+          };
+          final result =
+              await post(url: '/users/$userId/refresh', data: params);
+          final response = ResultApiModel.fromJson(result);
+          if (response.success) {
+            final newToken = response.data['accessToken'];
+            prefs.setKeyValue(Preferences.token, newToken);
+            prefs.setKeyValue(
+                Preferences.refreshToken, response.data['refreshToken']);
+            error.requestOptions.headers['Authorization'] = 'Bearer $newToken';
+            try {
+              var response = await _dio.request(
+                error.requestOptions.path,
+                options: Options(
+                  method: error.requestOptions.method,
+                  headers: error.requestOptions.headers,
+                  receiveTimeout: error.requestOptions.receiveTimeout,
+                ),
+              );
+              handler.resolve(response);
+            } catch (e) {
+              logError('Refresh Token Response Failed', e);
+              handler.reject(error);
+            }
+          } else {
+            logError('error6', response.message);
+          }
+        } else {
+          final response = Response(
+            requestOptions: error.requestOptions,
+            data: error.response?.data,
+          );
+          return handler.resolve(response);
+        }
+      }),
     );
   }
 
-  ///Post method
   Future<dynamic> post({
     required String url,
     dynamic data,
@@ -165,7 +124,6 @@ class HTTPManager {
     }
   }
 
-  ///Delete method
   Future<dynamic> delete({
     required String url,
     dynamic data,
@@ -195,7 +153,6 @@ class HTTPManager {
     }
   }
 
-  ///Post method
   Future<dynamic> patch({
     required String url,
     dynamic data,
@@ -229,7 +186,6 @@ class HTTPManager {
     }
   }
 
-  ///Get method
   Future<dynamic> get({
     required String url,
     dynamic params,
@@ -256,7 +212,6 @@ class HTTPManager {
     }
   }
 
-  ///Post method
   Future<dynamic> download({
     required String url,
     required String filePath,
@@ -301,12 +256,6 @@ class HTTPManager {
     }
   }
 
-  ///On change domain
-  // void changeDomain(String domain) {
-  //   _dio.options.baseUrl = 'https://heidiapp.com/index.php/wp-json';
-  // }
-
-  ///Print request info
   void _printRequest(RequestOptions options) {
     UtilLogger.log("BEFORE REQUEST ====================================");
     UtilLogger.log("${options.method} URL", options.uri);

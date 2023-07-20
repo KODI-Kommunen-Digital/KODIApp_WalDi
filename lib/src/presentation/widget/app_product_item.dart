@@ -5,7 +5,6 @@ import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:heidi/src/presentation/main/home/widget/empty_product_item.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/utils/configs/application.dart';
-import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class AppProductItem extends StatelessWidget {
@@ -29,7 +28,6 @@ class AppProductItem extends StatelessWidget {
         if (item == null) {
           return const EmptyProductItem();
         }
-        logError('ImageUrl:',item!.image );
         return InkWell(
           onTap: onPressed,
           child: Row(

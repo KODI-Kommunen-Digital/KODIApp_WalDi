@@ -71,7 +71,6 @@ class ListRepository {
     params['listingId'] = items.id;
     final response = await Api.requestAddWishList(userId, params);
     if (response.success) {
-      logError('Add Wishlist Response Success', response.message);
       return true;
     }
     else {
@@ -87,7 +86,7 @@ class ListRepository {
       return true;
     }
     else{
-      logError('Remove Wishlist Response Success', response.message);
+      logError('Remove Wishlist Response Failed', response.message);
       return false;
     }
   }

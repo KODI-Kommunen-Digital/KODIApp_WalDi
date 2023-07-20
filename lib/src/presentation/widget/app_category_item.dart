@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
+import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 enum CategoryView { full, icon, cardLarge }
@@ -17,7 +18,6 @@ class AppCategory extends StatelessWidget {
   final CategoryView type;
   final CategoryModel? item;
   final VoidCallback? onPressed;
-  static const String profilePicUrl = "http://testing.heidi.obs.eu-de.otc.t-systems.com/";
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +43,7 @@ class AppCategory extends StatelessWidget {
           child: SizedBox(
             height: 120,
             child: CachedNetworkImage(
-              imageUrl: "$profilePicUrl${item!.image}",
+              imageUrl: "${Application.picturesURL}${item!.image}",
               imageBuilder: (context, imageProvider) {
                 return Container(
                   decoration: BoxDecoration(
@@ -252,7 +252,7 @@ class AppCategory extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
               ),
               child: CachedNetworkImage(
-                imageUrl:"$profilePicUrl${item!.image}",
+                imageUrl:"${Application.picturesURL}${item!.image}",
                 imageBuilder: (context, imageProvider) {
                   return Container(
                     decoration: BoxDecoration(

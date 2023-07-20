@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
+import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -231,7 +232,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
     if (widget.image != null) {
       decorationImage = DecorationImage(
         image: NetworkImage(
-            "http://testing.heidi.obs.eu-de.otc.t-systems.com/${widget.image!}"),
+            "${Application.picturesURL}${widget.image!}"),
         fit: BoxFit.cover,
       );
     }

@@ -38,7 +38,7 @@ class _MainScreenState extends State<MainScreen> {
           children: const <Widget>[
             HomeScreen(),
             DiscoveryScreen(),
-            WishlistScreen(),
+            WishListScreen(),
             AccountScreen()
           ],
         ),

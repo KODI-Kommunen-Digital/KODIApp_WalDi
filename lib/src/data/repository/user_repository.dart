@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:heidi/src/data/model/model.dart';
+import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_favorite.dart';
+import 'package:heidi/src/data/model/model_favorites_detail_list.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
@@ -181,6 +183,66 @@ class UserRepository {
       }
       return favoriteList;
     } else {}
+    return favoriteList;
+  }
+
+  static Future<List<FavoriteDetailsModel>> loadFavoritesListDetail(
+      userId) async {
+    final Map<String, dynamic> params = {};
+    final favoriteList = <FavoriteDetailsModel>[];
+    List<CategoryModel> categories = [];
+    late CategoryModel categoryDetails;
+    final response = await Api.requestFavorites(userId);
+    if (response.success) {
+      final responseData = response.data;
+
+      final categoryResponse = await Api.requestCategory(params);
+      if (categoryResponse.success) {
+        categories = List.from(categoryResponse.data ?? []).map((item) {
+          return CategoryModel.fromJson(item);
+        }).toList();
+      }
+      for (final data in responseData) {
+        final favoriteListResponse = await Api.requestFavoritesDetailsList(
+            data['cityId'], data['listingId']);
+
+        if (favoriteListResponse.success) {
+          categoryDetails = categories.singleWhere((element) =>
+          element.id == favoriteListResponse.data['categoryId']);
+
+          favoriteList.add(FavoriteDetailsModel(
+            favoriteListResponse.data['id'],
+            favoriteListResponse.data['userId'],
+            favoriteListResponse.data['title'],
+            favoriteListResponse.data['place'],
+            categoryDetails.title,
+            favoriteListResponse.data['description'],
+            favoriteListResponse.data['media'],
+            favoriteListResponse.data['categoryId'],
+            favoriteListResponse.data['subcategoryId'] ?? 0,
+            favoriteListResponse.data['address'] ?? '',
+            favoriteListResponse.data['email'],
+            favoriteListResponse.data['phone'],
+            favoriteListResponse.data['website'],
+            favoriteListResponse.data['price'],
+            favoriteListResponse.data['discountPrice'],
+            favoriteListResponse.data['logo'],
+            favoriteListResponse.data['statusId'],
+            favoriteListResponse.data['sourceId'],
+            favoriteListResponse.data['longitude'],
+            favoriteListResponse.data['latitude'],
+            favoriteListResponse.data['villageId'],
+            favoriteListResponse.data['startDate'],
+            favoriteListResponse.data['endDate'],
+            favoriteListResponse.data['createdAt'],
+          ));
+        } else {
+          logError('Favorite Response Failed', favoriteListResponse.message);
+        }
+      }
+    } else {
+      logError('Request Favorite Response Failed', response.message);
+    }
     return favoriteList;
   }
 }
