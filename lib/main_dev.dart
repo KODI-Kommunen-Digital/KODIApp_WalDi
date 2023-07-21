@@ -10,12 +10,14 @@ import 'package:heidi/src/utils/configs/language.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/heidi_bloc_observer.dart';
+import 'package:heidi/src/utils/language_manager.dart';
 import 'package:heidi/src/utils/logging/bloc_logger.dart';
 import 'package:heidi/src/utils/logging/crashlytics_log_printer.dart';
 import 'package:heidi/src/utils/logging/drift_logger.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:loggy/loggy.dart';
+import 'package:provider/provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -73,41 +75,43 @@ class _HeidiAppState extends State<HeidiApp> {
           builder: (context, lang) {
             return BlocBuilder<ThemeCubit, ThemeState>(
               builder: (context, theme) {
-                return MaterialApp(
-                  debugShowCheckedModeBanner: false,
-                  theme: theme.lightTheme,
-                  darkTheme: theme.darkTheme,
-                  onGenerateRoute: Routes.generateRoute,
-                  locale: lang,
-                  localizationsDelegates: const [
-                    Translate.delegate,
-                    GlobalMaterialLocalizations.delegate,
-                    GlobalWidgetsLocalizations.delegate,
-                    GlobalCupertinoLocalizations.delegate,
-                  ],
-                  supportedLocales: AppLanguage.supportLanguage,
-                  home: Scaffold(
-                    body: BlocBuilder<ApplicationCubit, ApplicationState>(
-                      builder: (context, state) {
-                        if (state == const ApplicationState.loaded()) {
+                return ChangeNotifierProvider(
+                  create:  (_) => LanguageManager(),
+                  child: MaterialApp(
+                    debugShowCheckedModeBanner: false,
+                    theme: theme.lightTheme,
+                    darkTheme: theme.darkTheme,
+                    onGenerateRoute: Routes.generateRoute,
+                    localizationsDelegates: const [
+                      Translate.delegate,
+                      GlobalMaterialLocalizations.delegate,
+                      GlobalWidgetsLocalizations.delegate,
+                      GlobalCupertinoLocalizations.delegate,
+                    ],
+                    supportedLocales: AppLanguage.supportLanguage,
+                    home: Scaffold(
+                      body: BlocBuilder<ApplicationCubit, ApplicationState>(
+                        builder: (context, state) {
+                          if (state == const ApplicationState.loaded()) {
+                            return const MainScreen();
+                          }
+                          if (state == const ApplicationState.loading()) {
+                            return const SplashScreen();
+                          }
                           return const MainScreen();
-                        }
-                        if (state == const ApplicationState.loading()) {
-                          return const SplashScreen();
-                        }
-                        return const MainScreen();
-                      },
+                        },
+                      ),
                     ),
+                    builder: (context, child) {
+                      final data = MediaQuery.of(context).copyWith(
+                        textScaleFactor: theme.textScaleFactor,
+                      );
+                      return MediaQuery(
+                        data: data,
+                        child: child!,
+                      );
+                    },
                   ),
-                  builder: (context, child) {
-                    final data = MediaQuery.of(context).copyWith(
-                      textScaleFactor: theme.textScaleFactor,
-                    );
-                    return MediaQuery(
-                      data: data,
-                      child: child!,
-                    );
-                  },
                 );
               },
             );
