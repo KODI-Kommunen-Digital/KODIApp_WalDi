@@ -1,11 +1,8 @@
 import 'dart:async';
-import 'dart:developer';
-
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/remote/api/http_manager.dart';
 import 'package:heidi/src/utils/asset.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
-import 'package:heidi/src/utils/logging/loggy_exp.dart';
 
 class Api {
   static final httpManager = HTTPManager();
@@ -26,7 +23,6 @@ class Api {
       final result = await httpManager.post(url: login, data: params);
       return ResultApiModel.fromJson(result);
     } catch (e) {
-      logError('Http Request', e);
       return await httpManager.post(url: login, data: params);
     }
   }
@@ -191,6 +187,12 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
+  static Future<ResultApiModel> requestSubCatList(params) async {
+    var list = '/listings?categoryId=1&subCategoryId=1&statusId=1';
+    final result = await httpManager.get(url: list);
+    return ResultApiModel.fromJson(result);
+  }
+
   static Future<ResultApiModel> requestLocList(params) async {
     var list = '/listings?cityId=$params&statusId=1';
     final result = await httpManager.get(url: list);
@@ -221,8 +223,6 @@ class Api {
       url: filepath,
       formData: pickedFile,
     );
-    log(result);
-
     final convertResponse = {"success": result['id'] != null, "data": result};
     return ResultApiModel.fromJson(convertResponse);
   }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/utils/configs/application.dart';
-
 import 'app_placeholder.dart';
 
 enum UserViewType { basic, information, qrcode }
@@ -22,7 +21,6 @@ class AppUserInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (type) {
       case UserViewType.information:
-
         if (user == null) {
           return AppPlaceholder(
             child: Row(
@@ -65,7 +63,7 @@ class AppUserInfo extends StatelessWidget {
           );
         }
         if (user!.description.isNotEmpty) {
-         Column(
+          Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 4),
@@ -93,7 +91,6 @@ class AppUserInfo extends StatelessWidget {
           child: Row(
             children: <Widget>[
               networkImage,
-
               const SizedBox(width: 8),
               Expanded(
                 child: Column(

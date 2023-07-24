@@ -3,7 +3,7 @@
     "data": [
         {
             "id": 1,
-            "name": "Nachricht",
+            "name": "News",
             "noOfSubcategories": 8,
             "icon": "fas fa-newspaper",
             "color": "#ff8a65",
@@ -11,7 +11,7 @@
         },
         {
             "id": 2,
-            "name": "Straßenarbeiten/Verkehr",
+            "name": "Verkehr",
             "noOfSubcategories": 0,
             "icon": "fas fa-traffic-light",
             "color": "#5d6d7e",
@@ -19,7 +19,7 @@
         },
         {
             "id": 3,
-            "name": "Veranstaltungen",
+            "name": "Events",
             "noOfSubcategories": 0,
             "icon": "far fa-calendar-check",
             "color": "#a569bd",
@@ -35,7 +35,7 @@
         },
         {
             "id": 5,
-            "name": "Regionale Produkte",
+            "name": "Produkte",
             "noOfSubcategories": 0,                
             "icon": "fas fa-cart-shopping",
             "color": "#4a90a4",
@@ -43,7 +43,7 @@
         },
         {
             "id": 6,
-            "name": "Angebot/Suche",
+            "name": "Biete/Suche",
             "noOfSubcategories": 0,
             "icon": "fas fa-magnifying-glass",
             "color": "#58d68d",
@@ -59,7 +59,7 @@
         },
         {
             "id": 8,
-            "name": "Mängelbericht",
+            "name": "Mängelmelder",
             "noOfSubcategories": 0,            
             "icon": "fas fa-triangle-exclamation",
             "color": "#ff8a65",
@@ -67,7 +67,7 @@
         },
         {
             "id": 9,
-            "name": "Verloren/Gefunden",
+            "name": "Fundbüro",
             "noOfSubcategories": 0,
             "icon": "fas fa-search",
             "color": "#58d68d",
@@ -75,7 +75,7 @@
         },
         {
             "id": 10,
-            "name": "Firmenportraits",
+            "name": "Unternehmen",
             "noOfSubcategories": 0,
             "icon": "fas fa-briefcase",
             "color": "#fdc60a",
@@ -83,7 +83,7 @@
         },
         {
             "id": 11,
-            "name": "Mitfahrgelegenheit/Öffentliche Verkehrsmittel",
+            "name": "Mitfahrbank",
             "noOfSubcategories": 0,
             "icon": "fas fa-bus",
             "color": "#ff8a65",

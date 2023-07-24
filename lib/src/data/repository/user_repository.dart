@@ -27,33 +27,31 @@ class UserRepository {
     try {
       final response = await Api.requestLogin(params);
       if (response.success) {
+        final userId = response.data['userId'];
+        final cityUsers = response.data['cityUsers'];
+        for (final cities in cityUsers) {
+          cityIds.add(cities['cityId']);
+        }
+        List<String> cityIdsList = cityIds.map((i) => i.toString()).toList();
 
-      final userId = response.data['userId'];
-      final cityUsers = response.data['cityUsers'];
-      for (final cities in cityUsers) {
-        cityIds.add(cities['cityId']);
-      }
-      List<String> cityIdsList = cityIds.map((i) => i.toString()).toList();
-
-
-      prefs.setKeyValue(Preferences.userId, userId);
-      prefs.setKeyValue(Preferences.token, response.data['accessToken']);
-      prefs.setKeyValue(
-          Preferences.refreshToken, response.data['refreshToken']);
-      prefs.setKeyValue(Preferences.cityId, cityIdsList);
+        prefs.setKeyValue(Preferences.userId, userId);
+        prefs.setKeyValue(Preferences.token, response.data['accessToken']);
+        prefs.setKeyValue(
+            Preferences.refreshToken, response.data['refreshToken']);
+        prefs.setKeyValue(Preferences.cityId, cityIdsList);
 
         return response;
-    } else {
-      logError('Login Request Error', response.message);
-      return response;
-    }
+      } else {
+        logError('Login Request Error', response.message);
+        return response;
+      }
     } catch (e) {
       logError('request Login Response Error', e);
     }
     return null;
   }
 
-  static Future<UserModel?> requestUserDetails(userId)async{
+  static Future<UserModel?> requestUserDetails(userId) async {
     final response1 = await Api.requestUser(userId: userId);
     return UserModel.fromJson(response1.data);
   }
@@ -208,7 +206,7 @@ class UserRepository {
 
         if (favoriteListResponse.success) {
           categoryDetails = categories.singleWhere((element) =>
-          element.id == favoriteListResponse.data['categoryId']);
+              element.id == favoriteListResponse.data['categoryId']);
 
           favoriteList.add(FavoriteDetailsModel(
             favoriteListResponse.data['id'],

@@ -18,6 +18,7 @@ class AppCategory extends StatelessWidget {
   final CategoryView type;
   final CategoryModel? item;
   final VoidCallback? onPressed;
+  static const String profilePicUrl = Application.picturesURL;
 
   @override
   Widget build(BuildContext context) {
@@ -252,7 +253,7 @@ class AppCategory extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
               ),
               child: CachedNetworkImage(
-                imageUrl:"${Application.picturesURL}${item!.image}",
+                imageUrl: "$profilePicUrl${item!.image}",
                 imageBuilder: (context, imageProvider) {
                   return Container(
                     decoration: BoxDecoration(
