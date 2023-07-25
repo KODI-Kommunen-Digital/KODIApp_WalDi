@@ -181,6 +181,19 @@ class _WishListLoadedState extends State<WishListLoaded> {
                                           .copyWith(
                                               fontWeight: FontWeight.bold),
                                     ),
+                                    Text(
+                                      widget.favoritesList[index].categoryId ==
+                                              1
+                                          ? WishListCubit().onDateParse(widget
+                                              .favoritesList[index].createdAt)
+                                          : "",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall!
+                                          .copyWith(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                    ),
                                     const SizedBox(height: 8),
                                     const SizedBox(height: 8),
                                     const SizedBox(height: 4),
@@ -219,7 +232,8 @@ class _WishListLoadedState extends State<WishListLoaded> {
         email: favoritesList.email ?? '',
         favorite: true,
         startDate: favoritesList.startDate ?? '',
-        endDate: favoritesList.endDate ?? '');
+        endDate: favoritesList.endDate ?? '',
+        createDate: WishListCubit().onDateParse(favoritesList.createdAt));
 
     Navigator.pushNamed(context, Routes.productDetail, arguments: product)
         .then((value) async {

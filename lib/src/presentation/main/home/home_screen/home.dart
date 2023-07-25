@@ -94,6 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         setState(() {
                           selectedCityTitle = data;
                           selectedCityId = list.id;
+                          AppBloc.homeCubit.saveCityId(list.id);
                         });
                       } else if (data ==
                           Translate.of(context).translate('select_city')) {

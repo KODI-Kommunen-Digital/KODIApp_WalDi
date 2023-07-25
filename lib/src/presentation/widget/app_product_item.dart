@@ -80,9 +80,8 @@ class AppProductItem extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       item!.title,
-                      maxLines: 1,
-                      style: Theme
-                          .of(context)
+                      maxLines: 2,
+                      style: Theme.of(context)
                           .textTheme
                           .bodyLarge!
                           .copyWith(fontWeight: FontWeight.bold),
@@ -90,8 +89,7 @@ class AppProductItem extends StatelessWidget {
                     const SizedBox(height: 2),
                     Text(
                       item?.category ?? '',
-                      style: Theme
-                          .of(context)
+                      style: Theme.of(context)
                           .textTheme
                           .bodySmall!
                           .copyWith(fontWeight: FontWeight.bold),
@@ -181,8 +179,7 @@ class AppProductItem extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                 item?.category ?? '',
-                style: Theme
-                    .of(context)
+                style: Theme.of(context)
                     .textTheme
                     .bodySmall!
                     .copyWith(fontWeight: FontWeight.bold),
@@ -190,9 +187,8 @@ class AppProductItem extends StatelessWidget {
               const SizedBox(height: 4),
               Text(
                 item!.title,
-                maxLines: 1,
-                style: Theme
-                    .of(context)
+                maxLines: 2,
+                style: Theme.of(context)
                     .textTheme
                     .titleSmall!
                     .copyWith(fontWeight: FontWeight.bold),
@@ -202,10 +198,7 @@ class AppProductItem extends StatelessWidget {
               Text(
                 item!.address,
                 maxLines: 1,
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .bodySmall,
+                style: Theme.of(context).textTheme.bodySmall,
               ),
             ],
           ),
@@ -240,20 +233,15 @@ class AppProductItem extends StatelessWidget {
                         Text(
                           item?.category ?? '',
                           style:
-                          Theme
-                              .of(context)
-                              .textTheme
-                              .bodySmall!
-                              .copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                              Theme.of(context).textTheme.bodySmall!.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           item!.title,
-                          maxLines: 1,
-                          style: Theme
-                              .of(context)
+                          maxLines: 2,
+                          style: Theme.of(context)
                               .textTheme
                               .titleSmall!
                               .copyWith(fontWeight: FontWeight.bold),
@@ -261,17 +249,19 @@ class AppProductItem extends StatelessWidget {
                         const SizedBox(height: 8),
                         Text(
                           item?.categoryId == 3
-                              ? "${item?.startDate} ${Translate.of(context)
-                              .translate('to')} ${item?.endDate}"
+                              ? "${item?.startDate} ${Translate.of(context).translate('to')} ${item?.endDate}"
                               : "",
                           style:
-                          Theme
-                              .of(context)
-                              .textTheme
-                              .bodySmall!
-                              .copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                              Theme.of(context).textTheme.bodySmall!.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                        ),
+                        Text(
+                          item?.categoryId == 1 ? "${item?.createDate}" : "",
+                          style:
+                              Theme.of(context).textTheme.bodySmall!.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
                         ),
                         const SizedBox(height: 4),
                         const SizedBox(height: 8),

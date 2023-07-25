@@ -16,16 +16,15 @@ class Images {
   static const String twitter = "assets/images/twitter.png";
   static const String tumblr = "assets/images/tumblr.png";
   static const String instagram = "assets/images/instagram.png";
-  static const String service1 = "assets/images/services-1.jpg";
-  static const String service2 = "assets/images/services-2.jpg";
-  static const String service3 = "assets/images/services-3.jpg";
-  static const String service4 = "assets/images/services-4.jpg";
-  static const String service5 = "assets/images/services-5.jpg";
-  static const String service6 = "assets/images/services-6.jpg";
-  static const String service7 = "assets/images/services-7.jpg";
-  static const String service8 = "assets/images/services-8.jpg";
-  static const String service9 = "assets/images/services-9.jpg";
-  static const String service10 = "assets/images/services-10.jpg";
+  static const String service1 = "assets/images/services-1.png";
+  static const String service2 = "assets/images/services-2.png";
+  static const String service3 = "assets/images/services-3.png";
+  static const String service4 = "assets/images/services-4.png";
+  static const String service5 = "assets/images/services-5.png";
+  static const String service6 = "assets/images/services-6.png";
+  static const String service7 = "assets/images/services-7.png";
+  static const String service8 = "assets/images/services-8.png";
+  static const String service9 = "assets/images/services-9.png";
   static const String defaultListing = "assets/images/default_image.jpeg";
 
   ///Singleton factory

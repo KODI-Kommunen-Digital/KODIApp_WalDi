@@ -132,7 +132,7 @@ class _MainScreenState extends State<MainScreen> {
       case Routes.wishList:
         iconData = Icons.bookmark_outline;
         title = Translate.of(context).translate(
-          'wishlist',
+          'wish_list',
         );
         break;
       case Routes.account:
@@ -168,7 +168,7 @@ class _MainScreenState extends State<MainScreen> {
                   fontSize: 10,
                   color: color,
                 ),
-            maxLines: 1,
+            maxLines: 2,
             overflow: TextOverflow.ellipsis,
           )
         ],

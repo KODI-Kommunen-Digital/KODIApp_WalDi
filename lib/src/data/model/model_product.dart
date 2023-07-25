@@ -22,7 +22,7 @@ class ProductModel {
   final String? category;
   final String startDate;
   final String endDate;
-  final String? createDate;
+  final String createDate;
   final String? dateEstablish;
   final double? rate;
   final num? numRate;
@@ -68,7 +68,7 @@ class ProductModel {
       this.category,
       required this.startDate,
       required this.endDate,
-      this.createDate,
+      required this.createDate,
       this.dateEstablish,
       this.rate,
       this.numRate,
@@ -131,6 +131,7 @@ class ProductModel {
     String videoURL = '';
     String startDate = '';
     String endDate = '';
+    String createDate = '';
     String priceMin = '';
     String priceMax = '';
     String priceDisplay = '';
@@ -141,14 +142,16 @@ class ProductModel {
 
     if (json['categoryId'] == 1) {
       category = "Nachricht";
+      final parsedDateTime = DateTime.parse(json['createdAt']);
+      createDate = DateFormat('dd.MM.yyyy').format(parsedDateTime);
     } else if (json['categoryId'] == 2) {
       category = "Straßenarbeiten/Verkehr";
     } else if (json['categoryId'] == 3) {
       category = "Veranstaltungen";
       final parsedDateTime = DateTime.parse(json['startDate']);
-      startDate = DateFormat('dd-MM-yyyy').format(parsedDateTime);
+      startDate = DateFormat('dd.MM.yyyy').format(parsedDateTime);
       final parsedEDateTime = DateTime.parse(json['endDate']);
-      endDate = DateFormat('dd-MM-yyyy').format(parsedEDateTime);
+      endDate = DateFormat('dd.MM.yyyy').format(parsedEDateTime);
       // startDate = json['startDate'];
       // endDate = json['endDate'];
     } else if (json['categoryId'] == 4) {
@@ -191,7 +194,7 @@ class ProductModel {
       image: json['logo'] ?? 'admin/News.jpeg',
       videoURL: videoURL,
       category: category ?? '',
-      createDate: json['post_date'] ?? '',
+      createDate: createDate,
       startDate: startDate,
       endDate: endDate,
       rate: double.tryParse('${json['rating_avg']}') ?? 0.0,

@@ -110,11 +110,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     if (await canLaunch(
       "https://$link",
     )) {
-      await launch("https://$link",
-          forceWebView: true,
-          enableJavaScript: true,
-          enableDomStorage: true
-          );
+      await launchUrl(Uri.parse("https://$link"),
+          mode: LaunchMode.inAppWebView);
     } else {
       throw 'Could not launch $link';
     }
@@ -141,6 +138,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     Widget endDate = Container();
     Widget openHours = Container();
     Widget attachments = Container();
+    Widget createdDate = Container();
     Widget info = AppPlaceholder(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -355,8 +353,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
       ///Banner
       banner = CachedNetworkImage(
-        imageUrl:
-            "${Application.picturesURL}${product.image}",
+        imageUrl: "${Application.picturesURL}${product.image}",
         placeholder: (context, url) {
           return AppPlaceholder(
             child: Container(
@@ -371,7 +368,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: imageProvider,
-                fit: BoxFit.cover,
+                fit: BoxFit.fitHeight,
               ),
             ),
           );
@@ -643,6 +640,22 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         );
       }
 
+      ///Create Date
+      if (product.createDate.isNotEmpty) {
+        createdDate = Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              product.createDate,
+              style: Theme.of(context)
+                  .textTheme
+                  .subtitle2!
+                  .copyWith(fontWeight: FontWeight.bold),
+            )
+          ],
+        );
+      }
+
       info = Padding(
         padding: const EdgeInsets.only(left: 16, right: 16),
         child: Column(
@@ -658,7 +671,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
-                    maxLines: 1,
+                    maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
@@ -709,6 +722,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 ),
               ],
             ),
+            createdDate,
             address,
             phone,
             fax,
@@ -724,7 +738,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             //         height: 1.3,
             //       ),
             // ),
-            Html(data: product.description),
+            Html(
+              data: product.description,
+              style: {
+                "*": Style(
+                  color:
+                      Colors.white, // Set the text color to white (ARGB format)
+                ),
+              },
+            ),
             const SizedBox(height: 16),
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -765,8 +787,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 const SizedBox(height: 16),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                      ),
+                  child: Row(),
                 ),
                 info,
                 // latest,

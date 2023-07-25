@@ -1,16 +1,18 @@
+// ignore_for_file: use_build_context_synchronously
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/utils/configs/image.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../../utils/configs/preferences.dart';
+import '../../../utils/configs/routes.dart';
 
 class DiscoveryScreen extends StatefulWidget {
   const DiscoveryScreen({Key? key}) : super(key: key);
 
-
   @override
   State<DiscoveryScreen> createState() => _DiscoveryScreenState();
-
 }
 
 class _DiscoveryScreenState extends State<DiscoveryScreen> {
@@ -22,7 +24,7 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
   @override
   Widget build(BuildContext context) {
     final List<String> imageUrls = [
-      Images.service1,
+      // Images.service1,
       Images.service2,
       Images.service3,
       Images.service4,
@@ -31,21 +33,19 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
       Images.service7,
       Images.service8,
       Images.service9,
-      Images.service10,
       // Add more image URLs as needed
     ];
 
     final List<String> imageLinks = [
+      // '1',
+      '2',
       'error',
+      '4',
+      '5',
+      '6',
+      '7',
       'error',
-      'error',
-      'https://vgem-fuchstal.de/vg-fuchstal/was-erledige-ich-wo/#online-antraege',
-      'error',
-      'error',
-      'error',
-      'error',
-      'error',
-      'error',
+      '9',
     ];
     return Scaffold(
       appBar: AppBar(
@@ -78,15 +78,37 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
   }
 
   Future<void> navigateToLink(String link) async {
-    if (link == "error") {
+    final prefs = await Preferences.openBox();
+    if (link == "1") {
+      await launchUrl(Uri.parse('https://mitreden.ilzerland.bayern/ringelai'),
+          mode: LaunchMode.inAppWebView
+          // enableJavaScript: true, // Enable JavaScript in the in-app browser
+          );
+    } else if (link == "2") {
+      await launchUrl(Uri.parse(await AppBloc.discoveryCubit.getCityLink() ?? ""),
+          mode: LaunchMode.inAppWebView);
+    } else if (link == "error") {
       _onPopUpError();
-    } else if (await canLaunchUrl(Uri.parse(link))) {
-      await launchUrl(
-        Uri.parse(link),
-        mode: LaunchMode.inAppWebView,
-      );
-    } else {
-      throw 'Could not launch $link';
+    } else if (link == "4") {
+      prefs.setKeyValue(Preferences.categoryId, 1);
+      prefs.setKeyValue(Preferences.type, "categoryService");
+      Navigator.pushNamed(context, Routes.listProduct, arguments: 4);
+    } else if (link == "5") {
+      prefs.setKeyValue(Preferences.categoryId, 3);
+      prefs.setKeyValue(Preferences.type, "categoryService");
+      Navigator.pushNamed(context, Routes.listProduct, arguments: 5);
+    } else if (link == "6") {
+      prefs.setKeyValue(Preferences.categoryId, 4);
+      prefs.setKeyValue(Preferences.type, "categoryService");
+      Navigator.pushNamed(context, Routes.listProduct, arguments: 6);
+    } else if (link == "7") {
+      prefs.setKeyValue(Preferences.categoryId, 10);
+      prefs.setKeyValue(Preferences.type, "categoryService");
+      Navigator.pushNamed(context, Routes.listProduct, arguments: 7);
+    } else if (link == "9") {
+      prefs.setKeyValue(Preferences.categoryId, 6);
+      prefs.setKeyValue(Preferences.type, "categoryService");
+      Navigator.pushNamed(context, Routes.listProduct, arguments: 9);
     }
   }
 

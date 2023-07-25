@@ -32,7 +32,7 @@ FavoriteDetailsModel _$FavoriteDetailsModelFromJson(
       json['villageId'] as int?,
       json['startDate'] as String?,
       json['endDate'] as String?,
-      json['createdAt'] as String?,
+      json['createdAt'] as String,
     );
 
 Map<String, dynamic> _$FavoriteDetailsModelToJson(
