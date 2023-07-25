@@ -1,5 +1,5 @@
 {
-  "home": "Heim",
+  "home": "Home",
   "wish_list": "Favoriten",
   "message": "Mitteilungen",
   "notification": "Benachrichtigung",
@@ -64,7 +64,7 @@
   "filter": "Filter",
   "facilities": "Anlagen",
   "area": "Bereich",
-  "select_location": "Ort auswählen",
+  "select_location": "Alle Orte",
   "price_range": "Preisklasse",
   "avg_price": "AVG-Preis",
   "business_color": "Geschäftsfarbe",
