@@ -359,5 +359,7 @@
   "input_village": "Dorf auswählen",
   "input_category": "Kategorie Wählen",
   "input_subcategory": "Unterkategorie auswählen (falls vorhanden)",
-  "subCategory": "Unterkategorie"
+  "subCategory": "Unterkategorie",
+  "categorization": "Kategorisierung",
+  "category_coming_soon": "Diese Funktion wird in Kürze fertiggestellt. Durch die Kategorien hast du die Möglichkeit deine Interessen zu filtern. Es werden dir dann nur die relevanten Informationen angezeigt."
 }

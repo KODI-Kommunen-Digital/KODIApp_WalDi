@@ -136,9 +136,8 @@ class _HomeScreenState extends State<HomeScreen> {
     showDialog<String>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
-        title: const Text('Kategorisierung'),
-        content: const Text(
-            'Diese Funktion wird in Kürze fertiggestellt. Durch die Kategorien hast du die Möglichkeit deine Interessen zu filtern. Es werden dir dann nur die relevanten Informationen angezeigt.'),
+        title: Text(Translate.of(context).translate('categorization')),
+        content: Text(Translate.of(context).translate("category_coming_soon")),
         actions: <Widget>[
           TextButton(
             onPressed: () => Navigator.pop(context, 'OK'),
