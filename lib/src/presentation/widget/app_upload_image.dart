@@ -76,8 +76,6 @@ class _AppUploadImageState extends State<AppUploadImage> {
             setState(() {
               _completed = true;
             });
-            // final item = response.data['path'];
-            // widget.onChange(item);
           } else {}
         }
       } else if (statusImage.isDenied) {
