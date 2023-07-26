@@ -32,14 +32,21 @@ target 'Runner' do
   use_modular_headers!
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
+<<<<<<< HEAD
   # target 'Runner' do
   #   inherit! :search_paths
   # end
+=======
+  target 'RunnerTests' do
+    inherit! :search_paths
+  end
+>>>>>>> feature/location_citizen_management
 end
 
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
+<<<<<<< HEAD
     target.build_configurations.each do |config|
       # You can remove unused permissions here
       # for more infomation: https://github.com/BaseflowIT/flutter-permission-handler/blob/master/permission_handler/ios/Classes/PermissionHandlerEnums.h
@@ -76,5 +83,7 @@ post_install do |installer|
         'PERMISSION_CRITICAL_ALERTS=0',
       ]
   end
+=======
+>>>>>>> feature/location_citizen_management
   end
 end

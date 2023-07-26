@@ -1,11 +1,12 @@
 // ignore_for_file: use_build_context_synchronously
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/utils/configs/image.dart';
+import 'package:heidi/src/utils/configs/preferences.dart';
+import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../../../utils/configs/preferences.dart';
-import '../../../utils/configs/routes.dart';
 
 class DiscoveryScreen extends StatefulWidget {
   const DiscoveryScreen({Key? key}) : super(key: key);
@@ -85,8 +86,7 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
           );
     } else if (link == "2") {
       await launchUrl(
-          Uri.parse(
-              'https://www.bayernportal.de/suche/lebenslage/hierarchisch/buerger?plz=86925&behoerde=70664072559&gemeinde=006746347678'),
+          Uri.parse(await AppBloc.discoveryCubit.getCityLink() ?? ""),
           mode: LaunchMode.inAppWebView);
     } else if (link == "error") {
       _onPopUpError();

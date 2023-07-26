@@ -357,5 +357,7 @@
   "input_village": "Select Village",
   "input_category": "Select Category",
   "input_subcategory": "Select Sub Category (if any)",
-  "select_city": "Select City"
+  "select_city": "Select City",
+  "categorization": "Categorization",
+  "category_coming_soon": "This function is coming soon. Through the categories, you have the possibility to filter your interests. You will then be shown only the relevant information."
 }
