@@ -62,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
           List<CategoryModel>? location;
           List<ProductModel>? recent;
           List<String> cityTitles = [
-            Translate.of(context).translate('select_city')
+            Translate.of(context).translate('select_location')
           ];
 
           if (state is HomeStateLoaded) {
@@ -96,7 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           selectedCityId = list.id;
                         });
                       } else if (data ==
-                          Translate.of(context).translate('select_city')) {
+                          Translate.of(context).translate('select_location')) {
                         setState(() {
                           selectedCityId = 0;
                         });

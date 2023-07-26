@@ -744,6 +744,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 "*": Style(
                   color:
                       Colors.white, // Set the text color to white (ARGB format)
+                  lineHeight: const LineHeight(1.25)
                 ),
               },
             ),
