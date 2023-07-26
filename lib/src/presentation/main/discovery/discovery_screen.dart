@@ -23,7 +23,7 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
   @override
   Widget build(BuildContext context) {
     final List<String> imageUrls = [
-      // Images.service1,
+      Images.service1,
       Images.service2,
       Images.service3,
       Images.service4,
@@ -36,7 +36,7 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
     ];
 
     final List<String> imageLinks = [
-      // '1',
+      '1',
       '2',
       'error',
       '4',
