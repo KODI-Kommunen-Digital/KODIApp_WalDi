@@ -358,5 +358,7 @@
   "input_category": "Kategorie Wählen",
   "input_subcategory": "Unterkategorie auswählen (falls vorhanden)",
   "subCategory": "Unterkategorie",
-  "select_city": "Ort wählen"
+  "select_city": "Ort wählen",
+  "this_month":"Diesen Monat",
+  "this_week":"Diese Woche"
 }

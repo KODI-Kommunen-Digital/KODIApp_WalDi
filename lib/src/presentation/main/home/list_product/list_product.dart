@@ -10,13 +10,13 @@ import 'package:heidi/src/presentation/widget/app_product_item.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
-
 import 'cubit/cubit.dart';
 
 class ListProductScreen extends StatefulWidget {
   final int selectedCityId;
 
-  const ListProductScreen({Key? key, required this.selectedCityId}) : super(key: key);
+  const ListProductScreen({Key? key, required this.selectedCityId})
+      : super(key: key);
 
   @override
   State<ListProductScreen> createState() => _ListProductScreenState();
@@ -29,7 +29,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
 
   final PageType _pageType = PageType.list;
   final ProductViewType _listMode = Application.setting.listMode;
-
+  String? selectedFilter;
 
   @override
   void initState() {
@@ -51,6 +51,116 @@ class _ListProductScreenState extends State<ListProductScreen> {
 
   void _onProductDetail(ProductModel item) {
     Navigator.pushNamed(context, Routes.productDetail, arguments: item);
+  }
+
+  void _openFilterDrawer() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Container(
+          color: Colors.grey[900],
+          height: 150,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.calendar_today,
+                      color: Colors.white,
+                    ),
+                    const SizedBox(width: 8),
+                    TextButton(
+                      style: TextButton.styleFrom(),
+                      onPressed: () {
+                        _updateSelectedFilter('week');
+                        Navigator.pop(context);
+                      },
+                      child: Row(
+                        children: [
+                          Text(
+                            Translate.of(context).translate('this_week'),
+                            style: const TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          _buildTickIcon(selectedFilter == 'week'),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Divider(
+                color: Colors.white,
+                height: 1,
+                thickness: 1,
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.calendar_today,
+                      color: Colors.white,
+                    ),
+                    const SizedBox(width: 8),
+                    TextButton(
+                      style: TextButton.styleFrom(),
+                      onPressed: () {
+                        _updateSelectedFilter('month');
+                        Navigator.pop(context);
+                      },
+                      child: Row(
+                        children: [
+                          Text(
+                            Translate.of(context).translate('this_month'),
+                            style: const TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          _buildTickIcon(selectedFilter == 'month'),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _updateSelectedFilter(String filter) {
+    setState(() {
+      if (selectedFilter == filter) {
+        selectedFilter = null;
+        _listCubit.onProductFilter(null);
+      } else {
+        selectedFilter = filter;
+        _listCubit.onProductFilter(filter);
+      }
+    });
+  }
+
+  Widget _buildTickIcon(bool isSelected) {
+    return isSelected
+        ? const Icon(
+            Icons.done,
+            color: Colors.white,
+            size: 20,
+            weight: 900,
+          )
+        : const SizedBox(width: 20);
   }
 
   Widget _buildItem({
@@ -128,7 +238,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
 
           if (state is ListStateLoaded) {
             List list = List.from(state.list);
-             contentList = RefreshIndicator(
+            contentList = RefreshIndicator(
               onRefresh: loadListingsList,
               child: ListView.builder(
                 controller: _scrollController,
@@ -199,6 +309,30 @@ class _ListProductScreenState extends State<ListProductScreen> {
         appBar: AppBar(
           centerTitle: true,
           title: Text(Translate.of(context).translate('listing')),
+          actions: [
+            BlocBuilder<ListCubit, ListState>(
+              builder: (context, state) {
+                return FutureBuilder<bool?>(
+                  future: _listCubit.categoryPreferencesCall(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    } else if (snapshot.hasError || !snapshot.hasData) {
+                      return Container();
+                    } else {
+                      bool isEvent = snapshot.data!;
+                      return isEvent
+                          ? IconButton(
+                              icon: const Icon(Icons.filter_list),
+                              onPressed: _openFilterDrawer,
+                            )
+                          : Container();
+                    }
+                  },
+                );
+              },
+            ),
+          ],
         ),
         body: Column(
           children: <Widget>[

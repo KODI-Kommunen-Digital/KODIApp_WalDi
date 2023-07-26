@@ -265,7 +265,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 _onCategory(item, category);
                 return false;
               },
-              // _onCategory,
             );
           },
         ).toList(),
