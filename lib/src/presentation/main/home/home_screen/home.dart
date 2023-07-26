@@ -86,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
               SliverPersistentHeader(
                 delegate: AppBarHomeSliver(
                   cityTitlesList: cityTitles,
-                  expandedHeight: MediaQuery.of(context).size.height * 0.3,
+                  expandedHeight: MediaQuery.of(context).size.height * 0.25,
                   banners: banner,
                   setLocationCallback: (data) async {
                     for (final list in location!) {

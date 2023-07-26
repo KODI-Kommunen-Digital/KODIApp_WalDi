@@ -6,6 +6,7 @@ import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/main_screen.dart';
 import 'package:heidi/src/presentation/cubit/bloc.dart';
 import 'package:heidi/src/presentation/main/splash_screen/splash_screen.dart';
+import 'package:heidi/src/utils/adapters/formdata_adapter.dart';
 import 'package:heidi/src/utils/configs/language.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
@@ -18,6 +19,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:loggy/loggy.dart';
 
 Future<void> main() async {
+  await Hive.initFlutter();
+  Hive.registerAdapter(FormDataAdapter());
   WidgetsFlutterBinding.ensureInitialized();
   Loggy.initLoggy(
     logPrinter: FirebaseCrashlyticsLogPrinter(),
@@ -64,7 +67,7 @@ class _HeidiAppState extends State<HeidiApp> {
           create: (context) => UserRepository(),
         ),
         RepositoryProvider(
-          create: (context) => ListRepository(),
+          create: (context) => ListRepository(widget.prefBox),
         ),
       ],
       child: MultiBlocProvider(
