@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
+import 'package:heidi/src/utils/configs/preferences.dart';
 
 import 'home_state.dart';
 
@@ -39,5 +40,10 @@ class HomeCubit extends Cubit<HomeState> {
       location,
      recent,
     ));
+  }
+
+  Future<void> saveCityId(int cityId) async {
+    final prefs = await Preferences.openBox();
+    prefs.setKeyValue(Preferences.cityId, cityId);
   }
 }

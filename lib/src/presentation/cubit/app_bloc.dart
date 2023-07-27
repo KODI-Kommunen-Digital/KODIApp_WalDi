@@ -11,6 +11,7 @@ import 'package:heidi/src/presentation/main/login/forgot_password/cubit/forgot_p
 import 'package:heidi/src/presentation/main/login/signin/cubit/login_cubit.dart';
 import 'package:heidi/src/presentation/main/login/signup/cubit/signup_cubit.dart';
 import 'package:heidi/src/presentation/main/wishlist/cubit/cubit.dart';
+import 'package:heidi/src/presentation/main/discovery/cubit/discovery_cubit.dart';
 
 import 'bloc.dart';
 
@@ -30,6 +31,7 @@ class AppBloc {
   static final listCubit = ListCubit();
   // static final homeCubit = HomeCubit();
   static final wishListCubit = WishListCubit();
+  static final discoveryCubit = DiscoveryCubit();
   // static final reviewCubit = ReviewCubit();
   // static final messageCubit = MessageCubit();
   // static final submitCubit = SubmitCubit();

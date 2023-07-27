@@ -101,6 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           selectedCityId = 0;
                         });
                       }
+                      AppBloc.homeCubit.saveCityId(selectedCityId);
                     }
                   },
                 ),
