@@ -55,7 +55,14 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocBuilder<HomeCubit, HomeState>(
+      body: BlocConsumer<HomeCubit, HomeState>(
+        listener: (context, state) {
+          state.maybeWhen(
+            error: (msg) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(Translate.of(context).translate('no_internet')))),
+            orElse: () {},
+          );
+        },
         builder: (context, state) {
           List<String>? banner;
           List<CategoryModel>? category;

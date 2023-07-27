@@ -360,5 +360,6 @@
   "subCategory": "Unterkategorie",
   "select_city": "Ort wählen",
   "categorization": "Kategorisierung",
-  "category_coming_soon": "Diese Funktion wird in Kürze fertiggestellt. Durch die Kategorien hast du die Möglichkeit deine Interessen zu filtern. Es werden dir dann nur die relevanten Informationen angezeigt."
+  "category_coming_soon": "Diese Funktion wird in Kürze fertiggestellt. Durch die Kategorien hast du die Möglichkeit deine Interessen zu filtern. Es werden dir dann nur die relevanten Informationen angezeigt.",
+  "no_internet": "Keine Verbindung! Bitte verbinden Sie sich mit dem Internet."
 }
