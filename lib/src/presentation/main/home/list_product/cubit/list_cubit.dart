@@ -28,7 +28,6 @@ class ListCubit extends Cubit<ListState> {
     if (result != null) {
       list = result[0];
       pagination = result[1];
-
       emit(ListStateLoaded(
         list,
       ));

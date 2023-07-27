@@ -29,9 +29,6 @@ class _AccountScreenState extends State<AccountScreen> {
           error: (msg) => ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text(msg))),
 
-          // loggedOut: () {
-          //   // Navigator.pushNamed(context, Routes.signIn);
-          // },
           orElse: () {},
         );
       },
