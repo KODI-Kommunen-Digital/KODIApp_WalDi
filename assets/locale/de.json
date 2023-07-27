@@ -360,5 +360,6 @@
   "subCategory": "Unterkategorie",
   "select_city": "Ort wählen",
   "this_month":"Diesen Monat",
-  "this_week":"Diese Woche"
+  "this_week":"Diese Woche",
+  "no_internet": "Keine Verbindung! Bitte verbinden Sie sich mit dem Internet."
 }
