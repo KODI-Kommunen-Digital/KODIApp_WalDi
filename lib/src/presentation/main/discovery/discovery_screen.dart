@@ -33,6 +33,7 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
       Images.service7,
       Images.service8,
       Images.service9,
+      Images.service10
       // Add more image URLs as needed
     ];
 
@@ -46,6 +47,7 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
       '7',
       'error',
       '9',
+      'error'
     ];
     return Scaffold(
       appBar: AppBar(
