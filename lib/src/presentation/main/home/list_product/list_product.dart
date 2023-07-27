@@ -29,7 +29,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
 
   final PageType _pageType = PageType.list;
   final ProductViewType _listMode = Application.setting.listMode;
-  String? selectedFilter;
+  ProductFilter? selectedFilter;
 
   @override
   void initState() {
@@ -77,7 +77,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
                     TextButton(
                       style: TextButton.styleFrom(),
                       onPressed: () {
-                        _updateSelectedFilter('week');
+                        _updateSelectedFilter(ProductFilter.week);
                         Navigator.pop(context);
                       },
                       child: Row(
@@ -89,7 +89,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
                             ),
                           ),
                           const SizedBox(width: 5),
-                          _buildTickIcon(selectedFilter == 'week'),
+                          _buildTickIcon(selectedFilter == ProductFilter.week),
                         ],
                       ),
                     ),
@@ -114,7 +114,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
                     TextButton(
                       style: TextButton.styleFrom(),
                       onPressed: () {
-                        _updateSelectedFilter('month');
+                        _updateSelectedFilter(ProductFilter.month);
                         Navigator.pop(context);
                       },
                       child: Row(
@@ -126,7 +126,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
                             ),
                           ),
                           const SizedBox(width: 5),
-                          _buildTickIcon(selectedFilter == 'month'),
+                          _buildTickIcon(selectedFilter == ProductFilter.month),
                         ],
                       ),
                     ),
@@ -140,7 +140,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
     );
   }
 
-  void _updateSelectedFilter(String filter) {
+  void _updateSelectedFilter(ProductFilter? filter) {
     setState(() {
       if (selectedFilter == filter) {
         selectedFilter = null;

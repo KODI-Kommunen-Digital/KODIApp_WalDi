@@ -5,8 +5,12 @@ import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
-
 import 'cubit.dart';
+
+enum ProductFilter {
+  week,
+  month,
+}
 
 class ListCubit extends Cubit<ListState> {
   ListCubit() : super(const ListStateLoading());
@@ -65,9 +69,9 @@ class ListCubit extends Cubit<ListState> {
     }
   }
 
-  void onProductFilter(String? type) {
+  void onProductFilter(ProductFilter? type) {
     final currentDate = DateTime.now();
-    if (type == 'month') {
+    if (type == ProductFilter.month) {
       final filteredList = listLoaded.where((product) {
         final startDate = _parseDate(product.startDate);
         if (startDate != null) {
@@ -79,7 +83,7 @@ class ListCubit extends Cubit<ListState> {
       }).toList();
 
       emit(ListStateLoaded(filteredList));
-    } else if (type == 'week') {
+    } else if (type == ProductFilter.week) {
       final filteredList = listLoaded.where((product) {
         final startDate = _parseDate(product.startDate);
         if (startDate != null) {
