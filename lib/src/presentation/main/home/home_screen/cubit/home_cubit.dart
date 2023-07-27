@@ -35,9 +35,15 @@ class HomeCubit extends Cubit<HomeState> {
 
     emit(HomeStateLoaded(
       banner,
-      category,
+      sortCategoriesByListingCount(category),
       location,
      recent,
     ));
+  }
+
+  List<CategoryModel> sortCategoriesByListingCount(
+      List<CategoryModel> categories) {
+    categories.sort((a, b) => (b.count ?? 0).compareTo(a.count ?? 0));
+    return categories;
   }
 }
