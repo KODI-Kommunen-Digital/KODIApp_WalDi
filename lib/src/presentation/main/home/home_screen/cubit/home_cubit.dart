@@ -63,4 +63,15 @@ class HomeCubit extends Cubit<HomeState> {
     }
     return false;
   }
+
+  Future<CategoryModel?> checkSavedCity(List<CategoryModel> cities) async {
+    final prefs = await Preferences.openBox();
+    final cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    if(cityId != 0) {
+      final cityName = cities[cities.indexWhere((category) => category.id == cityId)].title;
+      return CategoryModel(id: cityId, title: cityName, image: "");
+    }
+    return null;
+  }
+
 }
