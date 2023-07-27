@@ -13,7 +13,9 @@ enum ProductFilter {
 }
 
 class ListCubit extends Cubit<ListState> {
-  ListCubit() : super(const ListStateLoading());
+  ListCubit() : super(const ListStateLoading()) {
+    // final isEvent = categoryPreferencesCall();
+  }
 
   int page = 1;
   List<ProductModel> list = [];
@@ -35,6 +37,7 @@ class ListCubit extends Cubit<ListState> {
       list = result[0];
       pagination = result[1];
       listLoaded = list;
+      // print(list);
       emit(ListStateLoaded(
         list,
       ));
@@ -70,6 +73,7 @@ class ListCubit extends Cubit<ListState> {
   }
 
   void onProductFilter(ProductFilter? type) {
+    print(listLoaded);
     final currentDate = DateTime.now();
     if (type == ProductFilter.month) {
       final filteredList = listLoaded.where((product) {
@@ -96,7 +100,7 @@ class ListCubit extends Cubit<ListState> {
 
       emit(ListStateLoaded(filteredList));
     } else {
-      emit(ListStateLoaded(list));
+      emit(ListStateLoaded(listLoaded));
     }
   }
 

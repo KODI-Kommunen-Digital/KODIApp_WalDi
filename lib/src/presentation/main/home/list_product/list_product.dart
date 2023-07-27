@@ -1,13 +1,11 @@
 import 'dart:async';
-
-import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_setting.dart';
-import 'package:heidi/src/presentation/widget/app_navbar.dart';
 import 'package:heidi/src/presentation/widget/app_product_item.dart';
 import 'package:heidi/src/utils/configs/application.dart';
+import 'package:heidi/src/presentation/widget/app_navbar.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'cubit/cubit.dart';
@@ -23,13 +21,8 @@ class ListProductScreen extends StatefulWidget {
 }
 
 class _ListProductScreenState extends State<ListProductScreen> {
-  final _listCubit = ListCubit();
-  final _swipeController = SwiperController();
-  final _scrollController = ScrollController();
-
-  final PageType _pageType = PageType.list;
-  final ProductViewType _listMode = Application.setting.listMode;
   ProductFilter? selectedFilter;
+  final _listCubit = ListCubit();
 
   @override
   void initState() {
@@ -37,24 +30,35 @@ class _ListProductScreenState extends State<ListProductScreen> {
     loadListingsList();
   }
 
-  @override
-  void dispose() {
-    _swipeController.dispose();
-    _scrollController.dispose();
-    _listCubit.close();
-    super.dispose();
-  }
-
   Future<void> loadListingsList() async {
-    await _listCubit.onLoad(widget.selectedCityId);
+    await context.read<ListCubit>().onLoad(widget.selectedCityId);
   }
 
-  void _onProductDetail(ProductModel item) {
-    Navigator.pushNamed(context, Routes.productDetail, arguments: item);
+  void _updateSelectedFilter(ProductFilter? filter) {
+    setState(() {
+      if (selectedFilter == filter) {
+        selectedFilter = null;
+        _listCubit.onProductFilter(null);
+      } else {
+        selectedFilter = filter;
+        _listCubit.onProductFilter(filter);
+      }
+    });
   }
 
-  void _openFilterDrawer() {
-    showModalBottomSheet(
+  Widget _buildTickIcon(bool isSelected) {
+    return isSelected
+        ? const Icon(
+            Icons.done,
+            color: Colors.white,
+            size: 20,
+            weight: 900,
+          )
+        : const SizedBox(width: 20);
+  }
+
+  Future<void> _openFilterDrawer(BuildContext context) async {
+    await showModalBottomSheet(
       context: context,
       builder: (context) {
         return Container(
@@ -138,29 +142,125 @@ class _ListProductScreenState extends State<ListProductScreen> {
         );
       },
     );
+    await loadListingsList();
   }
 
-  void _updateSelectedFilter(ProductFilter? filter) {
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text(
+            Translate.of(context).translate('listing'),
+          ),
+          actions: [
+            FutureBuilder<bool?>(
+              future: _listCubit.categoryPreferencesCall(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                } else if (snapshot.hasError || !snapshot.hasData) {
+                  return Container();
+                } else {
+                  bool isEvent = snapshot.data!;
+                  return isEvent
+                      ? IconButton(
+                          icon: const Icon(Icons.filter_list),
+                          onPressed: () async {
+                            await _openFilterDrawer(context);
+                          },
+                        )
+                      : Container();
+                }
+              },
+            ),
+          ],
+        ),
+        body: BlocConsumer<ListCubit, ListState>(
+          listener: (context, state) {
+            state.maybeWhen(
+              error: (msg) => ScaffoldMessenger.of(context)
+                  .showSnackBar(SnackBar(content: Text(msg))),
+              orElse: () {},
+            );
+          },
+          builder: (context, state) => state.maybeWhen(
+            loading: () => const ListLoading(),
+            loaded: (list) => ListLoaded(
+              list: list,
+              selectedCityId: widget.selectedCityId,
+            ),
+            orElse: () => ErrorWidget('Failed to load listings.'),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ListLoading extends StatelessWidget {
+  const ListLoading({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: CircularProgressIndicator(),
+    );
+  }
+}
+
+class ListLoaded extends StatefulWidget {
+  final List<ProductModel> list;
+  final int selectedCityId;
+
+  const ListLoaded({
+    Key? key,
+    required this.list,
+    required this.selectedCityId,
+  }) : super(key: key);
+
+  @override
+  State<ListLoaded> createState() => _ListLoadedState();
+}
+
+class _ListLoadedState extends State<ListLoaded> {
+  // final _swipeController = SwiperController();
+  final _scrollController = ScrollController();
+  bool isLoading = false;
+  final PageType _pageType = PageType.list;
+  final ProductViewType _listMode = Application.setting.listMode;
+  // ProductFilter? selectedFilter;
+
+  @override
+  void initState() {
+    super.initState();
+    // loadListingsList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        Expanded(
+          child: _buildContent(),
+        )
+      ],
+    );
+  }
+
+  Future<void> loadListingsList() async {
     setState(() {
-      if (selectedFilter == filter) {
-        selectedFilter = null;
-        _listCubit.onProductFilter(null);
-      } else {
-        selectedFilter = filter;
-        _listCubit.onProductFilter(filter);
-      }
+      isLoading = true;
+    });
+    await context.read<ListCubit>().onLoad(widget.selectedCityId);
+    setState(() {
+      isLoading = false;
     });
   }
 
-  Widget _buildTickIcon(bool isSelected) {
-    return isSelected
-        ? const Icon(
-            Icons.done,
-            color: Colors.white,
-            size: 20,
-            weight: 900,
-          )
-        : const SizedBox(width: 20);
+  void _onProductDetail(ProductModel item) {
+    Navigator.pushNamed(context, Routes.productDetail, arguments: item);
   }
 
   Widget _buildItem({
@@ -237,7 +337,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
           }
 
           if (state is ListStateLoaded) {
-            List list = List.from(state.list);
+            List<ProductModel> list = List.from(state.list);
             contentList = RefreshIndicator(
               onRefresh: loadListingsList,
               child: ListView.builder(
@@ -298,50 +398,6 @@ class _ListProductScreenState extends State<ListProductScreen> {
         }
         return Container();
       },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => _listCubit,
-      child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text(Translate.of(context).translate('listing')),
-          actions: [
-            BlocBuilder<ListCubit, ListState>(
-              builder: (context, state) {
-                return FutureBuilder<bool?>(
-                  future: _listCubit.categoryPreferencesCall(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
-                    } else if (snapshot.hasError || !snapshot.hasData) {
-                      return Container();
-                    } else {
-                      bool isEvent = snapshot.data!;
-                      return isEvent
-                          ? IconButton(
-                              icon: const Icon(Icons.filter_list),
-                              onPressed: _openFilterDrawer,
-                            )
-                          : Container();
-                    }
-                  },
-                );
-              },
-            ),
-          ],
-        ),
-        body: Column(
-          children: <Widget>[
-            Expanded(
-              child: _buildContent(),
-            )
-          ],
-        ),
-      ),
     );
   }
 }
