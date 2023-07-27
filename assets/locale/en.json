@@ -1,6 +1,5 @@
 {
   "home": "Home",
-  "select_city": "Select City",
   "wish_list": "Wishlist",
   "message": "Messages",
   "notification": "Notification",
@@ -274,7 +273,6 @@
   "secondary_color": "Secondary color",
   "discovery": "Discovery",
   "services": "Services",
-  "wishlist": "Wishlist",
   "cust_services":"Customer Services",
   "see_more": "See More",
   "booking": "Booking",
@@ -358,5 +356,8 @@
   "input_city": "Select City",
   "input_village": "Select Village",
   "input_category": "Select Category",
-  "input_subcategory": "Select Sub Category (if any)"
+  "input_subcategory": "Select Sub Category (if any)",
+  "select_city": "Select City",
+  "categorization": "Categorization",
+  "category_coming_soon": "This function is coming soon. Through the categories, you have the possibility to filter your interests. You will then be shown only the relevant information."
 }

@@ -58,7 +58,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
       return;
     }
     try {
-      if (statusImage.isGranted) {
+      if (statusImage.isGranted || statusImage.isLimited) {
         final pickedFile = await _picker.pickImage(
           source: ImageSource.gallery,
         );
@@ -70,21 +70,16 @@ class _AppUploadImageState extends State<AppUploadImage> {
         });
         final origin = widget.title;
         if (origin == 'Upload feature image') {
-          await ListRepository.uploadImage(_file!, origin);
         } else {
           final response = await ListRepository.uploadImage(_file!, origin);
           if (response!.data['status'] == 'success') {
             setState(() {
               isImageUploaded = true;
             });
-            final item = response.data['path'];
-            widget.onChange(item);
-          } else {
-            logError('Image Upload Error', response.message);
-          }
+          } else {}
         }
       } else if (statusImage.isDenied) {
-        if (statusImage.isGranted) {
+        if (statusImage.isGranted || statusImage.isLimited) {
           final pickedFile = await _picker.pickImage(
             source: ImageSource.gallery,
           );
@@ -96,7 +91,6 @@ class _AppUploadImageState extends State<AppUploadImage> {
           });
           final origin = widget.title;
           if (origin == 'Upload feature image') {
-            await ListRepository.uploadImage(_file!, origin);
           } else {
             final response = await ListRepository.uploadImage(_file!, origin);
             if (response!.data['status'] == 'success') {
@@ -106,7 +100,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
               final item = response.data['path'];
               widget.onChange(item);
             } else {
-              logError('Image Upload Error', response.message);
+              logError('Image Upload Permission Error', response);
             }
           }
         }
@@ -224,8 +218,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
 
     if (widget.image != null) {
       decorationImage = DecorationImage(
-        image: NetworkImage(
-            "${Application.picturesURL}${widget.image!}"),
+        image: NetworkImage("${Application.picturesURL}${widget.image!}"),
         fit: BoxFit.cover,
       );
     }

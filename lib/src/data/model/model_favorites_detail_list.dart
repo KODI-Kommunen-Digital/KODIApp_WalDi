@@ -27,7 +27,7 @@ class FavoriteDetailsModel {
   int? villageId;
   String? startDate;
   String? endDate;
-  String? createdAt;
+  String createdAt;
 
   FavoriteDetailsModel(
       this.id,

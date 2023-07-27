@@ -43,6 +43,24 @@ class ListRepository {
 
         return [list, response.pagination];
       }
+    } else if (type == "categoryService") {
+      int params = categoryId;
+      final response = await Api.requestCatList(params);
+      if (response.success) {
+        final list = List.from(response.data ?? []).map((item) {
+          return ProductModel.fromJson(item, setting: Application.setting);
+        }).toList();
+        return [list, response.pagination];
+      }
+    } else if (type == "subCategoryService") {
+      int params = categoryId;
+      final response = await Api.requestSubCatList(params);
+      if (response.success) {
+        final list = List.from(response.data ?? []).map((item) {
+          return ProductModel.fromJson(item, setting: Application.setting);
+        }).toList();
+        return [list, response.pagination];
+      }
     }
     return null;
   }

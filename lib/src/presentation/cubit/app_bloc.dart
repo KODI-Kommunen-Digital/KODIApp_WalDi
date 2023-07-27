@@ -5,6 +5,7 @@ import 'package:heidi/src/presentation/main/account/account_profile/cubit/accoun
 import 'package:heidi/src/presentation/main/account/change_password/cubit/change_password_cubit.dart';
 import 'package:heidi/src/presentation/main/account/edit_profile/cubit/edit_profile_cubit.dart';
 import 'package:heidi/src/presentation/main/add_listing/cubit/add_listing_cubit.dart';
+import 'package:heidi/src/presentation/main/discovery/cubit/discovery_cubit.dart';
 import 'package:heidi/src/presentation/main/home/home_screen/cubit/home_cubit.dart';
 import 'package:heidi/src/presentation/main/home/list_product/cubit/cubit.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/cubit/cubit.dart';
@@ -28,6 +29,7 @@ class AppBloc {
   static final forgotPasswordCubit = ForgotPasswordCubit();
   static final changePasswordCubit = ChangePasswordCubit();
   static final homeCubit = HomeCubit();
+  static final discoveryCubit = DiscoveryCubit();
   static final listCubit = ListCubit();
   // static final homeCubit = HomeCubit();
   static final wishListCubit = WishListCubit();
