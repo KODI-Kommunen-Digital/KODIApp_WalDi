@@ -3,14 +3,14 @@ import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
-class SubmitSuccessScreen extends StatefulWidget {
-  const SubmitSuccessScreen({Key? key}) : super(key: key);
+class AddListingSuccessScreen extends StatefulWidget {
+  const AddListingSuccessScreen({Key? key}) : super(key: key);
 
   @override
-  State<SubmitSuccessScreen> createState() => _SubmitSuccessScreenState();
+  State<AddListingSuccessScreen> createState() => _AddListingSuccessScreenState();
 }
 
-class _SubmitSuccessScreenState extends State<SubmitSuccessScreen> {
+class _AddListingSuccessScreenState extends State<AddListingSuccessScreen> {
   @override
   void initState() {
     super.initState();

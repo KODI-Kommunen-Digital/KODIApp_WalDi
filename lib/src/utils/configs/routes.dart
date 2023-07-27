@@ -7,6 +7,7 @@ import 'package:heidi/src/presentation/main/account/legal/legal.dart';
 import 'package:heidi/src/presentation/main/account/legal/privacy_policy/privacy.dart';
 import 'package:heidi/src/presentation/main/account/setting/settings_screen.dart';
 import 'package:heidi/src/presentation/main/add_listing/add_listing_screen.dart';
+import 'package:heidi/src/presentation/main/add_listing/add_listing_success/add_listing_success.dart';
 import 'package:heidi/src/presentation/main/home/list_product/list_product.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/product_detail.dart';
 import 'package:heidi/src/presentation/main/login/forgot_password/forgot_password_screen.dart';
@@ -126,7 +127,7 @@ class Routes {
       case submitSuccess:
         return MaterialPageRoute(
           builder: (context) {
-            return const AddListingScreen();
+            return const AddListingSuccessScreen();
           },
           fullscreenDialog: true,
         );
