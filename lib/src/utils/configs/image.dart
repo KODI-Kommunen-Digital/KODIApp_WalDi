@@ -25,6 +25,7 @@ class Images {
   static const String service7 = "assets/images/services-7.png";
   static const String service8 = "assets/images/services-8.png";
   static const String service9 = "assets/images/services-9.png";
+  static const String service10 = "assets/images/services-10.png";
   static const String defaultListing = "assets/images/default_image.jpeg";
 
   ///Singleton factory
