@@ -75,6 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
               for (final ids in location) {
                 cityTitles.add(ids.title.toString());
               }
+              _setSavedCity(location);
             }
           }
 
@@ -83,6 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
               parent: AlwaysScrollableScrollPhysics(),
             ),
             slivers: <Widget>[
+              //TODO: call setLocationCallback from _checkSavedCity
               SliverPersistentHeader(
                 delegate: AppBarHomeSliver(
                   cityTitlesList: cityTitles,
@@ -205,6 +207,16 @@ class _HomeScreenState extends State<HomeScreen> {
           arguments: selectedCityId);
     } else if (item.id != -1 && !item.hasChild) {
       _onPopUpCatError();
+    }
+  }
+
+  Future<void> _setSavedCity(List<CategoryModel> location) async {
+    final savedCity = await AppBloc.homeCubit.checkSavedCity(location);
+    if (savedCity != null) {
+      setState(() {
+        selectedCityId = savedCity.id;
+        selectedCityTitle = savedCity.title;
+      });
     }
   }
 
