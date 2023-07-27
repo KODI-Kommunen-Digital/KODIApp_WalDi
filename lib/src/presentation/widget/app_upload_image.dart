@@ -70,6 +70,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
         });
         final origin = widget.title;
         if (origin == 'Upload feature image') {
+          await ListRepository.uploadImage(_file!, origin);
         } else {
           final response = await ListRepository.uploadImage(_file!, origin);
           if (response!.data['status'] == 'success') {
