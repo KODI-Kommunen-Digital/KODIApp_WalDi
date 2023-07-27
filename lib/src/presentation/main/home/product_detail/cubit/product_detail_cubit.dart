@@ -5,7 +5,6 @@ import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/cubit/cubit.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
-import 'package:heidi/src/utils/logging/loggy_exp.dart';
 
 class ProductDetailCubit extends Cubit<ProductDetailState> {
   ProductDetailCubit() : super(const ProductDetailLoading());
@@ -37,9 +36,6 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
                 isFavorite = product!.favorite;
 
               }
-              else{
-                product?.favorite = false;
-              }
             }
           }
           emit(ProductDetailLoaded(product!, favoritesList, isLoggedIn));
@@ -57,19 +53,16 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
   bool getFavoriteIconValue() => isFavorite;
 
   void setFavoriteIconValue() {
-    logError('isFavorite',isFavorite);
     isFavorite = !isFavorite;
   }
 
   Future<void> onAddFavorite(ProductModel product) async {
-    logError('Add', product.categoryId);
     final prefs = await Preferences.openBox();
     final int? userId = prefs.getKeyValue(Preferences.userId, '');
     await ListRepository.addWishList(userId, product);
   }
 
   Future<void> onDeleteFavorite(ProductModel? product) async {
-    logError('Delete',  product?.categoryId);
     final prefs = await Preferences.openBox();
     final int? userId = prefs.getKeyValue(Preferences.userId, '');
 
