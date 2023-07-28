@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
+import 'package:heidi/src/utils/configs/preferences.dart';
 
 import 'home_state.dart';
 
@@ -14,7 +15,7 @@ class HomeCubit extends Cubit<HomeState> {
   HomeCubit() : super(const HomeState.loading());
 
   Future<void> onLoad() async {
-    final categoryRequestResponse= await Api.requestHomeCategory();
+    final categoryRequestResponse = await Api.requestHomeCategory();
     final cityRequestResponse = await Api.requestCities();
     final listingsRequestResponse = await Api.requestRecentListings();
     final imageRequestResponse = await Api.requestSliderImages();
@@ -31,13 +32,14 @@ class HomeCubit extends Cubit<HomeState> {
       return ProductModel.fromJson(item);
     }).toList();
 
-    final banner = List<String>.from(imageRequestResponse.data['sliders'] ?? []);
+    final banner =
+        List<String>.from(imageRequestResponse.data['sliders'] ?? []);
 
     emit(HomeStateLoaded(
       banner,
       sortCategoriesByListingCount(category),
       location,
-     recent,
+      recent,
     ));
   }
 
@@ -45,5 +47,10 @@ class HomeCubit extends Cubit<HomeState> {
       List<CategoryModel> categories) {
     categories.sort((a, b) => (b.count ?? 0).compareTo(a.count ?? 0));
     return categories;
+  }
+
+  Future<void> saveCityId(int cityId) async {
+    final prefs = await Preferences.openBox();
+    prefs.setKeyValue(Preferences.cityId, cityId);
   }
 }
