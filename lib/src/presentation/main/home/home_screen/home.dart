@@ -75,6 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
               for (final ids in location) {
                 cityTitles.add(ids.title.toString());
               }
+              _setSavedCity(location);
             }
           }
 
@@ -86,6 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
               SliverPersistentHeader(
                 delegate: AppBarHomeSliver(
                   cityTitlesList: cityTitles,
+                  hintText: (selectedCityId > 0) ? selectedCityTitle : null,
                   expandedHeight: MediaQuery.of(context).size.height * 0.3,
                   banners: banner,
                   setLocationCallback: (data) async {
@@ -101,6 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           selectedCityId = 0;
                         });
                       }
+                      AppBloc.homeCubit.saveCityId(selectedCityId);
                     }
                   },
                 ),
@@ -205,6 +208,16 @@ class _HomeScreenState extends State<HomeScreen> {
           arguments: selectedCityId);
     } else if (item.id != -1 && !item.hasChild) {
       _onPopUpCatError();
+    }
+  }
+
+  Future<void> _setSavedCity(List<CategoryModel> location) async {
+    final savedCity = await AppBloc.homeCubit.checkSavedCity(location);
+    if (savedCity != null) {
+      setState(() {
+        selectedCityId = savedCity.id;
+        selectedCityTitle = savedCity.title;
+      });
     }
   }
 
