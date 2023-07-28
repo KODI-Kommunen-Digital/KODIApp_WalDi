@@ -7,12 +7,14 @@ class AppBarHomeSliver extends SliverPersistentHeaderDelegate {
   final List<String>? banners;
   final ValueSetter<String>? setLocationCallback;
   final List<String>? cityTitlesList;
+  String? hintText;
 
   AppBarHomeSliver({
     required this.expandedHeight,
     required this.setLocationCallback,
     required this.cityTitlesList,
     this.banners,
+    this.hintText
   });
 
   @override
@@ -29,6 +31,7 @@ class AppBarHomeSliver extends SliverPersistentHeaderDelegate {
           color: Theme.of(context).colorScheme.background,
         ),
         CitiesDropDown(
+          hintText: hintText,
           cityTitlesList: cityTitlesList,
           setLocationCallback: setLocationCallback,
           // onScan: onScan,

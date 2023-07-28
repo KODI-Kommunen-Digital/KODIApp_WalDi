@@ -158,10 +158,11 @@ class ListRepository {
       'image': await MultipartFile.fromFile(image.path,
           filename: image.path, contentType: MediaType('image', '')),
     });
-    if (origin == 'profile') {
+    if (origin == 'profile' || origin == 'Profil') {
       final response = await Api.requestUploadImage(formData);
       return response;
-    } else if (origin == 'Upload feature image') {
+    } else if (origin == 'Upload feature image' ||
+        origin == 'Feature-Bild hochladen') {
       await prefs.setPickedFile(formData);
     }
     return null;
