@@ -359,5 +359,6 @@
   "input_subcategory": "Select Sub Category (if any)",
   "select_city": "Select City",
   "this_month":"This month",
-  "this_week":"This week"
+  "this_week":"This week",
+  "no_internet": "No connection! Please connect to the internet."
 }
