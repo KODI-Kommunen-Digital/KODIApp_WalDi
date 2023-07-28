@@ -6,12 +6,12 @@ class CitiesDropDown extends StatefulWidget {
   final List<String>? cityTitlesList;
   final String? hintText;
 
-  const CitiesDropDown({
-    Key? key,
-    required this.setLocationCallback,
-    required this.cityTitlesList,
-    this.hintText
-  }) : super(key: key);
+  const CitiesDropDown(
+      {Key? key,
+      required this.setLocationCallback,
+      required this.cityTitlesList,
+      this.hintText})
+      : super(key: key);
 
   @override
   State<CitiesDropDown> createState() => _CitiesDropDownState();
@@ -48,7 +48,8 @@ class _CitiesDropDownState extends State<CitiesDropDown> {
               focusedBorder: const OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.white),
               ),
-              labelText: widget.hintText ?? Translate.of(context).translate('select_city'),
+              labelText: widget.hintText ??
+                  Translate.of(context).translate('select_city'),
               labelStyle: const TextStyle(color: Colors.white),
               border: const OutlineInputBorder(),
             ),

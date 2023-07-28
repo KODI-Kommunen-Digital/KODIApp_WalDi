@@ -9,13 +9,12 @@ class AppBarHomeSliver extends SliverPersistentHeaderDelegate {
   final List<String>? cityTitlesList;
   String? hintText;
 
-  AppBarHomeSliver({
-    required this.expandedHeight,
-    required this.setLocationCallback,
-    required this.cityTitlesList,
-    this.banners,
-    this.hintText
-  });
+  AppBarHomeSliver(
+      {required this.expandedHeight,
+      required this.setLocationCallback,
+      required this.cityTitlesList,
+      this.banners,
+      this.hintText});
 
   @override
   Widget build(context, shrinkOffset, overlapsContent) {
