@@ -8,7 +8,7 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
 
   Future<String?> getCityLink() async {
     final prefs = await Preferences.openBox();
-    int cityId = await prefs.getKeyValue(Preferences.cityId, "");
+    int cityId = await prefs.getKeyValue(Preferences.cityId, int);
     Map<int, String> cityWebsites = {
       0: "https://www.bayernportal.de/suche/lebenslage/hierarchisch/buerger",
       1: "https://www.bayernportal.de/suche/lebenslage/hierarchisch/buerger?plz=94572&behoerde=71996696712&gemeinde=898745703691",
