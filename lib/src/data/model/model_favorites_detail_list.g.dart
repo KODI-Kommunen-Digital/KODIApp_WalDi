@@ -30,8 +30,8 @@ FavoriteDetailsModel _$FavoriteDetailsModelFromJson(
       (json['longitude'] as num?)?.toDouble(),
       (json['latitude'] as num?)?.toDouble(),
       json['villageId'] as int?,
-      json['startDate'] as String,
-      json['endDate'] as String,
+      json['startDate'] as String?,
+      json['endDate'] as String?,
       json['createdAt'] as String,
     );
 
