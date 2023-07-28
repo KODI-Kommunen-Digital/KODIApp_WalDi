@@ -84,10 +84,10 @@ class _HomeScreenState extends State<HomeScreen> {
               parent: AlwaysScrollableScrollPhysics(),
             ),
             slivers: <Widget>[
-              //TODO: call setLocationCallback from _checkSavedCity
               SliverPersistentHeader(
                 delegate: AppBarHomeSliver(
                   cityTitlesList: cityTitles,
+                  hintText: (selectedCityId>0) ? selectedCityTitle : null,
                   expandedHeight: MediaQuery.of(context).size.height * 0.3,
                   banners: banner,
                   setLocationCallback: (data) async {
