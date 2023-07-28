@@ -4,11 +4,13 @@ import 'package:heidi/src/utils/translate.dart';
 class CitiesDropDown extends StatefulWidget {
   final ValueSetter<String>? setLocationCallback;
   final List<String>? cityTitlesList;
+  final String? hintText;
 
   const CitiesDropDown({
     Key? key,
     required this.setLocationCallback,
     required this.cityTitlesList,
+    this.hintText
   }) : super(key: key);
 
   @override
@@ -46,7 +48,7 @@ class _CitiesDropDownState extends State<CitiesDropDown> {
               focusedBorder: const OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.white),
               ),
-              labelText: Translate.of(context).translate('select_city'),
+              labelText: widget.hintText ?? Translate.of(context).translate('select_city'),
               labelStyle: const TextStyle(color: Colors.white),
               border: const OutlineInputBorder(),
             ),
