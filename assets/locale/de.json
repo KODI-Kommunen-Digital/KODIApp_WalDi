@@ -376,4 +376,7 @@
   "category_companies": "Unternehmen",
   "category_public_transport": "Mitfahrbank",
   "category_offers": "Angebote"
+  "register_fail": "Registrierung fehlgeschlagen",
+  "this_month":"Diesen Monat",
+  "this_week":"Diese Woche"
 }

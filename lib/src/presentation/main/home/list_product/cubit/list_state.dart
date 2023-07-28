@@ -13,5 +13,9 @@ class ListState with _$ListState {
     List<ProductModel> list,
   ) = ListStateLoaded;
 
+  const factory ListState.updated(
+    List<ProductModel> list,
+  ) = ListStateUpdated;
+
   const factory ListState.error(String error) = ListStateError;
 }

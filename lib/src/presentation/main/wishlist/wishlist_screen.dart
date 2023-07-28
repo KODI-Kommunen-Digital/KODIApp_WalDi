@@ -162,7 +162,7 @@ class _WishListLoadedState extends State<WishListLoaded> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Text(
-                                      widget.favoritesList[index].title,
+                                      widget.favoritesList[index].category!,
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodySmall!
@@ -172,9 +172,8 @@ class _WishListLoadedState extends State<WishListLoaded> {
                                     ),
                                     const SizedBox(height: 4),
                                     Text(
-                                      widget.favoritesList[index].category ??
-                                          'empty string',
-                                      maxLines: 1,
+                                      widget.favoritesList[index].title,
+                                      maxLines: 2,
                                       style: Theme.of(context)
                                           .textTheme
                                           .titleSmall!
