@@ -51,7 +51,7 @@ class _LegalScreenState extends State<LegalScreen> {
             AppListTitle(
               title: Translate.of(context).translate('imprint'),
               onPressed: () {
-                _makeAction('https://smartregion-auf.de/impressum/');
+                _makeAction('https://ilzerland.bayern/impressum/');
               },
               trailing: Row(
                 children: <Widget>[
@@ -68,8 +68,7 @@ class _LegalScreenState extends State<LegalScreen> {
             AppListTitle(
               title: Translate.of(context).translate('privacy_policy'),
               onPressed: () {
-                _makeAction(
-                    'https://smartregion-auf.de/datenschutzerklaerung/');
+                _makeAction('https://ilzerland.bayern/datenschutz/');
               },
               trailing: Row(
                 children: <Widget>[
