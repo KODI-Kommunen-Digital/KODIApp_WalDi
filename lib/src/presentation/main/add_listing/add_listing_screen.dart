@@ -554,34 +554,34 @@ class _AddListingScreenState extends State<AddListingScreen> {
             ),
             const SizedBox(height: 16),
             const SizedBox(height: 8),
-            Text(
-              Translate.of(context).translate('village'),
-              style: Theme.of(context)
-                  .textTheme
-                  .titleMedium!
-                  .copyWith(fontWeight: FontWeight.bold),
-            ),
-            Row(
-              children: [
-                Expanded(
-                    child: DropdownButton(
-                  isExpanded: true,
-                  menuMaxHeight: 200,
-                  hint: Text(Translate.of(context).translate('input_village')),
-                  value: selectedVillage,
-                  items: listVillage.map((village) {
-                    return DropdownMenuItem(
-                        value: village['name'], child: Text(village['name']));
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      selectedVillage = value as String?;
-                    });
-                  },
-                )),
-              ],
-            ),
-            const SizedBox(height: 16),
+            // Text(
+            //   Translate.of(context).translate('village'),
+            //   style: Theme.of(context)
+            //       .textTheme
+            //       .titleMedium!
+            //       .copyWith(fontWeight: FontWeight.bold),
+            // ),
+            // Row(
+            //   children: [
+            //     Expanded(
+            //         child: DropdownButton(
+            //       isExpanded: true,
+            //       menuMaxHeight: 200,
+            //       hint: Text(Translate.of(context).translate('input_village')),
+            //       value: selectedVillage,
+            //       items: listVillage.map((village) {
+            //         return DropdownMenuItem(
+            //             value: village['name'], child: Text(village['name']));
+            //       }).toList(),
+            //       onChanged: (value) {
+            //         setState(() {
+            //           selectedVillage = value as String?;
+            //         });
+            //       },
+            //     )),
+            //   ],
+            // ),
+            // const SizedBox(height: 16),
             AppTextInput(
               hintText: Translate.of(context).translate('input_place'),
               controller: _textPlaceController,
