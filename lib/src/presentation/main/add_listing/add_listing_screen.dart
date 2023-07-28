@@ -317,6 +317,24 @@ class _AddListingScreenState extends State<AddListingScreen> {
     return true;
   }
 
+  String? _getCategoryTranslation(int id) {
+    Map<int, String> categories= {
+      1: "category_news",
+      2: "category_traffic",
+      3: "category_events",
+      4: "category_clubs",
+      5: "category_products",
+      6: "category_offer_search",
+      7: "category_citizen_info",
+      8: "category_defect_report",
+      9: "category_lost_found",
+      10: "category_companies",
+      11: "category_public_transport",
+      12: "category_offers"
+    };
+    return categories[id];
+  }
+
   Widget _buildContent() {
     if (_processing) {
       return const Center(
@@ -419,11 +437,11 @@ class _AddListingScreenState extends State<AddListingScreen> {
                             hint: Text(Translate.of(context)
                                 .translate('input_category')),
                             value:
-                                selectedCategory ?? listCategory.first['name'],
+                                selectedCategory ?? Translate.of(context).translate(_getCategoryTranslation(listCategory.first['id'])),
                             items: listCategory.map((category) {
                               return DropdownMenuItem(
                                   value: category['name'],
-                                  child: Text(category['name']));
+                                  child: Text(Translate.of(context).translate(_getCategoryTranslation(category['id']))));
                             }).toList(),
                             onChanged: (value) async {
                               setState(() {
