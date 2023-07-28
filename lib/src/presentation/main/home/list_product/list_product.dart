@@ -1,13 +1,15 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_setting.dart';
+import 'package:heidi/src/presentation/widget/app_navbar.dart';
 import 'package:heidi/src/presentation/widget/app_product_item.dart';
 import 'package:heidi/src/utils/configs/application.dart';
-import 'package:heidi/src/presentation/widget/app_navbar.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
+
 import 'cubit/cubit.dart';
 
 class ListProductScreen extends StatefulWidget {
@@ -22,7 +24,6 @@ class ListProductScreen extends StatefulWidget {
 
 class _ListProductScreenState extends State<ListProductScreen> {
   ProductFilter? selectedFilter;
-  final _listCubit = ListCubit();
 
   @override
   void initState() {
@@ -35,13 +36,14 @@ class _ListProductScreenState extends State<ListProductScreen> {
   }
 
   void _updateSelectedFilter(ProductFilter? filter) {
+    final loadedList = context.read<ListCubit>().getLoadedList();
     setState(() {
       if (selectedFilter == filter) {
         selectedFilter = null;
-        _listCubit.onProductFilter(null);
+        context.read<ListCubit>().onProductFilter(null, loadedList);
       } else {
         selectedFilter = filter;
-        _listCubit.onProductFilter(filter);
+        context.read<ListCubit>().onProductFilter(filter, loadedList);
       }
     });
   }
@@ -142,7 +144,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
         );
       },
     );
-    await loadListingsList();
+    // await loadListingsList();
   }
 
   @override
@@ -156,7 +158,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
           ),
           actions: [
             FutureBuilder<bool?>(
-              future: _listCubit.categoryPreferencesCall(),
+              future: context.read<ListCubit>().categoryPreferencesCall(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const CircularProgressIndicator();
@@ -185,13 +187,22 @@ class _ListProductScreenState extends State<ListProductScreen> {
               orElse: () {},
             );
           },
-          builder: (context, state) => state.maybeWhen(
+          builder: (context, state) => state.when(
             loading: () => const ListLoading(),
             loaded: (list) => ListLoaded(
               list: list,
               selectedCityId: widget.selectedCityId,
             ),
-            orElse: () => ErrorWidget('Failed to load listings.'),
+            updated: (list) {
+              return ListLoaded(
+                list: list,
+                selectedCityId: widget.selectedCityId,
+              );
+            },
+            error: (e) => ErrorWidget('Failed to load listings.'),
+            initial: () {
+              return Container();
+            },
           ),
         ),
       ),
@@ -230,7 +241,6 @@ class _ListLoadedState extends State<ListLoaded> {
   bool isLoading = false;
   final PageType _pageType = PageType.list;
   final ProductViewType _listMode = Application.setting.listMode;
-  // ProductFilter? selectedFilter;
 
   @override
   void initState() {
@@ -243,7 +253,7 @@ class _ListLoadedState extends State<ListLoaded> {
     return Column(
       children: <Widget>[
         Expanded(
-          child: _buildContent(),
+          child: _buildContent(widget.list),
         )
       ],
     );
@@ -303,7 +313,7 @@ class _ListLoadedState extends State<ListLoaded> {
     }
   }
 
-  Widget _buildContent() {
+  Widget _buildContent(List<ProductModel> list) {
     return BlocBuilder<ListCubit, ListState>(
       builder: (context, state) {
         if (_pageType == PageType.list) {
@@ -336,64 +346,62 @@ class _ListLoadedState extends State<ListLoaded> {
             );
           }
 
-          if (state is ListStateLoaded) {
-            List<ProductModel> list = List.from(state.list);
+          contentList = RefreshIndicator(
+            onRefresh: loadListingsList,
+            child: ListView.builder(
+              controller: _scrollController,
+              padding: const EdgeInsets.only(top: 8),
+              itemBuilder: (context, index) {
+                final item = list[index];
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: _buildItem(item: item, type: _listMode),
+                );
+              },
+              itemCount: list.length,
+            ),
+          );
+          if (_listMode == ProductViewType.grid) {
+            final size = MediaQuery.of(context).size;
+            final left = MediaQuery.of(context).padding.left;
+            final right = MediaQuery.of(context).padding.right;
+            const itemHeight = 220;
+            final itemWidth = (size.width - 48 - left - right) / 2;
+            final ratio = itemWidth / itemHeight;
             contentList = RefreshIndicator(
               onRefresh: loadListingsList,
-              child: ListView.builder(
+              child: GridView.count(
                 controller: _scrollController,
-                padding: const EdgeInsets.only(top: 8),
-                itemBuilder: (context, index) {
-                  final item = list[index];
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: _buildItem(item: item, type: _listMode),
-                  );
-                },
-                itemCount: list.length,
+                padding: const EdgeInsets.only(left: 16, right: 16, top: 8),
+                mainAxisSpacing: 16,
+                crossAxisSpacing: 16,
+                crossAxisCount: 2,
+                childAspectRatio: ratio,
+                children: list.map((item) {
+                  return _buildItem(item: item, type: _listMode);
+                }).toList(),
               ),
             );
-            if (_listMode == ProductViewType.grid) {
-              final size = MediaQuery.of(context).size;
-              final left = MediaQuery.of(context).padding.left;
-              final right = MediaQuery.of(context).padding.right;
-              const itemHeight = 220;
-              final itemWidth = (size.width - 48 - left - right) / 2;
-              final ratio = itemWidth / itemHeight;
-              contentList = RefreshIndicator(
-                onRefresh: loadListingsList,
-                child: GridView.count(
-                  controller: _scrollController,
-                  padding: const EdgeInsets.only(left: 16, right: 16, top: 8),
-                  mainAxisSpacing: 16,
-                  crossAxisSpacing: 16,
-                  crossAxisCount: 2,
-                  childAspectRatio: ratio,
-                  children: list.map((item) {
-                    return _buildItem(item: item, type: _listMode);
-                  }).toList(),
-                ),
-              );
-            }
-
-            if (state.list.isEmpty) {
-              contentList = Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    const Icon(Icons.sentiment_satisfied),
-                    Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: Text(
-                        Translate.of(context).translate('list_is_empty'),
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }
           }
+
+          if (list.isEmpty) {
+            contentList = Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  const Icon(Icons.sentiment_satisfied),
+                  Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Text(
+                      Translate.of(context).translate('list_is_empty'),
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
+
           return SafeArea(child: contentList);
         }
         return Container();

@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:heidi/src/data/model/model.dart';
-import 'package:heidi/src/data/model/model_filter.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
@@ -37,46 +36,20 @@ class ListCubit extends Cubit<ListState> {
       list = result[0];
       pagination = result[1];
       listLoaded = list;
-      // print(list);
       emit(ListStateLoaded(
         list,
       ));
     }
   }
 
-  Future<void> onLoadMore(FilterModel filter) async {
-    page = page + 1;
-    emit(ListStateLoaded(list));
-  }
 
-  Future<void> onUpdate(int id) async {
-    try {
-      final exist = list.firstWhere((e) => e.id == id);
-      final cityId = list.firstWhere((e) => e.id == id).cityId;
-      final result = await ListRepository.loadProduct(cityId, id);
+  List<ProductModel> getLoadedList() => listLoaded;
 
-      if (result != null) {
-        list = list.map((e) {
-          if (e.id == exist.id) {
-            return result;
-          }
-          return e;
-        }).toList();
+  void onProductFilter(ProductFilter? type, List<ProductModel> loadedList) {
 
-        emit(ListStateLoaded(
-          list,
-        ));
-      }
-    } catch (error) {
-      logError("LIST NOT FOUND Error");
-    }
-  }
-
-  void onProductFilter(ProductFilter? type) {
-    print(listLoaded);
     final currentDate = DateTime.now();
     if (type == ProductFilter.month) {
-      final filteredList = listLoaded.where((product) {
+       filteredList = loadedList.where((product) {
         final startDate = _parseDate(product.startDate);
         if (startDate != null) {
           final startMonth = startDate.month;
@@ -86,9 +59,10 @@ class ListCubit extends Cubit<ListState> {
         return false;
       }).toList();
 
-      emit(ListStateLoaded(filteredList));
+      emit(ListStateUpdated(filteredList));
+       logError('month2', filteredList.length);
     } else if (type == ProductFilter.week) {
-      final filteredList = listLoaded.where((product) {
+       filteredList = loadedList.where((product) {
         final startDate = _parseDate(product.startDate);
         if (startDate != null) {
           final startWeek = _getWeekNumber(startDate);
@@ -98,9 +72,9 @@ class ListCubit extends Cubit<ListState> {
         return false;
       }).toList();
 
-      emit(ListStateLoaded(filteredList));
+      emit(ListStateUpdated(filteredList));
     } else {
-      emit(ListStateLoaded(listLoaded));
+      emit(ListStateUpdated(loadedList));
     }
   }
 

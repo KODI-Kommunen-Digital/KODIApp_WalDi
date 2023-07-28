@@ -21,6 +21,7 @@ mixin _$ListState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<ProductModel> list) loaded,
+    required TResult Function(List<ProductModel> list) updated,
     required TResult Function(String error) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -29,6 +30,7 @@ mixin _$ListState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<ProductModel> list)? loaded,
+    TResult? Function(List<ProductModel> list)? updated,
     TResult? Function(String error)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -37,6 +39,7 @@ mixin _$ListState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<ProductModel> list)? loaded,
+    TResult Function(List<ProductModel> list)? updated,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) =>
@@ -46,6 +49,7 @@ mixin _$ListState {
     required TResult Function(ListStateInitial value) initial,
     required TResult Function(ListStateLoading value) loading,
     required TResult Function(ListStateLoaded value) loaded,
+    required TResult Function(ListStateUpdated value) updated,
     required TResult Function(ListStateError value) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -54,6 +58,7 @@ mixin _$ListState {
     TResult? Function(ListStateInitial value)? initial,
     TResult? Function(ListStateLoading value)? loading,
     TResult? Function(ListStateLoaded value)? loaded,
+    TResult? Function(ListStateUpdated value)? updated,
     TResult? Function(ListStateError value)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -62,6 +67,7 @@ mixin _$ListState {
     TResult Function(ListStateInitial value)? initial,
     TResult Function(ListStateLoading value)? loading,
     TResult Function(ListStateLoaded value)? loaded,
+    TResult Function(ListStateUpdated value)? updated,
     TResult Function(ListStateError value)? error,
     required TResult orElse(),
   }) =>
@@ -126,6 +132,7 @@ class _$ListStateInitial implements ListStateInitial {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<ProductModel> list) loaded,
+    required TResult Function(List<ProductModel> list) updated,
     required TResult Function(String error) error,
   }) {
     return initial();
@@ -137,6 +144,7 @@ class _$ListStateInitial implements ListStateInitial {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<ProductModel> list)? loaded,
+    TResult? Function(List<ProductModel> list)? updated,
     TResult? Function(String error)? error,
   }) {
     return initial?.call();
@@ -148,6 +156,7 @@ class _$ListStateInitial implements ListStateInitial {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<ProductModel> list)? loaded,
+    TResult Function(List<ProductModel> list)? updated,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
@@ -163,6 +172,7 @@ class _$ListStateInitial implements ListStateInitial {
     required TResult Function(ListStateInitial value) initial,
     required TResult Function(ListStateLoading value) loading,
     required TResult Function(ListStateLoaded value) loaded,
+    required TResult Function(ListStateUpdated value) updated,
     required TResult Function(ListStateError value) error,
   }) {
     return initial(this);
@@ -174,6 +184,7 @@ class _$ListStateInitial implements ListStateInitial {
     TResult? Function(ListStateInitial value)? initial,
     TResult? Function(ListStateLoading value)? loading,
     TResult? Function(ListStateLoaded value)? loaded,
+    TResult? Function(ListStateUpdated value)? updated,
     TResult? Function(ListStateError value)? error,
   }) {
     return initial?.call(this);
@@ -185,6 +196,7 @@ class _$ListStateInitial implements ListStateInitial {
     TResult Function(ListStateInitial value)? initial,
     TResult Function(ListStateLoading value)? loading,
     TResult Function(ListStateLoaded value)? loaded,
+    TResult Function(ListStateUpdated value)? updated,
     TResult Function(ListStateError value)? error,
     required TResult orElse(),
   }) {
@@ -240,6 +252,7 @@ class _$ListStateLoading implements ListStateLoading {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<ProductModel> list) loaded,
+    required TResult Function(List<ProductModel> list) updated,
     required TResult Function(String error) error,
   }) {
     return loading();
@@ -251,6 +264,7 @@ class _$ListStateLoading implements ListStateLoading {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<ProductModel> list)? loaded,
+    TResult? Function(List<ProductModel> list)? updated,
     TResult? Function(String error)? error,
   }) {
     return loading?.call();
@@ -262,6 +276,7 @@ class _$ListStateLoading implements ListStateLoading {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<ProductModel> list)? loaded,
+    TResult Function(List<ProductModel> list)? updated,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
@@ -277,6 +292,7 @@ class _$ListStateLoading implements ListStateLoading {
     required TResult Function(ListStateInitial value) initial,
     required TResult Function(ListStateLoading value) loading,
     required TResult Function(ListStateLoaded value) loaded,
+    required TResult Function(ListStateUpdated value) updated,
     required TResult Function(ListStateError value) error,
   }) {
     return loading(this);
@@ -288,6 +304,7 @@ class _$ListStateLoading implements ListStateLoading {
     TResult? Function(ListStateInitial value)? initial,
     TResult? Function(ListStateLoading value)? loading,
     TResult? Function(ListStateLoaded value)? loaded,
+    TResult? Function(ListStateUpdated value)? updated,
     TResult? Function(ListStateError value)? error,
   }) {
     return loading?.call(this);
@@ -299,6 +316,7 @@ class _$ListStateLoading implements ListStateLoading {
     TResult Function(ListStateInitial value)? initial,
     TResult Function(ListStateLoading value)? loading,
     TResult Function(ListStateLoaded value)? loaded,
+    TResult Function(ListStateUpdated value)? updated,
     TResult Function(ListStateError value)? error,
     required TResult orElse(),
   }) {
@@ -386,6 +404,7 @@ class _$ListStateLoaded implements ListStateLoaded {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<ProductModel> list) loaded,
+    required TResult Function(List<ProductModel> list) updated,
     required TResult Function(String error) error,
   }) {
     return loaded(list);
@@ -397,6 +416,7 @@ class _$ListStateLoaded implements ListStateLoaded {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<ProductModel> list)? loaded,
+    TResult? Function(List<ProductModel> list)? updated,
     TResult? Function(String error)? error,
   }) {
     return loaded?.call(list);
@@ -408,6 +428,7 @@ class _$ListStateLoaded implements ListStateLoaded {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<ProductModel> list)? loaded,
+    TResult Function(List<ProductModel> list)? updated,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
@@ -423,6 +444,7 @@ class _$ListStateLoaded implements ListStateLoaded {
     required TResult Function(ListStateInitial value) initial,
     required TResult Function(ListStateLoading value) loading,
     required TResult Function(ListStateLoaded value) loaded,
+    required TResult Function(ListStateUpdated value) updated,
     required TResult Function(ListStateError value) error,
   }) {
     return loaded(this);
@@ -434,6 +456,7 @@ class _$ListStateLoaded implements ListStateLoaded {
     TResult? Function(ListStateInitial value)? initial,
     TResult? Function(ListStateLoading value)? loading,
     TResult? Function(ListStateLoaded value)? loaded,
+    TResult? Function(ListStateUpdated value)? updated,
     TResult? Function(ListStateError value)? error,
   }) {
     return loaded?.call(this);
@@ -445,6 +468,7 @@ class _$ListStateLoaded implements ListStateLoaded {
     TResult Function(ListStateInitial value)? initial,
     TResult Function(ListStateLoading value)? loading,
     TResult Function(ListStateLoaded value)? loaded,
+    TResult Function(ListStateUpdated value)? updated,
     TResult Function(ListStateError value)? error,
     required TResult orElse(),
   }) {
@@ -462,6 +486,164 @@ abstract class ListStateLoaded implements ListState {
   List<ProductModel> get list;
   @JsonKey(ignore: true)
   _$$ListStateLoadedCopyWith<_$ListStateLoaded> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$ListStateUpdatedCopyWith<$Res> {
+  factory _$$ListStateUpdatedCopyWith(
+          _$ListStateUpdated value, $Res Function(_$ListStateUpdated) then) =
+      __$$ListStateUpdatedCopyWithImpl<$Res>;
+  @useResult
+  $Res call({List<ProductModel> list});
+}
+
+/// @nodoc
+class __$$ListStateUpdatedCopyWithImpl<$Res>
+    extends _$ListStateCopyWithImpl<$Res, _$ListStateUpdated>
+    implements _$$ListStateUpdatedCopyWith<$Res> {
+  __$$ListStateUpdatedCopyWithImpl(
+      _$ListStateUpdated _value, $Res Function(_$ListStateUpdated) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? list = null,
+  }) {
+    return _then(_$ListStateUpdated(
+      null == list
+          ? _value._list
+          : list // ignore: cast_nullable_to_non_nullable
+              as List<ProductModel>,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$ListStateUpdated implements ListStateUpdated {
+  const _$ListStateUpdated(final List<ProductModel> list) : _list = list;
+
+  final List<ProductModel> _list;
+  @override
+  List<ProductModel> get list {
+    if (_list is EqualUnmodifiableListView) return _list;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_list);
+  }
+
+  @override
+  String toString() {
+    return 'ListState.updated(list: $list)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ListStateUpdated &&
+            const DeepCollectionEquality().equals(other._list, _list));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(_list));
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ListStateUpdatedCopyWith<_$ListStateUpdated> get copyWith =>
+      __$$ListStateUpdatedCopyWithImpl<_$ListStateUpdated>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(List<ProductModel> list) loaded,
+    required TResult Function(List<ProductModel> list) updated,
+    required TResult Function(String error) error,
+  }) {
+    return updated(list);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(List<ProductModel> list)? loaded,
+    TResult? Function(List<ProductModel> list)? updated,
+    TResult? Function(String error)? error,
+  }) {
+    return updated?.call(list);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(List<ProductModel> list)? loaded,
+    TResult Function(List<ProductModel> list)? updated,
+    TResult Function(String error)? error,
+    required TResult orElse(),
+  }) {
+    if (updated != null) {
+      return updated(list);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(ListStateInitial value) initial,
+    required TResult Function(ListStateLoading value) loading,
+    required TResult Function(ListStateLoaded value) loaded,
+    required TResult Function(ListStateUpdated value) updated,
+    required TResult Function(ListStateError value) error,
+  }) {
+    return updated(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(ListStateInitial value)? initial,
+    TResult? Function(ListStateLoading value)? loading,
+    TResult? Function(ListStateLoaded value)? loaded,
+    TResult? Function(ListStateUpdated value)? updated,
+    TResult? Function(ListStateError value)? error,
+  }) {
+    return updated?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(ListStateInitial value)? initial,
+    TResult Function(ListStateLoading value)? loading,
+    TResult Function(ListStateLoaded value)? loaded,
+    TResult Function(ListStateUpdated value)? updated,
+    TResult Function(ListStateError value)? error,
+    required TResult orElse(),
+  }) {
+    if (updated != null) {
+      return updated(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class ListStateUpdated implements ListState {
+  const factory ListStateUpdated(final List<ProductModel> list) =
+      _$ListStateUpdated;
+
+  List<ProductModel> get list;
+  @JsonKey(ignore: true)
+  _$$ListStateUpdatedCopyWith<_$ListStateUpdated> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -532,6 +714,7 @@ class _$ListStateError implements ListStateError {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<ProductModel> list) loaded,
+    required TResult Function(List<ProductModel> list) updated,
     required TResult Function(String error) error,
   }) {
     return error(this.error);
@@ -543,6 +726,7 @@ class _$ListStateError implements ListStateError {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<ProductModel> list)? loaded,
+    TResult? Function(List<ProductModel> list)? updated,
     TResult? Function(String error)? error,
   }) {
     return error?.call(this.error);
@@ -554,6 +738,7 @@ class _$ListStateError implements ListStateError {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<ProductModel> list)? loaded,
+    TResult Function(List<ProductModel> list)? updated,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
@@ -569,6 +754,7 @@ class _$ListStateError implements ListStateError {
     required TResult Function(ListStateInitial value) initial,
     required TResult Function(ListStateLoading value) loading,
     required TResult Function(ListStateLoaded value) loaded,
+    required TResult Function(ListStateUpdated value) updated,
     required TResult Function(ListStateError value) error,
   }) {
     return error(this);
@@ -580,6 +766,7 @@ class _$ListStateError implements ListStateError {
     TResult? Function(ListStateInitial value)? initial,
     TResult? Function(ListStateLoading value)? loading,
     TResult? Function(ListStateLoaded value)? loaded,
+    TResult? Function(ListStateUpdated value)? updated,
     TResult? Function(ListStateError value)? error,
   }) {
     return error?.call(this);
@@ -591,6 +778,7 @@ class _$ListStateError implements ListStateError {
     TResult Function(ListStateInitial value)? initial,
     TResult Function(ListStateLoading value)? loading,
     TResult Function(ListStateLoaded value)? loaded,
+    TResult Function(ListStateUpdated value)? updated,
     TResult Function(ListStateError value)? error,
     required TResult orElse(),
   }) {
