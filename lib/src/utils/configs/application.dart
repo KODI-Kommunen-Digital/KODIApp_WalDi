@@ -6,6 +6,7 @@ class Application {
   static String domain = 'https://heidiapp.com';
   static DeviceModel? device;
   static SettingModel setting = SettingModel.fromDefault();
+
   static const String picturesURL =
       'https://unsa1heidi.obs.eu-de.otc.t-systems.com/';
 

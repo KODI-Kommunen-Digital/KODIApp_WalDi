@@ -33,7 +33,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
 
   File? _file;
   double? _percent;
-  bool _completed = false;
+  bool isImageUploaded = false;
   bool showAction = false;
   String title = '';
 
@@ -65,16 +65,18 @@ class _AppUploadImageState extends State<AppUploadImage> {
         if (pickedFile == null) return;
         if (!mounted) return;
         setState(() {
-          _completed = false;
+          isImageUploaded = false;
           _file = File(pickedFile.path);
         });
         final origin = widget.title;
-        if (origin == 'Upload feature image') {
+        if (origin == 'Upload feature image' ||
+            origin == 'Feature-Bild hochladen') {
+          await ListRepository.uploadImage(_file!, origin);
         } else {
           final response = await ListRepository.uploadImage(_file!, origin);
           if (response!.data['status'] == 'success') {
             setState(() {
-              _completed = true;
+              isImageUploaded = true;
             });
           } else {}
         }
@@ -86,16 +88,16 @@ class _AppUploadImageState extends State<AppUploadImage> {
           if (pickedFile == null) return;
           if (!mounted) return;
           setState(() {
-            _completed = false;
+            isImageUploaded = false;
             _file = File(pickedFile.path);
           });
           final origin = widget.title;
-          if (origin == 'Upload feature image') {
+          if (origin == 'Feature-Bild hochladen') {
           } else {
             final response = await ListRepository.uploadImage(_file!, origin);
             if (response!.data['status'] == 'success') {
               setState(() {
-                _completed = true;
+                isImageUploaded = true;
               });
               final item = response.data['path'];
               widget.onChange(item);
@@ -133,7 +135,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
           );
         }
 
-        if (_completed) {
+        if (isImageUploaded) {
           return Icon(
             Icons.check_circle,
             size: 18,
@@ -175,7 +177,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
           );
         }
 
-        if (_completed) {
+        if (isImageUploaded) {
           return Container(
             alignment: Alignment.topRight,
             child: Icon(
@@ -194,10 +196,6 @@ class _AppUploadImageState extends State<AppUploadImage> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(2),
               ),
-              // child: LinearProgressIndicator(
-              //   value: _percent,
-              //   backgroundColor: Theme.of(context).cardColor,
-              // ),
             ),
           );
         }
@@ -209,9 +207,6 @@ class _AppUploadImageState extends State<AppUploadImage> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(2),
             ),
-            // child: LinearProgressIndicator(
-            //   backgroundColor: Theme.of(context).cardColor,
-            // ),
           ),
         );
     }
@@ -249,14 +244,6 @@ class _AppUploadImageState extends State<AppUploadImage> {
         shape: BoxShape.circle,
         image: decorationImage,
       );
-      // if (_percent != null && _percent! < 100) {
-      //   circle = CircularProgressIndicator(
-      //     value: _percent,
-      //     backgroundColor: Theme.of(context).cardColor,
-      //   );
-      // } else if (_file != null && !_completed) {
-      //   circle = const CircularProgressIndicator();
-      // }
     }
 
     return InkWell(

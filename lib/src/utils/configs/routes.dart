@@ -6,6 +6,8 @@ import 'package:heidi/src/presentation/main/account/legal/imprint/imprint.dart';
 import 'package:heidi/src/presentation/main/account/legal/legal.dart';
 import 'package:heidi/src/presentation/main/account/legal/privacy_policy/privacy.dart';
 import 'package:heidi/src/presentation/main/account/setting/settings_screen.dart';
+import 'package:heidi/src/presentation/main/add_listing/add_listing_screen.dart';
+import 'package:heidi/src/presentation/main/add_listing/add_listing_success/add_listing_success.dart';
 import 'package:heidi/src/presentation/main/home/list_product/list_product.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/product_detail.dart';
 import 'package:heidi/src/presentation/main/login/forgot_password/forgot_password_screen.dart';
@@ -112,6 +114,22 @@ class Routes {
           builder: (context) {
             return const SettingsScreen();
           },
+        );
+
+      case submit:
+        return MaterialPageRoute(
+          builder: (context) {
+            return AddListingScreen(item: settings.arguments as ProductModel?);
+          },
+          fullscreenDialog: true,
+        );
+
+      case submitSuccess:
+        return MaterialPageRoute(
+          builder: (context) {
+            return const AddListingSuccessScreen();
+          },
+          fullscreenDialog: true,
         );
 
         case changePassword:

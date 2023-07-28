@@ -82,6 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
               for (final ids in location) {
                 cityTitles.add(ids.title.toString());
               }
+              _setSavedCity(location);
             }
           }
 
@@ -93,6 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
               SliverPersistentHeader(
                 delegate: AppBarHomeSliver(
                   cityTitlesList: cityTitles,
+                  hintText: (selectedCityId > 0) ? selectedCityTitle : null,
                   expandedHeight: MediaQuery.of(context).size.height * 0.3,
                   banners: banner,
                   setLocationCallback: (data) async {
@@ -144,9 +146,8 @@ class _HomeScreenState extends State<HomeScreen> {
     showDialog<String>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
-        title: const Text('Kategorisierung'),
-        content: const Text(
-            'Diese Funktion wird in Kürze fertiggestellt. Durch die Kategorien hast du die Möglichkeit deine Interessen zu filtern. Es werden dir dann nur die relevanten Informationen angezeigt.'),
+        title: Text(Translate.of(context).translate('categorization')),
+        content: Text(Translate.of(context).translate("category_coming_soon")),
         actions: <Widget>[
           TextButton(
             onPressed: () => Navigator.pop(context, 'OK'),
@@ -213,6 +214,16 @@ class _HomeScreenState extends State<HomeScreen> {
           arguments: selectedCityId);
     } else if (item.id != -1 && !item.hasChild) {
       _onPopUpCatError();
+    }
+  }
+
+  Future<void> _setSavedCity(List<CategoryModel> location) async {
+    final savedCity = await AppBloc.homeCubit.checkSavedCity(location);
+    if (savedCity != null) {
+      setState(() {
+        selectedCityId = savedCity.id;
+        selectedCityTitle = savedCity.title;
+      });
     }
   }
 

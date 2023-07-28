@@ -1,4 +1,4 @@
-enum ValidateType { normal, email, number, phone, tag }
+enum ValidateType { normal, email, number, phone, tag, cpassword }
 
 class UtilValidator {
   static const String errorEmpty = "value_not_empty";
@@ -8,17 +8,17 @@ class UtilValidator {
   static const String errorPhone = "value_not_phone";
   static const String errorPassword = "value_not_valid_password";
   static const String errorId = "value_not_valid_id";
+  static const String errorCpassword = "value_not_equal_password";
   static const String valueNotMatch = "value_not_match";
   static const String valueNotIsTag = "value_not_is_tag";
 
-  static String? validate(
-    String data, {
-    ValidateType? type = ValidateType.normal,
-    int? min,
-    int? max,
-    bool allowEmpty = false,
-    String? match,
-  }) {
+  static String? validate(String data,
+      {ValidateType? type = ValidateType.normal,
+      int? min,
+      int? max,
+      bool allowEmpty = false,
+      String? match,
+      String? password}) {
     ///Empty
     if (!allowEmpty && data.isEmpty) {
       return errorEmpty;
@@ -32,7 +32,6 @@ class UtilValidator {
     if (data.isEmpty) return null;
 
     switch (type) {
-
       ///Email pattern
       case ValidateType.email:
         final emailRegex = RegExp(
@@ -65,6 +64,13 @@ class UtilValidator {
         final tagRegex = RegExp(r'^([^0-9|\,\s]*)$');
         if (!tagRegex.hasMatch(data)) {
           return valueNotIsTag;
+        }
+        break;
+
+      ///Is cpassword equal to password
+      case ValidateType.cpassword:
+        if (password != data) {
+          return errorCpassword;
         }
         break;
       default:

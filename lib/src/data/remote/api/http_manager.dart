@@ -78,7 +78,7 @@ class HTTPManager {
               handler.reject(error);
             }
           } else {
-            logError('error6', response.message);
+            logError('Refresh Token Error', response.message);
           }
         } else {
           final response = Response(

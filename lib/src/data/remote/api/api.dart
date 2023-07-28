@@ -199,7 +199,6 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
-  ///Upload image
   static Future<ResultApiModel> requestUploadImage(formData) async {
     final prefs = await Preferences.openBox();
     final userId = prefs.getKeyValue(Preferences.userId, '');
@@ -213,7 +212,6 @@ class Api {
     return ResultApiModel.fromJson(convertResponse);
   }
 
-  ///Upload listing image
   static Future<ResultApiModel> requestListingUploadImage(listingId) async {
     final prefs = await Preferences.openBox();
     final cityId = prefs.getKeyValue(Preferences.cityId, '');

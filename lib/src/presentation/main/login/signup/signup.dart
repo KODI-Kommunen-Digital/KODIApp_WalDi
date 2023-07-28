@@ -64,13 +64,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
       _errorFN = UtilValidator.validate(_textFNController.text);
       _errorLN = UtilValidator.validate(_textLNController.text);
       _errorPass = UtilValidator.validate(_textPassController.text);
-      _errorCPass = UtilValidator.validate(_textPassController.text);
+      _errorCPass = UtilValidator.validate(_textCPassController.text,
+          password: _textPassController.text, type: ValidateType.cpassword);
       _errorEmail = UtilValidator.validate(
         _textEmailController.text,
         type: ValidateType.email,
       );
     });
-    if (_errorID == null && _errorPass == null && _errorEmail == null) {
+    if (_errorID == null &&
+        _errorPass == null &&
+        _errorEmail == null &&
+        _errorCPass == null) {
       final result = await AppBloc.signupCubit.onRegister(
         username: _textIDController.text,
         firstname: _textFNController.text,
@@ -87,7 +91,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
           password: _textPassController.text,
         );
         Navigator.pop(context);
+      } else {
+        _showErrorSnackBar();
       }
+    } else {
+      _showErrorSnackBar();
     }
   }
 
@@ -304,5 +312,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ),
       ),
     );
+  }
+
+  void _showErrorSnackBar() {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(Translate.of(context).translate("register_fail"))));
   }
 }

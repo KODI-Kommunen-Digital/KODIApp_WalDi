@@ -24,7 +24,10 @@ class Preferences {
   static const sessionTokenKey = '_sessionTokenKey';
   static const _pickedFileKey = 'pickedFile';
   static const String categoryId = 'categoryId';
+  static const String villageId = 'villageId';
+  static const String subCategoryId = 'subCategoryId';
   static const String type = 'type';
+  static const String path = 'path';
 
   Preferences._(this._box);
 

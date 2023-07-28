@@ -209,7 +209,7 @@
   "choose_country": "Land auswählen",
   "city": "Stadt",
   "village": "Dorf",
-  "choose_city": "Stadt wählen",
+  "choose_city": "Ort wählen",
   "state": "Bundesland",
   "choose_state": "Bundesland wählen",
   "choose_time_message": "Bitte Uhrzeit wählen",
@@ -359,7 +359,9 @@
   "input_subcategory": "Unterkategorie auswählen (falls vorhanden)",
   "subCategory": "Unterkategorie",
   "select_city": "Ort wählen",
-  "this_month":"Diesen Monat",
-  "this_week":"Diese Woche",
-  "no_internet": "Keine Verbindung! Bitte verbinden Sie sich mit dem Internet."
+  "categorization": "Kategorisierung",
+  "category_coming_soon": "Diese Funktion wird in Kürze fertiggestellt. Durch die Kategorien hast du die Möglichkeit deine Interessen zu filtern. Es werden dir dann nur die relevanten Informationen angezeigt.",
+  "no_internet": "Keine Verbindung! Bitte verbinden Sie sich mit dem Internet.",
+  "value_not_equal_password": "Passwort stimmt nicht überein",
+  "register_fail": "Registrierung fehlgeschlagen"
 }
