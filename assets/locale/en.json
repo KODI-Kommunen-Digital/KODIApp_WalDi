@@ -364,5 +364,17 @@
   "value_not_equal_password": "Password does not match",
   "register_fail": "Register failed",
   "this_month":"This month",
-  "this_week":"This week"
+  "this_week":"This week",
+  "category_news": "News",
+  "category_traffic": "Road works/Traffic",
+  "category_events": "Events",
+  "category_clubs": "Clubs",
+  "category_products": "Regional Products",
+  "category_offer_search": "Offer/Search",
+  "category_citizen_info": "New citizen info",
+  "category_defect_report": "Defect report",
+  "category_lost_found": "Lost and Found",
+  "category_companies": "Company portraits",
+  "category_public_transport": "Carpooling/Public transpor",
+  "category_offers": "Offers"
 }
