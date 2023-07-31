@@ -361,5 +361,21 @@
   "select_city": "Ort wählen",
   "categorization": "Kategorisierung",
   "category_coming_soon": "Diese Funktion wird in Kürze fertiggestellt. Durch die Kategorien hast du die Möglichkeit deine Interessen zu filtern. Es werden dir dann nur die relevanten Informationen angezeigt.",
-  "no_internet": "Keine Verbindung! Bitte verbinden Sie sich mit dem Internet."
+  "no_internet": "Keine Verbindung! Bitte verbinden Sie sich mit dem Internet.",
+  "value_not_equal_password": "Passwort stimmt nicht überein",
+  "category_news": "News",
+  "category_traffic": "Verkehr",
+  "category_events": "Events",
+  "category_clubs": "Vereine",
+  "category_products": "Produkte",
+  "category_offer_search": "Biete/Suche",
+  "category_citizen_info": "Bürgerinfo",
+  "category_defect_report": "Mängelmelder",
+  "category_lost_found": "Fundbüro",
+  "category_companies": "Unternehmen",
+  "category_public_transport": "Mitfahrbank",
+  "category_offers": "Angebote",
+  "register_fail": "Registrierung fehlgeschlagen",
+  "this_month":"Diesen Monat",
+  "this_week":"Diese Woche"
 }

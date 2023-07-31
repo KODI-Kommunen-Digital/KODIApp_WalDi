@@ -91,11 +91,11 @@ class _HomeScreenState extends State<HomeScreen> {
               parent: AlwaysScrollableScrollPhysics(),
             ),
             slivers: <Widget>[
-              //TODO: call setLocationCallback from _checkSavedCity
               SliverPersistentHeader(
                 delegate: AppBarHomeSliver(
                   cityTitlesList: cityTitles,
-                  expandedHeight: MediaQuery.of(context).size.height * 0.25,
+                  hintText: (selectedCityId > 0) ? selectedCityTitle : null,
+                  expandedHeight: MediaQuery.of(context).size.height * 0.3,
                   banners: banner,
                   setLocationCallback: (data) async {
                     for (final list in location!) {
@@ -284,7 +284,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 _onCategory(item, category);
                 return false;
               },
-              // _onCategory,
             );
           },
         ).toList(),

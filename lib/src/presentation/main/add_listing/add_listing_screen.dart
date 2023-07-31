@@ -146,7 +146,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
   }
 
   void _onProcess() async {
-    final loadCitiesResponse = await context.read<AddListingCubit>().loadCities();
+    final loadCitiesResponse =
+        await context.read<AddListingCubit>().loadCities();
     if (!mounted) return;
     final loadCategoryResponse =
         await context.read<AddListingCubit>().loadCategory();
@@ -154,11 +155,11 @@ class _AddListingScreenState extends State<AddListingScreen> {
       var jsonCategory = loadCategoryResponse!.data;
       final selectedCategory = jsonCategory.first['name'];
       if (!mounted) return;
-      final subCategoryResponse =
-          await context.read<AddListingCubit>().loadSubCategory(selectedCategory);
+      final subCategoryResponse = await context
+          .read<AddListingCubit>()
+          .loadSubCategory(selectedCategory);
 
       listSubCategory = subCategoryResponse!.data;
-
     }
     setState(() {
       listCategory = loadCategoryResponse?.data;
@@ -278,6 +279,18 @@ class _AddListingScreenState extends State<AddListingScreen> {
       allowEmpty: true,
     );
 
+    List<String?> errors = [
+      _errorTitle,
+      _errorContent,
+      _errorCategory,
+      _errorPhone,
+      _errorEmail,
+      _errorWebsite,
+      _errorStatus,
+      _errorSDate,
+      _errorEDate,
+    ];
+
     if (_errorTitle != null ||
         _errorContent != null ||
         _errorCategory != null ||
@@ -287,10 +300,39 @@ class _AddListingScreenState extends State<AddListingScreen> {
         _errorStatus != null ||
         _errorSDate != null ||
         _errorEDate != null) {
+      String errorMessage = "";
+      for (var element in errors) {
+        if (element != null) {
+          errorMessage =
+              "$errorMessage${Translate.of(context).translate(element)}, ";
+        }
+      }
+      errorMessage = errorMessage.substring(0, errorMessage.length - 2);
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(errorMessage)));
+
       setState(() {});
       return false;
     }
     return true;
+  }
+
+  String? _getCategoryTranslation(int id) {
+    Map<int, String> categories= {
+      1: "category_news",
+      2: "category_traffic",
+      3: "category_events",
+      4: "category_clubs",
+      5: "category_products",
+      6: "category_offer_search",
+      7: "category_citizen_info",
+      8: "category_defect_report",
+      9: "category_lost_found",
+      10: "category_companies",
+      11: "category_public_transport",
+      12: "category_offers"
+    };
+    return categories[id];
   }
 
   Widget _buildContent() {
@@ -384,7 +426,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
                   .copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
-
             Row(
               children: [
                 Expanded(
@@ -396,29 +437,31 @@ class _AddListingScreenState extends State<AddListingScreen> {
                             hint: Text(Translate.of(context)
                                 .translate('input_category')),
                             value:
-                                selectedCategory ?? listCategory.first['name'],
+                                selectedCategory ?? Translate.of(context).translate(_getCategoryTranslation(listCategory.first['id'])),
                             items: listCategory.map((category) {
                               return DropdownMenuItem(
                                   value: category['name'],
-                                  child: Text(category['name']));
+                                  child: Text(Translate.of(context).translate(_getCategoryTranslation(category['id']))));
                             }).toList(),
                             onChanged: (value) async {
                               setState(() {
                                 selectedCategory = value as String?;
                               });
-                              context.read<AddListingCubit>().clearSubCategory();
+                              context
+                                  .read<AddListingCubit>()
+                                  .clearSubCategory();
                               selectedSubCategory = null;
                               // clearStartEndDate();
                               final subCategoryResponse = await context
                                   .read<AddListingCubit>()
                                   .loadSubCategory(value);
                               if (!mounted) return;
-                              context.read<AddListingCubit>().getCategoryId(value);
+                              context
+                                  .read<AddListingCubit>()
+                                  .getCategoryId(value);
                               setState(() {
-
                                 selectedSubCategory =
                                     subCategoryResponse?.data.first['name'];
-
                               });
                             },
                           )),
@@ -505,9 +548,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
                 ),
               ],
             ),
-
             const SizedBox(height: 16),
-
             const SizedBox(height: 8),
             Text(
               Translate.of(context).translate('village'),
@@ -516,7 +557,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
                   .titleMedium!
                   .copyWith(fontWeight: FontWeight.bold),
             ),
-
             Row(
               children: [
                 Expanded(
