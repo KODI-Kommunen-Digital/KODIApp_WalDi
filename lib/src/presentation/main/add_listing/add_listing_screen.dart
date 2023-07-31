@@ -158,7 +158,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
       final subCategoryResponse = await context
           .read<AddListingCubit>()
           .loadSubCategory(selectedCategory);
-
       listSubCategory = subCategoryResponse!.data;
     }
     setState(() {
@@ -166,6 +165,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
       selectedCity = loadCitiesResponse!.data.first['name'];
       selectedSubCategory = loadCategoryResponse?.data.first['name'];
       listCity = loadCitiesResponse.data;
+      selectedCategory = selectedSubCategory;
+      selectSubCategory(selectedSubCategory);
       _processing = true;
     });
 
@@ -451,28 +452,13 @@ class _AddListingScreenState extends State<AddListingScreen> {
                               setState(() {
                                 selectedCategory = value as String?;
                               });
-                              context
-                                  .read<AddListingCubit>()
-                                  .clearSubCategory();
-                              selectedSubCategory = null;
-                              // clearStartEndDate();
-                              final subCategoryResponse = await context
-                                  .read<AddListingCubit>()
-                                  .loadSubCategory(value);
-                              if (!mounted) return;
-                              context
-                                  .read<AddListingCubit>()
-                                  .getCategoryId(value);
-                              setState(() {
-                                selectedSubCategory =
-                                    subCategoryResponse?.data.first['name'];
-                              });
+                              selectSubCategory(selectedCategory);
                             },
                           )),
               ],
             ),
-            if (selectedCategory == "News") const SizedBox(height: 8),
-            if (selectedCategory == "News")
+            if (selectedCategory == "News"  || selectedCategory == null) const SizedBox(height: 8),
+            if (selectedCategory == "News" || selectedCategory == null)
               Text(
                 Translate.of(context).translate('subCategory'),
                 style: Theme.of(context)
@@ -485,7 +471,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
               children: [
                 if (selectedCategory == "News")
                   Expanded(
-                      child: DropdownButton(
+                      child:  listSubCategory.isEmpty
+                          ? const LinearProgressIndicator()
+                          : DropdownButton(
                     isExpanded: true,
                     menuMaxHeight: 200,
                     hint: Text(
@@ -505,7 +493,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
                   )),
               ],
             ),
-            if (selectedCategory == "News") const SizedBox(height: 8),
+            if (selectedCategory == "News" || selectedCategory == null) const SizedBox(height: 8),
             const SizedBox(height: 8),
             Text(
               Translate.of(context).translate('city'),
@@ -772,5 +760,24 @@ class _AddListingScreenState extends State<AddListingScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> selectSubCategory(String? selectedCategory) async {
+    context
+        .read<AddListingCubit>()
+        .clearSubCategory();
+    selectedSubCategory = null;
+    // clearStartEndDate();
+    final subCategoryResponse = await context
+        .read<AddListingCubit>()
+        .loadSubCategory(selectedCategory);
+    if (!mounted) return;
+    context
+        .read<AddListingCubit>()
+        .getCategoryId(selectedCategory);
+    setState(() {
+      selectedSubCategory =
+      subCategoryResponse?.data.first['name'];
+    });
   }
 }
