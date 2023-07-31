@@ -742,10 +742,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               data: product.description,
               style: {
                 "*": Style(
-                  color:
-                      Colors.white, // Set the text color to white (ARGB format)
-                  lineHeight: const LineHeight(1.25)
-                ),
+                    fontSize: FontSize(16.0),
+                    color: Colors
+                        .white, // Set the text color to white (ARGB format)
+                    lineHeight: const LineHeight(1.25)),
               },
             ),
             const SizedBox(height: 16),
