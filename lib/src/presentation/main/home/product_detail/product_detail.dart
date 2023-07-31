@@ -351,7 +351,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         const SizedBox(width: 8),
       ];
 
-      ///Banner
       banner = CachedNetworkImage(
         imageUrl: "${Application.picturesURL}${product.image}",
         placeholder: (context, url) {
@@ -368,7 +367,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: imageProvider,
-                fit: BoxFit.fitHeight,
+                fit: BoxFit.fill,
               ),
             ),
           );
