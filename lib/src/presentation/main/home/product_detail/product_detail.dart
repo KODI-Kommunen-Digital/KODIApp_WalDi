@@ -368,7 +368,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: imageProvider,
-                fit: BoxFit.fitHeight,
+                fit: BoxFit.fill,
               ),
             ),
           );
