@@ -1,11 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 
 class HomeSwipe extends StatelessWidget {
   final double height;
-  final List<String>? images;
+  final String? images;
 
   const HomeSwipe({
     Key? key,
@@ -18,36 +17,15 @@ class HomeSwipe extends StatelessWidget {
     if (images != null) {
       return Swiper(
           itemBuilder: (BuildContext context, int index) {
-            return CachedNetworkImage(
-              imageUrl: images![index],
-              placeholder: (context, url) {
-                return AppPlaceholder(
-                  child: Container(
-                    color: Colors.white,
-                  ),
-                );
-              },
-              imageBuilder: (context, imageProvider) {
-                return Container(
-                  margin: const EdgeInsets.only(bottom: 2),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.background,
-                    image: DecorationImage(
-                      image: imageProvider,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                );
-              },
-              errorWidget: (context, url, error) {
-                return AppPlaceholder(
-                  child: Container(
-                    color: Colors.white,
-                    child: const Icon(Icons.error),
-                  ),
-                );
-              },
-            );
+            return Image.asset(images!, fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+              return AppPlaceholder(
+                child: Container(
+                  color: Colors.white,
+                  child: const Icon(Icons.error),
+                ),
+              );
+            });
           },
           autoplayDelay: 3000,
           autoplayDisableOnInteraction: false,
