@@ -51,6 +51,9 @@ class ListRepository {
         final list = List.from(response.data ?? []).map((item) {
           return ProductModel.fromJson(item, setting: Application.setting);
         }).toList();
+        if (cityId != 0) {
+          list.removeWhere((element) => element.cityId != cityId);
+        }
         return [list, response.pagination];
       }
     } else if (type == "subCategoryService") {
