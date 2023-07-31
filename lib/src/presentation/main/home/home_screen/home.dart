@@ -104,13 +104,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           selectedCityTitle = data;
                           selectedCityId = list.id;
                         });
+                        AppBloc.homeCubit.saveCityId(selectedCityId);
                       } else if (data ==
                           Translate.of(context).translate('select_location')) {
                         setState(() {
                           selectedCityId = 0;
                         });
+                        AppBloc.homeCubit.saveCityId(selectedCityId);
                       }
-                      AppBloc.homeCubit.saveCityId(selectedCityId);
                     }
                   },
                 ),

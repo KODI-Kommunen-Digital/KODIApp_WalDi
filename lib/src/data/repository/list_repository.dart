@@ -18,9 +18,10 @@ class ListRepository {
 
   static Future<List?> loadList({
     required categoryId,
-    required cityId,
     required type,
   }) async {
+    final preference = await Preferences.openBox();
+    final cityId = preference.getKeyValue(Preferences.cityId, 0);
     if (type == "category") {
       int params = categoryId;
       final response = await Api.requestCatList(params);
