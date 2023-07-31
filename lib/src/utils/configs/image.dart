@@ -3,7 +3,7 @@ class Images {
   static const String intro2 = "assets/images/intro_2.png";
   static const String intro3 = "assets/images/intro_3.png";
   static const String logo = "assets/images/logo.png";
-  static const String slide = "assets/images/slide.png";
+  static const String slider = "assets/images/slider.jpeg";
   static const String whatsapp = "assets/images/whatsapp.png";
   static const String telegram = "assets/images/telegram.png";
   static const String viber = "assets/images/viber.png";

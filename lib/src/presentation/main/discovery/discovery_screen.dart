@@ -33,8 +33,7 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
       Images.service7,
       Images.service8,
       Images.service9,
-      Images.service10
-      // Add more image URLs as needed
+      // Images.service10
     ];
 
     final List<String> imageLinks = [
@@ -47,7 +46,7 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
       '7',
       'error',
       '9',
-      'error'
+      // 'error'
     ];
     return Scaffold(
       appBar: AppBar(
@@ -82,10 +81,9 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
   Future<void> navigateToLink(String link) async {
     final prefs = await Preferences.openBox();
     if (link == "1") {
-      await launchUrl(Uri.parse('https://mitreden.ilzerland.bayern/ringelai'),
-          mode: LaunchMode.inAppWebView
-          // enableJavaScript: true, // Enable JavaScript in the in-app browser
-          );
+      await launchUrl(
+          Uri.parse(await AppBloc.discoveryCubit.getMitredenLink() ?? ""),
+          mode: LaunchMode.inAppWebView);
     } else if (link == "2") {
       await launchUrl(
           Uri.parse(await AppBloc.discoveryCubit.getCityLink() ?? ""),

@@ -64,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         },
         builder: (context, state) {
-          List<String>? banner;
+          String? banner;
           List<CategoryModel>? category;
           List<CategoryModel>? location;
           List<ProductModel>? recent;

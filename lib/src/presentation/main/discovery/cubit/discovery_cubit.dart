@@ -27,4 +27,26 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
 
     return cityWebsites[cityId];
   }
+
+  Future<String?> getMitredenLink() async {
+    final prefs = await Preferences.openBox();
+    int cityId = await prefs.getKeyValue(Preferences.cityId, int);
+    Map<int, String> cityWebsites = {
+      0: "https://mitreden.ilzerland.bayern/projekts?order=index_order_all",
+      1: "https://mitreden.ilzerland.bayern/schoefweg",
+      2: "https://mitreden.ilzerland.bayern/innernzell",
+      3: "https://mitreden.ilzerland.bayern/eppenschlag",
+      4: "https://mitreden.ilzerland.bayern/projekts?order=index_order_all",
+      5: "https://mitreden.ilzerland.bayern/grafenau",
+      6: "https://mitreden.ilzerland.bayern/ringelai",
+      7: "https://mitreden.ilzerland.bayern/perlesreut",
+      8: "https://mitreden.ilzerland.bayern/roehrnbach",
+      9: "https://mitreden.ilzerland.bayern/hutthurm",
+      10: "https://mitreden.ilzerland.bayern/fuersteneck",
+      11: "https://mitreden.ilzerland.bayern/saldenburg",
+      12: "https://mitreden.ilzerland.bayern/thurmansbang",
+    };
+
+    return cityWebsites[cityId];
+  }
 }
