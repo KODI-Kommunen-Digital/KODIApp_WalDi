@@ -22,7 +22,7 @@ class ListCubit extends Cubit<ListState> {
   List<ProductModel> listLoaded = [];
   List<ProductModel> filteredList = [];
 
-  Future<void> onLoad(int selectedCityId) async {
+  Future<void> onLoad() async {
     page = 1;
     final prefs = await Preferences.openBox();
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
@@ -32,7 +32,6 @@ class ListCubit extends Cubit<ListState> {
     }
     final result = await ListRepository.loadList(
       categoryId: categoryId,
-      cityId: selectedCityId,
       type: type,
     );
     if (result != null) {

@@ -18,9 +18,10 @@ class ListRepository {
 
   static Future<List?> loadList({
     required categoryId,
-    required cityId,
     required type,
   }) async {
+    final preference = await Preferences.openBox();
+    final cityId = preference.getKeyValue(Preferences.cityId, 0);
     if (type == "category") {
       int params = categoryId;
       final response = await Api.requestCatList(params);
@@ -50,6 +51,9 @@ class ListRepository {
         final list = List.from(response.data ?? []).map((item) {
           return ProductModel.fromJson(item, setting: Application.setting);
         }).toList();
+        if (cityId != 0) {
+          list.removeWhere((element) => element.cityId != cityId);
+        }
         return [list, response.pagination];
       }
     } else if (type == "subCategoryService") {

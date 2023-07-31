@@ -32,7 +32,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
   }
 
   Future<void> loadListingsList() async {
-    await context.read<ListCubit>().onLoad(widget.selectedCityId);
+    await context.read<ListCubit>().onLoad();
   }
 
   void _updateSelectedFilter(ProductFilter? filter) {
@@ -263,7 +263,7 @@ class _ListLoadedState extends State<ListLoaded> {
     setState(() {
       isLoading = true;
     });
-    await context.read<ListCubit>().onLoad(widget.selectedCityId);
+    await context.read<ListCubit>().onLoad();
     setState(() {
       isLoading = false;
     });

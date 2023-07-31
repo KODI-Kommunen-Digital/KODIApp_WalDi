@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
+import 'package:heidi/src/utils/configs/image.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 
-import '../../../../../utils/configs/image.dart';
 import 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {

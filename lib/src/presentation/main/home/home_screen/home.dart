@@ -98,19 +98,21 @@ class _HomeScreenState extends State<HomeScreen> {
                   expandedHeight: MediaQuery.of(context).size.height * 0.3,
                   banners: banner,
                   setLocationCallback: (data) async {
+
                     for (final list in location!) {
                       if (list.title == data) {
                         setState(() {
                           selectedCityTitle = data;
                           selectedCityId = list.id;
                         });
+                        AppBloc.homeCubit.saveCityId(selectedCityId);
                       } else if (data ==
                           Translate.of(context).translate('select_location')) {
                         setState(() {
                           selectedCityId = 0;
                         });
+                        AppBloc.homeCubit.saveCityId(selectedCityId);
                       }
-                      AppBloc.homeCubit.saveCityId(selectedCityId);
                     }
                   },
                 ),
