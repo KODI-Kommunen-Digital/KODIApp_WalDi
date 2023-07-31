@@ -742,6 +742,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               data: product.description,
               style: {
                 "*": Style(
+                  fontSize: FontSize(16.0),
                   color:
                       Colors.white, // Set the text color to white (ARGB format)
                 ),
