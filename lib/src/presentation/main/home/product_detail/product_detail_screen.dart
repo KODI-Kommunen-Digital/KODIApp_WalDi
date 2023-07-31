@@ -12,6 +12,7 @@ import 'package:heidi/src/presentation/main/home/product_detail/cubit/cubit.dart
 import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/utils/configs/application.dart';
+import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -351,37 +352,47 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         const SizedBox(width: 8),
       ];
 
-      banner = CachedNetworkImage(
-        imageUrl: "${Application.picturesURL}${product.image}",
-        placeholder: (context, url) {
-          return AppPlaceholder(
-            child: Container(
-              decoration: const BoxDecoration(
-                color: Colors.white,
-              ),
-            ),
+      banner = InkWell(
+        onTap: (){
+          Navigator.pushNamed(
+            context,
+            Routes.imageZoom,
+            arguments: "${Application.picturesURL}${product.image}",
           );
         },
-        imageBuilder: (context, imageProvider) {
-          return Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: imageProvider,
-                fit: BoxFit.fill,
+        child:
+        CachedNetworkImage(
+          imageUrl: "${Application.picturesURL}${product.image}",
+          placeholder: (context, url) {
+            return AppPlaceholder(
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                ),
               ),
-            ),
-          );
-        },
-        errorWidget: (context, url, error) {
-          return AppPlaceholder(
-            child: Container(
-              decoration: const BoxDecoration(
-                color: Colors.white,
+            );
+          },
+          imageBuilder: (context, imageProvider) {
+            return Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: imageProvider,
+                  fit: BoxFit.fitHeight,
+                ),
               ),
-              child: const Icon(Icons.error),
-            ),
-          );
-        },
+            );
+          },
+          errorWidget: (context, url, error) {
+            return AppPlaceholder(
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                ),
+                child: const Icon(Icons.error),
+              ),
+            );
+          },
+        ),
       );
 
       if (product.address.isNotEmpty) {
@@ -775,7 +786,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           actions: action,
           iconTheme: Theme.of(context).iconTheme.copyWith(color: _iconColor),
           flexibleSpace: FlexibleSpaceBar(
-            collapseMode: CollapseMode.none,
+            collapseMode: CollapseMode.pin,
             background: banner,
           ),
         ),
