@@ -11,7 +11,7 @@ class HomeState with _$HomeState {
   const factory HomeState.loading() = HomeStateLoading;
 
   const factory HomeState.loaded(
-      List<String> banner,
+      String banner,
       List<CategoryModel> category,
       List<CategoryModel> location,
       List<ProductModel> recent) = HomeStateLoaded;

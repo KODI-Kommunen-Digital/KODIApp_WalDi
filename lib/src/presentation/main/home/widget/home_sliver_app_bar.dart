@@ -4,18 +4,17 @@ import 'package:heidi/src/presentation/main/home/widget/home_swiper.dart';
 
 class AppBarHomeSliver extends SliverPersistentHeaderDelegate {
   final double expandedHeight;
-  final List<String>? banners;
+  final String? banners;
   final ValueSetter<String>? setLocationCallback;
   final List<String>? cityTitlesList;
   String? hintText;
 
-  AppBarHomeSliver({
-    required this.expandedHeight,
-    required this.setLocationCallback,
-    required this.cityTitlesList,
-    this.banners,
-    this.hintText
-  });
+  AppBarHomeSliver(
+      {required this.expandedHeight,
+      required this.setLocationCallback,
+      required this.cityTitlesList,
+      this.banners,
+      this.hintText});
 
   @override
   Widget build(context, shrinkOffset, overlapsContent) {

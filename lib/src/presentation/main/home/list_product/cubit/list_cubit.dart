@@ -27,6 +27,9 @@ class ListCubit extends Cubit<ListState> {
     final prefs = await Preferences.openBox();
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
     final type = prefs.getKeyValue(Preferences.type, '');
+    if (type == 'location') {
+      prefs.setKeyValue(Preferences.categoryId, '');
+    }
     final result = await ListRepository.loadList(
       categoryId: categoryId,
       cityId: selectedCityId,

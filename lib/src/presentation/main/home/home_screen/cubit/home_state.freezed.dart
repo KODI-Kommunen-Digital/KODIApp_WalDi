@@ -20,7 +20,7 @@ mixin _$HomeState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<String> banner, List<CategoryModel> category,
+    required TResult Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)
         loaded,
     required TResult Function(String error) error,
@@ -30,7 +30,7 @@ mixin _$HomeState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<String> banner, List<CategoryModel> category,
+    TResult? Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)?
         loaded,
     TResult? Function(String error)? error,
@@ -40,7 +40,7 @@ mixin _$HomeState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<String> banner, List<CategoryModel> category,
+    TResult Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)?
         loaded,
     TResult Function(String error)? error,
@@ -131,7 +131,7 @@ class _$HomeStateInitial implements HomeStateInitial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<String> banner, List<CategoryModel> category,
+    required TResult Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)
         loaded,
     required TResult Function(String error) error,
@@ -144,7 +144,7 @@ class _$HomeStateInitial implements HomeStateInitial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<String> banner, List<CategoryModel> category,
+    TResult? Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)?
         loaded,
     TResult? Function(String error)? error,
@@ -157,7 +157,7 @@ class _$HomeStateInitial implements HomeStateInitial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<String> banner, List<CategoryModel> category,
+    TResult Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)?
         loaded,
     TResult Function(String error)? error,
@@ -251,7 +251,7 @@ class _$HomeStateLoading implements HomeStateLoading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<String> banner, List<CategoryModel> category,
+    required TResult Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)
         loaded,
     required TResult Function(String error) error,
@@ -264,7 +264,7 @@ class _$HomeStateLoading implements HomeStateLoading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<String> banner, List<CategoryModel> category,
+    TResult? Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)?
         loaded,
     TResult? Function(String error)? error,
@@ -277,7 +277,7 @@ class _$HomeStateLoading implements HomeStateLoading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<String> banner, List<CategoryModel> category,
+    TResult Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)?
         loaded,
     TResult Function(String error)? error,
@@ -338,7 +338,7 @@ abstract class _$$HomeStateLoadedCopyWith<$Res> {
       __$$HomeStateLoadedCopyWithImpl<$Res>;
   @useResult
   $Res call(
-      {List<String> banner,
+      {String banner,
       List<CategoryModel> category,
       List<CategoryModel> location,
       List<ProductModel> recent});
@@ -362,9 +362,9 @@ class __$$HomeStateLoadedCopyWithImpl<$Res>
   }) {
     return _then(_$HomeStateLoaded(
       null == banner
-          ? _value._banner
+          ? _value.banner
           : banner // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as String,
       null == category
           ? _value._category
           : category // ignore: cast_nullable_to_non_nullable
@@ -384,24 +384,14 @@ class __$$HomeStateLoadedCopyWithImpl<$Res>
 /// @nodoc
 
 class _$HomeStateLoaded implements HomeStateLoaded {
-  const _$HomeStateLoaded(
-      final List<String> banner,
-      final List<CategoryModel> category,
-      final List<CategoryModel> location,
-      final List<ProductModel> recent)
-      : _banner = banner,
-        _category = category,
+  const _$HomeStateLoaded(this.banner, final List<CategoryModel> category,
+      final List<CategoryModel> location, final List<ProductModel> recent)
+      : _category = category,
         _location = location,
         _recent = recent;
 
-  final List<String> _banner;
   @override
-  List<String> get banner {
-    if (_banner is EqualUnmodifiableListView) return _banner;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_banner);
-  }
-
+  final String banner;
   final List<CategoryModel> _category;
   @override
   List<CategoryModel> get category {
@@ -436,7 +426,7 @@ class _$HomeStateLoaded implements HomeStateLoaded {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$HomeStateLoaded &&
-            const DeepCollectionEquality().equals(other._banner, _banner) &&
+            (identical(other.banner, banner) || other.banner == banner) &&
             const DeepCollectionEquality().equals(other._category, _category) &&
             const DeepCollectionEquality().equals(other._location, _location) &&
             const DeepCollectionEquality().equals(other._recent, _recent));
@@ -445,7 +435,7 @@ class _$HomeStateLoaded implements HomeStateLoaded {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(_banner),
+      banner,
       const DeepCollectionEquality().hash(_category),
       const DeepCollectionEquality().hash(_location),
       const DeepCollectionEquality().hash(_recent));
@@ -461,7 +451,7 @@ class _$HomeStateLoaded implements HomeStateLoaded {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<String> banner, List<CategoryModel> category,
+    required TResult Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)
         loaded,
     required TResult Function(String error) error,
@@ -474,7 +464,7 @@ class _$HomeStateLoaded implements HomeStateLoaded {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<String> banner, List<CategoryModel> category,
+    TResult? Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)?
         loaded,
     TResult? Function(String error)? error,
@@ -487,7 +477,7 @@ class _$HomeStateLoaded implements HomeStateLoaded {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<String> banner, List<CategoryModel> category,
+    TResult Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)?
         loaded,
     TResult Function(String error)? error,
@@ -539,12 +529,12 @@ class _$HomeStateLoaded implements HomeStateLoaded {
 
 abstract class HomeStateLoaded implements HomeState {
   const factory HomeStateLoaded(
-      final List<String> banner,
+      final String banner,
       final List<CategoryModel> category,
       final List<CategoryModel> location,
       final List<ProductModel> recent) = _$HomeStateLoaded;
 
-  List<String> get banner;
+  String get banner;
   List<CategoryModel> get category;
   List<CategoryModel> get location;
   List<ProductModel> get recent;
@@ -619,7 +609,7 @@ class _$HomeStateError implements HomeStateError {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<String> banner, List<CategoryModel> category,
+    required TResult Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)
         loaded,
     required TResult Function(String error) error,
@@ -632,7 +622,7 @@ class _$HomeStateError implements HomeStateError {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<String> banner, List<CategoryModel> category,
+    TResult? Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)?
         loaded,
     TResult? Function(String error)? error,
@@ -645,7 +635,7 @@ class _$HomeStateError implements HomeStateError {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<String> banner, List<CategoryModel> category,
+    TResult Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)?
         loaded,
     TResult Function(String error)? error,

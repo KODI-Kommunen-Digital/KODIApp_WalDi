@@ -83,9 +83,7 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
     final prefs = await Preferences.openBox();
     if (link == "1") {
       await launchUrl(Uri.parse('https://mitreden.ilzerland.bayern/ringelai'),
-          mode: LaunchMode.inAppWebView
-          // enableJavaScript: true, // Enable JavaScript in the in-app browser
-          );
+          mode: LaunchMode.inAppWebView);
     } else if (link == "2") {
       await launchUrl(
           Uri.parse(await AppBloc.discoveryCubit.getCityLink() ?? ""),
