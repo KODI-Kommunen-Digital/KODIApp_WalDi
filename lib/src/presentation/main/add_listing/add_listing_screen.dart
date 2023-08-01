@@ -158,7 +158,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
       final subCategoryResponse = await context
           .read<AddListingCubit>()
           .loadSubCategory(selectedCategory);
-
       listSubCategory = subCategoryResponse!.data;
     }
     setState(() {
@@ -280,6 +279,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
       _textStatusController.text,
       allowEmpty: true,
     );
+
+    _errorWebsite = UtilValidator.validate(_textWebsiteController.text,
+        allowEmpty: true, type: ValidateType.website);
 
     _errorTitle =
         UtilValidator.validate(_textTitleController.text, allowEmpty: false);
@@ -649,7 +651,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
               errorText: _errorZipCode,
               controller: _textZipCodeController,
               focusNode: _focusZipCode,
+              maxLength: 5,
               textInputAction: TextInputAction.next,
+              keyboardType: TextInputType.number,
               onChanged: (text) {
                 setState(() {
                   _errorZipCode = UtilValidator.validate(
@@ -677,6 +681,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
               errorText: _errorPhone,
               controller: _textPhoneController,
               focusNode: _focusPhone,
+              maxLength: 15,
+              keyboardType: TextInputType.phone,
               textInputAction: TextInputAction.next,
               onChanged: (text) {
                 setState(() {
@@ -737,9 +743,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
               onChanged: (text) {
                 setState(() {
                   _errorWebsite = UtilValidator.validate(
-                    _textWebsiteController.text,
-                    allowEmpty: true,
-                  );
+                      _textWebsiteController.text,
+                      allowEmpty: true,
+                      type: ValidateType.website);
                 });
               },
               leading: Icon(

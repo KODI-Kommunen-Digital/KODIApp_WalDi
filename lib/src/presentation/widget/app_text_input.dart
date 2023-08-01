@@ -17,6 +17,7 @@ class AppTextInput extends StatefulWidget {
   final String? errorText;
   final int? maxLines;
   final bool? autofocus;
+  final int? maxLength;
 
   const AppTextInput({
     Key? key,
@@ -34,6 +35,7 @@ class AppTextInput extends StatefulWidget {
     this.errorText,
     this.maxLines = 1,
     this.autofocus = false,
+    this.maxLength
   }) : super(key: key);
 
   @override
@@ -149,7 +151,9 @@ class _AppTextInputState extends State<AppTextInput> {
                   keyboardType: widget.keyboardType,
                   textInputAction: widget.textInputAction,
                   maxLines: widget.maxLines,
+                  maxLength: widget.maxLength,
                   decoration: InputDecoration(
+                    counterText: "",
                     hintText: widget.hintText,
                     suffixIcon: Row(
                       mainAxisSize: MainAxisSize.min,

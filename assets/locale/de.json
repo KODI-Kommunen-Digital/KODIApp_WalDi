@@ -44,6 +44,7 @@
   "value_not_empty": "Eingabe ist leer",
   "value_not_valid_range": "Eingabe ungültiger Bereich",
   "value_not_valid_email": "Eingabe ungültige E-Mail",
+  "value_not_website": "Eingabe ungültige Website",
   "value_not_valid_phone": "Eingabe ungültiges Telefon",
   "value_not_valid_password": "Eingabe ungültiges Passwort",
   "value_not_valid_id": "Eingabe ungültige ID",
