@@ -9,14 +9,7 @@
             "color": "#ff8a65",
             "categoryType" : "category"
         },
-        {
-            "id": 2,
-            "name": "Verkehr",
-            "noOfSubcategories": 0,
-            "icon": "fas fa-traffic-light",
-            "color": "#5d6d7e",
-            "categoryType" : "category"
-        },
+        
         {
             "id": 3,
             "name": "Events",
@@ -57,14 +50,7 @@
             "color": "#fdc60a",
             "categoryType" : "category"
         },
-        {
-            "id": 8,
-            "name": "Mängelmelder",
-            "noOfSubcategories": 0,            
-            "icon": "fas fa-triangle-exclamation",
-            "color": "#ff8a65",
-            "categoryType" : "category"
-        },
+        
         {
             "id": 9,
             "name": "Fundbüro",
@@ -94,6 +80,14 @@
             "name": "Angebote",
             "noOfSubcategories": 0,
             "icon": "fas fa-gift",
+            "color": "#58d68d",
+            "categoryType" : "category"
+        },
+        {
+            "id": 13,
+            "name": "Essen & Trinken",
+            "noOfSubcategories": 0,
+            "icon": "fas fa-mug-hot",
             "color": "#58d68d",
             "categoryType" : "category"
         }
