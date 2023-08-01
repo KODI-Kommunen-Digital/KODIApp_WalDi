@@ -377,5 +377,16 @@
   "category_lost_found": "Fundbüro",
   "category_companies": "Unternehmen",
   "category_public_transport": "Mitfahrbank",
-  "category_offers": "Angebote"
+  "category_offers": "Angebote",
+  "login_invalid_username": "Kein Account mit diesem Benutzernamen gefunden",
+  "login_invalid_password": "Das Passwort ist nicht korrekt",
+  "login_verification_mail": "Bestätigungsmail an Ihre E-Mail Adresse gesendet. Bitte bestätigen Sie diese, bevor Sie sich anmelden.",
+  "subcategory_newsflash": "Kurznachrichten",
+  "subcategory_alerts": "Warnungen",
+  "subcategory_politics": "Politik",
+  "subcategory_economy": "Wirtschaft",
+  "subcategory_sports": "Sport",
+  "subcategory_day_topic": "Thema des Tages",
+  "subcategory_local": "Lokales",
+  "subcategory_club_news": "Vereinsneuigkeiten"
 }

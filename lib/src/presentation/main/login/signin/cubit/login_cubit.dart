@@ -6,7 +6,6 @@ import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
 
 class LoginCubit extends Cubit<LoginState> {
-
   LoginCubit() : super(const LoginState.initial());
 
   void onLogin({
@@ -17,8 +16,9 @@ class LoginCubit extends Cubit<LoginState> {
       username: username,
       password: password,
     );
-    if(response!.success) {
-      final userDetailResponse = await UserRepository.requestUserDetails(response.data['userId']);
+    if (response!.success) {
+      final userDetailResponse =
+          await UserRepository.requestUserDetails(response.data['userId']);
       if (userDetailResponse != null) {
         await AppBloc.authenticateCubit.onSave(userDetailResponse);
 
@@ -27,12 +27,23 @@ class LoginCubit extends Cubit<LoginState> {
         emit(const LoginState.initial());
         logError('Login Result Failed', userDetailResponse);
       }
-    }
-    else{
+    } else {
       emit(const LoginState.initial());
       emit(LoginState.error(response.message));
       logError('Request User Detail Error', response.message);
     }
+  }
+
+  String? getTranslationKey(String sentence) {
+    switch (sentence) {
+      case "Invalid username":
+        return "login_invalid_username";
+      case "Invalid password":
+        return "login_invalid_password";
+      case "Verification email sent to your email id. Please verify first before trying to login.":
+        return "login_verification_mail";
+    }
+    return null;
   }
 
   void onLogout() async {
