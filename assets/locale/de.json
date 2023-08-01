@@ -365,6 +365,9 @@
   "category_coming_soon": "Diese Funktion wird in Kürze fertiggestellt. Durch die Kategorien hast du die Möglichkeit deine Interessen zu filtern. Es werden dir dann nur die relevanten Informationen angezeigt.",
   "no_internet": "Keine Verbindung! Bitte verbinden Sie sich mit dem Internet.",
   "value_not_equal_password": "Passwort stimmt nicht überein",
+  "register_fail": "Registrierung fehlgeschlagen",
+  "this_month": "Diesen Monat",
+  "this_week": "Diese Woche",
   "category_news": "News",
   "category_traffic": "Verkehr",
   "category_events": "Events",
@@ -377,9 +380,7 @@
   "category_companies": "Unternehmen",
   "category_public_transport": "Mitfahrbank",
   "category_offers": "Angebote",
-  "register_fail": "Registrierung fehlgeschlagen",
-  "this_month": "Diesen Monat",
-  "this_week": "Diese Woche",
+  "category_food": "Essen & Trinken",
   "login_invalid_username": "Kein Account mit diesem Benutzernamen gefunden",
   "login_invalid_password": "Das Passwort ist nicht korrekt",
   "login_verification_mail": "Bestätigungsmail an Ihre E-Mail Adresse gesendet. Bitte bestätigen Sie diese, bevor Sie sich anmelden.",
@@ -390,5 +391,6 @@
   "subcategory_sports": "Sport",
   "subcategory_day_topic": "Thema des Tages",
   "subcategory_local": "Lokales",
-  "subcategory_club_news": "Vereinsneuigkeiten"
+  "subcategory_club_news": "Vereinsneuigkeiten",
+  "subcategory_official_notification": "Amtliche Bekanntmachungen"
 }

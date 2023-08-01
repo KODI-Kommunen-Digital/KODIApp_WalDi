@@ -364,6 +364,9 @@
   "category_coming_soon": "This function is coming soon. Through the categories, you have the possibility to filter your interests. You will then be shown only the relevant information.",
   "no_internet": "No connection! Please connect to the internet.",
   "value_not_equal_password": "Password does not match",
+  "register_fail": "Register failed",
+  "this_month": "This month",
+  "this_week": "This week",
   "category_news": "News",
   "category_traffic": "Road works/Traffic",
   "category_events": "Events",
@@ -376,9 +379,7 @@
   "category_companies": "Company portraits",
   "category_public_transport": "Carpooling/Public transpor",
   "category_offers": "Offers",
-  "register_fail": "Register failed",
-  "this_month": "This month",
-  "this_week": "This week",
+  "category_food": "Eat or Drink",
   "login_invalid_username": "No account found with this username",
   "login_invalid_password": "Password is not correct",
   "login_verification_mail": "Verification email sent to your email id. Please verify first before trying to login.",
@@ -389,5 +390,6 @@
   "subcategory_sports": "Sports",
   "subcategory_day_topic": "Topic of the day",
   "subcategory_local": "Local",
-  "subcategory_club_news": "Club news"
+  "subcategory_club_news": "Club news",
+  "subcategory_official_notification": "Official Notification"
 }
