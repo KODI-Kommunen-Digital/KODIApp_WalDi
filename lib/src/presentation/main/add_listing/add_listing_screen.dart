@@ -355,7 +355,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
       9: "category_lost_found",
       10: "category_companies",
       11: "category_public_transport",
-      12: "category_offers"
+      12: "category_offers",
+      13: "category_food"
     };
     return categories[id];
   }
@@ -363,13 +364,13 @@ class _AddListingScreenState extends State<AddListingScreen> {
   String? _getSubCategoryTranslation(int id) {
     Map<int, String> subCategories = {
       1: "subcategory_newsflash",
-      2: "subcategory_alerts",
       3: "subcategory_politics",
       4: "subcategory_economy",
       5: "subcategory_sports",
-      6: "subcategory_day_topic",
       7: "subcategory_local",
       8: "subcategory_club_news",
+      9: "subcategory_road",
+      10: "subcategory_official_notification",
     };
     return subCategories[id];
   }
@@ -536,7 +537,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
                             )),
               ],
             ),
-            if (selectedCategory == "News") const SizedBox(height: 8),
+            if (selectedCategory == "News" || selectedCategory == null)
+              const SizedBox(height: 8),
             const SizedBox(height: 8),
             Text(
               Translate.of(context).translate('city'),
@@ -583,8 +585,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
                 ),
               ],
             ),
-            // const SizedBox(height: 16),
-            // const SizedBox(height: 8),
+            const SizedBox(height: 16),
+            const SizedBox(height: 8),
             // Text(
             //   Translate.of(context).translate('village'),
             //   style: Theme.of(context)
@@ -612,7 +614,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
             //     )),
             //   ],
             // ),
-            const SizedBox(height: 16),
+            // const SizedBox(height: 16),
             AppTextInput(
               hintText: Translate.of(context).translate('input_place'),
               controller: _textPlaceController,

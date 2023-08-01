@@ -57,8 +57,7 @@ class ListRepository {
         return [list, response.pagination];
       }
     } else if (type == "subCategoryService") {
-      int params = categoryId;
-      final response = await Api.requestSubCatList(params);
+      final response = await Api.requestSubCatList(cityId);
       if (response.success) {
         final list = List.from(response.data ?? []).map((item) {
           return ProductModel.fromJson(item, setting: Application.setting);
