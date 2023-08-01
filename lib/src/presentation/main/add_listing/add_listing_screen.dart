@@ -281,6 +281,16 @@ class _AddListingScreenState extends State<AddListingScreen> {
       allowEmpty: true,
     );
 
+    _errorTitle = UtilValidator.validate(
+      _textTitleController.text,
+      allowEmpty: false
+    );
+
+    _errorContent = UtilValidator.validate(
+      _textContentController.text,
+      allowEmpty: false
+    );
+
     List<String?> errors = [
       _errorTitle,
       _errorContent,
@@ -304,7 +314,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
         _errorEDate != null) {
       String errorMessage = "";
       for (var element in errors) {
-        if (element != null) {
+        if (element != null && !errorMessage.contains(Translate.of(context).translate(element))) {
           errorMessage =
               "$errorMessage${Translate.of(context).translate(element)}, ";
         }
