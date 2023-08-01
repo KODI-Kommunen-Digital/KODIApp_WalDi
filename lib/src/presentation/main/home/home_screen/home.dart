@@ -98,7 +98,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   expandedHeight: MediaQuery.of(context).size.height * 0.3,
                   banners: banner,
                   setLocationCallback: (data) async {
-
                     for (final list in location!) {
                       if (list.title == data) {
                         setState(() {
@@ -226,6 +225,8 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedCityId = savedCity.id;
         selectedCityTitle = savedCity.title;
       });
+    } else {
+      await AppBloc.homeCubit.saveCityId(0);
     }
   }
 
