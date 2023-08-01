@@ -1,7 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:heidi/src/presentation/cubit/bloc.dart';
+import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/utils/configs/image.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
@@ -44,7 +44,7 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
       '5',
       '6',
       '7',
-      'error',
+      '8',
       '9',
       // 'error'
     ];
@@ -106,6 +106,11 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
       prefs.setKeyValue(Preferences.categoryId, 10);
       prefs.setKeyValue(Preferences.type, "categoryService");
       Navigator.pushNamed(context, Routes.listProduct, arguments: 7);
+    }
+    else if (link == "8") {
+      prefs.setKeyValue(Preferences.categoryId, 13);
+      prefs.setKeyValue(Preferences.type, "categoryService");
+      Navigator.pushNamed(context, Routes.listProduct, arguments: 8);
     } else if (link == "9") {
       prefs.setKeyValue(Preferences.categoryId, 6);
       prefs.setKeyValue(Preferences.type, "categoryService");

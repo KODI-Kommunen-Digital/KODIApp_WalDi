@@ -733,21 +733,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               ],
             ),
             createdDate,
-            address,
-            phone,
-            fax,
-            email,
-            website,
-            openHours,
-            attachments,
-            // socials,
-            const SizedBox(height: 16),
-            // Text(
-            //   product.description,
-            //   style: Theme.of(context).textTheme.bodyText1!.copyWith(
-            //         height: 1.3,
-            //       ),
-            // ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                startDate,
+                endDate
+                // priceRange,
+              ],
+            ),
             Html(
               data: product.description,
               style: {
@@ -758,17 +751,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     lineHeight: const LineHeight(1.25)),
               },
             ),
+            address,
+            phone,
+            fax,
+            email,
+            website,
+            openHours,
+            attachments,
             const SizedBox(height: 16),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                startDate,
-                endDate
-                // priceRange,
-              ],
-            ),
-            // feature,
-            // tags,
+            const SizedBox(height: 16),
           ],
         ),
       );
