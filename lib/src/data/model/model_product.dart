@@ -159,7 +159,7 @@ class ProductModel {
     } else if (json['categoryId'] == 5) {
       category = "Regionale Produkte";
     } else if (json['categoryId'] == 6) {
-      category = "Angebot/Suche";
+      category = "Biete/Suche";
     } else if (json['categoryId'] == 7) {
       category = "Bürgerinfo";
     } else if (json['categoryId'] == 8) {
@@ -170,7 +170,7 @@ class ProductModel {
       category = "Firmenporträts";
     } else if (json['categoryId'] == 11) {
       category = "Fahrgemeinschaften/Öffentliche Verkehrsmittel";
-    } else if (json['categoryId'] == 11) {
+    } else if (json['categoryId'] == 12) {
       category = "Angebote";
     }
 
