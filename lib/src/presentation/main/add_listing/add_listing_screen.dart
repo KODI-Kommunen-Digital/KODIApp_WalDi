@@ -280,12 +280,14 @@ class _AddListingScreenState extends State<AddListingScreen> {
       allowEmpty: true,
     );
 
+    _errorWebsite = UtilValidator.validate(_textWebsiteController.text,
+        allowEmpty: true, type: ValidateType.website);
+
     _errorTitle =
         UtilValidator.validate(_textTitleController.text, allowEmpty: false);
 
     _errorContent =
         UtilValidator.validate(_textContentController.text, allowEmpty: false);
-
 
     if (selectedCategory == "Events") {
       if (_startDate == null || _startDate == "") {
@@ -650,6 +652,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
               errorText: _errorZipCode,
               controller: _textZipCodeController,
               focusNode: _focusZipCode,
+              maxLength: 5,
+              keyboardType: TextInputType.number,
               textInputAction: TextInputAction.next,
               onChanged: (text) {
                 setState(() {
@@ -678,6 +682,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
               errorText: _errorPhone,
               controller: _textPhoneController,
               focusNode: _focusPhone,
+              maxLength: 15,
+              keyboardType: TextInputType.phone,
               textInputAction: TextInputAction.next,
               onChanged: (text) {
                 setState(() {
@@ -740,6 +746,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
                   _errorWebsite = UtilValidator.validate(
                     _textWebsiteController.text,
                     allowEmpty: true,
+                    type: ValidateType.website
                   );
                 });
               },
