@@ -337,6 +337,20 @@ class _AddListingScreenState extends State<AddListingScreen> {
     return categories[id];
   }
 
+  String? _getSubCategoryTranslation(int id) {
+    Map<int, String> subCategories = {
+      1: "subcategory_newsflash",
+      2: "subcategory_alerts",
+      3: "subcategory_politics",
+      4: "subcategory_economy",
+      5: "subcategory_sports",
+      6: "subcategory_day_topic",
+      7: "subcategory_local",
+      8: "subcategory_club_news",
+    };
+    return subCategories[id];
+  }
+
   Widget _buildContent() {
     if (_processing) {
       return const Center(
@@ -480,11 +494,16 @@ class _AddListingScreenState extends State<AddListingScreen> {
                               menuMaxHeight: 200,
                               hint: Text(Translate.of(context)
                                   .translate('input_subcategory')),
-                              value: selectedSubCategory,
+                              value: selectedSubCategory ??
+                                  Translate.of(context).translate(
+                                      _getSubCategoryTranslation(
+                                          listSubCategory.first["id"])),
                               items: listSubCategory.map((subcategory) {
                                 return DropdownMenuItem(
                                     value: subcategory['name'],
-                                    child: Text(subcategory['name']));
+                                    child: Text(Translate.of(context).translate(
+                                        _getSubCategoryTranslation(
+                                            subcategory['id']))));
                               }).toList(),
                               onChanged: (value) {
                                 context
