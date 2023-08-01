@@ -50,6 +50,7 @@
   "value_not_valid_phone": "Input not valid phone",
   "value_not_valid_password": "Input not valid password",
   "value_not_valid_id": "Input not valid ID",
+  "value_not_date_empty": "Input for date empty. Please enter a start and end date",
   "edit_profile": "Edit Profile",
   "address": "Address",
   "input_address": "Address",

@@ -47,6 +47,7 @@
   "value_not_valid_phone": "Eingabe ungültiges Telefon",
   "value_not_valid_password": "Eingabe ungültiges Passwort",
   "value_not_valid_id": "Eingabe ungültige ID",
+  "value_not_date_empty": "Eingabe Datum leer. Bitte Start- und Enddatum eingeben",
   "edit_profile": "Profil bearbeiten",
   "address": "Adresse",
   "input_address": "Adresse",

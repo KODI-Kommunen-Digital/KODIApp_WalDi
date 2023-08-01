@@ -286,6 +286,21 @@ class _AddListingScreenState extends State<AddListingScreen> {
     _errorContent =
         UtilValidator.validate(_textContentController.text, allowEmpty: false);
 
+
+    if (selectedCategory == "Events") {
+      if (_startDate == null || _startDate == "") {
+        _errorSDate = "value_not_date_empty";
+      } else {
+        _errorSDate = null;
+      }
+
+      if (_endDate == null || _endDate == "") {
+        _errorEDate = "value_not_date_empty";
+      } else {
+        _errorEDate = null;
+      }
+    }
+
     List<String?> errors = [
       _errorTitle,
       _errorContent,
