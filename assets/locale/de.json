@@ -41,7 +41,7 @@
   "input_email": "Email",
   "information": "Information",
   "input_information": "Geben Sie Ihre Informationen ein",
-  "value_not_empty": "Eingabe ist nicht leer",
+  "value_not_empty": "Eingabe ist leer",
   "value_not_valid_range": "Eingabe ungültiger Bereich",
   "value_not_valid_email": "Eingabe ungültige E-Mail",
   "value_not_valid_phone": "Eingabe ungültiges Telefon",
