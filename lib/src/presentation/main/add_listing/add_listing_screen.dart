@@ -281,15 +281,21 @@ class _AddListingScreenState extends State<AddListingScreen> {
       allowEmpty: true,
     );
 
-    _errorTitle = UtilValidator.validate(
-      _textTitleController.text,
-      allowEmpty: false
-    );
+    _errorTitle =
+        UtilValidator.validate(_textTitleController.text, allowEmpty: false);
 
-    _errorContent = UtilValidator.validate(
-      _textContentController.text,
-      allowEmpty: false
-    );
+    _errorContent =
+        UtilValidator.validate(_textContentController.text, allowEmpty: false);
+
+    if (selectedCategory == "Events") {
+      if (_startDate == null || _startDate == "") {
+        _errorSDate = "value_not_date_empty";
+      }
+
+      if (_endDate == null || _endDate == "") {
+        _errorEDate = "value_not_date_empty";
+      }
+    }
 
     List<String?> errors = [
       _errorTitle,
@@ -314,7 +320,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
         _errorEDate != null) {
       String errorMessage = "";
       for (var element in errors) {
-        if (element != null && !errorMessage.contains(Translate.of(context).translate(element))) {
+        if (element != null &&
+            !errorMessage.contains(Translate.of(context).translate(element))) {
           errorMessage =
               "$errorMessage${Translate.of(context).translate(element)}, ";
         }
