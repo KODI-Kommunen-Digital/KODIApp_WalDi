@@ -35,6 +35,18 @@ class LoginCubit extends Cubit<LoginState> {
     }
   }
 
+  String? getTranslationKey(String sentence) {
+    switch(sentence) {
+      case "Invalid username":
+        return "login_invalid_username";
+      case "Invalid password":
+        return "login_invalid_password";
+      case "Verification email sent to your email id. Please verify first before trying to login.":
+        return "login_verification_mail";
+    }
+    return null;
+  }
+
   void onLogout() async {
     emit(const LoginState.initial());
     final prefs = await Preferences.openBox();

@@ -377,5 +377,8 @@
   "category_offers": "Angebote",
   "register_fail": "Registrierung fehlgeschlagen",
   "this_month":"Diesen Monat",
-  "this_week":"Diese Woche"
+  "this_week":"Diese Woche",
+  "login_invalid_username": "Kein Account mit diesem Benutzernamen gefunden",
+  "login_invalid_password": "Das Passwort ist nicht korrekt",
+  "login_verification_mail": "Bestätigungsmail an Ihre E-Mail Adresse gesendet. Bitte bestätigen Sie diese, bevor Sie sich anmelden."
 }

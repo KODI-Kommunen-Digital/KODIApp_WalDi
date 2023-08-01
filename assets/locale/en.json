@@ -376,5 +376,8 @@
   "category_offers": "Offers",
   "register_fail": "Register failed",
   "this_month":"This month",
-  "this_week":"This week"
+  "this_week":"This week",
+  "login_invalid_username": "No account found with this username",
+  "login_invalid_password": "Password is not correct",
+  "login_verification_mail": "Verification email sent to your email id. Please verify first before trying to login."
 }
