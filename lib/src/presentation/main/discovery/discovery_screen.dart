@@ -45,7 +45,7 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
       '5',
       '6',
       '7',
-      'error',
+      '8',
       '9',
       'error'
     ];
@@ -107,26 +107,33 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
       prefs.setKeyValue(Preferences.categoryId, 10);
       prefs.setKeyValue(Preferences.type, "categoryService");
       Navigator.pushNamed(context, Routes.listProduct, arguments: 7);
+    }
+    else if (link == "8") {
+      prefs.setKeyValue(Preferences.categoryId, 13);
+      prefs.setKeyValue(Preferences.type, "categoryService");
+      Navigator.pushNamed(context, Routes.listProduct, arguments: 8);
     } else if (link == "9") {
       prefs.setKeyValue(Preferences.categoryId, 6);
       prefs.setKeyValue(Preferences.type, "categoryService");
       Navigator.pushNamed(context, Routes.listProduct, arguments: 9);
+    } else if (link == "error") {
+     _onPopUpError();
     }
   }
 
-  // void _onPopUpError() {
-  //   showDialog<String>(
-  //     context: context,
-  //     builder: (BuildContext context) => AlertDialog(
-  //       title: Text(Translate.of(context).translate('functionNotAvail')),
-  //       content: Text(Translate.of(context).translate('functionNotAvailBody')),
-  //       actions: <Widget>[
-  //         TextButton(
-  //           onPressed: () => Navigator.pop(context, 'OK'),
-  //           child: const Text('OK'),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
+  void _onPopUpError() {
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: Text(Translate.of(context).translate('functionNotAvail')),
+        content: Text(Translate.of(context).translate('functionNotAvailBody')),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context, 'OK'),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
 }

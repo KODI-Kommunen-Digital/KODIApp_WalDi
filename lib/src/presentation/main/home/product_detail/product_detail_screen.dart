@@ -733,6 +733,25 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               ],
             ),
             createdDate,
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                startDate,
+                endDate
+                // priceRange,
+              ],
+            ),
+            Html(
+              data: product.description,
+              style: {
+                "*": Style(
+                  fontSize: FontSize(16.0),
+                  lineHeight: const LineHeight(1.6),
+                  color:
+                  Colors.white, // Set the text color to white (ARGB format)
+                ),
+              },
+            ),
             address,
             phone,
             fax,
@@ -742,31 +761,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             attachments,
             // socials,
             const SizedBox(height: 16),
-            // Text(
-            //   product.description,
-            //   style: Theme.of(context).textTheme.bodyText1!.copyWith(
-            //         height: 1.3,
-            //       ),
-            // ),
-            Html(
-              data: product.description,
-              style: {
-                "*": Style(
-                  fontSize: FontSize(16.0),
-                  color:
-                      Colors.white, // Set the text color to white (ARGB format)
-                ),
-              },
-            ),
+
             const SizedBox(height: 16),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                startDate,
-                endDate
-                // priceRange,
-              ],
-            ),
+
             // feature,
             // tags,
           ],
