@@ -225,6 +225,8 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedCityId = savedCity.id;
         selectedCityTitle = savedCity.title;
       });
+    } else {
+      await AppBloc.homeCubit.saveCityId(0);
     }
   }
 

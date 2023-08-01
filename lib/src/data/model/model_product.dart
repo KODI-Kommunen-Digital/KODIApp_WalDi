@@ -144,8 +144,6 @@ class ProductModel {
       category = "Nachricht";
       final parsedDateTime = DateTime.parse(json['createdAt']);
       createDate = DateFormat('dd.MM.yyyy').format(parsedDateTime);
-    } else if (json['categoryId'] == 2) {
-      category = "Straßenarbeiten/Verkehr";
     } else if (json['categoryId'] == 3) {
       category = "Veranstaltungen";
       final parsedDateTime = DateTime.parse(json['startDate']);
@@ -159,19 +157,19 @@ class ProductModel {
     } else if (json['categoryId'] == 5) {
       category = "Regionale Produkte";
     } else if (json['categoryId'] == 6) {
-      category = "Angebot/Suche";
+      category = "Biete/Suche";
     } else if (json['categoryId'] == 7) {
       category = "Bürgerinfo";
-    } else if (json['categoryId'] == 8) {
-      category = "Mängelbericht";
     } else if (json['categoryId'] == 9) {
       category = "Verloren gefunden";
     } else if (json['categoryId'] == 10) {
       category = "Firmenporträts";
     } else if (json['categoryId'] == 11) {
       category = "Fahrgemeinschaften/Öffentliche Verkehrsmittel";
-    } else if (json['categoryId'] == 11) {
+    } else if (json['categoryId'] == 12) {
       category = "Angebote";
+    } else if (json['categoryId'] == 13) {
+      category = "Essen & Trinken";
     }
 
     final listRelated = List.from(json['related'] ?? []).map((item) {

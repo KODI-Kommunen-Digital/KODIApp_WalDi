@@ -75,7 +75,7 @@ class _WishListLoadedState extends State<WishListLoaded> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(Translate.of(context).translate('Wishlist')),
+        title: Text(Translate.of(context).translate('wish_list')),
       ),
       body: RefreshIndicator(
         onRefresh: _onRefresh,

@@ -280,6 +280,29 @@ class _AddListingScreenState extends State<AddListingScreen> {
       allowEmpty: true,
     );
 
+    _errorWebsite = UtilValidator.validate(_textWebsiteController.text,
+        allowEmpty: true, type: ValidateType.website);
+
+    _errorTitle =
+        UtilValidator.validate(_textTitleController.text, allowEmpty: false);
+
+    _errorContent =
+        UtilValidator.validate(_textContentController.text, allowEmpty: false);
+
+    if (selectedCategory == "Events") {
+      if (_startDate == null || _startDate == "") {
+        _errorSDate = "value_not_date_empty";
+      } else {
+        _errorSDate = null;
+      }
+
+      if (_endDate == null || _endDate == "") {
+        _errorEDate = "value_not_date_empty";
+      } else {
+        _errorEDate = null;
+      }
+    }
+
     List<String?> errors = [
       _errorTitle,
       _errorContent,
@@ -303,7 +326,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
         _errorEDate != null) {
       String errorMessage = "";
       for (var element in errors) {
-        if (element != null) {
+        if (element != null &&
+            !errorMessage.contains(Translate.of(context).translate(element))) {
           errorMessage =
               "$errorMessage${Translate.of(context).translate(element)}, ";
         }
@@ -331,9 +355,24 @@ class _AddListingScreenState extends State<AddListingScreen> {
       9: "category_lost_found",
       10: "category_companies",
       11: "category_public_transport",
-      12: "category_offers"
+      12: "category_offers",
+      13: "category_food"
     };
     return categories[id];
+  }
+
+  String? _getSubCategoryTranslation(int id) {
+    Map<int, String> subCategories = {
+      1: "subcategory_newsflash",
+      3: "subcategory_politics",
+      4: "subcategory_economy",
+      5: "subcategory_sports",
+      7: "subcategory_local",
+      8: "subcategory_club_news",
+      9: "subcategory_road",
+      10: "subcategory_official_notification",
+    };
+    return subCategories[id];
   }
 
   Widget _buildContent() {
@@ -457,7 +496,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
                           )),
               ],
             ),
-            if (selectedCategory == "News"  || selectedCategory == null) const SizedBox(height: 8),
+            if (selectedCategory == "News" || selectedCategory == null)
+              const SizedBox(height: 8),
             if (selectedCategory == "News" || selectedCategory == null)
               Text(
                 Translate.of(context).translate('subCategory'),
@@ -471,29 +511,34 @@ class _AddListingScreenState extends State<AddListingScreen> {
               children: [
                 if (selectedCategory == "News")
                   Expanded(
-                      child:  listSubCategory.isEmpty
+                      child: listSubCategory.isEmpty
                           ? const LinearProgressIndicator()
                           : DropdownButton(
-                    isExpanded: true,
-                    menuMaxHeight: 200,
-                    hint: Text(
-                        Translate.of(context).translate('input_subcategory')),
-                    value: selectedSubCategory,
-                    items: listSubCategory.map((subcategory) {
-                      return DropdownMenuItem(
-                          value: subcategory['name'],
-                          child: Text(subcategory['name']));
-                    }).toList(),
-                    onChanged: (value) {
-                      context.read<AddListingCubit>().getSubCategoryId(value);
-                      setState(() {
-                        selectedSubCategory = value as String?;
-                      });
-                    },
-                  )),
+                              isExpanded: true,
+                              menuMaxHeight: 200,
+                              hint: Text(Translate.of(context)
+                                  .translate('input_subcategory')),
+                              value: selectedSubCategory,
+                              items: listSubCategory.map((subcategory) {
+                                return DropdownMenuItem(
+                                    value: subcategory['name'],
+                                    child: Text(Translate.of(context).translate(
+                                        _getSubCategoryTranslation(
+                                            subcategory['id']))));
+                              }).toList(),
+                              onChanged: (value) {
+                                context
+                                    .read<AddListingCubit>()
+                                    .getSubCategoryId(value);
+                                setState(() {
+                                  selectedSubCategory = value as String?;
+                                });
+                              },
+                            )),
               ],
             ),
-            if (selectedCategory == "News" || selectedCategory == null) const SizedBox(height: 8),
+            if (selectedCategory == "News" || selectedCategory == null)
+              const SizedBox(height: 8),
             const SizedBox(height: 8),
             Text(
               Translate.of(context).translate('city'),
@@ -608,6 +653,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
               errorText: _errorZipCode,
               controller: _textZipCodeController,
               focusNode: _focusZipCode,
+              maxLength: 5,
+              keyboardType: TextInputType.number,
               textInputAction: TextInputAction.next,
               onChanged: (text) {
                 setState(() {
@@ -636,6 +683,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
               errorText: _errorPhone,
               controller: _textPhoneController,
               focusNode: _focusPhone,
+              maxLength: 15,
+              keyboardType: TextInputType.phone,
               textInputAction: TextInputAction.next,
               onChanged: (text) {
                 setState(() {
@@ -698,6 +747,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
                   _errorWebsite = UtilValidator.validate(
                     _textWebsiteController.text,
                     allowEmpty: true,
+                    type: ValidateType.website
                   );
                 });
               },
@@ -763,21 +813,15 @@ class _AddListingScreenState extends State<AddListingScreen> {
   }
 
   Future<void> selectSubCategory(String? selectedCategory) async {
-    context
-        .read<AddListingCubit>()
-        .clearSubCategory();
+    context.read<AddListingCubit>().clearSubCategory();
     selectedSubCategory = null;
     // clearStartEndDate();
-    final subCategoryResponse = await context
-        .read<AddListingCubit>()
-        .loadSubCategory(selectedCategory);
+    final subCategoryResponse =
+        await context.read<AddListingCubit>().loadSubCategory(selectedCategory);
     if (!mounted) return;
-    context
-        .read<AddListingCubit>()
-        .getCategoryId(selectedCategory);
+    context.read<AddListingCubit>().getCategoryId(selectedCategory);
     setState(() {
-      selectedSubCategory =
-      subCategoryResponse?.data.first['name'];
+      selectedSubCategory = subCategoryResponse?.data.first['name'];
     });
   }
 }

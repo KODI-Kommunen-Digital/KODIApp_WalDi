@@ -1,9 +1,10 @@
-enum ValidateType { normal, email, number, phone, tag, cpassword }
+enum ValidateType { normal, email, number, phone, tag, cpassword, website }
 
 class UtilValidator {
   static const String errorEmpty = "value_not_empty";
   static const String errorRange = "value_not_valid_range";
   static const String errorEmail = "value_not_valid_email";
+  static const String errorWebsite = "value_not_website";
   static const String errorNumber = "value_not_number";
   static const String errorPhone = "value_not_phone";
   static const String errorPassword = "value_not_valid_password";
@@ -35,7 +36,8 @@ class UtilValidator {
       ///Email pattern
       case ValidateType.email:
         final emailRegex = RegExp(
-          r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$",
+          //r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$",
+          r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$",
         );
         if (!emailRegex.hasMatch(data)) {
           return errorEmail;
@@ -71,6 +73,13 @@ class UtilValidator {
       case ValidateType.cpassword:
         if (password != data) {
           return errorCpassword;
+        }
+        break;
+      case ValidateType.website:
+        final websiteRegex = RegExp(
+            r"^(?:(?:https?|ftp):\/\/)?(?:www\.)?([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})(?:\/[^\s]*)?$");
+        if (!websiteRegex.hasMatch(data)) {
+          return errorWebsite;
         }
         break;
       default:

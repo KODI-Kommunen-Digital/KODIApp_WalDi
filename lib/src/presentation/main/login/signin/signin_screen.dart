@@ -35,8 +35,18 @@ class _SignInScreenState extends State<SignInScreen> {
               Navigator.pop(context);
             }
             state.maybeWhen(
-              error: (msg) => ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(content: Text(msg))),
+              error: (msg) {
+                String? messageKey = AppBloc.loginCubit.getTranslationKey(msg);
+                String message;
+                if (messageKey == null) {
+                  message = msg;
+                } else {
+                  message = Translate.of(context).translate(messageKey);
+                }
+
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(SnackBar(content: Text(message)));
+              },
               orElse: () {},
             );
           },
