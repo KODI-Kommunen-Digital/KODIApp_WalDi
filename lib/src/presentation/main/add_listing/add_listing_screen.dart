@@ -355,7 +355,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
       9: "category_lost_found",
       10: "category_companies",
       11: "category_public_transport",
-      12: "category_offers"
+      12: "category_offers",
+      13: "category_food"
     };
     return categories[id];
   }
@@ -363,13 +364,13 @@ class _AddListingScreenState extends State<AddListingScreen> {
   String? _getSubCategoryTranslation(int id) {
     Map<int, String> subCategories = {
       1: "subcategory_newsflash",
-      2: "subcategory_alerts",
       3: "subcategory_politics",
       4: "subcategory_economy",
       5: "subcategory_sports",
-      6: "subcategory_day_topic",
       7: "subcategory_local",
       8: "subcategory_club_news",
+      9: "subcategory_road",
+      10: "subcategory_official_notification",
     };
     return subCategories[id];
   }

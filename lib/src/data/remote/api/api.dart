@@ -188,7 +188,7 @@ class Api {
   }
 
   static Future<ResultApiModel> requestSubCatList(params) async {
-    var list = '/listings?categoryId=1&subCategoryId=1&statusId=1';
+    var list = '/listings?subCategoryId=10&categoryId=1&statusId=1';
     final result = await httpManager.get(url: list);
     return ResultApiModel.fromJson(result);
   }

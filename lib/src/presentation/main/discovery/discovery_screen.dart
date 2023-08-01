@@ -39,7 +39,7 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
     final List<String> imageLinks = [
       '1',
       '2',
-      'error',
+      '3',
       '4',
       '5',
       '6',
@@ -88,8 +88,9 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
       await launchUrl(
           Uri.parse(await AppBloc.discoveryCubit.getCityLink() ?? ""),
           mode: LaunchMode.inAppWebView);
-    } else if (link == "error") {
-      _onPopUpError();
+    } else if (link == "3") {
+      prefs.setKeyValue(Preferences.type, "subCategoryService");
+      Navigator.pushNamed(context, Routes.listProduct, arguments: 4);
     } else if (link == "4") {
       prefs.setKeyValue(Preferences.categoryId, 1);
       prefs.setKeyValue(Preferences.type, "categoryService");
@@ -113,19 +114,19 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
     }
   }
 
-  void _onPopUpError() {
-    showDialog<String>(
-      context: context,
-      builder: (BuildContext context) => AlertDialog(
-        title: Text(Translate.of(context).translate('functionNotAvail')),
-        content: Text(Translate.of(context).translate('functionNotAvailBody')),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () => Navigator.pop(context, 'OK'),
-            child: const Text('OK'),
-          ),
-        ],
-      ),
-    );
-  }
+  // void _onPopUpError() {
+  //   showDialog<String>(
+  //     context: context,
+  //     builder: (BuildContext context) => AlertDialog(
+  //       title: Text(Translate.of(context).translate('functionNotAvail')),
+  //       content: Text(Translate.of(context).translate('functionNotAvailBody')),
+  //       actions: <Widget>[
+  //         TextButton(
+  //           onPressed: () => Navigator.pop(context, 'OK'),
+  //           child: const Text('OK'),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 }
