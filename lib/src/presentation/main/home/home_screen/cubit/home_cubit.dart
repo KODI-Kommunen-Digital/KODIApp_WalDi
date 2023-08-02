@@ -45,20 +45,40 @@ class HomeCubit extends Cubit<HomeState> {
 
     const banner = Images.slider;
 
-    emit(HomeStateLoaded(banner, sortCategoriesCount(category, categoryCount),
-        location, recent));
+    List<CategoryModel> formattedCategories =
+        await formatCategoriesList(category, categoryCount);
+
+    emit(HomeStateLoaded(banner, formattedCategories, location, recent));
   }
 
-  List<CategoryModel> sortCategoriesCount(
-      List<CategoryModel> categories, List<CategoryModel> categoryCount) {
+  Future<bool> categoryHasContent(int id) async {
+    final response = await Api.requestCatList(id);
+    if (response.data.toString() == "[]") {
+      return false;
+    }
+    return true;
+  }
+
+  Future<List<CategoryModel>> formatCategoriesList(
+      List<CategoryModel> categories, List<CategoryModel> categoryCount) async {
+    // Sort List
     Map<int, int?> idToCountMap = {};
     for (var obj in categoryCount) {
       idToCountMap[obj.id] = obj.count;
     }
-
     categories.sort(
         (a, b) => (idToCountMap[b.id] ?? 0).compareTo(idToCountMap[a.id] ?? 0));
-    return categories;
+
+    // Remove empty categories
+    List<CategoryModel> contentCategories = [];
+    for (var element in categories) {
+      bool hasContent = await categoryHasContent(element.id);
+      if (hasContent) {
+        contentCategories.add(element);
+      }
+    }
+
+    return contentCategories;
   }
 
   Future<void> saveCityId(int cityId) async {
