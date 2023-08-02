@@ -13,6 +13,7 @@ class Api {
   static const String forgotPassword = "/users/forgotPassword";
   static const String changePassword = "/users/resetPassword";
   static const String categories = "/categories";
+  static const String categoriesCount = "/categories/listingsCount";
   static const String list = "listings";
   static const String uploadImage = "/users/4/imageUpload";
   static const String cities = "/cities";
@@ -102,6 +103,11 @@ class Api {
       {required categoryId}) async {
     final filePath = '/categories/$categoryId/subcategories';
     final result = await httpManager.get(url: filePath);
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> requestCategoryCount() async {
+    final result = await httpManager.get(url: categoriesCount);
     return ResultApiModel.fromJson(result);
   }
 

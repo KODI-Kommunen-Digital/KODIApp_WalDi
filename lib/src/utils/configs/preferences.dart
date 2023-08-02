@@ -28,6 +28,7 @@ class Preferences {
   static const String subCategoryId = 'subCategoryId';
   static const String type = 'type';
   static const String path = 'path';
+  static const String categoryCount = "categoryCount";
 
   Preferences._(this._box);
 
