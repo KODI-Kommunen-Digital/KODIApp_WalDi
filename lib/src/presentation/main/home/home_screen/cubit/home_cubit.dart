@@ -45,11 +45,8 @@ class HomeCubit extends Cubit<HomeState> {
 
     const banner = Images.slider;
 
-    emit(HomeStateLoaded(
-        banner,
-        sortCategoriesCount(category, categoryCount),
-        location,
-        recent));
+    emit(HomeStateLoaded(banner, sortCategoriesCount(category, categoryCount),
+        location, recent));
   }
 
   List<CategoryModel> sortCategoriesCount(
