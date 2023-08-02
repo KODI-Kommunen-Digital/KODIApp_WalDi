@@ -13,6 +13,7 @@ class HomeCubit extends Cubit<HomeState> {
   dynamic location;
   dynamic recent;
   dynamic sliders;
+  dynamic categoryCount;
 
   HomeCubit() : super(const HomeState.loading());
 
@@ -23,6 +24,7 @@ class HomeCubit extends Cubit<HomeState> {
     final categoryRequestResponse = await Api.requestHomeCategory();
     final cityRequestResponse = await Api.requestCities();
     final listingsRequestResponse = await Api.requestRecentListings();
+    final categoryCountRequestResponse = await Api.requestCategoryCount();
 
     category = List.from(categoryRequestResponse.data ?? []).map((item) {
       return CategoryModel.fromJson(item);
@@ -36,14 +38,30 @@ class HomeCubit extends Cubit<HomeState> {
       return ProductModel.fromJson(item);
     }).toList();
 
+    categoryCount =
+        List.from(categoryCountRequestResponse.data ?? []).map((item) {
+      return CategoryModel.fromJson(item);
+    }).toList();
+
     const banner = Images.slider;
 
     emit(HomeStateLoaded(
-      banner,
-      category,
-      location,
-      recent,
-    ));
+        banner,
+        sortCategoriesCount(category, categoryCount),
+        location,
+        recent));
+  }
+
+  List<CategoryModel> sortCategoriesCount(
+      List<CategoryModel> categories, List<CategoryModel> categoryCount) {
+    Map<int, int?> idToCountMap = {};
+    for (var obj in categoryCount) {
+      idToCountMap[obj.id] = obj.count;
+    }
+
+    categories.sort(
+        (a, b) => (idToCountMap[b.id] ?? 0).compareTo(idToCountMap[a.id] ?? 0));
+    return categories;
   }
 
   Future<void> saveCityId(int cityId) async {
