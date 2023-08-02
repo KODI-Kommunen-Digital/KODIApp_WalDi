@@ -164,8 +164,7 @@ class ListRepository {
     if (origin == 'profile' || origin == 'Profil') {
       final response = await Api.requestUploadImage(formData);
       return response;
-    } else if (origin == 'Upload feature image' ||
-        origin == 'Feature-Bild hochladen') {
+    } else if (origin == 'Upload feature image' || origin == 'Bild hochladen') {
       await prefs.setPickedFile(formData);
     }
     return null;
@@ -285,7 +284,7 @@ class ListRepository {
       "price": 100, //dummy data
       "discountPrice": 100, //dummy data
       "logo": media,
-      "statusId": 3, //dummy data
+      "statusId": 1, //dummy data
       "sourceId": 1, //dummy data
       "longitude": 245.65, //dummy data
       "latitude": 22.456, //dummy data
