@@ -44,7 +44,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
   final _textPlaceController = TextEditingController();
 
   final _focusTitle = FocusNode();
-  final _focusPlace = FocusNode();
   final _focusContent = FocusNode();
   final _focusAddress = FocusNode();
   final _focusZipCode = FocusNode();
@@ -615,20 +614,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
             //   ],
             // ),
             // const SizedBox(height: 16),
-            AppTextInput(
-              hintText: Translate.of(context).translate('input_place'),
-              controller: _textPlaceController,
-              focusNode: _focusPlace,
-              textInputAction: TextInputAction.next,
-              onSubmitted: (text) {
-                Utils.fieldFocusChange(
-                  context,
-                  _focusPlace,
-                  _focusAddress,
-                );
-              },
-            ),
-            const SizedBox(height: 8),
             AppTextInput(
               hintText: Translate.of(context).translate('input_address'),
               // errorText: _errorAddress,
