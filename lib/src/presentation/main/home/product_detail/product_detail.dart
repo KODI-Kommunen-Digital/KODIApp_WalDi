@@ -353,15 +353,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       ];
 
       banner = InkWell(
-        onTap: (){
+        onTap: () {
           Navigator.pushNamed(
             context,
             Routes.imageZoom,
             arguments: "${Application.picturesURL}${product.image}",
           );
         },
-        child:
-        CachedNetworkImage(
+        child: CachedNetworkImage(
           imageUrl: "${Application.picturesURL}${product.image}",
           placeholder: (context, url) {
             return AppPlaceholder(
@@ -748,7 +747,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     fontSize: FontSize(16.0),
                     color: Colors
                         .white, // Set the text color to white (ARGB format)
-                    lineHeight: const LineHeight(1.25)),
+                    lineHeight: const LineHeight(1.6)),
               },
             ),
             address,
