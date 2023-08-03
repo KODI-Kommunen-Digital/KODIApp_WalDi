@@ -1,4 +1,13 @@
-enum ValidateType { normal, email, number, phone, tag, cpassword, website }
+enum ValidateType {
+  normal,
+  email,
+  number,
+  phone,
+  tag,
+  cpassword,
+  website,
+  userName
+}
 
 class UtilValidator {
   static const String errorEmpty = "value_not_empty";
@@ -12,6 +21,7 @@ class UtilValidator {
   static const String errorCpassword = "value_not_equal_password";
   static const String valueNotMatch = "value_not_match";
   static const String valueNotIsTag = "value_not_is_tag";
+  static const String errorUsername = "value_not_username";
 
   static String? validate(String data,
       {ValidateType? type = ValidateType.normal,
@@ -82,6 +92,15 @@ class UtilValidator {
           return errorWebsite;
         }
         break;
+
+      case ValidateType.userName:
+        final userNameRegex = RegExp(
+            r'^[a-z_]+$');
+        if (!userNameRegex.hasMatch(data)) {
+          return errorUsername;
+        }
+        break;
+
       default:
     }
     return null;

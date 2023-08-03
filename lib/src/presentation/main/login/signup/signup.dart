@@ -60,7 +60,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   void _signUp() async {
     Utils.hiddenKeyboard(context);
     setState(() {
-      _errorID = UtilValidator.validate(_textIDController.text);
+      _errorID = UtilValidator.validate(_textIDController.text.toLowerCase(), type: ValidateType.userName);
       _errorFN = UtilValidator.validate(_textFNController.text);
       _errorLN = UtilValidator.validate(_textLNController.text);
       _errorPass = UtilValidator.validate(_textPassController.text);
@@ -76,7 +76,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         _errorEmail == null &&
         _errorCPass == null) {
       final result = await AppBloc.signupCubit.onRegister(
-        username: _textIDController.text,
+        username: _textIDController.text.toLowerCase(),
         firstname: _textFNController.text,
         lastname: _textLNController.text,
         password: _textPassController.text,
@@ -132,7 +132,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   textInputAction: TextInputAction.next,
                   onChanged: (text) {
                     setState(() {
-                      _errorID = UtilValidator.validate(_textIDController.text);
+                      _errorID = UtilValidator.validate(_textIDController.text.toLowerCase());
                     });
                   },
                   onSubmitted: (text) {
