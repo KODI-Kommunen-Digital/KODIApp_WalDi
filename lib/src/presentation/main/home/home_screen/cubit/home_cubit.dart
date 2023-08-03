@@ -65,16 +65,15 @@ class HomeCubit extends Cubit<HomeState> {
     categories.sort(
         (a, b) => (idToCountMap[b.id] ?? 0).compareTo(idToCountMap[a.id] ?? 0));
 
-    // Remove empty categories
-    List<CategoryModel> contentCategories = [];
+    // Hide tag on empty categories
     for (var element in categories) {
       bool hasContent = await categoryHasContent(element.id);
-      if (hasContent) {
-        contentCategories.add(element);
+      if (!hasContent) {
+        element.hide = true;
       }
     }
 
-    return contentCategories;
+    return categories;
   }
 
   Future<bool> categoryHasContent(int id) async {
@@ -94,6 +93,16 @@ class HomeCubit extends Cubit<HomeState> {
       return CategoryModel(id: cityId, title: cityName, image: "");
     }
     return null;
+  }
+
+  List<CategoryModel> getCategoriesWithoutHidden(List<CategoryModel> categoryList) {
+    List<CategoryModel> noHiddenCategoryList = [];
+    for (var element in categoryList) {
+      if(!element.hide) {
+        noHiddenCategoryList.add(element);
+      }
+    }
+    return noHiddenCategoryList;
   }
 
   Future<void> saveCityId(int cityId) async {
