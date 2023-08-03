@@ -41,7 +41,6 @@ class HomeCubit extends Cubit<HomeState> {
     CategoryModel? savedCity = await checkSavedCity(location);
     final categoryCountRequestResponse =
         await Api.requestCategoryCount(savedCity?.id);
-    print(savedCity?.id);
     categoryCount =
         List.from(categoryCountRequestResponse.data ?? []).map((item) {
       return CategoryModel.fromJson(item);
