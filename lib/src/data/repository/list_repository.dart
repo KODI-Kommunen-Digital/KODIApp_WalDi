@@ -164,8 +164,7 @@ class ListRepository {
     if (origin == 'profile' || origin == 'Profil') {
       final response = await Api.requestUploadImage(formData);
       return response;
-    } else if (origin == 'Upload feature image' ||
-        origin == 'Feature-Bild hochladen') {
+    } else if (origin == 'Upload feature image' || origin == 'Bild hochladen') {
       await prefs.setPickedFile(formData);
     }
     return null;
