@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:device_info/device_info.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
@@ -48,9 +49,18 @@ class _AppUploadImageState extends State<AppUploadImage> {
   }
 
   Future<void> _uploadImage() async {
-    var statusImage = Platform.isAndroid
+    Platform.isAndroid
         ? await Permission.storage.request()
         : await Permission.photos.request();
+
+    String androidVersion = await _getAndroidVersion();
+    var statusImage = await Permission.photos.status;
+    if (int.parse(androidVersion) > 10) {
+      statusImage = await Permission.photos.status;
+    } else {
+      statusImage = await Permission.storage.status;
+    }
+
     if (showAction) {
       setState(() {
         showAction = false;
@@ -81,6 +91,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
           } else {}
         }
       } else if (statusImage.isDenied) {
+        await openAppSettings();
         if (statusImage.isGranted || statusImage.isLimited) {
           final pickedFile = await _picker.pickImage(
             source: ImageSource.gallery,
@@ -111,6 +122,15 @@ class _AppUploadImageState extends State<AppUploadImage> {
       }
     } catch (e) {
       logError('Image Upload Permission Error', e);
+    }
+  }
+
+  Future<String> _getAndroidVersion() async {
+    if (Platform.isAndroid) {
+      var androidInfo = await DeviceInfoPlugin().androidInfo;
+      return androidInfo.version.release;
+    } else {
+      return "Not an Android device";
     }
   }
 
