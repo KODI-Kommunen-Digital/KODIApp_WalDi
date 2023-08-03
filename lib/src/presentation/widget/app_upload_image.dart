@@ -79,8 +79,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
           _file = File(pickedFile.path);
         });
         final origin = widget.title;
-        if (origin == 'Upload feature image' ||
-            origin == 'Feature-Bild hochladen') {
+        if (origin == 'Upload feature image' || origin == 'Bild hochladen') {
           await ListRepository.uploadImage(_file!, origin);
         } else {
           final response = await ListRepository.uploadImage(_file!, origin);
@@ -103,7 +102,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
             _file = File(pickedFile.path);
           });
           final origin = widget.title;
-          if (origin == 'Feature-Bild hochladen') {
+          if (origin == 'Upload feature image' || origin == 'Bild hochladen') {
           } else {
             final response = await ListRepository.uploadImage(_file!, origin);
             if (response!.data['status'] == 'success') {
