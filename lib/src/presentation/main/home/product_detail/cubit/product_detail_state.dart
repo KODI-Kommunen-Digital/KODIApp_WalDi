@@ -29,8 +29,7 @@ class ProductDetailState with _$ProductDetailState {
   const factory ProductDetailState.loaded(
       ProductModel product,
       List<FavoriteModel>? favoritesList,
-      bool isLoggedIn
-      ) = ProductDetailLoaded;
+      bool isLoggedIn) = ProductDetailLoaded;
 
   const factory ProductDetailState.error(String error) = ProductDetailError;
 }
