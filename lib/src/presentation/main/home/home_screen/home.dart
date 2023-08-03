@@ -127,7 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     bottom: false,
                     child: Column(
                       children: <Widget>[
-                        _buildCategory(category),
+                        _buildCategory(AppBloc.homeCubit.getCategoriesWithoutHidden(category ?? [])),
                         _buildLocation(location),
                         _buildRecent(recent, selectedCityId),
                         const SizedBox(height: 28),
