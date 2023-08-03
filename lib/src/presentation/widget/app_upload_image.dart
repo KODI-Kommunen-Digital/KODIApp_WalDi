@@ -129,7 +129,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
       var androidInfo = await DeviceInfoPlugin().androidInfo;
       return androidInfo.version.release;
     } else {
-      return "Not an Android device";
+      return "0";
     }
   }
 
