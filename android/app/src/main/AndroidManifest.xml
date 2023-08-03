@@ -9,8 +9,8 @@
 
     <application
         android:label="WalDi"
+        android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
-        android:label="heidi"
         android:requestLegacyExternalStorage="true">
         <activity
             android:name=".MainActivity"
