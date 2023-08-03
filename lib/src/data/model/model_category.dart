@@ -13,6 +13,7 @@ class CategoryModel {
   final Color? color;
   final CategoryType? type;
   final bool hasChild;
+  bool hide;
 
   CategoryModel({
     required this.id,
@@ -23,6 +24,7 @@ class CategoryModel {
     this.color,
     this.type = CategoryType.category,
     this.hasChild = false,
+    this.hide = false
   });
 
   @override
