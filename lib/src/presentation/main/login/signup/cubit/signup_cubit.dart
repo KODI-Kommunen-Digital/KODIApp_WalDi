@@ -60,4 +60,20 @@ class SignUpCubit extends Cubit<SignUpState> {
 
     return null; // Password is valid.
   }
+
+  String? validateUsername(String username) {
+    if (username.isEmpty) {
+      return "Username is required.";
+    }
+
+    if (username.length < 6) {
+      return "Username must be at least 6 characters long.";
+    }
+
+    if (!RegExp(r'^[a-z_]+$').hasMatch(username)) {
+      return "Username can only contain lowercase letters and underscores.";
+    }
+
+    return null; // Username is valid.
+  }
 }

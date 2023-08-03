@@ -61,8 +61,8 @@ class _AppTextInputState extends State<AppTextInput> {
                     .textTheme
                     .bodySmall!
                     .copyWith(color: Theme.of(context).colorScheme.error),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+                overflow: TextOverflow.clip,
               ),
             )
           ],

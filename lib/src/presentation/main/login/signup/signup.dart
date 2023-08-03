@@ -38,6 +38,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   String? _errorCPass;
   String? _errorEmail;
   bool _isPasswordFocused = false;
+  bool _isUserNameFocused = false;
 
   @override
   void initState() {
@@ -61,8 +62,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   void _signUp() async {
     Utils.hiddenKeyboard(context);
     setState(() {
-      _errorID = UtilValidator.validate(_textIDController.text,
-          type: ValidateType.userName);
+      _errorID = AppBloc.signupCubit.validateUsername(_textIDController.text);
       _errorFN = UtilValidator.validate(_textFNController.text);
       _errorLN = UtilValidator.validate(_textLNController.text);
       _errorPass =
@@ -75,6 +75,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
       );
       if (_errorPass != null) {
         _errorPass = Translate.of(context).translate(_errorPass);
+      }
+      if (_errorID != null) {
+        _errorID = Translate.of(context).translate(_errorID);
       }
     });
     if (_errorID == null &&
@@ -109,6 +112,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     setPasswordListener();
     String passwordHint = Translate.of(context).translate('Password hint');
+    String userNameHint = Translate.of(context).translate('Username hint');
 
     return Scaffold(
       appBar: AppBar(
@@ -151,6 +155,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   onSubmitted: (text) {
                     Utils.fieldFocusChange(context, _focusID, _focusFN);
                   },
+                ),
+                const SizedBox(height: 16),
+                Visibility(
+                  visible: _isUserNameFocused,
+                  child: Text(
+                    userNameHint,
+                    style: const TextStyle(color: Colors.grey, fontSize: 12),
+                  ),
                 ),
                 const SizedBox(height: 16),
                 Text(
@@ -216,10 +228,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   errorText: _errorPass,
                   onChanged: (text) {
                     setState(() {
-                      // final validate = AppBloc.signupCubit.validatePassword(text);
-                      // if(validate != 'true'){
-                      //   _errorPass = validate;
-                      // }
                       _errorPass = UtilValidator.validate(
                         _textPassController.text,
                       );
@@ -348,6 +356,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
     _focusPass.addListener(() {
       setState(() {
         _isPasswordFocused = _focusPass.hasFocus;
+      });
+    });
+
+    _focusID.addListener(() {
+      setState(() {
+        _isUserNameFocused = _focusID.hasFocus;
       });
     });
   }
