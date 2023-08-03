@@ -23,7 +23,6 @@ class HomeCubit extends Cubit<HomeState> {
     final categoryRequestResponse = await Api.requestHomeCategory();
     final cityRequestResponse = await Api.requestCities();
     final listingsRequestResponse = await Api.requestRecentListings();
-    final categoryCountRequestResponse = await Api.requestCategoryCount();
 
     category = List.from(categoryRequestResponse.data ?? []).map((item) {
       return CategoryModel.fromJson(item);
@@ -37,6 +36,9 @@ class HomeCubit extends Cubit<HomeState> {
       return ProductModel.fromJson(item);
     }).toList();
 
+    CategoryModel? savedCity = await checkSavedCity(location);
+    final categoryCountRequestResponse =
+        await Api.requestCategoryCount(savedCity?.id);
     categoryCount =
         List.from(categoryCountRequestResponse.data ?? []).map((item) {
       return CategoryModel.fromJson(item);
@@ -95,10 +97,11 @@ class HomeCubit extends Cubit<HomeState> {
     return null;
   }
 
-  List<CategoryModel> getCategoriesWithoutHidden(List<CategoryModel> categoryList) {
+  List<CategoryModel> getCategoriesWithoutHidden(
+      List<CategoryModel> categoryList) {
     List<CategoryModel> noHiddenCategoryList = [];
     for (var element in categoryList) {
-      if(!element.hide) {
+      if (!element.hide) {
         noHiddenCategoryList.add(element);
       }
     }
