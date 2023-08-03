@@ -27,10 +27,10 @@ class HomeCategoryItem extends StatelessWidget {
                 width: 40,
                 height: 40,
                 alignment: Alignment.center,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white,
-                ),
+                decoration: BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10)),
               ),
               const SizedBox(height: 8),
               Container(
@@ -45,7 +45,7 @@ class HomeCategoryItem extends StatelessWidget {
     }
 
     return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.21,
+      width: MediaQuery.of(context).size.width * 0.22,
       child: GestureDetector(
         onTap: () => onPressed!(item!),
         child: Column(
@@ -57,9 +57,9 @@ class HomeCategoryItem extends StatelessWidget {
               height: 43,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: item!.color,
-              ),
+                  shape: BoxShape.rectangle,
+                  color: item!.color,
+                  borderRadius: BorderRadius.circular(10)),
               child: FaIcon(
                 item!.icon,
                 size: 18,
