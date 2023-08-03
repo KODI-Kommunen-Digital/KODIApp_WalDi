@@ -6,12 +6,12 @@ class CitiesDropDown extends StatefulWidget {
   final List<String>? cityTitlesList;
   final String? hintText;
 
-  const CitiesDropDown({
-    Key? key,
-    required this.setLocationCallback,
-    required this.cityTitlesList,
-    this.hintText
-  }) : super(key: key);
+  const CitiesDropDown(
+      {Key? key,
+      required this.setLocationCallback,
+      required this.cityTitlesList,
+      this.hintText})
+      : super(key: key);
 
   @override
   State<CitiesDropDown> createState() => _CitiesDropDownState();

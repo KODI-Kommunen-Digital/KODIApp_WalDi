@@ -1,5 +1,6 @@
-import 'package:bloc/bloc.dart';
 import 'dart:io';
+
+import 'package:bloc/bloc.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/remote/api/api.dart';

@@ -4,6 +4,7 @@ import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
+
 import 'cubit.dart';
 
 enum ProductFilter {
