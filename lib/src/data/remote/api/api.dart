@@ -106,8 +106,12 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
-  static Future<ResultApiModel> requestCategoryCount() async {
-    final result = await httpManager.get(url: categoriesCount);
+  static Future<ResultApiModel> requestCategoryCount(int? cityId) async {
+    String url = categoriesCount;
+    if(cityId != null) {
+      url = "$url?cityId=$cityId";
+    }
+    final result = await httpManager.get(url: url);
     return ResultApiModel.fromJson(result);
   }
 
