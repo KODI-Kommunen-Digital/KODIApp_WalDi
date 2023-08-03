@@ -6,7 +6,6 @@ enum ValidateType {
   tag,
   cpassword,
   website,
-  userName
 }
 
 class UtilValidator {
@@ -19,7 +18,6 @@ class UtilValidator {
   static const String errorId = "value_not_valid_id";
   static const String errorCpassword = "value_not_equal_password";
   static const String errorWebsite = "value_not_website";
-  static const String errorUsername = "value_not_username";
   static const String valueNotMatch = "value_not_match";
   static const String valueNotIsTag = "value_not_is_tag";
 
@@ -93,15 +91,6 @@ class UtilValidator {
           return errorWebsite;
         }
         break;
-
-      case ValidateType.userName:
-        final userNameRegex = RegExp(
-            r'^[a-z_]+$');
-        if (!userNameRegex.hasMatch(data)) {
-          return errorUsername;
-        }
-        break;
-
       default:
     }
     return null;

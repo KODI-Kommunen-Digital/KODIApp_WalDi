@@ -145,11 +145,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   textInputAction: TextInputAction.next,
                   onChanged: (text) {
                     setState(() {
-                      _errorID = UtilValidator.validate(
-                        _textIDController.text.toLowerCase(),
-                        type: ValidateType.userName,
-                        allowEmpty: true,
-                      );
+                      // _errorID = UtilValidator.validate(
+                      //   _textIDController.text.toLowerCase(),
+                      //   type: ValidateType.userName,
+                      //   allowEmpty: true,
+                      // );
                     });
                   },
                   onSubmitted: (text) {
