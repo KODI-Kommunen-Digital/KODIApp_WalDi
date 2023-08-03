@@ -37,6 +37,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   String? _errorPass;
   String? _errorCPass;
   String? _errorEmail;
+  bool _isPasswordFocused = false;
 
   @override
   void initState() {
@@ -60,16 +61,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
   void _signUp() async {
     Utils.hiddenKeyboard(context);
     setState(() {
-      _errorID = UtilValidator.validate(_textIDController.text, type: ValidateType.userName);
+      _errorID = UtilValidator.validate(_textIDController.text,
+          type: ValidateType.userName);
       _errorFN = UtilValidator.validate(_textFNController.text);
       _errorLN = UtilValidator.validate(_textLNController.text);
-      _errorPass = UtilValidator.validate(_textPassController.text);
+      _errorPass =
+          AppBloc.signupCubit.validatePassword(_textPassController.text);
       _errorCPass = UtilValidator.validate(_textCPassController.text,
           password: _textPassController.text, type: ValidateType.cpassword);
       _errorEmail = UtilValidator.validate(
         _textEmailController.text,
         type: ValidateType.email,
       );
+      if (_errorPass != null) {
+        _errorPass = Translate.of(context).translate(_errorPass);
+      }
     });
     if (_errorID == null &&
         _errorPass == null &&
@@ -101,6 +107,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    setPasswordListener();
+    String passwordHint = Translate.of(context).translate('Password hint');
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -207,6 +216,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   errorText: _errorPass,
                   onChanged: (text) {
                     setState(() {
+                      // final validate = AppBloc.signupCubit.validatePassword(text);
+                      // if(validate != 'true'){
+                      //   _errorPass = validate;
+                      // }
                       _errorPass = UtilValidator.validate(
                         _textPassController.text,
                       );
@@ -233,6 +246,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   obscureText: !_showPassword,
                   controller: _textPassController,
                   focusNode: _focusPass,
+                ),
+                const SizedBox(height: 16),
+                Visibility(
+                  visible: _isPasswordFocused,
+                  child: Text(
+                    passwordHint,
+                    style: const TextStyle(color: Colors.grey, fontSize: 12),
+                  ),
                 ),
                 const SizedBox(height: 16),
                 Text(
@@ -321,5 +342,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
   void _showErrorSnackBar() {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(Translate.of(context).translate("register_fail"))));
+  }
+
+  void setPasswordListener() {
+    _focusPass.addListener(() {
+      setState(() {
+        _isPasswordFocused = _focusPass.hasFocus;
+      });
+    });
   }
 }
