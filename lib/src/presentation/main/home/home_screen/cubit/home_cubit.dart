@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
+import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/image.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'home_state.dart';
@@ -47,7 +48,7 @@ class HomeCubit extends Cubit<HomeState> {
     const banner = Images.slider;
 
     List<CategoryModel> formattedCategories =
-        await formatCategoriesList(category, categoryCount);
+        await formatCategoriesList(category, categoryCount, savedCity?.id);
 
     emit(HomeStateLoaded(
       banner,
@@ -58,7 +59,9 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   Future<List<CategoryModel>> formatCategoriesList(
-      List<CategoryModel> categories, List<CategoryModel> categoryCount) async {
+      List<CategoryModel> categories,
+      List<CategoryModel> categoryCount,
+      int? cityId) async {
     // Sort List
     Map<int, int?> idToCountMap = {};
     for (var obj in categoryCount) {
@@ -69,7 +72,7 @@ class HomeCubit extends Cubit<HomeState> {
 
     // Hide tag on empty categories
     for (var element in categories) {
-      bool hasContent = await categoryHasContent(element.id);
+      bool hasContent = await categoryHasContent(element.id, cityId);
       if (!hasContent) {
         element.hide = true;
       }
@@ -78,12 +81,17 @@ class HomeCubit extends Cubit<HomeState> {
     return categories;
   }
 
-  Future<bool> categoryHasContent(int id) async {
+  Future<bool> categoryHasContent(int id, int? cityId) async {
+    cityId ??= 0;
     final response = await Api.requestCatList(id);
-    if (response.data.toString() == "[]") {
-      return false;
+    final list = List.from(response.data ?? []).map((item) {
+      return ProductModel.fromJson(item, setting: Application.setting);
+    }).toList();
+    if (list.any((element) => element.cityId == cityId) ||
+        (cityId == 0 && list.isNotEmpty)) {
+      return true;
     }
-    return true;
+    return false;
   }
 
   Future<CategoryModel?> checkSavedCity(List<CategoryModel> cities) async {
