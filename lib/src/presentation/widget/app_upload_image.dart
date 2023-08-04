@@ -55,7 +55,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
 
     String androidVersion = await _getAndroidVersion();
     var statusImage = await Permission.photos.status;
-    if (int.parse(androidVersion) > 10) {
+    if (int.parse(androidVersion) > 11) {
       statusImage = await Permission.photos.status;
     } else {
       statusImage = await Permission.storage.status;
