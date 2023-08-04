@@ -89,6 +89,8 @@ class _AppUploadImageState extends State<AppUploadImage> {
             setState(() {
               isImageUploaded = true;
             });
+            final item = response.data['data']?['image'];
+            widget.onChange(item);
           } else {}
         }
       } else if (statusImage.isDenied) {
@@ -111,7 +113,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
               setState(() {
                 isImageUploaded = true;
               });
-              final item = response.data['path'];
+              final item = response.data['data']?['image'];
               widget.onChange(item);
             } else {
               logError('Image Upload Permission Error', response);
