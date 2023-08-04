@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:heidi/src/data/model/model_citizen_service.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/utils/configs/image.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
@@ -19,36 +20,56 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
   @override
   void initState() {
     super.initState();
+    hideEmptyService();
+  }
+
+  final List<CitizenServiceModel> hiddenServices = [];
+
+  final List<CitizenServiceModel> services = [
+    CitizenServiceModel(imageUrl: Images.service2, imageLink: "2"),
+    CitizenServiceModel(
+        imageUrl: Images.service3,
+        imageLink: "3",
+        type: "subCategoryService",
+        arguments: 4),
+    CitizenServiceModel(
+        imageUrl: Images.service4, imageLink: "4", arguments: 4, categoryId: 1),
+    CitizenServiceModel(
+        imageUrl: Images.service5, imageLink: "5", arguments: 5, categoryId: 3),
+    CitizenServiceModel(
+        imageUrl: Images.service6, imageLink: "6", arguments: 6, categoryId: 4),
+    CitizenServiceModel(
+        imageUrl: Images.service7,
+        imageLink: "7",
+        arguments: 7,
+        categoryId: 10),
+    CitizenServiceModel(
+        imageUrl: Images.service8,
+        imageLink: "8",
+        arguments: 8,
+        categoryId: 13),
+    CitizenServiceModel(
+        imageUrl: Images.service9, imageLink: "9", arguments: 9, categoryId: 6),
+    CitizenServiceModel(imageUrl: Images.service10, imageLink: "error"),
+  ];
+
+  Future<void> hideEmptyService() async {
+    for (var element in services) {
+      if (element.categoryId != null || element.type == "subCategoryService") {
+        bool hasContent = await element.hasContent();
+        if (!hasContent) {
+          hiddenServices.add(element);
+        }
+      }
+    }
+
+    setState(() {
+      services.removeWhere((element) => hiddenServices.contains(element));
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final List<String> imageUrls = [
-      // Images.service1,
-      Images.service2,
-      Images.service3,
-      Images.service4,
-      Images.service5,
-      Images.service6,
-      Images.service7,
-      Images.service8,
-      Images.service9,
-      Images.service10
-      // Add more image URLs as needed
-    ];
-
-    final List<String> imageLinks = [
-      // '1',
-      '2',
-      '3',
-      '4',
-      '5',
-      '6',
-      '7',
-      '8',
-      '9',
-      'error'
-    ];
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -60,16 +81,16 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
             crossAxisSpacing: 10.0,
             mainAxisSpacing: 10.0,
             mainAxisExtent: 300.0),
-        itemCount: imageUrls.length,
+        itemCount: services.length,
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
             onTap: () {
-              navigateToLink(imageLinks[index]);
+              navigateToLink(services[index]);
             },
             child: ClipRRect(
               borderRadius: BorderRadius.circular(15.0),
               child: Image.asset(
-                imageUrls[index],
+                services[index].imageUrl,
                 fit: BoxFit.cover,
               ),
             ),
@@ -77,48 +98,6 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
         },
       ),
     );
-  }
-
-  Future<void> navigateToLink(String link) async {
-    final prefs = await Preferences.openBox();
-    if (link == "1") {
-      await launchUrl(Uri.parse('https://mitreden.ilzerland.bayern/ringelai'),
-          mode: LaunchMode.inAppWebView);
-    } else if (link == "2") {
-      await launchUrl(
-          Uri.parse(await AppBloc.discoveryCubit.getCityLink() ?? ""),
-          mode: LaunchMode.inAppWebView);
-    } else if (link == "3") {
-      prefs.setKeyValue(Preferences.type, "subCategoryService");
-      Navigator.pushNamed(context, Routes.listProduct, arguments: 4);
-    } else if (link == "4") {
-      prefs.setKeyValue(Preferences.categoryId, 1);
-      prefs.setKeyValue(Preferences.type, "categoryService");
-      Navigator.pushNamed(context, Routes.listProduct, arguments: 4);
-    } else if (link == "5") {
-      prefs.setKeyValue(Preferences.categoryId, 3);
-      prefs.setKeyValue(Preferences.type, "categoryService");
-      Navigator.pushNamed(context, Routes.listProduct, arguments: 5);
-    } else if (link == "6") {
-      prefs.setKeyValue(Preferences.categoryId, 4);
-      prefs.setKeyValue(Preferences.type, "categoryService");
-      Navigator.pushNamed(context, Routes.listProduct, arguments: 6);
-    } else if (link == "7") {
-      prefs.setKeyValue(Preferences.categoryId, 10);
-      prefs.setKeyValue(Preferences.type, "categoryService");
-      Navigator.pushNamed(context, Routes.listProduct, arguments: 7);
-    }
-    else if (link == "8") {
-      prefs.setKeyValue(Preferences.categoryId, 13);
-      prefs.setKeyValue(Preferences.type, "categoryService");
-      Navigator.pushNamed(context, Routes.listProduct, arguments: 8);
-    } else if (link == "9") {
-      prefs.setKeyValue(Preferences.categoryId, 6);
-      prefs.setKeyValue(Preferences.type, "categoryService");
-      Navigator.pushNamed(context, Routes.listProduct, arguments: 9);
-    } else if (link == "error") {
-     _onPopUpError();
-    }
   }
 
   void _onPopUpError() {
@@ -135,5 +114,26 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
         ],
       ),
     );
+  }
+
+  Future<void> navigateToLink(CitizenServiceModel service) async {
+    final prefs = await Preferences.openBox();
+    if (service.imageLink == "1") {
+      await launchUrl(Uri.parse('https://mitreden.ilzerland.bayern/ringelai'),
+          mode: LaunchMode.inAppWebView);
+    } else if (service.imageLink == "2") {
+      await launchUrl(
+          Uri.parse(await AppBloc.discoveryCubit.getCityLink() ?? ""),
+          mode: LaunchMode.inAppWebView);
+    } else if (service.imageLink == "error") {
+      _onPopUpError();
+    } else {
+      prefs.setKeyValue(Preferences.type, service.type);
+      if (service.categoryId != null) {
+        prefs.setKeyValue(Preferences.categoryId, service.categoryId);
+      }
+      Navigator.pushNamed(context, Routes.listProduct,
+          arguments: service.arguments);
+    }
   }
 }
