@@ -394,6 +394,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
               child: AppUploadImage(
                 title: Translate.of(context).translate('upload_feature_image'),
                 image: _featureImage,
+                profile: false,
                 onChange: (result) {
                   setState(() {
                     _featureImage = result;

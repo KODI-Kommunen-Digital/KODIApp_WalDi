@@ -16,6 +16,7 @@ class AppUploadImage extends StatefulWidget {
   final String? image;
   final Function(String) onChange;
   final UploadImageType type;
+  final bool profile;
 
   const AppUploadImage({
     Key? key,
@@ -23,6 +24,7 @@ class AppUploadImage extends StatefulWidget {
     this.image,
     required this.onChange,
     this.type = UploadImageType.square,
+    required this.profile,
   }) : super(key: key);
 
   @override
@@ -78,11 +80,11 @@ class _AppUploadImageState extends State<AppUploadImage> {
           isImageUploaded = false;
           _file = File(pickedFile.path);
         });
-        final origin = widget.title;
-        if (origin == 'Upload feature image' || origin == 'Bild hochladen') {
-          await ListRepository.uploadImage(_file!, origin);
+        final profile = widget.profile;
+        if (!profile) {
+          await ListRepository.uploadImage(_file!, profile);
         } else {
-          final response = await ListRepository.uploadImage(_file!, origin);
+          final response = await ListRepository.uploadImage(_file!, profile);
           if (response!.data['status'] == 'success') {
             setState(() {
               isImageUploaded = true;
@@ -101,10 +103,10 @@ class _AppUploadImageState extends State<AppUploadImage> {
             isImageUploaded = false;
             _file = File(pickedFile.path);
           });
-          final origin = widget.title;
-          if (origin == 'Upload feature image' || origin == 'Bild hochladen') {
+          final profile = widget.profile;
+          if (!profile) {
           } else {
-            final response = await ListRepository.uploadImage(_file!, origin);
+            final response = await ListRepository.uploadImage(_file!, profile);
             if (response!.data['status'] == 'success') {
               setState(() {
                 isImageUploaded = true;
