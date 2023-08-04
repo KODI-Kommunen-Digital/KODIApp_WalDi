@@ -1,5 +1,5 @@
 {
-  "home": "Home",
+  "home": "Start",
   "wish_list": "Favoriten",
   "message": "Mitteilungen",
   "notification": "Benachrichtigung",
@@ -71,7 +71,7 @@
   "tap_rate": "Tippen Sie zum Bewerten auf einen Stern",
   "title": "Titel",
   "input_title": "Titel",
-  "services": "Dienste",
+  "services": "Infos",
   "cust_services": "Bürgerservices",
   "description": "Beschreibung",
   "input_feedback": "Geben Sie Ihr Feedback ein",
