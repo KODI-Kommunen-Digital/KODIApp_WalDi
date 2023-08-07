@@ -155,16 +155,16 @@ class ListRepository {
   // }
 
   ///Upload image
-  static Future<ResultApiModel?> uploadImage(File image, origin) async {
+  static Future<ResultApiModel?> uploadImage(File image, profile) async {
     final prefs = await Preferences.openBox();
     final formData = FormData.fromMap({
       'image': await MultipartFile.fromFile(image.path,
           filename: image.path, contentType: MediaType('image', '')),
     });
-    if (origin == 'profile' || origin == 'Profil') {
+    if (profile) {
       final response = await Api.requestUploadImage(formData);
       return response;
-    } else if (origin == 'Upload feature image' || origin == 'Bild hochladen') {
+    } else if (!profile) {
       await prefs.setPickedFile(formData);
     }
     return null;

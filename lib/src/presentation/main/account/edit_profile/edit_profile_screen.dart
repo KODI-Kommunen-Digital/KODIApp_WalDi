@@ -89,8 +89,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       if (result) {
         if (!mounted) return;
         Navigator.pop(context);
-      }
-      else{
+      } else {
         logError('Update User Result Error', result);
       }
     }
@@ -119,11 +118,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         child: AppUploadImage(
                           title: 'profile',
                           type: UploadImageType.circle,
+                          profile: true,
                           image: _image,
                           onChange: (result) {
                             setState(() {
                               _image = result;
-
                             });
                           },
                         ),
