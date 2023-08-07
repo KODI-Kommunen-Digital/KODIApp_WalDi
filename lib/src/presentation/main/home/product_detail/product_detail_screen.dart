@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use
+// ignore_for_file: deprecated_member_use, null_argument_to_non_null_type
 
 import 'dart:async';
 
@@ -108,11 +108,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   }
 
   Future<void> _makeAction(String link) async {
-    if (await canLaunch(
-      "https://$link",
-    )) {
-      await launchUrl(Uri.parse("https://$link"),
-          mode: LaunchMode.inAppWebView);
+    if (!link.startsWith("https://") && !link.startsWith("http://")) {
+      link = "https://$link";
+    }
+    if (await canLaunch(link)) {
+      await launchUrl(Uri.parse(link), mode: LaunchMode.inAppWebView);
     } else {
       throw 'Could not launch $link';
     }
@@ -139,6 +139,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     Widget endDate = Container();
     Widget openHours = Container();
     Widget attachments = Container();
+    Widget description = Container();
     Widget createdDate = Container();
     Widget info = AppPlaceholder(
       child: Padding(
@@ -605,6 +606,23 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         );
       }
 
+      if (product.description.isNotEmpty) {
+        description = Html(
+          data: product.description,
+          style: {
+            "*": Style(
+              fontSize: FontSize(16.0),
+              lineHeight: const LineHeight(1.6),
+              color: Colors.white, // Set the text color to white (ARGB format)
+            ),
+            "img": Style(
+              width: Width(MediaQuery.of(context).size.width * .85),
+              height: Height(MediaQuery.of(context).size.height * .3),
+            ),
+          },
+        );
+      }
+
       if (product.startDate.isNotEmpty) {
         startDate = Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -740,17 +758,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 // priceRange,
               ],
             ),
-            Html(
-              data: product.description,
-              style: {
-                "*": Style(
-                  fontSize: FontSize(16.0),
-                  lineHeight: const LineHeight(1.6),
-                  color:
-                      Colors.white, // Set the text color to white (ARGB format)
-                ),
-              },
-            ),
+            description,
             address,
             phone,
             fax,
