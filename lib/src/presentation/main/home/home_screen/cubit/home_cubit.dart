@@ -123,9 +123,9 @@ class HomeCubit extends Cubit<HomeState> {
     final prefs = await Preferences.openBox();
     final cityId = prefs.getKeyValue(Preferences.cityId, 0);
     if (cityId != 0) {
-      final cityDetail =
-      cities.where((element) => element.id == cityId);
-      return CategoryModel(id: cityId, title: cityDetail.first.title, image: "");
+      final cityDetail = cities.where((element) => element.id == cityId);
+      return CategoryModel(
+          id: cityId, title: cityDetail.first.title, image: "");
     }
     return null;
   }
