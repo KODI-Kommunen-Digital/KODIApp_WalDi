@@ -7,6 +7,7 @@ import 'package:heidi/src/presentation/widget/app_picker_item.dart';
 import 'package:heidi/src/presentation/widget/app_text_input.dart';
 import 'package:heidi/src/presentation/widget/app_upload_image.dart';
 import 'package:heidi/src/utils/common.dart';
+import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/datetime.dart';
 import 'package:heidi/src/utils/translate.dart';
@@ -81,9 +82,18 @@ class _AddListingScreenState extends State<AddListingScreen> {
   String? selectedCategory;
   String? selectedSubCategory;
 
+  late int? currentCity;
+
   @override
   void initState() {
     super.initState();
+    _onProcess();
+  }
+
+  @override
+  void didChangeDependencies() async {
+    super.didChangeDependencies();
+    currentCity = await getCurrentCityId();
     _onProcess();
   }
 
@@ -144,6 +154,11 @@ class _AddListingScreenState extends State<AddListingScreen> {
     );
   }
 
+  Future<int?> getCurrentCityId() async {
+    final prefs = await Preferences.openBox();
+    return prefs.getKeyValue(Preferences.cityId, 0);
+  }
+
   void _onProcess() async {
     final loadCitiesResponse =
         await context.read<AddListingCubit>().loadCities();
@@ -161,7 +176,16 @@ class _AddListingScreenState extends State<AddListingScreen> {
     }
     setState(() {
       listCategory = loadCategoryResponse?.data;
-      selectedCity = loadCitiesResponse!.data.first['name'];
+      if (currentCity != null && currentCity != 0) {
+        for (var cityData in loadCitiesResponse!.data) {
+          if (cityData['id'] == currentCity) {
+            selectedCity = cityData['name'];
+            break; // Exit the loop once the desired city is found
+          }
+        }
+      } else {
+        selectedCity = loadCitiesResponse!.data.first['name'];
+      }
       selectedSubCategory = loadCategoryResponse?.data.first['name'];
       listCity = loadCitiesResponse.data;
       selectedCategory = selectedSubCategory;
