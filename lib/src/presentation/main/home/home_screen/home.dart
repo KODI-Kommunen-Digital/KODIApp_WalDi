@@ -247,7 +247,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (item.id != -1) {
       final prefs = await Preferences.openBox();
-      prefs.setKeyValue(Preferences.cityId, item.id);
+      AppBloc.homeCubit.saveCityId(item.id);
       prefs.setKeyValue(Preferences.type, "location");
       if (!mounted) return;
       Navigator.pushNamed(context, Routes.listProduct, arguments: item.id);
