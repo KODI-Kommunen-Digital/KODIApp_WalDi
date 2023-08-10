@@ -26,7 +26,6 @@ mixin _$HomeState {
     required TResult Function(String error) error,
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
@@ -48,7 +47,6 @@ mixin _$HomeState {
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(HomeStateInitial value) initial,
@@ -57,7 +55,6 @@ mixin _$HomeState {
     required TResult Function(HomeStateError value) error,
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(HomeStateInitial value)? initial,
@@ -88,9 +85,9 @@ class _$HomeStateCopyWithImpl<$Res, $Val extends HomeState>
     implements $HomeStateCopyWith<$Res> {
   _$HomeStateCopyWithImpl(this._value, this._then);
 
-// ignore: unused_field
+  // ignore: unused_field
   final $Val _value;
-// ignore: unused_field
+  // ignore: unused_field
   final $Res Function($Val) _then;
 }
 
@@ -399,7 +396,7 @@ class _$HomeStateLoaded implements HomeStateLoaded {
   @override
   List<CategoryModel> get category {
     if (_category is EqualUnmodifiableListView) return _category;
-// ignore: implicit_dynamic_type
+    // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_category);
   }
 
@@ -407,7 +404,7 @@ class _$HomeStateLoaded implements HomeStateLoaded {
   @override
   List<CategoryModel> get location {
     if (_location is EqualUnmodifiableListView) return _location;
-// ignore: implicit_dynamic_type
+    // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_location);
   }
 
@@ -415,7 +412,7 @@ class _$HomeStateLoaded implements HomeStateLoaded {
   @override
   List<ProductModel> get recent {
     if (_recent is EqualUnmodifiableListView) return _recent;
-// ignore: implicit_dynamic_type
+    // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_recent);
   }
 
