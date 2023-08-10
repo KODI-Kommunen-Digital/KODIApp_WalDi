@@ -14,6 +14,8 @@ import 'package:heidi/src/presentation/main/home/product_detail/product_detail.d
 import 'package:heidi/src/presentation/main/login/forgot_password/forgot_password_screen.dart';
 import 'package:heidi/src/presentation/main/login/signin/signin_screen.dart';
 import 'package:heidi/src/presentation/main/login/signup/signup.dart';
+import 'package:heidi/src/presentation/main/account/contact_us/contact_us_screen.dart';
+import 'package:heidi/src/presentation/main/account/contact_us/contact_us_success/contact_us_success.dart';
 
 class RouteArguments<T> {
   final T? item;
@@ -52,6 +54,7 @@ class Routes {
   static const String categoryPicker = "/categoryPicker";
   static const String gpsPicker = "/gpsPicker";
   static const String submitSuccess = "/submitSuccess";
+  static const String contactUsSuccess = "/contactUsSuccess";
   static const String openTime = "/openTime";
   static const String socialNetwork = "/socialNetwork";
   static const String tagsPicker = "/tagsPicker";
@@ -66,7 +69,6 @@ class Routes {
   static const String privacy = "/privacy";
   static const String imageZoom = "/imageZoom";
 
-
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case listProduct:
@@ -79,7 +81,8 @@ class Routes {
       case productDetail:
         return MaterialPageRoute(
           builder: (context) {
-            return ProductDetailScreen(item: settings.arguments as ProductModel);
+            return ProductDetailScreen(
+                item: settings.arguments as ProductModel);
           },
         );
 
@@ -105,14 +108,14 @@ class Routes {
           },
         );
 
-        case editProfile:
+      case editProfile:
         return MaterialPageRoute(
           builder: (context) {
             return const EditProfileScreen();
           },
         );
 
-        case setting:
+      case setting:
         return MaterialPageRoute(
           builder: (context) {
             return const SettingsScreen();
@@ -143,34 +146,48 @@ class Routes {
           fullscreenDialog: true,
         );
 
-        case changePassword:
+      case changePassword:
         return MaterialPageRoute(
           builder: (context) {
             return const ChangePasswordScreen();
           },
         );
 
-        case legal:
+      case legal:
         return MaterialPageRoute(
           builder: (context) {
             return const LegalScreen();
           },
         );
 
-        case imprint:
+      case imprint:
         return MaterialPageRoute(
           builder: (context) {
             return const ImprintScreen();
           },
         );
 
-        case privacy:
+      case privacy:
         return MaterialPageRoute(
           builder: (context) {
             return const PrivacyScreen();
           },
         );
 
+      case contactUs:
+        return MaterialPageRoute(
+          builder: (context) {
+            return const ContactUsScreen();
+          },
+        );
+
+      case contactUsSuccess:
+        return MaterialPageRoute(
+          builder: (context) {
+            return const ContactUsSuccessScreen();
+          },
+          fullscreenDialog: true,
+        );
       default:
         const SignInScreen();
 

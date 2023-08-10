@@ -13,6 +13,7 @@ import 'package:heidi/src/presentation/main/login/forgot_password/cubit/forgot_p
 import 'package:heidi/src/presentation/main/login/signin/cubit/login_cubit.dart';
 import 'package:heidi/src/presentation/main/login/signup/cubit/signup_cubit.dart';
 import 'package:heidi/src/presentation/main/wishlist/cubit/cubit.dart';
+import 'package:heidi/src/presentation/main/account/contact_us/cubit/contact_us_cubit.dart';
 
 import 'bloc.dart';
 
@@ -38,6 +39,7 @@ class AppBloc {
   // static final submitCubit = SubmitCubit();
   // static final searchCubit = SearchCubit();
   static final productDetailCubit = ProductDetailCubit();
+  static final contactUsCubit = ContactUsCubit();
 
   static final List<BlocProvider> providers = [
     BlocProvider<ApplicationCubit>(
@@ -96,6 +98,9 @@ class AppBloc {
     // ),
     BlocProvider<AddListingCubit>(
       create: (context) => AddListingCubit(context.read()),
+    ),
+    BlocProvider<ContactUsCubit>(
+      create: (context) => contactUsCubit,
     ),
     // BlocProvider<SearchCubit>(
     //   create: (context) => searchCubit,
