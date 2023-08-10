@@ -69,6 +69,8 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
           imageLink: "9",
           arguments: 9,
           categoryId: 6),
+      CitizenServiceModel(imageUrl: Images.service11, imageLink: "11"),
+      CitizenServiceModel(imageUrl: Images.service12, imageLink: "12"),
     ];
 
     for (var element in services) {
@@ -131,6 +133,14 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
     } else if (service.imageLink == "2") {
       await launchUrl(
           Uri.parse(await AppBloc.discoveryCubit.getCityLink() ?? ""),
+          mode: LaunchMode.inAppWebView);
+    } else if (service.imageLink == "11") {
+      await launchUrl(
+          Uri.parse("https://www.ilztal.de"),
+          mode: LaunchMode.inAppWebView);
+    }else if (service.imageLink == "12") {
+      await launchUrl(
+          Uri.parse("https://ilzerland.bayern/interaktive-karte/"),
           mode: LaunchMode.inAppWebView);
     } else {
       prefs.setKeyValue(Preferences.type, service.type);
