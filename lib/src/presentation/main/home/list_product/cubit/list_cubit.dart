@@ -108,4 +108,28 @@ class ListCubit extends Cubit<ListState> {
       return null;
     }
   }
+
+  Future<String?> getCategory() async {
+    final prefs = await Preferences.openBox();
+    final categoryId = prefs.getKeyValue(Preferences.categoryId, "");
+    Map<int, String> categories = {
+      1: "category_news",
+      2: "category_traffic",
+      3: "category_events",
+      4: "category_clubs",
+      5: "category_products",
+      6: "category_offer_search",
+      7: "category_citizen_info",
+      8: "category_defect_report",
+      9: "category_lost_found",
+      10: "category_companies",
+      11: "category_public_transport",
+      12: "category_offers",
+      13: "category_food"
+    };
+    if (categoryId != null) {
+      return categories[categoryId];
+    }
+    return null;
+  }
 }
