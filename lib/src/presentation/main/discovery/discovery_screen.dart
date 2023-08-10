@@ -57,7 +57,7 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
           categoryId: 13),
       CitizenServiceModel(
           imageUrl: Images.service9, imageLink: "9", arguments: 9, categoryId: 6),
-      CitizenServiceModel(imageUrl: Images.service10, imageLink: "error"),
+      CitizenServiceModel(imageUrl: Images.service10, imageLink: "10"),
     ];
     
     for (var element in services) {
@@ -136,7 +136,7 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
       await launchUrl(
           Uri.parse(await AppBloc.discoveryCubit.getCityLink() ?? ""),
           mode: LaunchMode.inAppWebView);
-    } else if (service.imageLink == "error") {
+    } else if (service.imageLink == "10") {
       _onPopUpError();
     } else {
       prefs.setKeyValue(Preferences.type, service.type);
