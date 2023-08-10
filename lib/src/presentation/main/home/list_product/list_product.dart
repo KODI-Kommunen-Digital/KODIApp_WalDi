@@ -167,11 +167,17 @@ class _ListProductScreenState extends State<ListProductScreen> {
                 } else {
                   bool isEvent = snapshot.data!;
                   return isEvent
-                      ? IconButton(
-                          icon: const Icon(Icons.filter_list),
+                      ? TextButton(
                           onPressed: () async {
                             await _openFilterDrawer(context);
                           },
+                          style: TextButton.styleFrom(
+                            textStyle: Theme.of(context)
+                                .textTheme
+                                .titleSmall!
+                                .copyWith(fontWeight: FontWeight.bold),
+                          ),
+                          child: const Text("Filter"),
                         )
                       : Container();
                 }
