@@ -153,9 +153,18 @@ class _ListProductScreenState extends State<ListProductScreen> {
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text(
-            Translate.of(context).translate('listing'),
-          ),
+          title: FutureBuilder<String?>(
+              future: context.read<ListCubit>().getCategory(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                } else if (snapshot.hasError || !snapshot.hasData) {
+                  return Container();
+                } else {
+                  String category = snapshot.data!;
+                  return Text(Translate.of(context).translate(category));
+                }
+              }),
           actions: [
             FutureBuilder<bool?>(
               future: context.read<ListCubit>().categoryPreferencesCall(),
