@@ -29,7 +29,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String selectedCityTitle = '';
   int selectedCityId = 0;
-  bool? checkSavedCity;
+  late bool checkSavedCity;
 
   @override
   void initState() {
@@ -84,8 +84,12 @@ class _HomeScreenState extends State<HomeScreen> {
               for (final ids in location) {
                 cityTitles.add(ids.title.toString());
               }
-              if (checkSavedCity ?? false) {
+              if (checkSavedCity) {
+                checkSavedCity = false;
                 _setSavedCity(location);
+              } else if(AppBloc.homeCubit.getCalledExternally()) {
+                _setSavedCity(location);
+                AppBloc.homeCubit.setCalledExternally(false);
               }
             }
           }
@@ -99,6 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 delegate: AppBarHomeSliver(
                   cityTitlesList: cityTitles,
                   hintText: (selectedCityId > 0) ? selectedCityTitle : null,
+                  selectedOption: selectedCityTitle,
                   expandedHeight: MediaQuery.of(context).size.height * 0.3,
                   banners: banner,
                   setLocationCallback: (data) async {
@@ -110,6 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           selectedCityId = list.id;
                         });
                         AppBloc.homeCubit.saveCityId(selectedCityId);
+                        AppBloc.discoveryCubit.onLocationFilter(selectedCityId);
                       } else if (data ==
                           Translate.of(context).translate('select_location')) {
                         setState(() {
@@ -235,7 +241,6 @@ class _HomeScreenState extends State<HomeScreen> {
     } else {
       await AppBloc.homeCubit.saveCityId(0);
     }
-    checkSavedCity = false;
     AppBloc.homeCubit.onLoad();
   }
 

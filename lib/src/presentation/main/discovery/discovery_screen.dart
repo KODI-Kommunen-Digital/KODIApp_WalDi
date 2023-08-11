@@ -92,12 +92,14 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
             itemCount: context.read<DiscoveryCubit>().location.length,
             itemBuilder: (context, index) {
               final locationName =
-                  context.read<DiscoveryCubit>().location[index];
+                  context.read<DiscoveryCubit>().location[index].title;
+              final locationId =
+                  context.read<DiscoveryCubit>().location[index].id;
               return ListTile(
                 title: Text(locationName),
                 onTap: () {
                   // context.read<DiscoveryCubit>().onLocationFilter(locationName,loadedList);
-                  context.read<DiscoveryCubit>().onLocationFilter(locationName);
+                  context.read<DiscoveryCubit>().onLocationFilter(locationId);
                   Navigator.pop(context);
                 },
               );
@@ -108,11 +110,11 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
     );
   }
 
-  void _updateSelectedFilter(ProductFilter? filter) {
-    setState(() {
-      selectedFilter = filter;
-    });
-  }
+//  void _updateSelectedFilter(ProductFilter? filter) {
+//    setState(() {
+//      selectedFilter = filter;
+//    });
+//  }
 }
 
 class DiscoveryLoading extends StatelessWidget {
@@ -158,7 +160,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
         mainAxisSpacing: 10.0,
         mainAxisExtent: 300.0,
       ),
-      itemCount: widget.list.length,
+      itemCount: services.length,
       itemBuilder: (BuildContext context, int index) {
         return InkWell(
           onTap: () {
@@ -203,7 +205,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
         categoryId: 13),
     CitizenServiceModel(
         imageUrl: Images.service9, imageLink: "9", arguments: 9, categoryId: 6),
-    CitizenServiceModel(imageUrl: Images.service10, imageLink: "error"),
+    CitizenServiceModel(imageUrl: Images.service10, imageLink: "10"),
   ];
 
   Future<void> hideEmptyService() async {
@@ -219,10 +221,6 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
     setState(() {
       services.removeWhere((element) => hiddenServices.contains(element));
     });
-  }
-
-  Future<void> loadServicesList() async {
-    await hideEmptyService();
   }
 
   void _onPopUpError() {
@@ -250,7 +248,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
       await launchUrl(
           Uri.parse(await AppBloc.discoveryCubit.getCityLink() ?? ""),
           mode: LaunchMode.inAppWebView);
-    } else if (service.imageLink == "error") {
+    } else if (service.imageLink == "10") {
       _onPopUpError();
     } else {
       prefs.setKeyValue(Preferences.type, service.type);

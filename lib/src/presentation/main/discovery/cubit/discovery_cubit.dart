@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:heidi/src/data/model/model_citizen_service.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
+import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import '../../../../data/model/model_category.dart';
 import 'discovery_state.dart';
@@ -29,7 +30,18 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
   }
 
   // void onLocationFilter(String locationName, List<ProductModel> loadedList)
-  void onLocationFilter(String locationName) {}
+  Future<void> onLocationFilter(int locationId) async {
+    await saveCityId(locationId);
+    emit(const DiscoveryState.loading());
+    await onLoad();
+    AppBloc.homeCubit.setCalledExternally(true);
+    await AppBloc.homeCubit.onLoad();
+  }
+
+  Future<void> saveCityId(int cityId) async {
+    final prefs = await Preferences.openBox();
+    prefs.setKeyValue(Preferences.cityId, cityId);
+  }
 
   Future<String?> getCityLink() async {
     final prefs = await Preferences.openBox();
