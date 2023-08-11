@@ -16,7 +16,6 @@ class HTTPManager {
     _dio = Dio(
       BaseOptions(
         baseUrl: 'https://app.smartregion-auf.de/api',
-        // baseUrl: 'http://localhost:8002',
         connectTimeout: 30000,
         receiveTimeout: 30000,
         contentType: Headers.formUrlEncodedContentType,
