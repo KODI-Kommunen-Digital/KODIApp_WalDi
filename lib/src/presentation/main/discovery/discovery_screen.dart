@@ -10,6 +10,7 @@ import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../home/list_product/cubit/list_cubit.dart';
 import 'cubit/cubit.dart';
 
 class DiscoveryScreen extends StatefulWidget {
@@ -21,6 +22,7 @@ class DiscoveryScreen extends StatefulWidget {
 
 class _DiscoveryScreenState extends State<DiscoveryScreen> {
   int? selectedLocationId;
+  ProductFilter? selectedFilter;
 
   @override
   void initState() {
@@ -243,6 +245,10 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
     setState(() {
       services.removeWhere((element) => hiddenServices.contains(element));
     });
+  }
+
+  Future<void> loadServicesList() async {
+    await hideEmptyService();
   }
 
   void _onPopUpError() {

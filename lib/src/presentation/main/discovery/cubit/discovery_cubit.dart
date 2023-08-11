@@ -6,6 +6,11 @@ import 'package:heidi/src/utils/configs/preferences.dart';
 import '../../../../data/model/model_category.dart';
 import 'discovery_state.dart';
 
+enum LocationFilter {
+  week,
+  month,
+}
+
 class DiscoveryCubit extends Cubit<DiscoveryState> {
   DiscoveryCubit() : super(const DiscoveryState.loading());
 
