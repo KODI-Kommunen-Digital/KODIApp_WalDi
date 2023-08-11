@@ -126,6 +126,9 @@ class _HomeScreenState extends State<HomeScreen> {
               }
               if (checkSavedCity) {
                 _setSavedCity(location);
+              } else if (AppBloc.homeCubit.getCalledExternally()) {
+                _setSavedCity(location);
+                AppBloc.homeCubit.setCalledExternally(false);
               }
             }
           }

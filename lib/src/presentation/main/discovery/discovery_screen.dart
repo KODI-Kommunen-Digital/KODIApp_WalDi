@@ -133,6 +133,7 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
       },
     );
   }
+
 //  void _updateSelectedFilter(ProductFilter? filter) {
 //    setState(() {
 //      selectedFilter = filter;
@@ -245,10 +246,6 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
     setState(() {
       services.removeWhere((element) => hiddenServices.contains(element));
     });
-  }
-
-  Future<void> loadServicesList() async {
-    await hideEmptyService();
   }
 
   void _onPopUpError() {
