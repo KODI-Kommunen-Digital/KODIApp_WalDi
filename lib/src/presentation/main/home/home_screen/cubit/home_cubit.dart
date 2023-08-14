@@ -23,7 +23,7 @@ class HomeCubit extends Cubit<HomeState> {
     }
     final categoryRequestResponse = await Api.requestHomeCategory();
     final cityRequestResponse = await Api.requestCities();
-    final listingsRequestResponse = await Api.requestRecentListings();
+    final listingsRequestResponse = await Api.requestRecentListings(1);
 
     category = List.from(categoryRequestResponse.data ?? []).map((item) {
       return CategoryModel.fromJson(item);
@@ -131,5 +131,43 @@ class HomeCubit extends Cubit<HomeState> {
       return false;
     }
     return false;
+  }
+
+  Future<void> newListings(int pageNo) async {
+    if (!await hasInternet()) {
+      emit(const HomeState.error("no_internet"));
+    }
+    final categoryRequestResponse = await Api.requestHomeCategory();
+    final cityRequestResponse = await Api.requestCities();
+
+    category = List.from(categoryRequestResponse.data ?? []).map((item) {
+      return CategoryModel.fromJson(item);
+    }).toList();
+
+    location = List.from(cityRequestResponse.data ?? []).map((item) {
+      return CategoryModel.fromJson(item);
+    }).toList();
+
+    CategoryModel? savedCity = await checkSavedCity(location);
+    final categoryCountRequestResponse =
+        await Api.requestCategoryCount(savedCity?.id);
+    categoryCount =
+        List.from(categoryCountRequestResponse.data ?? []).map((item) {
+      return CategoryModel.fromJson(item);
+    }).toList();
+    const banner = Images.slider;
+    List<CategoryModel> formattedCategories =
+        await formatCategoriesList(category, categoryCount, savedCity?.id);
+    final listingsRequestResponse = await Api.requestRecentListings(pageNo);
+    final newRecent = List.from(listingsRequestResponse.data ?? []).map((item) {
+      return ProductModel.fromJson(item);
+    }).toList();
+    recent.addAll(newRecent);
+    emit(HomeState.updated(
+      banner,
+      formattedCategories,
+      location,
+      recent,
+    ));
   }
 }

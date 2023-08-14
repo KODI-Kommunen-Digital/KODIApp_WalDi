@@ -23,6 +23,9 @@ mixin _$HomeState {
     required TResult Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)
         loaded,
+    required TResult Function(String banner, List<CategoryModel> category,
+            List<CategoryModel> location, List<ProductModel> recent)
+        updated,
     required TResult Function(String error) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -33,6 +36,9 @@ mixin _$HomeState {
     TResult? Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)?
         loaded,
+    TResult? Function(String banner, List<CategoryModel> category,
+            List<CategoryModel> location, List<ProductModel> recent)?
+        updated,
     TResult? Function(String error)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -43,6 +49,9 @@ mixin _$HomeState {
     TResult Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)?
         loaded,
+    TResult Function(String banner, List<CategoryModel> category,
+            List<CategoryModel> location, List<ProductModel> recent)?
+        updated,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) =>
@@ -52,6 +61,7 @@ mixin _$HomeState {
     required TResult Function(HomeStateInitial value) initial,
     required TResult Function(HomeStateLoading value) loading,
     required TResult Function(HomeStateLoaded value) loaded,
+    required TResult Function(HomeStateUpdated value) updated,
     required TResult Function(HomeStateError value) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -60,6 +70,7 @@ mixin _$HomeState {
     TResult? Function(HomeStateInitial value)? initial,
     TResult? Function(HomeStateLoading value)? loading,
     TResult? Function(HomeStateLoaded value)? loaded,
+    TResult? Function(HomeStateUpdated value)? updated,
     TResult? Function(HomeStateError value)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -68,6 +79,7 @@ mixin _$HomeState {
     TResult Function(HomeStateInitial value)? initial,
     TResult Function(HomeStateLoading value)? loading,
     TResult Function(HomeStateLoaded value)? loaded,
+    TResult Function(HomeStateUpdated value)? updated,
     TResult Function(HomeStateError value)? error,
     required TResult orElse(),
   }) =>
@@ -134,6 +146,9 @@ class _$HomeStateInitial implements HomeStateInitial {
     required TResult Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)
         loaded,
+    required TResult Function(String banner, List<CategoryModel> category,
+            List<CategoryModel> location, List<ProductModel> recent)
+        updated,
     required TResult Function(String error) error,
   }) {
     return initial();
@@ -147,6 +162,9 @@ class _$HomeStateInitial implements HomeStateInitial {
     TResult? Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)?
         loaded,
+    TResult? Function(String banner, List<CategoryModel> category,
+            List<CategoryModel> location, List<ProductModel> recent)?
+        updated,
     TResult? Function(String error)? error,
   }) {
     return initial?.call();
@@ -160,6 +178,9 @@ class _$HomeStateInitial implements HomeStateInitial {
     TResult Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)?
         loaded,
+    TResult Function(String banner, List<CategoryModel> category,
+            List<CategoryModel> location, List<ProductModel> recent)?
+        updated,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
@@ -175,6 +196,7 @@ class _$HomeStateInitial implements HomeStateInitial {
     required TResult Function(HomeStateInitial value) initial,
     required TResult Function(HomeStateLoading value) loading,
     required TResult Function(HomeStateLoaded value) loaded,
+    required TResult Function(HomeStateUpdated value) updated,
     required TResult Function(HomeStateError value) error,
   }) {
     return initial(this);
@@ -186,6 +208,7 @@ class _$HomeStateInitial implements HomeStateInitial {
     TResult? Function(HomeStateInitial value)? initial,
     TResult? Function(HomeStateLoading value)? loading,
     TResult? Function(HomeStateLoaded value)? loaded,
+    TResult? Function(HomeStateUpdated value)? updated,
     TResult? Function(HomeStateError value)? error,
   }) {
     return initial?.call(this);
@@ -197,6 +220,7 @@ class _$HomeStateInitial implements HomeStateInitial {
     TResult Function(HomeStateInitial value)? initial,
     TResult Function(HomeStateLoading value)? loading,
     TResult Function(HomeStateLoaded value)? loaded,
+    TResult Function(HomeStateUpdated value)? updated,
     TResult Function(HomeStateError value)? error,
     required TResult orElse(),
   }) {
@@ -254,6 +278,9 @@ class _$HomeStateLoading implements HomeStateLoading {
     required TResult Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)
         loaded,
+    required TResult Function(String banner, List<CategoryModel> category,
+            List<CategoryModel> location, List<ProductModel> recent)
+        updated,
     required TResult Function(String error) error,
   }) {
     return loading();
@@ -267,6 +294,9 @@ class _$HomeStateLoading implements HomeStateLoading {
     TResult? Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)?
         loaded,
+    TResult? Function(String banner, List<CategoryModel> category,
+            List<CategoryModel> location, List<ProductModel> recent)?
+        updated,
     TResult? Function(String error)? error,
   }) {
     return loading?.call();
@@ -280,6 +310,9 @@ class _$HomeStateLoading implements HomeStateLoading {
     TResult Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)?
         loaded,
+    TResult Function(String banner, List<CategoryModel> category,
+            List<CategoryModel> location, List<ProductModel> recent)?
+        updated,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
@@ -295,6 +328,7 @@ class _$HomeStateLoading implements HomeStateLoading {
     required TResult Function(HomeStateInitial value) initial,
     required TResult Function(HomeStateLoading value) loading,
     required TResult Function(HomeStateLoaded value) loaded,
+    required TResult Function(HomeStateUpdated value) updated,
     required TResult Function(HomeStateError value) error,
   }) {
     return loading(this);
@@ -306,6 +340,7 @@ class _$HomeStateLoading implements HomeStateLoading {
     TResult? Function(HomeStateInitial value)? initial,
     TResult? Function(HomeStateLoading value)? loading,
     TResult? Function(HomeStateLoaded value)? loaded,
+    TResult? Function(HomeStateUpdated value)? updated,
     TResult? Function(HomeStateError value)? error,
   }) {
     return loading?.call(this);
@@ -317,6 +352,7 @@ class _$HomeStateLoading implements HomeStateLoading {
     TResult Function(HomeStateInitial value)? initial,
     TResult Function(HomeStateLoading value)? loading,
     TResult Function(HomeStateLoaded value)? loaded,
+    TResult Function(HomeStateUpdated value)? updated,
     TResult Function(HomeStateError value)? error,
     required TResult orElse(),
   }) {
@@ -454,6 +490,9 @@ class _$HomeStateLoaded implements HomeStateLoaded {
     required TResult Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)
         loaded,
+    required TResult Function(String banner, List<CategoryModel> category,
+            List<CategoryModel> location, List<ProductModel> recent)
+        updated,
     required TResult Function(String error) error,
   }) {
     return loaded(banner, category, location, recent);
@@ -467,6 +506,9 @@ class _$HomeStateLoaded implements HomeStateLoaded {
     TResult? Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)?
         loaded,
+    TResult? Function(String banner, List<CategoryModel> category,
+            List<CategoryModel> location, List<ProductModel> recent)?
+        updated,
     TResult? Function(String error)? error,
   }) {
     return loaded?.call(banner, category, location, recent);
@@ -480,6 +522,9 @@ class _$HomeStateLoaded implements HomeStateLoaded {
     TResult Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)?
         loaded,
+    TResult Function(String banner, List<CategoryModel> category,
+            List<CategoryModel> location, List<ProductModel> recent)?
+        updated,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
@@ -495,6 +540,7 @@ class _$HomeStateLoaded implements HomeStateLoaded {
     required TResult Function(HomeStateInitial value) initial,
     required TResult Function(HomeStateLoading value) loading,
     required TResult Function(HomeStateLoaded value) loaded,
+    required TResult Function(HomeStateUpdated value) updated,
     required TResult Function(HomeStateError value) error,
   }) {
     return loaded(this);
@@ -506,6 +552,7 @@ class _$HomeStateLoaded implements HomeStateLoaded {
     TResult? Function(HomeStateInitial value)? initial,
     TResult? Function(HomeStateLoading value)? loading,
     TResult? Function(HomeStateLoaded value)? loaded,
+    TResult? Function(HomeStateUpdated value)? updated,
     TResult? Function(HomeStateError value)? error,
   }) {
     return loaded?.call(this);
@@ -517,6 +564,7 @@ class _$HomeStateLoaded implements HomeStateLoaded {
     TResult Function(HomeStateInitial value)? initial,
     TResult Function(HomeStateLoading value)? loading,
     TResult Function(HomeStateLoaded value)? loaded,
+    TResult Function(HomeStateUpdated value)? updated,
     TResult Function(HomeStateError value)? error,
     required TResult orElse(),
   }) {
@@ -540,6 +588,230 @@ abstract class HomeStateLoaded implements HomeState {
   List<ProductModel> get recent;
   @JsonKey(ignore: true)
   _$$HomeStateLoadedCopyWith<_$HomeStateLoaded> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$HomeStateUpdatedCopyWith<$Res> {
+  factory _$$HomeStateUpdatedCopyWith(
+          _$HomeStateUpdated value, $Res Function(_$HomeStateUpdated) then) =
+      __$$HomeStateUpdatedCopyWithImpl<$Res>;
+  @useResult
+  $Res call(
+      {String banner,
+      List<CategoryModel> category,
+      List<CategoryModel> location,
+      List<ProductModel> recent});
+}
+
+/// @nodoc
+class __$$HomeStateUpdatedCopyWithImpl<$Res>
+    extends _$HomeStateCopyWithImpl<$Res, _$HomeStateUpdated>
+    implements _$$HomeStateUpdatedCopyWith<$Res> {
+  __$$HomeStateUpdatedCopyWithImpl(
+      _$HomeStateUpdated _value, $Res Function(_$HomeStateUpdated) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? banner = null,
+    Object? category = null,
+    Object? location = null,
+    Object? recent = null,
+  }) {
+    return _then(_$HomeStateUpdated(
+      null == banner
+          ? _value.banner
+          : banner // ignore: cast_nullable_to_non_nullable
+              as String,
+      null == category
+          ? _value._category
+          : category // ignore: cast_nullable_to_non_nullable
+              as List<CategoryModel>,
+      null == location
+          ? _value._location
+          : location // ignore: cast_nullable_to_non_nullable
+              as List<CategoryModel>,
+      null == recent
+          ? _value._recent
+          : recent // ignore: cast_nullable_to_non_nullable
+              as List<ProductModel>,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$HomeStateUpdated implements HomeStateUpdated {
+  const _$HomeStateUpdated(this.banner, final List<CategoryModel> category,
+      final List<CategoryModel> location, final List<ProductModel> recent)
+      : _category = category,
+        _location = location,
+        _recent = recent;
+
+  @override
+  final String banner;
+  final List<CategoryModel> _category;
+  @override
+  List<CategoryModel> get category {
+    if (_category is EqualUnmodifiableListView) return _category;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_category);
+  }
+
+  final List<CategoryModel> _location;
+  @override
+  List<CategoryModel> get location {
+    if (_location is EqualUnmodifiableListView) return _location;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_location);
+  }
+
+  final List<ProductModel> _recent;
+  @override
+  List<ProductModel> get recent {
+    if (_recent is EqualUnmodifiableListView) return _recent;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_recent);
+  }
+
+  @override
+  String toString() {
+    return 'HomeState.updated(banner: $banner, category: $category, location: $location, recent: $recent)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$HomeStateUpdated &&
+            (identical(other.banner, banner) || other.banner == banner) &&
+            const DeepCollectionEquality().equals(other._category, _category) &&
+            const DeepCollectionEquality().equals(other._location, _location) &&
+            const DeepCollectionEquality().equals(other._recent, _recent));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      banner,
+      const DeepCollectionEquality().hash(_category),
+      const DeepCollectionEquality().hash(_location),
+      const DeepCollectionEquality().hash(_recent));
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$HomeStateUpdatedCopyWith<_$HomeStateUpdated> get copyWith =>
+      __$$HomeStateUpdatedCopyWithImpl<_$HomeStateUpdated>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(String banner, List<CategoryModel> category,
+            List<CategoryModel> location, List<ProductModel> recent)
+        loaded,
+    required TResult Function(String banner, List<CategoryModel> category,
+            List<CategoryModel> location, List<ProductModel> recent)
+        updated,
+    required TResult Function(String error) error,
+  }) {
+    return updated(banner, category, location, recent);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(String banner, List<CategoryModel> category,
+            List<CategoryModel> location, List<ProductModel> recent)?
+        loaded,
+    TResult? Function(String banner, List<CategoryModel> category,
+            List<CategoryModel> location, List<ProductModel> recent)?
+        updated,
+    TResult? Function(String error)? error,
+  }) {
+    return updated?.call(banner, category, location, recent);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(String banner, List<CategoryModel> category,
+            List<CategoryModel> location, List<ProductModel> recent)?
+        loaded,
+    TResult Function(String banner, List<CategoryModel> category,
+            List<CategoryModel> location, List<ProductModel> recent)?
+        updated,
+    TResult Function(String error)? error,
+    required TResult orElse(),
+  }) {
+    if (updated != null) {
+      return updated(banner, category, location, recent);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(HomeStateInitial value) initial,
+    required TResult Function(HomeStateLoading value) loading,
+    required TResult Function(HomeStateLoaded value) loaded,
+    required TResult Function(HomeStateUpdated value) updated,
+    required TResult Function(HomeStateError value) error,
+  }) {
+    return updated(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(HomeStateInitial value)? initial,
+    TResult? Function(HomeStateLoading value)? loading,
+    TResult? Function(HomeStateLoaded value)? loaded,
+    TResult? Function(HomeStateUpdated value)? updated,
+    TResult? Function(HomeStateError value)? error,
+  }) {
+    return updated?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(HomeStateInitial value)? initial,
+    TResult Function(HomeStateLoading value)? loading,
+    TResult Function(HomeStateLoaded value)? loaded,
+    TResult Function(HomeStateUpdated value)? updated,
+    TResult Function(HomeStateError value)? error,
+    required TResult orElse(),
+  }) {
+    if (updated != null) {
+      return updated(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class HomeStateUpdated implements HomeState {
+  const factory HomeStateUpdated(
+      final String banner,
+      final List<CategoryModel> category,
+      final List<CategoryModel> location,
+      final List<ProductModel> recent) = _$HomeStateUpdated;
+
+  String get banner;
+  List<CategoryModel> get category;
+  List<CategoryModel> get location;
+  List<ProductModel> get recent;
+  @JsonKey(ignore: true)
+  _$$HomeStateUpdatedCopyWith<_$HomeStateUpdated> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -612,6 +884,9 @@ class _$HomeStateError implements HomeStateError {
     required TResult Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)
         loaded,
+    required TResult Function(String banner, List<CategoryModel> category,
+            List<CategoryModel> location, List<ProductModel> recent)
+        updated,
     required TResult Function(String error) error,
   }) {
     return error(this.error);
@@ -625,6 +900,9 @@ class _$HomeStateError implements HomeStateError {
     TResult? Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)?
         loaded,
+    TResult? Function(String banner, List<CategoryModel> category,
+            List<CategoryModel> location, List<ProductModel> recent)?
+        updated,
     TResult? Function(String error)? error,
   }) {
     return error?.call(this.error);
@@ -638,6 +916,9 @@ class _$HomeStateError implements HomeStateError {
     TResult Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)?
         loaded,
+    TResult Function(String banner, List<CategoryModel> category,
+            List<CategoryModel> location, List<ProductModel> recent)?
+        updated,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
@@ -653,6 +934,7 @@ class _$HomeStateError implements HomeStateError {
     required TResult Function(HomeStateInitial value) initial,
     required TResult Function(HomeStateLoading value) loading,
     required TResult Function(HomeStateLoaded value) loaded,
+    required TResult Function(HomeStateUpdated value) updated,
     required TResult Function(HomeStateError value) error,
   }) {
     return error(this);
@@ -664,6 +946,7 @@ class _$HomeStateError implements HomeStateError {
     TResult? Function(HomeStateInitial value)? initial,
     TResult? Function(HomeStateLoading value)? loading,
     TResult? Function(HomeStateLoaded value)? loaded,
+    TResult? Function(HomeStateUpdated value)? updated,
     TResult? Function(HomeStateError value)? error,
   }) {
     return error?.call(this);
@@ -675,6 +958,7 @@ class _$HomeStateError implements HomeStateError {
     TResult Function(HomeStateInitial value)? initial,
     TResult Function(HomeStateLoading value)? loading,
     TResult Function(HomeStateLoaded value)? loaded,
+    TResult Function(HomeStateUpdated value)? updated,
     TResult Function(HomeStateError value)? error,
     required TResult orElse(),
   }) {
