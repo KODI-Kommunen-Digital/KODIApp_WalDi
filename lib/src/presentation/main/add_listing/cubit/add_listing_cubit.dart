@@ -3,6 +3,7 @@ import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/presentation/main/add_listing/cubit/add_listing_state.dart';
+import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
 
 class AddListingCubit extends Cubit<AddListingState> {
@@ -74,6 +75,11 @@ class AddListingCubit extends Cubit<AddListingState> {
     }
   }
 
+  Future<int?> getCurrentCityId() async {
+    final prefs = await Preferences.openBox();
+    return prefs.getKeyValue(Preferences.cityId, 0);
+  }
+
   void clearVillage() async {
     _repo.clearVillageId();
   }
@@ -118,7 +124,7 @@ class AddListingCubit extends Cubit<AddListingState> {
         final subCategoryResponse = _repo.loadSubCategory(value);
         return subCategoryResponse;
       }
-     return null;
+      return null;
     } catch (e) {
       logError('request subCategoryID Error', e);
       return null;
