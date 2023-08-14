@@ -16,5 +16,11 @@ class HomeState with _$HomeState {
       List<CategoryModel> location,
       List<ProductModel> recent) = HomeStateLoaded;
 
+  const factory HomeState.updated(
+      String banner,
+      List<CategoryModel> category,
+      List<CategoryModel> location,
+      List<ProductModel> recent) = HomeStateUpdated;
+
   const factory HomeState.error(String error) = HomeStateError;
 }
