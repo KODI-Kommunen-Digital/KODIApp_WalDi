@@ -6,11 +6,6 @@ import 'package:heidi/src/utils/configs/preferences.dart';
 import '../../../../data/model/model_category.dart';
 import 'discovery_state.dart';
 
-enum LocationFilter {
-  week,
-  month,
-}
-
 class DiscoveryCubit extends Cubit<DiscoveryState> {
   DiscoveryCubit() : super(const DiscoveryState.loading());
 
@@ -29,13 +24,21 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
     ));
   }
 
-  // void onLocationFilter(String locationName, List<ProductModel> loadedList)
   Future<void> onLocationFilter(int locationId) async {
-    await saveCityId(locationId);
+    if (locationId == 0) {
+      await saveCityId(0);
+    } else {
+      await saveCityId(locationId);
+    }
     emit(const DiscoveryState.loading());
     await onLoad();
     AppBloc.homeCubit.setCalledExternally(true);
     await AppBloc.homeCubit.onLoad();
+  }
+
+  Future<void> updateLocationFilter(int locationId) async {
+    emit(const DiscoveryState.loading());
+    await onLocationFilter(locationId);
   }
 
   Future<void> saveCityId(int cityId) async {

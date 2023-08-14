@@ -87,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
               if (checkSavedCity) {
                 checkSavedCity = false;
                 _setSavedCity(location);
-              } else if(AppBloc.homeCubit.getCalledExternally()) {
+              } else if (AppBloc.homeCubit.getCalledExternally()) {
                 _setSavedCity(location);
                 AppBloc.homeCubit.setCalledExternally(false);
               }
@@ -101,32 +101,35 @@ class _HomeScreenState extends State<HomeScreen> {
             slivers: <Widget>[
               SliverPersistentHeader(
                 delegate: AppBarHomeSliver(
-                  cityTitlesList: cityTitles,
-                  hintText: (selectedCityId > 0) ? selectedCityTitle : null,
-                  selectedOption: selectedCityTitle,
-                  expandedHeight: MediaQuery.of(context).size.height * 0.3,
-                  banners: banner,
-                  setLocationCallback: (data) async {
-                    for (final list in location!) {
-                      if (list.title == data) {
-                        AppBloc.homeCubit.onLoad();
-                        setState(() {
-                          selectedCityTitle = data;
-                          selectedCityId = list.id;
-                        });
-                        AppBloc.homeCubit.saveCityId(selectedCityId);
-                        AppBloc.discoveryCubit.onLocationFilter(selectedCityId);
-                      } else if (data ==
-                          Translate.of(context).translate('select_location')) {
-                        setState(() {
-                          selectedCityId = 0;
-                        });
-                        AppBloc.homeCubit.onLoad();
-                        AppBloc.homeCubit.saveCityId(selectedCityId);
+                    cityTitlesList: cityTitles,
+                    hintText: (selectedCityId > 0) ? selectedCityTitle : null,
+                    selectedOption: selectedCityTitle,
+                    expandedHeight: MediaQuery.of(context).size.height * 0.3,
+                    banners: banner,
+                    setLocationCallback: (data) async {
+                      for (final list in location!) {
+                        if (list.title == data) {
+                          AppBloc.homeCubit.onLoad();
+                          setState(() {
+                            selectedCityTitle = data;
+                            selectedCityId = list.id;
+                          });
+                          AppBloc.homeCubit.saveCityId(selectedCityId);
+                          await AppBloc.discoveryCubit
+                              .updateLocationFilter(selectedCityId);
+                        } else if (data ==
+                            Translate.of(context)
+                                .translate('select_location')) {
+                          setState(() {
+                            selectedCityId = 0;
+                          });
+                          AppBloc.homeCubit.onLoad();
+                          AppBloc.homeCubit.saveCityId(selectedCityId);
+                          await AppBloc.discoveryCubit
+                              .updateLocationFilter(selectedCityId);
+                        }
                       }
-                    }
-                  },
-                ),
+                    }),
                 pinned: true,
               ),
               CupertinoSliverRefreshControl(
