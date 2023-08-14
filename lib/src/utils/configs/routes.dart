@@ -14,6 +14,8 @@ import 'package:heidi/src/presentation/main/home/product_detail/product_detail_s
 import 'package:heidi/src/presentation/main/login/forgot_password/forgot_password_screen.dart';
 import 'package:heidi/src/presentation/main/login/signin/signin_screen.dart';
 import 'package:heidi/src/presentation/main/login/signup/signup.dart';
+import 'package:heidi/src/presentation/main/account/contact_us/contact_us_screen.dart';
+import 'package:heidi/src/presentation/main/account/contact_us/contact_us_success/contact_us_success.dart';
 
 class RouteArguments<T> {
   final T? item;
@@ -53,6 +55,7 @@ class Routes {
   static const String categoryPicker = "/categoryPicker";
   static const String gpsPicker = "/gpsPicker";
   static const String submitSuccess = "/submitSuccess";
+  static const String contactUsSuccess = "/contactUsSuccess";
   static const String openTime = "/openTime";
   static const String socialNetwork = "/socialNetwork";
   static const String tagsPicker = "/tagsPicker";
@@ -171,6 +174,20 @@ class Routes {
           },
         );
 
+      case contactUs:
+        return MaterialPageRoute(
+          builder: (context) {
+            return const ContactUsScreen();
+          },
+        );
+
+      case contactUsSuccess:
+        return MaterialPageRoute(
+          builder: (context) {
+            return const ContactUsSuccessScreen();
+          },
+          fullscreenDialog: true,
+        );
       default:
         const SignInScreen();
 
