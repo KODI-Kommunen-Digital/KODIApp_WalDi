@@ -36,11 +36,6 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
     await AppBloc.homeCubit.onLoad();
   }
 
-  Future<void> updateLocationFilter(int locationId) async {
-    emit(const DiscoveryState.loading());
-    await onLocationFilter(locationId);
-  }
-
   Future<void> saveCityId(int cityId) async {
     final prefs = await Preferences.openBox();
     prefs.setKeyValue(Preferences.cityId, cityId);

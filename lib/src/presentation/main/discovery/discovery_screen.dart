@@ -34,9 +34,7 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
 
   Future<void> loadSelectedLocation() async {
     final cityId = await context.read<DiscoveryCubit>().getCitySelected();
-    setState(() {
-      selectedLocationId = cityId;
-    });
+    selectedLocationId = cityId;
   }
 
   @override
@@ -69,7 +67,9 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
           );
         },
         builder: (context, state) => state.when(
-          loading: () => const DiscoveryLoading(),
+          loading: () {
+            return const DiscoveryLoading();
+          },
           loaded: (list) => DiscoveryLoaded(
             list: list,
           ),
@@ -88,6 +88,7 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
   }
 
   Future<void> _openFilterDrawer(BuildContext context) async {
+    await loadSelectedLocation();
     await showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -169,6 +170,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
   void initState() {
     super.initState();
     hideEmptyService();
+    //TODOasd
   }
 
   @override
