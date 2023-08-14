@@ -1,4 +1,6 @@
 import 'package:bloc/bloc.dart';
+import 'package:heidi/src/data/model/model_citizen_service.dart';
+import 'package:heidi/src/utils/configs/image.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 
 import 'discovery_state.dart';
@@ -26,6 +28,48 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
     };
 
     return cityWebsites[cityId];
+  }
+
+  List<CitizenServiceModel> initializeServices() {
+    return [
+      CitizenServiceModel(imageUrl: Images.service1, imageLink: "1"),
+      CitizenServiceModel(imageUrl: Images.service2, imageLink: "2"),
+      CitizenServiceModel(
+          imageUrl: Images.service3,
+          imageLink: "3",
+          type: "subCategoryService",
+          arguments: 4),
+      CitizenServiceModel(
+          imageUrl: Images.service4,
+          imageLink: "4",
+          arguments: 4,
+          categoryId: 1),
+      CitizenServiceModel(
+          imageUrl: Images.service5,
+          imageLink: "5",
+          arguments: 5,
+          categoryId: 3),
+      CitizenServiceModel(
+          imageUrl: Images.service6,
+          imageLink: "6",
+          arguments: 6,
+          categoryId: 4),
+      CitizenServiceModel(
+          imageUrl: Images.service7,
+          imageLink: "7",
+          arguments: 7,
+          categoryId: 10),
+      CitizenServiceModel(
+          imageUrl: Images.service8,
+          imageLink: "8",
+          arguments: 8,
+          categoryId: 13),
+      CitizenServiceModel(
+          imageUrl: Images.service9,
+          imageLink: "9",
+          arguments: 9,
+          categoryId: 6),
+    ];
   }
 
   Future<String?> getMitredenLink() async {
