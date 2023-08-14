@@ -102,8 +102,12 @@ class _HomeScreenState extends State<HomeScreen> {
               SliverPersistentHeader(
                 delegate: AppBarHomeSliver(
                     cityTitlesList: cityTitles,
-                    hintText: (selectedCityId > 0) ? selectedCityTitle : null,
-                    selectedOption: selectedCityTitle,
+                    hintText: (selectedCityId > 0)
+                        ? selectedCityTitle
+                        : Translate.of(context).translate('select_location'),
+                    selectedOption: (selectedCityId > 0)
+                        ? selectedCityTitle
+                        : Translate.of(context).translate('select_location'),
                     expandedHeight: MediaQuery.of(context).size.height * 0.3,
                     banners: banner,
                     setLocationCallback: (data) async {
@@ -243,6 +247,9 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     } else {
       await AppBloc.homeCubit.saveCityId(0);
+      setState(() {
+        selectedCityId = 0;
+      });
     }
     AppBloc.homeCubit.onLoad();
   }
