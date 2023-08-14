@@ -7,7 +7,6 @@ import 'package:heidi/src/presentation/widget/app_picker_item.dart';
 import 'package:heidi/src/presentation/widget/app_text_input.dart';
 import 'package:heidi/src/presentation/widget/app_upload_image.dart';
 import 'package:heidi/src/utils/common.dart';
-import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/datetime.dart';
 import 'package:heidi/src/utils/translate.dart';
@@ -93,7 +92,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
   @override
   void didChangeDependencies() async {
     super.didChangeDependencies();
-    currentCity = await getCurrentCityId();
+    currentCity = context.read().getCurrentCityId();
     _onProcess();
   }
 
@@ -152,11 +151,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
         ),
       ),
     );
-  }
-
-  Future<int?> getCurrentCityId() async {
-    final prefs = await Preferences.openBox();
-    return prefs.getKeyValue(Preferences.cityId, 0);
   }
 
   void _onProcess() async {

@@ -213,8 +213,6 @@ class ListRepository {
     final response = await Api.requestSubmitCities();
     var jsonCity = response.data;
     final selectedCity = jsonCity.first['name'];
-    //final cityId = jsonCity.first['id'];
-    //prefs.setKeyValue(Preferences.cityId, cityId as int);
     loadVillages(selectedCity);
     return response;
   }
