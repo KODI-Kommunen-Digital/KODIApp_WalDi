@@ -1,10 +1,47 @@
 import 'package:bloc/bloc.dart';
+import 'package:heidi/src/data/model/model_citizen_service.dart';
+import 'package:heidi/src/data/remote/api/api.dart';
+import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
-
+import '../../../../data/model/model_category.dart';
 import 'discovery_state.dart';
+
+enum LocationFilter {
+  week,
+  month,
+}
 
 class DiscoveryCubit extends Cubit<DiscoveryState> {
   DiscoveryCubit() : super(const DiscoveryState.loading());
+
+  List<CitizenServiceModel> list = [];
+  List<CitizenServiceModel> listLoaded = [];
+  List<CitizenServiceModel> filteredList = [];
+  dynamic location;
+
+  Future<void> onLoad() async {
+    final cityRequestResponse = await Api.requestCities();
+    location = List.from(cityRequestResponse.data ?? []).map((item) {
+      return CategoryModel.fromJson(item);
+    }).toList();
+    emit(DiscoveryStateLoaded(
+      location,
+    ));
+  }
+
+  // void onLocationFilter(String locationName, List<ProductModel> loadedList)
+  Future<void> onLocationFilter(int locationId) async {
+    await saveCityId(locationId);
+    emit(const DiscoveryState.loading());
+    await onLoad();
+    AppBloc.homeCubit.setCalledExternally(true);
+    await AppBloc.homeCubit.onLoad();
+  }
+
+  Future<void> saveCityId(int cityId) async {
+    final prefs = await Preferences.openBox();
+    prefs.setKeyValue(Preferences.cityId, cityId);
+  }
 
   Future<String?> getCityLink() async {
     final prefs = await Preferences.openBox();
@@ -17,5 +54,11 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
     };
 
     return cityWebsites[cityId];
+  }
+
+  Future<int?> getCitySelected() async {
+    final prefs = await Preferences.openBox();
+    int cityId = await prefs.getKeyValue(Preferences.cityId, int);
+    return cityId;
   }
 }

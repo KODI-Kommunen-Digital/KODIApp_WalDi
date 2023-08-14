@@ -88,6 +88,9 @@ class AppBloc {
     BlocProvider<WishListCubit>(
       create: (context) => wishListCubit,
     ),
+    BlocProvider<DiscoveryCubit>(
+      create: (context) => discoveryCubit,
+    ),
     // BlocProvider<ReviewCubit>(
     //   create: (context) => reviewCubit,
     // ),
