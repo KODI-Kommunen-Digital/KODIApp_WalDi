@@ -23,7 +23,6 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
 
   Future<void> setServiceValue(String preference, String? type, int? id) async {
     final prefs = await Preferences.openBox();
-    print("Set service value of $preference and $type and $id");
     prefs.setKeyValue(preference, type ?? id);
   }
 
