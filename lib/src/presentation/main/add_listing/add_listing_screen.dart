@@ -92,7 +92,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
   @override
   void didChangeDependencies() async {
     super.didChangeDependencies();
-    currentCity = context.read().getCurrentCityId();
+    currentCity = await context.read<AddListingCubit>().getCurrentCityId();
     _onProcess();
   }
 
