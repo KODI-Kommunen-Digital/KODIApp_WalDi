@@ -61,7 +61,6 @@ class ListCubit extends Cubit<ListState> {
       }).toList();
 
       emit(ListStateUpdated(filteredList));
-      logError('month2', filteredList.length);
     } else if (type == ProductFilter.week) {
       filteredList = loadedList.where((product) {
         final startDate = _parseDate(product.startDate);

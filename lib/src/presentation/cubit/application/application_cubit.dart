@@ -37,7 +37,7 @@ class ApplicationCubit extends Cubit<ApplicationState> {
         emit(const ApplicationState.loaded());
       });
     } else {
-        emit(const ApplicationState.loaded());
+      emit(const ApplicationState.loaded());
     }
 
     if (oldDomain != '') {

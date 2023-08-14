@@ -23,6 +23,7 @@ mixin _$AddListingState {
     required TResult Function(String error) error,
   }) =>
       throw _privateConstructorUsedError;
+
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
@@ -38,6 +39,7 @@ mixin _$AddListingState {
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
+
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(AddListingLoading value) loading,
@@ -45,6 +47,7 @@ mixin _$AddListingState {
     required TResult Function(AddListingError value) error,
   }) =>
       throw _privateConstructorUsedError;
+
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(AddListingLoading value)? loading,
@@ -74,9 +77,9 @@ class _$AddListingStateCopyWithImpl<$Res, $Val extends AddListingState>
     implements $AddListingStateCopyWith<$Res> {
   _$AddListingStateCopyWithImpl(this._value, this._then);
 
-  // ignore: unused_field
+// ignore: unused_field
   final $Val _value;
-  // ignore: unused_field
+// ignore: unused_field
   final $Res Function($Val) _then;
 }
 

@@ -121,7 +121,7 @@ class HomeCubit extends Cubit<HomeState> {
 
   Future<CategoryModel?> checkSavedCity(List<CategoryModel> cities) async {
     final prefs = await Preferences.openBox();
-    final cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    final cityId = await prefs.getKeyValue(Preferences.cityId, 0);
     if (cityId != 0) {
       final cityDetail = cities.where((element) => element.id == cityId);
       return CategoryModel(
