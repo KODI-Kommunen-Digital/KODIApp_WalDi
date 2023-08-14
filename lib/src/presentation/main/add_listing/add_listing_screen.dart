@@ -176,9 +176,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
 
     if (widget.item != null) {
       if (!mounted) return;
-        if (!isImageChanged) {
-        context.read<AddListingCubit>().setImagePref(widget.item?.image);
-      }
+
       _featureImage = widget.item?.image;
       _textTitleController.text = widget.item!.title;
       _textContentController.text = widget.item!.description;
