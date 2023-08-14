@@ -14,6 +14,7 @@ import 'package:heidi/src/presentation/widget/app_category_item.dart';
 import 'package:heidi/src/presentation/widget/app_product_item.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
+import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 import 'cubit/home_cubit.dart';
@@ -29,11 +30,14 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String selectedCityTitle = '';
   int selectedCityId = 0;
+  int pageNo = 1;
   late bool checkSavedCity;
+  final _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
+    _scrollController.addListener(_scrollListener);
     checkSavedCity = true;
     AppBloc.homeCubit.onLoad();
     connectivityInternet();
@@ -48,6 +52,22 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void dispose() {
     super.dispose();
+    _scrollController.removeListener(_scrollListener);
+    _scrollController.dispose();
+  }
+
+  void _scrollListener() {
+    if (_scrollController.position.atEdge) {
+      if (_scrollController.position.pixels != 0) {
+        AppBloc.homeCubit.newListings(++pageNo).then((_) {
+          setState(() {});
+        }).catchError(
+          (error) {
+            logError('Error loading new listings: $error');
+          },
+        );
+      }
+    }
   }
 
   Future<void> _onRefresh() async {
@@ -87,9 +107,25 @@ class _HomeScreenState extends State<HomeScreen> {
               if (checkSavedCity) {
                 checkSavedCity = false;
                 _setSavedCity(location);
-              } else if(AppBloc.homeCubit.getCalledExternally()) {
+              } else if (AppBloc.homeCubit.getCalledExternally()) {
                 _setSavedCity(location);
                 AppBloc.homeCubit.setCalledExternally(false);
+              }
+            }
+          }
+
+          if (state is HomeStateUpdated) {
+            banner = state.banner;
+            category = state.category;
+            location = state.location;
+            recent = state.recent;
+
+            if (location.isNotEmpty) {
+              for (final ids in location) {
+                cityTitles.add(ids.title.toString());
+              }
+              if (checkSavedCity) {
+                _setSavedCity(location);
               }
             }
           }
@@ -98,6 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
             physics: const BouncingScrollPhysics(
               parent: AlwaysScrollableScrollPhysics(),
             ),
+            controller: _scrollController,
             slivers: <Widget>[
               SliverPersistentHeader(
                 delegate: AppBarHomeSliver(

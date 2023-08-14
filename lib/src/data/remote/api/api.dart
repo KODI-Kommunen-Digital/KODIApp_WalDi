@@ -108,7 +108,7 @@ class Api {
 
   static Future<ResultApiModel> requestCategoryCount(int? cityId) async {
     String url = categoriesCount;
-    if(cityId != null) {
+    if (cityId != null) {
       url = "$url?cityId=$cityId";
     }
     final result = await httpManager.get(url: url);
@@ -142,7 +142,8 @@ class Api {
   }
 
   ///Get Recent Listings
-  static Future<ResultApiModel> requestRecentListings() async {
+  static Future<ResultApiModel> requestRecentListings(params) async {
+    final listings = "/listings?statusId=1&pageNo=$params&pageSize=19";
     final result = await httpManager.get(url: listings);
     return ResultApiModel.fromJson(result);
   }
