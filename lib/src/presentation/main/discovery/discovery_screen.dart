@@ -5,12 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_citizen_service.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
+import 'package:heidi/src/presentation/main/home/list_product/cubit/list_cubit.dart';
 import 'package:heidi/src/utils/configs/image.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../home/list_product/cubit/list_cubit.dart';
 import 'cubit/cubit.dart';
 
 class DiscoveryScreen extends StatefulWidget {
@@ -36,7 +36,9 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
 
   Future<void> loadSelectedLocation() async {
     final cityId = await context.read<DiscoveryCubit>().getCitySelected();
-    selectedLocationId = cityId;
+    setState(() {
+      selectedLocationId = cityId;
+    });
   }
 
   @override
@@ -133,7 +135,6 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
       },
     );
   }
-
 //  void _updateSelectedFilter(ProductFilter? filter) {
 //    setState(() {
 //      selectedFilter = filter;
