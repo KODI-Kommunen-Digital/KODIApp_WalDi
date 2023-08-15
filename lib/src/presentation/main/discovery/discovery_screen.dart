@@ -10,7 +10,6 @@ import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../home/list_product/cubit/list_cubit.dart';
 import 'cubit/cubit.dart';
 
 class DiscoveryScreen extends StatefulWidget {
@@ -21,7 +20,7 @@ class DiscoveryScreen extends StatefulWidget {
 }
 
 class _DiscoveryScreenState extends State<DiscoveryScreen> {
-  ProductFilter? selectedFilter;
+  int? selectedLocationId;
 
   @override
   void initState() {
@@ -31,6 +30,11 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
 
   Future<void> loadLocationList() async {
     await context.read<DiscoveryCubit>().onLoad();
+  }
+
+  Future<void> loadSelectedLocation() async {
+    final cityId = await context.read<DiscoveryCubit>().getCitySelected();
+    selectedLocationId = cityId;
   }
 
   @override
@@ -63,7 +67,9 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
           );
         },
         builder: (context, state) => state.when(
-          loading: () => const DiscoveryLoading(),
+          loading: () {
+            return const DiscoveryLoading();
+          },
           loaded: (list) => DiscoveryLoaded(
             list: list,
           ),
@@ -82,24 +88,40 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
   }
 
   Future<void> _openFilterDrawer(BuildContext context) async {
+    await loadSelectedLocation();
     await showModalBottomSheet(
       context: context,
       builder: (context) {
         return Container(
           color: Colors.grey[900],
-          height: 200, // Set the desired height for the drawer
-          child: ListView.builder(
+          height: 200,
+          child: ListView.separated(
             itemCount: context.read<DiscoveryCubit>().location.length,
+            separatorBuilder: (BuildContext context, int index) =>
+                const Divider(
+              color: Colors.white,
+              height: 1,
+              thickness: 1,
+            ),
             itemBuilder: (context, index) {
-              final locationName =
-                  context.read<DiscoveryCubit>().location[index].title;
-              final locationId =
-                  context.read<DiscoveryCubit>().location[index].id;
+              final location = context.read<DiscoveryCubit>().location[index];
+              final isSelected = selectedLocationId == location.id;
               return ListTile(
-                title: Text(locationName),
+                title: Text(location.title),
+                trailing: isSelected
+                    ? const Icon(Icons.check, color: Colors.white)
+                    : null,
                 onTap: () {
-                  // context.read<DiscoveryCubit>().onLocationFilter(locationName,loadedList);
-                  context.read<DiscoveryCubit>().onLocationFilter(locationId);
+                  setState(() {
+                    if (isSelected) {
+                      selectedLocationId = 0;
+                    } else {
+                      selectedLocationId = location.id;
+                    }
+                  });
+                  context
+                      .read<DiscoveryCubit>()
+                      .onLocationFilter(selectedLocationId!);
                   Navigator.pop(context);
                 },
               );
@@ -109,7 +131,6 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
       },
     );
   }
-
 //  void _updateSelectedFilter(ProductFilter? filter) {
 //    setState(() {
 //      selectedFilter = filter;
@@ -149,6 +170,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
   void initState() {
     super.initState();
     hideEmptyService();
+    //TODOasd
   }
 
   @override
