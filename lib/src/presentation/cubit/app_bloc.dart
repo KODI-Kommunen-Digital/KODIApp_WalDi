@@ -102,6 +102,9 @@ class AppBloc {
     BlocProvider<ContactUsCubit>(
       create: (context) => contactUsCubit,
     ),
+    BlocProvider<DiscoveryCubit>(
+      create: (context) => discoveryCubit,
+    ),
     // BlocProvider<SearchCubit>(
     //   create: (context) => searchCubit,
     // ),
