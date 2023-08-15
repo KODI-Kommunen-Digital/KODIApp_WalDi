@@ -4,6 +4,7 @@ import 'package:heidi/src/presentation/widget/app_list_title.dart';
 import 'package:heidi/src/utils/configs/language.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
+
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
 
@@ -27,7 +28,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void _onNavigate(String route) {
     Navigator.pushNamed(context, route);
   }
-
 
   @override
   Widget build(BuildContext context) {

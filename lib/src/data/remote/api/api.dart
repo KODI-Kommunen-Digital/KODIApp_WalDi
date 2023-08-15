@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/remote/api/http_manager.dart';
 import 'package:heidi/src/utils/asset.dart';
@@ -31,6 +32,11 @@ class Api {
 
   static Future<ResultApiModel> requestFavorites(userId) async {
     final result = await httpManager.get(url: '/users/$userId/favorites/');
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> requestUserListings(userId) async {
+    final result = await httpManager.get(url: '/users/$userId/listings/');
     return ResultApiModel.fromJson(result);
   }
 
@@ -178,7 +184,21 @@ class Api {
       loading: true,
     );
     final id = result['id'];
-    Api.requestListingUploadImage(id);
+    Api.requestListingUploadImage(id, cityId);
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> requestEditProduct(
+      cityId, listingId, params, bool isImageChanged) async {
+    final filePath = '/cities/$cityId/listings/$listingId';
+    final result = await httpManager.patch(
+      url: filePath,
+      data: params,
+      loading: true,
+    );
+    if (isImageChanged) {
+      await Api.requestListingUploadImage(listingId, cityId);
+    }
     return ResultApiModel.fromJson(result);
   }
 
@@ -188,6 +208,14 @@ class Api {
     final String removeWishList = "/users/$userId/favorites/$listingId";
     final result = await httpManager.delete(
       url: removeWishList,
+    );
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> deleteUserList(cityId, int listingId) async {
+    final String removeList = "/cities/$cityId/listings/$listingId";
+    final result = await httpManager.delete(
+      url: removeList,
     );
     return ResultApiModel.fromJson(result);
   }
@@ -233,9 +261,9 @@ class Api {
     return ResultApiModel.fromJson(convertResponse);
   }
 
-  static Future<ResultApiModel> requestListingUploadImage(listingId) async {
+  static Future<ResultApiModel> requestListingUploadImage(
+      listingId, cityId) async {
     final prefs = await Preferences.openBox();
-    final cityId = prefs.getKeyValue(Preferences.cityId, '');
     final pickedFile = prefs.getPickedFile();
     var filepath = '/cities/$cityId/listings/$listingId/imageUpload';
     var result = await httpManager.post(

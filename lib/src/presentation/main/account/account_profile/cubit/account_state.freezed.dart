@@ -23,6 +23,7 @@ mixin _$AccountState {
     required TResult Function(String errorMessage) error,
   }) =>
       throw _privateConstructorUsedError;
+
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
@@ -38,6 +39,7 @@ mixin _$AccountState {
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
+
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(AccountLoading value) loading,
@@ -45,6 +47,7 @@ mixin _$AccountState {
     required TResult Function(AccountError value) error,
   }) =>
       throw _privateConstructorUsedError;
+
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(AccountLoading value)? loading,
@@ -74,9 +77,9 @@ class _$AccountStateCopyWithImpl<$Res, $Val extends AccountState>
     implements $AccountStateCopyWith<$Res> {
   _$AccountStateCopyWithImpl(this._value, this._then);
 
-  // ignore: unused_field
+// ignore: unused_field
   final $Val _value;
-  // ignore: unused_field
+// ignore: unused_field
   final $Res Function($Val) _then;
 }
 
