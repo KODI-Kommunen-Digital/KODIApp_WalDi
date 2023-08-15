@@ -14,6 +14,7 @@ class HomeCubit extends Cubit<HomeState> {
   dynamic recent;
   dynamic sliders;
   dynamic categoryCount;
+  bool calledExternally = false;
 
   HomeCubit() : super(const HomeState.loading());
 
@@ -56,6 +57,14 @@ class HomeCubit extends Cubit<HomeState> {
       location,
       recent,
     ));
+  }
+
+  bool getCalledExternally() {
+    return calledExternally;
+  }
+
+  void setCalledExternally(bool called) {
+    calledExternally = called;
   }
 
   Future<List<CategoryModel>> formatCategoriesList(
