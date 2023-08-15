@@ -23,7 +23,6 @@ mixin _$EditProfileState {
     required TResult Function() error,
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
@@ -39,7 +38,6 @@ mixin _$EditProfileState {
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(EditProfileStateLoading value) loading,
@@ -47,7 +45,6 @@ mixin _$EditProfileState {
     required TResult Function(EditProfileStateError value) error,
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(EditProfileStateLoading value)? loading,
@@ -77,9 +74,9 @@ class _$EditProfileStateCopyWithImpl<$Res, $Val extends EditProfileState>
     implements $EditProfileStateCopyWith<$Res> {
   _$EditProfileStateCopyWithImpl(this._value, this._then);
 
-// ignore: unused_field
+  // ignore: unused_field
   final $Val _value;
-// ignore: unused_field
+  // ignore: unused_field
   final $Res Function($Val) _then;
 }
 

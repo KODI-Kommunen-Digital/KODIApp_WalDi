@@ -32,6 +32,7 @@ class AppBloc {
   static final homeCubit = HomeCubit();
   static final discoveryCubit = DiscoveryCubit();
   static final listCubit = ListCubit();
+  // static final homeCubit = HomeCubit();
   static final wishListCubit = WishListCubit();
   // static final reviewCubit = ReviewCubit();
   // static final messageCubit = MessageCubit();
@@ -74,9 +75,6 @@ class AppBloc {
     BlocProvider<EditProfileCubit>(
       create: (context) => editProfileCubit,
     ),
-    // BlocProvider<ProfileCubit>(
-    //   create: (context) => profileCubit,
-    // ),
     BlocProvider<ChangePasswordCubit>(
       create: (context) => changePasswordCubit,
     ),

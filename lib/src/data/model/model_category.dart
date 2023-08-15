@@ -15,16 +15,17 @@ class CategoryModel {
   final bool hasChild;
   bool hide;
 
-  CategoryModel(
-      {required this.id,
-      required this.title,
-      this.count,
-      required this.image,
-      this.icon,
-      this.color,
-      this.type = CategoryType.category,
-      this.hasChild = false,
-      this.hide = false});
+  CategoryModel({
+    required this.id,
+    required this.title,
+    this.count,
+    required this.image,
+    this.icon,
+    this.color,
+    this.type = CategoryType.category,
+    this.hasChild = false,
+    this.hide = false
+  });
 
   @override
   bool operator ==(Object other) => other is CategoryModel && id == other.id;

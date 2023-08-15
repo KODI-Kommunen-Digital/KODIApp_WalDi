@@ -22,7 +22,6 @@ class _PrivacyScreenState extends State<PrivacyScreen> {
   void dispose() {
     super.dispose();
   }
-
   Widget _buildWhoWeAre() {
     if (_privacyPage?.whoWeAre == null) {
       return AppPlaceholder(

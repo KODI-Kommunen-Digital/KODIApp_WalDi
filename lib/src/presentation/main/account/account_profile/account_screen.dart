@@ -115,11 +115,10 @@ class _AccountLoadedState extends State<AccountLoaded> {
                     child: AppUserInfo(
                       user: user,
                       type: UserViewType.information,
-                      onPressed: () {
-                        Navigator.pushNamed(context, Routes.profile,
-                            arguments: user);
-                      },
-                      showDirectionIcon: true,
+                      // onPressed: () {
+                      //   _onPopUpError();
+                      //   // _onProfile(user);
+                      // },
                     ),
                   ),
                   const SizedBox(height: 16),

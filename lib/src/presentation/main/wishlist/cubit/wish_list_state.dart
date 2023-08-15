@@ -9,8 +9,7 @@ class WishListState with _$WishListState {
 
   const factory WishListState.loading() = WishListLoading;
 
-  const factory WishListState.loaded(List<FavoriteDetailsModel> favorites) =
-      WishListLoaded;
+  const factory WishListState.loaded(List<FavoriteDetailsModel> favorites) = WishListLoaded;
 
   const factory WishListState.error(String errorMessage) = WishListError;
 }
