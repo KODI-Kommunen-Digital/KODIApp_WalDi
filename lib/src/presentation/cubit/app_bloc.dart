@@ -3,6 +3,7 @@ import 'package:heidi/src/presentation/cubit/authentication/authentication_cubit
 import 'package:heidi/src/presentation/cubit/user/user_cubit.dart';
 import 'package:heidi/src/presentation/main/account/account_profile/cubit/account_cubit.dart';
 import 'package:heidi/src/presentation/main/account/change_password/cubit/change_password_cubit.dart';
+import 'package:heidi/src/presentation/main/account/contact_us/cubit/contact_us_cubit.dart';
 import 'package:heidi/src/presentation/main/account/edit_profile/cubit/edit_profile_cubit.dart';
 import 'package:heidi/src/presentation/main/add_listing/cubit/add_listing_cubit.dart';
 import 'package:heidi/src/presentation/main/discovery/cubit/discovery_cubit.dart';
@@ -37,6 +38,7 @@ class AppBloc {
   // static final submitCubit = SubmitCubit();
   // static final searchCubit = SearchCubit();
   static final productDetailCubit = ProductDetailCubit();
+  static final contactUsCubit = ContactUsCubit();
 
   static final List<BlocProvider> providers = [
     BlocProvider<ApplicationCubit>(
@@ -90,6 +92,9 @@ class AppBloc {
     BlocProvider<WishListCubit>(
       create: (context) => wishListCubit,
     ),
+    BlocProvider<DiscoveryCubit>(
+      create: (context) => discoveryCubit,
+    ),
     // BlocProvider<ReviewCubit>(
     //   create: (context) => reviewCubit,
     // ),
@@ -98,6 +103,9 @@ class AppBloc {
     // ),
     BlocProvider<AddListingCubit>(
       create: (context) => AddListingCubit(context.read()),
+    ),
+    BlocProvider<ContactUsCubit>(
+      create: (context) => contactUsCubit,
     ),
     // BlocProvider<SearchCubit>(
     //   create: (context) => searchCubit,

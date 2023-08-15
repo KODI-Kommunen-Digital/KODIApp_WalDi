@@ -171,6 +171,19 @@ class _AccountLoadedState extends State<AccountLoaded> {
                           ),
                         ),
                       ),
+                      AppListTitle(
+                        title: Translate.of(context).translate('contact'),
+                        onPressed: () {
+                          _onNavigate(Routes.contactUs);
+                        },
+                        trailing: RotatedBox(
+                          quarterTurns: AppLanguage.isRTL() ? 2 : 0,
+                          child: const Icon(
+                            Icons.keyboard_arrow_right,
+                            textDirection: TextDirection.ltr,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 4),

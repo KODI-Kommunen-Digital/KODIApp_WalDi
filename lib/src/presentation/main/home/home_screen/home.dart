@@ -14,6 +14,7 @@ import 'package:heidi/src/presentation/widget/app_category_item.dart';
 import 'package:heidi/src/presentation/widget/app_product_item.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
+import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 import 'cubit/home_cubit.dart';
@@ -29,11 +30,14 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String selectedCityTitle = '';
   int selectedCityId = 0;
-  bool? checkSavedCity;
+  int pageNo = 1;
+  late bool checkSavedCity;
+  final _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
+    _scrollController.addListener(_scrollListener);
     checkSavedCity = true;
     AppBloc.homeCubit.onLoad();
     connectivityInternet();
@@ -48,6 +52,22 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void dispose() {
     super.dispose();
+    _scrollController.removeListener(_scrollListener);
+    _scrollController.dispose();
+  }
+
+  void _scrollListener() {
+    if (_scrollController.position.atEdge) {
+      if (_scrollController.position.pixels != 0) {
+        AppBloc.homeCubit.newListings(++pageNo).then((_) {
+          setState(() {});
+        }).catchError(
+          (error) {
+            logError('Error loading new listings: $error');
+          },
+        );
+      }
+    }
   }
 
   Future<void> _onRefresh() async {
@@ -84,7 +104,27 @@ class _HomeScreenState extends State<HomeScreen> {
               for (final ids in location) {
                 cityTitles.add(ids.title.toString());
               }
-              if (checkSavedCity ?? false) {
+              if (checkSavedCity) {
+                checkSavedCity = false;
+                _setSavedCity(location);
+              } else if (AppBloc.homeCubit.getCalledExternally()) {
+                _setSavedCity(location);
+                AppBloc.homeCubit.setCalledExternally(false);
+              }
+            }
+          }
+
+          if (state is HomeStateUpdated) {
+            banner = state.banner;
+            category = state.category;
+            location = state.location;
+            recent = state.recent;
+
+            if (location.isNotEmpty) {
+              for (final ids in location) {
+                cityTitles.add(ids.title.toString());
+              }
+              if (checkSavedCity) {
                 _setSavedCity(location);
               }
             }
@@ -94,33 +134,43 @@ class _HomeScreenState extends State<HomeScreen> {
             physics: const BouncingScrollPhysics(
               parent: AlwaysScrollableScrollPhysics(),
             ),
+            controller: _scrollController,
             slivers: <Widget>[
               SliverPersistentHeader(
                 delegate: AppBarHomeSliver(
-                  cityTitlesList: cityTitles,
-                  hintText: (selectedCityId > 0) ? selectedCityTitle : null,
-                  expandedHeight: MediaQuery.of(context).size.height * 0.3,
-                  banners: banner,
-                  setLocationCallback: (data) async {
-                    for (final list in location!) {
-                      if (list.title == data) {
-                        AppBloc.homeCubit.onLoad();
-                        setState(() {
-                          selectedCityTitle = data;
-                          selectedCityId = list.id;
-                        });
-                      } else if (data ==
-                          Translate.of(context).translate('select_location')) {
-                        setState(() {
-                          selectedCityId = 0;
-                        });
-                        AppBloc.homeCubit.onLoad();
-                        // AppBloc.homeCubit.saveCityId(selectedCityId);
+                    cityTitlesList: cityTitles,
+                    hintText: (selectedCityId > 0)
+                        ? selectedCityTitle
+                        : Translate.of(context).translate('select_location'),
+                    selectedOption: (selectedCityId > 0)
+                        ? selectedCityTitle
+                        : Translate.of(context).translate('select_location'),
+                    expandedHeight: MediaQuery.of(context).size.height * 0.3,
+                    banners: banner,
+                    setLocationCallback: (data) async {
+                      for (final list in location!) {
+                        if (list.title == data) {
+                          AppBloc.homeCubit.onLoad();
+                          setState(() {
+                            selectedCityTitle = data;
+                            selectedCityId = list.id;
+                          });
+                          AppBloc.homeCubit.saveCityId(selectedCityId);
+                          await AppBloc.discoveryCubit
+                              .onLocationFilter(selectedCityId);
+                        } else if (data ==
+                            Translate.of(context)
+                                .translate('select_location')) {
+                          setState(() {
+                            selectedCityId = 0;
+                          });
+                          AppBloc.homeCubit.onLoad();
+                          AppBloc.homeCubit.saveCityId(selectedCityId);
+                          await AppBloc.discoveryCubit
+                              .onLocationFilter(selectedCityId);
+                        }
                       }
-                    }
-                    AppBloc.homeCubit.saveCityId(selectedCityId);
-                  },
-                ),
+                    }),
                 pinned: true,
               ),
               CupertinoSliverRefreshControl(
@@ -234,8 +284,10 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     } else {
       await AppBloc.homeCubit.saveCityId(0);
+      setState(() {
+        selectedCityId = 0;
+      });
     }
-    checkSavedCity = false;
     AppBloc.homeCubit.onLoad();
   }
 

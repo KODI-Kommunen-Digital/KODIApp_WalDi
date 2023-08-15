@@ -19,6 +19,7 @@ class Api {
   static const String uploadImage = "/users/4/imageUpload";
   static const String cities = "/cities";
   static const String listings = "/listings?statusId=1";
+  static const String contact = "/contactUs";
 
   static Future<ResultApiModel> requestLogin(params) async {
     try {
@@ -148,7 +149,8 @@ class Api {
   }
 
   ///Get Recent Listings
-  static Future<ResultApiModel> requestRecentListings() async {
+  static Future<ResultApiModel> requestRecentListings(params) async {
+    final listings = "/listings?statusId=1&pageNo=$params&pageSize=19";
     final result = await httpManager.get(url: listings);
     return ResultApiModel.fromJson(result);
   }
@@ -234,6 +236,15 @@ class Api {
   static Future<ResultApiModel> requestLocList(params) async {
     var list = '/listings?cityId=$params&statusId=1';
     final result = await httpManager.get(url: list);
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> contactUs(params) async {
+    final result = await httpManager.post(
+      url: contact,
+      data: params,
+      loading: true,
+    );
     return ResultApiModel.fromJson(result);
   }
 
