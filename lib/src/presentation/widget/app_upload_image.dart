@@ -75,6 +75,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
           source: ImageSource.gallery,
         );
         if (pickedFile == null) return;
+        if (!mounted) return;
         setState(() {
           isImageUploaded = false;
           _file = File(pickedFile.path);
@@ -82,7 +83,6 @@ class _AppUploadImageState extends State<AppUploadImage> {
         final profile = widget.profile;
         if (!profile) {
           await ListRepository.uploadImage(_file!, profile);
-          widget.onChange('');
         } else {
           final response = await ListRepository.uploadImage(_file!, profile);
           if (response!.data['status'] == 'success') {
@@ -107,8 +107,6 @@ class _AppUploadImageState extends State<AppUploadImage> {
           });
           final profile = widget.profile;
           if (!profile) {
-            await ListRepository.uploadImage(_file!, profile);
-            widget.onChange('');
           } else {
             final response = await ListRepository.uploadImage(_file!, profile);
             if (response!.data['status'] == 'success') {
@@ -118,7 +116,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
               final item = response.data['data']?['image'];
               widget.onChange(item);
             } else {
-              logError('Image Upload Error', response);
+              logError('Image Upload Permission Error', response);
             }
           }
         }

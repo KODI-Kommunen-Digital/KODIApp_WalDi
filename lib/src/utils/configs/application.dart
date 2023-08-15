@@ -8,7 +8,6 @@ class Application {
   static SettingModel setting = SettingModel.fromDefault();
 
   static const String picturesURL =
-      // 'https://test1heidi.obs.eu-de.otc.t-systems.com/';
       'https://unsa1heidi.obs.eu-de.otc.t-systems.com/';
 
   static final Application _instance = Application._internal();

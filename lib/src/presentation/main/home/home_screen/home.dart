@@ -138,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
             slivers: <Widget>[
               SliverPersistentHeader(
                 delegate: AppBarHomeSliver(
-                cityTitlesList: cityTitles,
+                    cityTitlesList: cityTitles,
                     hintText: (selectedCityId > 0)
                         ? selectedCityTitle
                         : Translate.of(context).translate('select_location'),

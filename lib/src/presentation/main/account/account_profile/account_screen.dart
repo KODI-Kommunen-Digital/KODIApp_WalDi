@@ -101,8 +101,8 @@ class _AccountLoadedState extends State<AccountLoaded> {
                       boxShadow: [
                         BoxShadow(
                           color: Theme.of(context).dividerColor.withOpacity(
-                            .05,
-                          ),
+                                .05,
+                              ),
                           spreadRadius: 4,
                           blurRadius: 4,
                           offset: const Offset(
@@ -115,11 +115,10 @@ class _AccountLoadedState extends State<AccountLoaded> {
                     child: AppUserInfo(
                       user: user,
                       type: UserViewType.information,
-                      onPressed: () {
-                        Navigator.pushNamed(context, Routes.profile,
-                            arguments: user);
-                      },
-                      showDirectionIcon: true,
+                      // onPressed: () {
+                      //   _onPopUpError();
+                      //   // _onProfile(user);
+                      // },
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -162,6 +161,19 @@ class _AccountLoadedState extends State<AccountLoaded> {
                         title: Translate.of(context).translate('setting'),
                         onPressed: () {
                           _onNavigate(Routes.setting);
+                        },
+                        trailing: RotatedBox(
+                          quarterTurns: AppLanguage.isRTL() ? 2 : 0,
+                          child: const Icon(
+                            Icons.keyboard_arrow_right,
+                            textDirection: TextDirection.ltr,
+                          ),
+                        ),
+                      ),
+                      AppListTitle(
+                        title: Translate.of(context).translate('contact'),
+                        onPressed: () {
+                          _onNavigate(Routes.contactUs);
                         },
                         trailing: RotatedBox(
                           quarterTurns: AppLanguage.isRTL() ? 2 : 0,
