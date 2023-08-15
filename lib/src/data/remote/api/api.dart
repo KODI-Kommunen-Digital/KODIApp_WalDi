@@ -3,7 +3,6 @@ import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/remote/api/http_manager.dart';
 import 'package:heidi/src/utils/asset.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
-import 'package:heidi/src/utils/logging/loggy_exp.dart';
 
 class Api {
   static final httpManager = HTTPManager();
@@ -28,20 +27,6 @@ class Api {
     } catch (e) {
       return await httpManager.post(url: login, data: params);
     }
-  }
-
-  static Future<ResultApiModel> requestEditProduct(
-      cityId, listingId, params, bool isImageChanged) async {
-    final filePath = '/cities/$cityId/listings/$listingId';
-    final result = await httpManager.patch(
-      url: filePath,
-      data: params,
-      loading: true,
-    );
-    if (isImageChanged) {
-      await Api.requestListingUploadImage(listingId, cityId);
-    }
-    return ResultApiModel.fromJson(result);
   }
 
   static Future<ResultApiModel> requestFavorites(userId) async {
@@ -75,20 +60,6 @@ class Api {
     );
     return ResultApiModel.fromJson(result);
   }
-
-  static Future<ResultApiModel> requestUserListings(userId) async {
-    final result = await httpManager.get(url: '/users/$userId/listings/');
-    return ResultApiModel.fromJson(result);
-  }
-
-  static Future<ResultApiModel> deleteUserList(cityId, int listingId) async {
-    final String removeList = "/cities/$cityId/listings/$listingId";
-    final result = await httpManager.delete(
-      url: removeList,
-    );
-    return ResultApiModel.fromJson(result);
-  }
-
 
   ///Change Profile
   static Future<ResultApiModel> requestChangeProfile(params, userId) async {
@@ -207,7 +178,7 @@ class Api {
       loading: true,
     );
     final id = result['id'];
-    Api.requestListingUploadImage(id, cityId);
+    Api.requestListingUploadImage(id);
     return ResultApiModel.fromJson(result);
   }
 
@@ -262,17 +233,15 @@ class Api {
     return ResultApiModel.fromJson(convertResponse);
   }
 
-  static Future<ResultApiModel> requestListingUploadImage(
-      listingId, cityId) async {
+  static Future<ResultApiModel> requestListingUploadImage(listingId) async {
     final prefs = await Preferences.openBox();
+    final cityId = prefs.getKeyValue(Preferences.cityId, '');
     final pickedFile = prefs.getPickedFile();
-    logError('pickedFile', pickedFile);
     var filepath = '/cities/$cityId/listings/$listingId/imageUpload';
     var result = await httpManager.post(
       url: filepath,
       formData: pickedFile,
     );
-    logError('resultImage', result);
     final convertResponse = {"success": result['id'] != null, "data": result};
     return ResultApiModel.fromJson(convertResponse);
   }

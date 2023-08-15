@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/utils/configs/application.dart';
-
 import 'app_placeholder.dart';
 
 enum UserViewType { basic, information, qrcode }
@@ -10,14 +9,12 @@ class AppUserInfo extends StatelessWidget {
   final UserModel? user;
   final VoidCallback? onPressed;
   final UserViewType type;
-  final bool showDirectionIcon;
 
   const AppUserInfo({
     Key? key,
     this.user,
     this.onPressed,
     this.type = UserViewType.basic,
-    required this.showDirectionIcon,
   }) : super(key: key);
 
   @override
@@ -25,48 +22,43 @@ class AppUserInfo extends StatelessWidget {
     switch (type) {
       case UserViewType.information:
         if (user == null) {
-          return InkWell(
-            onTap: () {
-              onPressed;
-            },
-            child: AppPlaceholder(
-              child: Row(
-                children: <Widget>[
-                  Container(
-                    width: 60,
-                    height: 60,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white,
-                    ),
+          return AppPlaceholder(
+            child: Row(
+              children: <Widget>[
+                Container(
+                  width: 60,
+                  height: 60,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
                   ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                          height: 10,
-                          width: 100,
-                          color: Colors.white,
-                        ),
-                        const SizedBox(height: 4),
-                        Container(
-                          height: 10,
-                          width: 100,
-                          color: Colors.white,
-                        ),
-                        const SizedBox(height: 4),
-                        Container(
-                          height: 10,
-                          width: 150,
-                          color: Colors.white,
-                        ),
-                      ],
-                    ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                        height: 10,
+                        width: 100,
+                        color: Colors.white,
+                      ),
+                      const SizedBox(height: 4),
+                      Container(
+                        height: 10,
+                        width: 100,
+                        color: Colors.white,
+                      ),
+                      const SizedBox(height: 4),
+                      Container(
+                        height: 10,
+                        width: 150,
+                        color: Colors.white,
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           );
         }
@@ -88,14 +80,14 @@ class AppUserInfo extends StatelessWidget {
           height: 60,
           child: ClipOval(
               child: Image.network(
-                "${Application.picturesURL}${user!.image}",
-                width: 100,
-                height: 100,
-                fit: BoxFit.cover,
-              )),
+            "${Application.picturesURL}${user!.image}",
+            width: 100,
+            height: 100,
+            fit: BoxFit.cover,
+          )),
         );
         return InkWell(
-          onTap: onPressed,
+          onTap: () {},
           child: Row(
             children: <Widget>[
               networkImage,
@@ -119,10 +111,6 @@ class AppUserInfo extends StatelessWidget {
                   ],
                 ),
               ),
-              const Spacer(), // I just added one line
-              Visibility(
-                  visible: showDirectionIcon,
-                  child: const Icon(Icons.navigate_next, color: Colors.white))
             ],
           ),
         );
@@ -165,16 +153,16 @@ class AppUserInfo extends StatelessWidget {
           );
         }
         return InkWell(
-          onTap: () {},
+          onTap: onPressed,
           child: Row(
             children: <Widget>[
               ClipOval(
                   child: Image.network(
-                    "${Application.picturesURL}${user!.image}",
-                    width: 100,
-                    height: 100,
-                    fit: BoxFit.cover,
-                  )),
+                "${Application.picturesURL}${user!.image}",
+                width: 100,
+                height: 100,
+                fit: BoxFit.cover,
+              )),
               const SizedBox(width: 8),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
