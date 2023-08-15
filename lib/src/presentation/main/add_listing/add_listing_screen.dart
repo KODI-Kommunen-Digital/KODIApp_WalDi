@@ -6,7 +6,6 @@ import 'package:heidi/src/presentation/widget/app_picker_item.dart';
 import 'package:heidi/src/presentation/widget/app_text_input.dart';
 import 'package:heidi/src/presentation/widget/app_upload_image.dart';
 import 'package:heidi/src/utils/common.dart';
-import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/datetime.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:heidi/src/utils/validate.dart';
@@ -146,10 +145,10 @@ class _AddListingScreenState extends State<AddListingScreen> {
 
   void _onProcess() async {
     final loadCitiesResponse =
-    await context.read<AddListingCubit>().loadCities();
+        await context.read<AddListingCubit>().loadCities();
     if (!mounted) return;
     final loadCategoryResponse =
-    await context.read<AddListingCubit>().loadCategory();
+        await context.read<AddListingCubit>().loadCategory();
     if (!loadCategoryResponse?.data.isEmpty) {
       var jsonCategory = loadCategoryResponse!.data;
       final selectedCategory = jsonCategory.first['name'];
@@ -244,17 +243,17 @@ class _AddListingScreenState extends State<AddListingScreen> {
         }
       } else {
         final result = await context.read<AddListingCubit>().onSubmit(
-          title: _textTitleController.text,
-          place: _textPlaceController.text,
-          description: _textContentController.text,
-          address: _textAddressController.text,
-          email: _textEmailController.text,
-          phone: _textPhoneController.text,
-          website: _textWebsiteController.text,
-          price: _textPriceController.text,
-          startDate: _startDate,
-          endDate: _endDate,
-        );
+              title: _textTitleController.text,
+              place: _textPlaceController.text,
+              description: _textContentController.text,
+              address: _textAddressController.text,
+              email: _textEmailController.text,
+              phone: _textPhoneController.text,
+              website: _textWebsiteController.text,
+              price: _textPriceController.text,
+              startDate: _startDate,
+              endDate: _endDate,
+            );
         if (result) {
           _onSuccess();
           if (!mounted) return;
@@ -266,7 +265,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
 
   void _onSuccess() {
     Navigator.pop(context);
-    Navigator.pushNamed(context, Routes.submitSuccess);
   }
 
   bool _validData() {
@@ -347,7 +345,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
         if (element != null &&
             !errorMessage.contains(Translate.of(context).translate(element))) {
           errorMessage =
-          "$errorMessage${Translate.of(context).translate(element)}, ";
+              "$errorMessage${Translate.of(context).translate(element)}, ";
         }
       }
       errorMessage = errorMessage.substring(0, errorMessage.length - 2);
@@ -489,28 +487,28 @@ class _AddListingScreenState extends State<AddListingScreen> {
                     child: listCategory.isEmpty
                         ? const LinearProgressIndicator()
                         : DropdownButton(
-                      isExpanded: true,
-                      menuMaxHeight: 200,
-                      hint: Text(Translate.of(context)
-                          .translate('input_category')),
-                      value: selectedCategory ??
-                          Translate.of(context).translate(
-                              _getCategoryTranslation(
-                                  listCategory.first['id'])),
-                      items: listCategory.map((category) {
-                        return DropdownMenuItem(
-                            value: category['name'],
-                            child: Text(Translate.of(context).translate(
-                                _getCategoryTranslation(
-                                    category['id']))));
-                      }).toList(),
-                      onChanged: (value) async {
-                        setState(() {
-                          selectedCategory = value as String?;
-                        });
-                        selectSubCategory(selectedCategory);
-                      },
-                    )),
+                            isExpanded: true,
+                            menuMaxHeight: 200,
+                            hint: Text(Translate.of(context)
+                                .translate('input_category')),
+                            value: selectedCategory ??
+                                Translate.of(context).translate(
+                                    _getCategoryTranslation(
+                                        listCategory.first['id'])),
+                            items: listCategory.map((category) {
+                              return DropdownMenuItem(
+                                  value: category['name'],
+                                  child: Text(Translate.of(context).translate(
+                                      _getCategoryTranslation(
+                                          category['id']))));
+                            }).toList(),
+                            onChanged: (value) async {
+                              setState(() {
+                                selectedCategory = value as String?;
+                              });
+                              selectSubCategory(selectedCategory);
+                            },
+                          )),
               ],
             ),
             if (selectedCategory == "News" || selectedCategory == null)
@@ -531,27 +529,27 @@ class _AddListingScreenState extends State<AddListingScreen> {
                       child: listSubCategory.isEmpty
                           ? const LinearProgressIndicator()
                           : DropdownButton(
-                        isExpanded: true,
-                        menuMaxHeight: 200,
-                        hint: Text(Translate.of(context)
-                            .translate('input_subcategory')),
-                        value: selectedSubCategory,
-                        items: listSubCategory.map((subcategory) {
-                          return DropdownMenuItem(
-                              value: subcategory['name'],
-                              child: Text(Translate.of(context).translate(
-                                  _getSubCategoryTranslation(
-                                      subcategory['id']))));
-                        }).toList(),
-                        onChanged: (value) {
-                          context
-                              .read<AddListingCubit>()
-                              .getSubCategoryId(value);
-                          setState(() {
-                            selectedSubCategory = value as String?;
-                          });
-                        },
-                      )),
+                              isExpanded: true,
+                              menuMaxHeight: 200,
+                              hint: Text(Translate.of(context)
+                                  .translate('input_subcategory')),
+                              value: selectedSubCategory,
+                              items: listSubCategory.map((subcategory) {
+                                return DropdownMenuItem(
+                                    value: subcategory['name'],
+                                    child: Text(Translate.of(context).translate(
+                                        _getSubCategoryTranslation(
+                                            subcategory['id']))));
+                              }).toList(),
+                              onChanged: (value) {
+                                context
+                                    .read<AddListingCubit>()
+                                    .getSubCategoryId(value);
+                                setState(() {
+                                  selectedSubCategory = value as String?;
+                                });
+                              },
+                            )),
               ],
             ),
             if (selectedCategory == "News" || selectedCategory == null)
@@ -571,34 +569,34 @@ class _AddListingScreenState extends State<AddListingScreen> {
                   child: listCity.isEmpty
                       ? const LinearProgressIndicator()
                       : DropdownButton(
-                    isExpanded: true,
-                    menuMaxHeight: 200,
-                    hint: Text(
-                        Translate.of(context).translate('input_city')),
-                    value: selectedCity ?? listCity.first['name'],
-                    items: listCity.map((city) {
-                      return DropdownMenuItem(
-                          value: city['name'], child: Text(city['name']));
-                    }).toList(),
-                    onChanged: (value) async {
-                      setState(() {
-                        selectedCity = value as String?;
-                      });
-                      selectedVillage = null;
-                      context.read<AddListingCubit>().clearVillage();
-                      if (value != null) {
-                        final loadVillageResponse = await context
-                            .read<AddListingCubit>()
-                            .loadVillages(value);
-                        selectedVillage =
-                        loadVillageResponse.data.first['name'];
-                        villageId = loadVillageResponse.data.first['id'];
-                        setState(() {
-                          listVillage = loadVillageResponse.data;
-                        });
-                      }
-                    },
-                  ),
+                          isExpanded: true,
+                          menuMaxHeight: 200,
+                          hint: Text(
+                              Translate.of(context).translate('input_city')),
+                          value: selectedCity ?? listCity.first['name'],
+                          items: listCity.map((city) {
+                            return DropdownMenuItem(
+                                value: city['name'], child: Text(city['name']));
+                          }).toList(),
+                          onChanged: (value) async {
+                            setState(() {
+                              selectedCity = value as String?;
+                            });
+                            selectedVillage = null;
+                            context.read<AddListingCubit>().clearVillage();
+                            if (value != null) {
+                              final loadVillageResponse = await context
+                                  .read<AddListingCubit>()
+                                  .loadVillages(value);
+                              selectedVillage =
+                                  loadVillageResponse.data.first['name'];
+                              villageId = loadVillageResponse.data.first['id'];
+                              setState(() {
+                                listVillage = loadVillageResponse.data;
+                              });
+                            }
+                          },
+                        ),
                 ),
               ],
             ),
@@ -762,8 +760,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
             Text(
               selectedCategory == "Events"
                   ? Translate.of(context).translate(
-                'start_date',
-              )
+                      'start_date',
+                    )
                   : '',
               style: Theme.of(context)
                   .textTheme
@@ -787,8 +785,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
             Text(
               selectedCategory == "Events"
                   ? Translate.of(context).translate(
-                'end_date',
-              )
+                      'end_date',
+                    )
                   : '',
               style: Theme.of(context)
                   .textTheme
@@ -819,7 +817,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
     selectedSubCategory = null;
     // clearStartEndDate();
     final subCategoryResponse =
-    await context.read<AddListingCubit>().loadSubCategory(selectedCategory);
+        await context.read<AddListingCubit>().loadSubCategory(selectedCategory);
     if (!mounted) return;
     context.read<AddListingCubit>().getCategoryId(selectedCategory);
     setState(() {
