@@ -13,7 +13,8 @@ enum ProductFilter {
 }
 
 class ListCubit extends Cubit<ListState> {
-  ListCubit() : super(const ListStateLoading()) {
+  final ListRepository repo;
+  ListCubit(this.repo) : super(const ListStateLoading()) {
     // final isEvent = categoryPreferencesCall();
   }
 
@@ -111,8 +112,7 @@ class ListCubit extends Cubit<ListState> {
   }
 
   Future<String?> getCategory() async {
-    final prefs = await Preferences.openBox();
-    final categoryId = prefs.getKeyValue(Preferences.categoryId, "");
+    final categoryId = await repo.getCategoryId();
     Map<int, String> categories = {
       1: "category_news",
       2: "category_traffic",
@@ -128,9 +128,6 @@ class ListCubit extends Cubit<ListState> {
       12: "category_offers",
       13: "category_food"
     };
-    if(categoryId != null) {
-      return categories[categoryId];
-    }
-    return null;
+    return categories[categoryId];
   }
 }

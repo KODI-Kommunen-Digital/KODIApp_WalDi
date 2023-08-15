@@ -133,7 +133,7 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
         prefs.setKeyValue(Preferences.categoryId, service.categoryId);
       }
       Navigator.pushNamed(context, Routes.listProduct,
-          arguments: service.arguments);
+          arguments: {'id': service.arguments, 'title': ''});
     }
   }
 }

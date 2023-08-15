@@ -70,9 +70,11 @@ class Routes {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case listProduct:
+        final Map<String, dynamic> arguments =
+        settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
           builder: (context) {
-            return ListProductScreen(selectedCityId: settings.arguments as int);
+            return ListProductScreen(arguments:  arguments);
           },
         );
 

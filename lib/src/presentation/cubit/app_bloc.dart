@@ -30,7 +30,7 @@ class AppBloc {
   static final changePasswordCubit = ChangePasswordCubit();
   static final homeCubit = HomeCubit();
   static final discoveryCubit = DiscoveryCubit();
-  static final listCubit = ListCubit();
+  // static final listCubit = ListCubit();
   // static final homeCubit = HomeCubit();
   static final wishListCubit = WishListCubit();
   // static final reviewCubit = ReviewCubit();
@@ -80,7 +80,7 @@ class AppBloc {
       create: (context) => homeCubit,
     ),
     BlocProvider<ListCubit>(
-      create: (context) => listCubit,
+      create: (context) => ListCubit(context.read()),
     ),
     // BlocProvider<HomeCubit>(
     //   create: (context) => homeCubit,
