@@ -119,6 +119,7 @@ class _AccountLoadedState extends State<AccountLoaded> {
                         Navigator.pushNamed(context, Routes.profile,
                             arguments: user);
                       },
+                      showDirectionIcon: true,
                     ),
                   ),
                   const SizedBox(height: 16),

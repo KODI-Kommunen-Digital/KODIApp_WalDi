@@ -107,6 +107,18 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                   child: AppUserInfo(
                     user: widget.user,
                     type: UserViewType.information,
+                    showDirectionIcon: false,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Text(
+                    Translate.of(context).translate('my_listings'),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge!
+                        .copyWith(fontWeight: FontWeight.bold),
                   ),
                 ),
                 Stack(children: [
@@ -164,82 +176,89 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                               ),
                               key:
                                   Key(item.id.toString() + isSwiped.toString()),
-                              child: Padding(
-                                padding: const EdgeInsets.only(bottom: 16),
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16),
-                                  child: Stack(
-                                    children: [
-                                      Row(
-                                        children: <Widget>[
-                                          Container(
-                                            width: 120,
-                                            height: 140,
-                                            padding: const EdgeInsets.all(8),
-                                            child: Image.network(
-                                              "${Application.picturesURL}${userListingsList[index].image}",
-                                              key: UniqueKey(),
+                              child: InkWell(
+                                onTap: () {
+                                  _onProductDetail(item);
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.only(bottom: 16),
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16),
+                                    child: Stack(
+                                      children: [
+                                        Row(
+                                          children: <Widget>[
+                                            Container(
+                                              width: 120,
+                                              height: 140,
+                                              padding: const EdgeInsets.all(8),
+                                              child: Image.network(
+                                                "${Application.picturesURL}${userListingsList[index].image}",
+                                                key: UniqueKey(),
+                                              ),
+                                              // decoration: BoxDecoration(
+                                              //     borderRadius:
+                                              //         BorderRadius.circular(8),
+                                              //     image: DecorationImage(
+                                              //       image: Image.network(
+                                              //           "${Application.picturesURL}${userListingsList[index].image}"),
+                                              //       fit: BoxFit.cover,
+                                              //     )),
+                                              // alignment: Alignment.center,
                                             ),
-                                            // decoration: BoxDecoration(
-                                            //     borderRadius:
-                                            //         BorderRadius.circular(8),
-                                            //     image: DecorationImage(
-                                            //       image: Image.network(
-                                            //           "${Application.picturesURL}${userListingsList[index].image}"),
-                                            //       fit: BoxFit.cover,
-                                            //     )),
-                                            // alignment: Alignment.center,
-                                          ),
-                                          const SizedBox(width: 8),
-                                          Expanded(
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: <Widget>[
-                                                Text(
-                                                  userListingsList[index]
-                                                          .category ??
-                                                      '',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodySmall!
-                                                      .copyWith(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                ),
-                                                const SizedBox(height: 4),
-                                                Text(
-                                                  userListingsList[index].title,
-                                                  maxLines: 2,
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .titleSmall!
-                                                      .copyWith(
+                                            const SizedBox(width: 8),
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: <Widget>[
+                                                  Text(
+                                                    userListingsList[index]
+                                                            .category ??
+                                                        '',
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodySmall!
+                                                        .copyWith(
                                                           fontWeight:
-                                                              FontWeight.bold),
-                                                ),
-                                                Text(
-                                                  userListingsList[index]
-                                                      .createDate,
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodySmall!
-                                                      .copyWith(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                ),
-                                                const SizedBox(height: 8),
-                                                const SizedBox(height: 8),
-                                                const SizedBox(height: 4),
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ],
+                                                              FontWeight.bold,
+                                                        ),
+                                                  ),
+                                                  const SizedBox(height: 4),
+                                                  Text(
+                                                    userListingsList[index]
+                                                        .title,
+                                                    maxLines: 2,
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .titleSmall!
+                                                        .copyWith(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                  ),
+                                                  Text(
+                                                    userListingsList[index]
+                                                        .createDate,
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodySmall!
+                                                        .copyWith(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                  ),
+                                                  const SizedBox(height: 8),
+                                                  const SizedBox(height: 8),
+                                                  const SizedBox(height: 4),
+                                                ],
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
@@ -252,6 +271,10 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
         ),
       ),
     );
+  }
+
+  void _onProductDetail(ProductModel item) {
+    Navigator.pushNamed(context, Routes.productDetail, arguments: item);
   }
 
   Future<void> showDeleteConfirmation(BuildContext context, int index) async {

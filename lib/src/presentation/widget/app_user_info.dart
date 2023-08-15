@@ -10,12 +10,14 @@ class AppUserInfo extends StatelessWidget {
   final UserModel? user;
   final VoidCallback? onPressed;
   final UserViewType type;
+  final bool showDirectionIcon;
 
   const AppUserInfo({
     Key? key,
     this.user,
     this.onPressed,
     this.type = UserViewType.basic,
+    required this.showDirectionIcon,
   }) : super(key: key);
 
   @override
@@ -117,6 +119,10 @@ class AppUserInfo extends StatelessWidget {
                   ],
                 ),
               ),
+              const Spacer(), // I just added one line
+              Visibility(
+                  visible: showDirectionIcon,
+                  child: const Icon(Icons.navigate_next, color: Colors.white))
             ],
           ),
         );
