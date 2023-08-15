@@ -6,7 +6,6 @@ import 'package:heidi/src/presentation/widget/app_picker_item.dart';
 import 'package:heidi/src/presentation/widget/app_text_input.dart';
 import 'package:heidi/src/presentation/widget/app_upload_image.dart';
 import 'package:heidi/src/utils/common.dart';
-import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/datetime.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:heidi/src/utils/validate.dart';
@@ -266,7 +265,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
 
   void _onSuccess() {
     Navigator.pop(context);
-    Navigator.pushNamed(context, Routes.submitSuccess);
   }
 
   bool _validData() {
