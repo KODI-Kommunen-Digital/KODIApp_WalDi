@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model_sort.dart';
 import 'package:heidi/src/utils/translate.dart';
-
 enum PageType { map, list }
 
 class AppNavBar extends StatelessWidget {

@@ -2,7 +2,8 @@ import 'package:bloc/bloc.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/presentation/main/login/forgot_password/cubit/forgot_password_state.dart';
 
-class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
+class ForgotPasswordCubit extends Cubit<ForgotPasswordState>{
+
   ForgotPasswordCubit() : super(const ForgotPasswordStateLoading());
 
   Future<bool> onForgotPassword(String username) async {

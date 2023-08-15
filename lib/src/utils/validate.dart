@@ -23,11 +23,11 @@ class UtilValidator {
 
   static String? validate(String data,
       {ValidateType? type = ValidateType.normal,
-      int? min,
-      int? max,
-      bool allowEmpty = false,
-      String? match,
-      String? password}) {
+        int? min,
+        int? max,
+        bool allowEmpty = false,
+        String? match,
+        String? password}) {
     ///Empty
     if (!allowEmpty && data.isEmpty) {
       return errorEmpty;
@@ -41,7 +41,7 @@ class UtilValidator {
     if (data.isEmpty) return null;
 
     switch (type) {
-      ///Email pattern
+    ///Email pattern
       case ValidateType.email:
         final emailRegex = RegExp(
           //r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$",
@@ -52,7 +52,7 @@ class UtilValidator {
         }
         break;
 
-      ///Phone pattern
+    ///Phone pattern
       case ValidateType.number:
         final phoneRegex = RegExp(r'^[0-9]*$');
         if (!phoneRegex.hasMatch(data)) {
@@ -60,7 +60,7 @@ class UtilValidator {
         }
         break;
 
-      ///Phone pattern
+    ///Phone pattern
       case ValidateType.phone:
         const pattern = r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$';
         final phoneRegex = RegExp(pattern);
@@ -69,7 +69,7 @@ class UtilValidator {
         }
         break;
 
-      ///Tag pattern
+    ///Tag pattern
       case ValidateType.tag:
         final tagRegex = RegExp(r'^([^0-9|\,\s]*)$');
         if (!tagRegex.hasMatch(data)) {
@@ -77,7 +77,7 @@ class UtilValidator {
         }
         break;
 
-      ///Is cpassword equal to password
+    ///Is cpassword equal to password
       case ValidateType.cpassword:
         if (password != data) {
           return errorCpassword;
