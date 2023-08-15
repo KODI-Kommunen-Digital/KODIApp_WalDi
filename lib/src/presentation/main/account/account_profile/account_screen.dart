@@ -28,7 +28,6 @@ class _AccountScreenState extends State<AccountScreen> {
         state.maybeWhen(
           error: (msg) => ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text(msg))),
-
           orElse: () {},
         );
       },
@@ -102,8 +101,8 @@ class _AccountLoadedState extends State<AccountLoaded> {
                       boxShadow: [
                         BoxShadow(
                           color: Theme.of(context).dividerColor.withOpacity(
-                                .05,
-                              ),
+                            .05,
+                          ),
                           spreadRadius: 4,
                           blurRadius: 4,
                           offset: const Offset(
@@ -116,10 +115,11 @@ class _AccountLoadedState extends State<AccountLoaded> {
                     child: AppUserInfo(
                       user: user,
                       type: UserViewType.information,
-                      // onPressed: () {
-                      //   _onPopUpError();
-                      //   // _onProfile(user);
-                      // },
+                      onPressed: () {
+                        Navigator.pushNamed(context, Routes.profile,
+                            arguments: user);
+                      },
+                      showDirectionIcon: true,
                     ),
                   ),
                   const SizedBox(height: 16),

@@ -15,6 +15,7 @@ class HTTPManager {
   HTTPManager() {
     _dio = Dio(
       BaseOptions(
+        // baseUrl: 'https://test.smartregion-auf.de/api',
         baseUrl: 'https://waldi.app/api',
         connectTimeout: 30000,
         receiveTimeout: 30000,

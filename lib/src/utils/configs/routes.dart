@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_product.dart';
+import 'package:heidi/src/data/model/model_user.dart';
 import 'package:heidi/src/presentation/main/account/change_password/change_password_screen.dart';
 import 'package:heidi/src/presentation/main/account/edit_profile/edit_profile_screen.dart';
 import 'package:heidi/src/presentation/main/account/legal/imprint/imprint.dart';
 import 'package:heidi/src/presentation/main/account/legal/legal.dart';
 import 'package:heidi/src/presentation/main/account/legal/privacy_policy/privacy.dart';
+import 'package:heidi/src/presentation/main/account/profile/cubit/profile_cubit.dart';
+import 'package:heidi/src/presentation/main/account/profile/profile_screen.dart';
 import 'package:heidi/src/presentation/main/account/setting/settings_screen.dart';
 import 'package:heidi/src/presentation/main/add_listing/add_listing_screen.dart';
 import 'package:heidi/src/presentation/main/add_listing/add_listing_success/add_listing_success.dart';
@@ -14,6 +18,8 @@ import 'package:heidi/src/presentation/main/home/product_detail/product_detail.d
 import 'package:heidi/src/presentation/main/login/forgot_password/forgot_password_screen.dart';
 import 'package:heidi/src/presentation/main/login/signin/signin_screen.dart';
 import 'package:heidi/src/presentation/main/login/signup/signup.dart';
+import 'package:heidi/src/presentation/main/account/contact_us/contact_us_screen.dart';
+import 'package:heidi/src/presentation/main/account/contact_us/contact_us_success/contact_us_success.dart';
 
 class RouteArguments<T> {
   final T? item;
@@ -52,6 +58,7 @@ class Routes {
   static const String categoryPicker = "/categoryPicker";
   static const String gpsPicker = "/gpsPicker";
   static const String submitSuccess = "/submitSuccess";
+  static const String contactUsSuccess = "/contactUsSuccess";
   static const String openTime = "/openTime";
   static const String socialNetwork = "/socialNetwork";
   static const String tagsPicker = "/tagsPicker";
@@ -66,7 +73,6 @@ class Routes {
   static const String privacy = "/privacy";
   static const String imageZoom = "/imageZoom";
 
-
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case listProduct:
@@ -79,7 +85,8 @@ class Routes {
       case productDetail:
         return MaterialPageRoute(
           builder: (context) {
-            return ProductDetailScreen(item: settings.arguments as ProductModel);
+            return ProductDetailScreen(
+                item: settings.arguments as ProductModel);
           },
         );
 
@@ -105,14 +112,14 @@ class Routes {
           },
         );
 
-        case editProfile:
+      case editProfile:
         return MaterialPageRoute(
           builder: (context) {
             return const EditProfileScreen();
           },
         );
 
-        case setting:
+      case setting:
         return MaterialPageRoute(
           builder: (context) {
             return const SettingsScreen();
@@ -135,6 +142,22 @@ class Routes {
           fullscreenDialog: true,
         );
 
+      case profile:
+        return MaterialPageRoute(
+          builder: (context) {
+            final args = settings.arguments as UserModel;
+            return BlocProvider(
+              create: (context) => ProfileCubit(
+                context.read(),
+                args,
+              ),
+              child: ProfileScreen(
+                user: args,
+              ),
+            );
+          },
+        );
+
       case submitSuccess:
         return MaterialPageRoute(
           builder: (context) {
@@ -143,34 +166,48 @@ class Routes {
           fullscreenDialog: true,
         );
 
-        case changePassword:
+      case changePassword:
         return MaterialPageRoute(
           builder: (context) {
             return const ChangePasswordScreen();
           },
         );
 
-        case legal:
+      case legal:
         return MaterialPageRoute(
           builder: (context) {
             return const LegalScreen();
           },
         );
 
-        case imprint:
+      case imprint:
         return MaterialPageRoute(
           builder: (context) {
             return const ImprintScreen();
           },
         );
 
-        case privacy:
+      case privacy:
         return MaterialPageRoute(
           builder: (context) {
             return const PrivacyScreen();
           },
         );
 
+      case contactUs:
+        return MaterialPageRoute(
+          builder: (context) {
+            return const ContactUsScreen();
+          },
+        );
+
+      case contactUsSuccess:
+        return MaterialPageRoute(
+          builder: (context) {
+            return const ContactUsSuccessScreen();
+          },
+          fullscreenDialog: true,
+        );
       default:
         const SignInScreen();
 
