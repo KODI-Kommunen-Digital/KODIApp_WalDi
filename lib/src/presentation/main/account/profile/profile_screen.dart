@@ -144,10 +144,10 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                                   SlidableAction(
                                     onPressed: (aContext) {
                                       Navigator.pushNamed(
-                                              context, Routes.submit,
-                                              arguments:
-                                                  userListingsList[index])
-                                          .then((value) async {
+                                          context, Routes.submit, arguments: {
+                                        'item': userListingsList[index],
+                                        'isNewList': false
+                                      }).then((value) async {
                                         final response = await context
                                             .read<ProfileCubit>()
                                             .loadUserListing();

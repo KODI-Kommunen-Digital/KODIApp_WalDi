@@ -23,7 +23,6 @@ mixin _$ProfileState {
     required TResult Function(String error) error,
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
@@ -39,7 +38,6 @@ mixin _$ProfileState {
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(ProfileStateLoading value) loading,
@@ -47,7 +45,6 @@ mixin _$ProfileState {
     required TResult Function(ProfileStateError value) error,
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(ProfileStateLoading value)? loading,
@@ -77,9 +74,9 @@ class _$ProfileStateCopyWithImpl<$Res, $Val extends ProfileState>
     implements $ProfileStateCopyWith<$Res> {
   _$ProfileStateCopyWithImpl(this._value, this._then);
 
-// ignore: unused_field
+  // ignore: unused_field
   final $Val _value;
-// ignore: unused_field
+  // ignore: unused_field
   final $Res Function($Val) _then;
 }
 
@@ -232,7 +229,7 @@ class _$ProfileStateLoaded implements ProfileStateLoaded {
   @override
   List<ProductModel> get userListings {
     if (_userListings is EqualUnmodifiableListView) return _userListings;
-// ignore: implicit_dynamic_type
+    // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_userListings);
   }
 

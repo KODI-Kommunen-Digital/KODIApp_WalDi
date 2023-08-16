@@ -146,7 +146,9 @@ class Routes {
       case submit:
         return MaterialPageRoute(
           builder: (context) {
-            return AddListingScreen(item: settings.arguments as ProductModel?);
+            final Map<String, dynamic> arguments =
+            settings.arguments as Map<String, dynamic>;
+            return AddListingScreen(item: arguments['item'] as ProductModel?, isNewList: arguments['isNewList'] as bool,);
           },
           fullscreenDialog: true,
         );

@@ -24,7 +24,8 @@ class _AddListingSuccessScreenState extends State<AddListingSuccessScreen> {
 
   ///On Add More
   void _onSuccess() {
-    Navigator.pushReplacementNamed(context, Routes.submit);
+    Navigator.pushNamed(context, Routes.submit,
+        arguments: {'isNewList': true});
   }
 
   @override
