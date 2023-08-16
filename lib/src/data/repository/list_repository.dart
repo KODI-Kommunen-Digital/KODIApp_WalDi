@@ -214,8 +214,6 @@ class ListRepository {
     final response = await Api.requestSubmitCities();
     var jsonCity = response.data;
     final selectedCity = jsonCity.first['name'];
-    final cityId = jsonCity.first['id'];
-    prefs.setKeyValue(Preferences.cityId, cityId as int);
     loadVillages(selectedCity);
     return response;
   }
@@ -362,7 +360,7 @@ class ListRepository {
     final item = jsonCity.firstWhere((item) => item['name'] == value);
     final itemId = item['id'];
     final cityId = itemId;
-    prefs.setKeyValue(Preferences.cityId, cityId);
+    //prefs.setKeyValue(Preferences.cityId, cityId);
     final requestVillageResponse = await Api.requestVillages(cityId: cityId);
     if (!requestVillageResponse.data.isEmpty) {
       prefs.setKeyValue(Preferences.villageId,
