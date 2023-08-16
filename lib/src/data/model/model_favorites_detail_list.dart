@@ -28,6 +28,7 @@ class FavoriteDetailsModel {
   String? startDate;
   String? endDate;
   String createdAt;
+  int? cityId;
 
   FavoriteDetailsModel(
       this.id,
@@ -53,7 +54,8 @@ class FavoriteDetailsModel {
       this.villageId,
       this.startDate,
       this.endDate,
-      this.createdAt);
+      this.createdAt,
+      this.cityId);
 
   factory FavoriteDetailsModel.fromJson(Map<String, dynamic> json) =>
       _$FavoriteDetailsModelFromJson(json);
