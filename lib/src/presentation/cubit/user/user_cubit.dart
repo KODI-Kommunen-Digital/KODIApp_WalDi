@@ -18,7 +18,7 @@ class UserCubit extends Cubit<UserModel?> {
     UserModel? local = await UserRepository.loadUser();
     UserModel? remote = await UserRepository.fetchUser(userId);
     if (local != null && remote != null) {
-       final sync = local.updateUser(
+      final sync = local.updateUser(
         username: remote.username,
         firstname: remote.firstname,
         lastname: remote.lastname,
@@ -32,6 +32,7 @@ class UserCubit extends Cubit<UserModel?> {
     }
     return null;
   }
+
   Future<void> onSaveUser(UserModel user) async {
     await UserRepository.saveUser(user: user);
     emit(user);
@@ -41,6 +42,4 @@ class UserCubit extends Cubit<UserModel?> {
     UserRepository.deleteUser();
     emit(null);
   }
-
 }
-

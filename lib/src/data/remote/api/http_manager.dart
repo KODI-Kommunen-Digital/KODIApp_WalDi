@@ -16,6 +16,7 @@ class HTTPManager {
     _dio = Dio(
       BaseOptions(
         baseUrl: 'https://app.smartregion-auf.de/api',
+        // baseUrl: 'https://test.smartregion-auf.de/api',
         connectTimeout: 30000,
         receiveTimeout: 30000,
         contentType: Headers.formUrlEncodedContentType,
@@ -46,6 +47,7 @@ class HTTPManager {
       }, onResponse: (response, handler) {
         handler.next(response);
       }, onError: (error, handler) async {
+        logError('Errors', error.response?.data);
         if (error.response?.data['message'] ==
             'Unauthorized! Token was expired!') {
           final prefs = await Preferences.openBox();

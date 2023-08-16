@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_product.dart';
-import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/presentation/widget/app_picker_item.dart';
 import 'package:heidi/src/presentation/widget/app_text_input.dart';
@@ -16,12 +15,13 @@ import 'cubit/add_listing_cubit.dart';
 
 class AddListingScreen extends StatefulWidget {
   final ProductModel? item;
+  final bool isNewList;
 
   const AddListingScreen({
     Key? key,
     this.item,
+    required this.isNewList,
   }) : super(key: key);
-
   @override
   State<AddListingScreen> createState() => _AddListingScreenState();
 }
@@ -80,6 +80,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
   String? selectedVillage;
   String? selectedCategory;
   String? selectedSubCategory;
+  bool isImageChanged = false;
 
   late int? currentCity;
 
@@ -193,18 +194,16 @@ class _AddListingScreenState extends State<AddListingScreen> {
     }
 
     if (widget.item != null) {
-      final result = await ListRepository.loadProduct(
-          widget.item!.cityId, widget.item!.id);
-      if (result != null) {
-        _featureImage = result.image;
-        _textTitleController.text = result.title;
-        _textContentController.text = result.description;
-        _textAddressController.text = result.address;
-        _textZipCodeController.text = result.zipCode!;
-        _textPhoneController.text = result.phone;
-        _textEmailController.text = result.email;
-        _textWebsiteController.text = result.website;
-      }
+      if (!mounted) return;
+
+      _featureImage = widget.item?.image;
+      _textTitleController.text = widget.item!.title;
+      _textContentController.text = widget.item!.description;
+      _textAddressController.text = widget.item!.address;
+      _textZipCodeController.text = widget.item?.zipCode ?? '';
+      _textPhoneController.text = widget.item?.phone ?? '';
+      _textEmailController.text = widget.item?.email ?? '';
+      _textWebsiteController.text = widget.item?.website ?? '';
     }
     setState(() {
       _processing = false;
@@ -244,7 +243,10 @@ class _AddListingScreenState extends State<AddListingScreen> {
   void _onSubmit() async {
     final success = _validData();
     if (success) {
-      final result = await context.read<AddListingCubit>().onSubmit(
+      if (widget.item != null) {
+        final result = await context.read<AddListingCubit>().onEdit(
+            cityId: widget.item?.cityId,
+            listingId: widget.item?.id,
             title: _textTitleController.text,
             place: _textPlaceController.text,
             description: _textContentController.text,
@@ -255,17 +257,37 @@ class _AddListingScreenState extends State<AddListingScreen> {
             price: _textPriceController.text,
             startDate: _startDate,
             endDate: _endDate,
-          );
-      if (result) {
-        _onSuccess();
-        if (!mounted) return;
-        context.read<AddListingCubit>().clearImagePath();
+            isImageChanged: isImageChanged);
+        if (result) {
+          _onSuccess();
+        }
+      } else {
+        final result = await context.read<AddListingCubit>().onSubmit(
+              title: _textTitleController.text,
+              place: _textPlaceController.text,
+              description: _textContentController.text,
+              address: _textAddressController.text,
+              email: _textEmailController.text,
+              phone: _textPhoneController.text,
+              website: _textWebsiteController.text,
+              price: _textPriceController.text,
+              startDate: _startDate,
+              endDate: _endDate,
+            );
+        if (result) {
+          _onSuccess();
+          if (!mounted) return;
+          context.read<AddListingCubit>().clearImagePath();
+        }
       }
     }
   }
 
   void _onSuccess() {
-    Navigator.pushReplacementNamed(context, Routes.submitSuccess);
+    Navigator.pop(context);
+    if(widget.isNewList){
+      Navigator.pushNamed(context, Routes.submitSuccess);
+    }
   }
 
   bool _validData() {
@@ -414,9 +436,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
                 image: _featureImage,
                 profile: false,
                 onChange: (result) {
-                  setState(() {
-                    _featureImage = result;
-                  });
+                  isImageChanged = true;
                 },
               ),
             ),
@@ -822,7 +842,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
     final subCategoryResponse =
         await context.read<AddListingCubit>().loadSubCategory(selectedCategory);
     if (!mounted) return;
-    context.read<AddListingCubit>().getCategoryId(selectedCategory);
+    context.read<AddListingCubit>().setCategoryId(selectedCategory);
     setState(() {
       selectedSubCategory = subCategoryResponse?.data.first['name'];
     });

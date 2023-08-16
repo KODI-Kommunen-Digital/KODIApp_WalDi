@@ -16,6 +16,7 @@ class HomeCubit extends Cubit<HomeState> {
   dynamic recent;
   dynamic sliders;
   dynamic categoryCount;
+  bool calledExternally = false;
 
   HomeCubit() : super(const HomeState.loading());
 
@@ -25,7 +26,7 @@ class HomeCubit extends Cubit<HomeState> {
     }
     final categoryRequestResponse = await Api.requestHomeCategory();
     final cityRequestResponse = await Api.requestCities();
-    final listingsRequestResponse = await Api.requestRecentListings();
+    final listingsRequestResponse = await Api.requestRecentListings(1);
 
     category = List.from(categoryRequestResponse.data ?? []).map((item) {
       return CategoryModel.fromJson(item);
@@ -66,6 +67,14 @@ class HomeCubit extends Cubit<HomeState> {
       return true;
     }
     return false;
+  }
+
+  bool getCalledExternally() {
+    return calledExternally;
+  }
+
+  void setCalledExternally(bool called) {
+    calledExternally = called;
   }
 
   Future<List<CategoryModel>> formatCategoriesList(
@@ -121,12 +130,50 @@ class HomeCubit extends Cubit<HomeState> {
 
   Future<CategoryModel?> checkSavedCity(List<CategoryModel> cities) async {
     final prefs = await Preferences.openBox();
-    final cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    final cityId = await prefs.getKeyValue(Preferences.cityId, 0);
     if (cityId != 0) {
-      final cityDetail = cities.where((element) => element.id == cityId);
-      return CategoryModel(
-          id: cityId, title: cityDetail.first.title, image: "");
+      final cityName =
+          cities[cities.indexWhere((category) => category.id == cityId)].title;
+      return CategoryModel(id: cityId, title: cityName, image: "");
     }
     return null;
+  }
+
+  Future<void> newListings(int pageNo) async {
+    if (!await hasInternet()) {
+      emit(const HomeState.error("no_internet"));
+    }
+    final categoryRequestResponse = await Api.requestHomeCategory();
+    final cityRequestResponse = await Api.requestCities();
+
+    category = List.from(categoryRequestResponse.data ?? []).map((item) {
+      return CategoryModel.fromJson(item);
+    }).toList();
+
+    location = List.from(cityRequestResponse.data ?? []).map((item) {
+      return CategoryModel.fromJson(item);
+    }).toList();
+
+    CategoryModel? savedCity = await checkSavedCity(location);
+    final categoryCountRequestResponse =
+        await Api.requestCategoryCount(savedCity?.id);
+    categoryCount =
+        List.from(categoryCountRequestResponse.data ?? []).map((item) {
+      return CategoryModel.fromJson(item);
+    }).toList();
+    const banner = Images.slider;
+    List<CategoryModel> formattedCategories =
+        await formatCategoriesList(category, categoryCount, savedCity?.id);
+    final listingsRequestResponse = await Api.requestRecentListings(pageNo);
+    final newRecent = List.from(listingsRequestResponse.data ?? []).map((item) {
+      return ProductModel.fromJson(item);
+    }).toList();
+    recent.addAll(newRecent);
+    emit(HomeState.updated(
+      banner,
+      formattedCategories,
+      location,
+      recent,
+    ));
   }
 }

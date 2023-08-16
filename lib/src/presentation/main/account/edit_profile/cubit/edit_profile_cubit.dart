@@ -32,7 +32,7 @@ class EditProfileCubit extends Cubit<EditProfileState> {
     return changeProfileResponse;
   }
 
-  UserModel getUserDetails()  {
+  UserModel getUserDetails() {
     return AppBloc.userCubit.state!;
   }
 }

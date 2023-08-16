@@ -4,7 +4,6 @@ part 'account_state.freezed.dart';
 
 @freezed
 class AccountState with _$AccountState {
-
   const factory AccountState.loading() = AccountLoading;
 
   const factory AccountState.loaded() = AccountLoaded;

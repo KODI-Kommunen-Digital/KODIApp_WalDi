@@ -189,15 +189,13 @@ class _MainScreenState extends State<MainScreen> {
 
   void _onSubmit() async {
     if (AppBloc.userCubit.state == null) {
-      final result = await Navigator.pushNamed(
-        context,
-        Routes.signIn,
-        arguments: Routes.submit,
-      );
+      final result = await Navigator.pushNamed(context, Routes.submit,
+          arguments: {'item': Routes.submit, 'isNewList': true});
       if (result == null) return;
     }
     if (!mounted) return;
-    Navigator.pushNamed(context, Routes.submit);
+    Navigator.pushNamed(context, Routes.submit,
+        arguments: {'isNewList': true});
   }
 
   Widget _buildBottomMenu() {

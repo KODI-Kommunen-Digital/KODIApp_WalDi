@@ -33,6 +33,7 @@ FavoriteDetailsModel _$FavoriteDetailsModelFromJson(
       json['startDate'] as String?,
       json['endDate'] as String?,
       json['createdAt'] as String,
+      json['cityId'] as int?,
     );
 
 Map<String, dynamic> _$FavoriteDetailsModelToJson(
@@ -62,4 +63,5 @@ Map<String, dynamic> _$FavoriteDetailsModelToJson(
       'startDate': instance.startDate,
       'endDate': instance.endDate,
       'createdAt': instance.createdAt,
+      'cityId': instance.cityId,
     };

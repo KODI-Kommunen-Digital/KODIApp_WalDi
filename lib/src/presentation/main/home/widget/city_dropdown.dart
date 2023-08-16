@@ -5,12 +5,14 @@ class CitiesDropDown extends StatefulWidget {
   final ValueSetter<String>? setLocationCallback;
   final List<String>? cityTitlesList;
   final String? hintText;
+  final String? selectedOption;
 
   const CitiesDropDown(
       {Key? key,
       required this.setLocationCallback,
       required this.cityTitlesList,
-      this.hintText})
+      this.hintText,
+      this.selectedOption})
       : super(key: key);
 
   @override
@@ -20,7 +22,8 @@ class CitiesDropDown extends StatefulWidget {
 class _CitiesDropDownState extends State<CitiesDropDown> {
   @override
   Widget build(BuildContext context) {
-    String? selectedOption;
+    String? chosenOption;
+    if (widget.selectedOption != "") chosenOption = widget.selectedOption;
     return SafeArea(
       child: Container(
         padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
@@ -31,11 +34,11 @@ class _CitiesDropDownState extends State<CitiesDropDown> {
           ),
           elevation: 2,
           child: DropdownButtonFormField<String>(
-            value: selectedOption,
+            value: chosenOption,
             onChanged: (newValue) {
               setState(() {
                 widget.setLocationCallback!(newValue!);
-                selectedOption = newValue;
+                chosenOption = newValue;
               });
             },
             items: widget.cityTitlesList?.map((String option) {
@@ -48,7 +51,8 @@ class _CitiesDropDownState extends State<CitiesDropDown> {
               focusedBorder: const OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.white),
               ),
-              labelText: widget.hintText ?? Translate.of(context).translate('select_location'),
+              labelText: widget.hintText ??
+                  Translate.of(context).translate('select_location'),
               labelStyle: const TextStyle(color: Colors.white),
               border: const OutlineInputBorder(),
             ),
