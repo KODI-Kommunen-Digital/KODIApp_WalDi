@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_category.dart';
+import 'package:heidi/src/data/model/model_favorites_detail_list.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
 import 'package:heidi/src/utils/configs/application.dart';
@@ -113,46 +114,17 @@ class ListRepository {
     }
   }
 
-  //
-  // ///clear wishList
-  // static Future<bool> clearWishList() async {
-  //   final response = await Api.requestClearWishList();
-  //   AppBloc.messageCubit.onShow(response.message);
-  //   if (response.success) {
-  //     return true;
-  //   }
-  //   return false;
-  // }
-  //
-  // ///load author post
-  // static Future<List?> loadAuthorList({
-  //   required int page,
-  //   required int perPage,
-  //   required String keyword,
-  //   required int userID,
-  //   required FilterModel filter,
-  //   bool? pending,
-  // }) async {
-  //   Map<String, dynamic> params = {
-  //     "page": page,
-  //     "per_page": perPage,
-  //     "s": keyword,
-  //     "user_id": userID,
-  //   };
-  //   if (pending == true) {
-  //     params['post_status'] = 'pending';
-  //   }
-  //   params.addAll(await filter.getParams());
-  //   final response = await Api.requestAuthorList(params);
-  //   if (response.success) {
-  //     final list = List.from(response.data ?? []).map((item) {
-  //       return ProductModel.fromJson(item, setting: Application.setting);
-  //     }).toList();
-  //     return [list, response.pagination, response.user];
-  //   }
-  //   AppBloc.messageCubit.onShow(response.message);
-  //   return null;
-  // }
+  Future<bool> deleteUserList(int? cityId, int listingId) async {
+    final response = await Api.deleteUserList(cityId, listingId);
+    logError('cityId', cityId);
+    logError('listingId', listingId);
+    if (response.success) {
+      return true;
+    } else {
+      logError('Remove UserList Response Failed', response.message);
+      return false;
+    }
+  }
 
   ///Upload image
   static Future<ResultApiModel?> uploadImage(File image, profile) async {
@@ -181,13 +153,58 @@ class ListRepository {
     return null;
   }
 
+  Future<List<FavoriteDetailsModel>> loadUserListings() async {
+    final userId = prefs.getKeyValue('userId', 0);
+    final userList = <FavoriteDetailsModel>[];
+    final listResponse = await Api.requestUserListings(userId);
+    if (listResponse.success) {
+      final responseData = listResponse.data;
+      if (responseData != []) {
+        for (final data in responseData) {
+          logError(' dataId', data['id']);
+          logError(' dataCityId', data['cityId']);
+          userList.add(FavoriteDetailsModel(
+            data['id'],
+            data['userId'],
+            data['title'] ?? '',
+            data['place'] ?? '',
+            '',
+            data['description'] ?? '',
+            data['media'] ?? '',
+            data['categoryId'] ?? 0,
+            data['subcategoryId'] ?? 0,
+            data['address'] ?? '',
+            data['email'] ?? '',
+            data['phone'] ?? '',
+            data['website'] ?? '',
+            data['price'] ?? 0,
+            data['discountPrice'] ?? 0,
+            data['logo'] ?? '',
+            data['statusId'] ?? 0,
+            data['sourceId'] ?? 0,
+            data['longitude'] ?? 0.0,
+            data['latitude'] ?? 0.0,
+            data['villageId'] ?? 0,
+            data['startDate'] ?? '',
+            data['endDate'] ?? '',
+            data['createdAt'] ?? '',
+            data['cityId'] ?? 0,
+          ));
+        }
+      }
+      return userList;
+    } else {
+      logError('Load User Listings Error');
+    }
+    return userList;
+  }
+
   Future<ResultApiModel> requestVillages(value) async {
     final cityId = prefs.getKeyValue(Preferences.cityId, '');
     final response = await Api.requestVillages(cityId: cityId);
     var jsonCategory = response.data;
     final item = jsonCategory.firstWhere((item) => item['name'] == value);
     final itemId = item['id'];
-    // logError()
     final villageId = itemId;
     prefs.setKeyValue(Preferences.villageId, villageId);
     return response;
@@ -213,8 +230,6 @@ class ListRepository {
     final response = await Api.requestSubmitCities();
     var jsonCity = response.data;
     final selectedCity = jsonCity.first['name'];
-    final cityId = jsonCity.first['id'];
-    prefs.setKeyValue(Preferences.cityId, cityId as int);
     loadVillages(selectedCity);
     return response;
   }
@@ -267,7 +282,7 @@ class ListRepository {
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
     final villageId = prefs.getKeyValue(Preferences.villageId, null);
     final userId = prefs.getKeyValue(Preferences.userId, '');
-    final cityId = prefs.getKeyValue(Preferences.cityId, '');
+    final cityId = prefs.getKeyValue(Preferences.cityId, 0);
     final media = prefs.getKeyValue(Preferences.path, null);
 
     Map<String, dynamic> params = {
@@ -298,13 +313,74 @@ class ListRepository {
     return response;
   }
 
+  Future<ResultApiModel> editProduct(
+    int? listingId,
+    cityId,
+    String title,
+    String description,
+    String place,
+    CategoryModel? country,
+    CategoryModel? state,
+    CategoryModel? city,
+    int? statusId,
+    int? sourceId,
+    String address,
+    String? zipcode,
+    String? phone,
+    String? email,
+    String? website,
+    String? status,
+    String? startDate,
+    String? endDate,
+    String? price,
+    bool isImageChanged,
+  ) async {
+    final subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
+    final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
+    final villageId = prefs.getKeyValue(Preferences.villageId, null);
+    final userId = prefs.getKeyValue(Preferences.userId, '');
+    final media = prefs.getKeyValue(Preferences.path, null);
+
+    Map<String, dynamic> params = {
+      "userId": userId,
+      "title": title,
+      "place": place,
+      "description": description,
+      "media": '',
+      "categoryId": categoryId,
+      "address": address,
+      "email": email,
+      "phone": phone,
+      "website": website,
+      "price": 100, //dummy data
+      "discountPrice": 100, //dummy data
+      "logo": media,
+      "statusId": 1, //dummy data
+      "sourceId": 1, //dummy data
+      "longitude": 245.65, //dummy data
+      "latitude": 22.456, //dummy data
+      "villageId": villageId ?? 0,
+      "cityId": cityId ?? 0,
+      "startDate": startDate,
+      "endDate": endDate,
+      "subCategoryId": subCategoryId,
+    };
+    final response =
+        await Api.requestEditProduct(cityId, listingId, params, isImageChanged);
+    return response;
+  }
+
+  Future<void> setImagePrefs(imagePath) async {
+    await prefs.setKeyValue(Preferences.path, imagePath);
+  }
+
   Future<ResultApiModel> loadVillages(value) async {
     final response = await Api.requestSubmitCities();
     var jsonCity = response.data;
     final item = jsonCity.firstWhere((item) => item['name'] == value);
     final itemId = item['id'];
     final cityId = itemId;
-    prefs.setKeyValue(Preferences.cityId, cityId);
+    //prefs.setKeyValue(Preferences.cityId, cityId);
     final requestVillageResponse = await Api.requestVillages(cityId: cityId);
     if (!requestVillageResponse.data.isEmpty) {
       prefs.setKeyValue(Preferences.villageId,
@@ -313,13 +389,17 @@ class ListRepository {
     return requestVillageResponse;
   }
 
-  void getCategoryId(value) async {
+  void setCategoryId(value) async {
     final response = await Api.requestSubmitCategory();
     var jsonCategory = response.data;
     final item = jsonCategory.firstWhere((item) => item['name'] == value);
     final itemId = item['id'];
     final categoryId = itemId;
     prefs.setKeyValue(Preferences.categoryId, categoryId);
+  }
+
+  Future<int> getCategoryId() async {
+    return await prefs.getKeyValue(Preferences.categoryId, 0);
   }
 
   void getSubCategoryId(value) async {

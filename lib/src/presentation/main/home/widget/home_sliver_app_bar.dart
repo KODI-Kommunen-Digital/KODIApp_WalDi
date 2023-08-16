@@ -8,13 +8,15 @@ class AppBarHomeSliver extends SliverPersistentHeaderDelegate {
   final ValueSetter<String>? setLocationCallback;
   final List<String>? cityTitlesList;
   String? hintText;
+  String? selectedOption;
 
   AppBarHomeSliver(
       {required this.expandedHeight,
       required this.setLocationCallback,
       required this.cityTitlesList,
       this.banners,
-      this.hintText});
+      this.hintText,
+      this.selectedOption});
 
   @override
   Widget build(context, shrinkOffset, overlapsContent) {
@@ -33,6 +35,7 @@ class AppBarHomeSliver extends SliverPersistentHeaderDelegate {
           hintText: hintText,
           cityTitlesList: cityTitlesList,
           setLocationCallback: setLocationCallback,
+          selectedOption: selectedOption,
           // onScan: onScan,
         ),
       ],

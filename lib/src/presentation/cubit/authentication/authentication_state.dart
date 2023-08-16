@@ -16,5 +16,6 @@ class AuthenticationState with _$AuthenticationState {
 
   const factory AuthenticationState.loggedOut() = AuthenticationLoggedOut;
 
-  const factory AuthenticationState.error(String errorMessage) = AuthenticationError;
+  const factory AuthenticationState.error(String errorMessage) =
+      AuthenticationError;
 }
