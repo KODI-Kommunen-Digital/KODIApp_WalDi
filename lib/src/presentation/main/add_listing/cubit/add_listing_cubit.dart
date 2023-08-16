@@ -74,6 +74,62 @@ class AddListingCubit extends Cubit<AddListingState> {
     }
   }
 
+  Future<bool> onEdit({
+    int? cityId,
+    int? listingId,
+    required String title,
+    required String description,
+    CategoryModel? country,
+    CategoryModel? state,
+    CategoryModel? city,
+    int? statusId,
+    int? sourceId,
+    required String address,
+    required String place,
+    String? zipcode,
+    required String? phone,
+    String? email,
+    String? website,
+    String? status,
+    String? startDate,
+    String? endDate,
+    String? price,
+    required bool isImageChanged,
+  }) async {
+    try {
+      final response = await _repo.editProduct(
+          listingId,
+          cityId,
+          title,
+          description,
+          place,
+          country,
+          state,
+          city,
+          statusId,
+          sourceId,
+          address,
+          zipcode,
+          phone,
+          email,
+          website,
+          status,
+          startDate,
+          endDate,
+          price,
+          isImageChanged);
+      if (response.success) {
+        return true;
+      } else {
+        logError('edit Product Response Failed', response.message);
+        return false;
+      }
+    } catch (e) {
+      logError('edit Product Error', e);
+      return false;
+    }
+  }
+
   void clearVillage() async {
     _repo.clearVillageId();
   }
@@ -118,7 +174,7 @@ class AddListingCubit extends Cubit<AddListingState> {
         final subCategoryResponse = _repo.loadSubCategory(value);
         return subCategoryResponse;
       }
-     return null;
+      return null;
     } catch (e) {
       logError('request subCategoryID Error', e);
       return null;
