@@ -31,7 +31,7 @@ class AppBloc {
   static final changePasswordCubit = ChangePasswordCubit();
   static final homeCubit = HomeCubit();
   static final discoveryCubit = DiscoveryCubit();
-  static final listCubit = ListCubit();
+  //static final listCubit = ListCubit();
   static final wishListCubit = WishListCubit();
   // static final reviewCubit = ReviewCubit();
   // static final messageCubit = MessageCubit();
