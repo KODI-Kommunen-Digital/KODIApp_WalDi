@@ -47,6 +47,7 @@ class HTTPManager {
       }, onResponse: (response, handler) {
         handler.next(response);
       }, onError: (error, handler) async {
+        logError('Errors', error.response?.data);
         if (error.response?.data['message'] ==
             'Unauthorized! Token was expired!') {
           final prefs = await Preferences.openBox();

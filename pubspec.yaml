@@ -67,6 +67,7 @@ dependencies:
   ### File Reading
   open_filex: 4.3.1
   image_picker: 0.8.6
+  flutter_slidable: ^3.0.0
 
 dev_dependencies:
   flutter_test:

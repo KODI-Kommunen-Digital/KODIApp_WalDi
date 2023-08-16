@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/presentation/main/account/change_password/change_password_screen.dart';
 import 'package:heidi/src/presentation/main/account/edit_profile/edit_profile_screen.dart';
 import 'package:heidi/src/presentation/main/account/legal/imprint/imprint.dart';
 import 'package:heidi/src/presentation/main/account/legal/legal.dart';
 import 'package:heidi/src/presentation/main/account/legal/privacy_policy/privacy.dart';
+import 'package:heidi/src/presentation/main/account/profile/cubit/profile_cubit.dart';
+import 'package:heidi/src/presentation/main/account/profile/profile_screen.dart';
 import 'package:heidi/src/presentation/main/account/setting/settings_screen.dart';
 import 'package:heidi/src/presentation/main/add_listing/add_listing_screen.dart';
 import 'package:heidi/src/presentation/main/add_listing/add_listing_success/add_listing_success.dart';
@@ -14,6 +18,8 @@ import 'package:heidi/src/presentation/main/home/product_detail/product_detail_s
 import 'package:heidi/src/presentation/main/login/forgot_password/forgot_password_screen.dart';
 import 'package:heidi/src/presentation/main/login/signin/signin_screen.dart';
 import 'package:heidi/src/presentation/main/login/signup/signup.dart';
+import 'package:heidi/src/presentation/main/account/contact_us/contact_us_screen.dart';
+import 'package:heidi/src/presentation/main/account/contact_us/contact_us_success/contact_us_success.dart';
 
 class RouteArguments<T> {
   final T? item;
@@ -53,6 +59,7 @@ class Routes {
   static const String categoryPicker = "/categoryPicker";
   static const String gpsPicker = "/gpsPicker";
   static const String submitSuccess = "/submitSuccess";
+  static const String contactUsSuccess = "/contactUsSuccess";
   static const String openTime = "/openTime";
   static const String socialNetwork = "/socialNetwork";
   static const String tagsPicker = "/tagsPicker";
@@ -115,6 +122,22 @@ class Routes {
           },
         );
 
+      case profile:
+        return MaterialPageRoute(
+          builder: (context) {
+            final args = settings.arguments as UserModel;
+            return BlocProvider(
+              create: (context) => ProfileCubit(
+                context.read(),
+                args,
+              ),
+              child: ProfileScreen(
+                user: args,
+              ),
+            );
+          },
+        );
+
       case setting:
         return MaterialPageRoute(
           builder: (context) {
@@ -125,7 +148,9 @@ class Routes {
       case submit:
         return MaterialPageRoute(
           builder: (context) {
-            return AddListingScreen(item: settings.arguments as ProductModel?);
+            final Map<String, dynamic> arguments =
+            settings.arguments as Map<String, dynamic>;
+            return AddListingScreen(item: arguments['item'] as ProductModel?, isNewList: arguments['isNewList'] as bool,);
           },
           fullscreenDialog: true,
         );
@@ -173,6 +198,20 @@ class Routes {
           },
         );
 
+      case contactUs:
+        return MaterialPageRoute(
+          builder: (context) {
+            return const ContactUsScreen();
+          },
+        );
+
+      case contactUsSuccess:
+        return MaterialPageRoute(
+          builder: (context) {
+            return const ContactUsSuccessScreen();
+          },
+          fullscreenDialog: true,
+        );
       default:
         const SignInScreen();
 

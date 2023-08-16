@@ -239,15 +239,36 @@ class AppProductItem extends StatelessWidget {
                               .copyWith(fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 8),
-                        Text(
-                          item?.categoryId == 3
-                              ? "${item?.startDate} ${Translate.of(context).translate('to')} ${item?.endDate}"
-                              : "",
-                          style:
-                              Theme.of(context).textTheme.bodySmall!.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                        ),
+                        (item?.categoryId == 3)
+                            ? Container(
+                                padding: const EdgeInsets.all(3.5),
+                                decoration: BoxDecoration(
+                                  color: Colors.white30,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Text(
+                                  item?.categoryId == 3
+                                      ? "${item?.startDate} ${Translate.of(context).translate('to')} ${item?.endDate}"
+                                      : "",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall!
+                                      .copyWith(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                ),
+                              )
+                            : Text(
+                                item?.categoryId == 3
+                                    ? "${item?.startDate} ${Translate.of(context).translate('to')} ${item?.endDate}"
+                                    : "",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall!
+                                    .copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                              ),
                         Text(
                           item?.categoryId == 1 ? "${item?.createDate}" : "",
                           style:
