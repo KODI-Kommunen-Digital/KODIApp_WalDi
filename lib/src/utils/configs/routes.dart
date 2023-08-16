@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_product.dart';
+import 'package:heidi/src/data/model/model_user.dart';
 import 'package:heidi/src/presentation/main/account/change_password/change_password_screen.dart';
 import 'package:heidi/src/presentation/main/account/edit_profile/edit_profile_screen.dart';
 import 'package:heidi/src/presentation/main/account/legal/imprint/imprint.dart';
 import 'package:heidi/src/presentation/main/account/legal/legal.dart';
 import 'package:heidi/src/presentation/main/account/legal/privacy_policy/privacy.dart';
+import 'package:heidi/src/presentation/main/account/profile/cubit/profile_cubit.dart';
+import 'package:heidi/src/presentation/main/account/profile/profile_screen.dart';
 import 'package:heidi/src/presentation/main/account/setting/settings_screen.dart';
 import 'package:heidi/src/presentation/main/add_listing/add_listing_screen.dart';
 import 'package:heidi/src/presentation/main/add_listing/add_listing_success/add_listing_success.dart';
@@ -136,6 +140,22 @@ class Routes {
             return AddListingScreen(item: settings.arguments as ProductModel?);
           },
           fullscreenDialog: true,
+        );
+
+      case profile:
+        return MaterialPageRoute(
+          builder: (context) {
+            final args = settings.arguments as UserModel;
+            return BlocProvider(
+              create: (context) => ProfileCubit(
+                context.read(),
+                args,
+              ),
+              child: ProfileScreen(
+                user: args,
+              ),
+            );
+          },
         );
 
       case submitSuccess:
