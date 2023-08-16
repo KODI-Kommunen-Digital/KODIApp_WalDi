@@ -193,7 +193,7 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                                               width: 120,
                                               height: 140,
                                               child: Image.network(
-                                                "${Application.picturesURL}${item!.image}",
+                                                "${Application.picturesURL}${item.image}",
                                                 width: 120,
                                                 //       height: 140,
                                                 fit: BoxFit.cover,
