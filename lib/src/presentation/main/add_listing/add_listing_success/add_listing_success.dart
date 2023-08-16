@@ -7,7 +7,8 @@ class AddListingSuccessScreen extends StatefulWidget {
   const AddListingSuccessScreen({Key? key}) : super(key: key);
 
   @override
-  State<AddListingSuccessScreen> createState() => _AddListingSuccessScreenState();
+  State<AddListingSuccessScreen> createState() =>
+      _AddListingSuccessScreenState();
 }
 
 class _AddListingSuccessScreenState extends State<AddListingSuccessScreen> {
