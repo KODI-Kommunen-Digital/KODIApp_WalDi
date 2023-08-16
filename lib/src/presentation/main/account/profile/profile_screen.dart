@@ -189,23 +189,15 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                                       children: [
                                         Row(
                                           children: <Widget>[
-                                            Container(
+                                            SizedBox(
                                               width: 120,
                                               height: 140,
-                                              padding: const EdgeInsets.all(8),
                                               child: Image.network(
-                                                "${Application.picturesURL}${userListingsList[index].image}",
-                                                key: UniqueKey(),
+                                                "${Application.picturesURL}${item!.image}",
+                                                width: 120,
+                                                //       height: 140,
+                                                fit: BoxFit.cover,
                                               ),
-                                              // decoration: BoxDecoration(
-                                              //     borderRadius:
-                                              //         BorderRadius.circular(8),
-                                              //     image: DecorationImage(
-                                              //       image: Image.network(
-                                              //           "${Application.picturesURL}${userListingsList[index].image}"),
-                                              //       fit: BoxFit.cover,
-                                              //     )),
-                                              // alignment: Alignment.center,
                                             ),
                                             const SizedBox(width: 8),
                                             Expanded(
@@ -225,7 +217,7 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                                                               FontWeight.bold,
                                                         ),
                                                   ),
-                                                  const SizedBox(height: 4),
+                                                  const SizedBox(height: 8),
                                                   Text(
                                                     userListingsList[index]
                                                         .title,
@@ -238,9 +230,15 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                                                                 FontWeight
                                                                     .bold),
                                                   ),
+                                                  const SizedBox(height: 8),
                                                   Text(
                                                     userListingsList[index]
-                                                        .createDate,
+                                                                .categoryId ==
+                                                            3
+                                                        ? "${userListingsList[index].startDate} ${Translate.of(context).translate('to')} ${userListingsList[index].endDate}"
+                                                        : userListingsList[
+                                                                index]
+                                                            .createDate,
                                                     style: Theme.of(context)
                                                         .textTheme
                                                         .bodySmall!
@@ -287,12 +285,12 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
               .translate('Are_you_sure_you_want_to_delete_this_item?')),
           actions: <Widget>[
             TextButton(
-              onPressed: () => Navigator.of(context).pop(false), // No
-              child: Text(Translate.of(context).translate('no')),
-            ),
-            TextButton(
               onPressed: () => Navigator.of(context).pop(true), // Yes
               child: Text(Translate.of(context).translate('yes')),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false), // No
+              child: Text(Translate.of(context).translate('no')),
             ),
           ],
         );

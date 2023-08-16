@@ -25,6 +25,8 @@ class ProfileCubit extends Cubit<ProfileState> {
             cityId: list.cityId,
             title: product.title,
             image: product.image,
+            category: product.category,
+            categoryId: product.categoryId,
             startDate: product.startDate,
             endDate: product.endDate,
             createDate: product.createDate,
@@ -57,4 +59,5 @@ class ProfileCubit extends Cubit<ProfileState> {
     final deleteResponse = await repo.deleteUserList(id, listingId);
     return deleteResponse;
   }
+
 }
