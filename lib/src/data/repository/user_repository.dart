@@ -32,13 +32,13 @@ class UserRepository {
         for (final cities in cityUsers) {
           cityIds.add(cities['cityId']);
         }
-        List<String> cityIdsList = cityIds.map((i) => i.toString()).toList();
+        //List<String> cityIdsList = cityIds.map((i) => i.toString()).toList();
 
         prefs.setKeyValue(Preferences.userId, userId);
         prefs.setKeyValue(Preferences.token, response.data['accessToken']);
         prefs.setKeyValue(
             Preferences.refreshToken, response.data['refreshToken']);
-        prefs.setKeyValue(Preferences.cityId, cityIdsList);
+        //prefs.setKeyValue(Preferences.cityId, cityIdsList);
 
         return response;
       } else {
