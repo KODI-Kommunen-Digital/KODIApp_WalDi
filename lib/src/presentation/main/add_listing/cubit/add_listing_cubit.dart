@@ -3,6 +3,7 @@ import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/presentation/main/add_listing/cubit/add_listing_state.dart';
+import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
 
 class AddListingCubit extends Cubit<AddListingState> {
@@ -73,6 +74,10 @@ class AddListingCubit extends Cubit<AddListingState> {
       return false;
     }
   }
+
+  Future<int?> getCurrentCityId() async {
+    final prefs = await Preferences.openBox();
+    return prefs.getKeyValue(Preferences.cityId, 0);
 
   Future<bool> onEdit({
     int? cityId,

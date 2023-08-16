@@ -82,9 +82,18 @@ class _AddListingScreenState extends State<AddListingScreen> {
   String? selectedSubCategory;
   bool isImageChanged = false;
 
+  late int? currentCity;
+
   @override
   void initState() {
     super.initState();
+    _onProcess();
+  }
+
+  @override
+  void didChangeDependencies() async {
+    super.didChangeDependencies();
+    currentCity = await context.read<AddListingCubit>().getCurrentCityId();
     _onProcess();
   }
 
@@ -162,7 +171,16 @@ class _AddListingScreenState extends State<AddListingScreen> {
     }
     setState(() {
       listCategory = loadCategoryResponse?.data;
-      selectedCity = loadCitiesResponse!.data.first['name'];
+      if (currentCity != null && currentCity != 0) {
+        for (var cityData in loadCitiesResponse!.data) {
+          if (cityData['id'] == currentCity) {
+            selectedCity = cityData['name'];
+            break; // Exit the loop once the desired city is found
+          }
+        }
+      } else {
+        selectedCity = loadCitiesResponse!.data.first['name'];
+      }
       selectedSubCategory = loadCategoryResponse?.data.first['name'];
       listCity = loadCitiesResponse.data;
       selectedCategory = selectedSubCategory;
