@@ -78,6 +78,7 @@ class AddListingCubit extends Cubit<AddListingState> {
   Future<int?> getCurrentCityId() async {
     final prefs = await Preferences.openBox();
     return prefs.getKeyValue(Preferences.cityId, 0);
+  }
 
   Future<bool> onEdit({
     int? cityId,

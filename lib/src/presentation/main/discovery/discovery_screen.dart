@@ -9,7 +9,6 @@ import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/home/list_product/cubit/list_cubit.dart';
 import 'package:heidi/src/presentation/main/home/home_screen/cubit/home_cubit.dart';
 import 'package:heidi/src/presentation/main/home/home_screen/cubit/home_state.dart';
-import 'package:heidi/src/utils/configs/image.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
@@ -177,34 +176,6 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
   void initState() {
     super.initState();
     hideEmptyService();
-    //TODOasd
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return GridView.builder(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 10.0,
-        mainAxisSpacing: 10.0,
-        mainAxisExtent: 300.0,
-      ),
-      itemCount: services.length,
-      itemBuilder: (BuildContext context, int index) {
-        return InkWell(
-          onTap: () {
-            navigateToLink(services[index]);
-          },
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(15.0),
-            child: Image.asset(
-              services[index].imageUrl,
-              fit: BoxFit.cover,
-            ),
-          ),
-        );
-      },
-    );
   }
 
   final List<CitizenServiceModel> hiddenServices = [];

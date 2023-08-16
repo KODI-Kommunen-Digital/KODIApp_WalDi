@@ -105,8 +105,9 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
           categoryId: 6),
       CitizenServiceModel(imageUrl: Images.service10, imageLink: "10"),
     ];
+  }
 
-    Future<int?> getCitySelected() async {
+  Future<int?> getCitySelected() async {
     final prefs = await Preferences.openBox();
     int cityId = await prefs.getKeyValue(Preferences.cityId, int);
     return cityId;
