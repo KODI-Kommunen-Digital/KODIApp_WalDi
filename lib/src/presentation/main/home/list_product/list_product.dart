@@ -13,9 +13,9 @@ import 'package:heidi/src/utils/translate.dart';
 import 'cubit/cubit.dart';
 
 class ListProductScreen extends StatefulWidget {
-  final int selectedCityId;
+  final Map<String, dynamic> arguments;
 
-  const ListProductScreen({Key? key, required this.selectedCityId})
+  const ListProductScreen({Key? key, required this.arguments})
       : super(key: key);
 
   @override
@@ -153,7 +153,9 @@ class _ListProductScreenState extends State<ListProductScreen> {
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: FutureBuilder<String?>(
+          title: widget.arguments['title'] != ''
+              ? Text(widget.arguments['title'])
+              : FutureBuilder<String?>(
               future: context.read<ListCubit>().getCategory(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -206,12 +208,12 @@ class _ListProductScreenState extends State<ListProductScreen> {
             loading: () => const ListLoading(),
             loaded: (list) => ListLoaded(
               list: list,
-              selectedCityId: widget.selectedCityId,
+              selectedCityId: widget.arguments['id'],
             ),
             updated: (list) {
               return ListLoaded(
                 list: list,
-                selectedCityId: widget.selectedCityId,
+                selectedCityId: widget.arguments['id'],
               );
             },
             error: (e) => ErrorWidget('Failed to load listings.'),

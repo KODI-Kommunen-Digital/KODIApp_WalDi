@@ -96,9 +96,9 @@ class AddListingCubit extends Cubit<AddListingState> {
     }
   }
 
-  void getCategoryId(value) async {
+  void setCategoryId(value) async {
     try {
-      _repo.getCategoryId(value);
+      _repo.setCategoryId(value);
     } catch (e) {
       logError('request categoryID Error', e);
     }
@@ -118,7 +118,7 @@ class AddListingCubit extends Cubit<AddListingState> {
         final subCategoryResponse = _repo.loadSubCategory(value);
         return subCategoryResponse;
       }
-     return null;
+      return null;
     } catch (e) {
       logError('request subCategoryID Error', e);
       return null;
