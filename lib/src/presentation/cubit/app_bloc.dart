@@ -84,7 +84,7 @@ class AppBloc {
       create: (context) => homeCubit,
     ),
     BlocProvider<ListCubit>(
-      create: (context) => listCubit,
+      create: (context) => ListCubit(context.read()),
     ),
     // BlocProvider<HomeCubit>(
     //   create: (context) => homeCubit,

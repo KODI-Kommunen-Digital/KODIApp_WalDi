@@ -283,7 +283,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
         prefs.setKeyValue(Preferences.categoryId, service.categoryId);
       }
       Navigator.pushNamed(context, Routes.listProduct,
-          arguments: service.arguments);
+          arguments: {'id': service.arguments, 'title': ''});
     }
   }
 }

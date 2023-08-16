@@ -391,13 +391,17 @@ class ListRepository {
     return requestVillageResponse;
   }
 
-  void getCategoryId(value) async {
+  void setCategoryId(value) async {
     final response = await Api.requestSubmitCategory();
     var jsonCategory = response.data;
     final item = jsonCategory.firstWhere((item) => item['name'] == value);
     final itemId = item['id'];
     final categoryId = itemId;
     prefs.setKeyValue(Preferences.categoryId, categoryId);
+  }
+
+  Future<int> getCategoryId() async {
+    return await prefs.getKeyValue(Preferences.categoryId, 0);
   }
 
   void getSubCategoryId(value) async {

@@ -272,7 +272,7 @@ class _HomeScreenState extends State<HomeScreen> {
       prefs.setKeyValue(Preferences.type, "category");
       if (!mounted) return;
       Navigator.pushNamed(context, Routes.listProduct,
-          arguments: selectedCityId);
+          arguments: {'id': selectedCityId, 'title': ''});
     } else if (item.id != -1 && !item.hasChild) {
       _onPopUpCatError();
     }
@@ -305,7 +305,7 @@ class _HomeScreenState extends State<HomeScreen> {
       prefs.setKeyValue(Preferences.cityId, item.id);
       prefs.setKeyValue(Preferences.type, "location");
       if (!mounted) return;
-      Navigator.pushNamed(context, Routes.listProduct, arguments: item.id);
+      Navigator.pushNamed(context, Routes.listProduct, arguments: {'id': item.id, 'title': item.title});
     } else if (item.id != -1 && !item.hasChild) {
       _onPopUpCatError();
     }
