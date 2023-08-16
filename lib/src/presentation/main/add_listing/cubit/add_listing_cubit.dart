@@ -157,9 +157,9 @@ class AddListingCubit extends Cubit<AddListingState> {
     }
   }
 
-  void getCategoryId(value) async {
+  void setCategoryId(value) async {
     try {
-      _repo.getCategoryId(value);
+      _repo.setCategoryId(value);
     } catch (e) {
       logError('request categoryID Error', e);
     }

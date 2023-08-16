@@ -837,7 +837,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
     final subCategoryResponse =
         await context.read<AddListingCubit>().loadSubCategory(selectedCategory);
     if (!mounted) return;
-    context.read<AddListingCubit>().getCategoryId(selectedCategory);
+    context.read<AddListingCubit>().setCategoryId(selectedCategory);
     setState(() {
       selectedSubCategory = subCategoryResponse?.data.first['name'];
     });
