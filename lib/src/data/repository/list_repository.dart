@@ -282,7 +282,7 @@ class ListRepository {
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
     final villageId = prefs.getKeyValue(Preferences.villageId, null);
     final userId = prefs.getKeyValue(Preferences.userId, '');
-    final cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    //final cityId = prefs.getKeyValue(Preferences.cityId, 0);
     final media = prefs.getKeyValue(Preferences.path, null);
 
     Map<String, dynamic> params = {
