@@ -282,7 +282,7 @@ class ListRepository {
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
     final villageId = prefs.getKeyValue(Preferences.villageId, null);
     final userId = prefs.getKeyValue(Preferences.userId, '');
-    final cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    //final cityId = prefs.getKeyValue(Preferences.cityId, 0);
     final media = prefs.getKeyValue(Preferences.path, null);
 
     Map<String, dynamic> params = {
@@ -360,7 +360,7 @@ class ListRepository {
       "longitude": 245.65, //dummy data
       "latitude": 22.456, //dummy data
       "villageId": villageId ?? 0,
-      "cityId": cityId ?? 0,
+      "cityId": cityId,
       "startDate": startDate,
       "endDate": endDate,
       "subCategoryId": subCategoryId,
