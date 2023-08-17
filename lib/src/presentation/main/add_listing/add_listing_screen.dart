@@ -23,6 +23,7 @@ class AddListingScreen extends StatefulWidget {
     this.item,
     required this.isNewList,
   }) : super(key: key);
+
   @override
   State<AddListingScreen> createState() => _AddListingScreenState();
 }
@@ -245,7 +246,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
     final success = _validData();
     if (success) {
       if (widget.item != null) {
-
         context.read<AddListingCubit>().setCategoryId(selectedCategory);
         final result = await context.read<AddListingCubit>().onEdit(
             cityId: widget.item?.cityId,
@@ -266,6 +266,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
         }
       } else {
         final result = await context.read<AddListingCubit>().onSubmit(
+              cityId: cityId ?? 0,
               title: _textTitleController.text,
               place: _textPlaceController.text,
               description: _textContentController.text,
@@ -288,7 +289,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
 
   void _onSuccess() {
     Navigator.pop(context);
-    if(widget.isNewList){
+    if (widget.isNewList) {
       Navigator.pushNamed(context, Routes.submitSuccess);
     }
   }
@@ -331,9 +332,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
     _errorContent =
         UtilValidator.validate(_textContentController.text, allowEmpty: false);
 
-    logError('selectedCategory',selectedCategory);
+    logError('selectedCategory', selectedCategory);
     if (selectedCategory == "Events") {
-      logError('_startDate',_startDate);
+      logError('_startDate', _startDate);
 
       if (_startDate == null || _startDate == "") {
         _errorSDate = "value_not_date_empty";
@@ -610,6 +611,11 @@ class _AddListingScreenState extends State<AddListingScreen> {
                           onChanged: (value) async {
                             setState(() {
                               selectedCity = value as String?;
+                              for (var element in listCity) {
+                                if (element["name"] == value) {
+                                  cityId = element["id"];
+                                }
+                              }
                             });
                             selectedVillage = null;
                             context.read<AddListingCubit>().clearVillage();
