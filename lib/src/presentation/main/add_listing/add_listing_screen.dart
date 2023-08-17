@@ -266,7 +266,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
         }
       } else {
         final result = await context.read<AddListingCubit>().onSubmit(
-              cityId: cityId ?? 0,
+              cityId: cityId ?? 1,
               title: _textTitleController.text,
               place: _textPlaceController.text,
               description: _textContentController.text,
