@@ -289,12 +289,12 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
               .translate('Are_you_sure_you_want_to_delete_this_item?')),
           actions: <Widget>[
             TextButton(
-              onPressed: () => Navigator.of(context).pop(false), // No
-              child: Text(Translate.of(context).translate('no')),
-            ),
-            TextButton(
               onPressed: () => Navigator.of(context).pop(true), // Yes
               child: Text(Translate.of(context).translate('yes')),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false), // No
+              child: Text(Translate.of(context).translate('no')),
             ),
           ],
         );
