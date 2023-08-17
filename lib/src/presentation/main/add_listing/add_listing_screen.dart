@@ -261,6 +261,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
         }
       } else {
         final result = await context.read<AddListingCubit>().onSubmit(
+              cityId: cityId ?? 1,
               title: _textTitleController.text,
               place: _textPlaceController.text,
               description: _textContentController.text,
@@ -599,6 +600,11 @@ class _AddListingScreenState extends State<AddListingScreen> {
                           onChanged: (value) async {
                             setState(() {
                               selectedCity = value as String?;
+                              for (var element in listCity) {
+                                if (element["name"] == value) {
+                                  cityId = element["id"];
+                                }
+                              }
                             });
                             selectedVillage = null;
                             context.read<AddListingCubit>().clearVillage();

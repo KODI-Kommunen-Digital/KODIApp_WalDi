@@ -27,6 +27,7 @@ class AddListingCubit extends Cubit<AddListingState> {
   Future<bool> onSubmit({
     required String title,
     required String description,
+    required int cityId,
     CategoryModel? country,
     CategoryModel? state,
     CategoryModel? city,

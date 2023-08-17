@@ -26,11 +26,7 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
   }
 
   Future<void> onLocationFilter(int locationId, bool calledExternal) async {
-    if (locationId == 0) {
-      await saveCityId(0);
-    } else {
-      await saveCityId(locationId);
-    }
+    await saveCityId(locationId);
     emit(const DiscoveryState.loading());
     await onLoad();
     if (calledExternal) {
