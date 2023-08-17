@@ -25,7 +25,7 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
     ));
   }
 
-  Future<void> onLocationFilter(int locationId) async {
+  Future<void> onLocationFilter(int locationId, bool calledExternal) async {
     if (locationId == 0) {
       await saveCityId(0);
     } else {
@@ -33,13 +33,15 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
     }
     emit(const DiscoveryState.loading());
     await onLoad();
-    AppBloc.homeCubit.setCalledExternally(true);
-    await AppBloc.homeCubit.onLoad();
+    if (calledExternal) {
+      AppBloc.homeCubit.setCalledExternally(true);
+      await AppBloc.homeCubit.onLoad();
+    }
   }
 
   Future<void> updateLocationFilter(int locationId) async {
     emit(const DiscoveryState.loading());
-    await onLocationFilter(locationId);
+    await onLocationFilter(locationId, true);
   }
 
   Future<void> saveCityId(int cityId) async {

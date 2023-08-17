@@ -121,7 +121,7 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
                   });
                   context
                       .read<DiscoveryCubit>()
-                      .onLocationFilter(selectedLocationId!);
+                      .onLocationFilter(selectedLocationId!, true);
                   Navigator.pop(context);
                 },
               );
