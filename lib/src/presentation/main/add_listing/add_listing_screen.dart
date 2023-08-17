@@ -8,6 +8,7 @@ import 'package:heidi/src/presentation/widget/app_upload_image.dart';
 import 'package:heidi/src/utils/common.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/datetime.dart';
+import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:heidi/src/utils/validate.dart';
 
@@ -244,6 +245,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
     final success = _validData();
     if (success) {
       if (widget.item != null) {
+
+        context.read<AddListingCubit>().setCategoryId(selectedCategory);
         final result = await context.read<AddListingCubit>().onEdit(
             cityId: widget.item?.cityId,
             listingId: widget.item?.id,
@@ -328,7 +331,10 @@ class _AddListingScreenState extends State<AddListingScreen> {
     _errorContent =
         UtilValidator.validate(_textContentController.text, allowEmpty: false);
 
+    logError('selectedCategory',selectedCategory);
     if (selectedCategory == "Events") {
+      logError('_startDate',_startDate);
+
       if (_startDate == null || _startDate == "") {
         _errorSDate = "value_not_date_empty";
       } else {
