@@ -74,6 +74,7 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   void setCalledExternally(bool called) {
+    print(called);
     calledExternally = called;
   }
 

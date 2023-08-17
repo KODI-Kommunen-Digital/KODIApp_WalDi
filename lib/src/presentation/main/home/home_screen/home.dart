@@ -160,7 +160,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           });
                           AppBloc.homeCubit.saveCityId(selectedCityId);
                           await AppBloc.discoveryCubit
-                              .onLocationFilter(selectedCityId);
+                              .onLocationFilter(selectedCityId, false);
                         } else if (data ==
                             Translate.of(context)
                                 .translate('select_location')) {
@@ -170,7 +170,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           AppBloc.homeCubit.onLoad();
                           AppBloc.homeCubit.saveCityId(selectedCityId);
                           await AppBloc.discoveryCubit
-                              .onLocationFilter(selectedCityId);
+                              .onLocationFilter(selectedCityId, false);
                         }
                       }
                     }),
