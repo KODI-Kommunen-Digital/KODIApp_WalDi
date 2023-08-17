@@ -25,6 +25,7 @@ mixin _$ListState {
     required TResult Function(String error) error,
   }) =>
       throw _privateConstructorUsedError;
+
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
@@ -34,6 +35,7 @@ mixin _$ListState {
     TResult? Function(String error)? error,
   }) =>
       throw _privateConstructorUsedError;
+
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
@@ -44,6 +46,7 @@ mixin _$ListState {
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
+
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(ListStateInitial value) initial,
@@ -53,6 +56,7 @@ mixin _$ListState {
     required TResult Function(ListStateError value) error,
   }) =>
       throw _privateConstructorUsedError;
+
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(ListStateInitial value)? initial,
@@ -62,6 +66,7 @@ mixin _$ListState {
     TResult? Function(ListStateError value)? error,
   }) =>
       throw _privateConstructorUsedError;
+
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(ListStateInitial value)? initial,
@@ -87,6 +92,7 @@ class _$ListStateCopyWithImpl<$Res, $Val extends ListState>
 
   // ignore: unused_field
   final $Val _value;
+
   // ignore: unused_field
   final $Res Function($Val) _then;
 }
@@ -336,6 +342,7 @@ abstract class _$$ListStateLoadedCopyWith<$Res> {
   factory _$$ListStateLoadedCopyWith(
           _$ListStateLoaded value, $Res Function(_$ListStateLoaded) then) =
       __$$ListStateLoadedCopyWithImpl<$Res>;
+
   @useResult
   $Res call({List<ProductModel> list});
 }
@@ -368,6 +375,7 @@ class _$ListStateLoaded implements ListStateLoaded {
   const _$ListStateLoaded(final List<ProductModel> list) : _list = list;
 
   final List<ProductModel> _list;
+
   @override
   List<ProductModel> get list {
     if (_list is EqualUnmodifiableListView) return _list;
@@ -484,6 +492,7 @@ abstract class ListStateLoaded implements ListState {
       _$ListStateLoaded;
 
   List<ProductModel> get list;
+
   @JsonKey(ignore: true)
   _$$ListStateLoadedCopyWith<_$ListStateLoaded> get copyWith =>
       throw _privateConstructorUsedError;
@@ -494,6 +503,7 @@ abstract class _$$ListStateUpdatedCopyWith<$Res> {
   factory _$$ListStateUpdatedCopyWith(
           _$ListStateUpdated value, $Res Function(_$ListStateUpdated) then) =
       __$$ListStateUpdatedCopyWithImpl<$Res>;
+
   @useResult
   $Res call({List<ProductModel> list});
 }
@@ -526,6 +536,7 @@ class _$ListStateUpdated implements ListStateUpdated {
   const _$ListStateUpdated(final List<ProductModel> list) : _list = list;
 
   final List<ProductModel> _list;
+
   @override
   List<ProductModel> get list {
     if (_list is EqualUnmodifiableListView) return _list;
@@ -642,6 +653,7 @@ abstract class ListStateUpdated implements ListState {
       _$ListStateUpdated;
 
   List<ProductModel> get list;
+
   @JsonKey(ignore: true)
   _$$ListStateUpdatedCopyWith<_$ListStateUpdated> get copyWith =>
       throw _privateConstructorUsedError;
@@ -652,6 +664,7 @@ abstract class _$$ListStateErrorCopyWith<$Res> {
   factory _$$ListStateErrorCopyWith(
           _$ListStateError value, $Res Function(_$ListStateError) then) =
       __$$ListStateErrorCopyWithImpl<$Res>;
+
   @useResult
   $Res call({String error});
 }
@@ -793,6 +806,7 @@ abstract class ListStateError implements ListState {
   const factory ListStateError(final String error) = _$ListStateError;
 
   String get error;
+
   @JsonKey(ignore: true)
   _$$ListStateErrorCopyWith<_$ListStateError> get copyWith =>
       throw _privateConstructorUsedError;
