@@ -606,8 +606,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
                               final loadVillageResponse = await context
                                   .read<AddListingCubit>()
                                   .loadVillages(value);
-                              selectedVillage =
-                                  loadVillageResponse.data.first['name'];
+                              // selectedVillage =
+                              //     loadVillageResponse.data.first['name'];
                               villageId = loadVillageResponse.data.first['id'];
                               setState(() {
                                 listVillage = loadVillageResponse.data;

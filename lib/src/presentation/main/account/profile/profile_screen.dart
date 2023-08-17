@@ -197,6 +197,7 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                                               child: Image.network(
                                                 "${Application.picturesURL}${userListingsList[index].image}",
                                                 key: UniqueKey(),
+                                                fit: BoxFit.cover,
                                               ),
                                               // decoration: BoxDecoration(
                                               //     borderRadius:
