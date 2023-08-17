@@ -298,27 +298,27 @@ class ListRepository {
   }
 
   Future<ResultApiModel> editProduct(
-      int? listingId,
-      cityId,
-      String title,
-      String description,
-      String place,
-      CategoryModel? country,
-      CategoryModel? state,
-      CategoryModel? city,
-      int? statusId,
-      int? sourceId,
-      String address,
-      String? zipcode,
-      String? phone,
-      String? email,
-      String? website,
-      String? status,
-      String? startDate,
-      String? endDate,
-      String? price,
-      bool isImageChanged,
-      ) async {
+    int? listingId,
+    cityId,
+    String title,
+    String description,
+    String place,
+    CategoryModel? country,
+    CategoryModel? state,
+    CategoryModel? city,
+    int? statusId,
+    int? sourceId,
+    String address,
+    String? zipcode,
+    String? phone,
+    String? email,
+    String? website,
+    String? status,
+    String? startDate,
+    String? endDate,
+    String? price,
+    bool isImageChanged,
+  ) async {
     final subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
     final villageId = prefs.getKeyValue(Preferences.villageId, null);
@@ -350,7 +350,7 @@ class ListRepository {
       "subCategoryId": subCategoryId,
     };
     final response =
-    await Api.requestEditProduct(cityId, listingId, params, isImageChanged);
+        await Api.requestEditProduct(cityId, listingId, params, isImageChanged);
     return response;
   }
 

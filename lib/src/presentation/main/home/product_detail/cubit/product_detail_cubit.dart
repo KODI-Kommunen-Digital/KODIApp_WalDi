@@ -34,7 +34,6 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
               if (fList.listingsId == product?.id) {
                 product?.favorite = true;
                 isFavorite = product!.favorite;
-
               }
             }
           }

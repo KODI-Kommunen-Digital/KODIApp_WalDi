@@ -138,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
             slivers: <Widget>[
               SliverPersistentHeader(
                 delegate: AppBarHomeSliver(
-                cityTitlesList: cityTitles,
+                    cityTitlesList: cityTitles,
                     hintText: (selectedCityId > 0)
                         ? selectedCityTitle
                         : Translate.of(context).translate('select_location'),
@@ -302,7 +302,8 @@ class _HomeScreenState extends State<HomeScreen> {
       AppBloc.homeCubit.saveCityId(item.id);
       prefs.setKeyValue(Preferences.type, "location");
       if (!mounted) return;
-      Navigator.pushNamed(context, Routes.listProduct, arguments: {'id': item.id, 'title': item.title});
+      Navigator.pushNamed(context, Routes.listProduct,
+          arguments: {'id': item.id, 'title': item.title});
     } else if (item.id != -1 && !item.hasChild) {
       _onPopUpCatError();
     }

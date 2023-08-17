@@ -7,7 +7,8 @@ class AddListingSuccessScreen extends StatefulWidget {
   const AddListingSuccessScreen({Key? key}) : super(key: key);
 
   @override
-  State<AddListingSuccessScreen> createState() => _AddListingSuccessScreenState();
+  State<AddListingSuccessScreen> createState() =>
+      _AddListingSuccessScreenState();
 }
 
 class _AddListingSuccessScreenState extends State<AddListingSuccessScreen> {
@@ -23,7 +24,7 @@ class _AddListingSuccessScreenState extends State<AddListingSuccessScreen> {
 
   ///On Add More
   void _onSuccess() {
-    Navigator.pushReplacementNamed(context, Routes.submit);
+    Navigator.pushNamed(context, Routes.submit, arguments: {'isNewList': true});
   }
 
   @override

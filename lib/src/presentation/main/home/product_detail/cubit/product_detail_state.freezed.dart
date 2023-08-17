@@ -26,6 +26,7 @@ mixin _$ProductDetailState {
     required TResult Function(String error) error,
   }) =>
       throw _privateConstructorUsedError;
+
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
@@ -36,6 +37,7 @@ mixin _$ProductDetailState {
     TResult? Function(String error)? error,
   }) =>
       throw _privateConstructorUsedError;
+
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
@@ -47,6 +49,7 @@ mixin _$ProductDetailState {
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
+
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(ProductDetailInitial value) initial,
@@ -55,6 +58,7 @@ mixin _$ProductDetailState {
     required TResult Function(ProductDetailError value) error,
   }) =>
       throw _privateConstructorUsedError;
+
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(ProductDetailInitial value)? initial,
@@ -63,6 +67,7 @@ mixin _$ProductDetailState {
     TResult? Function(ProductDetailError value)? error,
   }) =>
       throw _privateConstructorUsedError;
+
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(ProductDetailInitial value)? initial,
@@ -88,6 +93,7 @@ class _$ProductDetailStateCopyWithImpl<$Res, $Val extends ProductDetailState>
 
   // ignore: unused_field
   final $Val _value;
+
   // ignore: unused_field
   final $Res Function($Val) _then;
 }
@@ -337,6 +343,7 @@ abstract class _$$ProductDetailLoadedCopyWith<$Res> {
   factory _$$ProductDetailLoadedCopyWith(_$ProductDetailLoaded value,
           $Res Function(_$ProductDetailLoaded) then) =
       __$$ProductDetailLoadedCopyWithImpl<$Res>;
+
   @useResult
   $Res call(
       {ProductModel product,
@@ -386,6 +393,7 @@ class _$ProductDetailLoaded implements ProductDetailLoaded {
   @override
   final ProductModel product;
   final List<FavoriteModel>? _favoritesList;
+
   @override
   List<FavoriteModel>? get favoritesList {
     final value = _favoritesList;
@@ -514,8 +522,11 @@ abstract class ProductDetailLoaded implements ProductDetailState {
       final bool isLoggedIn) = _$ProductDetailLoaded;
 
   ProductModel get product;
+
   List<FavoriteModel>? get favoritesList;
+
   bool get isLoggedIn;
+
   @JsonKey(ignore: true)
   _$$ProductDetailLoadedCopyWith<_$ProductDetailLoaded> get copyWith =>
       throw _privateConstructorUsedError;
@@ -526,6 +537,7 @@ abstract class _$$ProductDetailErrorCopyWith<$Res> {
   factory _$$ProductDetailErrorCopyWith(_$ProductDetailError value,
           $Res Function(_$ProductDetailError) then) =
       __$$ProductDetailErrorCopyWithImpl<$Res>;
+
   @useResult
   $Res call({String error});
 }
@@ -668,6 +680,7 @@ abstract class ProductDetailError implements ProductDetailState {
   const factory ProductDetailError(final String error) = _$ProductDetailError;
 
   String get error;
+
   @JsonKey(ignore: true)
   _$$ProductDetailErrorCopyWith<_$ProductDetailError> get copyWith =>
       throw _privateConstructorUsedError;

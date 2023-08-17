@@ -24,6 +24,7 @@ import 'package:heidi/src/presentation/main/account/contact_us/contact_us_succes
 class RouteArguments<T> {
   final T? item;
   final VoidCallback? callback;
+
   RouteArguments({this.item, this.callback});
 }
 
@@ -77,10 +78,10 @@ class Routes {
     switch (settings.name) {
       case listProduct:
         final Map<String, dynamic> arguments =
-        settings.arguments as Map<String, dynamic>;
+            settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
           builder: (context) {
-            return ListProductScreen(arguments:  arguments);
+            return ListProductScreen(arguments: arguments);
           },
         );
 
@@ -139,7 +140,12 @@ class Routes {
       case submit:
         return MaterialPageRoute(
           builder: (context) {
-            return AddListingScreen(item: settings.arguments as ProductModel?);
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return AddListingScreen(
+              item: arguments['item'] as ProductModel?,
+              isNewList: arguments['isNewList'] as bool,
+            );
           },
           fullscreenDialog: true,
         );
