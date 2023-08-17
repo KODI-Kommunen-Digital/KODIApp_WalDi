@@ -202,10 +202,6 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(Translate.of(context).translate('cust_services')),
-      ),
       body: BlocListener<HomeCubit, HomeState>(
         listener: (context, state) {
           hideEmptyService();
