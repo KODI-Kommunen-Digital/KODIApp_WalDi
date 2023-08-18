@@ -20,12 +20,13 @@ class ListRepository {
   static Future<List?> loadList({
     required categoryId,
     required type,
+    required pageNo,
   }) async {
     final preference = await Preferences.openBox();
     final cityId = preference.getKeyValue(Preferences.cityId, 0);
     if (type == "category") {
       int params = categoryId;
-      final response = await Api.requestCatList(params);
+      final response = await Api.requestCatList(params, pageNo);
       if (response.success) {
         final list = List.from(response.data ?? []).map((item) {
           return ProductModel.fromJson(item, setting: Application.setting);
@@ -37,7 +38,7 @@ class ListRepository {
       }
     } else if (type == "location") {
       int params = cityId;
-      final response = await Api.requestLocList(params);
+      final response = await Api.requestLocList(params, pageNo);
       if (response.success) {
         final list = List.from(response.data ?? []).map((item) {
           return ProductModel.fromJson(item, setting: Application.setting);
@@ -47,7 +48,7 @@ class ListRepository {
       }
     } else if (type == "categoryService") {
       int params = categoryId;
-      final response = await Api.requestCatList(params);
+      final response = await Api.requestCatList(params, pageNo);
       if (response.success) {
         final list = List.from(response.data ?? []).map((item) {
           return ProductModel.fromJson(item, setting: Application.setting);
@@ -58,7 +59,7 @@ class ListRepository {
         return [list, response.pagination];
       }
     } else if (type == "subCategoryService") {
-      final response = await Api.requestSubCatList(cityId);
+      final response = await Api.requestSubCatList(cityId, pageNo);
       if (response.success) {
         final list = List.from(response.data ?? []).map((item) {
           return ProductModel.fromJson(item, setting: Application.setting);
@@ -68,27 +69,6 @@ class ListRepository {
     }
     return null;
   }
-
-  ///load wish list
-  // static Future<List?> loadWishList({
-  //   int? page,
-  //   int? perPage,
-  // }) async {
-  //   Map<String, dynamic> params = {
-  //     "page": page,
-  //     "per_page": perPage,
-  //   };
-  //   final response = await Api.requestWishList(params);
-  //   if (response.success) {
-  //     final list = List.from(response.data ?? []).map((item) {
-  //       return ProductModel.fromJson(item, setting: Application.setting);
-  //     }).toList();
-
-  //     return [list, response.pagination];
-  //   }
-  //   AppBloc.messageCubit.onShow(response.message);
-  //   return null;
-  // }
 
   static Future<bool> addWishList(int? userId, ProductModel items) async {
     final Map<String, dynamic> params = {};
@@ -113,47 +93,6 @@ class ListRepository {
       return false;
     }
   }
-
-  //
-  // ///clear wishList
-  // static Future<bool> clearWishList() async {
-  //   final response = await Api.requestClearWishList();
-  //   AppBloc.messageCubit.onShow(response.message);
-  //   if (response.success) {
-  //     return true;
-  //   }
-  //   return false;
-  // }
-  //
-  // ///load author post
-  // static Future<List?> loadAuthorList({
-  //   required int page,
-  //   required int perPage,
-  //   required String keyword,
-  //   required int userID,
-  //   required FilterModel filter,
-  //   bool? pending,
-  // }) async {
-  //   Map<String, dynamic> params = {
-  //     "page": page,
-  //     "per_page": perPage,
-  //     "s": keyword,
-  //     "user_id": userID,
-  //   };
-  //   if (pending == true) {
-  //     params['post_status'] = 'pending';
-  //   }
-  //   params.addAll(await filter.getParams());
-  //   final response = await Api.requestAuthorList(params);
-  //   if (response.success) {
-  //     final list = List.from(response.data ?? []).map((item) {
-  //       return ProductModel.fromJson(item, setting: Application.setting);
-  //     }).toList();
-  //     return [list, response.pagination, response.user];
-  //   }
-  //   AppBloc.messageCubit.onShow(response.message);
-  //   return null;
-  // }
 
   ///Upload image
   static Future<ResultApiModel?> uploadImage(File image, profile) async {

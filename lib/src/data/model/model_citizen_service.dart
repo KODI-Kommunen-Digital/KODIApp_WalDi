@@ -9,15 +9,16 @@ class CitizenServiceModel {
 
   CitizenServiceModel(
       {required this.imageUrl,
-        required this.imageLink,
-        this.type = "categoryService",
-        this.categoryId,
-        this.arguments});
+      required this.imageLink,
+      this.type = "categoryService",
+      this.categoryId,
+      this.arguments});
 
   Future<bool> hasContent() async {
     final result = await ListRepository.loadList(
       categoryId: categoryId,
       type: type,
+      pageNo: 1,
     );
     return !result?[0].isEmpty;
   }

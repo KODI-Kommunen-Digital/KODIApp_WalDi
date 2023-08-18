@@ -89,7 +89,6 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
-
   ///Change Profile
   static Future<ResultApiModel> requestChangeProfile(params, userId) async {
     final filePath = '/users/$userId';
@@ -222,20 +221,22 @@ class Api {
   }
 
   ///Get Product List
-  static Future<ResultApiModel> requestCatList(params) async {
-    var list = '/listings?categoryId=$params&statusId=1';
+  static Future<ResultApiModel> requestCatList(params, pageNo) async {
+    var list =
+        '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19';
     final result = await httpManager.get(url: list);
     return ResultApiModel.fromJson(result);
   }
 
-  static Future<ResultApiModel> requestSubCatList(params) async {
-    var list = '/listings?subCategoryId=10&categoryId=1&statusId=1';
+  static Future<ResultApiModel> requestSubCatList(params, pageNo) async {
+    var list =
+        '/listings?subCategoryId=10&categoryId=1&statusId=1&pageNo=$pageNo&pageSize=19';
     final result = await httpManager.get(url: list);
     return ResultApiModel.fromJson(result);
   }
 
-  static Future<ResultApiModel> requestLocList(params) async {
-    var list = '/listings?cityId=$params&statusId=1';
+  static Future<ResultApiModel> requestLocList(params, pageNo) async {
+    var list = '/listings?cityId=$params&statusId=1&pageNo=$pageNo&pageSize=19';
     final result = await httpManager.get(url: list);
     return ResultApiModel.fromJson(result);
   }

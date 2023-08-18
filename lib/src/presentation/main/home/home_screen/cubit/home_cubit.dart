@@ -92,7 +92,7 @@ class HomeCubit extends Cubit<HomeState> {
 
   Future<bool> categoryHasContent(int id, int? cityId) async {
     cityId ??= 0;
-    final response = await Api.requestCatList(id);
+    final response = await Api.requestCatList(id, 1);
     final list = List.from(response.data ?? []).map((item) {
       return ProductModel.fromJson(item, setting: Application.setting);
     }).toList();

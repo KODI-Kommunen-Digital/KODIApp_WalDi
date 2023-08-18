@@ -177,22 +177,26 @@ class _HomeScreenState extends State<HomeScreen> {
                 onRefresh: _onRefresh,
               ),
               SliverList(
-                delegate: SliverChildListDelegate([
-                  SafeArea(
-                    top: false,
-                    bottom: false,
-                    child: Column(
-                      children: <Widget>[
-                        _buildCategory(AppBloc.homeCubit
-                            .getCategoriesWithoutHidden(category ?? [])),
-                        _buildLocation(location),
-                        _buildRecent(recent, selectedCityId),
-                        const SizedBox(height: 28),
-                      ],
+                delegate: SliverChildListDelegate(
+                  [
+                    SafeArea(
+                      top: false,
+                      bottom: false,
+                      child: Column(
+                        children: <Widget>[
+                          _buildCategory(
+                            AppBloc.homeCubit
+                                .getCategoriesWithoutHidden(category ?? []),
+                          ),
+                          _buildLocation(location),
+                          _buildRecent(recent, selectedCityId),
+                          const SizedBox(height: 28),
+                        ],
+                      ),
                     ),
-                  )
-                ]),
-              )
+                  ],
+                ),
+              ),
             ],
           );
         },
