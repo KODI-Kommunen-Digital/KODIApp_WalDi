@@ -76,6 +76,14 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
+  static Future<ResultApiModel> getUserDetails(userId,cityId) async {
+    final filePath = '/users/$userId?cityId=$cityId&cityUser=true';
+    final result = await httpManager.get(
+      url: filePath,
+    );
+    return ResultApiModel.fromJson(result);
+  }
+
   static Future<ResultApiModel> requestUserListings(userId) async {
     final result = await httpManager.get(url: '/users/$userId/listings/');
     return ResultApiModel.fromJson(result);

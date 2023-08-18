@@ -23,7 +23,6 @@ mixin _$ProfileState {
     required TResult Function(String error) error,
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
@@ -31,7 +30,6 @@ mixin _$ProfileState {
     TResult? Function(String error)? error,
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
@@ -40,7 +38,6 @@ mixin _$ProfileState {
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(ProfileStateLoading value) loading,
@@ -48,7 +45,6 @@ mixin _$ProfileState {
     required TResult Function(ProfileStateError value) error,
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(ProfileStateLoading value)? loading,
@@ -56,7 +52,6 @@ mixin _$ProfileState {
     TResult? Function(ProfileStateError value)? error,
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(ProfileStateLoading value)? loading,
@@ -81,7 +76,6 @@ class _$ProfileStateCopyWithImpl<$Res, $Val extends ProfileState>
 
   // ignore: unused_field
   final $Val _value;
-
   // ignore: unused_field
   final $Res Function($Val) _then;
 }
@@ -199,7 +193,6 @@ abstract class _$$ProfileStateLoadedCopyWith<$Res> {
   factory _$$ProfileStateLoadedCopyWith(_$ProfileStateLoaded value,
           $Res Function(_$ProfileStateLoaded) then) =
       __$$ProfileStateLoadedCopyWithImpl<$Res>;
-
   @useResult
   $Res call({List<ProductModel> userListings});
 }
@@ -233,7 +226,6 @@ class _$ProfileStateLoaded implements ProfileStateLoaded {
       : _userListings = userListings;
 
   final List<ProductModel> _userListings;
-
   @override
   List<ProductModel> get userListings {
     if (_userListings is EqualUnmodifiableListView) return _userListings;
@@ -340,7 +332,6 @@ abstract class ProfileStateLoaded implements ProfileState {
       _$ProfileStateLoaded;
 
   List<ProductModel> get userListings;
-
   @JsonKey(ignore: true)
   _$$ProfileStateLoadedCopyWith<_$ProfileStateLoaded> get copyWith =>
       throw _privateConstructorUsedError;
@@ -351,7 +342,6 @@ abstract class _$$ProfileStateErrorCopyWith<$Res> {
   factory _$$ProfileStateErrorCopyWith(
           _$ProfileStateError value, $Res Function(_$ProfileStateError) then) =
       __$$ProfileStateErrorCopyWithImpl<$Res>;
-
   @useResult
   $Res call({String error});
 }
@@ -481,7 +471,6 @@ abstract class ProfileStateError implements ProfileState {
   const factory ProfileStateError(final String error) = _$ProfileStateError;
 
   String get error;
-
   @JsonKey(ignore: true)
   _$$ProfileStateErrorCopyWith<_$ProfileStateError> get copyWith =>
       throw _privateConstructorUsedError;

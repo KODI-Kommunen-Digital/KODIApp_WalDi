@@ -6,11 +6,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_favorite.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/cubit/cubit.dart';
 import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
+import 'package:heidi/src/presentation/widget/app_user_info.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
@@ -120,8 +122,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   ///Build content UI
   Widget _buildContent(ProductModel? product, List<FavoriteModel>? favoriteList,
-      bool isLoggedIn) {
-    ///Build UI loading
+      UserModel? userDetail, bool isLoggedIn) {    ///Build UI loading
     List<Widget> action = [];
     Widget actionGalleries = Container();
     // Widget actionMapView = Container();
@@ -688,8 +689,53 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            const SizedBox(height: 4),
-            Row(
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.all(8),
+              margin: const EdgeInsets.symmetric(horizontal: 8),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: Theme.of(context).cardColor,
+                boxShadow: [
+                  BoxShadow(
+                    color: Theme.of(context).dividerColor.withOpacity(
+                      .05,
+                    ),
+                    spreadRadius: 4,
+                    blurRadius: 4,
+                    offset: const Offset(
+                      0,
+                      2,
+                    ), // changes position of shadow
+                  ),
+                ],
+              ),
+              child: AppUserInfo(
+                user: userDetail,
+                onPressed: () async {
+                  final loggedInUserId = await context
+                      .read<ProductDetailCubit>()
+                      .getLoggedInUserId();
+                  if (!mounted) return;
+                  final productUserId = await context
+                      .read<ProductDetailCubit>()
+                      .getUserDetails(widget.item.userId, widget.item.cityId);
+
+                  if (productUserId?.id == loggedInUserId) {
+                    if (!mounted) return;
+                    Navigator.pushNamed(context, Routes.profile,
+                        arguments: {'user': userDetail, 'editable': true});
+                  } else {
+                    if (!mounted) return;
+                    Navigator.pushNamed(context, Routes.profile,
+                        arguments: {'user': userDetail, 'editable': false});
+                  }
+                },
+                type: UserViewType.information,
+                showDirectionIcon: true,
+              ),
+            ),
+            const SizedBox(height: 8),            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Expanded(
@@ -820,14 +866,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           builder: (context, state) {
             ProductModel? product;
             List<FavoriteModel>? favoriteList;
+            UserModel? userDetail;
             bool isLoggedIn = false;
             if (state is ProductDetailLoaded) {
               product = state.product;
               favoriteList = state.favoritesList;
               isLoggedIn = state.isLoggedIn;
+              userDetail = state.userDetail;
             }
-            return _buildContent(product, favoriteList, isLoggedIn);
-          },
+            return _buildContent(product, favoriteList, userDetail, isLoggedIn);          },
         ),
       ),
     );

@@ -90,6 +90,16 @@ class ListRepository {
   //   return null;
   // }
 
+  Future<int> getCityId(cityName) async {
+    final response = await Api.requestSubmitCities();
+    var jsonCategory = response.data;
+    final item = jsonCategory.firstWhere((item) => item['name'] == cityName);
+    final itemId = item['id'];
+    final cityId = itemId;
+    return cityId;
+  }
+
+
   static Future<bool> addWishList(int? userId, ProductModel items) async {
     final Map<String, dynamic> params = {};
     params['cityId'] = items.cityId;
@@ -243,30 +253,29 @@ class ListRepository {
   }
 
   Future<ResultApiModel> saveProduct(
-    cityId,
-    String title,
-    String description,
-    String place,
-    CategoryModel? country,
-    CategoryModel? state,
-    CategoryModel? city,
-    int? statusId,
-    int? sourceId,
-    String address,
-    String? zipcode,
-    String? phone,
-    String? email,
-    String? website,
-    String? status,
-    String? startDate,
-    String? endDate,
-    String? price,
-  ) async {
+      String title,
+      String description,
+      String place,
+      CategoryModel? country,
+      CategoryModel? state,
+      String? city,
+      int? statusId,
+      int? sourceId,
+      String address,
+      String? zipcode,
+      String? phone,
+      String? email,
+      String? website,
+      String? status,
+      String? startDate,
+      String? endDate,
+      String? price,
+      ) async {
     final subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
     final villageId = prefs.getKeyValue(Preferences.villageId, null);
     final userId = prefs.getKeyValue(Preferences.userId, '');
-    //final cityId = prefs.getKeyValue(Preferences.cityId, '');
+    final cityId = await getCityId(city);
     final media = prefs.getKeyValue(Preferences.path, null);
 
     Map<String, dynamic> params = {
@@ -416,8 +425,6 @@ class ListRepository {
       final responseData = listResponse.data;
       if (responseData != []) {
         for (final data in responseData) {
-          logError(' dataId', data['id']);
-          logError(' dataCityId', data['cityId']);
           userList.add(FavoriteDetailsModel(
             data['id'],
             data['userId'],

@@ -20,36 +20,36 @@ mixin _$ProductDetailState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(ProductModel product,
-            List<FavoriteModel>? favoritesList, bool isLoggedIn)
+    required TResult Function(
+            ProductModel product,
+            List<FavoriteModel>? favoritesList,
+            UserModel? userDetail,
+            bool isLoggedIn)
         loaded,
     required TResult Function(String error) error,
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(ProductModel product, List<FavoriteModel>? favoritesList,
-            bool isLoggedIn)?
+            UserModel? userDetail, bool isLoggedIn)?
         loaded,
     TResult? Function(String error)? error,
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(ProductModel product, List<FavoriteModel>? favoritesList,
-            bool isLoggedIn)?
+            UserModel? userDetail, bool isLoggedIn)?
         loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(ProductDetailInitial value) initial,
@@ -58,7 +58,6 @@ mixin _$ProductDetailState {
     required TResult Function(ProductDetailError value) error,
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(ProductDetailInitial value)? initial,
@@ -67,7 +66,6 @@ mixin _$ProductDetailState {
     TResult? Function(ProductDetailError value)? error,
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(ProductDetailInitial value)? initial,
@@ -93,7 +91,6 @@ class _$ProductDetailStateCopyWithImpl<$Res, $Val extends ProductDetailState>
 
   // ignore: unused_field
   final $Val _value;
-
   // ignore: unused_field
   final $Res Function($Val) _then;
 }
@@ -138,8 +135,11 @@ class _$ProductDetailInitial implements ProductDetailInitial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(ProductModel product,
-            List<FavoriteModel>? favoritesList, bool isLoggedIn)
+    required TResult Function(
+            ProductModel product,
+            List<FavoriteModel>? favoritesList,
+            UserModel? userDetail,
+            bool isLoggedIn)
         loaded,
     required TResult Function(String error) error,
   }) {
@@ -152,7 +152,7 @@ class _$ProductDetailInitial implements ProductDetailInitial {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(ProductModel product, List<FavoriteModel>? favoritesList,
-            bool isLoggedIn)?
+            UserModel? userDetail, bool isLoggedIn)?
         loaded,
     TResult? Function(String error)? error,
   }) {
@@ -165,7 +165,7 @@ class _$ProductDetailInitial implements ProductDetailInitial {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(ProductModel product, List<FavoriteModel>? favoritesList,
-            bool isLoggedIn)?
+            UserModel? userDetail, bool isLoggedIn)?
         loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
@@ -258,8 +258,11 @@ class _$ProductDetailLoading implements ProductDetailLoading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(ProductModel product,
-            List<FavoriteModel>? favoritesList, bool isLoggedIn)
+    required TResult Function(
+            ProductModel product,
+            List<FavoriteModel>? favoritesList,
+            UserModel? userDetail,
+            bool isLoggedIn)
         loaded,
     required TResult Function(String error) error,
   }) {
@@ -272,7 +275,7 @@ class _$ProductDetailLoading implements ProductDetailLoading {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(ProductModel product, List<FavoriteModel>? favoritesList,
-            bool isLoggedIn)?
+            UserModel? userDetail, bool isLoggedIn)?
         loaded,
     TResult? Function(String error)? error,
   }) {
@@ -285,7 +288,7 @@ class _$ProductDetailLoading implements ProductDetailLoading {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(ProductModel product, List<FavoriteModel>? favoritesList,
-            bool isLoggedIn)?
+            UserModel? userDetail, bool isLoggedIn)?
         loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
@@ -343,11 +346,11 @@ abstract class _$$ProductDetailLoadedCopyWith<$Res> {
   factory _$$ProductDetailLoadedCopyWith(_$ProductDetailLoaded value,
           $Res Function(_$ProductDetailLoaded) then) =
       __$$ProductDetailLoadedCopyWithImpl<$Res>;
-
   @useResult
   $Res call(
       {ProductModel product,
       List<FavoriteModel>? favoritesList,
+      UserModel? userDetail,
       bool isLoggedIn});
 }
 
@@ -364,6 +367,7 @@ class __$$ProductDetailLoadedCopyWithImpl<$Res>
   $Res call({
     Object? product = null,
     Object? favoritesList = freezed,
+    Object? userDetail = freezed,
     Object? isLoggedIn = null,
   }) {
     return _then(_$ProductDetailLoaded(
@@ -375,6 +379,10 @@ class __$$ProductDetailLoadedCopyWithImpl<$Res>
           ? _value._favoritesList
           : favoritesList // ignore: cast_nullable_to_non_nullable
               as List<FavoriteModel>?,
+      freezed == userDetail
+          ? _value.userDetail
+          : userDetail // ignore: cast_nullable_to_non_nullable
+              as UserModel?,
       null == isLoggedIn
           ? _value.isLoggedIn
           : isLoggedIn // ignore: cast_nullable_to_non_nullable
@@ -387,13 +395,15 @@ class __$$ProductDetailLoadedCopyWithImpl<$Res>
 
 class _$ProductDetailLoaded implements ProductDetailLoaded {
   const _$ProductDetailLoaded(
-      this.product, final List<FavoriteModel>? favoritesList, this.isLoggedIn)
+      this.product,
+      final List<FavoriteModel>? favoritesList,
+      this.userDetail,
+      this.isLoggedIn)
       : _favoritesList = favoritesList;
 
   @override
   final ProductModel product;
   final List<FavoriteModel>? _favoritesList;
-
   @override
   List<FavoriteModel>? get favoritesList {
     final value = _favoritesList;
@@ -404,11 +414,13 @@ class _$ProductDetailLoaded implements ProductDetailLoaded {
   }
 
   @override
+  final UserModel? userDetail;
+  @override
   final bool isLoggedIn;
 
   @override
   String toString() {
-    return 'ProductDetailState.loaded(product: $product, favoritesList: $favoritesList, isLoggedIn: $isLoggedIn)';
+    return 'ProductDetailState.loaded(product: $product, favoritesList: $favoritesList, userDetail: $userDetail, isLoggedIn: $isLoggedIn)';
   }
 
   @override
@@ -419,13 +431,19 @@ class _$ProductDetailLoaded implements ProductDetailLoaded {
             (identical(other.product, product) || other.product == product) &&
             const DeepCollectionEquality()
                 .equals(other._favoritesList, _favoritesList) &&
+            (identical(other.userDetail, userDetail) ||
+                other.userDetail == userDetail) &&
             (identical(other.isLoggedIn, isLoggedIn) ||
                 other.isLoggedIn == isLoggedIn));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, product,
-      const DeepCollectionEquality().hash(_favoritesList), isLoggedIn);
+  int get hashCode => Object.hash(
+      runtimeType,
+      product,
+      const DeepCollectionEquality().hash(_favoritesList),
+      userDetail,
+      isLoggedIn);
 
   @JsonKey(ignore: true)
   @override
@@ -439,12 +457,15 @@ class _$ProductDetailLoaded implements ProductDetailLoaded {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(ProductModel product,
-            List<FavoriteModel>? favoritesList, bool isLoggedIn)
+    required TResult Function(
+            ProductModel product,
+            List<FavoriteModel>? favoritesList,
+            UserModel? userDetail,
+            bool isLoggedIn)
         loaded,
     required TResult Function(String error) error,
   }) {
-    return loaded(product, favoritesList, isLoggedIn);
+    return loaded(product, favoritesList, userDetail, isLoggedIn);
   }
 
   @override
@@ -453,11 +474,11 @@ class _$ProductDetailLoaded implements ProductDetailLoaded {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(ProductModel product, List<FavoriteModel>? favoritesList,
-            bool isLoggedIn)?
+            UserModel? userDetail, bool isLoggedIn)?
         loaded,
     TResult? Function(String error)? error,
   }) {
-    return loaded?.call(product, favoritesList, isLoggedIn);
+    return loaded?.call(product, favoritesList, userDetail, isLoggedIn);
   }
 
   @override
@@ -466,13 +487,13 @@ class _$ProductDetailLoaded implements ProductDetailLoaded {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(ProductModel product, List<FavoriteModel>? favoritesList,
-            bool isLoggedIn)?
+            UserModel? userDetail, bool isLoggedIn)?
         loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(product, favoritesList, isLoggedIn);
+      return loaded(product, favoritesList, userDetail, isLoggedIn);
     }
     return orElse();
   }
@@ -519,14 +540,13 @@ abstract class ProductDetailLoaded implements ProductDetailState {
   const factory ProductDetailLoaded(
       final ProductModel product,
       final List<FavoriteModel>? favoritesList,
+      final UserModel? userDetail,
       final bool isLoggedIn) = _$ProductDetailLoaded;
 
   ProductModel get product;
-
   List<FavoriteModel>? get favoritesList;
-
+  UserModel? get userDetail;
   bool get isLoggedIn;
-
   @JsonKey(ignore: true)
   _$$ProductDetailLoadedCopyWith<_$ProductDetailLoaded> get copyWith =>
       throw _privateConstructorUsedError;
@@ -537,7 +557,6 @@ abstract class _$$ProductDetailErrorCopyWith<$Res> {
   factory _$$ProductDetailErrorCopyWith(_$ProductDetailError value,
           $Res Function(_$ProductDetailError) then) =
       __$$ProductDetailErrorCopyWithImpl<$Res>;
-
   @useResult
   $Res call({String error});
 }
@@ -600,8 +619,11 @@ class _$ProductDetailError implements ProductDetailError {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(ProductModel product,
-            List<FavoriteModel>? favoritesList, bool isLoggedIn)
+    required TResult Function(
+            ProductModel product,
+            List<FavoriteModel>? favoritesList,
+            UserModel? userDetail,
+            bool isLoggedIn)
         loaded,
     required TResult Function(String error) error,
   }) {
@@ -614,7 +636,7 @@ class _$ProductDetailError implements ProductDetailError {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(ProductModel product, List<FavoriteModel>? favoritesList,
-            bool isLoggedIn)?
+            UserModel? userDetail, bool isLoggedIn)?
         loaded,
     TResult? Function(String error)? error,
   }) {
@@ -627,7 +649,7 @@ class _$ProductDetailError implements ProductDetailError {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(ProductModel product, List<FavoriteModel>? favoritesList,
-            bool isLoggedIn)?
+            UserModel? userDetail, bool isLoggedIn)?
         loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
@@ -680,7 +702,6 @@ abstract class ProductDetailError implements ProductDetailState {
   const factory ProductDetailError(final String error) = _$ProductDetailError;
 
   String get error;
-
   @JsonKey(ignore: true)
   _$$ProductDetailErrorCopyWith<_$ProductDetailError> get copyWith =>
       throw _privateConstructorUsedError;
