@@ -13,8 +13,9 @@ import 'package:heidi/src/utils/translate.dart';
 
 class ProfileScreen extends StatelessWidget {
   final UserModel user;
+  final bool isEditable;
 
-  const ProfileScreen({required this.user, super.key});
+  const ProfileScreen({required this.user, required this.isEditable, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,7 @@ class ProfileScreen extends StatelessWidget {
       },
       builder: (context, state) => state.maybeWhen(
         loading: () => const ProfileLoading(),
-        loaded: (userListing) => ProfileLoaded(user, userListing),
+        loaded: (userListing) => ProfileLoaded(user, userListing, isEditable),
         orElse: () => ErrorWidget('Failed to load Accounts.'),
       ),
     );
@@ -49,8 +50,9 @@ class ProfileLoading extends StatelessWidget {
 class ProfileLoaded extends StatefulWidget {
   final UserModel user;
   final List<ProductModel> userListings;
+  final bool isEditable;
 
-  const ProfileLoaded(this.user, this.userListings, {Key? key})
+  const ProfileLoaded(this.user, this.userListings, this.isEditable, {Key? key})
       : super(key: key);
 
   @override
@@ -138,7 +140,7 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                           itemBuilder: (context, index) {
                             final item = userListingsList[index];
                             return Slidable(
-                              endActionPane: ActionPane(
+                              endActionPane: !widget.isEditable ? null :ActionPane(
                                 motion: const ScrollMotion(),
                                 children: [
                                   SlidableAction(

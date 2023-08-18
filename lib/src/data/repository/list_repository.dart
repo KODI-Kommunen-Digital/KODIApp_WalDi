@@ -259,13 +259,12 @@ class ListRepository {
   }
 
   Future<ResultApiModel> saveProduct(
-    cityId,
     String title,
     String description,
     String place,
     CategoryModel? country,
     CategoryModel? state,
-    CategoryModel? city,
+    String? city,
     int? statusId,
     int? sourceId,
     String address,
@@ -282,7 +281,7 @@ class ListRepository {
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
     final villageId = prefs.getKeyValue(Preferences.villageId, null);
     final userId = prefs.getKeyValue(Preferences.userId, '');
-    final cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    final cityId = await getCityId(city);
     final media = prefs.getKeyValue(Preferences.path, null);
 
     Map<String, dynamic> params = {
@@ -396,6 +395,16 @@ class ListRepository {
     final itemId = item['id'];
     final categoryId = itemId;
     prefs.setKeyValue(Preferences.categoryId, categoryId);
+  }
+
+  Future<int> getCityId(cityName) async {
+
+    final response = await Api.requestSubmitCities();
+    var jsonCategory = response.data;
+    final item = jsonCategory.firstWhere((item) => item['name'] == cityName);
+    final itemId = item['id'];
+    final cityId = itemId;
+    return cityId;
   }
 
   Future<int> getCategoryId() async {

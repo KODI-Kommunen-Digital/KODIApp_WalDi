@@ -65,8 +65,21 @@ class UserRepository {
     return null;
   }
 
+  static Future<int> getLoggedUserId() async{
+    final prefs = await Preferences.openBox();
+    final userId = prefs.getKeyValue(Preferences.userId, 0);
+    return userId;
+  }
+
   static Future<UserModel?> fetchUser(userId) async {
     final response = await Api.requestUser(userId: userId);
+    if (response.success) {
+      return UserModel.fromJson(response.data);
+    }
+    return null;
+  }
+  static Future<UserModel?> getUserDetails(userId, cityId) async {
+    final response = await Api.getUserDetails(userId, cityId);
     if (response.success) {
       return UserModel.fromJson(response.data);
     }
