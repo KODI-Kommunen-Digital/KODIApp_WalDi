@@ -8,13 +8,14 @@ import 'package:heidi/src/presentation/main/account/profile/cubit/profile_state.
 import 'package:heidi/src/presentation/widget/app_user_info.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
-import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class ProfileScreen extends StatelessWidget {
   final UserModel user;
+  final bool isEditable;
 
-  const ProfileScreen({required this.user, super.key});
+  const ProfileScreen(
+      {required this.user, required this.isEditable, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,7 @@ class ProfileScreen extends StatelessWidget {
       },
       builder: (context, state) => state.maybeWhen(
         loading: () => const ProfileLoading(),
-        loaded: (userListing) => ProfileLoaded(user, userListing),
+        loaded: (userListing) => ProfileLoaded(user, userListing, isEditable),
         orElse: () => ErrorWidget('Failed to load Accounts.'),
       ),
     );
@@ -49,8 +50,9 @@ class ProfileLoading extends StatelessWidget {
 class ProfileLoaded extends StatefulWidget {
   final UserModel user;
   final List<ProductModel> userListings;
+  final bool isEditable;
 
-  const ProfileLoaded(this.user, this.userListings, {Key? key})
+  const ProfileLoaded(this.user, this.userListings, this.isEditable, {Key? key})
       : super(key: key);
 
   @override
@@ -82,7 +84,6 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
           child: RefreshIndicator(
             onRefresh: _onRefresh,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 16),
                 Container(
@@ -139,42 +140,48 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                           itemBuilder: (context, index) {
                             final item = userListingsList[index];
                             return Slidable(
-                              endActionPane: ActionPane(
-                                motion: const ScrollMotion(),
-                                children: [
-                                  SlidableAction(
-                                    onPressed: (aContext) {
-                                      Navigator.pushNamed(
-                                          context, Routes.submit, arguments: {
-                                        'item': userListingsList[index],
-                                        'isNewList': false
-                                      }).then((value) async {
-                                        final response = await context
-                                            .read<ProfileCubit>()
-                                            .loadUserListing();
-                                        setState(() {
-                                          userListingsList = response;
-                                        });
-                                      });
-                                    },
-                                    backgroundColor: Colors.blue,
-                                    foregroundColor: Colors.white,
-                                    icon: Icons.edit,
-                                    label:
-                                        Translate.of(context).translate('edit'),
-                                  ),
-                                  SlidableAction(
-                                    onPressed: (aContext) async {
-                                      showDeleteConfirmation(context, index);
-                                    },
-                                    backgroundColor: Colors.red,
-                                    foregroundColor: Colors.white,
-                                    icon: Icons.delete,
-                                    label: Translate.of(context)
-                                        .translate('delete'),
-                                  ),
-                                ],
-                              ),
+                              endActionPane: !widget.isEditable
+                                  ? null
+                                  : ActionPane(
+                                      motion: const ScrollMotion(),
+                                      children: [
+                                        SlidableAction(
+                                          onPressed: (aContext) {
+                                            Navigator.pushNamed(
+                                                context, Routes.submit,
+                                                arguments: {
+                                                  'item':
+                                                      userListingsList[index],
+                                                  'isNewList': false
+                                                }).then((value) async {
+                                              final response = await context
+                                                  .read<ProfileCubit>()
+                                                  .loadUserListing(
+                                                      widget.user.id);
+                                              setState(() {
+                                                userListingsList = response;
+                                              });
+                                            });
+                                          },
+                                          backgroundColor: Colors.blue,
+                                          foregroundColor: Colors.white,
+                                          icon: Icons.edit,
+                                          label: Translate.of(context)
+                                              .translate('edit'),
+                                        ),
+                                        SlidableAction(
+                                          onPressed: (aContext) async {
+                                            showDeleteConfirmation(
+                                                context, index);
+                                          },
+                                          backgroundColor: Colors.red,
+                                          foregroundColor: Colors.white,
+                                          icon: Icons.delete,
+                                          label: Translate.of(context)
+                                              .translate('delete'),
+                                        ),
+                                      ],
+                                    ),
                               key:
                                   Key(item.id.toString() + isSwiped.toString()),
                               child: InkWell(
@@ -190,24 +197,15 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                                       children: [
                                         Row(
                                           children: <Widget>[
-                                            Container(
+                                            SizedBox(
                                               width: 120,
                                               height: 140,
-                                              padding: const EdgeInsets.all(8),
                                               child: Image.network(
-                                                "${Application.picturesURL}${userListingsList[index].image}",
-                                                key: UniqueKey(),
+                                                "${Application.picturesURL}${item.image}",
+                                                width: 120,
+                                                //       height: 140,
                                                 fit: BoxFit.cover,
                                               ),
-                                              // decoration: BoxDecoration(
-                                              //     borderRadius:
-                                              //         BorderRadius.circular(8),
-                                              //     image: DecorationImage(
-                                              //       image: Image.network(
-                                              //           "${Application.picturesURL}${userListingsList[index].image}"),
-                                              //       fit: BoxFit.cover,
-                                              //     )),
-                                              // alignment: Alignment.center,
                                             ),
                                             const SizedBox(width: 8),
                                             Expanded(
@@ -227,7 +225,7 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                                                               FontWeight.bold,
                                                         ),
                                                   ),
-                                                  const SizedBox(height: 4),
+                                                  const SizedBox(height: 8),
                                                   Text(
                                                     userListingsList[index]
                                                         .title,
@@ -240,9 +238,15 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                                                                 FontWeight
                                                                     .bold),
                                                   ),
+                                                  const SizedBox(height: 8),
                                                   Text(
                                                     userListingsList[index]
-                                                        .createDate,
+                                                                .categoryId ==
+                                                            3
+                                                        ? "${userListingsList[index].startDate} ${Translate.of(context).translate('to')} ${userListingsList[index].endDate}"
+                                                        : userListingsList[
+                                                                index]
+                                                            .createDate,
                                                     style: Theme.of(context)
                                                         .textTheme
                                                         .bodySmall!
@@ -306,7 +310,6 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
             userListingsList[index].cityId.toString(),
             userListingsList[index].id,
           );
-      logError('deleteResponse', deleteResponse);
       setState(() {
         if (deleteResponse) {
           userListingsList.removeAt(index);
@@ -316,6 +319,6 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
   }
 
   Future<void> _onRefresh() async {
-    context.read<ProfileCubit>().loadUserListing();
+    context.read<ProfileCubit>().loadUserListing(widget.user.id);
   }
 }

@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_user.dart';
 import 'package:heidi/src/presentation/main/account/change_password/change_password_screen.dart';
+import 'package:heidi/src/presentation/main/account/contact_us/contact_us_screen.dart';
+import 'package:heidi/src/presentation/main/account/contact_us/contact_us_success/contact_us_success.dart';
 import 'package:heidi/src/presentation/main/account/edit_profile/edit_profile_screen.dart';
 import 'package:heidi/src/presentation/main/account/legal/imprint/imprint.dart';
 import 'package:heidi/src/presentation/main/account/legal/legal.dart';
@@ -18,8 +20,6 @@ import 'package:heidi/src/presentation/main/home/product_detail/product_detail.d
 import 'package:heidi/src/presentation/main/login/forgot_password/forgot_password_screen.dart';
 import 'package:heidi/src/presentation/main/login/signin/signin_screen.dart';
 import 'package:heidi/src/presentation/main/login/signup/signup.dart';
-import 'package:heidi/src/presentation/main/account/contact_us/contact_us_screen.dart';
-import 'package:heidi/src/presentation/main/account/contact_us/contact_us_success/contact_us_success.dart';
 
 class RouteArguments<T> {
   final T? item;
@@ -153,18 +153,21 @@ class Routes {
       case profile:
         return MaterialPageRoute(
           builder: (context) {
-            final args = settings.arguments as UserModel;
+            final Map<String, dynamic> arguments =
+            settings.arguments as Map<String, dynamic>;
             return BlocProvider(
               create: (context) => ProfileCubit(
                 context.read(),
-                args,
+                arguments['user'] as UserModel,
               ),
               child: ProfileScreen(
-                user: args,
+                user: arguments['user'] as UserModel,
+                isEditable: arguments['editable'] as bool,
               ),
             );
           },
         );
+
 
       case submitSuccess:
         return MaterialPageRoute(

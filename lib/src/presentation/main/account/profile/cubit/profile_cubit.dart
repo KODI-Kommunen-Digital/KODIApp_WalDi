@@ -11,12 +11,12 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   ProfileCubit(this.repo, this.userModel)
       : super(const ProfileState.loading()) {
-    loadUserListing();
+    loadUserListing(userModel.id);
   }
 
-  Future<List<ProductModel>> loadUserListing() async {
+  Future<List<ProductModel>> loadUserListing(userId) async {
     List<ProductModel> listDataList = [];
-    final result = await repo.loadUserListings();
+    final result = await repo.loadUserListings(userId);
     for (final list in result) {
       final product = await loadProduct(list.cityId, list.id);
       if (product != null) {
@@ -25,6 +25,8 @@ class ProfileCubit extends Cubit<ProfileState> {
             cityId: list.cityId,
             title: product.title,
             image: product.image,
+            category: product.category,
+            categoryId: product.categoryId,
             startDate: product.startDate,
             endDate: product.endDate,
             createDate: product.createDate,

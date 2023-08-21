@@ -70,6 +70,15 @@ class ListRepository {
     return null;
   }
 
+  Future<int> getCityId(cityName) async {
+    final response = await Api.requestSubmitCities();
+    var jsonCategory = response.data;
+    final item = jsonCategory.firstWhere((item) => item['name'] == cityName);
+    final itemId = item['id'];
+    final cityId = itemId;
+    return cityId;
+  }
+
   static Future<bool> addWishList(int? userId, ProductModel items) async {
     final Map<String, dynamic> params = {};
     params['cityId'] = items.cityId;
@@ -127,7 +136,6 @@ class ListRepository {
     var jsonCategory = response.data;
     final item = jsonCategory.firstWhere((item) => item['name'] == value);
     final itemId = item['id'];
-    // logError()
     final villageId = itemId;
     prefs.setKeyValue(Preferences.villageId, villageId);
     return response;
@@ -182,13 +190,12 @@ class ListRepository {
   }
 
   Future<ResultApiModel> saveProduct(
-    cityId,
     String title,
     String description,
     String place,
     CategoryModel? country,
     CategoryModel? state,
-    CategoryModel? city,
+    String? city,
     int? statusId,
     int? sourceId,
     String address,
@@ -205,7 +212,7 @@ class ListRepository {
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
     final villageId = prefs.getKeyValue(Preferences.villageId, null);
     final userId = prefs.getKeyValue(Preferences.userId, '');
-    //final cityId = prefs.getKeyValue(Preferences.cityId, '');
+    final cityId = await getCityId(city);
     final media = prefs.getKeyValue(Preferences.path, null);
 
     Map<String, dynamic> params = {
@@ -337,8 +344,6 @@ class ListRepository {
 
   Future<bool> deleteUserList(int? cityId, int listingId) async {
     final response = await Api.deleteUserList(cityId, listingId);
-    logError('cityId', cityId);
-    logError('listingId', listingId);
     if (response.success) {
       return true;
     } else {
@@ -347,16 +352,20 @@ class ListRepository {
     }
   }
 
-  Future<List<FavoriteDetailsModel>> loadUserListings() async {
-    final userId = prefs.getKeyValue('userId', 0);
+  Future<List<FavoriteDetailsModel>> loadUserListings(id) async {
+    int userId;
     final userList = <FavoriteDetailsModel>[];
+    if (id == 0) {
+      userId = prefs.getKeyValue('userId', 0);
+    } else {
+      userId = id;
+    }
+
     final listResponse = await Api.requestUserListings(userId);
     if (listResponse.success) {
       final responseData = listResponse.data;
       if (responseData != []) {
         for (final data in responseData) {
-          logError(' dataId', data['id']);
-          logError(' dataCityId', data['cityId']);
           userList.add(FavoriteDetailsModel(
             data['id'],
             data['userId'],
@@ -392,7 +401,6 @@ class ListRepository {
     }
     return userList;
   }
-
 //
 // ///save product
 // static Future<bool> saveProduct(cityId, params) async {

@@ -245,6 +245,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
     final success = _validData();
     if (success) {
       if (widget.item != null) {
+        context.read<AddListingCubit>().setCategoryId(selectedCategory);
         final result = await context.read<AddListingCubit>().onEdit(
             cityId: widget.item?.cityId,
             listingId: widget.item?.id,
@@ -264,8 +265,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
         }
       } else {
         final result = await context.read<AddListingCubit>().onSubmit(
-              cityId: cityId ?? 1,
               title: _textTitleController.text,
+              city: selectedCity,
               place: _textPlaceController.text,
               description: _textContentController.text,
               address: _textAddressController.text,
