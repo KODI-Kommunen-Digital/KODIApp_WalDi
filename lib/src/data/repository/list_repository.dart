@@ -99,7 +99,6 @@ class ListRepository {
     return cityId;
   }
 
-
   static Future<bool> addWishList(int? userId, ProductModel items) async {
     final Map<String, dynamic> params = {};
     params['cityId'] = items.cityId;
@@ -198,7 +197,6 @@ class ListRepository {
     var jsonCategory = response.data;
     final item = jsonCategory.firstWhere((item) => item['name'] == value);
     final itemId = item['id'];
-    // logError()
     final villageId = itemId;
     prefs.setKeyValue(Preferences.villageId, villageId);
     return response;
@@ -253,24 +251,24 @@ class ListRepository {
   }
 
   Future<ResultApiModel> saveProduct(
-      String title,
-      String description,
-      String place,
-      CategoryModel? country,
-      CategoryModel? state,
-      String? city,
-      int? statusId,
-      int? sourceId,
-      String address,
-      String? zipcode,
-      String? phone,
-      String? email,
-      String? website,
-      String? status,
-      String? startDate,
-      String? endDate,
-      String? price,
-      ) async {
+    String title,
+    String description,
+    String place,
+    CategoryModel? country,
+    CategoryModel? state,
+    String? city,
+    int? statusId,
+    int? sourceId,
+    String address,
+    String? zipcode,
+    String? phone,
+    String? email,
+    String? website,
+    String? status,
+    String? startDate,
+    String? endDate,
+    String? price,
+  ) async {
     final subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
     final villageId = prefs.getKeyValue(Preferences.villageId, null);
@@ -407,8 +405,6 @@ class ListRepository {
 
   Future<bool> deleteUserList(int? cityId, int listingId) async {
     final response = await Api.deleteUserList(cityId, listingId);
-    logError('cityId', cityId);
-    logError('listingId', listingId);
     if (response.success) {
       return true;
     } else {
@@ -417,9 +413,15 @@ class ListRepository {
     }
   }
 
-  Future<List<FavoriteDetailsModel>> loadUserListings() async {
-    final userId = prefs.getKeyValue('userId', 0);
+  Future<List<FavoriteDetailsModel>> loadUserListings(id) async {
+    int userId;
     final userList = <FavoriteDetailsModel>[];
+    if (id == 0) {
+      userId = prefs.getKeyValue('userId', 0);
+    } else {
+      userId = id;
+    }
+
     final listResponse = await Api.requestUserListings(userId);
     if (listResponse.success) {
       final responseData = listResponse.data;
@@ -460,7 +462,6 @@ class ListRepository {
     }
     return userList;
   }
-
 //
 // ///save product
 // static Future<bool> saveProduct(cityId, params) async {

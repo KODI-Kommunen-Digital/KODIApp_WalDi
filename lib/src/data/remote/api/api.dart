@@ -280,7 +280,6 @@ class Api {
       url: filepath,
       formData: pickedFile,
     );
-    logError('resultImage', result);
     final convertResponse = {"success": result['id'] != null, "data": result};
     return ResultApiModel.fromJson(convertResponse);
   }

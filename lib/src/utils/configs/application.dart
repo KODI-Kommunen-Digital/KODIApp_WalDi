@@ -11,6 +11,9 @@ class Application {
       // 'https://test1heidi.obs.eu-de.otc.t-systems.com/';
       'https://unsa1heidi.obs.eu-de.otc.t-systems.com/';
 
+  static const String defaultPicturesURL =
+      'https://smrauf1heidi.obs.eu-de.otc.t-systems.com/admin/ProfilePicture.png';
+
   static final Application _instance = Application._internal();
 
   factory Application() {
