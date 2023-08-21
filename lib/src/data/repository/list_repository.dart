@@ -21,9 +21,8 @@ class ListRepository {
     required categoryId,
     required type,
     required pageNo,
+    cityId,
   }) async {
-    final preference = await Preferences.openBox();
-    final cityId = preference.getKeyValue(Preferences.cityId, 0);
     if (type == "category") {
       int params = categoryId;
       final response = await Api.requestCatList(params, pageNo);
