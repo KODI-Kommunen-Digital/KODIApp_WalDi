@@ -155,7 +155,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             selectedCityTitle = data;
                             selectedCityId = list.id;
                           });
-                          AppBloc.homeCubit.saveCityId(selectedCityId);
+
                           await AppBloc.discoveryCubit
                               .onLocationFilter(selectedCityId, false);
                         } else if (data ==
@@ -177,22 +177,26 @@ class _HomeScreenState extends State<HomeScreen> {
                 onRefresh: _onRefresh,
               ),
               SliverList(
-                delegate: SliverChildListDelegate([
-                  SafeArea(
-                    top: false,
-                    bottom: false,
-                    child: Column(
-                      children: <Widget>[
-                        _buildCategory(AppBloc.homeCubit
-                            .getCategoriesWithoutHidden(category ?? [])),
-                        _buildLocation(location),
-                        _buildRecent(recent, selectedCityId),
-                        const SizedBox(height: 28),
-                      ],
+                delegate: SliverChildListDelegate(
+                  [
+                    SafeArea(
+                      top: false,
+                      bottom: false,
+                      child: Column(
+                        children: <Widget>[
+                          _buildCategory(
+                            AppBloc.homeCubit
+                                .getCategoriesWithoutHidden(category ?? []),
+                          ),
+                          _buildLocation(location),
+                          _buildRecent(recent, selectedCityId),
+                          const SizedBox(height: 28),
+                        ],
+                      ),
                     ),
-                  )
-                ]),
-              )
+                  ],
+                ),
+              ),
             ],
           );
         },
@@ -299,7 +303,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (item.id != -1) {
       final prefs = await Preferences.openBox();
-      AppBloc.homeCubit.saveCityId(item.id);
       prefs.setKeyValue(Preferences.type, "location");
       if (!mounted) return;
       Navigator.pushNamed(context, Routes.listProduct,

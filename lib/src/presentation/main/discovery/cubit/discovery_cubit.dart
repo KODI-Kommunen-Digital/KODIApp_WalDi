@@ -132,6 +132,30 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
       10: "https://mitreden.ilzerland.bayern/fuersteneck",
       11: "https://mitreden.ilzerland.bayern/saldenburg",
       12: "https://mitreden.ilzerland.bayern/thurmansbang",
+      13: "https://mitreden.ilzerland.bayern/projekts?order=index_order_all",
+    };
+
+    return cityWebsites[cityId];
+  }
+
+  Future<String?> getVirtualTourLink() async {
+    final prefs = await Preferences.openBox();
+    int cityId = await prefs.getKeyValue(Preferences.cityId, int);
+    Map<int, String> cityWebsites = {
+      0: "https://ilzerland.bayern/interaktive-karte/",
+      1: "https://tourmkr.com/F1Rg5oRge1/40641615p&310.64h&63.33t",
+      2: "https://tourmkr.com/F14ZlhQwXD/40641639p&356.76h&94.77t",
+      3: "https://tourmkr.com/F1nVQvVPi1/38390734p&340.75h&63.71t",
+      4: "https://ilzerland.bayern/interaktive-karte/",
+      5: "https://tourmkr.com/F1JeICLLWL/38851894p&334.04h&83.14t",
+      6: "https://tourmkr.com/F1P2Ti1VAp/34427036p&103.72h&86.75t",
+      7: "https://tourmkr.com/F14t5AzQfp/38906996p&331.62h&73.64t",
+      8: "https://tourmkr.com/F1iNyE4eSp/40686073p&260.81h&68.33t",
+      9: "https://ilzerland.bayern/interaktive-karte/",
+      10: "https://ilzerland.bayern/interaktive-karte/",
+      11: "https://tourmkr.com/F1c50qnKc8/38390190p&350.66h&70.41t",
+      12: "https://tourmkr.com/F1Hi8IDyo2/38390171p&231.46h&80.78t",
+      13: "https://tourmkr.com/F1AlYurcVO/40686065p&345.26h&65.34t",
     };
 
     return cityWebsites[cityId];

@@ -7,6 +7,7 @@ import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:heidi/src/presentation/widget/app_navbar.dart';
 import 'package:heidi/src/presentation/widget/app_product_item.dart';
 import 'package:heidi/src/utils/configs/application.dart';
+import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
@@ -24,6 +25,7 @@ class ListProductScreen extends StatefulWidget {
 
 class _ListProductScreenState extends State<ListProductScreen> {
   ProductFilter? selectedFilter;
+  int pageNo = 1;
 
   @override
   void initState() {
@@ -253,16 +255,38 @@ class ListLoaded extends StatefulWidget {
 }
 
 class _ListLoadedState extends State<ListLoaded> {
-  // final _swipeController = SwiperController();
   final _scrollController = ScrollController();
   bool isLoading = false;
   final PageType _pageType = PageType.list;
   final ProductViewType _listMode = Application.setting.listMode;
+  int pageNo = 1;
 
   @override
   void initState() {
     super.initState();
-    // loadListingsList();
+    _scrollController.addListener(_scrollListener);
+    loadListingsList();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_scrollListener);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollListener() {
+    if (_scrollController.position.atEdge) {
+      if (_scrollController.position.pixels != 0) {
+        context.read<ListCubit>().newListings(++pageNo).then((_) {
+          setState(() {});
+        }).catchError(
+          (error) {
+            logError('Error loading more listings: $error');
+          },
+        );
+      }
+    }
   }
 
   @override
@@ -335,6 +359,7 @@ class _ListLoadedState extends State<ListLoaded> {
       builder: (context, state) {
         if (_pageType == PageType.list) {
           Widget contentList = ListView.builder(
+            controller: _scrollController,
             padding: const EdgeInsets.only(top: 8),
             itemBuilder: (context, index) {
               return Padding(
@@ -344,62 +369,19 @@ class _ListLoadedState extends State<ListLoaded> {
             },
             itemCount: 8,
           );
-          if (_listMode == ProductViewType.grid) {
-            final size = MediaQuery.of(context).size;
-            final left = MediaQuery.of(context).padding.left;
-            final right = MediaQuery.of(context).padding.right;
-            const itemHeight = 220;
-            final itemWidth = (size.width - 48 - left - right) / 2;
-            final ratio = itemWidth / itemHeight;
-            contentList = GridView.count(
-              padding: const EdgeInsets.only(left: 16, right: 16, top: 8),
-              mainAxisSpacing: 16,
-              crossAxisSpacing: 16,
-              crossAxisCount: 2,
-              childAspectRatio: ratio,
-              children: List.generate(8, (index) => index).map((item) {
-                return _buildItem(type: _listMode);
-              }).toList(),
-            );
-          }
 
-          contentList = RefreshIndicator(
-            onRefresh: loadListingsList,
-            child: ListView.builder(
-              controller: _scrollController,
-              padding: const EdgeInsets.only(top: 8),
-              itemBuilder: (context, index) {
-                final item = list[index];
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 16),
-                  child: _buildItem(item: item, type: _listMode),
-                );
-              },
-              itemCount: list.length,
-            ),
+          contentList = ListView.builder(
+            controller: _scrollController,
+            padding: const EdgeInsets.only(top: 8),
+            itemBuilder: (context, index) {
+              final item = list[index];
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 16),
+                child: _buildItem(item: item, type: _listMode),
+              );
+            },
+            itemCount: list.length,
           );
-          if (_listMode == ProductViewType.grid) {
-            final size = MediaQuery.of(context).size;
-            final left = MediaQuery.of(context).padding.left;
-            final right = MediaQuery.of(context).padding.right;
-            const itemHeight = 220;
-            final itemWidth = (size.width - 48 - left - right) / 2;
-            final ratio = itemWidth / itemHeight;
-            contentList = RefreshIndicator(
-              onRefresh: loadListingsList,
-              child: GridView.count(
-                controller: _scrollController,
-                padding: const EdgeInsets.only(left: 16, right: 16, top: 8),
-                mainAxisSpacing: 16,
-                crossAxisSpacing: 16,
-                crossAxisCount: 2,
-                childAspectRatio: ratio,
-                children: list.map((item) {
-                  return _buildItem(item: item, type: _listMode);
-                }).toList(),
-              ),
-            );
-          }
 
           if (list.isEmpty) {
             contentList = Center(

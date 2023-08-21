@@ -116,7 +116,7 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                 Padding(
                   padding: const EdgeInsets.all(15.0),
                   child: Text(
-                    Translate.of(context).translate('my_listings'),
+                    Translate.of(context).translate('profile_listings'),
                     style: Theme.of(context)
                         .textTheme
                         .titleLarge!

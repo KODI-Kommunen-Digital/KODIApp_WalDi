@@ -17,14 +17,14 @@ class ListCubit extends Cubit<ListState> {
     // final isEvent = categoryPreferencesCall();
   }
 
-  int page = 1;
+  int pageNo = 1;
   List<ProductModel> list = [];
   PaginationModel? pagination;
   List<ProductModel> listLoaded = [];
   List<ProductModel> filteredList = [];
 
   Future<void> onLoad() async {
-    page = 1;
+    pageNo = 1;
     final prefs = await Preferences.openBox();
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
     final type = prefs.getKeyValue(Preferences.type, '');
@@ -34,6 +34,7 @@ class ListCubit extends Cubit<ListState> {
     final result = await ListRepository.loadList(
       categoryId: categoryId,
       type: type,
+      pageNo: pageNo,
     );
     if (result != null) {
       list = result[0];
@@ -127,5 +128,27 @@ class ListCubit extends Cubit<ListState> {
       13: "category_food"
     };
     return categories[categoryId];
+  }
+
+  Future<void> newListings(int pageNo) async {
+    final prefs = await Preferences.openBox();
+    final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
+    final type = prefs.getKeyValue(Preferences.type, '');
+    if (type == 'location') {
+      prefs.setKeyValue(Preferences.categoryId, '');
+    }
+    final result = await ListRepository.loadList(
+      categoryId: categoryId,
+      type: type,
+      pageNo: pageNo,
+    );
+    if (result != null) {
+      final listUpdated = result[0];
+      list.addAll(listUpdated);
+      listLoaded = listUpdated;
+      emit(ListStateUpdated(
+        list,
+      ));
+    }
   }
 }

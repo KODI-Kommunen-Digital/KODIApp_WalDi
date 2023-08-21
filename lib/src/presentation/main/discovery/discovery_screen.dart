@@ -271,7 +271,8 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
       await launchUrl(Uri.parse("https://www.ilztal.de"),
           mode: LaunchMode.inAppWebView);
     } else if (service.imageLink == "12") {
-      await launchUrl(Uri.parse("https://ilzerland.bayern/interaktive-karte/"),
+      await launchUrl(
+          Uri.parse(await AppBloc.discoveryCubit.getVirtualTourLink() ?? ""),
           mode: LaunchMode.inAppWebView);
     } else {
       prefs.setKeyValue(Preferences.type, service.type);
