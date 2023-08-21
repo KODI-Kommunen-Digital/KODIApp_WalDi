@@ -116,8 +116,6 @@ class ListRepository {
 
   Future<bool> deleteUserList(int? cityId, int listingId) async {
     final response = await Api.deleteUserList(cityId, listingId);
-    logError('cityId', cityId);
-    logError('listingId', listingId);
     if (response.success) {
       return true;
     } else {
@@ -153,16 +151,21 @@ class ListRepository {
     return null;
   }
 
-  Future<List<FavoriteDetailsModel>> loadUserListings() async {
-    final userId = prefs.getKeyValue('userId', 0);
+  Future<List<FavoriteDetailsModel>> loadUserListings(id) async {
+    int userId;
     final userList = <FavoriteDetailsModel>[];
+    if(id == 0){
+      userId = prefs.getKeyValue('userId', 0);
+    }
+    else{
+      userId = id;
+    }
+
     final listResponse = await Api.requestUserListings(userId);
     if (listResponse.success) {
       final responseData = listResponse.data;
       if (responseData != []) {
         for (final data in responseData) {
-          logError(' dataId', data['id']);
-          logError(' dataCityId', data['cityId']);
           userList.add(FavoriteDetailsModel(
             data['id'],
             data['userId'],

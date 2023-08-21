@@ -6,7 +6,6 @@ import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/cubit/cubit.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
-import 'package:heidi/src/utils/logging/loggy_exp.dart';
 
 class ProductDetailCubit extends Cubit<ProductDetailState> {
   ProductDetailCubit() : super(const ProductDetailLoading());
@@ -31,7 +30,6 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
       if (result != null) {
         product = result;
         userDetail = await getUserDetails(item.userId, item.cityId);
-        logError('NewUserId',userDetail?.id);
         if (userId != 0) {
           favoritesList = await UserRepository.loadFavorites(userId);
           if (product != null) {
@@ -65,7 +63,6 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
 
   Future<UserModel?> getUserDetails(userId, cityId) async{
     UserModel? userDetailResponse = await UserRepository.getUserDetails(userId, cityId);
-    logError('userDetailUsername', userDetailResponse?.username);
     return userDetailResponse;
   }
 

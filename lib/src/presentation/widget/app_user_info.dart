@@ -22,6 +22,7 @@ class AppUserInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     switch (type) {
       case UserViewType.information:
         if (user == null) {
@@ -88,7 +89,9 @@ class AppUserInfo extends StatelessWidget {
           height: 60,
           child: ClipOval(
               child: Image.network(
-            "${Application.picturesURL}${user!.image}",
+            user!.image == 'Unknown'
+                ? Application.defaultPicturesURL
+                : "${Application.picturesURL}${user!.image}",
             width: 100,
             height: 100,
             fit: BoxFit.cover,

@@ -690,52 +690,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            const SizedBox(height: 16),
-            Container(
-              padding: const EdgeInsets.all(8),
-              margin: const EdgeInsets.symmetric(horizontal: 8),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: Theme.of(context).cardColor,
-                boxShadow: [
-                  BoxShadow(
-                    color: Theme.of(context).dividerColor.withOpacity(
-                          .05,
-                        ),
-                    spreadRadius: 4,
-                    blurRadius: 4,
-                    offset: const Offset(
-                      0,
-                      2,
-                    ), // changes position of shadow
-                  ),
-                ],
-              ),
-              child: AppUserInfo(
-                user: userDetail,
-                onPressed: () async {
-                  final loggedInUserId = await context
-                      .read<ProductDetailCubit>()
-                      .getLoggedInUserId();
-                  if (!mounted) return;
-                  final productUserId = await context
-                      .read<ProductDetailCubit>()
-                      .getUserDetails(widget.item.userId, widget.item.cityId);
-
-                  if (productUserId?.id == loggedInUserId) {
-                    if (!mounted) return;
-                    Navigator.pushNamed(context, Routes.profile,
-                        arguments: {'user': userDetail, 'editable': true});
-                  } else {
-                    if (!mounted) return;
-                    Navigator.pushNamed(context, Routes.profile,
-                        arguments: {'user': userDetail, 'editable': false});
-                  }
-                },
-                type: UserViewType.information,
-                showDirectionIcon: true,
-              ),
-            ),
             const SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -814,6 +768,52 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             website,
             openHours,
             attachments,
+            // const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.all(8),
+              margin: const EdgeInsets.symmetric(horizontal: 8),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: Theme.of(context).cardColor,
+                boxShadow: [
+                  BoxShadow(
+                    color: Theme.of(context).dividerColor.withOpacity(
+                      .05,
+                    ),
+                    spreadRadius: 4,
+                    blurRadius: 4,
+                    offset: const Offset(
+                      0,
+                      2,
+                    ), // changes position of shadow
+                  ),
+                ],
+              ),
+              child: AppUserInfo(
+                user: userDetail,
+                onPressed: () async {
+                  final loggedInUserId = await context
+                      .read<ProductDetailCubit>()
+                      .getLoggedInUserId();
+                  if (!mounted) return;
+                  final productUserId = await context
+                      .read<ProductDetailCubit>()
+                      .getUserDetails(widget.item.userId, widget.item.cityId);
+
+                  if (productUserId?.id == loggedInUserId) {
+                    if (!mounted) return;
+                    Navigator.pushNamed(context, Routes.profile,
+                        arguments: {'user': userDetail, 'editable': true});
+                  } else {
+                    if (!mounted) return;
+                    Navigator.pushNamed(context, Routes.profile,
+                        arguments: {'user': userDetail, 'editable': false});
+                  }
+                },
+                type: UserViewType.information,
+                showDirectionIcon: true,
+              ),
+            ),
             // socials,
             const SizedBox(height: 16),
 

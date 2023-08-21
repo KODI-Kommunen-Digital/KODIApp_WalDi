@@ -28,6 +28,7 @@ class AppProductItem extends StatelessWidget {
         if (item == null) {
           return const EmptyProductItem();
         }
+
         return InkWell(
           onTap: onPressed,
           child: Row(
@@ -118,7 +119,6 @@ class AppProductItem extends StatelessWidget {
         if (item == null) {
           return const EmptyProductItem();
         }
-
         return InkWell(
           onTap: onPressed,
           child: Column(
