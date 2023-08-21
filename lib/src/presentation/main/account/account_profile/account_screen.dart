@@ -184,6 +184,20 @@ class _AccountLoadedState extends State<AccountLoaded> {
                           ),
                         ),
                       ),
+                      AppListTitle(
+                        title: Translate.of(context).translate('my_listings'),
+                        onPressed: () {
+                          Navigator.pushNamed(context, Routes.profile,
+                              arguments: user);
+                        },
+                        trailing: RotatedBox(
+                          quarterTurns: AppLanguage.isRTL() ? 2 : 0,
+                          child: const Icon(
+                            Icons.keyboard_arrow_right,
+                            textDirection: TextDirection.ltr,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 4),

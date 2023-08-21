@@ -35,21 +35,21 @@ class UserModel {
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      id: json['id'] ?? 0,
-      username: json['username'] ?? 'Unknown',
-      firstname: json['firstname'] ?? 'Unknown',
-      lastname: json['lastname'] ?? 'Unknown',
-      nickname: json['user_nicename'] ?? 'Unknown',
-      image: json['image'] ?? 'Unknown',
-      url: json['website'] ?? 'Unknown',
+      id: json['userId'] ?? 0,
+      username: json['username'] ?? 'Keine Angabe',
+      firstname: json['firstname'] ?? 'Keine Angabe',
+      lastname: json['lastname'] ?? 'Keine Angabe',
+      nickname: json['user_nicename'] ?? 'Keine Angabe',
+      image: json['image'] ?? 'Keine Angabe',
+      url: json['website'] ?? 'Keine Angabe',
       level: json['user_level'] ?? 0,
-      description: json['description'] ?? 'Unknown',
-      tag: json['tag'] ?? 'Unknown',
+      description: json['description'] ?? 'Keine Angabe',
+      tag: json['tag'] ?? 'Keine Angabe',
       rate: double.tryParse('${json['rating_avg']}') ?? 0.0,
       comment: int.tryParse('${json['total_comment']}') ?? 0,
       total: json['total'] ?? 0,
-      token: json['accessToken'] ?? "Unknown",
-      email: json['email'] ?? 'Unknown',
+      token: json['accessToken'] ?? "Keine Angabe",
+      email: json['email'] ?? 'Keine Angabe',
     );
   }
 
