@@ -24,7 +24,7 @@ class ListCubit extends Cubit<ListState> {
   List<ProductModel> listLoaded = [];
   List<ProductModel> filteredList = [];
 
-  Future<void> onLoad() async {
+  Future<void> onLoad(cityId) async {
     pageNo = 1;
     final prefs = await Preferences.openBox();
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
@@ -36,6 +36,8 @@ class ListCubit extends Cubit<ListState> {
       categoryId: categoryId,
       type: type,
       pageNo: pageNo,
+      cityId: cityId,
+
     );
     if (result != null) {
       list = result[0];
@@ -131,7 +133,7 @@ class ListCubit extends Cubit<ListState> {
     return categories[categoryId];
   }
 
-  Future<void> newListings(int pageNo) async {
+  Future<void> newListings(int pageNo, cityId) async {
     final prefs = await Preferences.openBox();
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
     final type = prefs.getKeyValue(Preferences.type, '');
@@ -142,6 +144,7 @@ class ListCubit extends Cubit<ListState> {
       categoryId: categoryId,
       type: type,
       pageNo: pageNo,
+      cityId: cityId,
     );
     if (result != null) {
       final listUpdated = result[0];

@@ -34,7 +34,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
   }
 
   Future<void> loadListingsList() async {
-    await context.read<ListCubit>().onLoad();
+    await context.read<ListCubit>().onLoad(widget.arguments['id']);
   }
 
   void _updateSelectedFilter(ProductFilter? filter) {
@@ -210,12 +210,12 @@ class _ListProductScreenState extends State<ListProductScreen> {
             loading: () => const ListLoading(),
             loaded: (list) => ListLoaded(
               list: list,
-              selectedCityId: widget.arguments['id'],
+              selectedId: widget.arguments['id'],
             ),
             updated: (list) {
               return ListLoaded(
                 list: list,
-                selectedCityId: widget.arguments['id'],
+                selectedId: widget.arguments['id'],
               );
             },
             error: (e) => ErrorWidget('Failed to load listings.'),
@@ -242,12 +242,12 @@ class ListLoading extends StatelessWidget {
 
 class ListLoaded extends StatefulWidget {
   final List<ProductModel> list;
-  final int selectedCityId;
+  final int selectedId;
 
   const ListLoaded({
     Key? key,
     required this.list,
-    required this.selectedCityId,
+    required this.selectedId,
   }) : super(key: key);
 
   @override
@@ -272,13 +272,14 @@ class _ListLoadedState extends State<ListLoaded> {
   void dispose() {
     _scrollController.removeListener(_scrollListener);
     _scrollController.dispose();
+    widget.list.clear();
     super.dispose();
   }
 
   void _scrollListener() {
     if (_scrollController.position.atEdge) {
       if (_scrollController.position.pixels != 0) {
-        context.read<ListCubit>().newListings(++pageNo).then((_) {
+        context.read<ListCubit>().newListings(++pageNo, widget.selectedId).then((_) {
           setState(() {});
         }).catchError(
           (error) {
@@ -304,7 +305,7 @@ class _ListLoadedState extends State<ListLoaded> {
     setState(() {
       isLoading = true;
     });
-    await context.read<ListCubit>().onLoad();
+    await context.read<ListCubit>().onLoad(widget.selectedId);
     setState(() {
       isLoading = false;
     });
@@ -359,6 +360,7 @@ class _ListLoadedState extends State<ListLoaded> {
       builder: (context, state) {
         if (_pageType == PageType.list) {
           Widget contentList = ListView.builder(
+            key: UniqueKey(),
             controller: _scrollController,
             padding: const EdgeInsets.only(top: 8),
             itemBuilder: (context, index) {
@@ -371,6 +373,7 @@ class _ListLoadedState extends State<ListLoaded> {
           );
 
           contentList = ListView.builder(
+            key: UniqueKey(),
             controller: _scrollController,
             padding: const EdgeInsets.only(top: 8),
             itemBuilder: (context, index) {
