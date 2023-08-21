@@ -158,7 +158,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             selectedCityTitle = data;
                             selectedCityId = list.id;
                           });
-                          AppBloc.homeCubit.saveCityId(selectedCityId);
                           await AppBloc.discoveryCubit
                               .onLocationFilter(selectedCityId, false);
                         } else if (data ==
@@ -302,7 +301,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (item.id != -1) {
       final prefs = await Preferences.openBox();
-      AppBloc.homeCubit.saveCityId(item.id);
       prefs.setKeyValue(Preferences.type, "location");
       if (!mounted) return;
       Navigator.pushNamed(context, Routes.listProduct, arguments: {'id': item.id, 'title': item.title});
