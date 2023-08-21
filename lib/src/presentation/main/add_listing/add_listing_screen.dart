@@ -10,6 +10,7 @@ import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/datetime.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:heidi/src/utils/validate.dart';
+import 'package:loggy/loggy.dart';
 
 import 'cubit/add_listing_cubit.dart';
 
@@ -279,7 +280,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
               price: _textPriceController.text,
               startDate: _startDate,
               endDate: _endDate,
-
             );
         if (result) {
           _onSuccess();
@@ -335,7 +335,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
     _errorContent =
         UtilValidator.validate(_textContentController.text, allowEmpty: false);
 
-logError('selectedCategory', selectedCategory);
+    logError('selectedCategory', selectedCategory);
     if (selectedCategory == "Events") {
       logError('_startDate', _startDate);
 

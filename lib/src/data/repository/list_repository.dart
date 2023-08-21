@@ -155,10 +155,9 @@ class ListRepository {
   Future<List<FavoriteDetailsModel>> loadUserListings(id) async {
     int userId;
     final userList = <FavoriteDetailsModel>[];
-    if(id == 0){
+    if (id == 0) {
       userId = prefs.getKeyValue('userId', 0);
-    }
-    else{
+    } else {
       userId = id;
     }
 
@@ -285,7 +284,7 @@ class ListRepository {
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
     final villageId = prefs.getKeyValue(Preferences.villageId, null);
     final userId = prefs.getKeyValue(Preferences.userId, '');
-    //final cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    final cityId = await getCityId(city);
     final media = prefs.getKeyValue(Preferences.path, null);
 
     Map<String, dynamic> params = {
@@ -402,7 +401,6 @@ class ListRepository {
   }
 
   Future<int> getCityId(cityName) async {
-
     final response = await Api.requestSubmitCities();
     var jsonCategory = response.data;
     final item = jsonCategory.firstWhere((item) => item['name'] == cityName);
