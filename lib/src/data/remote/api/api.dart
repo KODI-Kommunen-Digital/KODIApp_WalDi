@@ -150,7 +150,7 @@ class Api {
 
   ///Get Recent Listings
   static Future<ResultApiModel> requestRecentListings(params) async {
-    final listings = "/listings?statusId=1&pageNo=$params&pageSize=19";
+    final listings = "/listings?statusId=1&pageNo=$params&pageSize=9";
     final result = await httpManager.get(url: listings);
     return ResultApiModel.fromJson(result);
   }
@@ -221,20 +221,22 @@ class Api {
   }
 
   ///Get Product List
-  static Future<ResultApiModel> requestCatList(params) async {
-    var list = '/listings?categoryId=$params&statusId=1';
+  static Future<ResultApiModel> requestCatList(params, pageNo) async {
+    var list =
+        '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=9';
     final result = await httpManager.get(url: list);
     return ResultApiModel.fromJson(result);
   }
 
-  static Future<ResultApiModel> requestSubCatList(params) async {
-    var list = '/listings?subCategoryId=10&categoryId=1&statusId=1';
+  static Future<ResultApiModel> requestSubCatList(params, pageNo) async {
+    var list =
+        '/listings?subCategoryId=10&categoryId=1&statusId=1&pageNo=$pageNo&pageSize=9';
     final result = await httpManager.get(url: list);
     return ResultApiModel.fromJson(result);
   }
 
-  static Future<ResultApiModel> requestLocList(params) async {
-    var list = '/listings?cityId=$params&statusId=1';
+  static Future<ResultApiModel> requestLocList(params, pageNo) async {
+    var list = '/listings?cityId=$params&statusId=1&pageNo=$pageNo&pageSize=9';
     final result = await httpManager.get(url: list);
     return ResultApiModel.fromJson(result);
   }

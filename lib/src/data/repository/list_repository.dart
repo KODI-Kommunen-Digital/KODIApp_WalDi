@@ -20,12 +20,13 @@ class ListRepository {
   static Future<List?> loadList({
     required categoryId,
     required type,
+    required pageNo,
   }) async {
     final preference = await Preferences.openBox();
     final cityId = preference.getKeyValue(Preferences.cityId, 0);
     if (type == "category") {
       int params = categoryId;
-      final response = await Api.requestCatList(params);
+      final response = await Api.requestCatList(params, pageNo);
       if (response.success) {
         final list = List.from(response.data ?? []).map((item) {
           return ProductModel.fromJson(item, setting: Application.setting);
@@ -37,7 +38,7 @@ class ListRepository {
       }
     } else if (type == "location") {
       int params = cityId;
-      final response = await Api.requestLocList(params);
+      final response = await Api.requestLocList(params, pageNo);
       if (response.success) {
         final list = List.from(response.data ?? []).map((item) {
           return ProductModel.fromJson(item, setting: Application.setting);
@@ -47,7 +48,7 @@ class ListRepository {
       }
     } else if (type == "categoryService") {
       int params = categoryId;
-      final response = await Api.requestCatList(params);
+      final response = await Api.requestCatList(params, pageNo);
       if (response.success) {
         final list = List.from(response.data ?? []).map((item) {
           return ProductModel.fromJson(item, setting: Application.setting);
@@ -58,7 +59,7 @@ class ListRepository {
         return [list, response.pagination];
       }
     } else if (type == "subCategoryService") {
-      final response = await Api.requestSubCatList(cityId);
+      final response = await Api.requestSubCatList(cityId, pageNo);
       if (response.success) {
         final list = List.from(response.data ?? []).map((item) {
           return ProductModel.fromJson(item, setting: Application.setting);

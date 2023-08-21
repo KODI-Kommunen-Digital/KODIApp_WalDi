@@ -18,6 +18,7 @@ class CitizenServiceModel {
     final result = await ListRepository.loadList(
       categoryId: categoryId,
       type: type,
+      pageNo: 1,
     );
     return !result?[0].isEmpty;
   }
