@@ -39,9 +39,6 @@ class HomeCubit extends Cubit<HomeState> {
     }).toList();
 
     CategoryModel? savedCity = await checkSavedCity(location);
-    if (savedCity == null) {
-      saveCityId(0);
-    }
     final categoryCountRequestResponse =
         await Api.requestCategoryCount(savedCity?.id);
     categoryCount =
