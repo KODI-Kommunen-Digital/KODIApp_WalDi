@@ -188,7 +188,7 @@ class _AccountLoadedState extends State<AccountLoaded> {
                         title: Translate.of(context).translate('my_listings'),
                         onPressed: () {
                           Navigator.pushNamed(context, Routes.profile,
-                              arguments: user);
+                              arguments: {'user': user, 'editable': true});
                         },
                         trailing: RotatedBox(
                           quarterTurns: AppLanguage.isRTL() ? 2 : 0,
