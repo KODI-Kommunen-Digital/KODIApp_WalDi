@@ -8,7 +8,6 @@ import 'package:heidi/src/presentation/widget/app_upload_image.dart';
 import 'package:heidi/src/utils/common.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/datetime.dart';
-import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:heidi/src/utils/validate.dart';
 
@@ -159,6 +158,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
   void _onProcess() async {
     final loadCitiesResponse =
         await context.read<AddListingCubit>().loadCities();
+    selectedCity = loadCitiesResponse!.data.first['name'];
     if (!mounted) return;
     final loadCategoryResponse =
         await context.read<AddListingCubit>().loadCategory();
@@ -174,14 +174,14 @@ class _AddListingScreenState extends State<AddListingScreen> {
     setState(() {
       listCategory = loadCategoryResponse?.data;
       if (currentCity != null && currentCity != 0) {
-        for (var cityData in loadCitiesResponse!.data) {
+        for (var cityData in loadCitiesResponse.data) {
           if (cityData['id'] == currentCity) {
             selectedCity = cityData['name'];
             break; // Exit the loop once the desired city is found
           }
         }
       } else {
-        selectedCity = loadCitiesResponse!.data.first['name'];
+        selectedCity = loadCitiesResponse.data.first['name'];
       }
       selectedSubCategory = loadCategoryResponse?.data.first['name'];
       listCity = loadCitiesResponse.data;
@@ -245,6 +245,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
   void _onSubmit() async {
     final success = _validData();
     if (success) {
+      context.read<AddListingCubit>().setCategoryId(selectedCategory);
       if (widget.item != null) {
         context.read<AddListingCubit>().setCategoryId(selectedCategory);
         final result = await context.read<AddListingCubit>().onEdit(
@@ -268,6 +269,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
         final result = await context.read<AddListingCubit>().onSubmit(
               cityId: cityId ?? 1,
               title: _textTitleController.text,
+              city: selectedCity,
               place: _textPlaceController.text,
               description: _textContentController.text,
               address: _textAddressController.text,
@@ -277,6 +279,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
               price: _textPriceController.text,
               startDate: _startDate,
               endDate: _endDate,
+
             );
         if (result) {
           _onSuccess();
@@ -332,7 +335,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
     _errorContent =
         UtilValidator.validate(_textContentController.text, allowEmpty: false);
 
-    logError('selectedCategory', selectedCategory);
+logError('selectedCategory', selectedCategory);
     if (selectedCategory == "Events") {
       logError('_startDate', _startDate);
 

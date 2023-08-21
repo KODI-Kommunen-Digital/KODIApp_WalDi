@@ -14,7 +14,7 @@ class UserCubit extends Cubit<UserModel?> {
 
   Future<UserModel?> onFetchUser() async {
     final prefs = await Preferences.openBox();
-    final userId = prefs.getKeyValue(Preferences.userId, '');
+    final userId = prefs.getKeyValue(Preferences.userId, 0);
     UserModel? local = await UserRepository.loadUser();
     UserModel? remote = await UserRepository.fetchUser(userId);
     if (local != null && remote != null) {

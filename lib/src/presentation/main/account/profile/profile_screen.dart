@@ -8,13 +8,14 @@ import 'package:heidi/src/presentation/main/account/profile/cubit/profile_state.
 import 'package:heidi/src/presentation/widget/app_user_info.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
-import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class ProfileScreen extends StatelessWidget {
   final UserModel user;
+  final bool isEditable;
 
-  const ProfileScreen({required this.user, super.key});
+  const ProfileScreen(
+      {required this.user, required this.isEditable, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,7 @@ class ProfileScreen extends StatelessWidget {
       },
       builder: (context, state) => state.maybeWhen(
         loading: () => const ProfileLoading(),
-        loaded: (userListing) => ProfileLoaded(user, userListing),
+        loaded: (userListing) => ProfileLoaded(user, userListing, isEditable),
         orElse: () => ErrorWidget('Failed to load Accounts.'),
       ),
     );
@@ -49,8 +50,9 @@ class ProfileLoading extends StatelessWidget {
 class ProfileLoaded extends StatefulWidget {
   final UserModel user;
   final List<ProductModel> userListings;
+  final bool isEditable;
 
-  const ProfileLoaded(this.user, this.userListings, {Key? key})
+  const ProfileLoaded(this.user, this.userListings, this.isEditable, {Key? key})
       : super(key: key);
 
   @override
@@ -139,42 +141,48 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                           itemBuilder: (context, index) {
                             final item = userListingsList[index];
                             return Slidable(
-                              endActionPane: ActionPane(
-                                motion: const ScrollMotion(),
-                                children: [
-                                  SlidableAction(
-                                    onPressed: (aContext) {
-                                      Navigator.pushNamed(
-                                          context, Routes.submit, arguments: {
-                                        'item': userListingsList[index],
-                                        'isNewList': false
-                                      }).then((value) async {
-                                        final response = await context
-                                            .read<ProfileCubit>()
-                                            .loadUserListing();
-                                        setState(() {
-                                          userListingsList = response;
-                                        });
-                                      });
-                                    },
-                                    backgroundColor: Colors.blue,
-                                    foregroundColor: Colors.white,
-                                    icon: Icons.edit,
-                                    label:
-                                        Translate.of(context).translate('edit'),
-                                  ),
-                                  SlidableAction(
-                                    onPressed: (aContext) async {
-                                      showDeleteConfirmation(context, index);
-                                    },
-                                    backgroundColor: Colors.red,
-                                    foregroundColor: Colors.white,
-                                    icon: Icons.delete,
-                                    label: Translate.of(context)
-                                        .translate('delete'),
-                                  ),
-                                ],
-                              ),
+                              endActionPane: !widget.isEditable
+                                  ? null
+                                  : ActionPane(
+                                      motion: const ScrollMotion(),
+                                      children: [
+                                        SlidableAction(
+                                          onPressed: (aContext) {
+                                            Navigator.pushNamed(
+                                                context, Routes.submit,
+                                                arguments: {
+                                                  'item':
+                                                      userListingsList[index],
+                                                  'isNewList': false
+                                                }).then((value) async {
+                                              final response = await context
+                                                  .read<ProfileCubit>()
+                                                  .loadUserListing(
+                                                      widget.user.id);
+                                              setState(() {
+                                                userListingsList = response;
+                                              });
+                                            });
+                                          },
+                                          backgroundColor: Colors.blue,
+                                          foregroundColor: Colors.white,
+                                          icon: Icons.edit,
+                                          label: Translate.of(context)
+                                              .translate('edit'),
+                                        ),
+                                        SlidableAction(
+                                          onPressed: (aContext) async {
+                                            showDeleteConfirmation(
+                                                context, index);
+                                          },
+                                          backgroundColor: Colors.red,
+                                          foregroundColor: Colors.white,
+                                          icon: Icons.delete,
+                                          label: Translate.of(context)
+                                              .translate('delete'),
+                                        ),
+                                      ],
+                                    ),
                               key:
                                   Key(item.id.toString() + isSwiped.toString()),
                               child: InkWell(
@@ -303,7 +311,6 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
             userListingsList[index].cityId.toString(),
             userListingsList[index].id,
           );
-      logError('deleteResponse', deleteResponse);
       setState(() {
         if (deleteResponse) {
           userListingsList.removeAt(index);
@@ -313,6 +320,6 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
   }
 
   Future<void> _onRefresh() async {
-    context.read<ProfileCubit>().loadUserListing();
+    context.read<ProfileCubit>().loadUserListing(widget.user.id);
   }
 }

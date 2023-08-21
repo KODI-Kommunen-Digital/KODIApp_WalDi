@@ -28,6 +28,7 @@ class AppProductItem extends StatelessWidget {
         if (item == null) {
           return const EmptyProductItem();
         }
+
         return InkWell(
           onTap: onPressed,
           child: Row(
@@ -94,6 +95,17 @@ class AppProductItem extends StatelessWidget {
                           .bodySmall!
                           .copyWith(fontWeight: FontWeight.bold),
                     ),
+                    const SizedBox(height: 2),
+                    Visibility(
+                      visible: item!.startDate.isNotEmpty,
+                      child: Text(
+                        "${item?.startDate} ${Translate.of(context).translate('to')} ${item?.endDate}",
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall!
+                            .copyWith(fontWeight: FontWeight.bold),
+                      ),
+                    ),
                     const SizedBox(height: 4),
                   ],
                 ),
@@ -107,7 +119,6 @@ class AppProductItem extends StatelessWidget {
         if (item == null) {
           return const EmptyProductItem();
         }
-
         return InkWell(
           onTap: onPressed,
           child: Column(

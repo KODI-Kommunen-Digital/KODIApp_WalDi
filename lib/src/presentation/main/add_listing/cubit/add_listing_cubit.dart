@@ -30,7 +30,7 @@ class AddListingCubit extends Cubit<AddListingState> {
     required int cityId,
     CategoryModel? country,
     CategoryModel? state,
-    CategoryModel? city,
+    String? city,
     int? statusId,
     int? sourceId,
     required String address,
@@ -46,7 +46,6 @@ class AddListingCubit extends Cubit<AddListingState> {
   }) async {
     try {
       final response = await _repo.saveProduct(
-          cityId,
           title,
           description,
           place,

@@ -122,17 +122,19 @@ class Routes {
           },
         );
 
+
       case profile:
         return MaterialPageRoute(
           builder: (context) {
-            final args = settings.arguments as UserModel;
+            final Map<String, dynamic> arguments =
+            settings.arguments as Map<String, dynamic>;
             return BlocProvider(
               create: (context) => ProfileCubit(
                 context.read(),
-                args,
+                arguments['user'] as UserModel,
               ),
               child: ProfileScreen(
-                user: args,
+                user: arguments['user'] as UserModel, isEditable: arguments['editable'] as bool,
               ),
             );
           },

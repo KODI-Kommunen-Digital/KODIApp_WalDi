@@ -117,8 +117,6 @@ class ListRepository {
 
   Future<bool> deleteUserList(int? cityId, int listingId) async {
     final response = await Api.deleteUserList(cityId, listingId);
-    logError('cityId', cityId);
-    logError('listingId', listingId);
     if (response.success) {
       return true;
     } else {
@@ -154,16 +152,21 @@ class ListRepository {
     return null;
   }
 
-  Future<List<FavoriteDetailsModel>> loadUserListings() async {
-    final userId = prefs.getKeyValue('userId', 0);
+  Future<List<FavoriteDetailsModel>> loadUserListings(id) async {
+    int userId;
     final userList = <FavoriteDetailsModel>[];
+    if(id == 0){
+      userId = prefs.getKeyValue('userId', 0);
+    }
+    else{
+      userId = id;
+    }
+
     final listResponse = await Api.requestUserListings(userId);
     if (listResponse.success) {
       final responseData = listResponse.data;
       if (responseData != []) {
         for (final data in responseData) {
-          logError(' dataId', data['id']);
-          logError(' dataCityId', data['cityId']);
           userList.add(FavoriteDetailsModel(
             data['id'],
             data['userId'],
@@ -260,13 +263,12 @@ class ListRepository {
   }
 
   Future<ResultApiModel> saveProduct(
-    cityId,
     String title,
     String description,
     String place,
     CategoryModel? country,
     CategoryModel? state,
-    CategoryModel? city,
+    String? city,
     int? statusId,
     int? sourceId,
     String address,
@@ -397,6 +399,16 @@ class ListRepository {
     final itemId = item['id'];
     final categoryId = itemId;
     prefs.setKeyValue(Preferences.categoryId, categoryId);
+  }
+
+  Future<int> getCityId(cityName) async {
+
+    final response = await Api.requestSubmitCities();
+    var jsonCategory = response.data;
+    final item = jsonCategory.firstWhere((item) => item['name'] == cityName);
+    final itemId = item['id'];
+    final cityId = itemId;
+    return cityId;
   }
 
   Future<int> getCategoryId() async {
