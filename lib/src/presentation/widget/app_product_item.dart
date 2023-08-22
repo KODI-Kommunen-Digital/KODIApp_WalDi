@@ -97,12 +97,21 @@ class AppProductItem extends StatelessWidget {
                     const SizedBox(height: 2),
                     Visibility(
                       visible: item!.startDate.isNotEmpty,
-                      child: Text(
-                        "${item?.startDate} ${Translate.of(context).translate('to')} ${item?.endDate}",
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodySmall!
-                            .copyWith(fontWeight: FontWeight.bold),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white30,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(3.5),
+                          child: Text(
+                            "${item?.startDate} ${Translate.of(context).translate('to')} ${item?.endDate}",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall!
+                                .copyWith(fontWeight: FontWeight.bold),
+                          ),
+                        ),
                       ),
                     ),
                     const SizedBox(height: 4),
