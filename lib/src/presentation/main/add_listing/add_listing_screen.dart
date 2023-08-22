@@ -427,7 +427,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
   Widget _buildContent() {
     if (_processing) {
       return const Center(
-        child: CircularProgressIndicator(
+        child: CircularProgressIndicator.adaptive(
           strokeWidth: 2,
         ),
       );

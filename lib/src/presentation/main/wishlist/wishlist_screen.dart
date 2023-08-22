@@ -50,7 +50,7 @@ class WishListLoading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Center(
-      child: CircularProgressIndicator(),
+      child: CircularProgressIndicator.adaptive(),
     );
   }
 }
@@ -83,7 +83,7 @@ class _WishListLoadedState extends State<WishListLoaded> {
           Center(
             child: Visibility(
               visible: isLoading,
-              child: const CircularProgressIndicator(),
+              child: const CircularProgressIndicator.adaptive(),
             ),
           ),
           ListView.builder(

@@ -78,10 +78,10 @@ class Routes {
     switch (settings.name) {
       case listProduct:
         final Map<String, dynamic> arguments =
-        settings.arguments as Map<String, dynamic>;
+            settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
           builder: (context) {
-            return ListProductScreen(arguments:  arguments);
+            return ListProductScreen(arguments: arguments);
           },
         );
 
@@ -122,19 +122,19 @@ class Routes {
           },
         );
 
-
       case profile:
         return MaterialPageRoute(
           builder: (context) {
             final Map<String, dynamic> arguments =
-            settings.arguments as Map<String, dynamic>;
+                settings.arguments as Map<String, dynamic>;
             return BlocProvider(
               create: (context) => ProfileCubit(
                 context.read(),
                 arguments['user'] as UserModel,
               ),
               child: ProfileScreen(
-                user: arguments['user'] as UserModel, isEditable: arguments['editable'] as bool,
+                user: arguments['user'] as UserModel,
+                isEditable: arguments['editable'] as bool,
               ),
             );
           },
@@ -151,8 +151,11 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) {
             final Map<String, dynamic> arguments =
-            settings.arguments as Map<String, dynamic>;
-            return AddListingScreen(item: arguments['item'] as ProductModel?, isNewList: arguments['isNewList'] as bool,);
+                settings.arguments as Map<String, dynamic>;
+            return AddListingScreen(
+              item: arguments['item'] as ProductModel?,
+              isNewList: arguments['isNewList'] as bool,
+            );
           },
           fullscreenDialog: true,
         );
@@ -221,7 +224,7 @@ class Routes {
           builder: (context) {
             return const Scaffold(
               body: Center(
-                child: CircularProgressIndicator(),
+                child: CircularProgressIndicator.adaptive(),
               ),
             );
           },
