@@ -23,6 +23,9 @@ class ListRepository {
     required pageNo,
     cityId,
   }) async {
+    final prefs = await Preferences.openBox();
+    int selectedCityId = prefs.getKeyValue(Preferences.cityId, 0);
+
     if (type == "category") {
       int params = categoryId;
       final response = await Api.requestCatList(params, pageNo);
@@ -52,13 +55,13 @@ class ListRepository {
         final list = List.from(response.data ?? []).map((item) {
           return ProductModel.fromJson(item, setting: Application.setting);
         }).toList();
-        if (cityId != 0) {
-          list.removeWhere((element) => element.cityId != cityId);
+        if (selectedCityId != 0) {
+          list.removeWhere((element) => element.cityId != selectedCityId);
         }
         return [list, response.pagination];
       }
     } else if (type == "subCategoryService") {
-      final response = await Api.requestSubCatList(cityId, pageNo);
+      final response = await Api.requestSubCatList(selectedCityId, pageNo);
       if (response.success) {
         final list = List.from(response.data ?? []).map((item) {
           return ProductModel.fromJson(item, setting: Application.setting);

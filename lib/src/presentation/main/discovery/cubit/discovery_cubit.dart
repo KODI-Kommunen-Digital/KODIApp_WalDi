@@ -1,10 +1,10 @@
 import 'package:bloc/bloc.dart';
+import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_citizen_service.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
 import 'package:heidi/src/presentation/cubit/bloc.dart';
 import 'package:heidi/src/utils/configs/image.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
-import '../../../../data/model/model_category.dart';
 import 'discovery_state.dart';
 
 class DiscoveryCubit extends Cubit<DiscoveryState> {
@@ -47,7 +47,7 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
 
   Future<int?> getCitySelected() async {
     final prefs = await Preferences.openBox();
-    int cityId = await prefs.getKeyValue(Preferences.cityId, int);
+    int cityId = await prefs.getKeyValue(Preferences.cityId, 0);
     return cityId;
   }
 
