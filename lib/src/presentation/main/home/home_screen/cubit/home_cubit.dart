@@ -24,7 +24,6 @@ class HomeCubit extends Cubit<HomeState> {
     }
     final categoryRequestResponse = await Api.requestHomeCategory();
     final cityRequestResponse = await Api.requestCities();
-    final listingsRequestResponse = await Api.requestRecentListings(1);
 
     category = List.from(categoryRequestResponse.data ?? []).map((item) {
       return CategoryModel.fromJson(item);
@@ -34,11 +33,18 @@ class HomeCubit extends Cubit<HomeState> {
       return CategoryModel.fromJson(item);
     }).toList();
 
-    recent = List.from(listingsRequestResponse.data ?? []).map((item) {
-      return ProductModel.fromJson(item);
-    }).toList();
-
     CategoryModel? savedCity = await checkSavedCity(location);
+    if (savedCity != null) {
+      final listingsRequestResponse = await Api.requestLocList(savedCity.id, 1);
+      recent = List.from(listingsRequestResponse.data ?? []).map((item) {
+        return ProductModel.fromJson(item);
+      }).toList();
+    } else {
+      final listingsRequestResponse = await Api.requestRecentListings(1);
+      recent = List.from(listingsRequestResponse.data ?? []).map((item) {
+        return ProductModel.fromJson(item);
+      }).toList();
+    }
     final categoryCountRequestResponse =
         await Api.requestCategoryCount(savedCity?.id);
     categoryCount =
@@ -89,19 +95,6 @@ class HomeCubit extends Cubit<HomeState> {
 
     return categories;
   }
-
-  // Future<bool> categoryHasContent(int id, int? cityId) async {
-  //   cityId ??= 0;
-  //   final response = await Api.requestCatList(id, 1);
-  //   final list = List.from(response.data ?? []).map((item) {
-  //     return ProductModel.fromJson(item, setting: Application.setting);
-  //   }).toList();
-  //   if (list.any((element) => element.cityId == cityId) ||
-  //       (cityId == 0 && list.isNotEmpty)) {
-  //     return true;
-  //   }
-  //   return false;
-  // }
 
   Future<bool> categoryHasContent(int id, int? cityId) async {
     final response =

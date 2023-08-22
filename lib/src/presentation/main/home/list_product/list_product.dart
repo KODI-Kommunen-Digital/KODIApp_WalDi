@@ -7,8 +7,8 @@ import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:heidi/src/presentation/widget/app_navbar.dart';
 import 'package:heidi/src/presentation/widget/app_product_item.dart';
 import 'package:heidi/src/utils/configs/application.dart';
-import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
+import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 import 'cubit/cubit.dart';
@@ -161,7 +161,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
                   future: context.read<ListCubit>().getCategory(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
+                      return const CircularProgressIndicator.adaptive();
                     } else if (snapshot.hasError || !snapshot.hasData) {
                       return Container();
                     } else {
@@ -174,7 +174,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
               future: context.read<ListCubit>().categoryPreferencesCall(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
+                  return const CircularProgressIndicator.adaptive();
                 } else if (snapshot.hasError || !snapshot.hasData) {
                   return Container();
                 } else {
@@ -235,7 +235,7 @@ class ListLoading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Center(
-      child: CircularProgressIndicator(),
+      child: CircularProgressIndicator.adaptive(),
     );
   }
 }
@@ -257,6 +257,7 @@ class ListLoaded extends StatefulWidget {
 class _ListLoadedState extends State<ListLoaded> {
   final _scrollController = ScrollController();
   bool isLoading = false;
+  bool isLoadingMore = false;
   final PageType _pageType = PageType.list;
   final ProductViewType _listMode = Application.setting.listMode;
   int pageNo = 1;
@@ -279,10 +280,21 @@ class _ListLoadedState extends State<ListLoaded> {
   void _scrollListener() {
     if (_scrollController.position.atEdge) {
       if (_scrollController.position.pixels != 0) {
-        context.read<ListCubit>().newListings(++pageNo, widget.selectedId).then((_) {
-          setState(() {});
+        setState(() {
+          isLoadingMore = true;
+        });
+        context
+            .read<ListCubit>()
+            .newListings(++pageNo, widget.selectedId)
+            .then((_) {
+          setState(() {
+            isLoadingMore = false;
+          });
         }).catchError(
           (error) {
+            setState(() {
+              isLoadingMore = false;
+            });
             logError('Error loading more listings: $error');
           },
         );
@@ -404,7 +416,22 @@ class _ListLoadedState extends State<ListLoaded> {
             );
           }
 
-          return SafeArea(child: contentList);
+          return SafeArea(
+            child: Stack(
+              children: [
+                contentList,
+                if (isLoadingMore)
+                  const Positioned(
+                    bottom: 50,
+                    left: 0,
+                    right: 0,
+                    child: Center(
+                      child: CircularProgressIndicator.adaptive(),
+                    ),
+                  ),
+              ],
+            ),
+          );
         }
         return Container();
       },
