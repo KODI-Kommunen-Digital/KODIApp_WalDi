@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
-import 'package:heidi/src/utils/configs/application.dart';
+// import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/image.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 
@@ -56,13 +56,26 @@ class HomeCubit extends Cubit<HomeState> {
     emit(HomeStateLoaded(banner, formattedCategories, location, recent));
   }
 
+  // Future<bool> categoryHasContent(int id, int? cityId) async {
+  //   cityId ??= 0;
+  //   final response = await Api.requestCatList(id, 1);
+  //   final list = List.from(response.data ?? []).map((item) {
+  //     return ProductModel.fromJson(item, setting: Application.setting);
+  //   }).toList();
+  //   if (list.any((element) => element.cityId == cityId) ||
+  //       (cityId == 0 && list.isNotEmpty)) {
+  //     return true;
+  //   }
+  //   return false;
+  // }
+
   Future<bool> categoryHasContent(int id, int? cityId) async {
-    cityId ??= 0;
-    final response = await Api.requestCatList(id, 1);
+    final response =
+        await Api.requestCategoryCount(cityId == 0 ? null : cityId);
     final list = List.from(response.data ?? []).map((item) {
-      return ProductModel.fromJson(item, setting: Application.setting);
+      return CategoryModel.fromJson(item);
     }).toList();
-    if (list.any((element) => element.cityId == cityId) ||
+    if (list.any((element) => element.id == id) ||
         (cityId == 0 && list.isNotEmpty)) {
       return true;
     }
