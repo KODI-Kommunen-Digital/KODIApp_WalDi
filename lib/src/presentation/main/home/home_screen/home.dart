@@ -42,6 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
     checkSavedCity = true;
     AppBloc.homeCubit.onLoad();
     connectivityInternet();
+    scrollUp();
   }
 
   void connectivityInternet() {
@@ -77,6 +78,13 @@ class _HomeScreenState extends State<HomeScreen> {
         );
       }
     }
+  }
+
+  void scrollUp() {
+    _scrollController.animateTo(0,
+        duration: const Duration(milliseconds: 500), //duration of scroll
+        curve: Curves.fastOutSlowIn //scroll type
+        );
   }
 
   Future<void> _onRefresh() async {
@@ -117,9 +125,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 checkSavedCity = false;
                 _setSavedCity(location);
               } else if (AppBloc.homeCubit.getCalledExternally()) {
+                scrollUp();
                 _setSavedCity(location);
                 AppBloc.homeCubit.setCalledExternally(false);
               }
+            }
+            if (AppBloc.homeCubit.getDoesScroll()) {
+              AppBloc.homeCubit.setDoesScroll(false);
+              scrollUp();
             }
           }
 

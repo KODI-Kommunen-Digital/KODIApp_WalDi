@@ -171,11 +171,19 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
   // final _swipeController = SwiperController();
   // final _scrollController = ScrollController();
   bool isLoading = false;
+  final _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
     hideEmptyService();
+  }
+
+  void scrollUp() {
+    _scrollController.animateTo(0,
+        duration: const Duration(milliseconds: 500), //duration of scroll
+        curve: Curves.fastOutSlowIn //scroll type
+        );
   }
 
   final List<CitizenServiceModel> hiddenServices = [];
@@ -205,8 +213,13 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
       body: BlocListener<HomeCubit, HomeState>(
         listener: (context, state) {
           hideEmptyService();
+          if (AppBloc.discoveryCubit.getDoesScroll()) {
+            AppBloc.discoveryCubit.setDoesScroll(false);
+            scrollUp();
+          }
         },
         child: GridView.builder(
+          controller: _scrollController,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2, // Adjust the number of columns as desired
               crossAxisSpacing: 10.0,
