@@ -88,7 +88,7 @@ class AppUserInfo extends StatelessWidget {
           height: 60,
           child: ClipOval(
               child: Image.network(
-            user!.image == 'Keine Angabe'
+            user!.image == 'Keine Angabe' || user!.image == ""
                 ? Application.defaultPicturesURL
                 : "${Application.picturesURL}${user!.image}",
             width: 100,
