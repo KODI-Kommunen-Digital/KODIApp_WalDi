@@ -230,6 +230,7 @@ class _WishListLoadedState extends State<WishListLoaded> {
         website: favoritesList.website ?? '',
         email: favoritesList.email ?? '',
         favorite: true,
+        cityId: favoritesList.cityId ?? 0,
         startDate: favoritesList.startDate ?? '',
         endDate: favoritesList.endDate ?? '',
         createDate: WishListCubit().onDateParse(favoritesList.createdAt));

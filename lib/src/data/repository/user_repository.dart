@@ -246,7 +246,7 @@ class UserRepository {
             favoriteListResponse.data['startDate'],
             favoriteListResponse.data['endDate'],
             favoriteListResponse.data['createdAt'],
-            favoriteListResponse.data['cityId'] ?? 0,
+            data['cityId'],
           ));
         } else {
           logError('Favorite Response Failed', favoriteListResponse.message);
