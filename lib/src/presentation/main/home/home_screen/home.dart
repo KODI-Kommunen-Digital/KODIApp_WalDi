@@ -49,6 +49,13 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  void scrollUp() {
+    _scrollController.animateTo(0,
+        duration: const Duration(milliseconds: 500), //duration of scroll
+        curve: Curves.fastOutSlowIn //scroll type
+        );
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -111,6 +118,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 _setSavedCity(location);
                 AppBloc.homeCubit.setCalledExternally(false);
               }
+            }
+            if (AppBloc.homeCubit.getDoesScroll()) {
+              AppBloc.homeCubit.setDoesScroll(false);
+              scrollUp();
             }
           }
 

@@ -160,38 +160,55 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
   // final _swipeController = SwiperController();
   // final _scrollController = ScrollController();
   bool isLoading = false;
+  final _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
     hideEmptyService();
-    //TODOasd
+  }
+
+  void scrollUp() {
+    _scrollController.animateTo(0,
+        duration: const Duration(milliseconds: 500), //duration of scroll
+        curve: Curves.fastOutSlowIn //scroll type
+        );
   }
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 10.0,
-        mainAxisSpacing: 10.0,
-        mainAxisExtent: 300.0,
-      ),
-      itemCount: services.length,
-      itemBuilder: (BuildContext context, int index) {
-        return InkWell(
-          onTap: () {
-            navigateToLink(services[index]);
-          },
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(15.0),
-            child: Image.asset(
-              services[index].imageUrl,
-              fit: BoxFit.cover,
-            ),
-          ),
-        );
+    return BlocListener<DiscoveryCubit, DiscoveryState>(
+      listener: (context, state) {
+        hideEmptyService();
+        if (AppBloc.discoveryCubit.getDoesScroll()) {
+          AppBloc.discoveryCubit.setDoesScroll(false);
+          scrollUp();
+        }
       },
+      child: GridView.builder(
+        controller: _scrollController,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 10.0,
+          mainAxisSpacing: 10.0,
+          mainAxisExtent: 300.0,
+        ),
+        itemCount: services.length,
+        itemBuilder: (BuildContext context, int index) {
+          return InkWell(
+            onTap: () {
+              navigateToLink(services[index]);
+            },
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(15.0),
+              child: Image.asset(
+                services[index].imageUrl,
+                fit: BoxFit.cover,
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 
@@ -226,6 +243,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
     CitizenServiceModel(imageUrl: Images.service11, imageLink: "11"),
     CitizenServiceModel(imageUrl: Images.service12, imageLink: "12"),
   ];
+
   Future<void> hideEmptyService() async {
     for (var element in services) {
       if (element.categoryId != null || element.type == "subCategoryService") {
