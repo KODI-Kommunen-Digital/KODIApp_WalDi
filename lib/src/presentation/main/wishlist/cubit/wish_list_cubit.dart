@@ -12,6 +12,7 @@ class WishListCubit extends Cubit<WishListState> {
   dynamic response;
 
   Future<void> onLoad() async {
+    emit(const WishListLoading());
     final prefBox = await Preferences.openBox();
 
     final userId = prefBox.getKeyValue(Preferences.userId, 0);

@@ -125,7 +125,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 checkSavedCity = false;
                 _setSavedCity(location);
               } else if (AppBloc.homeCubit.getCalledExternally()) {
-                scrollUp();
                 _setSavedCity(location);
                 AppBloc.homeCubit.setCalledExternally(false);
               }

@@ -213,33 +213,37 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
       body: BlocListener<HomeCubit, HomeState>(
         listener: (context, state) {
           hideEmptyService();
-          if (AppBloc.discoveryCubit.getDoesScroll()) {
-            AppBloc.discoveryCubit.setDoesScroll(false);
-            scrollUp();
-          }
         },
-        child: GridView.builder(
-          controller: _scrollController,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, // Adjust the number of columns as desired
-              crossAxisSpacing: 10.0,
-              mainAxisSpacing: 10.0,
-              mainAxisExtent: 300.0),
-          itemCount: services.length,
-          itemBuilder: (BuildContext context, int index) {
-            return InkWell(
-              onTap: () {
-                navigateToLink(services[index]);
-              },
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(15.0),
-                child: Image.asset(
-                  services[index].imageUrl,
-                  fit: BoxFit.cover,
-                ),
-              ),
-            );
+        child: BlocListener<DiscoveryCubit, DiscoveryState>(
+          listener: (context, state) {
+            if (AppBloc.discoveryCubit.getDoesScroll()) {
+              AppBloc.discoveryCubit.setDoesScroll(false);
+              scrollUp();
+            }
           },
+          child: GridView.builder(
+            controller: _scrollController,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2, // Adjust the number of columns as desired
+                crossAxisSpacing: 10.0,
+                mainAxisSpacing: 10.0,
+                mainAxisExtent: 300.0),
+            itemCount: services.length,
+            itemBuilder: (BuildContext context, int index) {
+              return InkWell(
+                onTap: () {
+                  navigateToLink(services[index]);
+                },
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15.0),
+                  child: Image.asset(
+                    services[index].imageUrl,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              );
+            },
+          ),
         ),
       ),
     );
