@@ -111,17 +111,15 @@ class AppUserInfo extends StatelessWidget {
                       maxLines: 1,
                       style: Theme.of(context).textTheme.titleSmall,
                     ),
-                    // description,
                     const SizedBox(height: 4),
                     Text(
                       user!.email,
-                      maxLines: 1,
+                      maxLines: 2,
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ],
                 ),
               ),
-              const Spacer(), // I just added one line
               Visibility(
                   visible: showDirectionIcon,
                   child: const Icon(Icons.navigate_next, color: Colors.white))
