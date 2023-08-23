@@ -88,7 +88,7 @@ class AppUserInfo extends StatelessWidget {
           height: 60,
           child: ClipOval(
               child: Image.network(
-            user!.image == 'Keine Angabe'
+            user!.image == 'Keine Angabe' || user!.image == ""
                 ? Application.defaultPicturesURL
                 : "${Application.picturesURL}${user!.image}",
             width: 100,
@@ -115,13 +115,12 @@ class AppUserInfo extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       user!.email,
-                      maxLines: 1,
+                      maxLines: 2,
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ],
                 ),
               ),
-              const Spacer(), // I just added one line
               Visibility(
                   visible: showDirectionIcon,
                   child: const Icon(Icons.navigate_next, color: Colors.white))
