@@ -255,11 +255,12 @@ class ListLoaded extends StatefulWidget {
 }
 
 class _ListLoadedState extends State<ListLoaded> {
-  final _scrollController = ScrollController();
+  final _scrollController = ScrollController(initialScrollOffset: 0.0);
   bool isLoading = false;
   bool isLoadingMore = false;
   final PageType _pageType = PageType.list;
   final ProductViewType _listMode = Application.setting.listMode;
+  double previousScrollPosition = 0;
   int pageNo = 1;
 
   @override
@@ -282,6 +283,7 @@ class _ListLoadedState extends State<ListLoaded> {
       if (_scrollController.position.pixels != 0) {
         setState(() {
           isLoadingMore = true;
+          previousScrollPosition = _scrollController.position.pixels;
         });
         context
             .read<ListCubit>()
@@ -371,31 +373,22 @@ class _ListLoadedState extends State<ListLoaded> {
     return BlocBuilder<ListCubit, ListState>(
       builder: (context, state) {
         if (_pageType == PageType.list) {
-          Widget contentList = ListView.builder(
-            key: UniqueKey(),
+          Widget contentList = CustomScrollView(
             controller: _scrollController,
-            padding: const EdgeInsets.only(top: 8),
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 16),
-                child: _buildItem(type: _listMode),
-              );
-            },
-            itemCount: 8,
-          );
-
-          contentList = ListView.builder(
-            key: UniqueKey(),
-            controller: _scrollController,
-            padding: const EdgeInsets.only(top: 8),
-            itemBuilder: (context, index) {
-              final item = list[index];
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 16),
-                child: _buildItem(item: item, type: _listMode),
-              );
-            },
-            itemCount: list.length,
+            slivers: <Widget>[
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    final item = widget.list[index];
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: _buildItem(item: item, type: _listMode),
+                    );
+                  },
+                  childCount: widget.list.length,
+                ),
+              ),
+            ],
           );
 
           if (list.isEmpty) {
@@ -415,6 +408,7 @@ class _ListLoadedState extends State<ListLoaded> {
               ),
             );
           }
+
           return SafeArea(
             child: Stack(
               children: [
