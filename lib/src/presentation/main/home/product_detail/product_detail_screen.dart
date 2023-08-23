@@ -93,8 +93,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   ///Phone action
   void _phoneAction(String phone) async {
+    String cleanedPhone = phone.replaceAll(' ', '');
     try {
-      launch('tel:$phone');
+      await launch('tel:$cleanedPhone');
     } catch (e) {
       _showMessage(Translate.of(context).translate('cannot_make_action'));
     }
@@ -778,8 +779,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 boxShadow: [
                   BoxShadow(
                     color: Theme.of(context).dividerColor.withOpacity(
-                      .05,
-                    ),
+                          .05,
+                        ),
                     spreadRadius: 4,
                     blurRadius: 4,
                     offset: const Offset(
