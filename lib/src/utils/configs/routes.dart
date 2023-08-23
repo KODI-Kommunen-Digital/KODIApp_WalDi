@@ -154,7 +154,7 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) {
             final Map<String, dynamic> arguments =
-            settings.arguments as Map<String, dynamic>;
+                settings.arguments as Map<String, dynamic>;
             return BlocProvider(
               create: (context) => ProfileCubit(
                 context.read(),
@@ -167,7 +167,6 @@ class Routes {
             );
           },
         );
-
 
       case submitSuccess:
         return MaterialPageRoute(
@@ -226,7 +225,7 @@ class Routes {
           builder: (context) {
             return const Scaffold(
               body: Center(
-                child: CircularProgressIndicator(),
+                child: CircularProgressIndicator.adaptive(),
               ),
             );
           },

@@ -42,7 +42,7 @@ class ProfileLoading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Center(
-      child: CircularProgressIndicator(),
+      child: CircularProgressIndicator.adaptive(),
     );
   }
 }
@@ -127,7 +127,7 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                   Center(
                     child: Visibility(
                       visible: isLoading,
-                      child: const CircularProgressIndicator(),
+                      child: const CircularProgressIndicator.adaptive(),
                     ),
                   ),
                   userListingsList == []

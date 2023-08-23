@@ -33,6 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int pageNo = 1;
   late bool checkSavedCity;
   final _scrollController = ScrollController();
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -59,10 +60,18 @@ class _HomeScreenState extends State<HomeScreen> {
   void _scrollListener() {
     if (_scrollController.position.atEdge) {
       if (_scrollController.position.pixels != 0) {
+        setState(() {
+          isLoading = true;
+        });
         AppBloc.homeCubit.newListings(++pageNo).then((_) {
-          setState(() {});
+          setState(() {
+            isLoading = false;
+          });
         }).catchError(
           (error) {
+            setState(() {
+              isLoading = false;
+            });
             logError('Error loading new listings: $error');
           },
         );
@@ -190,7 +199,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           _buildLocation(location),
                           _buildRecent(recent, selectedCityId),
-                          const SizedBox(height: 28),
+                          if (isLoading)
+                            const CircularProgressIndicator.adaptive(),
+                          const SizedBox(height: 50),
                         ],
                       ),
                     ),

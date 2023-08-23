@@ -61,7 +61,6 @@ class ListCubit extends Cubit<ListState> {
         }
         return false;
       }).toList();
-
       emit(ListStateUpdated(filteredList));
     } else if (type == ProductFilter.week) {
       filteredList = loadedList.where((product) {

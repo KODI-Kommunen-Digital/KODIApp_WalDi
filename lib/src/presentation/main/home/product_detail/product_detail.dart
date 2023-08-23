@@ -93,8 +93,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   ///Phone action
   void _phoneAction(String phone) async {
+    String cleanedPhone = phone.replaceAll(' ', '');
     try {
-      launch('tel:$phone');
+      await launch('tel:$cleanedPhone');
     } catch (e) {
       _showMessage(Translate.of(context).translate('cannot_make_action'));
     }
@@ -122,7 +123,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   ///Build content UI
   Widget _buildContent(ProductModel? product, List<FavoriteModel>? favoriteList,
-      UserModel? userDetail, bool isLoggedIn) {    ///Build UI loading
+      UserModel? userDetail, bool isLoggedIn) {
+    ///Build UI loading
     List<Widget> action = [];
     Widget actionGalleries = Container();
     // Widget actionMapView = Container();
@@ -776,8 +778,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 boxShadow: [
                   BoxShadow(
                     color: Theme.of(context).dividerColor.withOpacity(
-                      .05,
-                    ),
+                          .05,
+                        ),
                     spreadRadius: 4,
                     blurRadius: 4,
                     offset: const Offset(
@@ -873,7 +875,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               isLoggedIn = state.isLoggedIn;
               userDetail = state.userDetail;
             }
-            return _buildContent(product, favoriteList, userDetail, isLoggedIn);          },
+            return _buildContent(product, favoriteList, userDetail, isLoggedIn);
+          },
         ),
       ),
     );
