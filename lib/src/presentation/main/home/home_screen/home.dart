@@ -80,6 +80,16 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  Future<void> _onUpdateCategory() async {
+    setState(() {
+      categoryLoading = true;
+    });
+    await AppBloc.homeCubit.onLoad();
+    setState(() {
+      categoryLoading = false;
+    });
+  }
+
   Future<void> _onRefresh() async {
     await AppBloc.homeCubit.onLoad();
   }
@@ -163,14 +173,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     setLocationCallback: (data) async {
                       for (final list in location!) {
                         if (list.title == data) {
-                          setState(() {
-                            categoryLoading = true;
-                          });
-                          await AppBloc.homeCubit.onLoad();
+                          _onUpdateCategory();
                           setState(() {
                             selectedCityTitle = data;
                             selectedCityId = list.id;
-                            categoryLoading = false;
                           });
                           await AppBloc.discoveryCubit
                               .onLocationFilter(selectedCityId, false);
@@ -179,15 +185,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                 .translate('select_location')) {
                           setState(() {
                             selectedCityId = 0;
-                            categoryLoading = true;
                           });
-                          AppBloc.homeCubit.onLoad();
+                          _onUpdateCategory();
                           AppBloc.homeCubit.saveCityId(selectedCityId);
                           await AppBloc.discoveryCubit
                               .onLocationFilter(selectedCityId, false);
-                          setState(() {
-                            categoryLoading = false;
-                          });
                         }
                       }
                     }),
