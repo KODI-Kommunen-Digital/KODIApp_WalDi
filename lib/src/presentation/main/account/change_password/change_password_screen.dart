@@ -43,7 +43,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   void _changePassword() async {
     Utils.hiddenKeyboard(context);
     setState(() {
-      _errorPass =  AppBloc.signupCubit.validatePassword(_textPassController.text);
+      _errorPass =
+          AppBloc.signupCubit.validatePassword(_textPassController.text);
       _errorNewPass = UtilValidator.validate(_textNewPassController.text,
           password: _textPassController.text, type: ValidateType.cpassword);
     });
@@ -83,7 +84,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  Translate.of(context).translate('cur_password'),
+                  Translate.of(context).translate('newPass'),
                   style: Theme.of(context)
                       .textTheme
                       .titleSmall!
@@ -92,7 +93,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 const SizedBox(height: 8),
                 AppTextInput(
                   hintText: Translate.of(context).translate(
-                    'input_your_password',
+                    'newPass',
                   ),
                   errorText: _errorPass,
                   onChanged: (text) {
@@ -134,7 +135,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  Translate.of(context).translate('newPass'),
+                  Translate.of(context).translate('cpassword'),
                   maxLines: 1,
                   style: Theme.of(context)
                       .textTheme
@@ -144,7 +145,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 const SizedBox(height: 8),
                 AppTextInput(
                   hintText: Translate.of(context).translate(
-                    'newPass',
+                    'cpassword',
                   ),
                   errorText: _errorNewPass,
                   focusNode: _focusNewPass,
