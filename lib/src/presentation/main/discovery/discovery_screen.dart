@@ -1,17 +1,17 @@
-
 import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_citizen_service.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
-import 'package:heidi/src/presentation/main/home/list_product/cubit/list_cubit.dart';
 import 'package:heidi/src/presentation/main/home/home_screen/cubit/home_cubit.dart';
 import 'package:heidi/src/presentation/main/home/home_screen/cubit/home_state.dart';
+import 'package:heidi/src/presentation/main/home/list_product/cubit/list_cubit.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import 'cubit/cubit.dart';
 
 class DiscoveryScreen extends StatefulWidget {
@@ -78,7 +78,9 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
           loaded: (list) => DiscoveryLoaded(
             services: list,
           ),
-          updated: (list) {return Container();},
+          updated: (list) {
+            return Container();
+          },
           // {
           //   return DiscoveryLoaded(
           //     services: list,
@@ -95,7 +97,7 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
 
   Future<void> _openFilterDrawer(BuildContext context) async {
     await loadSelectedLocation();
-    if(!mounted) return;
+    if (!mounted) return;
     await showModalBottomSheet(
       context: context,
       builder: (context) {

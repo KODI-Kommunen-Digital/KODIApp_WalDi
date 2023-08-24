@@ -190,6 +190,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           AppBloc.homeCubit.saveCityId(selectedCityId);
                           await AppBloc.discoveryCubit
                               .onLocationFilter(selectedCityId, false);
+                          break;
                         }
                       }
                     }),
@@ -205,9 +206,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     bottom: false,
                     child: Column(
                       children: <Widget>[
-                        categoryLoading ?  const CircularProgressIndicator.adaptive() : _buildCategory(AppBloc.homeCubit
-                        // _buildCategory(AppBloc.homeCubit
-                            .getCategoriesWithoutHidden(category ?? [])),
+                        categoryLoading
+                            ? const CircularProgressIndicator.adaptive()
+                            : _buildCategory(AppBloc.homeCubit
+                                .getCategoriesWithoutHidden(category ?? [])),
                         _buildLocation(location),
                         _buildRecent(recent, selectedCityId),
                         if (isLoading)

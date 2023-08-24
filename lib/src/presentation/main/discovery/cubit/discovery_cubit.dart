@@ -14,10 +14,11 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
   List<CitizenServiceModel> listLoaded = [];
   List<CitizenServiceModel> filteredList = [];
   List<CategoryModel> location = [];
+  final List<CitizenServiceModel> hiddenServices = [];
+  late List<CitizenServiceModel> services;
 
   Future<void> onLoad() async {
-    final List<CitizenServiceModel> hiddenServices = [];
-    late List<CitizenServiceModel> services;
+
     final cityRequestResponse = await Api.requestCities();
     location = List.from(cityRequestResponse.data ?? []).map((item) {
       return CategoryModel.fromJson(item);
