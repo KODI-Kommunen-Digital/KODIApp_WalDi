@@ -1,9 +1,8 @@
-// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_citizen_service.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/home/list_product/cubit/list_cubit.dart';
@@ -77,13 +76,14 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
             return const DiscoveryLoading();
           },
           loaded: (list) => DiscoveryLoaded(
-            list: list,
+            services: list,
           ),
-          updated: (list) {
-            return DiscoveryLoaded(
-              list: list,
-            );
-          },
+          updated: (list) {return Container();},
+          // {
+          //   return DiscoveryLoaded(
+          //     services: list,
+          //   );
+          // },
           error: (e) => ErrorWidget('Failed to load listings.'),
           initial: () {
             return Container();
@@ -95,6 +95,7 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
 
   Future<void> _openFilterDrawer(BuildContext context) async {
     await loadSelectedLocation();
+    if(!mounted) return;
     await showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -156,11 +157,11 @@ class DiscoveryLoading extends StatelessWidget {
 }
 
 class DiscoveryLoaded extends StatefulWidget {
-  final List<CategoryModel> list;
+  final List<CitizenServiceModel> services;
 
   const DiscoveryLoaded({
     Key? key,
-    required this.list,
+    required this.services,
   }) : super(key: key);
 
   @override
@@ -175,36 +176,37 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
   @override
   void initState() {
     super.initState();
-    hideEmptyService();
+    // hideEmptyService();
   }
 
-  final List<CitizenServiceModel> hiddenServices = [];
+  // final List<CitizenServiceModel> hiddenServices = [];
+  //
+  // late List<CitizenServiceModel> services;
 
-  late List<CitizenServiceModel> services;
-
-  Future<void> hideEmptyService() async {
-    services = AppBloc.discoveryCubit.initializeServices();
-
-    for (var element in services) {
-      if (element.categoryId != null || element.type == "subCategoryService") {
-        bool hasContent = await element.hasContent();
-        if (!hasContent) {
-          hiddenServices.add(element);
-        }
-      }
-    }
-
-    setState(() {
-      services.removeWhere((element) => hiddenServices.contains(element));
-    });
-  }
+  // Future<void> hideEmptyService() async {
+  //   services = AppBloc.discoveryCubit.initializeServices();
+  //
+  //   for (var element in services) {
+  //     if (element.categoryId != null || element.type == "subCategoryService") {
+  //       bool hasContent = await element.hasContent();
+  //       if (!hasContent) {
+  //         hiddenServices.add(element);
+  //       }
+  //     }
+  //   }
+  //
+  //   setState(() {
+  //     services.removeWhere((element) => hiddenServices.contains(element));
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocListener<HomeCubit, HomeState>(
         listener: (context, state) {
-          hideEmptyService();
+          AppBloc.discoveryCubit.onLoad();
+          // hideEmptyService();
         },
         child: GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -212,16 +214,16 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
               crossAxisSpacing: 10.0,
               mainAxisSpacing: 10.0,
               mainAxisExtent: 300.0),
-          itemCount: services.length,
+          itemCount: widget.services.length,
           itemBuilder: (BuildContext context, int index) {
             return InkWell(
               onTap: () {
-                navigateToLink(services[index]);
+                navigateToLink(widget.services[index]);
               },
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(15.0),
                 child: Image.asset(
-                  services[index].imageUrl,
+                  widget.services[index].imageUrl,
                   fit: BoxFit.cover,
                 ),
               ),
