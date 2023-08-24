@@ -47,6 +47,29 @@ class ListCubit extends Cubit<ListState> {
     }
   }
 
+  Future<void> newListings(int pageNo, cityId) async {
+    final prefs = await Preferences.openBox();
+    final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
+    final type = prefs.getKeyValue(Preferences.type, '');
+    if (type == 'location') {
+      prefs.setKeyValue(Preferences.categoryId, '');
+    }
+
+    final result = await ListRepository.loadList(
+      categoryId: categoryId,
+      type: type,
+      pageNo: pageNo,
+      cityId: cityId,
+    );
+
+    final listUpdated = result?[0];
+    if (listUpdated.isNotEmpty) {
+      list.addAll(listUpdated);
+      listLoaded = list;
+      emit(ListStateUpdated(list));
+    }
+  }
+
   List<ProductModel> getLoadedList() => listLoaded;
 
   void onProductFilter(ProductFilter? type, List<ProductModel> loadedList) {
@@ -128,28 +151,5 @@ class ListCubit extends Cubit<ListState> {
       13: "category_food"
     };
     return categories[categoryId];
-  }
-
-  Future<void> newListings(int pageNo, cityId) async {
-    final prefs = await Preferences.openBox();
-    final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
-    final type = prefs.getKeyValue(Preferences.type, '');
-    if (type == 'location') {
-      prefs.setKeyValue(Preferences.categoryId, '');
-    }
-    final result = await ListRepository.loadList(
-      categoryId: categoryId,
-      type: type,
-      pageNo: pageNo,
-      cityId: cityId,
-    );
-    if (result != null) {
-      final listUpdated = result[0];
-      list.addAll(listUpdated);
-      listLoaded = listUpdated;
-      emit(ListStateUpdated(
-        list,
-      ));
-    }
   }
 }
