@@ -13,16 +13,33 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
   List<CitizenServiceModel> list = [];
   List<CitizenServiceModel> listLoaded = [];
   List<CitizenServiceModel> filteredList = [];
+  List<CategoryModel> location = [];
+  final List<CitizenServiceModel> hiddenServices = [];
+  late List<CitizenServiceModel> services;
   dynamic location;
   bool doesScroll = false;
 
   Future<void> onLoad() async {
+
     final cityRequestResponse = await Api.requestCities();
     location = List.from(cityRequestResponse.data ?? []).map((item) {
       return CategoryModel.fromJson(item);
     }).toList();
+    services = initializeServices();
+
+    for (var element in services) {
+      if (element.categoryId != null || element.type == "subCategoryService") {
+        bool hasContent = await element.hasContent();
+        if (!hasContent) {
+          hiddenServices.add(element);
+        }
+      }
+    }
+
+    services.removeWhere((element) => hiddenServices.contains(element));
+
     emit(DiscoveryStateLoaded(
-      location,
+      services,
     ));
   }
 

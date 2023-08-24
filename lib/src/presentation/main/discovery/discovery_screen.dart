@@ -1,18 +1,17 @@
-// ignore_for_file: use_build_context_synchronously
 import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_citizen_service.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
-import 'package:heidi/src/presentation/main/home/list_product/cubit/list_cubit.dart';
 import 'package:heidi/src/presentation/main/home/home_screen/cubit/home_cubit.dart';
 import 'package:heidi/src/presentation/main/home/home_screen/cubit/home_state.dart';
+import 'package:heidi/src/presentation/main/home/list_product/cubit/list_cubit.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import 'cubit/cubit.dart';
 
 class DiscoveryScreen extends StatefulWidget {
@@ -77,13 +76,16 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
             return const DiscoveryLoading();
           },
           loaded: (list) => DiscoveryLoaded(
-            list: list,
+            services: list,
           ),
           updated: (list) {
-            return DiscoveryLoaded(
-              list: list,
-            );
+            return Container();
           },
+          // {
+          //   return DiscoveryLoaded(
+          //     services: list,
+          //   );
+          // },
           error: (e) => ErrorWidget('Failed to load listings.'),
           initial: () {
             return Container();
@@ -95,6 +97,7 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
 
   Future<void> _openFilterDrawer(BuildContext context) async {
     await loadSelectedLocation();
+    if (!mounted) return;
     await showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -156,11 +159,11 @@ class DiscoveryLoading extends StatelessWidget {
 }
 
 class DiscoveryLoaded extends StatefulWidget {
-  final List<CategoryModel> list;
+  final List<CitizenServiceModel> services;
 
   const DiscoveryLoaded({
     Key? key,
-    required this.list,
+    required this.services,
   }) : super(key: key);
 
   @override
@@ -176,9 +179,12 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
   @override
   void initState() {
     super.initState();
-    hideEmptyService();
+    // hideEmptyService();
   }
 
+  // final List<CitizenServiceModel> hiddenServices = [];
+  //
+  // late List<CitizenServiceModel> services;
   void scrollUp() {
     _scrollController.animateTo(0,
         duration: const Duration(milliseconds: 500), //duration of scroll
@@ -186,40 +192,53 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
         );
   }
 
-  final List<CitizenServiceModel> hiddenServices = [];
 
-  late List<CitizenServiceModel> services;
-
-  Future<void> hideEmptyService() async {
-    services = AppBloc.discoveryCubit.initializeServices();
-
-    for (var element in services) {
-      if (element.categoryId != null || element.type == "subCategoryService") {
-        bool hasContent = await element.hasContent();
-        if (!hasContent) {
-          hiddenServices.add(element);
-        }
-      }
-    }
-
-    setState(() {
-      services.removeWhere((element) => hiddenServices.contains(element));
-    });
-  }
+  // Future<void> hideEmptyService() async {
+  //   services = AppBloc.discoveryCubit.initializeServices();
+  //
+  //   for (var element in services) {
+  //     if (element.categoryId != null || element.type == "subCategoryService") {
+  //       bool hasContent = await element.hasContent();
+  //       if (!hasContent) {
+  //         hiddenServices.add(element);
+  //       }
+  //     }
+  //   }
+  //
+  //   setState(() {
+  //     services.removeWhere((element) => hiddenServices.contains(element));
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocListener<HomeCubit, HomeState>(
         listener: (context, state) {
-          hideEmptyService();
+          AppBloc.discoveryCubit.onLoad();
+          // hideEmptyService();
         },
-        child: BlocListener<DiscoveryCubit, DiscoveryState>(
-          listener: (context, state) {
-            if (AppBloc.discoveryCubit.getDoesScroll()) {
-              AppBloc.discoveryCubit.setDoesScroll(false);
-              scrollUp();
-            }
+        child: GridView.builder(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2, // Adjust the number of columns as desired
+              crossAxisSpacing: 10.0,
+              mainAxisSpacing: 10.0,
+              mainAxisExtent: 300.0),
+          itemCount: widget.services.length,
+          itemBuilder: (BuildContext context, int index) {
+            return InkWell(
+              onTap: () {
+                navigateToLink(widget.services[index]);
+              },
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(15.0),
+                child: Image.asset(
+                  widget.services[index].imageUrl,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            );
+
           },
           child: GridView.builder(
             controller: _scrollController,
