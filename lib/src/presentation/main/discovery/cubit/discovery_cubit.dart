@@ -14,6 +14,7 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
   List<CitizenServiceModel> listLoaded = [];
   List<CitizenServiceModel> filteredList = [];
   dynamic location;
+  bool doesScroll = false;
 
   Future<void> onLoad() async {
     final cityRequestResponse = await Api.requestCities();
@@ -159,5 +160,18 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
     };
 
     return cityWebsites[cityId];
+  }
+
+  bool getDoesScroll() {
+    return doesScroll;
+  }
+
+  void setDoesScroll(bool scroll) {
+    doesScroll = scroll;
+  }
+
+  void scrollUp() {
+    emit(const DiscoveryStateLoading());
+    emit(DiscoveryStateLoaded(location));
   }
 }

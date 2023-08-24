@@ -15,6 +15,7 @@ class HomeCubit extends Cubit<HomeState> {
   dynamic sliders;
   dynamic categoryCount;
   bool calledExternally = false;
+  bool doesScroll = false;
 
   HomeCubit() : super(const HomeState.loading());
 
@@ -63,6 +64,20 @@ class HomeCubit extends Cubit<HomeState> {
       location,
       recent,
     ));
+  }
+
+  void scrollUp() {
+    emit(const HomeStateLoading());
+    const banner = Images.slider;
+    emit(HomeStateLoaded(banner, category, location, recent));
+  }
+
+  bool getDoesScroll() {
+    return doesScroll;
+  }
+
+  void setDoesScroll(bool scroll) {
+    doesScroll = scroll;
   }
 
   bool getCalledExternally() {
