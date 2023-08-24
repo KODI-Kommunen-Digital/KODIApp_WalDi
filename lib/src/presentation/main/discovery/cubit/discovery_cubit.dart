@@ -16,6 +16,8 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
   List<CategoryModel> location = [];
   final List<CitizenServiceModel> hiddenServices = [];
   late List<CitizenServiceModel> services;
+  dynamic location;
+  bool doesScroll = false;
 
   Future<void> onLoad() async {
 
@@ -125,5 +127,18 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
     final prefs = await Preferences.openBox();
     int cityId = await prefs.getKeyValue(Preferences.cityId, 0);
     return cityId;
+  }
+
+  bool getDoesScroll() {
+    return doesScroll;
+  }
+
+  void setDoesScroll(bool scroll) {
+    doesScroll = scroll;
+  }
+
+  void scrollUp() {
+    emit(const DiscoveryStateLoading());
+    emit(DiscoveryStateLoaded(location));
   }
 }

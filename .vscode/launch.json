@@ -5,19 +5,19 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Heidi",
+            "name": "AUF",
             "request": "launch",
             "type": "dart",
             "program": "lib/main_dev.dart"
         },
         {
-            "name": "Heidi (profile mode)",
+            "name": "AUF (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "Heidi (release mode)",
+            "name": "AUF (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"
