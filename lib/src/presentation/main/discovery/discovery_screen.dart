@@ -1,15 +1,15 @@
 // ignore_for_file: use_build_context_synchronously, unused_element
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_citizen_service.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
-import 'package:heidi/src/utils/configs/image.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import 'cubit/cubit.dart';
 
 class DiscoveryScreen extends StatefulWidget {
@@ -71,13 +71,9 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
             return const DiscoveryLoading();
           },
           loaded: (list) => DiscoveryLoaded(
-            list: list,
+            services: list,
           ),
-          updated: (list) {
-            return DiscoveryLoaded(
-              list: list,
-            );
-          },
+          updated: (list) => Container(),
           error: (e) => ErrorWidget('Failed to load listings.'),
           initial: () {
             return Container();
@@ -145,11 +141,11 @@ class DiscoveryLoading extends StatelessWidget {
 }
 
 class DiscoveryLoaded extends StatefulWidget {
-  final List<CategoryModel> list;
+  final List<CitizenServiceModel> services;
 
   const DiscoveryLoaded({
     Key? key,
-    required this.list,
+    required this.services,
   }) : super(key: key);
 
   @override
@@ -157,33 +153,38 @@ class DiscoveryLoaded extends StatefulWidget {
 }
 
 class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
-  // final _swipeController = SwiperController();
-  // final _scrollController = ScrollController();
   bool isLoading = false;
   final _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
-    hideEmptyService();
-  }
-
-  void scrollUp() {
-    _scrollController.animateTo(0,
-        duration: const Duration(milliseconds: 500), //duration of scroll
-        curve: Curves.fastOutSlowIn //scroll type
-        );
+    // hideEmptyService();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<DiscoveryCubit, DiscoveryState>(
-      listener: (context, state) {
-        hideEmptyService();
-        if (AppBloc.discoveryCubit.getDoesScroll()) {
-          AppBloc.discoveryCubit.setDoesScroll(false);
-          scrollUp();
-        }
+    return GridView.builder(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 10.0,
+        mainAxisSpacing: 10.0,
+        mainAxisExtent: 300.0,
+      ),
+      itemCount: widget.services.length,
+      itemBuilder: (BuildContext context, int index) {
+        return InkWell(
+          onTap: () {
+            navigateToLink(widget.services[index]);
+          },
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(15.0),
+            child: Image.asset(
+              widget.services[index].imageUrl,
+              fit: BoxFit.cover,
+            ),
+          ),
+        );
       },
       child: GridView.builder(
         controller: _scrollController,
@@ -210,53 +211,6 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
         },
       ),
     );
-  }
-
-  final List<CitizenServiceModel> hiddenServices = [];
-
-  final List<CitizenServiceModel> services = [
-    CitizenServiceModel(imageUrl: Images.service1, imageLink: "1"),
-    CitizenServiceModel(imageUrl: Images.service2, imageLink: "2"),
-    CitizenServiceModel(
-        imageUrl: Images.service3,
-        imageLink: "3",
-        type: "subCategoryService",
-        arguments: 4),
-    CitizenServiceModel(
-        imageUrl: Images.service4, imageLink: "4", arguments: 4, categoryId: 1),
-    CitizenServiceModel(
-        imageUrl: Images.service5, imageLink: "5", arguments: 5, categoryId: 3),
-    CitizenServiceModel(
-        imageUrl: Images.service6, imageLink: "6", arguments: 6, categoryId: 4),
-    CitizenServiceModel(
-        imageUrl: Images.service7,
-        imageLink: "7",
-        arguments: 7,
-        categoryId: 10),
-    CitizenServiceModel(
-        imageUrl: Images.service8,
-        imageLink: "8",
-        arguments: 8,
-        categoryId: 13),
-    CitizenServiceModel(
-        imageUrl: Images.service9, imageLink: "9", arguments: 9, categoryId: 6),
-    CitizenServiceModel(imageUrl: Images.service11, imageLink: "11"),
-    CitizenServiceModel(imageUrl: Images.service12, imageLink: "12"),
-  ];
-
-  Future<void> hideEmptyService() async {
-    for (var element in services) {
-      if (element.categoryId != null || element.type == "subCategoryService") {
-        bool hasContent = await element.hasContent();
-        if (!hasContent) {
-          hiddenServices.add(element);
-        }
-      }
-    }
-
-    setState(() {
-      services.removeWhere((element) => hiddenServices.contains(element));
-    });
   }
 
   void _onPopUpError() {
