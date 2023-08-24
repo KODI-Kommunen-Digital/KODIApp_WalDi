@@ -154,6 +154,7 @@ class DiscoveryLoaded extends StatefulWidget {
 
 class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
   bool isLoading = false;
+  final _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -185,6 +186,30 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
           ),
         );
       },
+      child: GridView.builder(
+        controller: _scrollController,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 10.0,
+          mainAxisSpacing: 10.0,
+          mainAxisExtent: 300.0,
+        ),
+        itemCount: services.length,
+        itemBuilder: (BuildContext context, int index) {
+          return InkWell(
+            onTap: () {
+              navigateToLink(services[index]);
+            },
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(15.0),
+              child: Image.asset(
+                services[index].imageUrl,
+                fit: BoxFit.cover,
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 

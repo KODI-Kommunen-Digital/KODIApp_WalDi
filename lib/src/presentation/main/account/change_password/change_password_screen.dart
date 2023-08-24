@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/widget/app_button.dart';
@@ -19,6 +20,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   final _focusPass = FocusNode();
   final _focusNewPass = FocusNode();
 
+  bool _showPassword = false;
+  bool _showCPassword = false;
+  bool _isPasswordFocused = false;
   String? _errorPass;
   String? _errorNewPass;
 
@@ -39,13 +43,14 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   void _changePassword() async {
     Utils.hiddenKeyboard(context);
     setState(() {
-      _errorPass = UtilValidator.validate(
-        _textPassController.text,
-      );
-      _errorNewPass = UtilValidator.validate(
-        _textNewPassController.text,
-      );
+      _errorPass =
+          AppBloc.signupCubit.validatePassword(_textPassController.text);
+      _errorNewPass = UtilValidator.validate(_textNewPassController.text,
+          password: _textPassController.text, type: ValidateType.cpassword);
     });
+    if (_errorPass != null) {
+      _errorPass = Translate.of(context).translate(_errorPass);
+    }
     if (_errorPass == null && _errorNewPass == null) {
       final result = await AppBloc.changePasswordCubit.onChangePassword(
         _textPassController.text,
@@ -60,6 +65,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
+    setPasswordListener();
+    String passwordHint = Translate.of(context).translate('Password hint');
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -76,41 +84,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  Translate.of(context).translate('cur_password'),
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleSmall!
-                      .copyWith(fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 8),
-                AppTextInput(
-                  hintText: Translate.of(context).translate(
-                    'input_your_password',
-                  ),
-                  errorText: _errorPass,
-                  focusNode: _focusPass,
-                  textInputAction: TextInputAction.next,
-                  obscureText: true,
-                  onSubmitted: (text) {
-                    Utils.fieldFocusChange(
-                      context,
-                      _focusPass,
-                      _focusNewPass,
-                    );
-                  },
-                  onChanged: (text) {
-                    setState(() {
-                      _errorPass = UtilValidator.validate(
-                        _textPassController.text,
-                      );
-                    });
-                  },
-                  controller: _textPassController,
-                ),
-                const SizedBox(height: 16),
-                Text(
                   Translate.of(context).translate('newPass'),
-                  maxLines: 1,
                   style: Theme.of(context)
                       .textTheme
                       .titleSmall!
@@ -121,13 +95,60 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   hintText: Translate.of(context).translate(
                     'newPass',
                   ),
+                  errorText: _errorPass,
+                  onChanged: (text) {
+                    setState(() {
+                      _errorPass = UtilValidator.validate(
+                        _textPassController.text,
+                      );
+                    });
+                  },
+                  onSubmitted: (text) {
+                    Utils.fieldFocusChange(
+                      context,
+                      _focusPass,
+                      _focusNewPass,
+                    );
+                  },
+                  trailing: GestureDetector(
+                    dragStartBehavior: DragStartBehavior.down,
+                    onTap: () {
+                      setState(() {
+                        _showPassword = !_showPassword;
+                      });
+                    },
+                    child: Icon(_showPassword
+                        ? Icons.visibility
+                        : Icons.visibility_off),
+                  ),
+                  obscureText: !_showPassword,
+                  controller: _textPassController,
+                  focusNode: _focusPass,
+                ),
+                const SizedBox(height: 16),
+                Visibility(
+                  visible: _isPasswordFocused,
+                  child: Text(
+                    passwordHint,
+                    style: const TextStyle(color: Colors.grey, fontSize: 12),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  Translate.of(context).translate('cpassword'),
+                  maxLines: 1,
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleSmall!
+                      .copyWith(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 8),
+                AppTextInput(
+                  hintText: Translate.of(context).translate(
+                    'cpassword',
+                  ),
                   errorText: _errorNewPass,
                   focusNode: _focusNewPass,
-                  textInputAction: TextInputAction.done,
-                  obscureText: true,
-                  onSubmitted: (text) {
-                    _changePassword();
-                  },
                   onChanged: (text) {
                     setState(() {
                       _errorNewPass = UtilValidator.validate(
@@ -135,6 +156,21 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       );
                     });
                   },
+                  onSubmitted: (text) {
+                    _changePassword();
+                  },
+                  trailing: GestureDetector(
+                    dragStartBehavior: DragStartBehavior.down,
+                    onTap: () {
+                      setState(() {
+                        _showCPassword = !_showCPassword;
+                      });
+                    },
+                    child: Icon(_showCPassword
+                        ? Icons.visibility
+                        : Icons.visibility_off),
+                  ),
+                  obscureText: !_showCPassword,
                   controller: _textNewPassController,
                 ),
                 const SizedBox(height: 16),
@@ -149,5 +185,13 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         ),
       ),
     );
+  }
+
+  void setPasswordListener() {
+    _focusPass.addListener(() {
+      setState(() {
+        _isPasswordFocused = _focusPass.hasFocus;
+      });
+    });
   }
 }

@@ -769,6 +769,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             website,
             openHours,
             attachments,
+            const SizedBox(height: 16),
             Container(
               padding: const EdgeInsets.all(8),
               margin: const EdgeInsets.symmetric(horizontal: 8),

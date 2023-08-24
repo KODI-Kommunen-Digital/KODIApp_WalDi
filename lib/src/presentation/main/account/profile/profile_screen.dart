@@ -84,6 +84,7 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
           child: RefreshIndicator(
             onRefresh: _onRefresh,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 16),
                 Container(

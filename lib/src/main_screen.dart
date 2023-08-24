@@ -108,6 +108,20 @@ class _MainScreenState extends State<MainScreen> {
     setState(() {
       _selectedPage = route;
     });
+
+    switch (route) {
+      case Routes.home:
+        AppBloc.homeCubit.setDoesScroll(true);
+        AppBloc.homeCubit.scrollUp();
+        break;
+      case Routes.discovery:
+        AppBloc.discoveryCubit.setDoesScroll(true);
+        AppBloc.discoveryCubit.scrollUp();
+        break;
+      case Routes.wishList:
+        AppBloc.wishListCubit.setDoesScroll(true);
+        AppBloc.wishListCubit.scrollUp();
+    }
   }
 
   Widget _buildMenuItem(String route) {

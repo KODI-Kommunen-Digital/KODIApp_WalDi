@@ -4,6 +4,7 @@ import 'package:heidi/src/data/model/model_favorite.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
+import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/cubit/cubit.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 
@@ -15,7 +16,6 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
   UserModel? userDetail;
 
   void onLoad(ProductModel item) async {
-
     final int userId = await UserRepository.getLoggedUserId();
     bool isLoggedIn = false;
     if (userId == 0) {
@@ -40,7 +40,8 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
               }
             }
           }
-          emit(ProductDetailLoaded(product!, favoritesList, userDetail, isLoggedIn));
+          emit(ProductDetailLoaded(
+              product!, favoritesList, userDetail, isLoggedIn));
         } else {
           emit(ProductDetailLoaded(product!, null, userDetail, isLoggedIn));
         }
@@ -57,12 +58,13 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
     isFavorite = !isFavorite;
   }
 
-  Future<int> getLoggedInUserId() async{
+  Future<int> getLoggedInUserId() async {
     return await UserRepository.getLoggedUserId();
   }
 
-  Future<UserModel?> getUserDetails(userId, cityId) async{
-    UserModel? userDetailResponse = await UserRepository.getUserDetails(userId, cityId);
+  Future<UserModel?> getUserDetails(userId, cityId) async {
+    UserModel? userDetailResponse =
+        await UserRepository.getUserDetails(userId, cityId);
     return userDetailResponse;
   }
 
@@ -70,6 +72,7 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
     final prefs = await Preferences.openBox();
     final int? userId = prefs.getKeyValue(Preferences.userId, '');
     await ListRepository.addWishList(userId, product);
+    await AppBloc.wishListCubit.onLoad();
   }
 
   Future<void> onDeleteFavorite(ProductModel? product) async {
@@ -84,6 +87,7 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
           await ListRepository.removeWishList(userId, fList.favoriteId);
         }
       }
+      await AppBloc.wishListCubit.onLoad();
     }
   }
 }
