@@ -34,6 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late bool checkSavedCity;
   final _scrollController = ScrollController();
   bool isLoading = false;
+  bool categoryLoading = false;
 
   @override
   void initState() {
@@ -162,10 +163,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     setLocationCallback: (data) async {
                       for (final list in location!) {
                         if (list.title == data) {
-                          AppBloc.homeCubit.onLoad();
+                          setState(() {
+                            categoryLoading = true;
+                          });
+                          await AppBloc.homeCubit.onLoad();
                           setState(() {
                             selectedCityTitle = data;
                             selectedCityId = list.id;
+                            categoryLoading = false;
                           });
                           await AppBloc.discoveryCubit
                               .onLocationFilter(selectedCityId, false);
@@ -174,11 +179,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                 .translate('select_location')) {
                           setState(() {
                             selectedCityId = 0;
+                            categoryLoading = true;
                           });
                           AppBloc.homeCubit.onLoad();
                           AppBloc.homeCubit.saveCityId(selectedCityId);
                           await AppBloc.discoveryCubit
                               .onLocationFilter(selectedCityId, false);
+                          setState(() {
+                            categoryLoading = false;
+                          });
                         }
                       }
                     }),
@@ -194,7 +203,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     bottom: false,
                     child: Column(
                       children: <Widget>[
-                        _buildCategory(AppBloc.homeCubit
+                        categoryLoading ?  const CircularProgressIndicator.adaptive() : _buildCategory(AppBloc.homeCubit
+                        // _buildCategory(AppBloc.homeCubit
                             .getCategoriesWithoutHidden(category ?? [])),
                         _buildLocation(location),
                         _buildRecent(recent, selectedCityId),
