@@ -171,11 +171,19 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
   // final _swipeController = SwiperController();
   // final _scrollController = ScrollController();
   bool isLoading = false;
+  final _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
     hideEmptyService();
+  }
+
+  void scrollUp() {
+    _scrollController.animateTo(0,
+        duration: const Duration(milliseconds: 500), //duration of scroll
+        curve: Curves.fastOutSlowIn //scroll type
+        );
   }
 
   final List<CitizenServiceModel> hiddenServices = [];
@@ -206,27 +214,36 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
         listener: (context, state) {
           hideEmptyService();
         },
-        child: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, // Adjust the number of columns as desired
-              crossAxisSpacing: 10.0,
-              mainAxisSpacing: 10.0,
-              mainAxisExtent: 300.0),
-          itemCount: services.length,
-          itemBuilder: (BuildContext context, int index) {
-            return InkWell(
-              onTap: () {
-                navigateToLink(services[index]);
-              },
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(15.0),
-                child: Image.asset(
-                  services[index].imageUrl,
-                  fit: BoxFit.cover,
-                ),
-              ),
-            );
+        child: BlocListener<DiscoveryCubit, DiscoveryState>(
+          listener: (context, state) {
+            if (AppBloc.discoveryCubit.getDoesScroll()) {
+              AppBloc.discoveryCubit.setDoesScroll(false);
+              scrollUp();
+            }
           },
+          child: GridView.builder(
+            controller: _scrollController,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2, // Adjust the number of columns as desired
+                crossAxisSpacing: 10.0,
+                mainAxisSpacing: 10.0,
+                mainAxisExtent: 300.0),
+            itemCount: services.length,
+            itemBuilder: (BuildContext context, int index) {
+              return InkWell(
+                onTap: () {
+                  navigateToLink(services[index]);
+                },
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15.0),
+                  child: Image.asset(
+                    services[index].imageUrl,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              );
+            },
+          ),
         ),
       ),
     );
