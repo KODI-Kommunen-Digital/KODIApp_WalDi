@@ -16,11 +16,9 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
   List<CategoryModel> location = [];
   final List<CitizenServiceModel> hiddenServices = [];
   late List<CitizenServiceModel> services;
-  dynamic location;
   bool doesScroll = false;
 
   Future<void> onLoad() async {
-
     final cityRequestResponse = await Api.requestCities();
     location = List.from(cityRequestResponse.data ?? []).map((item) {
       return CategoryModel.fromJson(item);
