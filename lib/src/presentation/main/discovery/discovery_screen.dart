@@ -10,6 +10,7 @@ import 'package:heidi/src/presentation/main/home/list_product/cubit/list_cubit.d
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
+import 'package:loggy/loggy.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'cubit/cubit.dart';
@@ -171,55 +172,21 @@ class DiscoveryLoaded extends StatefulWidget {
 }
 
 class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
-  // final _swipeController = SwiperController();
-  // final _scrollController = ScrollController();
   bool isLoading = false;
-  final _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
-    // hideEmptyService();
   }
-
-  // final List<CitizenServiceModel> hiddenServices = [];
-  //
-  // late List<CitizenServiceModel> services;
-  void scrollUp() {
-    _scrollController.animateTo(0,
-        duration: const Duration(milliseconds: 500), //duration of scroll
-        curve: Curves.fastOutSlowIn //scroll type
-        );
-  }
-
-  // Future<void> hideEmptyService() async {
-  //   services = AppBloc.discoveryCubit.initializeServices();
-  //
-  //   for (var element in services) {
-  //     if (element.categoryId != null || element.type == "subCategoryService") {
-  //       bool hasContent = await element.hasContent();
-  //       if (!hasContent) {
-  //         hiddenServices.add(element);
-  //       }
-  //     }
-  //   }
-  //
-  //   setState(() {
-  //     services.removeWhere((element) => hiddenServices.contains(element));
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
+    logError(' widget.services.length', widget.services.length);
     return Scaffold(
       body: BlocListener<HomeCubit, HomeState>(
         listener: (context, state) {
           AppBloc.discoveryCubit.onLoad();
           // hideEmptyService();
-          if (AppBloc.discoveryCubit.getDoesScroll()) {
-            AppBloc.discoveryCubit.setDoesScroll(false);
-            scrollUp();
-          }
         },
         child: GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
