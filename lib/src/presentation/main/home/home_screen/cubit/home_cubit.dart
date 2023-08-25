@@ -6,6 +6,7 @@ import 'package:heidi/src/data/remote/api/api.dart';
 // import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/image.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
+import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
@@ -20,17 +21,20 @@ class HomeCubit extends Cubit<HomeState> {
   HomeCubit() : super(const HomeState.loading());
 
   Future<void> onLoad() async {
+    logError('onLoadCalled');
     if (!await hasInternet()) {
       emit(const HomeState.error("no_internet"));
     }
-    final categoryRequestResponse = await Api.requestHomeCategory();
-    final cityRequestResponse = await Api.requestCities();
 
-    category = List.from(categoryRequestResponse.data ?? []).map((item) {
+    final cityRequestResponse = await Api.requestCities();
+    location = List.from(cityRequestResponse.data ?? []).map((item) {
       return CategoryModel.fromJson(item);
     }).toList();
 
-    location = List.from(cityRequestResponse.data ?? []).map((item) {
+    emit(HomeState.categoryLoading(location));
+
+    final categoryRequestResponse = await Api.requestHomeCategory();
+    category = List.from(categoryRequestResponse.data ?? []).map((item) {
       return CategoryModel.fromJson(item);
     }).toList();
 
@@ -58,12 +62,15 @@ class HomeCubit extends Cubit<HomeState> {
     List<CategoryModel> formattedCategories =
         await formatCategoriesList(category, categoryCount, savedCity?.id);
 
+    // emit(const HomeState.categoryLoaded());
     emit(HomeStateLoaded(
       banner,
       formattedCategories,
       location,
       recent,
     ));
+
+
   }
 
   void scrollUp() {

@@ -10,6 +10,10 @@ class HomeState with _$HomeState {
 
   const factory HomeState.loading() = HomeStateLoading;
 
+  const factory HomeState.categoryLoading(List<CategoryModel>? location) = HomeStatecategoryLoading;
+
+  const factory HomeState.categoryLoaded() = HomeStatecategoryLoaded;
+
   const factory HomeState.loaded(
       String banner,
       List<CategoryModel> category,

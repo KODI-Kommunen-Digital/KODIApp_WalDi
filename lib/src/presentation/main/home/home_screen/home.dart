@@ -92,10 +92,22 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _onUpdateCategory() async {
+    // setState(() {
+    //   categoryLoading = true;
+    // });
+    await AppBloc.homeCubit.onLoad();
+    // setState(() {
+    //   categoryLoading = false;
+    // });
+  }
+
+  void setCategoryLoading(){
     setState(() {
       categoryLoading = true;
     });
-    await AppBloc.homeCubit.onLoad();
+  }
+
+  void setCategoryLoaded(){
     setState(() {
       categoryLoading = false;
     });
@@ -121,11 +133,29 @@ class _HomeScreenState extends State<HomeScreen> {
             Translate.of(context).translate('select_location')
           ];
 
+          if(state is HomeStatecategoryLoading){
+            categoryLoading = true;
+            location = state.location;
+            if (location!.isNotEmpty) {
+              for (final ids in location) {
+                cityTitles.add(ids.title.toString());
+              }
+              if (checkSavedCity) {
+                checkSavedCity = false;
+                _setSavedCity(location);
+              } else if (AppBloc.homeCubit.getCalledExternally()) {
+                _setSavedCity(location);
+                AppBloc.homeCubit.setCalledExternally(false);
+              }
+            }
+          }
+
           if (state is HomeStateLoaded) {
             banner = state.banner;
             category = state.category;
             location = state.location;
             recent = state.recent;
+            categoryLoading = false;
 
             if (location.isNotEmpty) {
               for (final ids in location) {
