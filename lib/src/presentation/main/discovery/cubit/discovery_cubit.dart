@@ -137,6 +137,6 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
 
   void scrollUp() {
     emit(const DiscoveryStateLoading());
-    emit(DiscoveryStateLoaded(location));
+    emit(DiscoveryStateLoaded(services));
   }
 }
