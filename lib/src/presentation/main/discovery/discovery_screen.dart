@@ -216,6 +216,10 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
         listener: (context, state) {
           AppBloc.discoveryCubit.onLoad();
           // hideEmptyService();
+          if (AppBloc.discoveryCubit.getDoesScroll()) {
+            AppBloc.discoveryCubit.setDoesScroll(false);
+            scrollUp();
+          }
         },
         child: GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
