@@ -154,7 +154,6 @@ class DiscoveryLoaded extends StatefulWidget {
 
 class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
   bool isLoading = false;
-  final _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -162,19 +161,8 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
     // hideEmptyService();
   }
 
-  void scrollUp() {
-    _scrollController.animateTo(0,
-        duration: const Duration(milliseconds: 500), //duration of scroll
-        curve: Curves.fastOutSlowIn //scroll type
-        );
-  }
-
   @override
   Widget build(BuildContext context) {
-    if (AppBloc.discoveryCubit.getDoesScroll()) {
-      AppBloc.discoveryCubit.setDoesScroll(false);
-      scrollUp();
-    }
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,

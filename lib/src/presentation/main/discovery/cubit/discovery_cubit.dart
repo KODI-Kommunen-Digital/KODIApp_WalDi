@@ -181,16 +181,4 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
     return cityWebsites[cityId];
   }
 
-  bool getDoesScroll() {
-    return doesScroll;
-  }
-
-  void setDoesScroll(bool scroll) {
-    doesScroll = scroll;
-  }
-
-  void scrollUp() {
-    emit(const DiscoveryStateLoading());
-    emit(DiscoveryStateLoaded(location));
-  }
 }
