@@ -10,7 +10,6 @@ import 'package:heidi/src/presentation/main/home/list_product/cubit/list_cubit.d
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
-import 'package:loggy/loggy.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'cubit/cubit.dart';
@@ -181,7 +180,6 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
 
   @override
   Widget build(BuildContext context) {
-    logError(' widget.services.length', widget.services.length);
     return Scaffold(
       body: BlocListener<HomeCubit, HomeState>(
         listener: (context, state) {

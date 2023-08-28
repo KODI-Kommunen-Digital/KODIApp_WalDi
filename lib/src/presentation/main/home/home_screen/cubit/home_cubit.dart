@@ -24,14 +24,15 @@ class HomeCubit extends Cubit<HomeState> {
     if (!await hasInternet()) {
       emit(const HomeState.error("no_internet"));
     }
-    final categoryRequestResponse = await Api.requestHomeCategory();
     final cityRequestResponse = await Api.requestCities();
-
-    category = List.from(categoryRequestResponse.data ?? []).map((item) {
+    location = List.from(cityRequestResponse.data ?? []).map((item) {
       return CategoryModel.fromJson(item);
     }).toList();
 
-    location = List.from(cityRequestResponse.data ?? []).map((item) {
+    emit(HomeState.categoryLoading(location));
+
+    final categoryRequestResponse = await Api.requestHomeCategory();
+    category = List.from(categoryRequestResponse.data ?? []).map((item) {
       return CategoryModel.fromJson(item);
     }).toList();
 
@@ -48,18 +49,23 @@ class HomeCubit extends Cubit<HomeState> {
       }).toList();
     }
     final categoryCountRequestResponse =
-        await Api.requestCategoryCount(savedCity?.id);
+    await Api.requestCategoryCount(savedCity?.id);
     categoryCount =
         List.from(categoryCountRequestResponse.data ?? []).map((item) {
-      return CategoryModel.fromJson(item);
-    }).toList();
+          return CategoryModel.fromJson(item);
+        }).toList();
 
     const banner = Images.slider;
 
     List<CategoryModel> formattedCategories =
-        await formatCategoriesList(category, categoryCount, savedCity?.id);
+    await formatCategoriesList(category, categoryCount, savedCity?.id);
 
-    emit(HomeStateLoaded(banner, formattedCategories, location, recent));
+    emit(HomeStateLoaded(
+      banner,
+      formattedCategories,
+      location,
+      recent,
+    ));
   }
 
   Future<bool> categoryHasContent(int id, int? cityId) async {

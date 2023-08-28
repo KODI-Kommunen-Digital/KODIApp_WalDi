@@ -20,6 +20,7 @@ mixin _$HomeState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
+    required TResult Function(List<CategoryModel>? location) categoryLoading,
     required TResult Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)
         loaded,
@@ -33,6 +34,7 @@ mixin _$HomeState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
+    TResult? Function(List<CategoryModel>? location)? categoryLoading,
     TResult? Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)?
         loaded,
@@ -46,6 +48,7 @@ mixin _$HomeState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
+    TResult Function(List<CategoryModel>? location)? categoryLoading,
     TResult Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)?
         loaded,
@@ -60,6 +63,7 @@ mixin _$HomeState {
   TResult map<TResult extends Object?>({
     required TResult Function(HomeStateInitial value) initial,
     required TResult Function(HomeStateLoading value) loading,
+    required TResult Function(HomeStatecategoryLoading value) categoryLoading,
     required TResult Function(HomeStateLoaded value) loaded,
     required TResult Function(HomeStateUpdated value) updated,
     required TResult Function(HomeStateError value) error,
@@ -69,6 +73,7 @@ mixin _$HomeState {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(HomeStateInitial value)? initial,
     TResult? Function(HomeStateLoading value)? loading,
+    TResult? Function(HomeStatecategoryLoading value)? categoryLoading,
     TResult? Function(HomeStateLoaded value)? loaded,
     TResult? Function(HomeStateUpdated value)? updated,
     TResult? Function(HomeStateError value)? error,
@@ -78,6 +83,7 @@ mixin _$HomeState {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(HomeStateInitial value)? initial,
     TResult Function(HomeStateLoading value)? loading,
+    TResult Function(HomeStatecategoryLoading value)? categoryLoading,
     TResult Function(HomeStateLoaded value)? loaded,
     TResult Function(HomeStateUpdated value)? updated,
     TResult Function(HomeStateError value)? error,
@@ -143,6 +149,7 @@ class _$HomeStateInitial implements HomeStateInitial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
+    required TResult Function(List<CategoryModel>? location) categoryLoading,
     required TResult Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)
         loaded,
@@ -159,6 +166,7 @@ class _$HomeStateInitial implements HomeStateInitial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
+    TResult? Function(List<CategoryModel>? location)? categoryLoading,
     TResult? Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)?
         loaded,
@@ -175,6 +183,7 @@ class _$HomeStateInitial implements HomeStateInitial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
+    TResult Function(List<CategoryModel>? location)? categoryLoading,
     TResult Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)?
         loaded,
@@ -195,6 +204,7 @@ class _$HomeStateInitial implements HomeStateInitial {
   TResult map<TResult extends Object?>({
     required TResult Function(HomeStateInitial value) initial,
     required TResult Function(HomeStateLoading value) loading,
+    required TResult Function(HomeStatecategoryLoading value) categoryLoading,
     required TResult Function(HomeStateLoaded value) loaded,
     required TResult Function(HomeStateUpdated value) updated,
     required TResult Function(HomeStateError value) error,
@@ -207,6 +217,7 @@ class _$HomeStateInitial implements HomeStateInitial {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(HomeStateInitial value)? initial,
     TResult? Function(HomeStateLoading value)? loading,
+    TResult? Function(HomeStatecategoryLoading value)? categoryLoading,
     TResult? Function(HomeStateLoaded value)? loaded,
     TResult? Function(HomeStateUpdated value)? updated,
     TResult? Function(HomeStateError value)? error,
@@ -219,6 +230,7 @@ class _$HomeStateInitial implements HomeStateInitial {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(HomeStateInitial value)? initial,
     TResult Function(HomeStateLoading value)? loading,
+    TResult Function(HomeStatecategoryLoading value)? categoryLoading,
     TResult Function(HomeStateLoaded value)? loaded,
     TResult Function(HomeStateUpdated value)? updated,
     TResult Function(HomeStateError value)? error,
@@ -275,6 +287,7 @@ class _$HomeStateLoading implements HomeStateLoading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
+    required TResult Function(List<CategoryModel>? location) categoryLoading,
     required TResult Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)
         loaded,
@@ -291,6 +304,7 @@ class _$HomeStateLoading implements HomeStateLoading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
+    TResult? Function(List<CategoryModel>? location)? categoryLoading,
     TResult? Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)?
         loaded,
@@ -307,6 +321,7 @@ class _$HomeStateLoading implements HomeStateLoading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
+    TResult Function(List<CategoryModel>? location)? categoryLoading,
     TResult Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)?
         loaded,
@@ -327,6 +342,7 @@ class _$HomeStateLoading implements HomeStateLoading {
   TResult map<TResult extends Object?>({
     required TResult Function(HomeStateInitial value) initial,
     required TResult Function(HomeStateLoading value) loading,
+    required TResult Function(HomeStatecategoryLoading value) categoryLoading,
     required TResult Function(HomeStateLoaded value) loaded,
     required TResult Function(HomeStateUpdated value) updated,
     required TResult Function(HomeStateError value) error,
@@ -339,6 +355,7 @@ class _$HomeStateLoading implements HomeStateLoading {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(HomeStateInitial value)? initial,
     TResult? Function(HomeStateLoading value)? loading,
+    TResult? Function(HomeStatecategoryLoading value)? categoryLoading,
     TResult? Function(HomeStateLoaded value)? loaded,
     TResult? Function(HomeStateUpdated value)? updated,
     TResult? Function(HomeStateError value)? error,
@@ -351,6 +368,7 @@ class _$HomeStateLoading implements HomeStateLoading {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(HomeStateInitial value)? initial,
     TResult Function(HomeStateLoading value)? loading,
+    TResult Function(HomeStatecategoryLoading value)? categoryLoading,
     TResult Function(HomeStateLoaded value)? loaded,
     TResult Function(HomeStateUpdated value)? updated,
     TResult Function(HomeStateError value)? error,
@@ -365,6 +383,187 @@ class _$HomeStateLoading implements HomeStateLoading {
 
 abstract class HomeStateLoading implements HomeState {
   const factory HomeStateLoading() = _$HomeStateLoading;
+}
+
+/// @nodoc
+abstract class _$$HomeStatecategoryLoadingCopyWith<$Res> {
+  factory _$$HomeStatecategoryLoadingCopyWith(_$HomeStatecategoryLoading value,
+          $Res Function(_$HomeStatecategoryLoading) then) =
+      __$$HomeStatecategoryLoadingCopyWithImpl<$Res>;
+  @useResult
+  $Res call({List<CategoryModel>? location});
+}
+
+/// @nodoc
+class __$$HomeStatecategoryLoadingCopyWithImpl<$Res>
+    extends _$HomeStateCopyWithImpl<$Res, _$HomeStatecategoryLoading>
+    implements _$$HomeStatecategoryLoadingCopyWith<$Res> {
+  __$$HomeStatecategoryLoadingCopyWithImpl(_$HomeStatecategoryLoading _value,
+      $Res Function(_$HomeStatecategoryLoading) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? location = freezed,
+  }) {
+    return _then(_$HomeStatecategoryLoading(
+      freezed == location
+          ? _value._location
+          : location // ignore: cast_nullable_to_non_nullable
+              as List<CategoryModel>?,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$HomeStatecategoryLoading implements HomeStatecategoryLoading {
+  const _$HomeStatecategoryLoading(final List<CategoryModel>? location)
+      : _location = location;
+
+  final List<CategoryModel>? _location;
+  @override
+  List<CategoryModel>? get location {
+    final value = _location;
+    if (value == null) return null;
+    if (_location is EqualUnmodifiableListView) return _location;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  @override
+  String toString() {
+    return 'HomeState.categoryLoading(location: $location)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$HomeStatecategoryLoading &&
+            const DeepCollectionEquality().equals(other._location, _location));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(_location));
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$HomeStatecategoryLoadingCopyWith<_$HomeStatecategoryLoading>
+      get copyWith =>
+          __$$HomeStatecategoryLoadingCopyWithImpl<_$HomeStatecategoryLoading>(
+              this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(List<CategoryModel>? location) categoryLoading,
+    required TResult Function(String banner, List<CategoryModel> category,
+            List<CategoryModel> location, List<ProductModel> recent)
+        loaded,
+    required TResult Function(String banner, List<CategoryModel> category,
+            List<CategoryModel> location, List<ProductModel> recent)
+        updated,
+    required TResult Function(String error) error,
+  }) {
+    return categoryLoading(location);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(List<CategoryModel>? location)? categoryLoading,
+    TResult? Function(String banner, List<CategoryModel> category,
+            List<CategoryModel> location, List<ProductModel> recent)?
+        loaded,
+    TResult? Function(String banner, List<CategoryModel> category,
+            List<CategoryModel> location, List<ProductModel> recent)?
+        updated,
+    TResult? Function(String error)? error,
+  }) {
+    return categoryLoading?.call(location);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(List<CategoryModel>? location)? categoryLoading,
+    TResult Function(String banner, List<CategoryModel> category,
+            List<CategoryModel> location, List<ProductModel> recent)?
+        loaded,
+    TResult Function(String banner, List<CategoryModel> category,
+            List<CategoryModel> location, List<ProductModel> recent)?
+        updated,
+    TResult Function(String error)? error,
+    required TResult orElse(),
+  }) {
+    if (categoryLoading != null) {
+      return categoryLoading(location);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(HomeStateInitial value) initial,
+    required TResult Function(HomeStateLoading value) loading,
+    required TResult Function(HomeStatecategoryLoading value) categoryLoading,
+    required TResult Function(HomeStateLoaded value) loaded,
+    required TResult Function(HomeStateUpdated value) updated,
+    required TResult Function(HomeStateError value) error,
+  }) {
+    return categoryLoading(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(HomeStateInitial value)? initial,
+    TResult? Function(HomeStateLoading value)? loading,
+    TResult? Function(HomeStatecategoryLoading value)? categoryLoading,
+    TResult? Function(HomeStateLoaded value)? loaded,
+    TResult? Function(HomeStateUpdated value)? updated,
+    TResult? Function(HomeStateError value)? error,
+  }) {
+    return categoryLoading?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(HomeStateInitial value)? initial,
+    TResult Function(HomeStateLoading value)? loading,
+    TResult Function(HomeStatecategoryLoading value)? categoryLoading,
+    TResult Function(HomeStateLoaded value)? loaded,
+    TResult Function(HomeStateUpdated value)? updated,
+    TResult Function(HomeStateError value)? error,
+    required TResult orElse(),
+  }) {
+    if (categoryLoading != null) {
+      return categoryLoading(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class HomeStatecategoryLoading implements HomeState {
+  const factory HomeStatecategoryLoading(final List<CategoryModel>? location) =
+      _$HomeStatecategoryLoading;
+
+  List<CategoryModel>? get location;
+  @JsonKey(ignore: true)
+  _$$HomeStatecategoryLoadingCopyWith<_$HomeStatecategoryLoading>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -487,6 +686,7 @@ class _$HomeStateLoaded implements HomeStateLoaded {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
+    required TResult Function(List<CategoryModel>? location) categoryLoading,
     required TResult Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)
         loaded,
@@ -503,6 +703,7 @@ class _$HomeStateLoaded implements HomeStateLoaded {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
+    TResult? Function(List<CategoryModel>? location)? categoryLoading,
     TResult? Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)?
         loaded,
@@ -519,6 +720,7 @@ class _$HomeStateLoaded implements HomeStateLoaded {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
+    TResult Function(List<CategoryModel>? location)? categoryLoading,
     TResult Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)?
         loaded,
@@ -539,6 +741,7 @@ class _$HomeStateLoaded implements HomeStateLoaded {
   TResult map<TResult extends Object?>({
     required TResult Function(HomeStateInitial value) initial,
     required TResult Function(HomeStateLoading value) loading,
+    required TResult Function(HomeStatecategoryLoading value) categoryLoading,
     required TResult Function(HomeStateLoaded value) loaded,
     required TResult Function(HomeStateUpdated value) updated,
     required TResult Function(HomeStateError value) error,
@@ -551,6 +754,7 @@ class _$HomeStateLoaded implements HomeStateLoaded {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(HomeStateInitial value)? initial,
     TResult? Function(HomeStateLoading value)? loading,
+    TResult? Function(HomeStatecategoryLoading value)? categoryLoading,
     TResult? Function(HomeStateLoaded value)? loaded,
     TResult? Function(HomeStateUpdated value)? updated,
     TResult? Function(HomeStateError value)? error,
@@ -563,6 +767,7 @@ class _$HomeStateLoaded implements HomeStateLoaded {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(HomeStateInitial value)? initial,
     TResult Function(HomeStateLoading value)? loading,
+    TResult Function(HomeStatecategoryLoading value)? categoryLoading,
     TResult Function(HomeStateLoaded value)? loaded,
     TResult Function(HomeStateUpdated value)? updated,
     TResult Function(HomeStateError value)? error,
@@ -711,6 +916,7 @@ class _$HomeStateUpdated implements HomeStateUpdated {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
+    required TResult Function(List<CategoryModel>? location) categoryLoading,
     required TResult Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)
         loaded,
@@ -727,6 +933,7 @@ class _$HomeStateUpdated implements HomeStateUpdated {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
+    TResult? Function(List<CategoryModel>? location)? categoryLoading,
     TResult? Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)?
         loaded,
@@ -743,6 +950,7 @@ class _$HomeStateUpdated implements HomeStateUpdated {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
+    TResult Function(List<CategoryModel>? location)? categoryLoading,
     TResult Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)?
         loaded,
@@ -763,6 +971,7 @@ class _$HomeStateUpdated implements HomeStateUpdated {
   TResult map<TResult extends Object?>({
     required TResult Function(HomeStateInitial value) initial,
     required TResult Function(HomeStateLoading value) loading,
+    required TResult Function(HomeStatecategoryLoading value) categoryLoading,
     required TResult Function(HomeStateLoaded value) loaded,
     required TResult Function(HomeStateUpdated value) updated,
     required TResult Function(HomeStateError value) error,
@@ -775,6 +984,7 @@ class _$HomeStateUpdated implements HomeStateUpdated {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(HomeStateInitial value)? initial,
     TResult? Function(HomeStateLoading value)? loading,
+    TResult? Function(HomeStatecategoryLoading value)? categoryLoading,
     TResult? Function(HomeStateLoaded value)? loaded,
     TResult? Function(HomeStateUpdated value)? updated,
     TResult? Function(HomeStateError value)? error,
@@ -787,6 +997,7 @@ class _$HomeStateUpdated implements HomeStateUpdated {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(HomeStateInitial value)? initial,
     TResult Function(HomeStateLoading value)? loading,
+    TResult Function(HomeStatecategoryLoading value)? categoryLoading,
     TResult Function(HomeStateLoaded value)? loaded,
     TResult Function(HomeStateUpdated value)? updated,
     TResult Function(HomeStateError value)? error,
@@ -881,6 +1092,7 @@ class _$HomeStateError implements HomeStateError {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
+    required TResult Function(List<CategoryModel>? location) categoryLoading,
     required TResult Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)
         loaded,
@@ -897,6 +1109,7 @@ class _$HomeStateError implements HomeStateError {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
+    TResult? Function(List<CategoryModel>? location)? categoryLoading,
     TResult? Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)?
         loaded,
@@ -913,6 +1126,7 @@ class _$HomeStateError implements HomeStateError {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
+    TResult Function(List<CategoryModel>? location)? categoryLoading,
     TResult Function(String banner, List<CategoryModel> category,
             List<CategoryModel> location, List<ProductModel> recent)?
         loaded,
@@ -933,6 +1147,7 @@ class _$HomeStateError implements HomeStateError {
   TResult map<TResult extends Object?>({
     required TResult Function(HomeStateInitial value) initial,
     required TResult Function(HomeStateLoading value) loading,
+    required TResult Function(HomeStatecategoryLoading value) categoryLoading,
     required TResult Function(HomeStateLoaded value) loaded,
     required TResult Function(HomeStateUpdated value) updated,
     required TResult Function(HomeStateError value) error,
@@ -945,6 +1160,7 @@ class _$HomeStateError implements HomeStateError {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(HomeStateInitial value)? initial,
     TResult? Function(HomeStateLoading value)? loading,
+    TResult? Function(HomeStatecategoryLoading value)? categoryLoading,
     TResult? Function(HomeStateLoaded value)? loaded,
     TResult? Function(HomeStateUpdated value)? updated,
     TResult? Function(HomeStateError value)? error,
@@ -957,6 +1173,7 @@ class _$HomeStateError implements HomeStateError {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(HomeStateInitial value)? initial,
     TResult Function(HomeStateLoading value)? loading,
+    TResult Function(HomeStatecategoryLoading value)? categoryLoading,
     TResult Function(HomeStateLoaded value)? loaded,
     TResult Function(HomeStateUpdated value)? updated,
     TResult Function(HomeStateError value)? error,
