@@ -200,16 +200,6 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                                       children: [
                                         Row(
                                           children: <Widget>[
-                                            // SizedBox(
-                                            //   width: 120,
-                                            //   height: 140,
-                                            //   child: Image.network(
-                                            //     "${Application.picturesURL}${item.image}",
-                                            //     width: 120,
-                                            //     //       height: 140,
-                                            //     fit: BoxFit.cover,
-                                            //   ),
-                                            // ),
                                             CachedNetworkImage(
                                               imageUrl: "${Application.picturesURL}${item.image}",
                                               imageBuilder: (context, imageProvider) {
