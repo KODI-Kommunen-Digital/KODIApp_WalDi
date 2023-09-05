@@ -235,15 +235,62 @@ class AppProductItem extends StatelessWidget {
             children: [
               Row(
                 children: <Widget>[
-                  SizedBox(
-                    width: 120,
-                    height: 140,
-                    child: Image.network(
-                      "${Application.picturesURL}${item!.image}",
-                      width: 120,
-                      //       height: 140,
-                      fit: BoxFit.cover,
-                    ),
+                  // SizedBox(
+                  //   width: 120,
+                  //   height: 140,
+                  //   child: Image.network(
+                  //     "${Application.picturesURL}${item!.image}",
+                  //     width: 120,
+                  //     //       height: 140,
+                  //     fit: BoxFit.cover,
+                  //   ),
+                  // ),
+                  CachedNetworkImage(
+                    imageUrl: "${Application.picturesURL}${item!.image}",
+                    imageBuilder: (context, imageProvider) {
+                      return Container(
+                        width: 120,
+                        height: 140,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: imageProvider,
+                            fit: BoxFit.cover,
+                          ),
+                          borderRadius: BorderRadius.circular(11),
+                        ),
+                      );
+                    },
+                    placeholder: (context, url) {
+                      return AppPlaceholder(
+                        child: Container(
+                          width: 120,
+                          height: 140,
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(8),
+                              bottomLeft: Radius.circular(8),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                    errorWidget: (context, url, error) {
+                      return AppPlaceholder(
+                        child: Container(
+                          width: 120,
+                          height: 140,
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(8),
+                              bottomLeft: Radius.circular(8),
+                            ),
+                          ),
+                          child: const Icon(Icons.error),
+                        ),
+                      );
+                    },
                   ),
                   const SizedBox(width: 8),
                   Expanded(

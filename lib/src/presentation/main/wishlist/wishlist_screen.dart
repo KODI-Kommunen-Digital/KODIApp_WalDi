@@ -134,10 +134,7 @@ class _WishListLoadedState extends State<WishListLoaded> {
                                           image: imageProvider,
                                           fit: BoxFit.cover,
                                         ),
-                                        borderRadius: const BorderRadius.only(
-                                          topLeft: Radius.circular(8),
-                                          bottomLeft: Radius.circular(8),
-                                        ),
+                                        borderRadius: BorderRadius.circular(11),
                                       ),
                                     );
                                   },
