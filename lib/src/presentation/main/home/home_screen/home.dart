@@ -43,14 +43,14 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _scrollController.addListener(_scrollListener);
     checkSavedCity = true;
-    AppBloc.homeCubit.onLoad();
+    AppBloc.homeCubit.onLoad(false);
     connectivityInternet();
     scrollUp();
   }
 
   void connectivityInternet() {
     Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      AppBloc.homeCubit.onLoad();
+      AppBloc.homeCubit.onLoad(false);
     });
   }
 
@@ -84,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _onUpdateCategory() async {
-    await AppBloc.homeCubit.onLoad();
+    await AppBloc.homeCubit.onLoad(false);
 
   }
 
@@ -96,7 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _onRefresh() async {
-    await AppBloc.homeCubit.onLoad();
+    await AppBloc.homeCubit.onLoad(true);
   }
 
   Future<void> _setSavedCity(List<CategoryModel> location) async {
@@ -112,7 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedCityId = 0;
       });
     }
-    AppBloc.homeCubit.onLoad();
+    AppBloc.homeCubit.onLoad(false);
   }
 
   @override
