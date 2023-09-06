@@ -1,11 +1,10 @@
-// ignore_for_file: deprecated_member_use, null_argument_to_non_null_type
+// ignore_for_file: deprecated_member_use, null_argument_to_non_null_type, use_build_context_synchronously
 
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_favorite.dart';
