@@ -20,7 +20,7 @@ class HomeCubit extends Cubit<HomeState> {
 
   HomeCubit() : super(const HomeState.loading());
 
-  Future<void> onLoad() async {
+  Future<void> onLoad(bool isRefreshLoader) async {
     if (!await hasInternet()) {
       emit(const HomeState.error("no_internet"));
     }
@@ -29,7 +29,8 @@ class HomeCubit extends Cubit<HomeState> {
       return CategoryModel.fromJson(item);
     }).toList();
 
-    emit(HomeState.categoryLoading(location));
+    if(!isRefreshLoader){
+      emit(HomeState.categoryLoading(location));}
 
     final categoryRequestResponse = await Api.requestHomeCategory();
     category = List.from(categoryRequestResponse.data ?? []).map((item) {

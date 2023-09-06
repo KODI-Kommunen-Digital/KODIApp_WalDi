@@ -46,7 +46,7 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
     await onLoad();
     if (calledExternal) {
       AppBloc.homeCubit.setCalledExternally(true);
-      await AppBloc.homeCubit.onLoad();
+      await AppBloc.homeCubit.onLoad(false);
     }
   }
 
