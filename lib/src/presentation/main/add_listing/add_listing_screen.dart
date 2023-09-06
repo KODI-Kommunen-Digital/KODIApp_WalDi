@@ -483,7 +483,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
             ),
             const SizedBox(height: 16),
             Text(
-              Translate.of(context).translate('content'),
+              Translate.of(context).translate('input_content'),
               style: Theme.of(context)
                   .textTheme
                   .titleMedium!
