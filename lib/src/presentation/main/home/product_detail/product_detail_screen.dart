@@ -5,7 +5,7 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_favorite.dart';
 import 'package:heidi/src/data/model/model_product.dart';
@@ -610,18 +610,36 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       }
 
       if (product.description.isNotEmpty) {
-        description = Html(
-          data: product.description,
-          style: {
-            "*": Style(
-              fontSize: FontSize(16.0),
-              lineHeight: const LineHeight(1.6),
-              color: Colors.white, // Set the text color to white (ARGB format)
-            ),
-            "img": Style(
-              width: Width(MediaQuery.of(context).size.width * .85),
-              height: Height(MediaQuery.of(context).size.height * .3),
-            ),
+        String modifiedDescription = product.description;
+
+        modifiedDescription = modifiedDescription.replaceAll(
+            RegExp(r'color: [^;]+;'), "color: white");
+
+        description = HtmlWidget(
+          modifiedDescription,
+          textStyle:
+              const TextStyle(fontSize: 16.0, color: Colors.white, height: 1.6),
+          customStylesBuilder: (element) {
+            if (element.localName == 'img') {
+              return {'max-width': '100%'};
+            } else if (element.localName == '') {
+              return {'color': '#ffffff'};
+            }
+            var style = element.attributes['style'];
+            if (style != null) {
+              style =
+                  style.replaceAll(RegExp(r'color:[^;];?'), 'color: #ffffff;');
+            } else {
+              style = 'color: #ffffff;';
+            }
+
+            return {'style': style};
+          },
+          onTapUrl: (url) {
+            if (Uri.parse(url).hasAbsolutePath) {
+              _makeAction(url);
+            }
+            return false;
           },
         );
       }
