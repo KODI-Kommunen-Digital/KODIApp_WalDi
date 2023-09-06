@@ -118,6 +118,11 @@ class _MainScreenState extends State<MainScreen> {
       case Routes.wishList:
         AppBloc.wishListCubit.setDoesScroll(true);
         AppBloc.wishListCubit.scrollUp();
+        break;
+      case Routes.discovery:
+        AppBloc.discoveryCubit.setDoesScroll(true);
+        AppBloc.discoveryCubit.scrollUp();
+        break;
     }
   }
 
