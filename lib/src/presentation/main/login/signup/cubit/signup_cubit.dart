@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/presentation/main/login/signup/cubit/signup_state.dart';
 
-class SignUpCubit extends Cubit<SignUpState>{
+class SignUpCubit extends Cubit<SignUpState> {
   SignUpCubit() : super(const SignUpState.loading());
 
   Future<bool> onRegister({
@@ -68,6 +68,10 @@ class SignUpCubit extends Cubit<SignUpState>{
 
     if (username.length < 6) {
       return "Username must be at least 6 characters long.";
+    }
+
+    if (username.length > 15) {
+      return "Username must not exceed 15 characters.";
     }
 
     if (!RegExp(r'^[a-z_]+$').hasMatch(username)) {
