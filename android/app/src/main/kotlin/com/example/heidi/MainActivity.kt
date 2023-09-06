@@ -1,4 +1,4 @@
-package com.example.heidi
+package com.smartauf
 
 import io.flutter.embedding.android.FlutterActivity
 
