@@ -198,6 +198,66 @@ class _AccountLoadedState extends State<AccountLoaded> {
                           ),
                         ),
                       ),
+                      AppListTitle(
+                        title:
+                            Translate.of(context).translate('delete_Account'),
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text(
+                                  Translate.of(context)
+                                      .translate('delete_Account'),
+                                ),
+                                content: Text(
+                                  Translate.of(context)
+                                      .translate('delete_Account_Confirmation'),
+                                ),
+                                actions: <Widget>[
+                                  TextButton(
+                                    child: Text(
+                                      Translate.of(context).translate('yes'),
+                                    ),
+                                    onPressed: () async {
+                                      Navigator.of(context).pop();
+                                      final isDeleted = await context
+                                          .read<AccountCubit>()
+                                          .deleteUserAccount();
+                                      if (isDeleted) {
+                                        _showSuccessSnackBar();
+                                        AppBloc.loginCubit.onLogout();
+                                        await Navigator.pushNamed(
+                                          context,
+                                          Routes.signIn,
+                                          arguments: Routes.submit,
+                                        );
+                                      } else {
+                                        _showErrorSnackBar();
+                                      }
+                                    },
+                                  ),
+                                  TextButton(
+                                    child: Text(
+                                      Translate.of(context).translate('no'),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        trailing: RotatedBox(
+                          quarterTurns: AppLanguage.isRTL() ? 2 : 0,
+                          child: const Icon(
+                            Icons.keyboard_arrow_right,
+                            textDirection: TextDirection.ltr,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 4),
@@ -221,5 +281,16 @@ class _AccountLoadedState extends State<AccountLoaded> {
 
   void _onNavigate(String route) {
     Navigator.pushNamed(context, route);
+  }
+
+  void _showSuccessSnackBar() {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content:
+            Text(Translate.of(context).translate("delete_account_success"))));
+  }
+
+  void _showErrorSnackBar() {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(Translate.of(context).translate("delete_account_fail"))));
   }
 }

@@ -291,6 +291,12 @@ class Api {
     return ResultApiModel.fromJson(convertResponse);
   }
 
+  static Future<ResultApiModel> deleteUserAccount(userId) async {
+    final String deleteAccount = "/users/$userId";
+    final result = await httpManager.delete(url: deleteAccount);
+    return ResultApiModel.fromJson(result);
+  }
+
   ///Singleton factory
   static final Api _instance = Api._internal();
 

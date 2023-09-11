@@ -412,5 +412,9 @@
   "subcategory_day_topic": "Topic of the day",
   "subcategory_local": "Local",
   "subcategory_club_news": "Club news",
-  "subcategory_official_notification": "Official Notification"
+  "subcategory_official_notification": "Official Notification",
+  "delete_Account": "Delete Account", 
+  "delete_Account_Confirmation": "Are you sure you want to delete your account?",
+  "delete_account_success": "Account Deleted Successfully",
+  "delete_account_fail": "Account Deletion failed. Please try later."
 }
