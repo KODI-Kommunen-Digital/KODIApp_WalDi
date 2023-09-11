@@ -101,13 +101,13 @@ class _HomeScreenState extends State<HomeScreen> {
     // });
   }
 
-  void setCategoryLoading(){
+  void setCategoryLoading() {
     setState(() {
       categoryLoading = true;
     });
   }
 
-  void setCategoryLoaded(){
+  void setCategoryLoaded() {
     setState(() {
       categoryLoading = false;
     });
@@ -133,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Translate.of(context).translate('select_location')
           ];
 
-          if(state is HomeStatecategoryLoading){
+          if (state is HomeStatecategoryLoading) {
             categoryLoading = true;
             location = state.location;
             if (location!.isNotEmpty) {
@@ -200,9 +200,8 @@ class _HomeScreenState extends State<HomeScreen> {
               SliverPersistentHeader(
                 delegate: AppBarHomeSliver(
                     cityTitlesList: cityTitles,
-                    hintText: (selectedCityId > 0)
-                        ? selectedCityTitle
-                        : Translate.of(context).translate('select_location'),
+                    hintText:
+                        Translate.of(context).translate('select_location'),
                     selectedOption: (selectedCityId > 0)
                         ? selectedCityTitle
                         : Translate.of(context).translate('select_location'),
