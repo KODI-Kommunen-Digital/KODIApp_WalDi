@@ -85,7 +85,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _onUpdateCategory() async {
     await AppBloc.homeCubit.onLoad(false);
-
   }
 
   void scrollUp() {
@@ -160,7 +159,7 @@ class _HomeScreenState extends State<HomeScreen> {
             }
           }
 
-          if(state is HomeStatecategoryLoading){
+          if (state is HomeStatecategoryLoading) {
             categoryLoading = true;
             location = state.location;
             if (location!.isNotEmpty) {
@@ -205,9 +204,8 @@ class _HomeScreenState extends State<HomeScreen> {
               SliverPersistentHeader(
                 delegate: AppBarHomeSliver(
                     cityTitlesList: cityTitles,
-                    hintText: (selectedCityId > 0)
-                        ? selectedCityTitle
-                        : Translate.of(context).translate('select_location'),
+                    hintText:
+                        Translate.of(context).translate('select_location'),
                     selectedOption: (selectedCityId > 0)
                         ? selectedCityTitle
                         : Translate.of(context).translate('select_location'),
