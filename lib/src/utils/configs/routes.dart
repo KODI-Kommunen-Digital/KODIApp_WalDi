@@ -9,6 +9,7 @@ import 'package:heidi/src/presentation/main/account/legal/legal.dart';
 import 'package:heidi/src/presentation/main/account/legal/privacy_policy/privacy.dart';
 import 'package:heidi/src/presentation/main/account/profile/cubit/profile_cubit.dart';
 import 'package:heidi/src/presentation/main/account/profile/profile_screen.dart';
+import 'package:heidi/src/presentation/main/account/profile_settings/profile_settings_screen.dart';
 import 'package:heidi/src/presentation/main/account/setting/settings_screen.dart';
 import 'package:heidi/src/presentation/main/add_listing/add_listing_screen.dart';
 import 'package:heidi/src/presentation/main/add_listing/add_listing_success/add_listing_success.dart';
@@ -73,6 +74,7 @@ class Routes {
   static const String imprint = "/imprint";
   static const String privacy = "/privacy";
   static const String imageZoom = "/imageZoom";
+  static const String profileSettings = "/profileSettings";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -203,6 +205,12 @@ class Routes {
           },
         );
 
+      case profileSettings:
+        return MaterialPageRoute(
+          builder: (context) {
+            return const ProfileSettingsScreen();
+          },
+        );
       case contactUs:
         return MaterialPageRoute(
           builder: (context) {

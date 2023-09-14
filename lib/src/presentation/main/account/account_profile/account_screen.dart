@@ -128,55 +128,9 @@ class _AccountLoadedState extends State<AccountLoaded> {
                   Column(
                     children: <Widget>[
                       AppListTitle(
-                        title: Translate.of(context).translate(
-                          'edit_profile',
-                        ),
-                        trailing: RotatedBox(
-                          quarterTurns: AppLanguage.isRTL() ? 2 : 0,
-                          child: const Icon(
-                            Icons.keyboard_arrow_right,
-                            textDirection: TextDirection.ltr,
-                          ),
-                        ),
-                        onPressed: () {
-                          Navigator.pushNamed(context, Routes.editProfile)
-                              .then((value) {
-                            setState(() {});
-                          });
-                        },
-                      ),
-                      AppListTitle(
-                        title: Translate.of(context).translate(
-                          'change_password',
-                        ),
-                        trailing: RotatedBox(
-                          quarterTurns: AppLanguage.isRTL() ? 2 : 0,
-                          child: const Icon(
-                            Icons.keyboard_arrow_right,
-                            textDirection: TextDirection.ltr,
-                          ),
-                        ),
-                        onPressed: () {
-                          _onNavigate(Routes.changePassword);
-                        },
-                      ),
-                      AppListTitle(
                         title: Translate.of(context).translate('setting'),
                         onPressed: () {
                           _onNavigate(Routes.setting);
-                        },
-                        trailing: RotatedBox(
-                          quarterTurns: AppLanguage.isRTL() ? 2 : 0,
-                          child: const Icon(
-                            Icons.keyboard_arrow_right,
-                            textDirection: TextDirection.ltr,
-                          ),
-                        ),
-                      ),
-                      AppListTitle(
-                        title: Translate.of(context).translate('contact'),
-                        onPressed: () {
-                          _onNavigate(Routes.contactUs);
                         },
                         trailing: RotatedBox(
                           quarterTurns: AppLanguage.isRTL() ? 2 : 0,
@@ -201,56 +155,9 @@ class _AccountLoadedState extends State<AccountLoaded> {
                         ),
                       ),
                       AppListTitle(
-                        title:
-                            Translate.of(context).translate('delete_Account'),
+                        title: Translate.of(context).translate('contact'),
                         onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: Text(
-                                  Translate.of(context)
-                                      .translate('delete_Account'),
-                                ),
-                                content: Text(
-                                  Translate.of(context)
-                                      .translate('delete_Account_Confirmation'),
-                                ),
-                                actions: <Widget>[
-                                  TextButton(
-                                    child: Text(
-                                      Translate.of(context).translate('yes'),
-                                    ),
-                                    onPressed: () async {
-                                      Navigator.of(context).pop();
-                                      final isDeleted = await context
-                                          .read<AccountCubit>()
-                                          .deleteUserAccount();
-                                      if (isDeleted) {
-                                        _showSuccessSnackBar();
-                                        AppBloc.loginCubit.onLogout();
-                                        await Navigator.pushNamed(
-                                          context,
-                                          Routes.signIn,
-                                          arguments: Routes.submit,
-                                        );
-                                      } else {
-                                        _showErrorSnackBar();
-                                      }
-                                    },
-                                  ),
-                                  TextButton(
-                                    child: Text(
-                                      Translate.of(context).translate('no'),
-                                    ),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                ],
-                              );
-                            },
-                          );
+                          _onNavigate(Routes.contactUs);
                         },
                         trailing: RotatedBox(
                           quarterTurns: AppLanguage.isRTL() ? 2 : 0,
@@ -283,16 +190,5 @@ class _AccountLoadedState extends State<AccountLoaded> {
 
   void _onNavigate(String route) {
     Navigator.pushNamed(context, route);
-  }
-
-  void _showSuccessSnackBar() {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content:
-            Text(Translate.of(context).translate("delete_account_success"))));
-  }
-
-  void _showErrorSnackBar() {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(Translate.of(context).translate("delete_account_fail"))));
   }
 }

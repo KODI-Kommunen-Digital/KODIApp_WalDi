@@ -70,6 +70,7 @@
   "Username must be at least 6 characters long." : "Username must be at least 6 characters long.",
   "Username can only contain lowercase letters and underscores." : "Username can only contain lowercase letters and underscores.",
   "address": "Address",
+  "profile_settings": "Profile Settings",
   "input_address": "Address",
   "website": "Website",
   "input_website": "Website",
