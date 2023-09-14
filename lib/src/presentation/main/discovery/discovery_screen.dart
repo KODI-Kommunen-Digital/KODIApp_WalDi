@@ -172,10 +172,18 @@ class DiscoveryLoaded extends StatefulWidget {
 
 class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
   bool isLoading = false;
+  final _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
+  }
+
+  void scrollUp() {
+    _scrollController.animateTo(0,
+        duration: const Duration(milliseconds: 500), //duration of scroll
+        curve: Curves.fastOutSlowIn //scroll type
+        );
   }
 
   @override
@@ -186,27 +194,36 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
           AppBloc.discoveryCubit.onLoad();
           // hideEmptyService();
         },
-        child: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, // Adjust the number of columns as desired
-              crossAxisSpacing: 10.0,
-              mainAxisSpacing: 10.0,
-              mainAxisExtent: 300.0),
-          itemCount: widget.services.length,
-          itemBuilder: (BuildContext context, int index) {
-            return InkWell(
-              onTap: () {
-                navigateToLink(widget.services[index]);
-              },
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(15.0),
-                child: Image.asset(
-                  widget.services[index].imageUrl,
-                  fit: BoxFit.cover,
-                ),
-              ),
-            );
+        child: BlocListener<DiscoveryCubit, DiscoveryState>(
+          listener: (context, state) {
+            if (AppBloc.discoveryCubit.getDoesScroll()) {
+              AppBloc.discoveryCubit.setDoesScroll(false);
+              scrollUp();
+            }
           },
+          child: GridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2, // Adjust the number of columns as desired
+                crossAxisSpacing: 10.0,
+                mainAxisSpacing: 10.0,
+                mainAxisExtent: 300.0),
+            itemCount: widget.services.length,
+            controller: _scrollController,
+            itemBuilder: (BuildContext context, int index) {
+              return InkWell(
+                onTap: () {
+                  navigateToLink(widget.services[index]);
+                },
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15.0),
+                  child: Image.asset(
+                    widget.services[index].imageUrl,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              );
+            },
+          ),
         ),
       ),
     );
