@@ -88,10 +88,20 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
     return cityWebsites[cityId];
   }
 
-  Future<void> hideEmptyService() async {
+  Future<void> hideEmptyService() async {}
 
+  bool getDoesScroll() {
+    return doesScroll;
   }
 
+  void setDoesScroll(bool scroll) {
+    doesScroll = scroll;
+  }
+
+  void scrollUp() {
+    emit(const DiscoveryStateLoading());
+    emit(DiscoveryStateLoaded(services));
+  }
 
   List<CitizenServiceModel> initializeServices() {
     return [
@@ -180,5 +190,4 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
 
     return cityWebsites[cityId];
   }
-
 }
