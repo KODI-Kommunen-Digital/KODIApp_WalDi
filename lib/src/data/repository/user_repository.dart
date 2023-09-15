@@ -246,6 +246,7 @@ class UserRepository {
             favoriteListResponse.data['startDate'],
             favoriteListResponse.data['endDate'],
             favoriteListResponse.data['createdAt'],
+            favoriteListResponse.data['pdf'] ?? '',
             data['cityId'],
           ));
         } else {

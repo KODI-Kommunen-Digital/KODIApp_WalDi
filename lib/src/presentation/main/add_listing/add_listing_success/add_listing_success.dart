@@ -24,6 +24,7 @@ class _AddListingSuccessScreenState extends State<AddListingSuccessScreen> {
 
   ///On Add More
   void _onSuccess() {
+    Navigator.pop(context);
     Navigator.pushNamed(context, Routes.submit, arguments: {'isNewList': true});
   }
 

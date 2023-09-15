@@ -1,13 +1,14 @@
 import 'dart:io';
 
-import 'package:device_info/device_info.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
+import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/utils/configs/application.dart';
-import 'package:heidi/src/utils/logging/loggy_exp.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:heidi/src/utils/multiple_gesture_detector.dart';
+import 'package:heidi/src/utils/translate.dart';
 
 enum UploadImageType { circle, square }
 
@@ -32,8 +33,6 @@ class AppUploadImage extends StatefulWidget {
 }
 
 class _AppUploadImageState extends State<AppUploadImage> {
-  final _picker = ImagePicker();
-
   File? _file;
   double? _percent;
   bool isImageUploaded = false;
@@ -50,98 +49,105 @@ class _AppUploadImageState extends State<AppUploadImage> {
     super.dispose();
   }
 
-  Future<void> _uploadImage() async {
-    Platform.isAndroid
-        ? await Permission.storage.request()
-        : await Permission.photos.request();
-
-    String androidVersion = await _getAndroidVersion();
-    var statusImage = await Permission.photos.status;
-    if (int.parse(androidVersion) > 11) {
-      statusImage = await Permission.photos.status;
-    } else {
-      statusImage = await Permission.storage.status;
-    }
-
-    if (showAction) {
-      setState(() {
-        showAction = false;
-      });
-      return;
-    }
-    try {
-      if (statusImage.isGranted || statusImage.isLimited) {
-        final pickedFile = await _picker.pickImage(
-          source: ImageSource.gallery,
+  void showChooseFileTypeDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          title: Text(Translate.of(context).translate('Choose_File_Type')),
+          children: [
+            SimpleDialogOption(
+              onPressed: () async {
+                Navigator.pop(context);
+                FilePickerResult? result = await FilePicker.platform.pickFiles(
+                  type: FileType.custom,
+                  allowedExtensions: ['pdf'],
+                );
+                if (result != null) {
+                  _file = File('');
+                  widget.onChange('pdf');
+                  setState(() {
+                    _file = File(result.files.single.path!);
+                    isImageUploaded = false;
+                  });
+                  final profile = widget.profile;
+                  if (!profile) {
+                    await ListRepository.uploadPdf(_file!);
+                  }
+                }
+              },
+              child: const ListTile(
+                leading: Icon(Icons.picture_as_pdf),
+                title: Text('PDF'),
+              ),
+            ),
+            SimpleDialogOption(
+              onPressed: () async {
+                Navigator.pop(context);
+                FilePickerResult? result = await FilePicker.platform.pickFiles(
+                  type: FileType.image,
+                );
+                if (result != null) {
+                  _file = File('');
+                  setState(() {
+                    _file = File(result.files.single.path!);
+                    isImageUploaded = false;
+                  });
+                  final profile = widget.profile;
+                  if (!profile) {
+                    await ListRepository.uploadImage(_file!, profile);
+                    widget.onChange('image');
+                  } else {
+                    final response =
+                    await ListRepository.uploadImage(_file!, profile);
+                    if (response!.data['status'] == 'success') {
+                      setState(() {
+                        isImageUploaded = true;
+                      });
+                      final item = response.data['data']?['image'];
+                      widget.onChange(item);
+                    }
+                  }
+                }
+              },
+              child: ListTile(
+                leading: const Icon(Icons.image),
+                title: Text(Translate.of(context).translate('Images')),
+              ),
+            ),
+          ],
         );
-        if (pickedFile == null) return;
-        setState(() {
-          isImageUploaded = false;
-          _file = File(pickedFile.path);
-        });
-        final profile = widget.profile;
-        if (!profile) {
-          await ListRepository.uploadImage(_file!, profile);
-          widget.onChange('');
-        } else {
-          final response = await ListRepository.uploadImage(_file!, profile);
-          if (response!.data['status'] == 'success') {
-            setState(() {
-              isImageUploaded = true;
-            });
-            final item = response.data['data']?['image'];
-            widget.onChange(item);
-          } else {}
-        }
-      } else if (statusImage.isDenied) {
-        await openAppSettings();
-        if (statusImage.isGranted || statusImage.isLimited) {
-          final pickedFile = await _picker.pickImage(
-            source: ImageSource.gallery,
-          );
-          if (pickedFile == null) return;
-          if (!mounted) return;
-          setState(() {
-            isImageUploaded = false;
-            _file = File(pickedFile.path);
-          });
-          final profile = widget.profile;
-          if (!profile) {
-            await ListRepository.uploadImage(_file!, profile);
-            widget.onChange('');
-          } else {
-            final response = await ListRepository.uploadImage(_file!, profile);
-            if (response!.data['status'] == 'success') {
-              setState(() {
-                isImageUploaded = true;
-              });
-              final item = response.data['data']?['image'];
-              widget.onChange(item);
-            } else {
-              logError('Image Upload Error', response);
-            }
-          }
-        }
-      } else if (statusImage.isPermanentlyDenied) {
-        await openAppSettings();
-      }
-    } catch (e) {
-      logError('Image Upload Permission Error', e);
-    }
-  }
-
-  Future<String> _getAndroidVersion() async {
-    if (Platform.isAndroid) {
-      var androidInfo = await DeviceInfoPlugin().androidInfo;
-      return androidInfo.version.release;
-    } else {
-      return "0";
-    }
+      },
+    );
   }
 
   Widget? _buildContent() {
-    if (widget.image != null && _file == null) return null;
-
+    String uniqueKey = UniqueKey().toString();
+    if (widget.image != null && _file == null) {
+      if (widget.image!.contains(".pdf")) {
+        return SizedBox(
+            width: double.infinity,
+            height: 400,
+            child: RawGestureDetector(
+              gestures: {
+                AllowMultipleGestureRecognizer:
+                GestureRecognizerFactoryWithHandlers<
+                    AllowMultipleGestureRecognizer>(
+                      () => AllowMultipleGestureRecognizer(), //constructor
+                      (AllowMultipleGestureRecognizer instance) {
+                    //initializer
+                    instance.onTap = () => showChooseFileTypeDialog();
+                  },
+                )
+              },
+              child: const PDF().cachedFromUrl(
+                "${Application.picturesURL}${widget.image!}?cacheKey=$uniqueKey",
+                placeholder: (progress) => Center(child: Text('$progress %')),
+                errorWidget: (error) => Center(child: Text(error.toString())),
+              ),
+            ));
+      }
+    }
     switch (widget.type) {
       case UploadImageType.circle:
         if (_file == null) {
@@ -167,8 +173,8 @@ class _AppUploadImageState extends State<AppUploadImage> {
             color: Theme.of(context).primaryColor,
           );
         }
-
         return Container();
+
       default:
         if (_file == null) {
           Widget title = Container();
@@ -200,41 +206,56 @@ class _AppUploadImageState extends State<AppUploadImage> {
               ),
             ],
           );
-        }
-
-        if (isImageUploaded) {
-          return Container(
-            alignment: Alignment.topRight,
-            child: Icon(
-              Icons.check_circle,
-              size: 18,
-              color: Theme.of(context).primaryColor,
-            ),
-          );
-        }
-
-        if (_percent != null && _percent! < 100) {
-          return Container(
-            alignment: Alignment.bottomLeft,
-            child: Container(
-              clipBehavior: Clip.antiAlias,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(2),
+        } else {
+          if (isImageUploaded) {
+            return Container(
+              alignment: Alignment.topRight,
+              child: Icon(
+                Icons.check_circle,
+                size: 18,
+                color: Theme.of(context).primaryColor,
               ),
-            ),
-          );
+            );
+          }
+          if (_file?.path != null) {
+            if (_file!.path.contains(".pdf")) {
+              return RawGestureDetector(
+                gestures: {
+                  AllowMultipleGestureRecognizer:
+                  GestureRecognizerFactoryWithHandlers<
+                      AllowMultipleGestureRecognizer>(
+                        () => AllowMultipleGestureRecognizer(), //constructor
+                        (AllowMultipleGestureRecognizer instance) {
+                      instance.onTap = () => showChooseFileTypeDialog();
+                    },
+                  )
+                },
+                child: PDFView(
+                  key: UniqueKey(),
+                  filePath: _file?.path,
+                  fitPolicy: FitPolicy.WIDTH,
+                  onPageChanged: (page, total) {
+                    // Do something when the page changes (optional)
+                  },
+                ),
+              );
+            } else {
+              if (_percent != null && _percent! < 100) {
+                return Container(
+                  alignment: Alignment.bottomLeft,
+                  child: Container(
+                    clipBehavior: Clip.antiAlias,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                );
+              }
+            }
+          }
         }
-
-        return Container(
-          alignment: Alignment.bottomLeft,
-          child: Container(
-            clipBehavior: Clip.antiAlias,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(2),
-            ),
-          ),
-        );
     }
+    return null;
   }
 
   @override
@@ -243,13 +264,14 @@ class _AppUploadImageState extends State<AppUploadImage> {
     BorderType borderType = BorderType.RRect;
     Widget circle = Container();
 
-    if (widget.image != null) {
+    if (widget.image != null && !widget.image!.contains(".pdf")) {
       decorationImage = DecorationImage(
         image: NetworkImage("${Application.picturesURL}${widget.image!}"),
         fit: BoxFit.cover,
       );
     }
-    if (_file != null) {
+
+    if (_file != null && !_file!.path.contains(".pdf")) {
       decorationImage = DecorationImage(
         image: FileImage(
           _file!,
@@ -272,7 +294,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
     }
 
     return InkWell(
-      onTap: _uploadImage,
+      onTap: showChooseFileTypeDialog,
       child: Stack(
         children: [
           DottedBorder(
@@ -280,7 +302,6 @@ class _AppUploadImageState extends State<AppUploadImage> {
             radius: const Radius.circular(8),
             color: Theme.of(context).primaryColor,
             child: Container(
-              padding: const EdgeInsets.all(8),
               decoration: decoration,
               alignment: Alignment.center,
               child: _buildContent(),

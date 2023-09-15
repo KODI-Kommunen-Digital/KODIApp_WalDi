@@ -1,10 +1,9 @@
-// ignore_for_file: deprecated_member_use, null_argument_to_non_null_type, use_build_context_synchronously
-
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_favorite.dart';
@@ -15,6 +14,7 @@ import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/presentation/widget/app_user_info.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
+import 'package:heidi/src/utils/multiple_gesture_detector.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -72,7 +72,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               children: <Widget>[
                 Text(
                   message,
-                  style: Theme.of(context).textTheme.bodyText1,
+                  style: Theme.of(context).textTheme.bodyLarge,
                 ),
               ],
             ),
@@ -95,8 +95,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   void _phoneAction(String phone) async {
     String cleanedPhone = phone.replaceAll(' ', '');
     try {
-      await launch('tel:$cleanedPhone');
+      await launchUrl(Uri.parse('tel:$cleanedPhone'));
     } catch (e) {
+      if (!mounted) return;
       _showMessage(Translate.of(context).translate('cannot_make_action'));
     }
   }
@@ -104,7 +105,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   ///Mail action
   void _mailAction(String email) async {
     try {
-      launch('mailto:$email');
+      launchUrl(Uri.parse('mailto:$email'));
+      // launch('mailto:$email');
     } catch (e) {
       _showMessage(Translate.of(context).translate('cannot_make_action'));
     }
@@ -114,7 +116,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     if (!link.startsWith("https://") && !link.startsWith("http://")) {
       link = "https://$link";
     }
-    if (await canLaunch(link)) {
+    if (await canLaunchUrl(Uri.parse(link))) {
       await launchUrl(Uri.parse(link), mode: LaunchMode.inAppWebView);
     } else {
       throw 'Could not launch $link';
@@ -124,7 +126,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   ///Build content UI
   Widget _buildContent(ProductModel? product, List<FavoriteModel>? favoriteList,
       UserModel? userDetail, bool isLoggedIn) {
-    ///Build UI loading
+    String uniqueKey = UniqueKey().toString();
     List<Widget> action = [];
     Widget actionGalleries = Container();
     // Widget actionMapView = Container();
@@ -356,7 +358,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         const SizedBox(width: 8),
       ];
 
-      banner = InkWell(
+      banner = product.pdf == ''
+          ? InkWell(
         onTap: () {
           Navigator.pushNamed(
             context,
@@ -365,7 +368,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           );
         },
         child: CachedNetworkImage(
-          imageUrl: "${Application.picturesURL}${product.image}",
+          imageUrl: "${Application.picturesURL}${product.image}?cacheKey=$uniqueKey",
           placeholder: (context, url) {
             return AppPlaceholder(
               child: Container(
@@ -388,13 +391,40 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           errorWidget: (context, url, error) {
             return AppPlaceholder(
               child: Container(
+                width: 120,
+                height: 140,
                 decoration: const BoxDecoration(
                   color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(8),
+                    bottomLeft: Radius.circular(8),
+                  ),
                 ),
                 child: const Icon(Icons.error),
               ),
             );
           },
+        ),
+      )
+          : RawGestureDetector(
+        gestures: {
+          AllowMultipleGestureRecognizer:
+          GestureRecognizerFactoryWithHandlers<
+              AllowMultipleGestureRecognizer>(
+                () => AllowMultipleGestureRecognizer(), //constructor
+                (AllowMultipleGestureRecognizer instance) {
+              instance.onTap = () => Navigator.pushNamed(
+                context,
+                Routes.imageZoom,
+                arguments: "${Application.picturesURL}${product.pdf}",
+              );
+            },
+          )
+        },
+        child: const PDF().cachedFromUrl(
+          "${Application.picturesURL}${product.pdf}?cacheKey=$uniqueKey",
+          placeholder: (progress) => Center(child: Text('$progress %')),
+          errorWidget: (error) => Center(child: Text(error.toString())),
         ),
       );
 
@@ -429,7 +459,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             children: <Widget>[
                               Text(
                                 Translate.of(context).translate('address'),
-                                style: Theme.of(context).textTheme.caption,
+                                style: Theme.of(context).textTheme.bodySmall,
                               ),
                               Text(
                                 product.address,
@@ -437,7 +467,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 overflow: TextOverflow.ellipsis,
                                 style: Theme.of(context)
                                     .textTheme
-                                    .bodyText1!
+                                    .bodyLarge!
                                     .copyWith(fontWeight: FontWeight.bold),
                               ),
                             ],
@@ -484,7 +514,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       children: <Widget>[
                         Text(
                           Translate.of(context).translate('phone'),
-                          style: Theme.of(context).textTheme.caption,
+                          style: Theme.of(context).textTheme.bodySmall,
                         ),
                         Text(
                           product.phone,
@@ -492,7 +522,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           overflow: TextOverflow.ellipsis,
                           style: Theme.of(context)
                               .textTheme
-                              .bodyText1!
+                              .bodyLarge!
                               .copyWith(fontWeight: FontWeight.bold),
                         ),
                       ],
@@ -536,7 +566,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       children: <Widget>[
                         Text(
                           Translate.of(context).translate('email'),
-                          style: Theme.of(context).textTheme.caption,
+                          style: Theme.of(context).textTheme.bodySmall,
                         ),
                         Text(
                           product.email,
@@ -544,7 +574,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           overflow: TextOverflow.ellipsis,
                           style: Theme.of(context)
                               .textTheme
-                              .bodyText1!
+                              .bodyLarge!
                               .copyWith(fontWeight: FontWeight.bold),
                         ),
                       ],
@@ -588,7 +618,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       children: <Widget>[
                         Text(
                           Translate.of(context).translate('website'),
-                          style: Theme.of(context).textTheme.caption,
+                          style: Theme.of(context).textTheme.bodySmall,
                         ),
                         Text(
                           product.website,
@@ -596,7 +626,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           overflow: TextOverflow.ellipsis,
                           style: Theme.of(context)
                               .textTheme
-                              .bodyText1!
+                              .bodyLarge!
                               .copyWith(fontWeight: FontWeight.bold),
                         ),
                       ],
@@ -617,14 +647,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               Translate.of(context).translate(
                 'start_date',
               ),
-              style: Theme.of(context).textTheme.caption,
+              style: Theme.of(context).textTheme.bodySmall,
             ),
             const SizedBox(width: 8),
             Text(
               product.startDate,
               style: Theme.of(context)
                   .textTheme
-                  .subtitle2!
+                  .titleSmall!
                   .copyWith(fontWeight: FontWeight.bold),
             )
           ],
@@ -639,14 +669,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               Translate.of(context).translate(
                 'end_date',
               ),
-              style: Theme.of(context).textTheme.caption,
+              style: Theme.of(context).textTheme.bodySmall,
             ),
             const SizedBox(width: 8),
             Text(
               product.endDate,
               style: Theme.of(context)
                   .textTheme
-                  .subtitle2!
+                  .titleSmall!
                   .copyWith(fontWeight: FontWeight.bold),
             )
           ],
@@ -662,7 +692,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               product.createDate,
               style: Theme.of(context)
                   .textTheme
-                  .subtitle2!
+                  .titleSmall!
                   .copyWith(fontWeight: FontWeight.bold),
             )
           ],
@@ -717,8 +747,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   child: Text(
                     product.title,
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                      fontWeight: FontWeight.bold,
+                    ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -741,7 +771,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           : '',
                       style: Theme.of(context)
                           .textTheme
-                          .caption
+                          .bodySmall
                           ?.copyWith(fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 4),
@@ -797,8 +827,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 boxShadow: [
                   BoxShadow(
                     color: Theme.of(context).dividerColor.withOpacity(
-                          .05,
-                        ),
+                      .05,
+                    ),
                     spreadRadius: 4,
                     blurRadius: 4,
                     offset: const Offset(
