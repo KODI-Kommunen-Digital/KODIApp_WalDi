@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_user.dart';
@@ -74,6 +75,7 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
 
   @override
   Widget build(BuildContext context) {
+    String uniqueKey = UniqueKey().toString();
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -200,8 +202,10 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                                       children: [
                                         Row(
                                           children: <Widget>[
-                                            CachedNetworkImage(
-                                              imageUrl: "${Application.picturesURL}${item.image}",
+                                            item.pdf == ''
+                                                ? CachedNetworkImage(
+                                              imageUrl:
+                                              "${Application.picturesURL}${item.image}?cacheKey=$uniqueKey",
                                               imageBuilder: (context, imageProvider) {
                                                 return Container(
                                                   width: 120,
@@ -246,7 +250,21 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                                                   ),
                                                 );
                                               },
-                                            ),
+                                            ): SizedBox(
+                                                width: 120,
+                                                height: 140,
+                                                child: const PDF()
+                                                    .cachedFromUrl(
+                                                  "${Application.picturesURL}${item.pdf}?cacheKey=$uniqueKey",
+                                                  placeholder: (progress) =>
+                                                      Center(
+                                                          child: Text(
+                                                              '$progress %')),
+                                                  errorWidget: (error) =>
+                                                      Center(
+                                                          child: Text(error
+                                                              .toString())),
+                                                )),
                                             const SizedBox(width: 8),
                                             Expanded(
                                               child: Column(

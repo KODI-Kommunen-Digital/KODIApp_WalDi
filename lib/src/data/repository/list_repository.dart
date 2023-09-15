@@ -133,6 +133,8 @@ class ListRepository {
     String imageType = '';
     if(image.path.contains('jpg')){
       imageType = 'jpg';
+    }else if(image.path.contains('jpeg')) {
+      imageType = 'jpeg';
     }else if(image.path.contains('png')){
       imageType = 'png';
     }
@@ -148,6 +150,25 @@ class ListRepository {
     }
     return null;
   }
+
+  static Future<ResultApiModel?> uploadPdf(File pdf) async {
+    final prefs = await Preferences.openBox();
+    final formData = FormData.fromMap({
+      'pdf': await MultipartFile.fromFile(pdf.path,
+          filename: pdf.path, contentType: MediaType('application', 'pdf')),
+    });
+    await prefs.setPickedFile(formData);
+    return null;
+  }
+
+  void deletePdf(cityId, listingId) async {
+    Api.deletePdf(cityId, listingId);
+  }
+
+  void deleteImage(cityId, listingId) async {
+    Api.deleteImage(cityId, listingId);
+  }
+
 
   static Future<ProductModel?> loadProduct(cityId, id) async {
     final response = await Api.requestProduct(cityId, id);
@@ -199,6 +220,7 @@ class ListRepository {
             data['startDate'] ?? '',
             data['endDate'] ?? '',
             data['createdAt'] ?? '',
+            data['pdf'] ?? '',
             data['cityId'] ?? 0,
           ));
         }

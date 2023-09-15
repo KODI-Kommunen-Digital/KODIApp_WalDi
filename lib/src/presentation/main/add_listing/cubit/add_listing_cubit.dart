@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
+import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/add_listing/cubit/add_listing_state.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
@@ -125,6 +126,7 @@ class AddListingCubit extends Cubit<AddListingState> {
           price,
           isImageChanged);
       if (response.success) {
+        await AppBloc.homeCubit.onLoad(false);
         return true;
       } else {
         logError('edit Product Response Failed', response.message);
@@ -142,6 +144,14 @@ class AddListingCubit extends Cubit<AddListingState> {
 
   void clearVillage() async {
     _repo.clearVillageId();
+  }
+
+  void deletePdf(cityId, listingId) async {
+    _repo.deletePdf(cityId, listingId);
+  }
+
+  void deleteImage(cityId, listingId) async {
+    _repo.deleteImage(cityId, listingId);
   }
 
   void clearCityId() async {

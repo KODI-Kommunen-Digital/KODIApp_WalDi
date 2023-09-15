@@ -25,6 +25,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             cityId: list.cityId,
             title: product.title,
             image: product.image,
+            pdf: product.pdf,
             category: product.category,
             categoryId: product.categoryId,
             startDate: product.startDate,
