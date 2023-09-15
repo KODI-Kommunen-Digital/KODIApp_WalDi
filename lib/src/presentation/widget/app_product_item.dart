@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:heidi/src/presentation/main/home/widget/empty_product_item.dart';
@@ -23,57 +24,72 @@ class AppProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String uniqueKey = UniqueKey().toString();
     switch (type) {
       case ProductViewType.small:
         if (item == null) {
           return const EmptyProductItem();
         }
-
         return InkWell(
           onTap: onPressed,
           child: Row(
             children: <Widget>[
-              CachedNetworkImage(
-                imageUrl: "${Application.picturesURL}${item!.image}",
-                imageBuilder: (context, imageProvider) {
-                  return Container(
-                    width: 84,
-                    height: 84,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      image: DecorationImage(
-                        image: imageProvider,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  );
-                },
-                placeholder: (context, url) {
-                  return AppPlaceholder(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: Colors.white,
-                      ),
+              item?.pdf == ''
+                  ? CachedNetworkImage(
+                      imageUrl:
+                          "${Application.picturesURL}${item!.image}?cacheKey=$uniqueKey",
+                      imageBuilder: (context, imageProvider) {
+                        return Container(
+                          width: 84,
+                          height: 84,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            image: DecorationImage(
+                              image: imageProvider,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        );
+                      },
+                      placeholder: (context, url) {
+                        return AppPlaceholder(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              color: Colors.white,
+                            ),
+                            width: 84,
+                            height: 84,
+                          ),
+                        );
+                      },
+                      errorWidget: (context, url, error) {
+                        return AppPlaceholder(
+                          child: Container(
+                            width: 84,
+                            height: 84,
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(8),
+                                bottomLeft: Radius.circular(8),
+                              ),
+                            ),
+                            child: const Icon(Icons.error),
+                          ),
+                        );
+                      },
+                    )
+                  : SizedBox(
                       width: 84,
                       height: 84,
-                    ),
-                  );
-                },
-                errorWidget: (context, url, error) {
-                  return AppPlaceholder(
-                    child: Container(
-                      width: 84,
-                      height: 84,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: Colors.white,
-                      ),
-                      child: const Icon(Icons.error),
-                    ),
-                  );
-                },
-              ),
+                      child: const PDF().cachedFromUrl(
+                        "${Application.picturesURL}${item?.pdf}?cacheKey=$uniqueKey",
+                        placeholder: (progress) =>
+                            Center(child: Text('$progress %')),
+                        errorWidget: (error) =>
+                            Center(child: Text(error.toString())),
+                      )),
               const SizedBox(width: 8),
               Expanded(
                 child: Column(
@@ -128,6 +144,7 @@ class AppProductItem extends StatelessWidget {
         if (item == null) {
           return const EmptyProductItem();
         }
+
         return InkWell(
           onTap: onPressed,
           child: Column(
@@ -235,16 +252,6 @@ class AppProductItem extends StatelessWidget {
             children: [
               Row(
                 children: <Widget>[
-                  // SizedBox(
-                  //   width: 120,
-                  //   height: 140,
-                  //   child: Image.network(
-                  //     "${Application.picturesURL}${item!.image}",
-                  //     width: 120,
-                  //     //       height: 140,
-                  //     fit: BoxFit.cover,
-                  //   ),
-                  // ),
                   CachedNetworkImage(
                     imageUrl: "${Application.picturesURL}${item!.image}",
                     imageBuilder: (context, imageProvider) {

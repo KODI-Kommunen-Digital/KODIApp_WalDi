@@ -18,11 +18,16 @@ class ProductModel {
   final int? statusId;
   final String title;
   final String image;
+  final String? pdf;
   final String? videoURL;
   final String? category;
   final String startDate;
   final String endDate;
   final String createDate;
+  final String? username;
+  final String? firstname;
+  final String? lastname;
+  final String? profileImage;
   final String? dateEstablish;
   final double? rate;
   final num? numRate;
@@ -62,59 +67,64 @@ class ProductModel {
 
   ProductModel(
       {required this.id,
-      required this.title,
-      required this.image,
-      this.videoURL,
-      this.category,
-      required this.startDate,
-      required this.endDate,
-      required this.createDate,
-      this.dateEstablish,
-      this.rate,
-      this.numRate,
-      this.rateText,
-      this.status,
-      required this.favorite,
-      required this.address,
-      this.zipCode,
-      required this.phone,
-      this.fax,
-      required this.email,
-      required this.website,
-      required this.description,
-      this.color,
-      this.icon,
-      this.tags,
-      this.price,
-      this.priceMin,
-      this.priceMax,
-      this.country,
-      this.city,
-      this.state,
-      this.author,
-      this.galleries,
-      this.features,
-      this.related,
-      this.latest,
-      this.openHours,
-      this.socials,
-      this.location,
-      this.attachments,
-      this.link,
-      this.bookingUse,
-      this.bookingStyle,
-      this.priceDisplay,
-      this.categoryId,
-      this.subcategoryId,
-      required this.userId,
-      this.cityId,
-      this.villageId,
-      this.statusId});
+        required this.title,
+        required this.image,
+        this.pdf,
+        this.videoURL,
+        this.category,
+        required this.startDate,
+        required this.endDate,
+        required this.createDate,
+        this.username,
+        this.firstname,
+        this.lastname,
+        this.profileImage,
+        this.dateEstablish,
+        this.rate,
+        this.numRate,
+        this.rateText,
+        this.status,
+        required this.favorite,
+        required this.address,
+        this.zipCode,
+        required this.phone,
+        this.fax,
+        required this.email,
+        required this.website,
+        required this.description,
+        this.color,
+        this.icon,
+        this.tags,
+        this.price,
+        this.priceMin,
+        this.priceMax,
+        this.country,
+        this.city,
+        this.state,
+        this.author,
+        this.galleries,
+        this.features,
+        this.related,
+        this.latest,
+        this.openHours,
+        this.socials,
+        this.location,
+        this.attachments,
+        this.link,
+        this.bookingUse,
+        this.bookingStyle,
+        this.priceDisplay,
+        this.categoryId,
+        this.subcategoryId,
+        required this.userId,
+        this.cityId,
+        this.villageId,
+        this.statusId});
 
   factory ProductModel.fromJson(
-    Map<String, dynamic> json, {
-    SettingModel? setting,
-  }) {
+      Map<String, dynamic> json, {
+        SettingModel? setting,
+      }) {
     List<ImageModel> galleries = [];
     List<CategoryModel> features = [];
     List<OpenTimeModel> openHours = [];
@@ -195,6 +205,11 @@ class ProductModel {
       createDate: createDate,
       startDate: startDate,
       endDate: endDate,
+      username: json['username'],
+      firstname: json['firstname'],
+      lastname: json['lastname'],
+      profileImage: json['image'] ?? '',
+      pdf: json['pdf'] ?? '',
       rate: double.tryParse('${json['rating_avg']}') ?? 0.0,
       numRate: json['rating_count'] ?? 0,
       rateText: json['post_status'] ?? '',
@@ -248,6 +263,10 @@ class ProductModel {
       createDate: '',
       startDate: '',
       endDate: '',
+      username: json['username'],
+      firstname: json['firstname'],
+      lastname: json['lastname'],
+      profileImage: json['image'],
       rate: double.tryParse('${json['rating_avg']}') ?? 0.0,
       numRate: 0,
       categoryId: 0,
