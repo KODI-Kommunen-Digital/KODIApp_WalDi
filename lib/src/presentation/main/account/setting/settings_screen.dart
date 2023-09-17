@@ -4,6 +4,7 @@ import 'package:heidi/src/presentation/widget/app_list_title.dart';
 import 'package:heidi/src/utils/configs/language.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
+
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
 
@@ -28,7 +29,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     Navigator.pushNamed(context, route);
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,6 +52,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     _receiveNotification = value;
                   });
                 },
+              ),
+            ),
+            AppListTitle(
+              title: Translate.of(context).translate('profile_settings'),
+              onPressed: () {
+                _onNavigate(Routes.profileSettings);
+              },
+              trailing: Row(
+                children: <Widget>[
+                  RotatedBox(
+                    quarterTurns: AppLanguage.isRTL() ? 2 : 0,
+                    child: const Icon(
+                      Icons.keyboard_arrow_right,
+                      textDirection: TextDirection.ltr,
+                    ),
+                  ),
+                ],
               ),
             ),
             AppListTitle(

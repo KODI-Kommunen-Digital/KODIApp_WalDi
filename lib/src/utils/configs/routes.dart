@@ -20,6 +20,7 @@ import 'package:heidi/src/presentation/main/home/product_detail/product_detail.d
 import 'package:heidi/src/presentation/main/login/forgot_password/forgot_password_screen.dart';
 import 'package:heidi/src/presentation/main/login/signin/signin_screen.dart';
 import 'package:heidi/src/presentation/main/login/signup/signup.dart';
+import 'package:heidi/src/presentation/main/account/profile_settings/profile_settings_screen.dart';
 
 class RouteArguments<T> {
   final T? item;
@@ -73,6 +74,7 @@ class Routes {
   static const String imprint = "/imprint";
   static const String privacy = "/privacy";
   static const String imageZoom = "/imageZoom";
+  static const String profileSettings = "/profileSettings";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -201,6 +203,13 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) {
             return const PrivacyScreen();
+          },
+        );
+
+      case profileSettings:
+        return MaterialPageRoute(
+          builder: (context) {
+            return const ProfileSettingsScreen();
           },
         );
 
