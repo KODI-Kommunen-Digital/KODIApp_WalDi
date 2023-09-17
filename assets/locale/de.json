@@ -417,5 +417,8 @@
   "subcategory_local": "Lokales",
   "subcategory_club_news": "Vereinsneuigkeiten",
   "subcategory_official_notification": "Amtliche Bekanntmachungen",
-  "subcategory_road": "Straßenarbeiten/Verkehr"
+  "subcategory_road": "Straßenarbeiten/Verkehr",
+  "hselect_location":"Ort auswählen",
+  "choose_stime":"Wählen Sie die Startzeit",
+  "choose_etime":"Wählen Sie die Endzeit"
 }

@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
@@ -42,6 +43,8 @@ class AddListingCubit extends Cubit<AddListingState> {
     String? startDate,
     String? endDate,
     String? price,
+    TimeOfDay? startTime,
+    TimeOfDay? endTime,
   }) async {
     try {
       final response = await _repo.saveProduct(
@@ -61,7 +64,9 @@ class AddListingCubit extends Cubit<AddListingState> {
           status,
           startDate,
           endDate,
-          price);
+          price,
+          startTime,
+          endTime);
       if (response.success) {
         return true;
       } else {
@@ -78,7 +83,7 @@ class AddListingCubit extends Cubit<AddListingState> {
     final prefs = await Preferences.openBox();
     return prefs.getKeyValue(Preferences.cityId, 0);
   }
-    
+
   Future<bool> onEdit({
     int? cityId,
     int? listingId,
@@ -99,6 +104,8 @@ class AddListingCubit extends Cubit<AddListingState> {
     String? startDate,
     String? endDate,
     String? price,
+    TimeOfDay? startTime,
+    TimeOfDay? endTime,
     required bool isImageChanged,
   }) async {
     try {
@@ -122,7 +129,9 @@ class AddListingCubit extends Cubit<AddListingState> {
           startDate,
           endDate,
           price,
-          isImageChanged);
+          isImageChanged,
+          startTime,
+          endTime);
       if (response.success) {
         return true;
       } else {

@@ -302,7 +302,7 @@ class Api {
     var firstFileEntry = pickedFile?.files[0];
     if (firstFileEntry?.key == 'pdf') {
       filePath = '/cities/$cityId/listings/$listingId/pdfUpload';
-    } else {
+    } else if (firstFileEntry?.key == 'image') {
       filePath = '/cities/$cityId/listings/$listingId/imageUpload';
     }
     var result = await httpManager.post(
