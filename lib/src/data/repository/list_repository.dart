@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_favorites_detail_list.dart';
@@ -131,11 +132,11 @@ class ListRepository {
   static Future<ResultApiModel?> uploadImage(File image, profile) async {
     final prefs = await Preferences.openBox();
     String imageType = '';
-    if(image.path.contains('jpg')){
+    if (image.path.contains('jpg')) {
       imageType = 'jpg';
-    }else if(image.path.contains('jpeg')) {
+    } else if (image.path.contains('jpeg')) {
       imageType = 'jpeg';
-    }else if(image.path.contains('png')){
+    } else if (image.path.contains('png')) {
       imageType = 'png';
     }
     final formData = FormData.fromMap({
@@ -168,7 +169,6 @@ class ListRepository {
   void deleteImage(cityId, listingId) async {
     Api.deleteImage(cityId, listingId);
   }
-
 
   static Future<ProductModel?> loadProduct(cityId, id) async {
     final response = await Api.requestProduct(cityId, id);
@@ -308,7 +308,8 @@ class ListRepository {
     String? status,
     String? startDate,
     String? endDate,
-    String? price,
+    TimeOfDay? startTime,
+    TimeOfDay? endTime,
   ) async {
     final subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
@@ -316,6 +317,20 @@ class ListRepository {
     final userId = prefs.getKeyValue(Preferences.userId, '');
     final cityId = await getCityId(city);
     final media = prefs.getKeyValue(Preferences.path, null);
+    String? combinedStartDateTime;
+    String? combinedEndDateTime;
+
+    if (startDate != null) {
+      final String formattedTime =
+          "${startTime?.hour}:${startTime?.minute.toString().padLeft(2, '0')}";
+      combinedStartDateTime = "${startDate.trim()}T$formattedTime";
+    }
+
+    if (endDate != null) {
+      final String formattedTime =
+          "${endTime?.hour}:${endTime?.minute.toString().padLeft(2, '0')}";
+      combinedEndDateTime = "${endDate.trim()}T$formattedTime";
+    }
 
     Map<String, dynamic> params = {
       "userId": userId,
@@ -337,8 +352,8 @@ class ListRepository {
       "latitude": 22.456, //dummy data
       "villageId": villageId ?? 0,
       "cityId": cityId,
-      "startDate": startDate,
-      "endDate": endDate,
+      "startDate": combinedStartDateTime,
+      "endDate": combinedEndDateTime,
       "subCategoryId": subCategoryId,
     };
     final response = await Api.requestSaveProduct(cityId, params);
@@ -366,12 +381,29 @@ class ListRepository {
     String? endDate,
     String? price,
     bool isImageChanged,
+    TimeOfDay? startTime,
+    TimeOfDay? endTime,
   ) async {
     final subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
     final villageId = prefs.getKeyValue(Preferences.villageId, null);
     final userId = prefs.getKeyValue(Preferences.userId, '');
     final media = prefs.getKeyValue(Preferences.path, null);
+
+    String? combinedStartDateTime;
+    String? combinedEndDateTime;
+
+    if (startDate != null) {
+      final String formattedTime =
+          "${startTime?.hour}:${startTime?.minute.toString().padLeft(2, '0')}";
+      combinedStartDateTime = "${startDate.trim()}T$formattedTime";
+    }
+
+    if (endDate != null) {
+      final String formattedTime =
+          "${endTime?.hour}:${endTime?.minute.toString().padLeft(2, '0')}";
+      combinedEndDateTime = "${endDate.trim()}T$formattedTime";
+    }
 
     Map<String, dynamic> params = {
       "userId": userId,
@@ -393,8 +425,8 @@ class ListRepository {
       "latitude": 22.456, //dummy data
       "villageId": villageId ?? 0,
       "cityId": cityId,
-      "startDate": startDate,
-      "endDate": endDate,
+      "startDate": combinedStartDateTime,
+      "endDate": combinedEndDateTime,
       "subCategoryId": subCategoryId,
     };
     final response =

@@ -419,5 +419,8 @@
   "delete_Account": "Lösche den Account", 
   "delete_Account_Confirmation": "Möchtest du deinen Account wirklich löschen?",
   "delete_account_success": "Konto erfolgreich gelöscht",
-  "delete_account_fail": "Das Löschen des Kontos ist fehlgeschlagen. Bitte versuch es später."
+  "delete_account_fail": "Das Löschen des Kontos ist fehlgeschlagen. Bitte versuch es später.",
+  "hselect_location":"Ort auswählen",
+  "choose_stime":"Wählen Sie die Startzeit",
+  "choose_etime":"Wählen Sie die Endzeit"
 }

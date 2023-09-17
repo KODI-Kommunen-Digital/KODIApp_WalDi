@@ -80,6 +80,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
   String? _featurePdf;
   String? _startDate;
   String? _endDate;
+  TimeOfDay? _startTime;
+  TimeOfDay? _endTime;
   String? selectedVillage;
   String? selectedCategory;
   String? selectedSubCategory;
@@ -245,6 +247,32 @@ class _AddListingScreenState extends State<AddListingScreen> {
     }
   }
 
+  Future<void> _onShowStartTimePicker() async {
+    final pickedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+
+    if (pickedTime != null) {
+      setState(() {
+        _startTime = pickedTime;
+      });
+    }
+  }
+
+  Future<void> _onShowEndTimePicker() async {
+    final pickedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+
+    if (pickedTime != null) {
+      setState(() {
+        _endTime = pickedTime;
+      });
+    }
+  }
+
   void _onSubmit() async {
     final success = _validData();
     if (success) {
@@ -272,25 +300,27 @@ class _AddListingScreenState extends State<AddListingScreen> {
             price: _textPriceController.text,
             startDate: _startDate,
             endDate: _endDate,
+            startTime: _startTime,
+            endTime: _endTime,
             isImageChanged: isImageChanged);
         if (result) {
           _onSuccess();
         }
       } else {
         final result = await context.read<AddListingCubit>().onSubmit(
-              cityId: cityId ?? 1,
-              title: _textTitleController.text,
-              city: selectedCity,
-              place: _textPlaceController.text,
-              description: _textContentController.text,
-              address: _textAddressController.text,
-              email: _textEmailController.text,
-              phone: _textPhoneController.text,
-              website: _textWebsiteController.text,
-              price: _textPriceController.text,
-              startDate: _startDate,
-              endDate: _endDate,
-            );
+            cityId: cityId ?? 1,
+            title: _textTitleController.text,
+            city: selectedCity,
+            place: _textPlaceController.text,
+            description: _textContentController.text,
+            address: _textAddressController.text,
+            email: _textEmailController.text,
+            phone: _textPhoneController.text,
+            website: _textWebsiteController.text,
+            startDate: _startDate,
+            endDate: _endDate,
+            startTime: _startTime,
+            endTime: _endTime);
         if (result) {
           _onSuccess();
           if (!mounted) return;
@@ -825,6 +855,31 @@ class _AddListingScreenState extends State<AddListingScreen> {
                 ),
                 onPressed: _onShowStartDatePicker,
               ),
+            if (selectedCategory == "Events") const SizedBox(height: 8),
+            Text(
+              selectedCategory == "Events"
+                  ? Translate.of(context).translate(
+                      'start_time',
+                    )
+                  : '',
+              style: Theme.of(context)
+                  .textTheme
+                  .titleMedium!
+                  .copyWith(fontWeight: FontWeight.bold),
+            ),
+            if (selectedCategory == "Events") const SizedBox(height: 8),
+            if (selectedCategory == "Events")
+              AppPickerItem(
+                leading: Icon(
+                  Icons.access_time,
+                  color: Theme.of(context).hintColor,
+                ),
+                value: _startTime?.format(context),
+                title: Translate.of(context).translate(
+                  'choose_stime',
+                ),
+                onPressed: _onShowStartTimePicker,
+              ),
             if (selectedCategory == "Events") const SizedBox(height: 16),
             Text(
               selectedCategory == "Events"
@@ -849,6 +904,31 @@ class _AddListingScreenState extends State<AddListingScreen> {
                   'choose_date',
                 ),
                 onPressed: _onShowEndDatePicker,
+              ),
+            if (selectedCategory == "Events") const SizedBox(height: 16),
+            Text(
+              selectedCategory == "Events"
+                  ? Translate.of(context).translate(
+                      'end_time',
+                    )
+                  : '',
+              style: Theme.of(context)
+                  .textTheme
+                  .titleMedium!
+                  .copyWith(fontWeight: FontWeight.bold),
+            ),
+            if (selectedCategory == "Events") const SizedBox(height: 8),
+            if (selectedCategory == "Events")
+              AppPickerItem(
+                leading: Icon(
+                  Icons.access_time,
+                  color: Theme.of(context).hintColor,
+                ),
+                value: _endTime?.format(context),
+                title: Translate.of(context).translate(
+                  'choose_etime',
+                ),
+                onPressed: _onShowEndTimePicker,
               ),
           ],
         ),

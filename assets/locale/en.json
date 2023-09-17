@@ -87,6 +87,7 @@
   "facilities": "Facilities",
   "area": "Area",
   "select_location": "Select Location",
+  "hselect_location": "Select Location",
   "price_range": "Price Range",
   "avg_price": "AVG Price",
   "business_color": "Business Color",
@@ -419,5 +420,7 @@
   "delete_Account": "Delete Account", 
   "delete_Account_Confirmation": "Are you sure you want to delete your account?",
   "delete_account_success": "Account Deleted Successfully",
-  "delete_account_fail": "Account Deletion failed. Please try later."
+  "delete_account_fail": "Account Deletion failed. Please try later.",
+  "choose_stime":"Choose Start Time",
+  "choose_etime":"Choose End Time"
 }

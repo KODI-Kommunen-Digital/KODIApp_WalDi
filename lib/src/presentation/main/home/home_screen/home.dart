@@ -205,7 +205,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 delegate: AppBarHomeSliver(
                     cityTitlesList: cityTitles,
                     hintText:
-                        Translate.of(context).translate('select_location'),
+                        Translate.of(context).translate('hselect_location'),
                     selectedOption: (selectedCityId > 0)
                         ? selectedCityTitle
                         : Translate.of(context).translate('select_location'),

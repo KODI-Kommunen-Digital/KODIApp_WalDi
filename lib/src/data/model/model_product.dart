@@ -67,64 +67,64 @@ class ProductModel {
 
   ProductModel(
       {required this.id,
-        required this.title,
-        required this.image,
-        this.pdf,
-        this.videoURL,
-        this.category,
-        required this.startDate,
-        required this.endDate,
-        required this.createDate,
-        this.username,
-        this.firstname,
-        this.lastname,
-        this.profileImage,
-        this.dateEstablish,
-        this.rate,
-        this.numRate,
-        this.rateText,
-        this.status,
-        required this.favorite,
-        required this.address,
-        this.zipCode,
-        required this.phone,
-        this.fax,
-        required this.email,
-        required this.website,
-        required this.description,
-        this.color,
-        this.icon,
-        this.tags,
-        this.price,
-        this.priceMin,
-        this.priceMax,
-        this.country,
-        this.city,
-        this.state,
-        this.author,
-        this.galleries,
-        this.features,
-        this.related,
-        this.latest,
-        this.openHours,
-        this.socials,
-        this.location,
-        this.attachments,
-        this.link,
-        this.bookingUse,
-        this.bookingStyle,
-        this.priceDisplay,
-        this.categoryId,
-        this.subcategoryId,
-        required this.userId,
-        this.cityId,
-        this.villageId,
-        this.statusId});
+      required this.title,
+      required this.image,
+      this.pdf,
+      this.videoURL,
+      this.category,
+      required this.startDate,
+      required this.endDate,
+      required this.createDate,
+      this.username,
+      this.firstname,
+      this.lastname,
+      this.profileImage,
+      this.dateEstablish,
+      this.rate,
+      this.numRate,
+      this.rateText,
+      this.status,
+      required this.favorite,
+      required this.address,
+      this.zipCode,
+      required this.phone,
+      this.fax,
+      required this.email,
+      required this.website,
+      required this.description,
+      this.color,
+      this.icon,
+      this.tags,
+      this.price,
+      this.priceMin,
+      this.priceMax,
+      this.country,
+      this.city,
+      this.state,
+      this.author,
+      this.galleries,
+      this.features,
+      this.related,
+      this.latest,
+      this.openHours,
+      this.socials,
+      this.location,
+      this.attachments,
+      this.link,
+      this.bookingUse,
+      this.bookingStyle,
+      this.priceDisplay,
+      this.categoryId,
+      this.subcategoryId,
+      required this.userId,
+      this.cityId,
+      this.villageId,
+      this.statusId});
 
   factory ProductModel.fromJson(
-      Map<String, dynamic> json, {
-        SettingModel? setting,
-      }) {
+    Map<String, dynamic> json, {
+    SettingModel? setting,
+  }) {
     List<ImageModel> galleries = [];
     List<CategoryModel> features = [];
     List<OpenTimeModel> openHours = [];
@@ -157,9 +157,9 @@ class ProductModel {
     } else if (json['categoryId'] == 3) {
       category = "Veranstaltungen";
       final parsedDateTime = DateTime.parse(json['startDate']);
-      startDate = DateFormat('dd.MM.yyyy').format(parsedDateTime);
+      startDate = DateFormat('dd.MM.yyyy HH:mm').format(parsedDateTime);
       final parsedEDateTime = DateTime.parse(json['endDate']);
-      endDate = DateFormat('dd.MM.yyyy').format(parsedEDateTime);
+      endDate = DateFormat('dd.MM.yyyy HH:mm').format(parsedEDateTime);
       // startDate = json['startDate'];
       // endDate = json['endDate'];
     } else if (json['categoryId'] == 4) {
