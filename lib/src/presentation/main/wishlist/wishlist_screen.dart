@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:heidi/src/data/model/model_favorites_detail_list.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
@@ -76,11 +77,12 @@ class _WishListLoadedState extends State<WishListLoaded> {
     _scrollController.animateTo(0,
         duration: const Duration(milliseconds: 500), //duration of scroll
         curve: Curves.fastOutSlowIn //scroll type
-    );
+        );
   }
 
   @override
   Widget build(BuildContext context) {
+    String uniqueKey = UniqueKey().toString();
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -120,61 +122,76 @@ class _WishListLoadedState extends State<WishListLoaded> {
                           children: [
                             Row(
                               children: <Widget>[
-                                CachedNetworkImage(
-                                  imageUrl: widget.favoritesList[index].logo ==
-                                      null
-                                      ? "${Application.picturesURL}admin/News.jpeg"
-                                      : "${Application.picturesURL}${(widget.favoritesList[index].logo)}",
-                                  imageBuilder: (context, imageProvider) {
-                                    return Container(
-                                      width: 120,
-                                      height: 140,
-                                      decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                          image: imageProvider,
-                                          fit: BoxFit.cover,
-                                        ),
-                                        borderRadius: BorderRadius.circular(11),
-                                      ),
-                                    );
-                                  },
-                                  placeholder: (context, url) {
-                                    return AppPlaceholder(
-                                      child: Container(
+                                widget.favoritesList[index].pdf == ''
+                                    ? CachedNetworkImage(
+                                        imageUrl: widget.favoritesList[index]
+                                                    .logo ==
+                                                null
+                                            ? "${Application.picturesURL}admin/News.jpeg"
+                                            : "${Application.picturesURL}${(widget.favoritesList[index].logo)}",
+                                        imageBuilder: (context, imageProvider) {
+                                          return Container(
+                                            width: 120,
+                                            height: 140,
+                                            decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                image: imageProvider,
+                                                fit: BoxFit.cover,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(11),
+                                            ),
+                                          );
+                                        },
+                                        placeholder: (context, url) {
+                                          return AppPlaceholder(
+                                            child: Container(
+                                              width: 120,
+                                              height: 140,
+                                              decoration: const BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(8),
+                                                  bottomLeft:
+                                                      Radius.circular(8),
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        errorWidget: (context, url, error) {
+                                          return AppPlaceholder(
+                                            child: Container(
+                                              width: 120,
+                                              height: 140,
+                                              decoration: const BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(8),
+                                                  bottomLeft:
+                                                      Radius.circular(8),
+                                                ),
+                                              ),
+                                              child: const Icon(Icons.error),
+                                            ),
+                                          );
+                                        },
+                                      )
+                                    : SizedBox(
                                         width: 120,
                                         height: 140,
-                                        decoration: const BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(8),
-                                            bottomLeft: Radius.circular(8),
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  errorWidget: (context, url, error) {
-                                    return AppPlaceholder(
-                                      child: Container(
-                                        width: 120,
-                                        height: 140,
-                                        decoration: const BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(8),
-                                            bottomLeft: Radius.circular(8),
-                                          ),
-                                        ),
-                                        child: const Icon(Icons.error),
-                                      ),
-                                    );
-                                  },
-                                ),
+                                        child: const PDF().cachedFromUrl(
+                                          "${Application.picturesURL}${widget.favoritesList[index].pdf}?cacheKey=$uniqueKey",
+                                          placeholder: (progress) => Center(
+                                              child: Text('$progress %')),
+                                          errorWidget: (error) => Center(
+                                              child: Text(error.toString())),
+                                        )),
                                 const SizedBox(width: 8),
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     children: <Widget>[
                                       Text(
                                         widget.favoritesList[index].category!,
@@ -182,8 +199,8 @@ class _WishListLoadedState extends State<WishListLoaded> {
                                             .textTheme
                                             .bodySmall!
                                             .copyWith(
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                       ),
                                       const SizedBox(height: 4),
                                       Text(
@@ -193,21 +210,21 @@ class _WishListLoadedState extends State<WishListLoaded> {
                                             .textTheme
                                             .titleSmall!
                                             .copyWith(
-                                            fontWeight: FontWeight.bold),
+                                                fontWeight: FontWeight.bold),
                                       ),
                                       Text(
                                         widget.favoritesList[index]
-                                            .categoryId ==
-                                            1
+                                                    .categoryId ==
+                                                1
                                             ? WishListCubit().onDateParse(widget
-                                            .favoritesList[index].createdAt)
+                                                .favoritesList[index].createdAt)
                                             : "",
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodySmall!
                                             .copyWith(
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                       ),
                                       const SizedBox(height: 8),
                                       const SizedBox(height: 8),

@@ -1,9 +1,9 @@
 import 'dart:async';
+import 'package:dio/dio.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/remote/api/http_manager.dart';
 import 'package:heidi/src/utils/asset.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
-import 'package:heidi/src/utils/logging/loggy_exp.dart';
 
 class Api {
   static final httpManager = HTTPManager();
@@ -28,20 +28,6 @@ class Api {
     } catch (e) {
       return await httpManager.post(url: login, data: params);
     }
-  }
-
-  static Future<ResultApiModel> requestEditProduct(
-      cityId, listingId, params, bool isImageChanged) async {
-    final filePath = '/cities/$cityId/listings/$listingId';
-    final result = await httpManager.patch(
-      url: filePath,
-      data: params,
-      loading: true,
-    );
-    if (isImageChanged) {
-      await Api.requestListingUploadImage(listingId, cityId);
-    }
-    return ResultApiModel.fromJson(result);
   }
 
   static Future<ResultApiModel> requestFavorites(userId) async {
@@ -214,7 +200,37 @@ class Api {
       loading: true,
     );
     final id = result['id'];
-    Api.requestListingUploadImage(id, cityId);
+    Api.requestListingUploadMedia(id, cityId);
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> requestEditProduct(
+      cityId, listingId, params, bool isImageChanged) async {
+    final filePath = '/cities/$cityId/listings/$listingId';
+    final result = await httpManager.patch(
+      url: filePath,
+      data: params,
+      loading: true,
+    );
+    if (isImageChanged) {
+      await Api.requestListingUploadMedia(listingId, cityId);
+    }
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> deletePdf(cityId, listingId) async {
+    final result = await httpManager.delete(
+      url: '/cities/$cityId/listings/$listingId/pdfDelete',
+      loading: true,
+    );
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> deleteImage(cityId, listingId) async {
+    final result = await httpManager.delete(
+      url: '/cities/$cityId/listings/$listingId/imageDelete',
+      loading: true,
+    );
     return ResultApiModel.fromJson(result);
   }
 
@@ -278,14 +294,19 @@ class Api {
     return ResultApiModel.fromJson(convertResponse);
   }
 
-  static Future<ResultApiModel> requestListingUploadImage(
+  static Future<ResultApiModel> requestListingUploadMedia(
       listingId, cityId) async {
+    var filePath = '';
     final prefs = await Preferences.openBox();
-    final pickedFile = prefs.getPickedFile();
-    logError('pickedFile', pickedFile);
-    var filepath = '/cities/$cityId/listings/$listingId/imageUpload';
+    FormData? pickedFile = prefs.getPickedFile();
+    var firstFileEntry = pickedFile?.files[0];
+    if (firstFileEntry?.key == 'pdf') {
+      filePath = '/cities/$cityId/listings/$listingId/pdfUpload';
+    } else {
+      filePath = '/cities/$cityId/listings/$listingId/imageUpload';
+    }
     var result = await httpManager.post(
-      url: filepath,
+      url: filePath,
       formData: pickedFile,
     );
     final convertResponse = {"success": result['id'] != null, "data": result};

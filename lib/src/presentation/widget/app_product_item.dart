@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:heidi/src/presentation/main/home/widget/empty_product_item.dart';
@@ -23,6 +24,7 @@ class AppProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String uniqueKey = UniqueKey().toString();
     switch (type) {
       case ProductViewType.small:
         if (item == null) {
@@ -32,8 +34,10 @@ class AppProductItem extends StatelessWidget {
           onTap: onPressed,
           child: Row(
             children: <Widget>[
-              CachedNetworkImage(
-                imageUrl: "${Application.picturesURL}${item!.image}",
+              item?.pdf == ''
+                  ? CachedNetworkImage(
+                imageUrl:
+                "${Application.picturesURL}${item!.image}?cacheKey=$uniqueKey",
                 imageBuilder: (context, imageProvider) {
                   return Container(
                     width: 84,
@@ -62,17 +66,30 @@ class AppProductItem extends StatelessWidget {
                 errorWidget: (context, url, error) {
                   return AppPlaceholder(
                     child: Container(
-                      width: 84,
-                      height: 84,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
+                      width: 120,
+                      height: 140,
+                      decoration: const BoxDecoration(
                         color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(8),
+                          bottomLeft: Radius.circular(8),
+                        ),
                       ),
                       child: const Icon(Icons.error),
                     ),
                   );
                 },
-              ),
+              )
+                  : SizedBox(
+                  width: 84,
+                  height: 84,
+                  child: const PDF().cachedFromUrl(
+                    "${Application.picturesURL}${item?.pdf}?cacheKey=$uniqueKey",
+                    placeholder: (progress) =>
+                        Center(child: Text('$progress %')),
+                    errorWidget: (error) =>
+                        Center(child: Text(error.toString())),
+                  )),
               const SizedBox(width: 8),
               Expanded(
                 child: Column(
@@ -235,16 +252,6 @@ class AppProductItem extends StatelessWidget {
             children: [
               Row(
                 children: <Widget>[
-                  // SizedBox(
-                  //   width: 120,
-                  //   height: 140,
-                  //   child: Image.network(
-                  //     "${Application.picturesURL}${item!.image}",
-                  //     width: 120,
-                  //     //       height: 140,
-                  //     fit: BoxFit.cover,
-                  //   ),
-                  // ),
                   CachedNetworkImage(
                     imageUrl: "${Application.picturesURL}${item!.image}",
                     imageBuilder: (context, imageProvider) {
@@ -308,40 +315,40 @@ class AppProductItem extends StatelessWidget {
                         const SizedBox(height: 8),
                         (item?.categoryId == 3)
                             ? Container(
-                                padding: const EdgeInsets.all(3.5),
-                                decoration: BoxDecoration(
-                                  color: Colors.white30,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Text(
-                                  item?.categoryId == 3
-                                      ? "${item?.startDate} ${Translate.of(context).translate('to')} ${item?.endDate}"
-                                      : "",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodySmall!
-                                      .copyWith(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                ),
-                              )
+                          padding: const EdgeInsets.all(3.5),
+                          decoration: BoxDecoration(
+                            color: Colors.white30,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            item?.categoryId == 3
+                                ? "${item?.startDate} ${Translate.of(context).translate('to')} ${item?.endDate}"
+                                : "",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall!
+                                .copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        )
                             : Text(
-                                item?.categoryId == 3
-                                    ? "${item?.startDate} ${Translate.of(context).translate('to')} ${item?.endDate}"
-                                    : "",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall!
-                                    .copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                              ),
+                          item?.categoryId == 3
+                              ? "${item?.startDate} ${Translate.of(context).translate('to')} ${item?.endDate}"
+                              : "",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall!
+                              .copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                         Text(
                           item?.categoryId == 1 ? "${item?.createDate}" : "",
                           style:
-                              Theme.of(context).textTheme.bodySmall!.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                          Theme.of(context).textTheme.bodySmall!.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         const SizedBox(height: 4),
                         const SizedBox(height: 8),

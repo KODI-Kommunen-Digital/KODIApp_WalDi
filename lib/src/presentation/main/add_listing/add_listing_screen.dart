@@ -76,6 +76,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
   List listSubCategory = [];
 
   String? _featureImage;
+  String? _featurePdf;
   String? _startDate;
   String? _endDate;
   String? selectedVillage;
@@ -198,6 +199,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       if (!mounted) return;
 
       _featureImage = widget.item?.image;
+      _featurePdf = widget.item?.pdf;
       _textTitleController.text = widget.item!.title;
       _textContentController.text = widget.item!.description;
       _textAddressController.text = widget.item!.address;
@@ -246,6 +248,14 @@ class _AddListingScreenState extends State<AddListingScreen> {
     if (success) {
       if (widget.item != null) {
         context.read<AddListingCubit>().setCategoryId(selectedCategory);
+        if (isImageChanged) {
+          context
+              .read<AddListingCubit>()
+              .deleteImage(widget.item?.cityId, widget.item?.id);
+          context
+              .read<AddListingCubit>()
+              .deletePdf(widget.item?.cityId, widget.item?.id);
+        }
         final result = await context.read<AddListingCubit>().onEdit(
             cityId: widget.item?.cityId,
             listingId: widget.item?.id,
@@ -436,7 +446,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
               height: 180,
               child: AppUploadImage(
                 title: Translate.of(context).translate('upload_feature_image'),
-                image: _featureImage,
+                image: _featurePdf == '' ? _featureImage : _featurePdf,
                 profile: false,
                 onChange: (result) {
                   isImageChanged = true;
@@ -460,11 +470,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
               focusNode: _focusTitle,
               textInputAction: TextInputAction.next,
               onChanged: (text) {
-                setState(() {
-                  _errorTitle = UtilValidator.validate(
-                    _textTitleController.text,
-                  );
-                });
+                _errorTitle = UtilValidator.validate(
+                  _textTitleController.text,
+                );
               },
               onSubmitted: (text) {
                 Utils.fieldFocusChange(
@@ -491,11 +499,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
               focusNode: _focusContent,
               textInputAction: TextInputAction.done,
               onChanged: (text) {
-                setState(() {
-                  _errorContent = UtilValidator.validate(
-                    _textContentController.text,
-                  );
-                });
+                _errorContent = UtilValidator.validate(
+                  _textContentController.text,
+                );
               },
             ),
             const SizedBox(height: 16),
