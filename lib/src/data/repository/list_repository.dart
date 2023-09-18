@@ -285,6 +285,9 @@ class ListRepository {
       "endDate": combinedEndDateTime,
     };
     final response = await Api.requestSaveProduct(cityId, params);
+    if (response.success) {
+      prefs.deleteKey('pickedFile');
+    }
     return response;
   }
 
