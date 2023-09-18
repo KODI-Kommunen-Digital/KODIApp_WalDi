@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_product.dart';
@@ -297,10 +299,10 @@ class _AddListingScreenState extends State<AddListingScreen> {
       if (widget.item != null) {
         // context.read<AddListingCubit>().setCategoryId(selectedCategory);
         if (isImageChanged) {
-          context
+          await context
               .read<AddListingCubit>()
               .deleteImage(widget.item?.cityId, widget.item?.id);
-          context
+          await context
               .read<AddListingCubit>()
               .deletePdf(widget.item?.cityId, widget.item?.id);
         }
