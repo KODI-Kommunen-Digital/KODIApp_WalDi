@@ -123,7 +123,7 @@ class AppProductItem extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(3.5),
                           child: Text(
-                            "${item?.startDate} ${Translate.of(context).translate('to')} ",
+                            "${item?.startDate} ${Translate.of(context).translate('to')} ${item?.endDate}",
                             style: Theme.of(context)
                                 .textTheme
                                 .bodySmall!
