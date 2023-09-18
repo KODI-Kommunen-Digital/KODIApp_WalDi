@@ -188,7 +188,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
       selectedSubCategory = loadCategoryResponse?.data.first['name'];
       listCity = loadCitiesResponse.data;
       selectedCategory = selectedSubCategory;
-      selectSubCategory(selectedSubCategory);
+      if (selectedCategory == "News" || selectedCategory == null) {
+        selectSubCategory(selectedCategory);
+      }
       _processing = true;
     });
 
@@ -374,13 +376,13 @@ class _AddListingScreenState extends State<AddListingScreen> {
         UtilValidator.validate(_textContentController.text, allowEmpty: false);
 
     if (selectedCategory == "Events") {
-      if (_startDate == null || _startDate == "") {
+      if (_startDate == null || _startDate == "" || _startTime == null) {
         _errorSDate = "value_not_date_empty";
       } else {
         _errorSDate = null;
       }
 
-      if (_endDate == null || _endDate == "") {
+      if (_endDate == null || _endDate == "" || _endTime == null) {
         _errorEDate = "value_not_date_empty";
       } else {
         _errorEDate = null;
@@ -570,7 +572,10 @@ class _AddListingScreenState extends State<AddListingScreen> {
                               setState(() {
                                 selectedCategory = value as String?;
                               });
-                              selectSubCategory(selectedCategory);
+                              if (selectedCategory == "News" ||
+                                  selectedCategory == null) {
+                                selectSubCategory(selectedCategory);
+                              }
                             },
                           )),
               ],
