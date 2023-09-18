@@ -202,7 +202,7 @@ class Api {
       loading: true,
     );
     final id = result['id'];
-    if (pickedFile!.files.isNotEmpty) {
+    if (pickedFile != null) {
       Api.requestListingUploadMedia(id, cityId, pickedFile);
     }
     return ResultApiModel.fromJson(result);
