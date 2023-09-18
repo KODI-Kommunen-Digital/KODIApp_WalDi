@@ -159,7 +159,9 @@ class ProductModel {
       final parsedDateTime = DateTime.parse(json['startDate']);
       startDate = DateFormat('dd.MM.yyyy HH:mm').format(parsedDateTime);
       final parsedEDateTime = DateTime.parse(json['endDate']);
-      if (parsedDateTime.isAtSameMomentAs(parsedEDateTime)) {
+      if (parsedDateTime.year == parsedEDateTime.year &&
+          parsedDateTime.month == parsedEDateTime.month &&
+          parsedDateTime.day == parsedEDateTime.day) {
         endDate = DateFormat('HH:mm').format(parsedEDateTime);
       } else {
         endDate = DateFormat('dd.MM.yyyy HH:mm').format(parsedEDateTime);
