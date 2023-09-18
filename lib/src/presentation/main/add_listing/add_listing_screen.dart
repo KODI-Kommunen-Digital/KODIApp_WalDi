@@ -277,7 +277,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
     final success = _validData();
     if (success) {
       if (widget.item != null) {
-        context.read<AddListingCubit>().setCategoryId(selectedCategory);
+        //context.read<AddListingCubit>().setCategoryId(selectedCategory);
         if (isImageChanged) {
           context
               .read<AddListingCubit>()
@@ -569,9 +569,14 @@ class _AddListingScreenState extends State<AddListingScreen> {
                                           category['id']))));
                             }).toList(),
                             onChanged: (value) async {
-                              setState(() {
-                                selectedCategory = value as String?;
-                              });
+                              setState(
+                                () {
+                                  selectedCategory = value as String?;
+                                  context
+                                      .read<AddListingCubit>()
+                                      .setCategoryId(selectedCategory);
+                                },
+                              );
                               if (selectedCategory == "News" ||
                                   selectedCategory == null) {
                                 selectSubCategory(selectedCategory);
