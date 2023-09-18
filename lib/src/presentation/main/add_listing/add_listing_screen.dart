@@ -190,7 +190,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
       selectedSubCategory = loadCategoryResponse?.data.first['name'];
       listCity = loadCitiesResponse.data;
       selectedCategory = selectedSubCategory;
-      selectSubCategory(selectedSubCategory);
+      if (selectedCategory == "News" || selectedCategory == null) {
+        selectSubCategory(selectedCategory);
+      }
       _processing = true;
     });
 

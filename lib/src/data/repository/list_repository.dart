@@ -357,6 +357,9 @@ class ListRepository {
       "subCategoryId": subCategoryId,
     };
     final response = await Api.requestSaveProduct(cityId, params);
+    if (response.success) {
+      prefs.deleteKey('pickedFile');
+    }
     return response;
   }
 
