@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:device_info/device_info.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/multiple_gesture_detector.dart';
 import 'package:heidi/src/utils/translate.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 enum UploadImageType { circle, square }
 
@@ -38,6 +40,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
   bool isImageUploaded = false;
   bool showAction = false;
   String title = '';
+  bool isPermanentlyDenied = false;
 
   @override
   void initState() {
@@ -49,76 +52,108 @@ class _AppUploadImageState extends State<AppUploadImage> {
     super.dispose();
   }
 
-  void showChooseFileTypeDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return SimpleDialog(
-          title: Text(Translate.of(context).translate('Choose_File_Type')),
-          children: [
-            SimpleDialogOption(
-              onPressed: () async {
-                Navigator.pop(context);
-                FilePickerResult? result = await FilePicker.platform.pickFiles(
-                  type: FileType.custom,
-                  allowedExtensions: ['pdf'],
-                );
-                if (result != null) {
-                  _file = File('');
-                  widget.onChange('pdf');
-                  setState(() {
-                    _file = File(result.files.single.path!);
-                    isImageUploaded = false;
-                  });
-                  final profile = widget.profile;
-                  if (!profile) {
-                    await ListRepository.uploadPdf(_file!);
-                  }
-                }
-              },
-              child: const ListTile(
-                leading: Icon(Icons.picture_as_pdf),
-                title: Text('PDF'),
-              ),
-            ),
-            SimpleDialogOption(
-              onPressed: () async {
-                Navigator.pop(context);
-                FilePickerResult? result = await FilePicker.platform.pickFiles(
-                  type: FileType.image,
-                );
-                if (result != null) {
-                  _file = File('');
-                  setState(() {
-                    _file = File(result.files.single.path!);
-                    isImageUploaded = false;
-                  });
-                  final profile = widget.profile;
-                  if (!profile) {
-                    await ListRepository.uploadImage(_file!, profile);
-                    widget.onChange('image');
-                  } else {
-                    final response =
-                    await ListRepository.uploadImage(_file!, profile);
-                    if (response!.data['status'] == 'success') {
-                      setState(() {
-                        isImageUploaded = true;
-                      });
-                      final item = response.data['data']?['image'];
-                      widget.onChange(item);
+  Future<void> showChooseFileTypeDialog() async {
+    PermissionStatus status;
+    if (await Permission.storage.isGranted) {
+      status = PermissionStatus.granted;
+    } else {
+      String androidVersion = await _getAndroidVersion();
+      if (int.parse(androidVersion) > 11) {
+        status = await Permission.photos.status;
+      } else {
+        status = await Permission.storage.status;
+      }
+      status = await Permission.storage.request();
+    }
+
+    if (!mounted) return;
+    if (status == PermissionStatus.granted) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return SimpleDialog(
+            title: Text(Translate.of(context).translate('Choose_File_Type')),
+            children: [
+              SimpleDialogOption(
+                onPressed: () async {
+                  Navigator.pop(context);
+                  FilePickerResult? result =
+                      await FilePicker.platform.pickFiles(
+                    type: FileType.custom,
+                    allowedExtensions: ['pdf'],
+                  );
+                  if (result != null) {
+                    _file = File('');
+                    widget.onChange('pdf');
+                    setState(() {
+                      _file = File(result.files.single.path!);
+                      isImageUploaded = false;
+                    });
+                    final profile = widget.profile;
+                    if (!profile) {
+                      await ListRepository.uploadPdf(_file!);
                     }
                   }
-                }
-              },
-              child: ListTile(
-                leading: const Icon(Icons.image),
-                title: Text(Translate.of(context).translate('Images')),
+                },
+                child: const ListTile(
+                  leading: Icon(Icons.picture_as_pdf),
+                  title: Text('PDF'),
+                ),
               ),
-            ),
-          ],
-        );
-      },
-    );
+              SimpleDialogOption(
+                onPressed: () async {
+                  Navigator.pop(context);
+                  FilePickerResult? result =
+                      await FilePicker.platform.pickFiles(
+                    type: FileType.image,
+                  );
+                  if (result != null) {
+                    _file = File('');
+                    setState(() {
+                      _file = File(result.files.single.path!);
+                      isImageUploaded = false;
+                    });
+                    final profile = widget.profile;
+                    if (!profile) {
+                      await ListRepository.uploadImage(_file!, profile);
+                      widget.onChange('image');
+                    } else {
+                      final response =
+                          await ListRepository.uploadImage(_file!, profile);
+                      if (response!.data['status'] == 'success') {
+                        setState(() {
+                          isImageUploaded = true;
+                        });
+                        final item = response.data['data']?['image'];
+                        widget.onChange(item);
+                      }
+                    }
+                  }
+                },
+                child: ListTile(
+                  leading: const Icon(Icons.image),
+                  title: Text(Translate.of(context).translate('Images')),
+                ),
+              ),
+            ],
+          );
+        },
+      );
+    } else if (status.isPermanentlyDenied) {
+      if (isPermanentlyDenied) {
+        await openAppSettings();
+      }
+      isPermanentlyDenied = true;
+    }
+  }
+
+  Future<String> _getAndroidVersion() async {
+    if (Platform.isAndroid) {
+      var androidInfo = await DeviceInfoPlugin().androidInfo;
+      return androidInfo.version.release;
+    } else {
+      return "0";
+    }
   }
 
   Widget? _buildContent() {
@@ -131,10 +166,10 @@ class _AppUploadImageState extends State<AppUploadImage> {
             child: RawGestureDetector(
               gestures: {
                 AllowMultipleGestureRecognizer:
-                GestureRecognizerFactoryWithHandlers<
-                    AllowMultipleGestureRecognizer>(
-                      () => AllowMultipleGestureRecognizer(), //constructor
-                      (AllowMultipleGestureRecognizer instance) {
+                    GestureRecognizerFactoryWithHandlers<
+                        AllowMultipleGestureRecognizer>(
+                  () => AllowMultipleGestureRecognizer(), //constructor
+                  (AllowMultipleGestureRecognizer instance) {
                     //initializer
                     instance.onTap = () => showChooseFileTypeDialog();
                   },
@@ -222,10 +257,10 @@ class _AppUploadImageState extends State<AppUploadImage> {
               return RawGestureDetector(
                 gestures: {
                   AllowMultipleGestureRecognizer:
-                  GestureRecognizerFactoryWithHandlers<
-                      AllowMultipleGestureRecognizer>(
-                        () => AllowMultipleGestureRecognizer(), //constructor
-                        (AllowMultipleGestureRecognizer instance) {
+                      GestureRecognizerFactoryWithHandlers<
+                          AllowMultipleGestureRecognizer>(
+                    () => AllowMultipleGestureRecognizer(), //constructor
+                    (AllowMultipleGestureRecognizer instance) {
                       instance.onTap = () => showChooseFileTypeDialog();
                     },
                   )
