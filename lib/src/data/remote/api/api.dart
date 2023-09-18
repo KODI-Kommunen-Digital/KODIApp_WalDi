@@ -187,26 +187,34 @@ class Api {
   ///Save Product
   static Future<ResultApiModel> requestSaveProduct(cityId, params) async {
     final filePath = '/cities/$cityId/listings';
+    final prefs = await Preferences.openBox();
+    FormData? pickedFile = prefs.getPickedFile();
     final result = await httpManager.post(
       url: filePath,
       data: params,
       loading: true,
     );
     final id = result['id'];
-    Api.requestListingUploadMedia(id, cityId);
+    if (pickedFile!.files.isNotEmpty) {
+      Api.requestListingUploadMedia(id, cityId, pickedFile);
+    }
     return ResultApiModel.fromJson(result);
   }
 
   static Future<ResultApiModel> requestEditProduct(
       cityId, listingId, params, bool isImageChanged) async {
     final filePath = '/cities/$cityId/listings/$listingId';
+    final prefs = await Preferences.openBox();
+    FormData? pickedFile = prefs.getPickedFile();
     final result = await httpManager.patch(
       url: filePath,
       data: params,
       loading: true,
     );
     if (isImageChanged) {
-      await Api.requestListingUploadMedia(listingId, cityId);
+      if (pickedFile!.files.isNotEmpty) {
+        await Api.requestListingUploadMedia(listingId, cityId, pickedFile);
+      }
     }
     return ResultApiModel.fromJson(result);
   }
@@ -296,10 +304,9 @@ class Api {
   }
 
   static Future<ResultApiModel> requestListingUploadMedia(
-      listingId, cityId) async {
+      listingId, cityId, pickedFile) async {
     var filePath = '';
-    final prefs = await Preferences.openBox();
-    FormData? pickedFile = prefs.getPickedFile();
+
     var firstFileEntry = pickedFile?.files[0];
     if (firstFileEntry?.key == 'pdf') {
       filePath = '/cities/$cityId/listings/$listingId/pdfUpload';
