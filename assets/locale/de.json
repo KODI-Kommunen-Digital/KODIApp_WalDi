@@ -421,6 +421,6 @@
   "delete_account_success": "Konto erfolgreich gelöscht",
   "delete_account_fail": "Das Löschen des Kontos ist fehlgeschlagen. Bitte versuch es später.",
   "hselect_location":"Ort auswählen",
-  "choose_stime":"Wählen Sie die Startzeit",
-  "choose_etime":"Wählen Sie die Endzeit"
+  "choose_stime":"Startzeit wählen",
+  "choose_etime":"Endzeit wählen"
 }

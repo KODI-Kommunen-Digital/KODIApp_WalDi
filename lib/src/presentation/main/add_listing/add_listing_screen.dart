@@ -377,15 +377,13 @@ class _AddListingScreenState extends State<AddListingScreen> {
 
     logError('selectedCategory', selectedCategory);
     if (selectedCategory == "Events") {
-      logError('_startDate', _startDate);
-
-      if (_startDate == null || _startDate == "") {
+      if (_startDate == null || _startDate == "" || _startTime == null) {
         _errorSDate = "value_not_date_empty";
       } else {
         _errorSDate = null;
       }
 
-      if (_endDate == null || _endDate == "") {
+      if (_endDate == null || _endDate == "" || _endTime == null) {
         _errorEDate = "value_not_date_empty";
       } else {
         _errorEDate = null;
@@ -575,7 +573,10 @@ class _AddListingScreenState extends State<AddListingScreen> {
                               setState(() {
                                 selectedCategory = value as String?;
                               });
-                              selectSubCategory(selectedCategory);
+                              if (selectedCategory == "News" ||
+                                  selectedCategory == null) {
+                                selectSubCategory(selectedCategory);
+                              }
                             },
                           )),
               ],

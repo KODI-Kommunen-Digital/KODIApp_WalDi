@@ -159,9 +159,11 @@ class ProductModel {
       final parsedDateTime = DateTime.parse(json['startDate']);
       startDate = DateFormat('dd.MM.yyyy HH:mm').format(parsedDateTime);
       final parsedEDateTime = DateTime.parse(json['endDate']);
-      endDate = DateFormat('dd.MM.yyyy HH:mm').format(parsedEDateTime);
-      // startDate = json['startDate'];
-      // endDate = json['endDate'];
+      if (parsedDateTime.isAtSameMomentAs(parsedEDateTime)) {
+        endDate = DateFormat('HH:mm').format(parsedEDateTime);
+      } else {
+        endDate = DateFormat('dd.MM.yyyy HH:mm').format(parsedEDateTime);
+      }
     } else if (json['categoryId'] == 4) {
       category = "Vereine";
     } else if (json['categoryId'] == 5) {
