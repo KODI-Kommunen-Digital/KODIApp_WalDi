@@ -837,106 +837,102 @@ class _AddListingScreenState extends State<AddListingScreen> {
                 color: Theme.of(context).hintColor,
               ),
             ),
-            if (selectedCategory == "Events") const SizedBox(height: 16),
-            Text(
-              selectedCategory == "Events"
-                  ? Translate.of(context).translate(
+            Visibility(
+              visible: selectedCategory == "Events",
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 16),
+                  Text(
+                    Translate.of(context).translate(
                       'start_date',
-                    )
-                  : '',
-              style: Theme.of(context)
-                  .textTheme
-                  .titleMedium!
-                  .copyWith(fontWeight: FontWeight.bold),
-            ),
-            if (selectedCategory == "Events") const SizedBox(height: 8),
-            if (selectedCategory == "Events")
-              AppPickerItem(
-                leading: Icon(
-                  Icons.calendar_today_outlined,
-                  color: Theme.of(context).hintColor,
-                ),
-                value: _startDate,
-                title: Translate.of(context).translate(
-                  'choose_date',
-                ),
-                onPressed: _onShowStartDatePicker,
-              ),
-            if (selectedCategory == "Events") const SizedBox(height: 8),
-            Text(
-              selectedCategory == "Events"
-                  ? Translate.of(context).translate(
+                    ),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium!
+                        .copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8),
+                  AppPickerItem(
+                    leading: Icon(
+                      Icons.calendar_today_outlined,
+                      color: Theme.of(context).hintColor,
+                    ),
+                    value: _startDate,
+                    title: Translate.of(context).translate(
+                      'choose_date',
+                    ),
+                    onPressed: _onShowStartDatePicker,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    Translate.of(context).translate(
                       'start_time',
-                    )
-                  : '',
-              style: Theme.of(context)
-                  .textTheme
-                  .titleMedium!
-                  .copyWith(fontWeight: FontWeight.bold),
-            ),
-            if (selectedCategory == "Events") const SizedBox(height: 8),
-            if (selectedCategory == "Events")
-              AppPickerItem(
-                leading: Icon(
-                  Icons.access_time,
-                  color: Theme.of(context).hintColor,
-                ),
-                value: _startTime?.format(context),
-                title: Translate.of(context).translate(
-                  'choose_stime',
-                ),
-                onPressed: _onShowStartTimePicker,
-              ),
-            if (selectedCategory == "Events") const SizedBox(height: 16),
-            Text(
-              selectedCategory == "Events"
-                  ? Translate.of(context).translate(
+                    ),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium!
+                        .copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8),
+                  AppPickerItem(
+                    leading: Icon(
+                      Icons.access_time,
+                      color: Theme.of(context).hintColor,
+                    ),
+                    value: _startTime?.format(context),
+                    title: Translate.of(context).translate(
+                      'choose_stime',
+                    ),
+                    onPressed: _onShowStartTimePicker,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    Translate.of(context).translate(
                       'end_date',
-                    )
-                  : '',
-              style: Theme.of(context)
-                  .textTheme
-                  .titleMedium!
-                  .copyWith(fontWeight: FontWeight.bold),
-            ),
-            if (selectedCategory == "Events") const SizedBox(height: 8),
-            if (selectedCategory == "Events")
-              AppPickerItem(
-                leading: Icon(
-                  Icons.calendar_today_outlined,
-                  color: Theme.of(context).hintColor,
-                ),
-                value: _endDate,
-                title: Translate.of(context).translate(
-                  'choose_date',
-                ),
-                onPressed: _onShowEndDatePicker,
-              ),
-            if (selectedCategory == "Events") const SizedBox(height: 16),
-            Text(
-              selectedCategory == "Events"
-                  ? Translate.of(context).translate(
+                    ),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium!
+                        .copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8),
+                  AppPickerItem(
+                    leading: Icon(
+                      Icons.calendar_today_outlined,
+                      color: Theme.of(context).hintColor,
+                    ),
+                    value: _endDate,
+                    title: Translate.of(context).translate(
+                      'choose_date',
+                    ),
+                    onPressed: _onShowEndDatePicker,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    Translate.of(context).translate(
                       'end_time',
-                    )
-                  : '',
-              style: Theme.of(context)
-                  .textTheme
-                  .titleMedium!
-                  .copyWith(fontWeight: FontWeight.bold),
-            ),
-            if (selectedCategory == "Events") const SizedBox(height: 8),
-            if (selectedCategory == "Events")
-              AppPickerItem(
-                leading: Icon(
-                  Icons.access_time,
-                  color: Theme.of(context).hintColor,
-                ),
-                value: _endTime?.format(context),
-                title: Translate.of(context).translate(
-                  'choose_etime',
-                ),
-                onPressed: _onShowEndTimePicker,
+                    ),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium!
+                        .copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8),
+                  AppPickerItem(
+                    leading: Icon(
+                      Icons.access_time,
+                      color: Theme.of(context).hintColor,
+                    ),
+                    value: _endTime?.format(context),
+                    title: Translate.of(context).translate(
+                      'choose_etime',
+                    ),
+                    onPressed: _onShowEndTimePicker,
+                  ),
+                ],
               ),
+            ),
           ],
         ),
       ),
