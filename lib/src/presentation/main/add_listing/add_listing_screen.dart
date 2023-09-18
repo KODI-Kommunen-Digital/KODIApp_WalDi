@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_product.dart';
+import 'package:heidi/src/presentation/main/home/home_screen/cubit/home_cubit.dart';
 import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/presentation/widget/app_picker_item.dart';
 import 'package:heidi/src/presentation/widget/app_text_input.dart';
@@ -162,7 +163,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
   void _onProcess() async {
     final loadCitiesResponse =
         await context.read<AddListingCubit>().loadCities();
-    if(!mounted) return;
+    if (!mounted) return;
     final loadCategoryResponse =
         await context.read<AddListingCubit>().loadCategory();
     setState(() {
@@ -194,7 +195,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
       _textWebsiteController.text = widget.item?.website ?? '';
       selectedCategory = Translate.of(context)
           .translate(_getCategoryTranslation(widget.item!.categoryId!));
-      final city = listCity.firstWhere((element) => element['id'] == widget.item?.cityId);
+      final city = listCity
+          .firstWhere((element) => element['id'] == widget.item?.cityId);
       selectedCity = city['name'];
       if (selectedCategory == "News" || selectedCategory == null) {
         final subCategoryResponse = await context
@@ -202,9 +204,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
             .loadSubCategory(selectedCategory);
         listSubCategory = subCategoryResponse!.data;
       }
-
-    }
-    else{
+    } else {
       if (currentCity != null && currentCity != 0) {
         for (var cityData in loadCitiesResponse?.data) {
           if (cityData['id'] == currentCity) {
@@ -218,16 +218,16 @@ class _AddListingScreenState extends State<AddListingScreen> {
       if (!loadCategoryResponse?.data.isEmpty) {
         if (!mounted) return;
         if (selectedCategory == "News" || selectedCategory == null) {
-        final subCategoryResponse = await context
-            .read<AddListingCubit>()
-            .loadSubCategory(Translate.of(context)
-            .translate(_getCategoryTranslation(loadCategoryResponse!.data.first['id'])));
-        setState(() {
-          listSubCategory = subCategoryResponse!.data;
-        });
-
-      }}
-
+          final subCategoryResponse = await context
+              .read<AddListingCubit>()
+              .loadSubCategory(Translate.of(context).translate(
+                  _getCategoryTranslation(
+                      loadCategoryResponse!.data.first['id'])));
+          setState(() {
+            listSubCategory = subCategoryResponse!.data;
+          });
+        }
+      }
     }
     setState(() {
       _processing = false;
@@ -349,6 +349,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
 
   void _onSuccess() {
     Navigator.pop(context);
+    context.read<HomeCubit>().onLoad(false);
     if (widget.isNewList) {
       Navigator.pushNamed(context, Routes.submitSuccess);
     }
@@ -581,28 +582,29 @@ class _AddListingScreenState extends State<AddListingScreen> {
                                         listCategory.first['id'])),
                             items: listCategory.map((category) {
                               return DropdownMenuItem(
-                                  value:  Translate.of(context).translate(
-                                      _getCategoryTranslation(
-                                          category['id'])),
+                                  value: Translate.of(context).translate(
+                                      _getCategoryTranslation(category['id'])),
                                   child: Text(Translate.of(context).translate(
                                       _getCategoryTranslation(
                                           category['id']))));
                             }).toList(),
-                            onChanged: widget.item == null ? (value) async {
-                              setState(
-                                () {
-                                  selectedCategory = value as String?;
-                                  context
-                                      .read<AddListingCubit>()
-                                      .setCategoryId(selectedCategory);
-                                },
-                              );
+                            onChanged: widget.item == null
+                                ? (value) async {
+                                    setState(
+                                      () {
+                                        selectedCategory = value as String?;
+                                        context
+                                            .read<AddListingCubit>()
+                                            .setCategoryId(selectedCategory);
+                                      },
+                                    );
 
-                              if (selectedCategory == "News" ||
-                                  selectedCategory == null) {
-                                selectSubCategory(selectedCategory);
-                              }
-                            } : null,
+                                    if (selectedCategory == "News" ||
+                                        selectedCategory == null) {
+                                      selectSubCategory(selectedCategory);
+                                    }
+                                  }
+                                : null,
                           )),
               ],
             ),
@@ -636,14 +638,16 @@ class _AddListingScreenState extends State<AddListingScreen> {
                                         _getSubCategoryTranslation(
                                             subcategory['id']))));
                               }).toList(),
-                              onChanged: widget.item == null ? (value) {
-                                context
-                                    .read<AddListingCubit>()
-                                    .getSubCategoryId(value);
-                                setState(() {
-                                  selectedSubCategory = value as String?;
-                                });
-                              } : null,
+                              onChanged: widget.item == null
+                                  ? (value) {
+                                      context
+                                          .read<AddListingCubit>()
+                                          .getSubCategoryId(value);
+                                      setState(() {
+                                        selectedSubCategory = value as String?;
+                                      });
+                                    }
+                                  : null,
                             )),
               ],
             ),
@@ -673,29 +677,34 @@ class _AddListingScreenState extends State<AddListingScreen> {
                             return DropdownMenuItem(
                                 value: city['name'], child: Text(city['name']));
                           }).toList(),
-                          onChanged: widget.item == null ? (value) async {
-                            setState(() {
-                              selectedCity = value as String?;
-                              for (var element in listCity) {
-                                if (element["name"] == value) {
-                                  cityId = element["id"];
+                          onChanged: widget.item == null
+                              ? (value) async {
+                                  setState(() {
+                                    selectedCity = value as String?;
+                                    for (var element in listCity) {
+                                      if (element["name"] == value) {
+                                        cityId = element["id"];
+                                      }
+                                    }
+                                  });
+                                  selectedVillage = null;
+                                  context
+                                      .read<AddListingCubit>()
+                                      .clearVillage();
+                                  if (value != null) {
+                                    final loadVillageResponse = await context
+                                        .read<AddListingCubit>()
+                                        .loadVillages(value);
+                                    selectedVillage =
+                                        loadVillageResponse.data.first['name'];
+                                    villageId =
+                                        loadVillageResponse.data.first['id'];
+                                    setState(() {
+                                      listVillage = loadVillageResponse.data;
+                                    });
+                                  }
                                 }
-                              }
-                            });
-                            selectedVillage = null;
-                            context.read<AddListingCubit>().clearVillage();
-                            if (value != null) {
-                              final loadVillageResponse = await context
-                                  .read<AddListingCubit>()
-                                  .loadVillages(value);
-                              selectedVillage =
-                                  loadVillageResponse.data.first['name'];
-                              villageId = loadVillageResponse.data.first['id'];
-                              setState(() {
-                                listVillage = loadVillageResponse.data;
-                              });
-                            }
-                          } : null,
+                              : null,
                         ),
                 ),
               ],
