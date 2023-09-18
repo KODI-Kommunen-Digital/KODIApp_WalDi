@@ -162,33 +162,13 @@ class _AddListingScreenState extends State<AddListingScreen> {
   void _onProcess() async {
     final loadCitiesResponse =
         await context.read<AddListingCubit>().loadCities();
-    selectedCity = loadCitiesResponse!.data.first['name'];
-    if (!mounted) return;
+    if(!mounted) return;
     final loadCategoryResponse =
         await context.read<AddListingCubit>().loadCategory();
-    if (!loadCategoryResponse?.data.isEmpty) {
-      var jsonCategory = loadCategoryResponse!.data;
-      final selectedCategory = jsonCategory.first['name'];
-      if (!mounted) return;
-      final subCategoryResponse = await context
-          .read<AddListingCubit>()
-          .loadSubCategory(selectedCategory);
-      listSubCategory = subCategoryResponse!.data;
-    }
     setState(() {
       listCategory = loadCategoryResponse?.data;
-      if (currentCity != null && currentCity != 0) {
-        for (var cityData in loadCitiesResponse.data) {
-          if (cityData['id'] == currentCity) {
-            selectedCity = cityData['name'];
-            break; // Exit the loop once the desired city is found
-          }
-        }
-      } else {
-        selectedCity = loadCitiesResponse.data.first['name'];
-      }
       selectedSubCategory = loadCategoryResponse?.data.first['name'];
-      listCity = loadCitiesResponse.data;
+      listCity = loadCitiesResponse?.data;
       selectedCategory = selectedSubCategory;
       if (selectedCategory == "News" || selectedCategory == null) {
         selectSubCategory(selectedCategory);
@@ -203,7 +183,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
 
     if (widget.item != null) {
       if (!mounted) return;
-
       _featureImage = widget.item?.image;
       _featurePdf = widget.item?.pdf;
       _textTitleController.text = widget.item!.title;
@@ -213,6 +192,42 @@ class _AddListingScreenState extends State<AddListingScreen> {
       _textPhoneController.text = widget.item?.phone ?? '';
       _textEmailController.text = widget.item?.email ?? '';
       _textWebsiteController.text = widget.item?.website ?? '';
+      selectedCategory = Translate.of(context)
+          .translate(_getCategoryTranslation(widget.item!.categoryId!));
+      final city = listCity.firstWhere((element) => element['id'] == widget.item?.cityId);
+      selectedCity = city['name'];
+      if (selectedCategory == "News" || selectedCategory == null) {
+        final subCategoryResponse = await context
+            .read<AddListingCubit>()
+            .loadSubCategory(selectedCategory);
+        listSubCategory = subCategoryResponse!.data;
+      }
+
+    }
+    else{
+      if (currentCity != null && currentCity != 0) {
+        for (var cityData in loadCitiesResponse?.data) {
+          if (cityData['id'] == currentCity) {
+            selectedCity = cityData['name'];
+            break; // Exit the loop once the desired city is found
+          }
+        }
+      } else {
+        selectedCity = loadCitiesResponse?.data.first['name'];
+      }
+      if (!loadCategoryResponse?.data.isEmpty) {
+        if (!mounted) return;
+        if (selectedCategory == "News" || selectedCategory == null) {
+        final subCategoryResponse = await context
+            .read<AddListingCubit>()
+            .loadSubCategory(Translate.of(context)
+            .translate(_getCategoryTranslation(loadCategoryResponse!.data.first['id'])));
+        setState(() {
+          listSubCategory = subCategoryResponse!.data;
+        });
+
+      }}
+
     }
     setState(() {
       _processing = false;
@@ -566,12 +581,14 @@ class _AddListingScreenState extends State<AddListingScreen> {
                                         listCategory.first['id'])),
                             items: listCategory.map((category) {
                               return DropdownMenuItem(
-                                  value: category['name'],
+                                  value:  Translate.of(context).translate(
+                                      _getCategoryTranslation(
+                                          category['id'])),
                                   child: Text(Translate.of(context).translate(
                                       _getCategoryTranslation(
                                           category['id']))));
                             }).toList(),
-                            onChanged: (value) async {
+                            onChanged: widget.item == null ? (value) async {
                               setState(
                                 () {
                                   selectedCategory = value as String?;
@@ -585,7 +602,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
                                   selectedCategory == null) {
                                 selectSubCategory(selectedCategory);
                               }
-                            },
+                            } : null,
                           )),
               ],
             ),
@@ -619,14 +636,14 @@ class _AddListingScreenState extends State<AddListingScreen> {
                                         _getSubCategoryTranslation(
                                             subcategory['id']))));
                               }).toList(),
-                              onChanged: (value) {
+                              onChanged: widget.item == null ? (value) {
                                 context
                                     .read<AddListingCubit>()
                                     .getSubCategoryId(value);
                                 setState(() {
                                   selectedSubCategory = value as String?;
                                 });
-                              },
+                              } : null,
                             )),
               ],
             ),
@@ -656,7 +673,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
                             return DropdownMenuItem(
                                 value: city['name'], child: Text(city['name']));
                           }).toList(),
-                          onChanged: (value) async {
+                          onChanged: widget.item == null ? (value) async {
                             setState(() {
                               selectedCity = value as String?;
                               for (var element in listCity) {
@@ -678,7 +695,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
                                 listVillage = loadVillageResponse.data;
                               });
                             }
-                          },
+                          } : null,
                         ),
                 ),
               ],
