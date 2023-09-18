@@ -162,12 +162,12 @@ class ListRepository {
     return null;
   }
 
-  void deletePdf(cityId, listingId) async {
-    Api.deletePdf(cityId, listingId);
+  Future<void> deletePdf(cityId, listingId) async {
+    await Api.deletePdf(cityId, listingId);
   }
 
-  void deleteImage(cityId, listingId) async {
-    Api.deleteImage(cityId, listingId);
+  Future<void> deleteImage(cityId, listingId) async {
+    await Api.deleteImage(cityId, listingId);
   }
 
   static Future<ProductModel?> loadProduct(cityId, id) async {
