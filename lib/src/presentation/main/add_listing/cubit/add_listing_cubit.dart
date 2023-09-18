@@ -152,12 +152,12 @@ class AddListingCubit extends Cubit<AddListingState> {
     _repo.clearCityId();
   }
 
-  void deletePdf(cityId, listingId) async {
-    _repo.deletePdf(cityId, listingId);
+  Future<void> deletePdf(cityId, listingId) async {
+    await _repo.deletePdf(cityId, listingId);
   }
 
-  void deleteImage(cityId, listingId) async {
-    _repo.deleteImage(cityId, listingId);
+  Future<void> deleteImage(cityId, listingId) async {
+    await _repo.deleteImage(cityId, listingId);
   }
 
   void clearCategoryId() async {
