@@ -5,6 +5,7 @@ import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_user.dart';
+import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/account/profile/cubit/profile_cubit.dart';
 import 'package:heidi/src/presentation/main/account/profile/cubit/profile_state.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
@@ -204,67 +205,87 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                                           children: <Widget>[
                                             item.pdf == ''
                                                 ? CachedNetworkImage(
-                                              imageUrl:
-                                              "${Application.picturesURL}${item.image}?cacheKey=$uniqueKey",
-                                              imageBuilder: (context, imageProvider) {
-                                                return Container(
-                                                  width: 120,
-                                                  height: 140,
-                                                  decoration: BoxDecoration(
-                                                    image: DecorationImage(
-                                                      image: imageProvider,
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                                    borderRadius: BorderRadius.circular(11),
-                                                  ),
-                                                );
-                                              },
-                                              placeholder: (context, url) {
-                                                return AppPlaceholder(
-                                                  child: Container(
+                                                    imageUrl:
+                                                        "${Application.picturesURL}${item.image}?cacheKey=$uniqueKey",
+                                                    imageBuilder: (context,
+                                                        imageProvider) {
+                                                      return Container(
+                                                        width: 120,
+                                                        height: 140,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          image:
+                                                              DecorationImage(
+                                                            image:
+                                                                imageProvider,
+                                                            fit: BoxFit.cover,
+                                                          ),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(11),
+                                                        ),
+                                                      );
+                                                    },
+                                                    placeholder:
+                                                        (context, url) {
+                                                      return AppPlaceholder(
+                                                        child: Container(
+                                                          width: 120,
+                                                          height: 140,
+                                                          decoration:
+                                                              const BoxDecoration(
+                                                            color: Colors.white,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .only(
+                                                              topLeft: Radius
+                                                                  .circular(8),
+                                                              bottomLeft: Radius
+                                                                  .circular(8),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                    errorWidget:
+                                                        (context, url, error) {
+                                                      return AppPlaceholder(
+                                                        child: Container(
+                                                          width: 120,
+                                                          height: 140,
+                                                          decoration:
+                                                              const BoxDecoration(
+                                                            color: Colors.white,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .only(
+                                                              topLeft: Radius
+                                                                  .circular(8),
+                                                              bottomLeft: Radius
+                                                                  .circular(8),
+                                                            ),
+                                                          ),
+                                                          child: const Icon(
+                                                              Icons.error),
+                                                        ),
+                                                      );
+                                                    },
+                                                  )
+                                                : SizedBox(
                                                     width: 120,
                                                     height: 140,
-                                                    decoration: const BoxDecoration(
-                                                      color: Colors.white,
-                                                      borderRadius: BorderRadius.only(
-                                                        topLeft: Radius.circular(8),
-                                                        bottomLeft: Radius.circular(8),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                              errorWidget: (context, url, error) {
-                                                return AppPlaceholder(
-                                                  child: Container(
-                                                    width: 120,
-                                                    height: 140,
-                                                    decoration: const BoxDecoration(
-                                                      color: Colors.white,
-                                                      borderRadius: BorderRadius.only(
-                                                        topLeft: Radius.circular(8),
-                                                        bottomLeft: Radius.circular(8),
-                                                      ),
-                                                    ),
-                                                    child: const Icon(Icons.error),
-                                                  ),
-                                                );
-                                              },
-                                            ): SizedBox(
-                                                width: 120,
-                                                height: 140,
-                                                child: const PDF()
-                                                    .cachedFromUrl(
-                                                  "${Application.picturesURL}${item.pdf}?cacheKey=$uniqueKey",
-                                                  placeholder: (progress) =>
-                                                      Center(
-                                                          child: Text(
-                                                              '$progress %')),
-                                                  errorWidget: (error) =>
-                                                      Center(
-                                                          child: Text(error
-                                                              .toString())),
-                                                )),
+                                                    child: const PDF()
+                                                        .cachedFromUrl(
+                                                      "${Application.picturesURL}${item.pdf}?cacheKey=$uniqueKey",
+                                                      placeholder: (progress) =>
+                                                          Center(
+                                                              child: Text(
+                                                                  '$progress %')),
+                                                      errorWidget: (error) =>
+                                                          Center(
+                                                              child: Text(error
+                                                                  .toString())),
+                                                    )),
                                             const SizedBox(width: 8),
                                             Expanded(
                                               child: Column(
@@ -351,7 +372,10 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
               .translate('Are_you_sure_you_want_to_delete_this_item?')),
           actions: <Widget>[
             TextButton(
-              onPressed: () => Navigator.of(context).pop(true), // Yes
+              onPressed: () async {
+                Navigator.of(context).pop(true);
+                await AppBloc.homeCubit.onLoad(false);
+              }, // Yes
               child: Text(Translate.of(context).translate('yes')),
             ),
             TextButton(
