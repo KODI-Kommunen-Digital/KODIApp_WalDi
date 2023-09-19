@@ -324,6 +324,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
         }
         final result = await context.read<AddListingCubit>().onEdit(
             cityId: widget.item?.cityId,
+            categoryId: widget.item!.categoryId,
             listingId: widget.item?.id,
             title: _textTitleController.text,
             place: _textPlaceController.text,

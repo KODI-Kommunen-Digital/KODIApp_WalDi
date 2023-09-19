@@ -87,6 +87,7 @@ class AddListingCubit extends Cubit<AddListingState> {
 
   Future<bool> onEdit({
     int? cityId,
+    int? categoryId,
     int? listingId,
     required String title,
     required String description,
@@ -112,6 +113,7 @@ class AddListingCubit extends Cubit<AddListingState> {
     try {
       final response = await _repo.editProduct(
           listingId,
+          categoryId,
           cityId,
           title,
           description,

@@ -373,6 +373,7 @@ class ListRepository {
 
   Future<ResultApiModel> editProduct(
     int? listingId,
+    int? categoryId,
     cityId,
     String title,
     String description,
@@ -396,7 +397,6 @@ class ListRepository {
     TimeOfDay? endTime,
   ) async {
     final subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
-    final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
     final villageId = prefs.getKeyValue(Preferences.villageId, null);
     final userId = prefs.getKeyValue(Preferences.userId, '');
     final media = prefs.getKeyValue(Preferences.path, null);
