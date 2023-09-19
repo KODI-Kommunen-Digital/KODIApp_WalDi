@@ -131,17 +131,11 @@ class ListRepository {
   ///Upload image
   static Future<ResultApiModel?> uploadImage(File image, profile) async {
     final prefs = await Preferences.openBox();
-    String imageType = '';
-    if (image.path.contains('jpg')) {
-      imageType = 'jpg';
-    } else if (image.path.contains('jpeg')) {
-      imageType = 'jpeg';
-    } else if (image.path.contains('png')) {
-      imageType = 'png';
-    }
+    List<String> parts = image.path.split('.');
+      String imageExtension = parts.last;
     final formData = FormData.fromMap({
       'image': await MultipartFile.fromFile(image.path,
-          filename: image.path, contentType: MediaType('image', imageType)),
+          filename: image.path, contentType: MediaType('image', imageExtension)),
     });
     if (profile) {
       final response = await Api.requestUploadImage(formData);
