@@ -411,15 +411,29 @@ class ListRepository {
     String? combinedEndDateTime;
 
     if (startDate != null) {
-      final String formattedTime =
-          "${startTime?.hour}:${startTime?.minute.toString().padLeft(2, '0')}";
-      combinedStartDateTime = "${startDate.trim()}T$formattedTime";
+      String formattedTime;
+      if (startTime?.periodOffset == 0) {
+        formattedTime =
+            "${startTime?.periodOffset}${startTime?.hour}:${startTime?.minute.toString().padLeft(2, '0')}";
+        combinedStartDateTime = "${startDate.trim()}T$formattedTime";
+      } else if (startTime?.periodOffset != 0) {
+        formattedTime =
+            "${startTime?.hour}:${startTime?.minute.toString().padLeft(2, '0')}";
+        combinedStartDateTime = "${startDate.trim()}T$formattedTime";
+      }
     }
 
     if (endDate != null) {
-      final String formattedTime =
-          "${endTime?.hour}:${endTime?.minute.toString().padLeft(2, '0')}";
-      combinedEndDateTime = "${endDate.trim()}T$formattedTime";
+      String formattedTime;
+      if (endTime?.periodOffset == 0) {
+        formattedTime =
+            "${endTime?.periodOffset}${endTime?.hour}:${endTime?.minute.toString().padLeft(2, '0')}";
+        combinedEndDateTime = "${endDate.trim()}T$formattedTime";
+      } else if (endTime?.periodOffset != 0) {
+        formattedTime =
+            "${endTime?.hour}:${endTime?.minute.toString().padLeft(2, '0')}";
+        combinedEndDateTime = "${endDate.trim()}T$formattedTime";
+      }
     }
 
     Map<String, dynamic> params = {
