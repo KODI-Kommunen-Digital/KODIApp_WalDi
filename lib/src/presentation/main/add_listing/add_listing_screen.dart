@@ -204,7 +204,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
 
     if (widget.item != null) {
       if (!mounted) return;
-
       _featureImage = widget.item?.image;
       _featurePdf = widget.item?.pdf;
       _textTitleController.text = widget.item!.title;
@@ -214,6 +213,58 @@ class _AddListingScreenState extends State<AddListingScreen> {
       _textPhoneController.text = widget.item?.phone ?? '';
       _textEmailController.text = widget.item?.email ?? '';
       _textWebsiteController.text = widget.item?.website ?? '';
+      selectedCategory = Translate.of(context)
+          .translate(_getCategoryTranslation(widget.item!.categoryId!));
+      final city = listCity
+          .firstWhere((element) => element['id'] == widget.item?.cityId);
+      selectedCity = city['name'];
+      if (selectedCategory == "News" || selectedCategory == null) {
+        final subCategoryResponse = await context
+            .read<AddListingCubit>()
+            .loadSubCategory(selectedCategory);
+        listSubCategory = subCategoryResponse!.data;
+      }
+      if (widget.item?.startDate != '') {
+        List<String> startDateTime = widget.item!.startDate.split(' ');
+        List<String> endDateTime = widget.item!.endDate.split(' ');
+
+        if (startDateTime.length == 2) {
+          _startDate = startDateTime[0]; // '15.09.2023'
+          List<String> startTimeParts = startDateTime[1].split(':');
+          int startHour = int.parse(startTimeParts[0]);
+          int startMinute = int.parse(startTimeParts[1]);
+          _startTime = TimeOfDay(hour: startHour, minute: startMinute);
+          _endDate = endDateTime[0]; // '15.09.2023'
+          List<String> endTimeParts = endDateTime[1].split(':');
+          int endHour = int.parse(endTimeParts[0]);
+          int endMinute = int.parse(endTimeParts[1]);
+          _endTime = TimeOfDay(hour: endHour, minute: endMinute);
+        }
+      }
+    } else {
+      if (currentCity != null && currentCity != 0) {
+        for (var cityData in loadCitiesResponse?.data) {
+          if (cityData['id'] == currentCity) {
+            selectedCity = cityData['name'];
+            break; // Exit the loop once the desired city is found
+          }
+        }
+      } else {
+        selectedCity = loadCitiesResponse?.data.first['name'];
+      }
+      if (!loadCategoryResponse?.data.isEmpty) {
+        if (!mounted) return;
+        if (selectedCategory == "News" || selectedCategory == null) {
+          final subCategoryResponse = await context
+              .read<AddListingCubit>()
+              .loadSubCategory(Translate.of(context).translate(
+                  _getCategoryTranslation(
+                      loadCategoryResponse!.data.first['id'])));
+          setState(() {
+            listSubCategory = subCategoryResponse!.data;
+          });
+        }
+      }
     }
     setState(() {
       _processing = false;
@@ -567,25 +618,28 @@ class _AddListingScreenState extends State<AddListingScreen> {
                                         listCategory.first['id'])),
                             items: listCategory.map((category) {
                               return DropdownMenuItem(
-                                  value: category['name'],
+                                  value: Translate.of(context).translate(
+                                      _getCategoryTranslation(category['id'])),
                                   child: Text(Translate.of(context).translate(
                                       _getCategoryTranslation(
                                           category['id']))));
                             }).toList(),
-                            onChanged: (value) async {
-                              setState(
-                                () {
-                                  selectedCategory = value as String?;
-                                  context
-                                      .read<AddListingCubit>()
-                                      .setCategoryId(selectedCategory);
-                                },
-                              );
-                              if (selectedCategory == "News" ||
-                                  selectedCategory == null) {
-                                selectSubCategory(selectedCategory);
-                              }
-                            },
+                            onChanged: widget.item == null
+                                ? (value) async {
+                                    setState(
+                                      () {
+                                        selectedCategory = value as String?;
+                                        context
+                                            .read<AddListingCubit>()
+                                            .setCategoryId(selectedCategory);
+                                      },
+                                    );
+                                    if (selectedCategory == "News" ||
+                                        selectedCategory == null) {
+                                      selectSubCategory(selectedCategory);
+                                    }
+                                  }
+                                : null,
                           )),
               ],
             ),
@@ -619,14 +673,16 @@ class _AddListingScreenState extends State<AddListingScreen> {
                                         _getSubCategoryTranslation(
                                             subcategory['id']))));
                               }).toList(),
-                              onChanged: (value) {
-                                context
-                                    .read<AddListingCubit>()
-                                    .getSubCategoryId(value);
-                                setState(() {
-                                  selectedSubCategory = value as String?;
-                                });
-                              },
+                              onChanged: widget.item == null
+                                  ? (value) {
+                                      context
+                                          .read<AddListingCubit>()
+                                          .getSubCategoryId(value);
+                                      setState(() {
+                                        selectedSubCategory = value as String?;
+                                      });
+                                    }
+                                  : null,
                             )),
               ],
             ),
@@ -656,29 +712,34 @@ class _AddListingScreenState extends State<AddListingScreen> {
                             return DropdownMenuItem(
                                 value: city['name'], child: Text(city['name']));
                           }).toList(),
-                          onChanged: (value) async {
-                            setState(() {
-                              selectedCity = value as String?;
-                              for (var element in listCity) {
-                                if (element["name"] == value) {
-                                  cityId = element["id"];
+                          onChanged: widget.item == null
+                              ? (value) async {
+                                  setState(() {
+                                    selectedCity = value as String?;
+                                    for (var element in listCity) {
+                                      if (element["name"] == value) {
+                                        cityId = element["id"];
+                                      }
+                                    }
+                                  });
+                                  selectedVillage = null;
+                                  context
+                                      .read<AddListingCubit>()
+                                      .clearVillage();
+                                  if (value != null) {
+                                    final loadVillageResponse = await context
+                                        .read<AddListingCubit>()
+                                        .loadVillages(value);
+                                    // selectedVillage =
+                                    //     loadVillageResponse.data.first['name'];
+                                    villageId =
+                                        loadVillageResponse.data.first['id'];
+                                    setState(() {
+                                      listVillage = loadVillageResponse.data;
+                                    });
+                                  }
                                 }
-                              }
-                            });
-                            selectedVillage = null;
-                            context.read<AddListingCubit>().clearVillage();
-                            if (value != null) {
-                              final loadVillageResponse = await context
-                                  .read<AddListingCubit>()
-                                  .loadVillages(value);
-                              // selectedVillage =
-                              //     loadVillageResponse.data.first['name'];
-                              villageId = loadVillageResponse.data.first['id'];
-                              setState(() {
-                                listVillage = loadVillageResponse.data;
-                              });
-                            }
-                          },
+                              : null,
                         ),
                 ),
               ],
