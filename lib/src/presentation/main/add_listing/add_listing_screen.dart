@@ -205,6 +205,23 @@ class _AddListingScreenState extends State<AddListingScreen> {
             .loadSubCategory(selectedCategory);
         listSubCategory = subCategoryResponse!.data;
       }
+      if (widget.item?.startDate != '') {
+        List<String> startDateTime = widget.item!.startDate.split(' ');
+        List<String> endDateTime = widget.item!.endDate.split(' ');
+
+        if (startDateTime.length == 2) {
+          _startDate = startDateTime[0]; // '15.09.2023'
+          List<String> startTimeParts = startDateTime[1].split(':');
+          int startHour = int.parse(startTimeParts[0]);
+          int startMinute = int.parse(startTimeParts[1]);
+          _startTime = TimeOfDay(hour: startHour, minute: startMinute);
+          _endDate = endDateTime[0]; // '15.09.2023'
+          List<String> endTimeParts = endDateTime[1].split(':');
+          int endHour = int.parse(endTimeParts[0]);
+          int endMinute = int.parse(endTimeParts[1]);
+          _endTime = TimeOfDay(hour: endHour, minute: endMinute);
+        }
+      }
     } else {
       if (currentCity != null && currentCity != 0) {
         for (var cityData in loadCitiesResponse?.data) {
