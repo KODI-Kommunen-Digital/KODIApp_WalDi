@@ -368,7 +368,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           );
         },
         child: CachedNetworkImage(
-          imageUrl: "${Application.picturesURL}${product.image}?cacheKey=$uniqueKey",
+          imageUrl: product.image == 'admin/News.jpeg'
+              ? "${Application.picturesURL}${product.image}"
+              :"${Application.picturesURL}${product.image}?cacheKey=$uniqueKey",
           placeholder: (context, url) {
             return AppPlaceholder(
               child: Container(
