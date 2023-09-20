@@ -67,8 +67,8 @@ class AppProductItem extends StatelessWidget {
                       errorWidget: (context, url, error) {
                         return AppPlaceholder(
                           child: Container(
-                            width: 120,
-                            height: 140,
+                            width: 84,
+                            height: 84,
                             decoration: const BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.only(
@@ -81,16 +81,19 @@ class AppProductItem extends StatelessWidget {
                         );
                       },
                     )
-                  : SizedBox(
-                      width: 84,
-                      height: 84,
-                      child: const PDF().cachedFromUrl(
-                        "${Application.picturesURL}${item?.pdf}?cacheKey=$uniqueKey",
-                        placeholder: (progress) =>
-                            Center(child: Text('$progress %')),
-                        errorWidget: (error) =>
-                            Center(child: Text(error.toString())),
-                      )),
+                  : ClipRRect(
+                      borderRadius: BorderRadius.circular(11),
+                      child: SizedBox(
+                          width: 84,
+                          height: 84,
+                          child: const PDF().cachedFromUrl(
+                            "${Application.picturesURL}${item?.pdf}?cacheKey=$uniqueKey",
+                            placeholder: (progress) =>
+                                Center(child: Text('$progress %')),
+                            errorWidget: (error) =>
+                                Center(child: Text(error.toString())),
+                          )),
+                    ),
               const SizedBox(width: 8),
               Expanded(
                 child: Column(
@@ -274,53 +277,69 @@ class AppProductItem extends StatelessWidget {
             children: [
               Row(
                 children: <Widget>[
-                  CachedNetworkImage(
-                    imageUrl: "${Application.picturesURL}${item!.image}",
-                    imageBuilder: (context, imageProvider) {
-                      return Container(
-                        width: 120,
-                        height: 140,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: imageProvider,
-                            fit: BoxFit.cover,
-                          ),
+                  item?.pdf == ''
+                      ? CachedNetworkImage(
+                          imageUrl: item?.image == 'admin/News.jpeg'
+                              ? "${Application.picturesURL}${item?.image}"
+                              : "${Application.picturesURL}${item!.image}?cacheKey=$uniqueKey",
+                          imageBuilder: (context, imageProvider) {
+                            return Container(
+                              width: 120,
+                              height: 140,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: imageProvider,
+                                  fit: BoxFit.cover,
+                                ),
+                                borderRadius: BorderRadius.circular(11),
+                              ),
+                            );
+                          },
+                          placeholder: (context, url) {
+                            return AppPlaceholder(
+                              child: Container(
+                                width: 120,
+                                height: 140,
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(8),
+                                    bottomLeft: Radius.circular(8),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                          errorWidget: (context, url, error) {
+                            return AppPlaceholder(
+                              child: Container(
+                                width: 120,
+                                height: 140,
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(8),
+                                    bottomLeft: Radius.circular(8),
+                                  ),
+                                ),
+                                child: const Icon(Icons.error),
+                              ),
+                            );
+                          },
+                        )
+                      : ClipRRect(
                           borderRadius: BorderRadius.circular(11),
+                          child: SizedBox(
+                              width: 120,
+                              height: 140,
+                              child: const PDF().cachedFromUrl(
+                                "${Application.picturesURL}${item?.pdf}?cacheKey=$uniqueKey",
+                                placeholder: (progress) =>
+                                    Center(child: Text('$progress %')),
+                                errorWidget: (error) =>
+                                    Center(child: Text(error.toString())),
+                              )),
                         ),
-                      );
-                    },
-                    placeholder: (context, url) {
-                      return AppPlaceholder(
-                        child: Container(
-                          width: 120,
-                          height: 140,
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(8),
-                              bottomLeft: Radius.circular(8),
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                    errorWidget: (context, url, error) {
-                      return AppPlaceholder(
-                        child: Container(
-                          width: 120,
-                          height: 140,
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(8),
-                              bottomLeft: Radius.circular(8),
-                            ),
-                          ),
-                          child: const Icon(Icons.error),
-                        ),
-                      );
-                    },
-                  ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Column(

@@ -727,12 +727,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
             return {'style': style};
           },
-          onTapUrl: (url) {
-            if (Uri.parse(url).hasAbsolutePath) {
-              _makeAction(url);
-            }
-            return false;
-          },
+          // onTapUrl: (url) {
+          //   if (Uri.parse(url).hasAbsolutePath) {
+          //     _makeAction(url);
+          //   }
+          //   return false;
+          // },
         );
       }
 
