@@ -419,5 +419,8 @@
   "subcategory_club_news": "Club news",
   "subcategory_official_notification": "Official Notification",
   "choose_stime":"Choose Start Time",
-  "choose_etime":"Choose End Time"
+  "choose_etime":"Choose End Time", 
+  "message_sent":"Message Sent",
+  "message_sent_success":"Message Sent Successfully",
+  "submit_contactUs_message":"Your messsage has been sent successfully. Thank you for your feedback."
 }
