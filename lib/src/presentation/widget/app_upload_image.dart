@@ -132,7 +132,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
                 },
                 child: ListTile(
                   leading: const Icon(Icons.image),
-                  title: Text(Translate.of(context).translate('Images')),
+                  title: Text(Translate.of(context).translate('images')),
                 ),
               ),
             ],
@@ -144,7 +144,6 @@ class _AppUploadImageState extends State<AppUploadImage> {
         await openAppSettings();
       }
       isPermanentlyDenied = true;
-
     }
   }
 

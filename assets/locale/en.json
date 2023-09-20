@@ -117,9 +117,6 @@
   "payment": "Payment",
   "payment_not_completed": "Payment not completed",
   "booking_fail_message": "Booking request fail",
-  "message_sent": "Your message has been sent",
-  "submit_contactUs_message": "Thank you for your message. We shall get back to you as soon as possbile.",
-  "message_sent_success": "Message Sent",
   "payment_intro": "Your strategic online business partner.",
   "location_intro": "Location, Community, Quality Living. It Starts Here!",
   "lasted_post": "Lasted Post",
@@ -422,5 +419,8 @@
   "delete_account_success": "Account Deleted Successfully",
   "delete_account_fail": "Account Deletion failed. Please try later.",
   "choose_stime":"Choose Start Time",
-  "choose_etime":"Choose End Time"
+  "choose_etime":"Choose End Time",
+  "message_sent":"Message Sent",
+  "message_sent_success":"Message Sent Successfully",
+  "submit_contactUs_message":"Your messsage has been sent successfully. Thank you for your feedback."
 }

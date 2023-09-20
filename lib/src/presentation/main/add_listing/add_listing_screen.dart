@@ -263,7 +263,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
 
   void _onShowStartDatePicker(String? startDate) async {
     final now = DateTime.now();
-    final dateFormat = DateFormat('dd.MM.yyyy');
+    final dateFormat = DateFormat('yyyy-MM-dd');
     if (startDate != null) {
       final parsedDate = dateFormat.parse(startDate);
       final picked = await showDatePicker(
@@ -295,7 +295,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
 
   void _onShowEndDatePicker(String? endDate) async {
     final now = DateTime.now();
-    final dateFormat = DateFormat('dd.MM.yyyy');
+    final dateFormat = DateFormat('yyyy-MM-dd');
     if (endDate != null) {
       final parsedDate = dateFormat.parse(endDate);
       final picked = await showDatePicker(
