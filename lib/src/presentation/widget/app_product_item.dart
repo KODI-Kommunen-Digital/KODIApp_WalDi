@@ -36,8 +36,9 @@ class AppProductItem extends StatelessWidget {
             children: <Widget>[
               item?.pdf == ''
                   ? CachedNetworkImage(
-                      imageUrl:
-                          "${Application.picturesURL}${item!.image}?cacheKey=$uniqueKey",
+                      imageUrl: item?.image == 'admin/News.jpeg'
+                          ? "${Application.picturesURL}${item?.image}"
+                          : "${Application.picturesURL}${item!.image}?cacheKey=$uniqueKey",
                       imageBuilder: (context, imageProvider) {
                         return Container(
                           width: 84,
