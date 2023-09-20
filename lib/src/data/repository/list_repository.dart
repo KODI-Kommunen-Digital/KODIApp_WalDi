@@ -113,7 +113,8 @@ class ListRepository {
     String imageExtension = parts.last;
     final formData = FormData.fromMap({
       'image': await MultipartFile.fromFile(image.path,
-          filename: image.path, contentType: MediaType('image', imageExtension)),
+          filename: image.path,
+          contentType: MediaType('image', imageExtension)),
     });
     if (profile) {
       final response = await Api.requestUploadImage(formData);
@@ -301,6 +302,7 @@ class ListRepository {
 
   Future<ResultApiModel> editProduct(
     int? listingId,
+    int? categoryId,
     cityId,
     String title,
     String description,
@@ -324,7 +326,6 @@ class ListRepository {
     TimeOfDay? endTime,
   ) async {
     final subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
-    final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
     final villageId = prefs.getKeyValue(Preferences.villageId, null);
     final userId = prefs.getKeyValue(Preferences.userId, '');
     final media = prefs.getKeyValue(Preferences.path, null);
