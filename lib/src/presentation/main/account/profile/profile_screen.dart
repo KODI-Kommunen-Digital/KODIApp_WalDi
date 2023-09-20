@@ -205,7 +205,8 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                                           children: <Widget>[
                                             item.pdf == ''
                                                 ? CachedNetworkImage(
-                                                    imageUrl: item.image == 'admin/News.jpeg'
+                                                    imageUrl: item.image ==
+                                                            'admin/News.jpeg'
                                                         ? "${Application.picturesURL}${item.image}"
                                                         : "${Application.picturesURL}${item.image}?cacheKey=$uniqueKey",
                                                     imageBuilder: (context,
@@ -272,21 +273,26 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                                                       );
                                                     },
                                                   )
-                                                : SizedBox(
-                                                    width: 120,
-                                                    height: 140,
-                                                    child: const PDF()
-                                                        .cachedFromUrl(
-                                                      "${Application.picturesURL}${item.pdf}?cacheKey=$uniqueKey",
-                                                      placeholder: (progress) =>
-                                                          Center(
-                                                              child: Text(
-                                                                  '$progress %')),
-                                                      errorWidget: (error) =>
-                                                          Center(
-                                                              child: Text(error
-                                                                  .toString())),
-                                                    )),
+                                                : ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            11),
+                                                    child: SizedBox(
+                                                        width: 120,
+                                                        height: 140,
+                                                        child: const PDF()
+                                                            .cachedFromUrl(
+                                                          "${Application.picturesURL}${item.pdf}?cacheKey=$uniqueKey",
+                                                          placeholder:
+                                                              (progress) => Center(
+                                                                  child: Text(
+                                                                      '$progress %')),
+                                                          errorWidget:
+                                                              (error) => Center(
+                                                                  child: Text(error
+                                                                      .toString())),
+                                                        )),
+                                                  ),
                                             const SizedBox(width: 8),
                                             Expanded(
                                               child: Column(
