@@ -12,6 +12,7 @@ import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/datetime.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:heidi/src/utils/validate.dart';
+import 'package:intl/intl.dart';
 import 'package:loggy/loggy.dart';
 
 import 'cubit/add_listing_cubit.dart';
@@ -210,16 +211,24 @@ class _AddListingScreenState extends State<AddListingScreen> {
         List<String> endDateTime = widget.item!.endDate.split(' ');
 
         if (startDateTime.length == 2) {
-          _startDate = startDateTime[0]; // '15.09.2023'
+          _startDate = startDateTime[0];
           List<String> startTimeParts = startDateTime[1].split(':');
           int startHour = int.parse(startTimeParts[0]);
           int startMinute = int.parse(startTimeParts[1]);
           _startTime = TimeOfDay(hour: startHour, minute: startMinute);
-          _endDate = endDateTime[0]; // '15.09.2023'
-          List<String> endTimeParts = endDateTime[1].split(':');
-          int endHour = int.parse(endTimeParts[0]);
-          int endMinute = int.parse(endTimeParts[1]);
-          _endTime = TimeOfDay(hour: endHour, minute: endMinute);
+          if (endDateTime.length == 2) {
+            _endDate = endDateTime[0];
+            List<String> endTimeParts = endDateTime[1].split(':');
+            int endHour = int.parse(endTimeParts[0]);
+            int endMinute = int.parse(endTimeParts[1]);
+            _endTime = TimeOfDay(hour: endHour, minute: endMinute);
+          } else {
+            _endDate = startDateTime[0];
+            List<String> endTimeParts = endDateTime[0].split(':');
+            int endHour = int.parse(endTimeParts[0]);
+            int endMinute = int.parse(endTimeParts[1]);
+            _endTime = TimeOfDay(hour: endHour, minute: endMinute);
+          }
         }
       }
     } else {
@@ -252,68 +261,126 @@ class _AddListingScreenState extends State<AddListingScreen> {
     });
   }
 
-  void _onShowStartDatePicker() async {
+  void _onShowStartDatePicker(String? startDate) async {
     final now = DateTime.now();
-    final picked = await showDatePicker(
-      initialDate: now,
-      firstDate: DateTime(now.year),
-      context: context,
-      lastDate: DateTime(now.year + 1),
-    );
-    if (picked != null) {
-      setState(() {
-        _startDate = picked.dateView;
-      });
+    final dateFormat = DateFormat('dd.MM.yyyy');
+    if (startDate != null) {
+      final parsedDate = dateFormat.parse(startDate);
+      final picked = await showDatePicker(
+        initialDate: parsedDate,
+        firstDate: DateTime(now.year),
+        context: context,
+        lastDate: DateTime(now.year + 1),
+      );
+      if (picked != null) {
+        setState(() {
+          _startDate = picked.dateView;
+        });
+      }
+    } else {
+      final picked = await showDatePicker(
+        initialDate: now,
+        firstDate: DateTime(now.year),
+        context: context,
+        lastDate: DateTime(now.year + 1),
+      );
+
+      if (picked != null) {
+        setState(() {
+          _startDate = picked.dateView;
+        });
+      }
     }
   }
 
-  void _onShowEndDatePicker() async {
+  void _onShowEndDatePicker(String? endDate) async {
     final now = DateTime.now();
-    final picked = await showDatePicker(
-      initialDate: now,
-      firstDate: DateTime(now.year),
-      context: context,
-      lastDate: DateTime(now.year + 1),
-    );
-    if (picked != null) {
-      setState(() {
-        _endDate = picked.dateView;
-      });
+    final dateFormat = DateFormat('dd.MM.yyyy');
+    if (endDate != null) {
+      final parsedDate = dateFormat.parse(endDate);
+      final picked = await showDatePicker(
+        initialDate: parsedDate,
+        firstDate: DateTime(now.year),
+        context: context,
+        lastDate: DateTime(now.year + 1),
+      );
+      if (picked != null) {
+        setState(() {
+          _endDate = picked.dateView;
+        });
+      }
+    } else {
+      final picked = await showDatePicker(
+        initialDate: now,
+        firstDate: DateTime(now.year),
+        context: context,
+        lastDate: DateTime(now.year + 1),
+      );
+
+      if (picked != null) {
+        setState(() {
+          _endDate = picked.dateView;
+        });
+      }
     }
   }
 
-  Future<void> _onShowStartTimePicker() async {
-    final pickedTime = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-    );
+  Future<void> _onShowStartTimePicker(TimeOfDay? startTime) async {
+    if (startTime != null) {
+      final pickedTime = await showTimePicker(
+        context: context,
+        initialTime: startTime,
+      );
 
-    if (pickedTime != null) {
-      setState(() {
-        _startTime = pickedTime;
-      });
+      if (pickedTime != null) {
+        setState(() {
+          _startTime = pickedTime;
+        });
+      }
+    } else {
+      final pickedTime = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.now(),
+      );
+
+      if (pickedTime != null) {
+        setState(() {
+          _startTime = pickedTime;
+        });
+      }
     }
   }
 
-  Future<void> _onShowEndTimePicker() async {
-    final pickedTime = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-    );
+  Future<void> _onShowEndTimePicker(TimeOfDay? endTime) async {
+    if (endTime != null) {
+      final pickedTime = await showTimePicker(
+        context: context,
+        initialTime: endTime,
+      );
 
-    if (pickedTime != null) {
-      setState(() {
-        _endTime = pickedTime;
-      });
+      if (pickedTime != null) {
+        setState(() {
+          _endTime = pickedTime;
+        });
+      }
+    } else {
+      final pickedTime = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.now(),
+      );
+
+      if (pickedTime != null) {
+        setState(() {
+          _endTime = pickedTime;
+        });
+      }
     }
   }
 
   void _onSubmit() async {
     final success = _validData();
     if (success) {
-      // context.read<AddListingCubit>().setCategoryId(selectedCategory);
       if (widget.item != null) {
-        // context.read<AddListingCubit>().setCategoryId(selectedCategory);
         if (isImageChanged) {
           await context
               .read<AddListingCubit>()
@@ -908,7 +975,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
                     title: Translate.of(context).translate(
                       'choose_date',
                     ),
-                    onPressed: _onShowStartDatePicker,
+                    onPressed: () async {
+                      _onShowStartDatePicker(_startDate);
+                    },
                   ),
                   const SizedBox(height: 8),
                   Text(
@@ -922,16 +991,17 @@ class _AddListingScreenState extends State<AddListingScreen> {
                   ),
                   const SizedBox(height: 8),
                   AppPickerItem(
-                    leading: Icon(
-                      Icons.access_time,
-                      color: Theme.of(context).hintColor,
-                    ),
-                    value: _startTime?.format(context),
-                    title: Translate.of(context).translate(
-                      'choose_stime',
-                    ),
-                    onPressed: _onShowStartTimePicker,
-                  ),
+                      leading: Icon(
+                        Icons.access_time,
+                        color: Theme.of(context).hintColor,
+                      ),
+                      value: _startTime?.format(context),
+                      title: Translate.of(context).translate(
+                        'choose_stime',
+                      ),
+                      onPressed: () async {
+                        _onShowStartTimePicker(_startTime);
+                      }),
                   const SizedBox(height: 16),
                   Text(
                     Translate.of(context).translate(
@@ -952,7 +1022,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
                     title: Translate.of(context).translate(
                       'choose_date',
                     ),
-                    onPressed: _onShowEndDatePicker,
+                    onPressed: () async {
+                      _onShowEndDatePicker(_endDate);
+                    },
                   ),
                   const SizedBox(height: 16),
                   Text(
@@ -974,7 +1046,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
                     title: Translate.of(context).translate(
                       'choose_etime',
                     ),
-                    onPressed: _onShowEndTimePicker,
+                    onPressed: () async {
+                      _onShowEndTimePicker(_endTime);
+                    },
                   ),
                 ],
               ),

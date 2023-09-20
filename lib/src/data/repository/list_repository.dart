@@ -132,10 +132,11 @@ class ListRepository {
   static Future<ResultApiModel?> uploadImage(File image, profile) async {
     final prefs = await Preferences.openBox();
     List<String> parts = image.path.split('.');
-      String imageExtension = parts.last;
+    String imageExtension = parts.last;
     final formData = FormData.fromMap({
       'image': await MultipartFile.fromFile(image.path,
-          filename: image.path, contentType: MediaType('image', imageExtension)),
+          filename: image.path,
+          contentType: MediaType('image', imageExtension)),
     });
     if (profile) {
       final response = await Api.requestUploadImage(formData);
@@ -316,26 +317,26 @@ class ListRepository {
 
     if (startDate != null) {
       String formattedTime;
-      if (startTime?.periodOffset == 0) {
+      if (startTime!.hour < 10) {
         formattedTime =
-            "${startTime?.periodOffset}${startTime?.hour}:${startTime?.minute.toString().padLeft(2, '0')}";
+            "${startTime.periodOffset}${startTime.hour}:${startTime.minute.toString().padLeft(2, '0')}";
         combinedStartDateTime = "${startDate.trim()}T$formattedTime";
-      } else if (startTime?.periodOffset != 0) {
+      } else {
         formattedTime =
-            "${startTime?.hour}:${startTime?.minute.toString().padLeft(2, '0')}";
+            "${startTime.hour}:${startTime.minute.toString().padLeft(2, '0')}";
         combinedStartDateTime = "${startDate.trim()}T$formattedTime";
       }
     }
 
     if (endDate != null) {
       String formattedTime;
-      if (endTime?.periodOffset == 0) {
+      if (endTime!.hour < 10) {
         formattedTime =
-            "${endTime?.periodOffset}${endTime?.hour}:${endTime?.minute.toString().padLeft(2, '0')}";
+            "${endTime.periodOffset}${endTime.hour}:${endTime.minute.toString().padLeft(2, '0')}";
         combinedEndDateTime = "${endDate.trim()}T$formattedTime";
-      } else if (endTime?.periodOffset != 0) {
+      } else {
         formattedTime =
-            "${endTime?.hour}:${endTime?.minute.toString().padLeft(2, '0')}";
+            "${endTime.hour}:${endTime.minute.toString().padLeft(2, '0')}";
         combinedEndDateTime = "${endDate.trim()}T$formattedTime";
       }
     }
@@ -406,26 +407,26 @@ class ListRepository {
 
     if (startDate != null) {
       String formattedTime;
-      if (startTime?.periodOffset == 0) {
+      if (startTime!.hour < 10) {
         formattedTime =
-            "${startTime?.periodOffset}${startTime?.hour}:${startTime?.minute.toString().padLeft(2, '0')}";
+            "${startTime.periodOffset}${startTime.hour}:${startTime.minute.toString().padLeft(2, '0')}";
         combinedStartDateTime = "${startDate.trim()}T$formattedTime";
-      } else if (startTime?.periodOffset != 0) {
+      } else {
         formattedTime =
-            "${startTime?.hour}:${startTime?.minute.toString().padLeft(2, '0')}";
+            "${startTime.hour}:${startTime.minute.toString().padLeft(2, '0')}";
         combinedStartDateTime = "${startDate.trim()}T$formattedTime";
       }
     }
 
     if (endDate != null) {
       String formattedTime;
-      if (endTime?.periodOffset == 0) {
+      if (endTime!.hour < 10) {
         formattedTime =
-            "${endTime?.periodOffset}${endTime?.hour}:${endTime?.minute.toString().padLeft(2, '0')}";
+            "${endTime.periodOffset}${endTime.hour}:${endTime.minute.toString().padLeft(2, '0')}";
         combinedEndDateTime = "${endDate.trim()}T$formattedTime";
-      } else if (endTime?.periodOffset != 0) {
+      } else {
         formattedTime =
-            "${endTime?.hour}:${endTime?.minute.toString().padLeft(2, '0')}";
+            "${endTime.hour}:${endTime.minute.toString().padLeft(2, '0')}";
         combinedEndDateTime = "${endDate.trim()}T$formattedTime";
       }
     }
@@ -513,38 +514,4 @@ class ListRepository {
   void clearSubCategory() async {
     prefs.deleteKey(Preferences.subCategoryId);
   }
-
-//
-// ///save product
-// static Future<bool> saveProduct(cityId, params) async {
-//   final response = await Api.requestSaveProduct(cityId, params);
-//   AppBloc.messageCubit.onShow(response.message);
-//   if (response.success) {
-//     return true;
-//   } else {
-//     return false;
-//   }
-// }
-//
-// ///Delete author item
-// static Future<bool> removeProduct(id) async {
-//   final response = await Api.requestDeleteProduct({"post_id": id});
-//   AppBloc.messageCubit.onShow(response.message);
-//   if (response.success) {
-//     return true;
-//   }
-//   return false;
-// }
-//
-// ///Load tags list with keyword
-// static Future<List<String>?> loadTags(String keyword) async {
-//   final response = await Api.requestTags({"s": keyword});
-//   if (response.success) {
-//     return List.from(response.data ?? []).map((e) {
-//       return e['name'] as String;
-//     }).toList();
-//   }
-//   AppBloc.messageCubit.onShow(response.message);
-//   return [];
-// }
 }
