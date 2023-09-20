@@ -305,8 +305,6 @@ class Api {
   static Future<ResultApiModel> requestListingUploadMedia(
       listingId, cityId, pickedFile) async {
     var filePath = '';
-    final prefs = await Preferences.openBox();
-    FormData? pickedFile = prefs.getPickedFile();
     var firstFileEntry = pickedFile?.files[0];
     if (firstFileEntry?.key == 'pdf') {
       filePath = '/cities/$cityId/listings/$listingId/pdfUpload';
