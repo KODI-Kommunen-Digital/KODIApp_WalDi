@@ -23,16 +23,10 @@ class _LegalScreenState extends State<LegalScreen> {
   }
 
   Future<void> _makeAction(String link) async {
-    if (await canLaunchUrl(
+    await launchUrl(
       Uri.parse(link),
-    )) {
-      await launchUrl(
-        Uri.parse(link),
-        mode: LaunchMode.inAppWebView,
-      );
-    } else {
-      throw 'Could not launch $link';
-    }
+      mode: LaunchMode.inAppWebView,
+    );
   }
 
   @override
