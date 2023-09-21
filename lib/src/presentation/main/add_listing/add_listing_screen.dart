@@ -593,12 +593,23 @@ class _AddListingScreenState extends State<AddListingScreen> {
             ),
             const SizedBox(height: 16),
             const SizedBox(height: 16),
-            Text(
-              Translate.of(context).translate('title'),
-              style: Theme.of(context)
-                  .textTheme
-                  .titleMedium!
-                  .copyWith(fontWeight: FontWeight.bold),
+            Text.rich(
+              TextSpan(
+                text: Translate.of(context).translate('title'),
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium!
+                    .copyWith(fontWeight: FontWeight.bold),
+                children: const <TextSpan>[
+                  TextSpan(
+                    text: ' *',
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 8),
             AppTextInput(
@@ -621,12 +632,23 @@ class _AddListingScreenState extends State<AddListingScreen> {
               },
             ),
             const SizedBox(height: 16),
-            Text(
-              Translate.of(context).translate('input_content'),
-              style: Theme.of(context)
-                  .textTheme
-                  .titleMedium!
-                  .copyWith(fontWeight: FontWeight.bold),
+            Text.rich(
+              TextSpan(
+                text: Translate.of(context).translate('input_content'),
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium!
+                    .copyWith(fontWeight: FontWeight.bold),
+                children: const <TextSpan>[
+                  TextSpan(
+                    text: ' *',
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 8),
             AppTextInput(
@@ -643,12 +665,23 @@ class _AddListingScreenState extends State<AddListingScreen> {
               },
             ),
             const SizedBox(height: 16),
-            Text(
-              Translate.of(context).translate('category'),
-              style: Theme.of(context)
-                  .textTheme
-                  .titleMedium!
-                  .copyWith(fontWeight: FontWeight.bold),
+            Text.rich(
+              TextSpan(
+                text: Translate.of(context).translate('category'),
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium!
+                    .copyWith(fontWeight: FontWeight.bold),
+                children: const <TextSpan>[
+                  TextSpan(
+                    text: ' *',
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 8),
             Row(
@@ -696,12 +729,23 @@ class _AddListingScreenState extends State<AddListingScreen> {
             if (selectedCategory == "News" || selectedCategory == null)
               const SizedBox(height: 8),
             if (selectedCategory == "News" || selectedCategory == null)
-              Text(
-                Translate.of(context).translate('subCategory'),
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium!
-                    .copyWith(fontWeight: FontWeight.bold),
+              Text.rich(
+                TextSpan(
+                  text: Translate.of(context).translate('subCategory'),
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium!
+                      .copyWith(fontWeight: FontWeight.bold),
+                  children: const <TextSpan>[
+                    TextSpan(
+                      text: ' *',
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             const SizedBox(height: 8),
             Row(
@@ -739,12 +783,23 @@ class _AddListingScreenState extends State<AddListingScreen> {
             if (selectedCategory == "News" || selectedCategory == null)
               const SizedBox(height: 8),
             const SizedBox(height: 8),
-            Text(
-              Translate.of(context).translate('city'),
-              style: Theme.of(context)
-                  .textTheme
-                  .titleMedium!
-                  .copyWith(fontWeight: FontWeight.bold),
+            Text.rich(
+              TextSpan(
+                text: Translate.of(context).translate('city'),
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium!
+                    .copyWith(fontWeight: FontWeight.bold),
+                children: const <TextSpan>[
+                  TextSpan(
+                    text: ' *',
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 8),
             Row(
@@ -956,14 +1011,23 @@ class _AddListingScreenState extends State<AddListingScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 16),
-                  Text(
-                    Translate.of(context).translate(
-                      'start_date',
+                  Text.rich(
+                    TextSpan(
+                      text: Translate.of(context).translate('start_date'),
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleMedium!
+                          .copyWith(fontWeight: FontWeight.bold),
+                      children: const <TextSpan>[
+                        TextSpan(
+                          text: ' *',
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium!
-                        .copyWith(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
                   AppPickerItem(
@@ -980,14 +1044,23 @@ class _AddListingScreenState extends State<AddListingScreen> {
                     },
                   ),
                   const SizedBox(height: 8),
-                  Text(
-                    Translate.of(context).translate(
-                      'start_time',
+                  Text.rich(
+                    TextSpan(
+                      text: Translate.of(context).translate('start_time'),
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleMedium!
+                          .copyWith(fontWeight: FontWeight.bold),
+                      children: const <TextSpan>[
+                        TextSpan(
+                          text: ' *',
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium!
-                        .copyWith(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
                   AppPickerItem(
@@ -1003,14 +1076,23 @@ class _AddListingScreenState extends State<AddListingScreen> {
                         _onShowStartTimePicker(_startTime);
                       }),
                   const SizedBox(height: 16),
-                  Text(
-                    Translate.of(context).translate(
-                      'end_date',
+                  Text.rich(
+                    TextSpan(
+                      text: Translate.of(context).translate('end_date'),
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleMedium!
+                          .copyWith(fontWeight: FontWeight.bold),
+                      children: const <TextSpan>[
+                        TextSpan(
+                          text: ' *',
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium!
-                        .copyWith(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
                   AppPickerItem(
@@ -1027,14 +1109,23 @@ class _AddListingScreenState extends State<AddListingScreen> {
                     },
                   ),
                   const SizedBox(height: 16),
-                  Text(
-                    Translate.of(context).translate(
-                      'end_time',
+                  Text.rich(
+                    TextSpan(
+                      text: Translate.of(context).translate('end_time'),
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleMedium!
+                          .copyWith(fontWeight: FontWeight.bold),
+                      children: const <TextSpan>[
+                        TextSpan(
+                          text: ' *',
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium!
-                        .copyWith(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
                   AppPickerItem(
