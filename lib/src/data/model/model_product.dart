@@ -157,14 +157,14 @@ class ProductModel {
     } else if (json['categoryId'] == 3) {
       category = "Veranstaltungen";
       final parsedDateTime = DateTime.parse(json['startDate']);
-      startDate = DateFormat('yyyy-MM-dd HH:mm').format(parsedDateTime);
+      startDate = DateFormat('dd.MM.yyyy HH:mm').format(parsedDateTime);
       final parsedEDateTime = DateTime.parse(json['endDate']);
       if (parsedDateTime.year == parsedEDateTime.year &&
           parsedDateTime.month == parsedEDateTime.month &&
           parsedDateTime.day == parsedEDateTime.day) {
         endDate = DateFormat('HH:mm').format(parsedEDateTime);
       } else {
-        endDate = DateFormat('yyyy-MM-dd HH:mm').format(parsedEDateTime);
+        endDate = DateFormat('dd.MM.yyyy HH:mm').format(parsedEDateTime);
       }
     } else if (json['categoryId'] == 4) {
       category = "Vereine";

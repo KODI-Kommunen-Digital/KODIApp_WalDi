@@ -211,19 +211,27 @@ class _AddListingScreenState extends State<AddListingScreen> {
         List<String> endDateTime = widget.item!.endDate.split(' ');
 
         if (startDateTime.length == 2) {
-          _startDate = startDateTime[0];
+          String dateString = startDateTime[0];
+          DateTime parsedDateTime = DateFormat('dd.MM.yyyy').parse(dateString);
+          _startDate = DateFormat('yyyy-MM-dd').format(parsedDateTime);
           List<String> startTimeParts = startDateTime[1].split(':');
           int startHour = int.parse(startTimeParts[0]);
           int startMinute = int.parse(startTimeParts[1]);
           _startTime = TimeOfDay(hour: startHour, minute: startMinute);
           if (endDateTime.length == 2) {
-            _endDate = endDateTime[0];
+            String dateString = endDateTime[0];
+            DateTime parsedDateTime =
+                DateFormat('dd.MM.yyyy').parse(dateString);
+            _endDate = DateFormat('yyyy-MM-dd').format(parsedDateTime);
             List<String> endTimeParts = endDateTime[1].split(':');
             int endHour = int.parse(endTimeParts[0]);
             int endMinute = int.parse(endTimeParts[1]);
             _endTime = TimeOfDay(hour: endHour, minute: endMinute);
           } else {
-            _endDate = startDateTime[0];
+            String dateString = startDateTime[0];
+            DateTime parsedDateTime =
+                DateFormat('dd.MM.yyyy').parse(dateString);
+            _endDate = DateFormat('yyyy-MM-dd').format(parsedDateTime);
             List<String> endTimeParts = endDateTime[0].split(':');
             int endHour = int.parse(endTimeParts[0]);
             int endMinute = int.parse(endTimeParts[1]);
