@@ -15,6 +15,7 @@ import 'package:heidi/src/presentation/main/add_listing/add_listing_screen.dart'
 import 'package:heidi/src/presentation/main/add_listing/add_listing_success/add_listing_success.dart';
 import 'package:heidi/src/presentation/main/home/forum/add_group_screen/add_group_screen.dart';
 import 'package:heidi/src/presentation/main/home/forum/add_group_screen/cubit/add_group_cubit.dart';
+import 'package:heidi/src/presentation/main/home/forum/list_groups/cubit/cubit.dart';
 import 'package:heidi/src/presentation/main/home/forum/list_groups/list_groups.dart';
 import 'package:heidi/src/presentation/main/home/list_product/list_product.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/image_zoom/image_zoom_screen.dart';
@@ -232,12 +233,20 @@ class Routes {
         );
 
       case listGroups:
-        final Map<String, dynamic> arguments =
-            settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
           builder: (context) {
-            return ListGroupScreen(arguments: arguments);
+            final Map<String, dynamic> arguments =
+            settings.arguments as Map<String, dynamic>;
+            return BlocProvider(
+              create: (context) => ListGroupsCubit(
+                context.read(),
+              ),
+              child: ListGroupScreen(
+                  arguments: arguments
+              ),
+            );
           },
+          fullscreenDialog: true,
         );
 
       case addGroups:

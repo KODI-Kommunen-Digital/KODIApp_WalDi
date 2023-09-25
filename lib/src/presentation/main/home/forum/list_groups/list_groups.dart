@@ -1,17 +1,20 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:heidi/src/data/model/model_forum_group.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/home/list_product/cubit/cubit.dart';
+import 'package:heidi/src/presentation/widget/app_forum_group_item.dart';
 import 'package:heidi/src/presentation/widget/app_navbar.dart';
 import 'package:heidi/src/presentation/widget/app_product_item.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
-// import 'cubit/cubit.dart';
+
+import 'cubit/cubit.dart';
 
 class ListGroupScreen extends StatefulWidget {
   final Map<String, dynamic> arguments;
@@ -205,7 +208,7 @@ class _ListGroupScreenState extends State<ListGroupScreen> {
             ),
           ],
         ),
-        body: BlocConsumer<ListCubit, ListState>(
+        body: BlocConsumer<ListGroupsCubit, ListGroupsState>(
           listener: (context, state) {
             state.maybeWhen(
               error: (msg) => ScaffoldMessenger.of(context)
@@ -248,7 +251,7 @@ class ListLoading extends StatelessWidget {
 }
 
 class ListLoaded extends StatefulWidget {
-  final List<ProductModel> list;
+  final List<ForumGroupModel> list;
   final int selectedId;
 
   const ListLoaded({
@@ -336,20 +339,18 @@ class _ListLoadedState extends State<ListLoaded> {
   }
 
   Widget _buildItem({
-    ProductModel? item,
+    ForumGroupModel? item,
     required ProductViewType type,
   }) {
-    switch (type) {
-      case ProductViewType.list:
+
         if (item != null) {
           return Container(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: AppProductItem(
+            child: ForumGroupItem(
               onPressed: () {
-                _onProductDetail(item);
+                // _onProductDetail(id);
               },
               item: item,
-              type: _listMode,
             ),
           );
         }
@@ -359,23 +360,9 @@ class _ListLoadedState extends State<ListLoaded> {
             type: _listMode,
           ),
         );
-      default:
-        if (item != null) {
-          return AppProductItem(
-            onPressed: () {
-              _onProductDetail(item);
-            },
-            item: item,
-            type: _listMode,
-          );
-        }
-        return AppProductItem(
-          type: _listMode,
-        );
-    }
   }
 
-  Widget _buildContent(List<ProductModel> list) {
+  Widget _buildContent(List<ForumGroupModel> list) {
     return BlocBuilder<ListCubit, ListState>(
       builder: (context, state) {
         if (_pageType == PageType.list) {
