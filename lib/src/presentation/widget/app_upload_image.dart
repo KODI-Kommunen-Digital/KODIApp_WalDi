@@ -11,6 +11,7 @@ import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/multiple_gesture_detector.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:loggy/loggy.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 enum UploadImageType { circle, square }
@@ -54,6 +55,84 @@ class _AppUploadImageState extends State<AppUploadImage> {
     super.dispose();
   }
 
+  Future<void> _uploadImage() async {
+    Platform.isAndroid
+        ? await Permission.storage.request()
+        : await Permission.photos.request();
+
+    String androidVersion = await _getAndroidVersion();
+    var statusImage = await Permission.photos.status;
+    if (int.parse(androidVersion) > 11) {
+      statusImage = await Permission.photos.status;
+    } else {
+      statusImage = await Permission.storage.status;
+    }
+
+    if (showAction) {
+      setState(() {
+        showAction = false;
+      });
+      return;
+    }
+    try {
+      if (statusImage.isGranted || statusImage.isLimited) {
+        final pickedFile = await _picker.pickImage(
+          source: ImageSource.gallery,
+        );
+        if (pickedFile == null) return;
+        if (!mounted) return;
+        setState(() {
+          isImageUploaded = false;
+          _file = File(pickedFile.path);
+        });
+        final profile = widget.profile;
+        if (!profile) {
+          await ListRepository.uploadImage(_file!, profile);
+        } else {
+          final response = await ListRepository.uploadImage(_file!, profile);
+          if (response!.data['status'] == 'success') {
+            setState(() {
+              isImageUploaded = true;
+            });
+            final item = response.data['data']?['image'];
+            widget.onChange(item);
+          } else {}
+        }
+      } else if (statusImage.isDenied) {
+        await openAppSettings();
+        if (statusImage.isGranted || statusImage.isLimited) {
+          final pickedFile = await _picker.pickImage(
+            source: ImageSource.gallery,
+          );
+          if (pickedFile == null) return;
+          if (!mounted) return;
+          setState(() {
+            isImageUploaded = false;
+            _file = File(pickedFile.path);
+          });
+          final profile = widget.profile;
+          if (!profile) {
+          } else {
+            final response = await ListRepository.uploadImage(_file!, profile);
+            if (response!.data['status'] == 'success') {
+              setState(() {
+                isImageUploaded = true;
+              });
+              final item = response.data['data']?['image'];
+              widget.onChange(item);
+            } else {
+              logError('Image Upload Permission Error', response);
+            }
+          }
+        }
+      } else if (statusImage.isPermanentlyDenied) {
+        await openAppSettings();
+      }
+    } catch (e) {
+      logError('Image Upload Permission Error', e);
+    }
+  }
+
   Future<void> showChooseFileTypeDialog() async {
     PermissionStatus status;
     if (await Permission.storage.isGranted) {
@@ -80,7 +159,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
                 onPressed: () async {
                   Navigator.pop(context);
                   FilePickerResult? result =
-                  await FilePicker.platform.pickFiles(
+                      await FilePicker.platform.pickFiles(
                     type: FileType.custom,
                     allowedExtensions: ['pdf'],
                   );
@@ -124,7 +203,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
                         widget.onChange('image');
                       } else {
                         final response =
-                        await ListRepository.uploadImage(_file!, profile);
+                            await ListRepository.uploadImage(_file!, profile);
                         if (response!.data['status'] == 'success') {
                           setState(() {
                             isImageUploaded = true;
@@ -141,7 +220,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
                     }
                   } else {
                     FilePickerResult? result =
-                    await FilePicker.platform.pickFiles(
+                        await FilePicker.platform.pickFiles(
                       type: FileType.image,
                     );
                     if (result != null) {
@@ -156,7 +235,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
                         widget.onChange('image');
                       } else {
                         final response =
-                        await ListRepository.uploadImage(_file!, profile);
+                            await ListRepository.uploadImage(_file!, profile);
                         if (response!.data['status'] == 'success') {
                           setState(() {
                             isImageUploaded = true;
@@ -367,7 +446,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
     }
 
     return InkWell(
-      onTap: showChooseFileTypeDialog,
+      onTap: widget.profile ? _uploadImage : showChooseFileTypeDialog,
       child: Stack(
         children: [
           DottedBorder(
