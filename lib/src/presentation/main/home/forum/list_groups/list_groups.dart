@@ -194,6 +194,8 @@ class _ListGroupScreenState extends State<ListGroupScreen> {
             Padding(
               padding: const EdgeInsets.only(right: 8.0),
               child: Container(
+                width: 40.0,
+                height: 40.0,
                 decoration: const BoxDecoration(
                   shape: BoxShape.circle,
                   color: Colors.blue,
