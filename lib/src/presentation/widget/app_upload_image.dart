@@ -6,10 +6,13 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:heidi/src/data/repository/forum_repository.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/multiple_gesture_detector.dart';
 import 'package:heidi/src/utils/translate.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:loggy/loggy.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 enum UploadImageType { circle, square }
@@ -20,6 +23,7 @@ class AppUploadImage extends StatefulWidget {
   final Function(String) onChange;
   final UploadImageType type;
   final bool profile;
+  final bool forumGroup;
 
   const AppUploadImage({
     Key? key,
@@ -28,6 +32,7 @@ class AppUploadImage extends StatefulWidget {
     required this.onChange,
     this.type = UploadImageType.square,
     required this.profile,
+    required this.forumGroup,
   }) : super(key: key);
 
   @override
@@ -41,6 +46,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
   bool showAction = false;
   String title = '';
   bool isPermanentlyDenied = false;
+  final _picker = ImagePicker();
 
   @override
   void initState() {
@@ -50,6 +56,89 @@ class _AppUploadImageState extends State<AppUploadImage> {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  Future<void> _uploadImage() async {
+    Platform.isAndroid
+        ? await Permission.storage.request()
+        : await Permission.photos.request();
+
+    String androidVersion = await _getAndroidVersion();
+    var statusImage = await Permission.photos.status;
+    if (int.parse(androidVersion) > 11) {
+      statusImage = await Permission.photos.status;
+    } else {
+      statusImage = await Permission.storage.status;
+    }
+
+    if (showAction) {
+      setState(() {
+        showAction = false;
+      });
+      return;
+    }
+    try {
+      if (statusImage.isGranted || statusImage.isLimited) {
+        final pickedFile = await _picker.pickImage(
+          source: ImageSource.gallery,
+        );
+        if (pickedFile == null) return;
+        if (!mounted) return;
+        setState(() {
+          isImageUploaded = false;
+          _file = File(pickedFile.path);
+        });
+        final profile = widget.profile;
+        final forumGroup = widget.forumGroup;
+
+        if (!profile) {
+          await ListRepository.uploadImage(_file!, profile);
+        }
+        if (forumGroup) {
+          await ForumRepository.uploadImage(_file!, forumGroup);
+        } else if (profile) {
+          final response = await ListRepository.uploadImage(_file!, profile);
+          if (response!.data['status'] == 'success') {
+            setState(() {
+              isImageUploaded = true;
+            });
+            final item = response.data['data']?['image'];
+            widget.onChange(item);
+          } else {}
+        }
+      } else if (statusImage.isDenied) {
+        await openAppSettings();
+        if (statusImage.isGranted || statusImage.isLimited) {
+          final pickedFile = await _picker.pickImage(
+            source: ImageSource.gallery,
+          );
+          if (pickedFile == null) return;
+          if (!mounted) return;
+          setState(() {
+            isImageUploaded = false;
+            _file = File(pickedFile.path);
+          });
+          final profile = widget.profile;
+          if (!profile) {
+          } else {
+            final response = await ListRepository.uploadImage(_file!, profile);
+            if (response!.data['status'] == 'success') {
+              setState(() {
+                isImageUploaded = true;
+              });
+              final item = response.data['data']?['image'];
+              widget.onChange(item);
+            } else {
+              logError('Image Upload Permission Error', response);
+            }
+          }
+        }
+      } else if (statusImage.isPermanentlyDenied) {
+        await openAppSettings();
+      }
+    } catch (e) {
+      logError('Image Upload Permission Error', e);
+    }
   }
 
   Future<void> showChooseFileTypeDialog() async {
@@ -329,7 +418,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
     }
 
     return InkWell(
-      onTap: showChooseFileTypeDialog,
+      onTap: widget.profile ? _uploadImage : showChooseFileTypeDialog,
       child: Stack(
         children: [
           DottedBorder(

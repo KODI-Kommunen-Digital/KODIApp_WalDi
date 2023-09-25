@@ -11,12 +11,16 @@ import 'package:heidi/src/utils/logging/loggy_exp.dart';
 class HTTPManager {
   final exceptionCode = ['jwt_auth_bad_iss', 'jwt_auth_invalid_token'];
   late final Dio _dio;
+  late final String _baseUrl;
 
-  HTTPManager() {
+  HTTPManager({bool forum = false}) {
+    _baseUrl = forum
+        ? 'https://test.smartregion-auf.de/forumapi/'
+        : 'https://test.smartregion-auf.de/api';
+
     _dio = Dio(
       BaseOptions(
-        baseUrl: 'https://app.smartregion-auf.de/api',
-        // baseUrl: 'https://test.smartregion-auf.de/api',
+        baseUrl: _baseUrl,
         connectTimeout: 30000,
         receiveTimeout: 30000,
         contentType: Headers.formUrlEncodedContentType,

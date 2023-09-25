@@ -75,7 +75,6 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
   List listSubCategory = [];
 
   String? _featureImage;
-  String? _featurePdf;
   String? _startDate;
   String? _endDate;
   TimeOfDay? _startTime;
@@ -92,6 +91,7 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
   void initState() {
     super.initState();
     _onProcess();
+    selectedPrivacy = 'public';
   }
 
   @override
@@ -161,12 +161,9 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
   void _onProcess() async {
     final loadCitiesResponse = await context.read<AddGroupCubit>().loadCities();
     if (!mounted) return;
-    final loadCategoryResponse =
-        await context.read<AddGroupCubit>().loadCategory();
+
     setState(() {
-      listCategory = loadCategoryResponse?.data;
-      selectedSubCategory = loadCategoryResponse?.data.first['name'];
-      listCity = loadCitiesResponse?.data;
+      listCity = loadCitiesResponse!;
       selectedCategory = selectedSubCategory;
       if (selectedCategory == "News" || selectedCategory == null) {
         selectSubCategory(selectedCategory);
@@ -182,7 +179,6 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
     if (widget.item != null) {
       if (!mounted) return;
       _featureImage = widget.item?.image;
-      _featurePdf = widget.item?.pdf;
       _textTitleController.text = widget.item!.title;
       _textContentController.text = widget.item!.description;
       _textAddressController.text = widget.item!.address;
@@ -201,14 +197,14 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
       }
     } else {
       if (currentCity != null && currentCity != 0) {
-        for (var cityData in loadCitiesResponse?.data) {
+        for (var cityData in loadCitiesResponse!) {
           if (cityData['id'] == currentCity) {
             selectedCity = cityData['name'];
-            break; // Exit the loop once the desired city is found
+            break;
           }
         }
       } else {
-        selectedCity = loadCitiesResponse?.data.first['name'];
+        selectedCity = loadCitiesResponse?.first['name'];
       }
     }
     setState(() {
@@ -253,20 +249,11 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
             cityId: cityId ?? 1,
             title: _textTitleController.text,
             city: selectedCity,
-            place: _textPlaceController.text,
             description: _textContentController.text,
-            address: _textAddressController.text,
-            email: _textEmailController.text,
-            phone: _textPhoneController.text,
-            website: _textWebsiteController.text,
-            startDate: _startDate,
-            endDate: _endDate,
-            startTime: _startTime,
-            endTime: _endTime);
+            type: selectedPrivacy);
         if (result) {
           _onSuccess();
           if (!mounted) return;
-          context.read<AddGroupCubit>().clearImagePath();
         }
       }
     }
@@ -280,31 +267,6 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
   }
 
   bool _validData() {
-    _errorPhone = UtilValidator.validate(
-      _textPhoneController.text,
-      type: ValidateType.phone,
-      allowEmpty: true,
-    );
-
-    _errorEmail = UtilValidator.validate(
-      _textEmailController.text,
-      type: ValidateType.email,
-      allowEmpty: true,
-    );
-
-    _errorWebsite = UtilValidator.validate(
-      _textWebsiteController.text,
-      allowEmpty: true,
-    );
-
-    _errorStatus = UtilValidator.validate(
-      _textStatusController.text,
-      allowEmpty: true,
-    );
-
-    _errorWebsite = UtilValidator.validate(_textWebsiteController.text,
-        allowEmpty: true, type: ValidateType.website);
-
     _errorTitle =
         UtilValidator.validate(_textTitleController.text, allowEmpty: false);
 
@@ -384,8 +346,9 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
               height: 180,
               child: AppUploadImage(
                 title: Translate.of(context).translate('upload_feature_image'),
-                image: _featurePdf == '' ? _featureImage : _featurePdf,
-                profile: false,
+                image: _featureImage,
+                profile: true,
+                forumGroup: true,
                 onChange: (result) {
                   isImageChanged = true;
                 },
@@ -547,32 +510,16 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
                             return DropdownMenuItem(
                                 value: city['name'], child: Text(city['name']));
                           }).toList(),
-                          onChanged: widget.item == null
-                              ? (value) async {
-                                  setState(() {
-                                    selectedCity = value as String?;
-                                    for (var element in listCity) {
-                                      if (element["name"] == value) {
-                                        cityId = element["id"];
-                                      }
-                                    }
-                                  });
-                                  selectedVillage = null;
-                                  context.read<AddGroupCubit>().clearVillage();
-                                  if (value != null) {
-                                    final loadVillageResponse = await context
-                                        .read<AddGroupCubit>()
-                                        .loadVillages(value);
-                                    selectedVillage =
-                                        loadVillageResponse.data.first['name'];
-                                    villageId =
-                                        loadVillageResponse.data.first['id'];
-                                    setState(() {
-                                      listVillage = loadVillageResponse.data;
-                                    });
-                                  }
+                          onChanged: (value) async {
+                            setState(() {
+                              selectedCity = value as String?;
+                              for (var element in listCity) {
+                                if (element["name"] == value) {
+                                  cityId = element["id"];
                                 }
-                              : null,
+                              }
+                            });
+                          },
                         ),
                 ),
               ],

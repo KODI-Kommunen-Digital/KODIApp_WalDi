@@ -15,67 +15,29 @@ class AddGroupCubit extends Cubit<AddGroupState> {
 
   String? selectedCity;
   int? cityId;
-  int? villageId;
-  int? categoryId;
-  int? subCategoryId;
   List listCity = [];
   List listVillage = [];
   List listCategory = [];
   List listSubCategory = [];
-  String? selectedVillage;
   String? selectedCategory;
   String? selectedSubCategory;
 
-  Future<bool> onSubmit({
-    required String title,
-    required String description,
-    required int cityId,
-    CategoryModel? country,
-    CategoryModel? state,
-    String? city,
-    int? statusId,
-    int? sourceId,
-    required String address,
-    required String place,
-    String? zipcode,
-    required String? phone,
-    String? email,
-    String? website,
-    String? status,
-    String? startDate,
-    String? endDate,
-    String? price,
-    TimeOfDay? startTime,
-    TimeOfDay? endTime,
-  }) async {
+  Future<bool> onSubmit(
+      {required String title,
+      required String description,
+      required int cityId,
+      String? city,
+      String? type}) async {
     try {
-      final response = await _repo.saveProduct(
-          title,
-          description,
-          place,
-          country,
-          state,
-          city,
-          statusId,
-          sourceId,
-          address,
-          zipcode,
-          phone,
-          email,
-          website,
-          status,
-          startDate,
-          endDate,
-          startTime,
-          endTime);
+      final response = await _repo.saveForum(title, description, city, type);
       if (response.success) {
         return true;
       } else {
-        logError('save Product Response Failed', response.message);
+        logError('Save Forum Response Failed', response.message);
         return false;
       }
     } catch (e) {
-      logError('save Product Error', e);
+      logError('Save Forum Error', e);
       return false;
     }
   }
@@ -215,14 +177,28 @@ class AddGroupCubit extends Cubit<AddGroupState> {
     _repo.clearSubCategory();
   }
 
-  Future<ResultApiModel?> loadCities() async {
+  Future<List<dynamic>?> loadCities() async {
     try {
-      final loadCitiesResponse = _repo.loadCities();
-      return loadCitiesResponse;
+      final loadCitiesResponse = await _repo.loadCities();
+      final loadForumCitiesResponse = await _repo.loadForumCities();
+
+      if (loadCitiesResponse.success && loadForumCitiesResponse.success) {
+        List<dynamic> filteredCities = [];
+
+        for (var city in loadCitiesResponse.data) {
+          if (loadForumCitiesResponse.data
+              .any((forumCity) => forumCity['id'] == city['id'])) {
+            filteredCities.add(city);
+          }
+        }
+
+        return filteredCities;
+      }
     } catch (e) {
       logError('load cities error', e.toString());
-      return null;
     }
+
+    return null;
   }
 
   Future<ResultApiModel?> loadCategory() async {

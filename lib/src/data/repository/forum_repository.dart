@@ -50,6 +50,21 @@ class ForumRepository {
     return null;
   }
 
+  static Future<ResultApiModel?> uploadImage(File image, forumGroup) async {
+    final prefs = await Preferences.openBox();
+    List<String> parts = image.path.split('.');
+    String imageExtension = parts.last;
+    final formData = FormData.fromMap({
+      'image': await MultipartFile.fromFile(image.path,
+          filename: image.path,
+          contentType: MediaType('image', imageExtension)),
+    });
+    if (forumGroup) {
+      await prefs.setPickedFile(formData);
+    }
+    return null;
+  }
+
   static Future<bool> addWishList(int? userId, ProductModel items) async {
     final Map<String, dynamic> params = {};
     params['cityId'] = items.cityId;
@@ -82,24 +97,6 @@ class ForumRepository {
       logError('Remove UserList Response Failed', response.message);
       return false;
     }
-  }
-
-  static Future<ResultApiModel?> uploadImage(File image, profile) async {
-    final prefs = await Preferences.openBox();
-    List<String> parts = image.path.split('.');
-    String imageExtension = parts.last;
-    final formData = FormData.fromMap({
-      'image': await MultipartFile.fromFile(image.path,
-          filename: image.path,
-          contentType: MediaType('image', imageExtension)),
-    });
-    if (profile) {
-      final response = await Api.requestUploadImage(formData);
-      return response;
-    } else if (!profile) {
-      await prefs.setPickedFile(formData);
-    }
-    return null;
   }
 
   static Future<ResultApiModel?> uploadPdf(File pdf) async {
@@ -217,6 +214,11 @@ class ForumRepository {
     return response;
   }
 
+  Future<ResultApiModel> loadForumCities() async {
+    final response = await Api.requestHasForum();
+    return response;
+  }
+
   Future<ResultApiModel> loadCategory() async {
     final response = await Api.requestSubmitCategory();
     var jsonCategory = response.data;
@@ -241,86 +243,32 @@ class ForumRepository {
     return requestSubmitResponse;
   }
 
-  Future<ResultApiModel> saveProduct(
+  Future<ResultApiModel> saveForum(
     String title,
     String description,
-    String place,
-    CategoryModel? country,
-    CategoryModel? state,
     String? city,
-    int? statusId,
-    int? sourceId,
-    String address,
-    String? zipcode,
-    String? phone,
-    String? email,
-    String? website,
-    String? status,
-    String? startDate,
-    String? endDate,
-    TimeOfDay? startTime,
-    TimeOfDay? endTime,
+    String? type,
   ) async {
-    final subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
-    final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
-    final villageId = prefs.getKeyValue(Preferences.villageId, null);
-    final userId = prefs.getKeyValue(Preferences.userId, '');
     final cityId = await getCityId(city);
-    final media = prefs.getKeyValue(Preferences.path, null);
-    String? combinedStartDateTime;
-    String? combinedEndDateTime;
-
-    if (startDate != null) {
-      String formattedTime;
-      if (startTime!.hour < 10) {
-        formattedTime =
-            "${startTime.periodOffset}${startTime.hour}:${startTime.minute.toString().padLeft(2, '0')}";
-        combinedStartDateTime = "${startDate.trim()}T$formattedTime";
-      } else {
-        formattedTime =
-            "${startTime.hour}:${startTime.minute.toString().padLeft(2, '0')}";
-        combinedStartDateTime = "${startDate.trim()}T$formattedTime";
-      }
-    }
-
-    if (endDate != null) {
-      String formattedTime;
-      if (endTime!.hour < 10) {
-        formattedTime =
-            "${endTime.periodOffset}${endTime.hour}:${endTime.minute.toString().padLeft(2, '0')}";
-        combinedEndDateTime = "${endDate.trim()}T$formattedTime";
-      } else {
-        formattedTime =
-            "${endTime.hour}:${endTime.minute.toString().padLeft(2, '0')}";
-        combinedEndDateTime = "${endDate.trim()}T$formattedTime";
-      }
+    final image = prefs.getKeyValue(Preferences.path, null);
+    bool isPrivate = false;
+    if (type == 'public') {
+      isPrivate = false;
+    } else if (type == 'private') {
+      isPrivate = true;
     }
 
     Map<String, dynamic> params = {
-      "userId": userId,
-      "title": title,
-      "place": place,
-      "description": description,
-      "media": '',
-      "categoryId": categoryId,
-      "address": address,
-      "email": email,
-      "phone": phone,
-      "website": website,
-      "price": 100, //dummy data
-      "discountPrice": 100, //dummy data
-      "logo": media,
-      "statusId": 1, //dummy data
-      "sourceId": 1, //dummy data
-      "longitude": 245.65, //dummy data
-      "latitude": 22.456, //dummy data
-      "villageId": villageId ?? 0,
       "cityId": cityId,
-      "startDate": combinedStartDateTime,
-      "endDate": combinedEndDateTime,
-      "subCategoryId": subCategoryId,
+      "description": description,
+      "forumName": title,
+      "image": image,
+      "isPrivate": isPrivate,
+      "removeImage": false,
+      "villageId": 0,
+      "visibility": "",
     };
-    final response = await Api.requestSaveProduct(cityId, params);
+    final response = await Api.requestSaveForum(cityId, params);
     if (response.success) {
       prefs.deleteKey('pickedFile');
     }

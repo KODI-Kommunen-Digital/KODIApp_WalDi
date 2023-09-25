@@ -428,5 +428,8 @@
   "choose_etime":"Endzeit wählen",
   "message_sent":"Nachricht gesendet",
   "message_sent_success":"Die Nachricht wurde versandt.",
-  "submit_contactUs_message":"Vielen Dank für dein Feedback."
+  "submit_contactUs_message":"Vielen Dank für dein Feedback.",
+  "add_new_group":"Neue Gruppe hinzufügen",
+  "update_group":"Gruppe aktualisieren"
 }
+
