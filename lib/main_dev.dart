@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:heidi/src/data/repository/forum_repository.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/main_screen.dart';
@@ -71,6 +72,9 @@ class _HeidiAppState extends State<HeidiApp> {
         RepositoryProvider(
           create: (context) => ListRepository(widget.prefBox),
         ),
+        RepositoryProvider(
+          create: (context) => ForumRepository(widget.prefBox),
+        )
       ],
       child: MultiBlocProvider(
         providers: AppBloc.providers,
@@ -79,7 +83,7 @@ class _HeidiAppState extends State<HeidiApp> {
             return BlocBuilder<ThemeCubit, ThemeState>(
               builder: (context, theme) {
                 return ChangeNotifierProvider(
-                  create:  (_) => LanguageManager(),
+                  create: (_) => LanguageManager(),
                   child: MaterialApp(
                     debugShowCheckedModeBanner: false,
                     theme: theme.lightTheme,

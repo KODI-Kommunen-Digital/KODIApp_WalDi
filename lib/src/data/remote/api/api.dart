@@ -21,6 +21,8 @@ class Api {
   static const String cities = "/cities";
   static const String listings = "/listings?statusId=1";
   static const String contact = "/contactUs";
+  static const String forum = "/forumapi/cities/1/forums";
+  static const String hasForum = "/cities?hasForum=true";
 
   static Future<ResultApiModel> requestLogin(params) async {
     try {
@@ -38,6 +40,17 @@ class Api {
 
   static Future<ResultApiModel> requestUserListings(userId) async {
     final result = await httpManager.get(url: '/users/$userId/listings/');
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> requestForum(cityId) async {
+    final filepath = "/forumapi/cities/$cityId/forums";
+    final result = await httpManager.get(url: filepath);
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> requestHasForum() async {
+    final result = await httpManager.get(url: hasForum);
     return ResultApiModel.fromJson(result);
   }
 

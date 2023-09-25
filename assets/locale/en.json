@@ -422,5 +422,11 @@
   "choose_etime":"Choose End Time",
   "message_sent":"Message Sent",
   "message_sent_success":"Message Sent Successfully",
-  "submit_contactUs_message":"Your messsage has been sent successfully. Thank you for your feedback."
+  "submit_contactUs_message":"Your messsage has been sent successfully. Thank you for your feedback.",  
+  "my_groups": "My Groups",  
+  "all_groups": "All Groups",
+  "public":"Public",  
+  "private":"Private", 
+  "select_privacy":"Group type",  
+  "forums":"Forums"
 }
