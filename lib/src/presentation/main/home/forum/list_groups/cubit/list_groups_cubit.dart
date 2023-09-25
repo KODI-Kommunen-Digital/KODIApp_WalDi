@@ -23,6 +23,7 @@ class ListGroupsCubit extends Cubit<ListGroupsState> {
   List<ForumGroupModel> groupsList = [];
   PaginationModel? pagination;
   List<ForumGroupModel> listLoaded = [];
+  List<ForumGroupModel> filteredList = [];
   var userJoinedGroupsList = <UserJoinedGroupsModel>[];
 
   Future<void> onLoad() async {
@@ -53,6 +54,8 @@ class ListGroupsCubit extends Cubit<ListGroupsState> {
     }
   }
 
+  List<ForumGroupModel> getLoadedList() => listLoaded;
+
 // Future<void> newListings(int pageNo, cityId) async {
 //   final prefs = await Preferences.openBox();
 //   final type = prefs.getKeyValue(Preferences.type, '');
@@ -74,36 +77,19 @@ class ListGroupsCubit extends Cubit<ListGroupsState> {
 //
 // List<ForumGroupModel> getLoadedList() => listLoaded;
 
-/*  void onGroupFilter(GroupFilter? type, List<ProductModel> loadedList) {
-    final currentDate = DateTime.now();
-    if (type == GroupFilter.mygroups) {
+  void onGroupFilter(GroupFilter? type, List<ForumGroupModel> loadedList) {
+    if (type == GroupFilter.myGroups) {
       filteredList = loadedList.where((product) {
-        final startDate = _parseDate(product.startDate);
-        if (startDate != null) {
-          final startMonth = startDate.month;
-          final currentMonth = currentDate.month;
-          return startMonth == currentMonth;
-        }
-        return false;
+        return product.isJoined == true;
       }).toList();
 
       emit(ListGroupsStateUpdated(filteredList));
-    } else if (type == GroupFilter.allgroups) {
-      filteredList = loadedList.where((product) {
-        final startDate = _parseDate(product.startDate);
-        if (startDate != null) {
-          final startWeek = _getWeekNumber(startDate);
-          final currentWeek = _getWeekNumber(currentDate);
-          return startWeek == currentWeek;
-        }
-        return false;
-      }).toList();
-
-      emit(ListGroupsStateUpdated(filteredList));
+    } else if (type == GroupFilter.allGroups) {
+      emit(ListGroupsStateUpdated(loadedList));
     } else {
       emit(ListGroupsStateUpdated(loadedList));
     }
-  }*/
+  }
 
 /*  DateTime? _parseDate(String dateString) {
     try {

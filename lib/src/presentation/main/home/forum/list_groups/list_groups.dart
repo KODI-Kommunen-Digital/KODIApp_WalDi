@@ -26,7 +26,7 @@ class ListGroupScreen extends StatefulWidget {
 }
 
 class _ListGroupScreenState extends State<ListGroupScreen> {
-  ProductFilter? selectedFilter;
+  GroupFilter? selectedFilter;
   int pageNo = 1;
 
   @override
@@ -53,15 +53,15 @@ class _ListGroupScreenState extends State<ListGroupScreen> {
         arguments: {'isNewGroup': true});
   }
 
-  void _updateSelectedFilter(ProductFilter? filter) {
-    final loadedList = context.read<ListCubit>().getLoadedList();
+  void _updateSelectedFilter(GroupFilter? filter) {
+    final loadedList = context.read<ListGroupsCubit>().getLoadedList();
     setState(() {
       if (selectedFilter == filter) {
         selectedFilter = null;
-        context.read<ListCubit>().onProductFilter(null, loadedList);
+        context.read<ListGroupsCubit>().onGroupFilter(null, loadedList);
       } else {
         selectedFilter = filter;
-        context.read<ListCubit>().onProductFilter(filter, loadedList);
+        context.read<ListGroupsCubit>().onGroupFilter(filter, loadedList);
       }
     });
   }
@@ -101,7 +101,7 @@ class _ListGroupScreenState extends State<ListGroupScreen> {
                     TextButton(
                       style: TextButton.styleFrom(),
                       onPressed: () {
-                        _updateSelectedFilter(ProductFilter.week);
+                        _updateSelectedFilter(GroupFilter.myGroups);
                         Navigator.pop(context);
                       },
                       child: Row(
@@ -113,7 +113,8 @@ class _ListGroupScreenState extends State<ListGroupScreen> {
                             ),
                           ),
                           const SizedBox(width: 5),
-                          _buildTickIcon(selectedFilter == ProductFilter.week),
+                          _buildTickIcon(
+                              selectedFilter == GroupFilter.myGroups),
                         ],
                       ),
                     ),
@@ -138,7 +139,7 @@ class _ListGroupScreenState extends State<ListGroupScreen> {
                     TextButton(
                       style: TextButton.styleFrom(),
                       onPressed: () {
-                        _updateSelectedFilter(ProductFilter.month);
+                        _updateSelectedFilter(GroupFilter.allGroups);
                         Navigator.pop(context);
                       },
                       child: Row(
@@ -150,7 +151,8 @@ class _ListGroupScreenState extends State<ListGroupScreen> {
                             ),
                           ),
                           const SizedBox(width: 5),
-                          _buildTickIcon(selectedFilter == ProductFilter.month),
+                          _buildTickIcon(
+                              selectedFilter == GroupFilter.allGroups),
                         ],
                       ),
                     ),
@@ -342,24 +344,23 @@ class _ListLoadedState extends State<ListLoaded> {
     ForumGroupModel? item,
     required ProductViewType type,
   }) {
-
-        if (item != null) {
-          return Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: ForumGroupItem(
-              onPressed: () {
-                // _onProductDetail(id);
-              },
-              item: item,
-            ),
-          );
-        }
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: AppProductItem(
-            type: _listMode,
-          ),
-        );
+    if (item != null) {
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: ForumGroupItem(
+          onPressed: () {
+            // _onProductDetail(id);
+          },
+          item: item,
+        ),
+      );
+    }
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: AppProductItem(
+        type: _listMode,
+      ),
+    );
   }
 
   Widget _buildContent(List<ForumGroupModel> list) {
