@@ -36,7 +36,7 @@ class HTTPManager {
           "osName": Application.device?.model,
           "Device-Version": Application.device?.version,
           "deviceType":
-              '${Application.device?.type} ${Application.device?.model}',
+          '${Application.device?.type} ${Application.device?.model}',
           "Device-Token": Application.device?.token,
           HttpHeaders.contentTypeHeader: 'application/json',
         };
@@ -61,7 +61,7 @@ class HTTPManager {
             "refreshToken": rToken,
           };
           final result =
-              await post(url: '/users/$userId/refresh', data: params);
+          await post(url: '/users/$userId/refresh', data: params);
           final response = ResultApiModel.fromJson(result);
           if (response.success) {
             final newToken = response.data['accessToken'];

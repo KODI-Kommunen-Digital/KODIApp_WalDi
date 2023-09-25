@@ -20,8 +20,8 @@ mixin _$ListGroupsState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<ProductModel> list) loaded,
-    required TResult Function(List<ProductModel> list) updated,
+    required TResult Function(List<ForumGroupModel> list) loaded,
+    required TResult Function(List<ForumGroupModel> list) updated,
     required TResult Function(String error) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -29,8 +29,8 @@ mixin _$ListGroupsState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<ProductModel> list)? loaded,
-    TResult? Function(List<ProductModel> list)? updated,
+    TResult? Function(List<ForumGroupModel> list)? loaded,
+    TResult? Function(List<ForumGroupModel> list)? updated,
     TResult? Function(String error)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -38,8 +38,8 @@ mixin _$ListGroupsState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<ProductModel> list)? loaded,
-    TResult Function(List<ProductModel> list)? updated,
+    TResult Function(List<ForumGroupModel> list)? loaded,
+    TResult Function(List<ForumGroupModel> list)? updated,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) =>
@@ -132,8 +132,8 @@ class _$ListGroupsStateInitial implements ListGroupsStateInitial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<ProductModel> list) loaded,
-    required TResult Function(List<ProductModel> list) updated,
+    required TResult Function(List<ForumGroupModel> list) loaded,
+    required TResult Function(List<ForumGroupModel> list) updated,
     required TResult Function(String error) error,
   }) {
     return initial();
@@ -144,8 +144,8 @@ class _$ListGroupsStateInitial implements ListGroupsStateInitial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<ProductModel> list)? loaded,
-    TResult? Function(List<ProductModel> list)? updated,
+    TResult? Function(List<ForumGroupModel> list)? loaded,
+    TResult? Function(List<ForumGroupModel> list)? updated,
     TResult? Function(String error)? error,
   }) {
     return initial?.call();
@@ -156,8 +156,8 @@ class _$ListGroupsStateInitial implements ListGroupsStateInitial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<ProductModel> list)? loaded,
-    TResult Function(List<ProductModel> list)? updated,
+    TResult Function(List<ForumGroupModel> list)? loaded,
+    TResult Function(List<ForumGroupModel> list)? updated,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
@@ -252,8 +252,8 @@ class _$ListGroupsStateLoading implements ListGroupsStateLoading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<ProductModel> list) loaded,
-    required TResult Function(List<ProductModel> list) updated,
+    required TResult Function(List<ForumGroupModel> list) loaded,
+    required TResult Function(List<ForumGroupModel> list) updated,
     required TResult Function(String error) error,
   }) {
     return loading();
@@ -264,8 +264,8 @@ class _$ListGroupsStateLoading implements ListGroupsStateLoading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<ProductModel> list)? loaded,
-    TResult? Function(List<ProductModel> list)? updated,
+    TResult? Function(List<ForumGroupModel> list)? loaded,
+    TResult? Function(List<ForumGroupModel> list)? updated,
     TResult? Function(String error)? error,
   }) {
     return loading?.call();
@@ -276,8 +276,8 @@ class _$ListGroupsStateLoading implements ListGroupsStateLoading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<ProductModel> list)? loaded,
-    TResult Function(List<ProductModel> list)? updated,
+    TResult Function(List<ForumGroupModel> list)? loaded,
+    TResult Function(List<ForumGroupModel> list)? updated,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
@@ -338,7 +338,7 @@ abstract class _$$ListGroupsStateLoadedCopyWith<$Res> {
           $Res Function(_$ListGroupsStateLoaded) then) =
       __$$ListGroupsStateLoadedCopyWithImpl<$Res>;
   @useResult
-  $Res call({List<ProductModel> list});
+  $Res call({List<ForumGroupModel> list});
 }
 
 /// @nodoc
@@ -358,7 +358,7 @@ class __$$ListGroupsStateLoadedCopyWithImpl<$Res>
       null == list
           ? _value._list
           : list // ignore: cast_nullable_to_non_nullable
-              as List<ProductModel>,
+              as List<ForumGroupModel>,
     ));
   }
 }
@@ -366,11 +366,12 @@ class __$$ListGroupsStateLoadedCopyWithImpl<$Res>
 /// @nodoc
 
 class _$ListGroupsStateLoaded implements ListGroupsStateLoaded {
-  const _$ListGroupsStateLoaded(final List<ProductModel> list) : _list = list;
+  const _$ListGroupsStateLoaded(final List<ForumGroupModel> list)
+      : _list = list;
 
-  final List<ProductModel> _list;
+  final List<ForumGroupModel> _list;
   @override
-  List<ProductModel> get list {
+  List<ForumGroupModel> get list {
     if (_list is EqualUnmodifiableListView) return _list;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_list);
@@ -405,8 +406,8 @@ class _$ListGroupsStateLoaded implements ListGroupsStateLoaded {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<ProductModel> list) loaded,
-    required TResult Function(List<ProductModel> list) updated,
+    required TResult Function(List<ForumGroupModel> list) loaded,
+    required TResult Function(List<ForumGroupModel> list) updated,
     required TResult Function(String error) error,
   }) {
     return loaded(list);
@@ -417,8 +418,8 @@ class _$ListGroupsStateLoaded implements ListGroupsStateLoaded {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<ProductModel> list)? loaded,
-    TResult? Function(List<ProductModel> list)? updated,
+    TResult? Function(List<ForumGroupModel> list)? loaded,
+    TResult? Function(List<ForumGroupModel> list)? updated,
     TResult? Function(String error)? error,
   }) {
     return loaded?.call(list);
@@ -429,8 +430,8 @@ class _$ListGroupsStateLoaded implements ListGroupsStateLoaded {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<ProductModel> list)? loaded,
-    TResult Function(List<ProductModel> list)? updated,
+    TResult Function(List<ForumGroupModel> list)? loaded,
+    TResult Function(List<ForumGroupModel> list)? updated,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
@@ -482,10 +483,10 @@ class _$ListGroupsStateLoaded implements ListGroupsStateLoaded {
 }
 
 abstract class ListGroupsStateLoaded implements ListGroupsState {
-  const factory ListGroupsStateLoaded(final List<ProductModel> list) =
+  const factory ListGroupsStateLoaded(final List<ForumGroupModel> list) =
       _$ListGroupsStateLoaded;
 
-  List<ProductModel> get list;
+  List<ForumGroupModel> get list;
   @JsonKey(ignore: true)
   _$$ListGroupsStateLoadedCopyWith<_$ListGroupsStateLoaded> get copyWith =>
       throw _privateConstructorUsedError;
@@ -497,7 +498,7 @@ abstract class _$$ListGroupsStateUpdatedCopyWith<$Res> {
           $Res Function(_$ListGroupsStateUpdated) then) =
       __$$ListGroupsStateUpdatedCopyWithImpl<$Res>;
   @useResult
-  $Res call({List<ProductModel> list});
+  $Res call({List<ForumGroupModel> list});
 }
 
 /// @nodoc
@@ -517,7 +518,7 @@ class __$$ListGroupsStateUpdatedCopyWithImpl<$Res>
       null == list
           ? _value._list
           : list // ignore: cast_nullable_to_non_nullable
-              as List<ProductModel>,
+              as List<ForumGroupModel>,
     ));
   }
 }
@@ -525,11 +526,12 @@ class __$$ListGroupsStateUpdatedCopyWithImpl<$Res>
 /// @nodoc
 
 class _$ListGroupsStateUpdated implements ListGroupsStateUpdated {
-  const _$ListGroupsStateUpdated(final List<ProductModel> list) : _list = list;
+  const _$ListGroupsStateUpdated(final List<ForumGroupModel> list)
+      : _list = list;
 
-  final List<ProductModel> _list;
+  final List<ForumGroupModel> _list;
   @override
-  List<ProductModel> get list {
+  List<ForumGroupModel> get list {
     if (_list is EqualUnmodifiableListView) return _list;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_list);
@@ -564,8 +566,8 @@ class _$ListGroupsStateUpdated implements ListGroupsStateUpdated {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<ProductModel> list) loaded,
-    required TResult Function(List<ProductModel> list) updated,
+    required TResult Function(List<ForumGroupModel> list) loaded,
+    required TResult Function(List<ForumGroupModel> list) updated,
     required TResult Function(String error) error,
   }) {
     return updated(list);
@@ -576,8 +578,8 @@ class _$ListGroupsStateUpdated implements ListGroupsStateUpdated {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<ProductModel> list)? loaded,
-    TResult? Function(List<ProductModel> list)? updated,
+    TResult? Function(List<ForumGroupModel> list)? loaded,
+    TResult? Function(List<ForumGroupModel> list)? updated,
     TResult? Function(String error)? error,
   }) {
     return updated?.call(list);
@@ -588,8 +590,8 @@ class _$ListGroupsStateUpdated implements ListGroupsStateUpdated {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<ProductModel> list)? loaded,
-    TResult Function(List<ProductModel> list)? updated,
+    TResult Function(List<ForumGroupModel> list)? loaded,
+    TResult Function(List<ForumGroupModel> list)? updated,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
@@ -641,10 +643,10 @@ class _$ListGroupsStateUpdated implements ListGroupsStateUpdated {
 }
 
 abstract class ListGroupsStateUpdated implements ListGroupsState {
-  const factory ListGroupsStateUpdated(final List<ProductModel> list) =
+  const factory ListGroupsStateUpdated(final List<ForumGroupModel> list) =
       _$ListGroupsStateUpdated;
 
-  List<ProductModel> get list;
+  List<ForumGroupModel> get list;
   @JsonKey(ignore: true)
   _$$ListGroupsStateUpdatedCopyWith<_$ListGroupsStateUpdated> get copyWith =>
       throw _privateConstructorUsedError;
@@ -717,8 +719,8 @@ class _$ListGroupsStateError implements ListGroupsStateError {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<ProductModel> list) loaded,
-    required TResult Function(List<ProductModel> list) updated,
+    required TResult Function(List<ForumGroupModel> list) loaded,
+    required TResult Function(List<ForumGroupModel> list) updated,
     required TResult Function(String error) error,
   }) {
     return error(this.error);
@@ -729,8 +731,8 @@ class _$ListGroupsStateError implements ListGroupsStateError {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<ProductModel> list)? loaded,
-    TResult? Function(List<ProductModel> list)? updated,
+    TResult? Function(List<ForumGroupModel> list)? loaded,
+    TResult? Function(List<ForumGroupModel> list)? updated,
     TResult? Function(String error)? error,
   }) {
     return error?.call(this.error);
@@ -741,8 +743,8 @@ class _$ListGroupsStateError implements ListGroupsStateError {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<ProductModel> list)? loaded,
-    TResult Function(List<ProductModel> list)? updated,
+    TResult Function(List<ForumGroupModel> list)? loaded,
+    TResult Function(List<ForumGroupModel> list)? updated,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {

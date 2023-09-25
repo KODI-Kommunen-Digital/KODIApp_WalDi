@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_favorites_detail_list.dart';
+import 'package:heidi/src/data/model/model_forum_group.dart';
 import 'package:heidi/src/data/model/model_product.dart';
+import 'package:heidi/src/data/model/model_users_joined_group.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
@@ -18,17 +20,16 @@ class ForumRepository {
 
   ForumRepository(this.prefs);
 
-  static Future<List?> loadForumsList({
-    required pageNo,
-    cityId,
-  }) async {
+  Future<List?> loadForumsList({required pageNo}) async {
     final hasForum = await Api.requestHasForum();
+    int cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    int userId = prefs.getKeyValue(Preferences.userId, 0);
 
     bool hasForumFlag = false;
 
     if (hasForum.success) {
       for (var forumData in hasForum.data) {
-        if (forumData['id'] == cityId) {
+        if (forumData['hasForum'] == 1) {
           hasForumFlag = true;
           break;
         }
@@ -36,17 +37,27 @@ class ForumRepository {
     }
 
     if (hasForumFlag) {
-      final response = await Api.requestForum(cityId);
-      if (response.success) {
-        final list = List.from(response.data ?? []).map((item) {
-          return ProductModel.fromJson(item, setting: Application.setting);
+      final requestForumResponse = await Api.requestForum(cityId);
+      if (requestForumResponse.success) {
+        final groupList =
+            List.from(requestForumResponse.data ?? []).map((item) {
+          return ForumGroupModel.fromJson(
+            item,
+          );
         }).toList();
-        if (cityId != 0) {
-          list.removeWhere((element) => element.cityId != cityId);
-        }
-        return [list, response.pagination];
+        final usersJoinedForumResponse = await Api.requestUsersForum(userId);
+        final userJoinedList =
+            List.from(usersJoinedForumResponse.data ?? []).map((item) {
+          return UserJoinedGroupsModel.fromJson(
+            item,
+          );
+        }).toList();
+
+        return [groupList, requestForumResponse.pagination, userJoinedList];
       }
-    } else {}
+    } else {
+      logError('Forum Group List Error');
+    }
     return null;
   }
 

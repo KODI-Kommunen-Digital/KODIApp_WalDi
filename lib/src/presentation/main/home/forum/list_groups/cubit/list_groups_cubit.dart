@@ -1,73 +1,80 @@
 import 'package:bloc/bloc.dart';
 import 'package:heidi/src/data/model/model.dart';
-import 'package:heidi/src/data/model/model_product.dart';
+import 'package:heidi/src/data/model/model_forum_group.dart';
+import 'package:heidi/src/data/model/model_users_joined_group.dart';
 import 'package:heidi/src/data/repository/forum_repository.dart';
-import 'package:heidi/src/utils/configs/preferences.dart';
-import 'package:heidi/src/utils/logging/loggy_exp.dart';
 
 import 'cubit.dart';
 
 enum GroupFilter {
-  mygroups,
-  allgroups,
+  myGroups,
+  allGroups,
 }
 
 class ListGroupsCubit extends Cubit<ListGroupsState> {
   final ForumRepository repo;
+
   ListGroupsCubit(this.repo) : super(const ListGroupsStateLoading()) {
     // final isEvent = categoryPreferencesCall();
+    onLoad();
   }
 
   int pageNo = 1;
-  List<ProductModel> list = [];
+  List<ForumGroupModel> groupsList = [];
   PaginationModel? pagination;
-  List<ProductModel> listLoaded = [];
-  List<ProductModel> filteredList = [];
+  List<ForumGroupModel> listLoaded = [];
+  var userJoinedGroupsList = <UserJoinedGroupsModel>[];
 
-  Future<void> onLoad(cityId) async {
+  Future<void> onLoad() async {
     pageNo = 1;
-    final prefs = await Preferences.openBox();
-    final type = prefs.getKeyValue(Preferences.type, '');
-    if (type == 'location') {
-      prefs.setKeyValue(Preferences.categoryId, '');
-    }
-    final result = await ForumRepository.loadForumsList(
+    final result = await repo.loadForumsList(
       pageNo: pageNo,
-      cityId: cityId,
     );
     if (result != null) {
-      list = result[0];
+      groupsList = result[0];
       pagination = result[1];
-      listLoaded = list;
+      userJoinedGroupsList = result[2];
+      // listLoaded = list;
+      for (final list in groupsList) {
+        bool joined =
+            userJoinedGroupsList.any((element) => element.forumId == list.id);
+        listLoaded.add(ForumGroupModel(
+            id: list.id,
+            forumName: list.forumName,
+            createdAt: list.createdAt,
+            description: list.description,
+            image: list.image,
+            isPrivate: list.isPrivate,
+            isJoined: joined));
+      }
       emit(ListGroupsStateLoaded(
-        list,
+        listLoaded,
       ));
     }
   }
 
-  Future<void> newListings(int pageNo, cityId) async {
-    final prefs = await Preferences.openBox();
-    final type = prefs.getKeyValue(Preferences.type, '');
-    if (type == 'location') {
-      prefs.setKeyValue(Preferences.categoryId, '');
-    }
+// Future<void> newListings(int pageNo, cityId) async {
+//   final prefs = await Preferences.openBox();
+//   final type = prefs.getKeyValue(Preferences.type, '');
+//   if (type == 'location') {
+//     prefs.setKeyValue(Preferences.categoryId, '');
+//   }
+//
+//   final result = await repo.loadForumsList(
+//     pageNo: pageNo,
+//   );
+//
+//   final listUpdated = result?[0];
+//   if (listUpdated.isNotEmpty) {
+//     list.addAll(listUpdated);
+//     listLoaded = list;
+//     emit(ListGroupsStateUpdated(list));
+//   }
+// }
+//
+// List<ForumGroupModel> getLoadedList() => listLoaded;
 
-    final result = await ForumRepository.loadForumsList(
-      pageNo: pageNo,
-      cityId: cityId,
-    );
-
-    final listUpdated = result?[0];
-    if (listUpdated.isNotEmpty) {
-      list.addAll(listUpdated);
-      listLoaded = list;
-      emit(ListGroupsStateUpdated(list));
-    }
-  }
-
-  List<ProductModel> getLoadedList() => listLoaded;
-
-  void onGroupFilter(GroupFilter? type, List<ProductModel> loadedList) {
+/*  void onGroupFilter(GroupFilter? type, List<ProductModel> loadedList) {
     final currentDate = DateTime.now();
     if (type == GroupFilter.mygroups) {
       filteredList = loadedList.where((product) {
@@ -96,9 +103,9 @@ class ListGroupsCubit extends Cubit<ListGroupsState> {
     } else {
       emit(ListGroupsStateUpdated(loadedList));
     }
-  }
+  }*/
 
-  DateTime? _parseDate(String dateString) {
+/*  DateTime? _parseDate(String dateString) {
     try {
       final parts = dateString.split('.');
       if (parts.length == 3) {
@@ -147,5 +154,5 @@ class ListGroupsCubit extends Cubit<ListGroupsState> {
       13: "category_food"
     };
     return categories[categoryId];
-  }
+  }*/
 }

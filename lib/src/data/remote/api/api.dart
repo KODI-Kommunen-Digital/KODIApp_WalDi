@@ -26,6 +26,7 @@ class Api {
     try {
       final result =
           await HTTPManager(forum: false).post(url: login, data: params);
+
       return ResultApiModel.fromJson(result);
     } catch (e) {
       return await HTTPManager(forum: false).post(url: login, data: params);
@@ -39,13 +40,19 @@ class Api {
   }
 
   static Future<ResultApiModel> requestUserListings(userId) async {
-    final result =
-        await HTTPManager(forum: false).get(url: '/users/$userId/listings/');
+    final result = await HTTPManager(forum: false).get(url: '/users/$userId/listings/');
     return ResultApiModel.fromJson(result);
   }
 
   static Future<ResultApiModel> requestForum(cityId) async {
-    final filepath = "/forumapi/cities/$cityId/forums";
+    ///TODO: CHANGE THIS HARDCODED CITYID
+    final filepath = "/cities/1/forums";
+    final result = await HTTPManager(forum: true).get(url: filepath);
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> requestUsersForum(userId) async {
+    final filepath = "/users/$userId/forums";
     final result = await HTTPManager(forum: true).get(url: filepath);
     return ResultApiModel.fromJson(result);
   }
@@ -57,8 +64,8 @@ class Api {
 
   static Future<ResultApiModel> requestFavoritesDetailsList(
       cityId, listingId) async {
-    final result = await HTTPManager(forum: false)
-        .get(url: '/cities/$cityId/listings/$listingId');
+    final result =
+        await HTTPManager(forum: false).get(url: '/cities/$cityId/listings/$listingId');
     return ResultApiModel.fromJson(result);
   }
 
@@ -194,8 +201,7 @@ class Api {
   ///Save Wish List
   static Future<ResultApiModel> requestAddWishList(userId, params) async {
     final String addWishList = "/users/$userId/favorites/";
-    final result =
-        await HTTPManager(forum: false).post(url: addWishList, data: params);
+    final result = await HTTPManager(forum: false).post(url: addWishList, data: params);
     return ResultApiModel.fromJson(result);
   }
 
@@ -358,6 +364,7 @@ class Api {
     var filePath = '';
     filePath = '/cities/$cityId/forums/$forumId/imageUpload';
     var result = await HTTPManager(forum: true).post(
+
       url: filePath,
       formData: pickedFile,
     );
