@@ -594,6 +594,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
                 title: Translate.of(context).translate('upload_feature_image'),
                 image: _featurePdf == '' ? _featureImage : _featurePdf,
                 profile: false,
+                forumGroup: false,
                 onChange: (result) {
                   isImageChanged = true;
                 },

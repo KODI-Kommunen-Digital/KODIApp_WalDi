@@ -428,5 +428,7 @@
   "public":"Public",  
   "private":"Private", 
   "select_privacy":"Group type",  
-  "forums":"Forums"
+  "forums":"Forums",
+  "add_new_group":"Add New Group",
+  "update_group":"Update Group"
 }

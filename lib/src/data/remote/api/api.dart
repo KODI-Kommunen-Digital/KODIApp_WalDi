@@ -7,7 +7,6 @@ import 'package:heidi/src/utils/asset.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 
 class Api {
-
   static const String login = "/users/login";
   static const String user = "/users/";
   static const String register = "/users/register";
@@ -25,7 +24,9 @@ class Api {
 
   static Future<ResultApiModel> requestLogin(params) async {
     try {
-      final result = await HTTPManager(forum: false).post(url: login, data: params);
+      final result =
+          await HTTPManager(forum: false).post(url: login, data: params);
+
       return ResultApiModel.fromJson(result);
     } catch (e) {
       return await HTTPManager(forum: false).post(url: login, data: params);
@@ -33,7 +34,8 @@ class Api {
   }
 
   static Future<ResultApiModel> requestFavorites(userId) async {
-    final result = await HTTPManager(forum: false).get(url: '/users/$userId/favorites/');
+    final result =
+        await HTTPManager(forum: false).get(url: '/users/$userId/favorites/');
     return ResultApiModel.fromJson(result);
   }
 
@@ -220,6 +222,23 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
+  ///Save Forum
+  static Future<ResultApiModel> requestSaveForum(cityId, params) async {
+    final filePath = '/cities/$cityId/forums';
+    final prefs = await Preferences.openBox();
+    FormData? pickedFile = prefs.getPickedFile();
+    final result = await HTTPManager(forum: true).post(
+      url: filePath,
+      data: params,
+      loading: true,
+    );
+    final forumId = result['id'];
+    if (pickedFile != null) {
+      Api.requestForumImageUpload(cityId, forumId, pickedFile);
+    }
+    return ResultApiModel.fromJson(result);
+  }
+
   static Future<ResultApiModel> requestEditProduct(
       cityId, listingId, params, bool isImageChanged) async {
     final filePath = '/cities/$cityId/listings/$listingId';
@@ -333,6 +352,19 @@ class Api {
       filePath = '/cities/$cityId/listings/$listingId/imageUpload';
     }
     var result = await HTTPManager(forum: false).post(
+      url: filePath,
+      formData: pickedFile,
+    );
+    final convertResponse = {"success": result['id'] != null, "data": result};
+    return ResultApiModel.fromJson(convertResponse);
+  }
+
+  static Future<ResultApiModel> requestForumImageUpload(
+      cityId, forumId, pickedFile) async {
+    var filePath = '';
+    filePath = '/cities/$cityId/forums/$forumId/imageUpload';
+    var result = await HTTPManager(forum: true).post(
+
       url: filePath,
       formData: pickedFile,
     );
