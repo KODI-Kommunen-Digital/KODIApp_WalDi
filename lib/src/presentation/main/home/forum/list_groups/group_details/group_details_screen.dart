@@ -14,18 +14,21 @@ class GroupDetailsScreen extends StatefulWidget {
 class _GroupDetailsScreenState extends State<GroupDetailsScreen> {
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back), // Change to your desired icon
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
             expandedHeight: 200.0,
-            // Height when expanded
             floating: false,
-            // Whether the app bar should stay at the top when scrolling
             pinned: true,
-            // Whether the app bar should remain visible after scrolling
             flexibleSpace: FlexibleSpaceBar(
-              title: const Text('SilverAppBar Example'),
               background: Image.network(
                 widget.item.image != null
                     ? "${Application.picturesURL}${widget.item.image}"
@@ -39,17 +42,27 @@ class _GroupDetailsScreenState extends State<GroupDetailsScreen> {
               [
                 Container(
                   padding: const EdgeInsets.all(16),
-                  child: const Text(
-                    'Scrollable Content Goes Here',
-                    style: TextStyle(fontSize: 20),
+                  child: Text(
+                    widget.item.forumName!,
+                    style: const TextStyle(fontSize: 20),
                   ),
                 ),
                 Container(
-                    decoration:
-                        BoxDecoration(color: Theme.of(context).primaryColor),
+                  padding: const EdgeInsets.all(16),
+                  child: Text(
+                    widget.item.description!,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ),
+                Container(
+                    margin: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                        borderRadius: BorderRadius.circular(5.0)),
                     child: TextButton(
                       onPressed: () {},
-                      child: const Text('Create post', style: TextStyle(color: Colors.white)),
+                      child: const Text('Create post',
+                          style: TextStyle(fontSize: 20, color: Colors.white)),
                     )),
               ],
             ),

@@ -7,6 +7,7 @@ import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_favorites_detail_list.dart';
 import 'package:heidi/src/data/model/model_forum_group.dart';
 import 'package:heidi/src/data/model/model_product.dart';
+import 'package:heidi/src/data/model/model_request_member.dart';
 import 'package:heidi/src/data/model/model_users_joined_group.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
 import 'package:heidi/src/utils/configs/application.dart';
@@ -70,6 +71,30 @@ class ForumRepository {
       logError('Request To Join Group Response Failed', response.message);
       return false;
     }
+  }
+
+  Future<List<RequestMemberModel>?> getGroupMemberRequests() async {
+    final userId = prefs.getKeyValue(Preferences.userId, 0);
+    final requestMemberList = <RequestMemberModel>[];
+    final response = await Api.getGroupMemberRequests(userId);
+    if (response.success) {
+      for (final list in response.data) {
+        requestMemberList.add(RequestMemberModel(
+          forumId: list['forumId'],
+          userId: list['userId'],
+          statusId: list['statusId'],
+          createdAt: list['createdAt'],
+          updatedAt: list['updatedAt'],
+          id: list['id'],
+          reason: list['reason'],
+        ));
+      }
+      return requestMemberList;
+    } else {
+      logError(
+          'Request To Get Group Members Response Failed', response.message);
+    }
+    return null;
   }
 
   static Future<ResultApiModel?> uploadImage(File image, forumGroup) async {
