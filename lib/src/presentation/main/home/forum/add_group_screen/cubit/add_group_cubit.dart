@@ -179,25 +179,13 @@ class AddGroupCubit extends Cubit<AddGroupState> {
 
   Future<List<dynamic>?> loadCities() async {
     try {
-      final loadCitiesResponse = await _repo.loadCities();
       final loadForumCitiesResponse = await _repo.loadForumCities();
-
-      if (loadCitiesResponse.success && loadForumCitiesResponse.success) {
-        List<dynamic> filteredCities = [];
-
-        for (var city in loadCitiesResponse.data) {
-          if (loadForumCitiesResponse.data
-              .any((forumCity) => forumCity['id'] == city['id'])) {
-            filteredCities.add(city);
-          }
-        }
-
-        return filteredCities;
+      if (loadForumCitiesResponse.success) {
+        return loadForumCitiesResponse.data;
       }
     } catch (e) {
       logError('load cities error', e.toString());
     }
-
     return null;
   }
 
