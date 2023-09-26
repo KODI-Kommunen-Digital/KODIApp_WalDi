@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model_forum_group.dart';
+import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/utils/configs/application.dart';
+import 'package:heidi/src/utils/configs/routes.dart';
 
 class GroupDetailsScreen extends StatefulWidget {
   final ForumGroupModel item;
@@ -12,9 +14,22 @@ class GroupDetailsScreen extends StatefulWidget {
 }
 
 class _GroupDetailsScreenState extends State<GroupDetailsScreen> {
+  void _onAddPost() async {
+    if (AppBloc.userCubit.state == null) {
+      final result = await Navigator.pushNamed(
+        context,
+        Routes.signIn,
+        arguments: Routes.addPosts,
+      );
+      if (result == null) return;
+    }
+    if (!mounted) return;
+    Navigator.pushNamed(context, Routes.addPosts,
+        arguments: {'isNewPost': true, 'item': widget.item});
+  }
+
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[
@@ -60,9 +75,11 @@ class _GroupDetailsScreenState extends State<GroupDetailsScreen> {
                         color: Theme.of(context).primaryColor,
                         borderRadius: BorderRadius.circular(5.0)),
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        _onAddPost();
+                      },
                       child: const Text('Create post',
-                          style: TextStyle(fontSize: 20, color: Colors.white)),
+                          style: TextStyle(color: Colors.white)),
                     )),
               ],
             ),

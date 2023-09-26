@@ -40,7 +40,8 @@ class Api {
   }
 
   static Future<ResultApiModel> requestUserListings(userId) async {
-    final result = await HTTPManager(forum: false).get(url: '/users/$userId/listings/');
+    final result =
+        await HTTPManager(forum: false).get(url: '/users/$userId/listings/');
     return ResultApiModel.fromJson(result);
   }
 
@@ -77,8 +78,8 @@ class Api {
 
   static Future<ResultApiModel> requestFavoritesDetailsList(
       cityId, listingId) async {
-    final result =
-        await HTTPManager(forum: false).get(url: '/cities/$cityId/listings/$listingId');
+    final result = await HTTPManager(forum: false)
+        .get(url: '/cities/$cityId/listings/$listingId');
     return ResultApiModel.fromJson(result);
   }
 
@@ -214,7 +215,8 @@ class Api {
   ///Save Wish List
   static Future<ResultApiModel> requestAddWishList(userId, params) async {
     final String addWishList = "/users/$userId/favorites/";
-    final result = await HTTPManager(forum: false).post(url: addWishList, data: params);
+    final result =
+        await HTTPManager(forum: false).post(url: addWishList, data: params);
     return ResultApiModel.fromJson(result);
   }
 
@@ -248,6 +250,23 @@ class Api {
     final forumId = result['id'];
     if (pickedFile != null) {
       Api.requestForumImageUpload(cityId, forumId, pickedFile);
+    }
+    return ResultApiModel.fromJson(result);
+  }
+
+  ///Save Post
+  static Future<ResultApiModel> requestSavePost(cityId, fId, params) async {
+    final filePath = '/cities/$cityId/forums/$fId/posts';
+    final prefs = await Preferences.openBox();
+    FormData? pickedFile = prefs.getPickedFile();
+    final result = await HTTPManager(forum: true).post(
+      url: filePath,
+      data: params,
+      loading: true,
+    );
+    final postId = result['id'];
+    if (pickedFile != null) {
+      Api.requestPostImageUpload(cityId, fId, postId, pickedFile);
     }
     return ResultApiModel.fromJson(result);
   }
@@ -377,7 +396,18 @@ class Api {
     var filePath = '';
     filePath = '/cities/$cityId/forums/$forumId/imageUpload';
     var result = await HTTPManager(forum: true).post(
+      url: filePath,
+      formData: pickedFile,
+    );
+    final convertResponse = {"success": result['id'] != null, "data": result};
+    return ResultApiModel.fromJson(convertResponse);
+  }
 
+  static Future<ResultApiModel> requestPostImageUpload(
+      cityId, forumId, postId, pickedFile) async {
+    var filePath = '';
+    filePath = '/cities/$cityId/forums/$forumId/posts/$postId/imageUpload';
+    var result = await HTTPManager(forum: true).post(
       url: filePath,
       formData: pickedFile,
     );

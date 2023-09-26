@@ -16,6 +16,8 @@ import 'package:heidi/src/presentation/main/add_listing/add_listing_screen.dart'
 import 'package:heidi/src/presentation/main/add_listing/add_listing_success/add_listing_success.dart';
 import 'package:heidi/src/presentation/main/home/forum/add_group_screen/add_group_screen.dart';
 import 'package:heidi/src/presentation/main/home/forum/add_group_screen/cubit/add_group_cubit.dart';
+import 'package:heidi/src/presentation/main/home/forum/list_groups/add_new_post/add_post_screen.dart';
+import 'package:heidi/src/presentation/main/home/forum/list_groups/add_new_post/cubit/add_post_cubit.dart';
 import 'package:heidi/src/presentation/main/home/forum/list_groups/cubit/cubit.dart';
 import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details/cubit/group_details_cubit.dart';
 import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details/group_details_screen.dart';
@@ -85,6 +87,7 @@ class Routes {
   static const String listGroups = "/listGroups";
   static const String groupDetails = "/groupDetails";
   static const String addGroups = "/addGroup";
+  static const String addPosts = "/addPosts";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -257,10 +260,7 @@ class Routes {
             final ForumGroupModel arguments =
                 settings.arguments as ForumGroupModel;
             return BlocProvider(
-              create: (context) => GroupDetailsCubit(
-                context.read(),
-                arguments
-              ),
+              create: (context) => GroupDetailsCubit(context.read(), arguments),
               child: GroupDetailsScreen(arguments),
             );
           },
@@ -279,6 +279,24 @@ class Routes {
               child: AddGroupScreen(
                 item: arguments['item'] as ProductModel?,
                 isNewGroup: arguments['isNewGroup'] as bool,
+              ),
+            );
+          },
+          fullscreenDialog: true,
+        );
+
+      case addPosts:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return BlocProvider(
+              create: (context) => AddPostCubit(
+                context.read(),
+              ),
+              child: AddPostScreen(
+                item: arguments['item'],
+                isNewPost: arguments['isNewPost'] as bool,
               ),
             );
           },

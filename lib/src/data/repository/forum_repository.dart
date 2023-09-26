@@ -322,6 +322,27 @@ class ForumRepository {
     return response;
   }
 
+  Future<ResultApiModel> savePost(
+    String title,
+    String description,
+    int? cityId,
+  ) async {
+    final forumId = 9;
+    final image = prefs.getKeyValue(Preferences.path, null);
+
+    Map<String, dynamic> params = {
+      "cityId": cityId,
+      "description": description,
+      "title": title,
+      "image": image,
+    };
+    final response = await Api.requestSavePost(1, forumId, params);
+    if (response.success) {
+      prefs.deleteKey('pickedFile');
+    }
+    return response;
+  }
+
   Future<ResultApiModel> editProduct(
     int? listingId,
     int? categoryId,

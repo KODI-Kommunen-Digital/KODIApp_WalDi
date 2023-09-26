@@ -591,7 +591,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
             SizedBox(
               height: 180,
               child: AppUploadImage(
-                title: Translate.of(context).translate('upload_feature_image'),
+                title:
+                    Translate.of(context).translate('upload_feature_image_pdf'),
                 image: _featurePdf == '' ? _featureImage : _featurePdf,
                 profile: false,
                 forumGroup: false,

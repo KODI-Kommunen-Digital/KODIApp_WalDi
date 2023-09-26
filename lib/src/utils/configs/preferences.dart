@@ -25,6 +25,7 @@ class Preferences {
   static const _pickedFileKey = 'pickedFile';
   static const String categoryId = 'categoryId';
   static const String villageId = 'villageId';
+  static const String forumId = 'forumId';
   static const String subCategoryId = 'subCategoryId';
   static const String type = 'type';
   static const String path = 'path';

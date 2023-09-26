@@ -3,14 +3,14 @@ import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
-class AddGroupSuccessScreen extends StatefulWidget {
-  const AddGroupSuccessScreen({Key? key}) : super(key: key);
+class AddPostSuccessScreen extends StatefulWidget {
+  const AddPostSuccessScreen({Key? key}) : super(key: key);
 
   @override
-  State<AddGroupSuccessScreen> createState() => _AddGroupSuccessScreenState();
+  State<AddPostSuccessScreen> createState() => _AddPostSuccessScreenState();
 }
 
-class _AddGroupSuccessScreenState extends State<AddGroupSuccessScreen> {
+class _AddPostSuccessScreenState extends State<AddPostSuccessScreen> {
   @override
   void initState() {
     super.initState();
@@ -24,8 +24,8 @@ class _AddGroupSuccessScreenState extends State<AddGroupSuccessScreen> {
   ///On Add More
   void _onSuccess() {
     Navigator.pop(context);
-    Navigator.pushNamed(context, Routes.addGroups,
-        arguments: {'isNewGroup': true});
+    Navigator.pushNamed(context, Routes.addPosts,
+        arguments: {'isNewPost': true});
   }
 
   @override
