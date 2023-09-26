@@ -1,12 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_forum_group.dart';
+import 'package:heidi/src/presentation/main/home/forum/list_groups/cubit/cubit.dart';
 import 'package:heidi/src/presentation/main/home/widget/empty_product_item.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/utils/configs/application.dart';
+import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
-class ForumGroupItem extends StatelessWidget {
+class ForumGroupItem extends StatefulWidget {
   const ForumGroupItem({
     Key? key,
     this.item,
@@ -17,23 +20,39 @@ class ForumGroupItem extends StatelessWidget {
   final VoidCallback? onPressed;
 
   @override
+  State<ForumGroupItem> createState() => _ForumGroupItemState();
+}
+
+class _ForumGroupItemState extends State<ForumGroupItem> {
+  bool isJoined = false;
+  String groupStatus = '';
+
+  @override
+  void initState() {
+    super.initState();
+    isJoined = widget.item!.isJoined!;
+    groupStatus = widget.item?.isJoined == false ? 'Beitreten' : 'zur Gruppe';
+
+  }
+
+  @override
   Widget build(BuildContext context) {
     String uniqueKey = UniqueKey().toString();
 
-    if (item == null) {
+    if (widget.item == null) {
       return const EmptyProductItem();
     }
 
     return InkWell(
-      onTap: onPressed,
+      onTap: widget.onPressed,
       child: Stack(
         children: [
           Row(
             children: <Widget>[
               CachedNetworkImage(
-                imageUrl: item?.image == 'admin/News.jpeg'
-                    ? "${Application.picturesURL}${item?.image}"
-                    : "${Application.picturesURL}${item!.image}?cacheKey=$uniqueKey",
+                imageUrl: widget.item?.image == 'admin/News.jpeg'
+                    ? "${Application.picturesURL}${widget.item?.image}"
+                    : "${Application.picturesURL}${widget.item!.image}?cacheKey=$uniqueKey",
                 imageBuilder: (context, imageProvider) {
                   return Container(
                     width: 120,
@@ -85,7 +104,7 @@ class ForumGroupItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      item?.forumName ?? '',
+                      widget.item?.forumName ?? '',
                       maxLines: 2,
                       style: Theme.of(context)
                           .textTheme
@@ -93,23 +112,37 @@ class ForumGroupItem extends StatelessWidget {
                           .copyWith(fontWeight: FontWeight.bold),
                     ),
                     Text(
-                        item?.isPrivate == 0
+                        widget.item?.isPrivate == 0
                             ? Translate.of(context).translate('public')
                             : Translate.of(context).translate('private'),
                         maxLines: 2,
                         style: TextStyle(
                           color: Theme.of(context).primaryColor,
                         )),
-                    const SizedBox(height: 10.0,),
-                    Container(
-                      margin: const EdgeInsets.fromLTRB(0, 0, 50, 0),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[500],
-                        borderRadius: BorderRadius.circular(4.0),
-                      ),
-                      alignment: Alignment.center,
-                      child: Text(
-                        item?.isJoined == false ? 'Anfrage verschickt' : 'zur Gruppe',
+                    const SizedBox(
+                      height: 10.0,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        if (widget.item?.isJoined == false) {
+                          showJoinGroupDialog(context, widget.item?.id);
+                        }
+                        else{
+                          Navigator.pushNamed(context, Routes.groupDetails, arguments: widget.item);
+                          // widget.onPressed;
+                        }
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.fromLTRB(0, 0, 50, 0),
+                        padding: const EdgeInsets.all(2.0),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[600],
+                          borderRadius: BorderRadius.circular(6.0),
+                        ),
+                        alignment: Alignment.center,
+                        child: Text(
+                          groupStatus,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -127,5 +160,56 @@ class ForumGroupItem extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future<void> showJoinGroupDialog(BuildContext context, int? id) async {
+    final result = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(Translate.of(context).translate('request_Confirmation')),
+          content: Text(Translate.of(context)
+              .translate('Do_you_want_to_join_this_group?')),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () async {
+                Navigator.of(context).pop(true);
+                // await AppBloc.homeCubit.onLoad(false);
+              }, // Yes
+              child: Text(Translate.of(context).translate('yes')),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false), // No
+              child: Text(Translate.of(context).translate('no')),
+            ),
+          ],
+        );
+      },
+    );
+    if (result == true) {
+      if (!mounted) return;
+      final joinRequestResponse =
+          await context.read<ListGroupsCubit>().requestToJoinGroup(id);
+      if (joinRequestResponse) {
+        setState(() {
+          groupStatus = 'Anfrage verschickt';
+          isJoined = true;
+        });
+      } else {
+        isJoined = false;
+      }
+
+      // if (!mounted) return;
+      // final deleteResponse = await context.read<ProfileCubit>().deleteUserList(
+      //   userListingsList[index].cityId.toString(),
+      //   userListingsList[index].id,
+      // );
+      // setState(() {
+      //   if (deleteResponse) {
+      //     userListingsList.removeAt(index);
+      //   }
+      // });
+      // }
+    }
   }
 }

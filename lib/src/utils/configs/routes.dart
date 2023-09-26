@@ -19,7 +19,7 @@ import 'package:heidi/src/presentation/main/home/forum/add_group_screen/cubit/ad
 import 'package:heidi/src/presentation/main/home/forum/list_groups/cubit/cubit.dart';
 import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details/cubit/group_details_cubit.dart';
 import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details/group_details_screen.dart';
-import 'package:heidi/src/presentation/main/home/forum/list_groups/list_groups.dart';
+import 'package:heidi/src/presentation/main/home/forum/list_groups/list_groups_screen.dart';
 import 'package:heidi/src/presentation/main/home/list_product/list_product.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/image_zoom/image_zoom_screen.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/product_detail_screen.dart';
@@ -261,7 +261,7 @@ class Routes {
                 context.read(),
                 arguments
               ),
-              child: const GroupDetailsScreen(),
+              child: GroupDetailsScreen(arguments),
             );
           },
           fullscreenDialog: true,

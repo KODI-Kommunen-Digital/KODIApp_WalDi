@@ -15,7 +15,6 @@ class ListGroupsCubit extends Cubit<ListGroupsState> {
   final ForumRepository repo;
 
   ListGroupsCubit(this.repo) : super(const ListGroupsStateLoading()) {
-    // final isEvent = categoryPreferencesCall();
     onLoad();
   }
 
@@ -51,6 +50,15 @@ class ListGroupsCubit extends Cubit<ListGroupsState> {
       emit(ListGroupsStateLoaded(
         listLoaded,
       ));
+    }
+  }
+
+  Future<bool> requestToJoinGroup(forumId) async {
+    final response = await repo.requestToJoinGroup(forumId);
+    if (response) {
+      return true;
+    } else {
+      return false;
     }
   }
 

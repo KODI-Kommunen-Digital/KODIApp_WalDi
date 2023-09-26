@@ -61,6 +61,17 @@ class ForumRepository {
     return null;
   }
 
+  Future<bool> requestToJoinGroup(forumId) async {
+    final cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    final response = await Api.requestToJoinGroup(forumId, cityId);
+    if (response.success) {
+      return true;
+    } else {
+      logError('Request To Join Group Response Failed', response.message);
+      return false;
+    }
+  }
+
   static Future<ResultApiModel?> uploadImage(File image, forumGroup) async {
     final prefs = await Preferences.openBox();
     List<String> parts = image.path.split('.');
