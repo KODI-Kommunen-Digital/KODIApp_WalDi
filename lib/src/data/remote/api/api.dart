@@ -46,7 +46,7 @@ class Api {
 
   static Future<ResultApiModel> requestForum(cityId) async {
     ///TODO: CHANGE THIS HARDCODED CITYID
-    final filepath = "/cities/1/forums";
+    const filepath = "/cities/1/forums";
     final result = await HTTPManager(forum: true).get(url: filepath);
     return ResultApiModel.fromJson(result);
   }

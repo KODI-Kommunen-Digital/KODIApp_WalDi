@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model.dart';
+import 'package:heidi/src/data/model/model_forum_group.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/presentation/main/account/change_password/change_password_screen.dart';
 import 'package:heidi/src/presentation/main/account/edit_profile/edit_profile_screen.dart';
@@ -16,6 +17,8 @@ import 'package:heidi/src/presentation/main/add_listing/add_listing_success/add_
 import 'package:heidi/src/presentation/main/home/forum/add_group_screen/add_group_screen.dart';
 import 'package:heidi/src/presentation/main/home/forum/add_group_screen/cubit/add_group_cubit.dart';
 import 'package:heidi/src/presentation/main/home/forum/list_groups/cubit/cubit.dart';
+import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details/cubit/group_details_cubit.dart';
+import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details/group_details_screen.dart';
 import 'package:heidi/src/presentation/main/home/forum/list_groups/list_groups.dart';
 import 'package:heidi/src/presentation/main/home/list_product/list_product.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/image_zoom/image_zoom_screen.dart';
@@ -80,6 +83,7 @@ class Routes {
   static const String imageZoom = "/imageZoom";
   static const String profileSettings = "/profileSettings";
   static const String listGroups = "/listGroups";
+  static const String groupDetails = "/groupDetails";
   static const String addGroups = "/addGroup";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -236,14 +240,28 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) {
             final Map<String, dynamic> arguments =
-            settings.arguments as Map<String, dynamic>;
+                settings.arguments as Map<String, dynamic>;
             return BlocProvider(
               create: (context) => ListGroupsCubit(
                 context.read(),
               ),
-              child: ListGroupScreen(
-                  arguments: arguments
+              child: ListGroupScreen(arguments: arguments),
+            );
+          },
+          fullscreenDialog: true,
+        );
+
+      case groupDetails:
+        return MaterialPageRoute(
+          builder: (context) {
+            final ForumGroupModel arguments =
+                settings.arguments as ForumGroupModel;
+            return BlocProvider(
+              create: (context) => GroupDetailsCubit(
+                context.read(),
+                arguments
               ),
+              child: const GroupDetailsScreen(),
             );
           },
           fullscreenDialog: true,

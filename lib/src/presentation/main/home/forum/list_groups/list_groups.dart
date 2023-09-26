@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_forum_group.dart';
-import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/home/list_product/cubit/cubit.dart';
@@ -338,8 +337,8 @@ class _ListLoadedState extends State<ListLoaded> {
     });
   }
 
-  void _onProductDetail(ProductModel item) {
-    Navigator.pushNamed(context, Routes.productDetail, arguments: item);
+  void _onProductDetail(ForumGroupModel? item) {
+    Navigator.pushNamed(context, Routes.groupDetails, arguments: item);
   }
 
   Widget _buildItem({
@@ -351,7 +350,7 @@ class _ListLoadedState extends State<ListLoaded> {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: ForumGroupItem(
           onPressed: () {
-            // _onProductDetail(id);
+            _onProductDetail(item);
           },
           item: item,
         ),
