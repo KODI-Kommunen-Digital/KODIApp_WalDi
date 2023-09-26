@@ -25,7 +25,8 @@ class _AddListingSuccessScreenState extends State<AddListingSuccessScreen> {
   ///On Add More
   void _onSuccess() {
     Navigator.pop(context);
-    Navigator.pushNamed(context, Routes.submit, arguments: {'isNewList': true});
+    Navigator.pushNamed(context, Routes.addGroups,
+        arguments: {'isNewGroup': true});
   }
 
   @override
@@ -71,7 +72,7 @@ class _AddListingSuccessScreenState extends State<AddListingSuccessScreen> {
                       const SizedBox(height: 8),
                       Text(
                         Translate.of(context).translate(
-                          'submit_success_message',
+                          'submit_forum_success_message',
                         ),
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.bodyMedium,

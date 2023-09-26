@@ -130,10 +130,10 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String textTitle = Translate.of(context).translate('add_new_listing');
+    String textTitle = Translate.of(context).translate('add_new_group');
     String textAction = Translate.of(context).translate('add');
     if (widget.item != null) {
-      textTitle = Translate.of(context).translate('update_listing');
+      textTitle = Translate.of(context).translate('update_group');
       textAction = Translate.of(context).translate('update');
     }
 

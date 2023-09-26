@@ -274,6 +274,7 @@
   "completed": "Upload abgeschlossen",
   "add_more": "Mehr hinzufügen",
   "submit_success_message": "Vielen Dank für die Übermittlung der Daten, diese werden in Kürze überprüft und anschließend direkt hochgeladen.",
+  "submit_forum_success_message": "Sie haben die Daten erfolgreich übermittelt. Ihre Daten werden im Forenverzeichnis angezeigt.",
   "choose_hours": "Stunden auswählen",
   "start_hour": "Startzeit",
   "end_hour": "Ende Stunde",
@@ -429,7 +430,7 @@
   "message_sent":"Nachricht gesendet",
   "message_sent_success":"Die Nachricht wurde versandt.",
   "submit_contactUs_message":"Vielen Dank für dein Feedback.",
-  "add_new_group":"Neue Gruppe hinzufügen",
+  "add_new_group":"Neue Gruppe",
   "update_group":"Gruppe aktualisieren"
 }
 
