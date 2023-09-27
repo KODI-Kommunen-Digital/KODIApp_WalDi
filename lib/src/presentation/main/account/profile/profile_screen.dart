@@ -205,10 +205,12 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                                           children: <Widget>[
                                             item.pdf == ''
                                                 ? CachedNetworkImage(
-                                                    imageUrl: item.image ==
-                                                            'admin/News.jpeg'
-                                                        ? "${Application.picturesURL}${item.image}"
-                                                        : "${Application.picturesURL}${item.image}?cacheKey=$uniqueKey",
+                                                    imageUrl: item.sourceId == 2
+                                                        ? item.image
+                                                        : item.image ==
+                                                                'admin/News.jpeg'
+                                                            ? "${Application.picturesURL}${item.image}"
+                                                            : "${Application.picturesURL}${item.image}?cacheKey=$uniqueKey",
                                                     imageBuilder: (context,
                                                         imageProvider) {
                                                       return Container(

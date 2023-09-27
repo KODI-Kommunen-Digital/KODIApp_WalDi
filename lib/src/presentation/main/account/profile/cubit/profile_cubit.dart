@@ -37,7 +37,8 @@ class ProfileCubit extends Cubit<ProfileState> {
             email: product.email,
             website: product.website,
             description: product.description,
-            userId: product.userId));
+            userId: product.userId,
+            sourceId: product.sourceId));
       }
     }
     emit(ProfileState.loaded(listDataList));
@@ -60,5 +61,4 @@ class ProfileCubit extends Cubit<ProfileState> {
     final deleteResponse = await repo.deleteUserList(id, listingId);
     return deleteResponse;
   }
-
 }

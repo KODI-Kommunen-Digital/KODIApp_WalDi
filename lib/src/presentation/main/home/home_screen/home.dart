@@ -1,9 +1,11 @@
-// ignore_for_file: no_leading_underscores_for_local_identifiers
+// ignore_for_file: no_leading_underscores_for_local_identifiers, depend_on_referenced_packages
 
 import 'dart:async';
 
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_category.dart';
@@ -18,6 +20,7 @@ import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:heidi/src/utils/translate.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 import 'cubit/home_cubit.dart';
 import 'cubit/home_state.dart';
@@ -37,6 +40,9 @@ class _HomeScreenState extends State<HomeScreen> {
   final _scrollController = ScrollController();
   bool isLoading = false;
   bool categoryLoading = false;
+  final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
+    Factory(() => EagerGestureRecognizer())
+  };
 
   @override
   void initState() {
@@ -360,8 +366,73 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  void _makeAction(String link) async {
+    if (!link.startsWith("https://") && !link.startsWith("http://")) {
+      link = "https://$link";
+    }
+    final webViewController = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..loadRequest(Uri.parse(link));
+
+    await showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return SafeArea(
+          top: false,
+          bottom: false,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                color: Colors.black,
+                padding: const EdgeInsets.fromLTRB(16, 32, 16, 0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        link,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(
+                        Icons.close,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height:
+                    MediaQuery.of(context).size.height - kToolbarHeight - 30,
+                child: WebViewWidget(
+                  controller: webViewController,
+                  gestureRecognizers: gestureRecognizers,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   void _onProductDetail(ProductModel item) {
-    Navigator.pushNamed(context, Routes.productDetail, arguments: item);
+    if (item.sourceId == 2) {
+      _makeAction(item.website);
+    } else {
+      Navigator.pushNamed(context, Routes.productDetail, arguments: item);
+    }
   }
 
   Widget _buildCategory(List<CategoryModel>? category) {

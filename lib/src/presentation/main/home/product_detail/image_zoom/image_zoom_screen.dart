@@ -33,7 +33,9 @@ class ImageZoomScreen extends StatelessWidget {
                         imageProvider: CachedNetworkImageProvider(
                             imageUrl.contains('admin/News.jpeg')
                                 ? imageUrl
-                                : '$imageUrl?cacheKey=$uniqueKey'),
+                                : imageUrl.contains('instagram')
+                                    ? imageUrl
+                                    : '$imageUrl?cacheKey=$uniqueKey'),
                         minScale: PhotoViewComputedScale.contained * 0.8,
                         maxScale: PhotoViewComputedScale.covered * 2.0,
                         initialScale: PhotoViewComputedScale.contained,
