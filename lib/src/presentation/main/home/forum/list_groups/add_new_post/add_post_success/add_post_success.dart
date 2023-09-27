@@ -71,7 +71,7 @@ class _AddPostSuccessScreenState extends State<AddPostSuccessScreen> {
                       const SizedBox(height: 8),
                       Text(
                         Translate.of(context).translate(
-                          'submit_forum_success_message',
+                          'submit_post_success_message',
                         ),
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.bodyMedium,

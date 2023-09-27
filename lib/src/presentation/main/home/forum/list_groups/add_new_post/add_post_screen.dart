@@ -30,27 +30,9 @@ class _AddPostScreenState extends State<AddPostScreen> {
   final regInt = RegExp('[^0-9]');
   final _textTitleController = TextEditingController();
   final _textContentController = TextEditingController();
-  final _textTagsController = TextEditingController();
-  final _textAddressController = TextEditingController();
-  final _textZipCodeController = TextEditingController();
-  final _textPhoneController = TextEditingController();
-  final _textFaxController = TextEditingController();
-  final _textEmailController = TextEditingController();
-  final _textWebsiteController = TextEditingController();
-  final _textStatusController = TextEditingController();
-  final _textPriceController = TextEditingController();
-  final _textPriceMinController = TextEditingController();
-  final _textPriceMaxController = TextEditingController();
 
   final _focusTitle = FocusNode();
   final _focusContent = FocusNode();
-  final _focusAddress = FocusNode();
-  final _focusZipCode = FocusNode();
-  final _focusPhone = FocusNode();
-  final _focusFax = FocusNode();
-  final _focusEmail = FocusNode();
-  final _focusWebsite = FocusNode();
-  final _focusPrice = FocusNode();
 
   bool _processing = false;
   String? _errorTitle;
@@ -59,19 +41,11 @@ class _AddPostScreenState extends State<AddPostScreen> {
   String? selectedCity;
   int? cityId;
   int? villageId;
-  int? categoryId;
-  int? subCategoryId;
   List listCity = [];
-  List listVillage = [];
-  List listCategory = [];
-  List listSubCategory = [];
 
   String? _featureImage;
 
-  String? selectedVillage;
-  String? selectedCategory;
   String? selectedPrivacy;
-  String? selectedSubCategory;
   bool isImageChanged = false;
 
   late int? currentCity;
@@ -86,7 +60,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
   @override
   void didChangeDependencies() async {
     super.didChangeDependencies();
-    currentCity = await context.read<AddPostCubit>().getCurrentCityId() ?? 0;
+    currentCity = await context.read<AddPostCubit>().getCurrentCityId();
     _onProcess();
   }
 
@@ -94,37 +68,15 @@ class _AddPostScreenState extends State<AddPostScreen> {
   void dispose() {
     _textTitleController.dispose();
     _textContentController.dispose();
-    _textTagsController.dispose();
-    _textAddressController.dispose();
-    _textZipCodeController.dispose();
-    _textPhoneController.dispose();
-    _textFaxController.dispose();
-    _textEmailController.dispose();
-    _textWebsiteController.dispose();
-    _textStatusController.dispose();
-    _textPriceController.dispose();
-    _textPriceMinController.dispose();
-    _textPriceMaxController.dispose();
     _focusTitle.dispose();
     _focusContent.dispose();
-    _focusAddress.dispose();
-    _focusZipCode.dispose();
-    _focusPhone.dispose();
-    _focusFax.dispose();
-    _focusEmail.dispose();
-    _focusWebsite.dispose();
-    _focusPrice.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    String textTitle = Translate.of(context).translate('add_new_listing');
+    String textTitle = Translate.of(context).translate('add_new_post');
     String textAction = Translate.of(context).translate('add');
-    if (widget.item != null) {
-      textTitle = Translate.of(context).translate('update_listing');
-      textAction = Translate.of(context).translate('update');
-    }
 
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -157,15 +109,6 @@ class _AddPostScreenState extends State<AddPostScreen> {
       params['post_id'] = widget.item!.id;
     }
 
-    if (widget.item != null) {
-      // if (!mounted) return;
-      // _featureImage = widget.item?.image;
-      // _textTitleController.text = widget.item!.forumName!;
-      // _textContentController.text = widget.item!.description!;
-      // final city = listCity
-      //     .firstWhere((element) => element['id'] == widget.item?.cityId);
-      // selectedCity = city['name'];
-    } else {}
     setState(() {
       _processing = false;
     });
@@ -242,10 +185,9 @@ class _AddPostScreenState extends State<AddPostScreen> {
             SizedBox(
               height: 180,
               child: AppUploadImage(
-                title:
-                    Translate.of(context).translate('upload_feature_image_pdf'),
+                title: Translate.of(context).translate('upload_feature_image'),
                 image: _featureImage,
-                profile: false,
+                profile: true,
                 forumGroup: true,
                 onChange: (result) {
                   isImageChanged = true;

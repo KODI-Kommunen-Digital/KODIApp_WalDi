@@ -34,7 +34,7 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
       }
     }
 
-    services.removeWhere((element) => hiddenServices.contains(element));
+    // services.removeWhere((element) => hiddenServices.contains(element));
 
     emit(DiscoveryStateLoaded(
       services,

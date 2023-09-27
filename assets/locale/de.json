@@ -277,6 +277,7 @@
   "add_more": "Mehr hinzufügen",
   "submit_success_message": "Vielen Dank für die Übermittlung der Daten, diese werden in Kürze überprüft und anschließend direkt hochgeladen.",
   "submit_forum_success_message": "Sie haben die Daten erfolgreich übermittelt. Ihre Daten werden im Forenverzeichnis angezeigt.",
+  "submit_post_success_message": "Sie haben Ihre Daten erfolgreich übermittelt. Ihre Daten werden im Forum-Beitragsverzeichnis angezeigt.",
   "choose_hours": "Stunden auswählen",
   "start_hour": "Startzeit",
   "end_hour": "Ende Stunde",
@@ -434,6 +435,8 @@
   "message_sent_success":"Die Nachricht wurde versandt.",
   "submit_contactUs_message":"Vielen Dank für dein Feedback.",
   "add_new_group":"Neue Gruppe",
-  "update_group":"Gruppe aktualisieren"
+  "update_group":"Gruppe aktualisieren",
+  "add_new_post":"Neuen Beitrag",
+  "update_post":"Beitrag aktualisieren"
 }
 

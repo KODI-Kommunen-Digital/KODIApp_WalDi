@@ -277,6 +277,7 @@
   "add_more": "Add More",
   "submit_success_message": "You have submitted data successfully. Your data will be appear on the directory listing application.",
   "submit_forum_success_message": "You have submitted data successfully. Your data will appear on the forums directory.",
+  "submit_post_success_message": "You have successfully submitted your data. Your data will be displayed in the forum post directory",  
   "choose_hours": "Choose hours",
   "start_hour": "Start hour",
   "end_hour": "End hour",
@@ -434,5 +435,7 @@
   "select_privacy":"Group type",  
   "forums":"Forums",
   "add_new_group":"Add New Group",
-  "update_group":"Update Group"
+  "update_group":"Update Group", 
+  "add_new_post":"Add New Post",
+  "update_post":"Update Post"
 }
