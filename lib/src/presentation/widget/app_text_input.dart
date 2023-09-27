@@ -18,6 +18,8 @@ class AppTextInput extends StatefulWidget {
   final int? maxLines;
   final bool? autofocus;
   final int? maxLength;
+  final bool readOnly;
+  final bool hasDelete;
 
   const AppTextInput(
       {Key? key,
@@ -35,7 +37,9 @@ class AppTextInput extends StatefulWidget {
       this.errorText,
       this.maxLines = 1,
       this.autofocus = false,
-      this.maxLength})
+      this.maxLength,
+      this.readOnly = false,
+      this.hasDelete = true})
       : super(key: key);
 
   @override
@@ -107,7 +111,7 @@ class _AppTextInputState extends State<AppTextInput> {
       );
     }
 
-    if (widget.controller != null && widget.controller!.text.isNotEmpty) {
+    if (widget.controller != null && widget.controller!.text.isNotEmpty && widget.hasDelete) {
       deleteAction = Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -141,6 +145,7 @@ class _AppTextInputState extends State<AppTextInput> {
               leadingWidget,
               Expanded(
                 child: TextField(
+                  readOnly: widget.readOnly,
                   onTap: widget.onTap,
                   textAlignVertical: TextAlignVertical.center,
                   onSubmitted: widget.onSubmitted,
