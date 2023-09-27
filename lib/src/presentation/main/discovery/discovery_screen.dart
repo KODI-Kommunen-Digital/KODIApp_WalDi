@@ -179,32 +179,29 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
           scrollUp();
         }
       },
-      child: Padding(
-        padding: const EdgeInsets.only(top: 16.0),
-        child: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 10.0,
-            mainAxisSpacing: 10.0,
-            mainAxisExtent: 300.0,
-          ),
-          itemCount: widget.services.length,
-          controller: _scrollController,
-          itemBuilder: (BuildContext context, int index) {
-            return InkWell(
-              onTap: () {
-                navigateToLink(widget.services[index]);
-              },
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(15.0),
-                child: Image.asset(
-                  widget.services[index].imageUrl,
-                  fit: BoxFit.cover,
-                ),
-              ),
-            );
-          },
+      child: GridView.builder(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 10.0,
+          mainAxisSpacing: 10.0,
+          mainAxisExtent: 300.0,
         ),
+        itemCount: widget.services.length,
+        controller: _scrollController,
+        itemBuilder: (BuildContext context, int index) {
+          return InkWell(
+            onTap: () {
+              navigateToLink(widget.services[index]);
+            },
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(15.0),
+              child: Image.asset(
+                widget.services[index].imageUrl,
+                fit: BoxFit.cover,
+              ),
+            ),
+          );
+        },
       ),
     );
   }
