@@ -125,10 +125,14 @@ class _WishListLoadedState extends State<WishListLoaded> {
                                 widget.favoritesList[index].pdf == ''
                                     ? CachedNetworkImage(
                                         imageUrl: widget.favoritesList[index]
-                                                    .logo ==
-                                                null
-                                            ? "${Application.picturesURL}admin/News.jpeg"
-                                            : "${Application.picturesURL}${(widget.favoritesList[index].logo)}",
+                                                    .sourceId ==
+                                                2
+                                            ? "${Application.picturesURL}${widget.favoritesList[index].logo}"
+                                            : (widget.favoritesList[index]
+                                                        .logo ==
+                                                    null
+                                                ? "${Application.picturesURL}admin/News.jpeg"
+                                                : "${Application.picturesURL}${widget.favoritesList[index].logo}"),
                                         imageBuilder: (context, imageProvider) {
                                           return Container(
                                             width: 120,

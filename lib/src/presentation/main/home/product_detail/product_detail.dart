@@ -1,6 +1,7 @@
-import 'dart:async';
-
+// ignore_for_file: depend_on_referenced_packages
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
@@ -17,6 +18,7 @@ import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/multiple_gesture_detector.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   const ProductDetailScreen({Key? key, required this.item}) : super(key: key);
@@ -31,6 +33,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   final _scrollController = ScrollController();
   final _productDetailCubit = ProductDetailCubit();
   Color? _iconColor = Colors.white;
+  final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
+    Factory(() => EagerGestureRecognizer())
+  };
 
   @override
   void initState() {
@@ -112,15 +117,66 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     }
   }
 
-  Future<void> _makeAction(String link) async {
+  void _makeAction(String link) async {
     if (!link.startsWith("https://") && !link.startsWith("http://")) {
       link = "https://$link";
     }
-    if (await canLaunchUrl(Uri.parse(link))) {
-      await launchUrl(Uri.parse(link), mode: LaunchMode.inAppWebView);
-    } else {
-      throw 'Could not launch $link';
-    }
+
+    final webViewController = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..loadRequest(Uri.parse(link));
+
+    await showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return SafeArea(
+          top: false,
+          bottom: false,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                color: Colors.black,
+                padding: const EdgeInsets.fromLTRB(16, 32, 16, 0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        link,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(
+                        Icons.close,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height:
+                    MediaQuery.of(context).size.height - kToolbarHeight - 30,
+                child: WebViewWidget(
+                  controller: webViewController,
+                  gestureRecognizers: gestureRecognizers,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   ///Build content UI
@@ -360,75 +416,79 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
       banner = product.pdf == ''
           ? InkWell(
-        onTap: () {
-          Navigator.pushNamed(
-            context,
-            Routes.imageZoom,
-            arguments: "${Application.picturesURL}${product.image}",
-          );
-        },
-        child: CachedNetworkImage(
-          imageUrl: product.image == 'admin/News.jpeg'
-              ? "${Application.picturesURL}${product.image}"
-              :"${Application.picturesURL}${product.image}?cacheKey=$uniqueKey",
-          placeholder: (context, url) {
-            return AppPlaceholder(
-              child: Container(
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                ),
+              onTap: () {
+                Navigator.pushNamed(
+                  context,
+                  Routes.imageZoom,
+                  arguments: product.sourceId == 2
+                      ? product.image
+                      : "${Application.picturesURL}${product.image}",
+                );
+              },
+              child: CachedNetworkImage(
+                imageUrl: product.sourceId == 2
+                    ? product.image
+                    : product.image == 'admin/News.jpeg'
+                        ? "${Application.picturesURL}${product.image}"
+                        : "${Application.picturesURL}${product.image}?cacheKey=$uniqueKey",
+                placeholder: (context, url) {
+                  return AppPlaceholder(
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                      ),
+                    ),
+                  );
+                },
+                imageBuilder: (context, imageProvider) {
+                  return Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.fitHeight,
+                      ),
+                    ),
+                  );
+                },
+                errorWidget: (context, url, error) {
+                  return AppPlaceholder(
+                    child: Container(
+                      width: 120,
+                      height: 140,
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(8),
+                          bottomLeft: Radius.circular(8),
+                        ),
+                      ),
+                      child: const Icon(Icons.error),
+                    ),
+                  );
+                },
               ),
-            );
-          },
-          imageBuilder: (context, imageProvider) {
-            return Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: imageProvider,
-                  fit: BoxFit.fitHeight,
-                ),
-              ),
-            );
-          },
-          errorWidget: (context, url, error) {
-            return AppPlaceholder(
-              child: Container(
-                width: 120,
-                height: 140,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(8),
-                    bottomLeft: Radius.circular(8),
-                  ),
-                ),
-                child: const Icon(Icons.error),
-              ),
-            );
-          },
-        ),
-      )
+            )
           : RawGestureDetector(
-        gestures: {
-          AllowMultipleGestureRecognizer:
-          GestureRecognizerFactoryWithHandlers<
-              AllowMultipleGestureRecognizer>(
-                () => AllowMultipleGestureRecognizer(), //constructor
-                (AllowMultipleGestureRecognizer instance) {
-              instance.onTap = () => Navigator.pushNamed(
-                context,
-                Routes.imageZoom,
-                arguments: "${Application.picturesURL}${product.pdf}",
-              );
-            },
-          )
-        },
-        child: const PDF().cachedFromUrl(
-          "${Application.picturesURL}${product.pdf}?cacheKey=$uniqueKey",
-          placeholder: (progress) => Center(child: Text('$progress %')),
-          errorWidget: (error) => Center(child: Text(error.toString())),
-        ),
-      );
+              gestures: {
+                AllowMultipleGestureRecognizer:
+                    GestureRecognizerFactoryWithHandlers<
+                        AllowMultipleGestureRecognizer>(
+                  () => AllowMultipleGestureRecognizer(), //constructor
+                  (AllowMultipleGestureRecognizer instance) {
+                    instance.onTap = () => Navigator.pushNamed(
+                          context,
+                          Routes.imageZoom,
+                          arguments: "${Application.picturesURL}${product.pdf}",
+                        );
+                  },
+                )
+              },
+              child: const PDF().cachedFromUrl(
+                "${Application.picturesURL}${product.pdf}?cacheKey=$uniqueKey",
+                placeholder: (progress) => Center(child: Text('$progress %')),
+                errorWidget: (error) => Center(child: Text(error.toString())),
+              ),
+            );
 
       if (product.address.isNotEmpty) {
         address = Column(
@@ -749,8 +809,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   child: Text(
                     product.title,
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                          fontWeight: FontWeight.bold,
+                        ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -829,8 +889,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 boxShadow: [
                   BoxShadow(
                     color: Theme.of(context).dividerColor.withOpacity(
-                      .05,
-                    ),
+                          .05,
+                        ),
                     spreadRadius: 4,
                     blurRadius: 4,
                     offset: const Offset(

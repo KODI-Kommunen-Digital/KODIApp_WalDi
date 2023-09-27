@@ -36,9 +36,11 @@ class AppProductItem extends StatelessWidget {
             children: <Widget>[
               item?.pdf == ''
                   ? CachedNetworkImage(
-                      imageUrl: item?.image == 'admin/News.jpeg'
-                          ? "${Application.picturesURL}${item?.image}"
-                          : "${Application.picturesURL}${item!.image}?cacheKey=$uniqueKey",
+                      imageUrl: item?.sourceId == 2
+                          ? item!.image
+                          : item!.image == 'admin/News.jpeg'
+                              ? "${Application.picturesURL}${item!.image}"
+                              : "${Application.picturesURL}${item!.image}?cacheKey=$uniqueKey",
                       imageBuilder: (context, imageProvider) {
                         return Container(
                           width: 84,
@@ -176,7 +178,9 @@ class AppProductItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               CachedNetworkImage(
-                imageUrl: "${Application.picturesURL}${item!.image}",
+                imageUrl: item?.sourceId == 2
+                    ? item!.image
+                    : "${Application.picturesURL}${item!.image}",
                 imageBuilder: (context, imageProvider) {
                   return Container(
                     height: 120,
@@ -279,9 +283,11 @@ class AppProductItem extends StatelessWidget {
                 children: <Widget>[
                   item?.pdf == ''
                       ? CachedNetworkImage(
-                          imageUrl: item?.image == 'admin/News.jpeg'
-                              ? "${Application.picturesURL}${item?.image}"
-                              : "${Application.picturesURL}${item!.image}?cacheKey=$uniqueKey",
+                          imageUrl: item?.sourceId == 2
+                              ? item!.image
+                              : item!.image == 'admin/News.jpeg'
+                                  ? "${Application.picturesURL}${item!.image}"
+                                  : "${Application.picturesURL}${item!.image}?cacheKey=$uniqueKey",
                           imageBuilder: (context, imageProvider) {
                             return Container(
                               width: 120,
