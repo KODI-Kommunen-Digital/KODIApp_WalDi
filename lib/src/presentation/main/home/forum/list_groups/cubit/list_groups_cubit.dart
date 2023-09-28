@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_forum_group.dart';
+import 'package:heidi/src/data/model/model_request_member.dart';
 import 'package:heidi/src/data/model/model_users_joined_group.dart';
 import 'package:heidi/src/data/repository/forum_repository.dart';
 
@@ -23,6 +24,7 @@ class ListGroupsCubit extends Cubit<ListGroupsState> {
   PaginationModel? pagination;
   List<ForumGroupModel> listLoaded = [];
   List<ForumGroupModel> filteredList = [];
+  List<RequestMemberModel> requestMemberList = [];
   var userJoinedGroupsList = <UserJoinedGroupsModel>[];
 
   Future<void> onLoad() async {
@@ -34,10 +36,14 @@ class ListGroupsCubit extends Cubit<ListGroupsState> {
       groupsList = result[0];
       pagination = result[1];
       userJoinedGroupsList = result[2];
-      // listLoaded = list;
+      requestMemberList = result[3];
+
       for (final list in groupsList) {
         bool joined =
             userJoinedGroupsList.any((element) => element.forumId == list.id);
+        bool requested =
+            requestMemberList.any((element) => element.forumId == list.id);
+
         listLoaded.add(ForumGroupModel(
             id: list.id,
             forumName: list.forumName,
@@ -45,7 +51,8 @@ class ListGroupsCubit extends Cubit<ListGroupsState> {
             description: list.description,
             image: list.image,
             isPrivate: list.isPrivate,
-            isJoined: joined));
+            isJoined: joined,
+            isRequested: requested));
       }
       emit(ListGroupsStateLoaded(
         listLoaded,

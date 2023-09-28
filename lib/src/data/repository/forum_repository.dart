@@ -20,6 +20,8 @@ class ForumRepository {
 
   Future<List?> loadForumsList({required pageNo}) async {
     final hasForum = await Api.requestHasForum();
+    final requestMemberList = <RequestMemberModel>[];
+
     int cityId = prefs.getKeyValue(Preferences.cityId, 0);
     int userId = prefs.getKeyValue(Preferences.userId, 0);
 
@@ -44,6 +46,26 @@ class ForumRepository {
           );
         }).toList();
         final usersJoinedForumResponse = await Api.requestUsersForum(userId);
+
+        final requestGroupRequestResponse =
+            await Api.getGroupMemberRequests(userId);
+        if (requestGroupRequestResponse.success) {
+          for (final list in requestGroupRequestResponse.data) {
+            requestMemberList.add(RequestMemberModel(
+              forumId: list['forumId'],
+              userId: list['userId'],
+              statusId: list['statusId'],
+              createdAt: list['createdAt'],
+              updatedAt: list['updatedAt'],
+              id: list['id'],
+              reason: list['reason'],
+            ));
+          }
+        } else {
+          logError('Request To Get Group Members Response Failed',
+              requestGroupRequestResponse.message);
+        }
+
         final userJoinedList =
             List.from(usersJoinedForumResponse.data ?? []).map((item) {
           return UserJoinedGroupsModel.fromJson(
@@ -51,7 +73,12 @@ class ForumRepository {
           );
         }).toList();
 
-        return [groupList, requestForumResponse.pagination, userJoinedList];
+        return [
+          groupList,
+          requestForumResponse.pagination,
+          userJoinedList,
+          requestMemberList
+        ];
       }
     } else {
       logError('Forum Group List Error');
@@ -67,6 +94,17 @@ class ForumRepository {
     } else {
       logError('Request To Join Group Response Failed', response.message);
       return false;
+    }
+  }
+
+  Future<ResultApiModel?> requestGroupPosts(forumId) async {
+    final userId = prefs.getKeyValue(Preferences.userId, 0);
+    final response = await Api.requestGroupPosts(forumId, userId);
+    if (response.success) {
+      return response;
+    } else {
+      logError('Request Group Post Response Failed', response.message);
+      return null;
     }
   }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_forum_group.dart';
+import 'package:heidi/src/data/model/model_group_posts.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/presentation/main/account/change_password/change_password_screen.dart';
 import 'package:heidi/src/presentation/main/account/edit_profile/edit_profile_screen.dart';
@@ -21,6 +22,10 @@ import 'package:heidi/src/presentation/main/home/forum/list_groups/add_new_post/
 import 'package:heidi/src/presentation/main/home/forum/list_groups/cubit/cubit.dart';
 import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details/cubit/group_details_cubit.dart';
 import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details/group_details_screen.dart';
+import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details/group_members/cubit/group_members_cubit.dart';
+import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details/group_members/group_members_screen.dart';
+import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details/post_detail/cubit/post_detail_cubit.dart';
+import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details/post_detail/post_detail_screen.dart';
 import 'package:heidi/src/presentation/main/home/forum/list_groups/list_groups_screen.dart';
 import 'package:heidi/src/presentation/main/home/list_product/list_product.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/image_zoom/image_zoom_screen.dart';
@@ -86,6 +91,8 @@ class Routes {
   static const String profileSettings = "/profileSettings";
   static const String listGroups = "/listGroups";
   static const String groupDetails = "/groupDetails";
+  static const String groupMembersDetails = "/groupMembersDetails";
+  static const String postDetails = "/postDetails";
   static const String addGroups = "/addGroup";
   static const String addPosts = "/addPosts";
 
@@ -262,6 +269,37 @@ class Routes {
             return BlocProvider(
               create: (context) => GroupDetailsCubit(context.read(), arguments),
               child: GroupDetailsScreen(arguments),
+            );
+          },
+          fullscreenDialog: true,
+        );
+
+        case groupMembersDetails:
+        return MaterialPageRoute(
+          builder: (context) {
+            final int arguments =
+                settings.arguments as int;
+            return BlocProvider(
+              create: (context) => GroupMembersCubit(
+                context.read(),
+                arguments
+              ),
+              child: GroupMembersScreen(arguments),
+            );
+          },
+          fullscreenDialog: true,
+        );
+
+        case postDetails:
+        return MaterialPageRoute(
+          builder: (context) {
+            final GroupPostsModel arguments =
+                settings.arguments as GroupPostsModel;
+            return BlocProvider(
+              create: (context) => PostDetailCubit(
+                arguments
+              ),
+              child: PostDetailsScreen(arguments),
             );
           },
           fullscreenDialog: true,

@@ -31,8 +31,11 @@ class _ForumGroupItemState extends State<ForumGroupItem> {
   void initState() {
     super.initState();
     isJoined = widget.item!.isJoined!;
-    groupStatus = widget.item?.isJoined == false ? 'Beitreten' : 'zur Gruppe';
-
+    groupStatus = widget.item?.isRequested == true
+        ? 'Anfrage verschickt'
+        : widget.item?.isJoined == false
+            ? 'Beitreten'
+            : 'zur Gruppe';
   }
 
   @override
@@ -124,12 +127,14 @@ class _ForumGroupItemState extends State<ForumGroupItem> {
                     ),
                     InkWell(
                       onTap: () {
-                        if (widget.item?.isJoined == false) {
-                          showJoinGroupDialog(context, widget.item?.id);
-                        }
-                        else{
-                          Navigator.pushNamed(context, Routes.groupDetails, arguments: widget.item);
-                          // widget.onPressed;
+                        if (widget.item?.isRequested == false) {
+                          if (widget.item?.isJoined == false) {
+                            showJoinGroupDialog(context, widget.item?.id);
+                          } else {
+                            Navigator.pushNamed(context, Routes.groupDetails,
+                                arguments: widget.item);
+                            // widget.onPressed;
+                          }
                         }
                       },
                       child: Container(
