@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/utils/configs/application.dart';
@@ -22,6 +23,7 @@ class AppUserInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String uniqueKey = UniqueKey().toString();
     switch (type) {
       case UserViewType.information:
         if (user == null) {
@@ -87,13 +89,60 @@ class AppUserInfo extends StatelessWidget {
           width: 60,
           height: 60,
           child: ClipOval(
-              child: Image.network(
-            user!.image == 'Keine Angabe' || user!.image == ""
+              child:
+                  //     Image.network(
+                  //   user!.image == 'Keine Angabe' || user!.image == ""
+                  //       ? Application.defaultPicturesURL
+                  //       : "${Application.picturesURL}${user!.image}?cacheKey=$uniqueKey",
+                  //   width: 100,
+                  //   height: 100,
+                  //   fit: BoxFit.cover,
+                  // )
+                  CachedNetworkImage(
+            imageUrl: user!.image == 'Keine Angabe' || user!.image == ""
                 ? Application.defaultPicturesURL
-                : "${Application.picturesURL}${user!.image}",
-            width: 100,
-            height: 100,
-            fit: BoxFit.cover,
+                : "${Application.picturesURL}${user!.image}?cacheKey=$uniqueKey",
+            imageBuilder: (context, imageProvider) {
+              return Container(
+                width: 84,
+                height: 84,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  image: DecorationImage(
+                    image: imageProvider,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              );
+            },
+            placeholder: (context, url) {
+              return AppPlaceholder(
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: Colors.white,
+                  ),
+                  width: 84,
+                  height: 84,
+                ),
+              );
+            },
+            errorWidget: (context, url, error) {
+              return AppPlaceholder(
+                child: Container(
+                  width: 84,
+                  height: 84,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(8),
+                      bottomLeft: Radius.circular(8),
+                    ),
+                  ),
+                  child: const Icon(Icons.error),
+                ),
+              );
+            },
           )),
         );
         return InkWell(
