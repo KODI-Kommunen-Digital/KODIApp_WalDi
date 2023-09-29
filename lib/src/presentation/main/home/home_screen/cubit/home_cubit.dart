@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
+import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/utils/configs/image.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 
@@ -29,8 +30,9 @@ class HomeCubit extends Cubit<HomeState> {
       return CategoryModel.fromJson(item);
     }).toList();
 
-    if(!isRefreshLoader){
-      emit(HomeState.categoryLoading(location));}
+    if (!isRefreshLoader) {
+      emit(HomeState.categoryLoading(location));
+    }
 
     final categoryRequestResponse = await Api.requestHomeCategory();
     category = List.from(categoryRequestResponse.data ?? []).map((item) {
@@ -50,17 +52,18 @@ class HomeCubit extends Cubit<HomeState> {
       }).toList();
     }
     final categoryCountRequestResponse =
-    await Api.requestCategoryCount(savedCity?.id);
+        await Api.requestCategoryCount(savedCity?.id);
     categoryCount =
         List.from(categoryCountRequestResponse.data ?? []).map((item) {
-          return CategoryModel.fromJson(item);
-        }).toList();
+      return CategoryModel.fromJson(item);
+    }).toList();
 
     const banner = Images.slider;
 
     List<CategoryModel> formattedCategories =
-    await formatCategoriesList(category, categoryCount, savedCity?.id);
+        await formatCategoriesList(category, categoryCount, savedCity?.id);
 
+    await AppBloc.discoveryCubit.onLoad();
     emit(HomeStateLoaded(
       banner,
       formattedCategories,
@@ -91,7 +94,6 @@ class HomeCubit extends Cubit<HomeState> {
   bool getCalledExternally() {
     return calledExternally;
   }
-
 
   void setCalledExternally(bool called) {
     calledExternally = called;
