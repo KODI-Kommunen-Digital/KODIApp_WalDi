@@ -142,21 +142,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     hintText: Translate.of(context).translate('input_id'),
                     errorText: _errorUName,
                     focusNode: _focusUName,
-                    textInputAction: TextInputAction.next,
-                    onSubmitted: (text) {
-                      Utils.fieldFocusChange(
-                        context,
-                        _focusUName,
-                        _focusFName,
-                      );
-                    },
-                    onChanged: (text) {
-                      setState(() {
-                        _errorUName = UtilValidator.validate(
-                          _textUNameController.text,
-                        );
-                      });
-                    },
+                    hasDelete: false,
+                    readOnly: true,
                     controller: _textUNameController,
                   ),
                   const SizedBox(height: 16),
