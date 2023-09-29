@@ -189,6 +189,9 @@ class _AccountLoadedState extends State<AccountLoaded> {
   }
 
   void _onNavigate(String route) {
-    Navigator.pushNamed(context, route);
+    Navigator.pushNamed(context, route).then((value) {
+      setState(() {});
+    });
+
   }
 }

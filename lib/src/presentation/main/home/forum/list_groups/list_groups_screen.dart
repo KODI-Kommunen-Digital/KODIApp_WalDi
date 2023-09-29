@@ -337,10 +337,6 @@ class _ListLoadedState extends State<ListLoaded> {
     });
   }
 
-  void _onProductDetail(ForumGroupModel? item) {
-    Navigator.pushNamed(context, Routes.groupDetails, arguments: item);
-  }
-
   Widget _buildItem({
     ForumGroupModel? item,
     required ProductViewType type,
@@ -350,7 +346,17 @@ class _ListLoadedState extends State<ListLoaded> {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: ForumGroupItem(
           onPressed: () {
-            _onProductDetail(item);
+            Navigator.pushNamed(context, Routes.groupDetails, arguments: item)
+                .then((value) async {
+              logError('Value', value);
+              await context.read<ListGroupsCubit>().onLoad();
+            });
+            //     .then((value)
+            // {
+            //   logError('Value', value),
+            //   setState(() {})
+            //   // await context.read<ListGroupsCubit>().onLoad()}
+            // });
           },
           item: item,
         ),

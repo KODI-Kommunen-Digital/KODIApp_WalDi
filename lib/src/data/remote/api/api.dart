@@ -71,9 +71,23 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
+  static Future<ResultApiModel> removeUserFromGroup(forumId, cityId, memberId) async {
+    ///TODO: CHANGE THIS HARDCODED CITYID
+    final filepath = "/cities/1/forums/$forumId/members/$memberId";
+    final result = await HTTPManager(forum: true).delete(url: filepath);
+    return ResultApiModel.fromJson(result);
+  }
+
   static Future<ResultApiModel> requestGroupPosts(forumId, cityId) async {
     ///TODO: CHANGE THIS HARDCODED CITYID
     final filepath = "/cities/1/forums/$forumId/posts";
+    final result = await HTTPManager(forum: true).get(url: filepath);
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> getGroupMembers(forumId, cityId) async {
+    ///TODO: CHANGE THIS HARDCODED CITYID
+    final filepath = "/cities/1/forums/$forumId/members";
     final result = await HTTPManager(forum: true).get(url: filepath);
     return ResultApiModel.fromJson(result);
   }

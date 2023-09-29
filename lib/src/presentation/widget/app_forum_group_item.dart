@@ -8,6 +8,7 @@ import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
+import 'package:loggy/loggy.dart';
 
 class ForumGroupItem extends StatefulWidget {
   const ForumGroupItem({
@@ -25,12 +26,14 @@ class ForumGroupItem extends StatefulWidget {
 
 class _ForumGroupItemState extends State<ForumGroupItem> {
   bool isJoined = false;
+  bool isRequested = false;
   String groupStatus = '';
 
   @override
   void initState() {
     super.initState();
     isJoined = widget.item!.isJoined!;
+    isRequested = widget.item!.isRequested!;
     groupStatus = widget.item?.isRequested == true
         ? 'Anfrage verschickt'
         : widget.item?.isJoined == false
@@ -47,7 +50,7 @@ class _ForumGroupItemState extends State<ForumGroupItem> {
     }
 
     return InkWell(
-      onTap: widget.onPressed,
+      onTap: isRequested || isJoined == false ? null : widget.onPressed,
       child: Stack(
         children: [
           Row(
@@ -132,7 +135,10 @@ class _ForumGroupItemState extends State<ForumGroupItem> {
                             showJoinGroupDialog(context, widget.item?.id);
                           } else {
                             Navigator.pushNamed(context, Routes.groupDetails,
-                                arguments: widget.item);
+                                arguments: widget.item).then((value) async {
+                              logError('Value', value);
+                              await context.read<ListGroupsCubit>().onLoad();
+                            });
                             // widget.onPressed;
                           }
                         }
@@ -199,9 +205,13 @@ class _ForumGroupItemState extends State<ForumGroupItem> {
         setState(() {
           groupStatus = 'Anfrage verschickt';
           isJoined = true;
+          isRequested = true;
         });
       } else {
-        isJoined = false;
+        setState(() {
+          isRequested = false;
+          isJoined = false;
+        });
       }
 
       // if (!mounted) return;

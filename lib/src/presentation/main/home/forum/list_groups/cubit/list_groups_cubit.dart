@@ -28,6 +28,8 @@ class ListGroupsCubit extends Cubit<ListGroupsState> {
   var userJoinedGroupsList = <UserJoinedGroupsModel>[];
 
   Future<void> onLoad() async {
+    listLoaded.clear();
+    emit(const ListGroupsStateLoading());
     pageNo = 1;
     final result = await repo.loadForumsList(
       pageNo: pageNo,

@@ -97,9 +97,31 @@ class ForumRepository {
     }
   }
 
+  Future<bool> removeUserFromGroup(forumId, memberId) async {
+    final cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    final response = await Api.removeUserFromGroup(forumId, cityId, memberId) ;
+    if (response.success) {
+      return true;
+    } else {
+      logError('Request To Join Group Response Failed', response.message);
+      return false;
+    }
+  }
+
   Future<ResultApiModel?> requestGroupPosts(forumId) async {
-    final userId = prefs.getKeyValue(Preferences.userId, 0);
-    final response = await Api.requestGroupPosts(forumId, userId);
+    final cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    final response = await Api.requestGroupPosts(forumId, cityId);
+    if (response.success) {
+      return response;
+    } else {
+      logError('Request Group Post Response Failed', response.message);
+      return null;
+    }
+  }
+
+  Future<ResultApiModel?> getGroupMembers(forumId) async {
+    final cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    final response = await Api.getGroupMembers(forumId, cityId);
     if (response.success) {
       return response;
     } else {

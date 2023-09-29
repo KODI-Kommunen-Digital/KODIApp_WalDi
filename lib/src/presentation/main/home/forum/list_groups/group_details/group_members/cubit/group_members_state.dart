@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:heidi/src/data/model/model_group_posts.dart';
+import 'package:heidi/src/data/model/model_group_members.dart';
 
 part 'group_members_state.freezed.dart';
 
@@ -10,7 +10,7 @@ class GroupMembersState with _$GroupMembersState {
   const factory GroupMembersState.loading() = GroupMembersLoading;
 
   const factory GroupMembersState.loaded(
-      List<GroupPostsModel> list,
+      List<GroupMembersModel> list,
       ) = GroupMembersLoaded;
 
   const factory GroupMembersState.error(String error) = GroupMembersStateError;

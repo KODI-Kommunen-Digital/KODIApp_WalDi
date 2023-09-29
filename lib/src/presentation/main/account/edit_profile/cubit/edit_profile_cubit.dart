@@ -28,6 +28,7 @@ class EditProfileCubit extends Cubit<EditProfileState> {
 
     if (changeProfileResponse) {
       await AppBloc.userCubit.onFetchUser();
+      await AppBloc.userCubit.onLoadUser();
     }
     return changeProfileResponse;
   }

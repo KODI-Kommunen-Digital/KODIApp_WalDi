@@ -10,6 +10,7 @@ import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
+import 'package:heidi/src/utils/translate.dart';
 
 class GroupDetailsScreen extends StatelessWidget {
   final ForumGroupModel item;
@@ -119,11 +120,24 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                         style: const TextStyle(fontSize: 20),
                       ),
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.menu),
-                      onPressed: () {
-                        Navigator.pushNamed(context, Routes.groupMembersDetails,
-                            arguments: widget.item.id);
+                    PopupMenuButton<String>(
+                      onSelected: (String choice) {
+                        if (choice == 'Leave Group') {
+                          showLeaveGroupConfirmation(context);
+                        } else if (choice == 'See Members') {
+                          Navigator.pushNamed(
+                              context, Routes.groupMembersDetails,
+                              arguments: widget.item.id);
+                        }
+                      },
+                      itemBuilder: (BuildContext context) {
+                        return {'Leave Group', 'See Members'}
+                            .map((String choice) {
+                          return PopupMenuItem<String>(
+                            value: choice,
+                            child: Text(choice),
+                          );
+                        }).toList();
                       },
                     ),
                   ],
@@ -237,5 +251,42 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
         ],
       ),
     );
+  }
+
+  Future<void> showLeaveGroupConfirmation(BuildContext buildContext) async {
+    final result = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Group Leave Confirmation'),
+          content: const Text('Are you sure you want to leave this group?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () async {
+                final isRemoved = await buildContext
+                    .read<GroupDetailsCubit>()
+                    .removeGroupMember(widget.item.id);
+                if (isRemoved) {
+                  if (!mounted) return;
+                  Navigator.of(context).pop(true);
+                }
+                else{
+                  ///Show that you are admin
+                }
+              },
+              child: Text(Translate.of(context).translate('yes')),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false), // No
+              child: Text(Translate.of(context).translate('no')),
+            ),
+          ],
+        );
+      },
+    );
+    if (result == true) {
+      if (!mounted) return;
+      Navigator.pop(context);
+    }
   }
 }
