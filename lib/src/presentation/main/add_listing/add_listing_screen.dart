@@ -214,8 +214,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       _textPhoneController.text = widget.item?.phone ?? '';
       _textEmailController.text = widget.item?.email ?? '';
       _textWebsiteController.text = widget.item?.website ?? '';
-      selectedCategory = Translate.of(context)
-          .translate(_getCategoryTranslation(widget.item!.categoryId!));
+      selectedCategory = widget.item!.category;
       final city = listCity
           .firstWhere((element) => element['id'] == widget.item?.cityId);
       selectedCity = city['name'];
@@ -565,16 +564,19 @@ class _AddListingScreenState extends State<AddListingScreen> {
       1: "category_news",
       2: "category_traffic",
       3: "category_events",
-      4: "category_clubs",
+      4: "category_clubs_add",
       5: "category_products",
       6: "category_offer_search",
       7: "category_citizen_info",
       8: "category_defect_report",
       9: "category_lost_found",
-      10: "category_companies",
+      10: "category_companies_add",
       11: "category_public_transport",
       12: "category_offers",
-      13: "category_food"
+      13: "category_food",
+      14: "category_rathaus",
+      15: "category_newsletter",
+      16: "category_official_notification"
     };
     return categories[id];
   }
@@ -722,17 +724,16 @@ class _AddListingScreenState extends State<AddListingScreen> {
                             menuMaxHeight: 200,
                             hint: Text(Translate.of(context)
                                 .translate('input_category')),
-                            value: selectedCategory ??
-                                Translate.of(context).translate(
-                                    _getCategoryTranslation(
-                                        listCategory.first['id'])),
+                            value: selectedCategory,
                             items: listCategory.map((category) {
                               return DropdownMenuItem(
-                                  value: Translate.of(context).translate(
-                                      _getCategoryTranslation(category['id'])),
-                                  child: Text(Translate.of(context).translate(
-                                      _getCategoryTranslation(
-                                          category['id']))));
+                                value: category['name'],
+                                child: Text(
+                                  Translate.of(context).translate(
+                                    _getCategoryTranslation(category['id']),
+                                  ),
+                                ),
+                              );
                             }).toList(),
                             onChanged: widget.item == null
                                 ? (value) async {
