@@ -383,7 +383,6 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
             TextButton(
               onPressed: () async {
                 Navigator.of(context).pop(true);
-                await AppBloc.homeCubit.onLoad(false);
               }, // Yes
               child: Text(Translate.of(context).translate('yes')),
             ),
@@ -406,6 +405,7 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
           userListingsList.removeAt(index);
         }
       });
+      await AppBloc.homeCubit.onLoad(false);
     }
   }
 
