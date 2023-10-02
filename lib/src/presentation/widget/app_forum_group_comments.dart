@@ -8,12 +8,14 @@ import 'package:heidi/src/utils/translate.dart';
 class CommentsBottomSheet extends StatefulWidget {
   final int? forumId;
   final int? postId;
+  final List<CommentModel> comments;
 
-  const CommentsBottomSheet({
-    Key? key,
-    required this.forumId,
-    required this.postId,
-  }) : super(key: key);
+  const CommentsBottomSheet(
+      {Key? key,
+      required this.forumId,
+      required this.postId,
+      required this.comments})
+      : super(key: key);
 
   @override
   CommentsBottomSheetState createState() => CommentsBottomSheetState();
@@ -26,7 +28,8 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
   @override
   void initState() {
     super.initState();
-    fetchComments(context);
+    comments.addAll(widget.comments);
+    // fetchComments(context);
   }
 
   void fetchComments(BuildContext buildContext) async {

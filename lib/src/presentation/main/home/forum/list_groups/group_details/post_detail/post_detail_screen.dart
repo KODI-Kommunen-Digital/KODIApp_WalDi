@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model.dart';
+import 'package:heidi/src/data/model/model_comment.dart';
 import 'package:heidi/src/data/model/model_group_posts.dart';
 import 'package:heidi/src/presentation/widget/app_forum_group_comments.dart';
 import 'package:heidi/src/presentation/widget/app_user_info.dart';
@@ -176,16 +177,19 @@ class _PostDetailsLoadedState extends State<PostDetailsLoaded> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).primaryColor,
-        onPressed: () {
+        onPressed: () async {
+          List<CommentModel> comments = await context.read<PostDetailCubit>().getPostComments(
+            widget.post.forumId,
+            widget.post.id,
+          );
+          if(!mounted) return;
           showModalBottomSheet(
             context: context,
             builder: (context) {
-              return BlocProvider(
-                create: (context) => context.read<PostDetailCubit>(),
-                child: CommentsBottomSheet(
-                  forumId: widget.post.forumId,
-                  postId: widget.post.id,
-                ),
+              return CommentsBottomSheet(
+                forumId: widget.post.forumId,
+                postId: widget.post.id,
+                comments: comments,
               );
             },
           );
