@@ -246,13 +246,6 @@ class CommentInputWidgetState extends State<CommentInputWidget> {
               }
             },
           ),
-          if (!widget.isAddingReply)
-            IconButton(
-              icon: const Icon(Icons.reply, color: Colors.white),
-              onPressed: () {
-                widget.toggleAddingReply();
-              },
-            ),
         ],
       ),
     );
