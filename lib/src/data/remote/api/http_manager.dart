@@ -11,7 +11,7 @@ import 'package:heidi/src/utils/logging/loggy_exp.dart';
 class HTTPManager {
   final exceptionCode = ['jwt_auth_bad_iss', 'jwt_auth_invalid_token'];
   late final Dio _dio;
-  late final String _baseUrl;
+  late String _baseUrl;
 
   HTTPManager({bool forum = false}) {
     _baseUrl = !forum
@@ -54,6 +54,8 @@ class HTTPManager {
         logError('Errors', error.response?.data);
         if (error.response?.data['message'] ==
             'Unauthorized! Token was expired!') {
+          _baseUrl = 'https://test.smartregion-auf.de/api';
+          // forum = false;
           final prefs = await Preferences.openBox();
           var rToken = prefs.getKeyValue(Preferences.refreshToken, '');
           final userId = prefs.getKeyValue(Preferences.userId, '');

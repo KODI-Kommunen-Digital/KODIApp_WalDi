@@ -130,6 +130,30 @@ class ForumRepository {
     }
   }
 
+  Future<ResultApiModel?> requestMakeUserAdmin(forumId, memberId) async {
+    final cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    final Map<String, dynamic> params = {"isAdmin": 1};
+    final response = await Api.requestMakeUserAdmin(cityId, forumId, memberId, params);
+    if (response.success) {
+      return response;
+    } else {
+      logError('Request make User Admin Failed', response.message);
+      return null;
+    }
+  }
+
+  Future<ResultApiModel?> requestRemoveAdmin(forumId, memberId) async {
+    final cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    final Map<String, dynamic> params = {"isAdmin": 0};
+    final response = await Api.requestRemoveAdmin(cityId, forumId, memberId, params);
+    if (response.success) {
+      return response;
+    } else {
+      logError('Request Remove User Admin Failed', response.message);
+      return null;
+    }
+  }
+
   Future<List<RequestMemberModel>?> getGroupMemberRequests() async {
     final userId = prefs.getKeyValue(Preferences.userId, 0);
     final requestMemberList = <RequestMemberModel>[];

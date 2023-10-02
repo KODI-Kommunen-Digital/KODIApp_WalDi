@@ -122,16 +122,16 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                     ),
                     PopupMenuButton<String>(
                       onSelected: (String choice) {
-                        if (choice == 'Leave Group') {
+                        if (choice == Translate.of(context).translate('leave_group')) {
                           showLeaveGroupConfirmation(context);
-                        } else if (choice == 'See Members') {
+                        } else if (choice == Translate.of(context).translate('see_member')) {
                           Navigator.pushNamed(
                               context, Routes.groupMembersDetails,
                               arguments: widget.item.id);
                         }
                       },
                       itemBuilder: (BuildContext context) {
-                        return {'Leave Group', 'See Members'}
+                        return {Translate.of(context).translate('leave_group'), Translate.of(context).translate('see_member')}
                             .map((String choice) {
                           return PopupMenuItem<String>(
                             value: choice,
@@ -258,8 +258,8 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Group Leave Confirmation'),
-          content: const Text('Are you sure you want to leave this group?'),
+          title: Text(Translate.of(context).translate('group_leave_confirmation')),
+          content: Text(Translate.of(context).translate('Are_you_sure_you_want_to_leave_this_group')),
           actions: <Widget>[
             TextButton(
               onPressed: () async {
