@@ -30,25 +30,25 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
   }
 
   void fetchComments(BuildContext buildContext) async {
-    final postDetailCubit = buildContext.read<PostDetailCubit>();
-    final comments = await postDetailCubit.getPostComments(
-      widget.forumId,
-      widget.postId,
-    );
+    final comments = await context.read<PostDetailCubit>().getPostComments(
+          widget.forumId,
+          widget.postId,
+        );
 
-    setState(() {
-      this.comments = comments;
-    });
+    if (mounted) {
+      setState(() {
+        this.comments = comments;
+      });
+    }
   }
 
   void fetchCommentsReplies(int? parentId) async {
-    final postDetailCubit = BlocProvider.of<PostDetailCubit>(context);
-    final comments = await postDetailCubit.getCommentReplies(
-      widget.forumId,
-      widget.postId,
-      parentId,
-      1,
-    );
+    final comments = await context.read<PostDetailCubit>().getCommentReplies(
+          widget.forumId,
+          widget.postId,
+          parentId,
+          1,
+        );
 
     setState(() {
       this.comments = comments;
