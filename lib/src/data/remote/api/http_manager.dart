@@ -14,9 +14,9 @@ class HTTPManager {
   late final String _baseUrl;
 
   HTTPManager({bool forum = false}) {
-    _baseUrl = forum
-        ? 'https://test.smartregion-auf.de/forumapi/'
-        : 'https://test.smartregion-auf.de/api';
+    _baseUrl = !forum
+        ? 'https://test.smartregion-auf.de/api'
+        : 'https://test.smartregion-auf.de/forumapi/';
 
     _dio = Dio(
       BaseOptions(
@@ -36,7 +36,7 @@ class HTTPManager {
           "osName": Application.device?.model,
           "Device-Version": Application.device?.version,
           "deviceType":
-          '${Application.device?.type} ${Application.device?.model}',
+              '${Application.device?.type} ${Application.device?.model}',
           "Device-Token": Application.device?.token,
           HttpHeaders.contentTypeHeader: 'application/json',
         };
@@ -61,7 +61,7 @@ class HTTPManager {
             "refreshToken": rToken,
           };
           final result =
-          await post(url: '/users/$userId/refresh', data: params);
+              await post(url: '/users/$userId/refresh', data: params);
           final response = ResultApiModel.fromJson(result);
           if (response.success) {
             final newToken = response.data['accessToken'];
