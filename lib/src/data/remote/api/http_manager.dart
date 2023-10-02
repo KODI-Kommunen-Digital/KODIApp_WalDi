@@ -11,7 +11,7 @@ import 'package:heidi/src/utils/logging/loggy_exp.dart';
 class HTTPManager {
   final exceptionCode = ['jwt_auth_bad_iss', 'jwt_auth_invalid_token'];
   late final Dio _dio;
-  late final String _baseUrl;
+  late String _baseUrl;
 
   HTTPManager({bool forum = false}) {
     _baseUrl = forum
@@ -36,7 +36,7 @@ class HTTPManager {
           "osName": Application.device?.model,
           "Device-Version": Application.device?.version,
           "deviceType":
-          '${Application.device?.type} ${Application.device?.model}',
+              '${Application.device?.type} ${Application.device?.model}',
           "Device-Token": Application.device?.token,
           HttpHeaders.contentTypeHeader: 'application/json',
         };
@@ -60,8 +60,9 @@ class HTTPManager {
           final Map<String, dynamic> params = {
             "refreshToken": rToken,
           };
+          _baseUrl = 'https://test.smartregion-auf.de/api';
           final result =
-          await post(url: '/users/$userId/refresh', data: params);
+              await post(url: '/users/$userId/refresh', data: params);
           final response = ResultApiModel.fromJson(result);
           if (response.success) {
             final newToken = response.data['accessToken'];

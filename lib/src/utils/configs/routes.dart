@@ -274,31 +274,25 @@ class Routes {
           fullscreenDialog: true,
         );
 
-        case groupMembersDetails:
+      case groupMembersDetails:
         return MaterialPageRoute(
           builder: (context) {
-            final int arguments =
-                settings.arguments as int;
+            final int arguments = settings.arguments as int;
             return BlocProvider(
-              create: (context) => GroupMembersCubit(
-                context.read(),
-                arguments
-              ),
+              create: (context) => GroupMembersCubit(context.read(), arguments),
               child: GroupMembersScreen(arguments),
             );
           },
           fullscreenDialog: true,
         );
 
-        case postDetails:
+      case postDetails:
         return MaterialPageRoute(
           builder: (context) {
             final GroupPostsModel arguments =
                 settings.arguments as GroupPostsModel;
             return BlocProvider(
-              create: (context) => PostDetailCubit(
-                arguments
-              ),
+              create: (context) => PostDetailCubit(context.read(), arguments),
               child: PostDetailsScreen(arguments),
             );
           },

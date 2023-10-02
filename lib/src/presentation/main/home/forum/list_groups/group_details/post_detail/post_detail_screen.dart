@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_group_posts.dart';
+import 'package:heidi/src/presentation/widget/app_forum_group_comments.dart';
 import 'package:heidi/src/presentation/widget/app_user_info.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
@@ -9,11 +10,16 @@ import 'package:heidi/src/utils/configs/routes.dart';
 import 'cubit/post_detail_cubit.dart';
 import 'cubit/post_detail_state.dart';
 
-class PostDetailsScreen extends StatelessWidget {
+class PostDetailsScreen extends StatefulWidget {
   final GroupPostsModel item;
 
   const PostDetailsScreen(this.item, {super.key});
 
+  @override
+  State<PostDetailsScreen> createState() => _PostDetailsScreenState();
+}
+
+class _PostDetailsScreenState extends State<PostDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<PostDetailCubit, PostDetailState>(
@@ -26,7 +32,7 @@ class PostDetailsScreen extends StatelessWidget {
       },
       builder: (context, state) => state.maybeWhen(
         loading: () => const PostDetailsLoading(),
-        loaded: (userDetails) => PostDetailsLoaded(userDetails, item),
+        loaded: (userDetails) => PostDetailsLoaded(userDetails, widget.item),
         orElse: () => ErrorWidget('Failed to load Post Details.'),
       ),
     );
@@ -74,7 +80,7 @@ class _PostDetailsLoadedState extends State<PostDetailsLoaded> {
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
               background: InkWell(
-                onTap: (){
+                onTap: () {
                   Navigator.pushNamed(
                     context,
                     Routes.imageZoom,
@@ -94,14 +100,14 @@ class _PostDetailsLoadedState extends State<PostDetailsLoaded> {
             delegate: SliverChildListDelegate(
               [
                 Container(
-                  padding: const EdgeInsets.fromLTRB(16,16,0,0),
+                  padding: const EdgeInsets.fromLTRB(16, 16, 0, 0),
                   child: Text(
                     widget.post.title!,
                     style: const TextStyle(fontSize: 20),
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.fromLTRB(16,0,0,0),
+                  padding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
                   child: Text(
                     widget.post.createdAt!,
                     style: Theme.of(context).textTheme.bodyMedium,
@@ -124,8 +130,8 @@ class _PostDetailsLoadedState extends State<PostDetailsLoaded> {
                     boxShadow: [
                       BoxShadow(
                         color: Theme.of(context).dividerColor.withOpacity(
-                          .05,
-                        ),
+                              .05,
+                            ),
                         spreadRadius: 4,
                         blurRadius: 4,
                         offset: const Offset(
@@ -146,11 +152,17 @@ class _PostDetailsLoadedState extends State<PostDetailsLoaded> {
                       if (widget.post.userId == loggedInUserId) {
                         if (!mounted) return;
                         Navigator.pushNamed(context, Routes.profile,
-                            arguments: {'user': widget.userDetail, 'editable': true});
+                            arguments: {
+                              'user': widget.userDetail,
+                              'editable': true
+                            });
                       } else {
                         if (!mounted) return;
                         Navigator.pushNamed(context, Routes.profile,
-                            arguments: {'user': widget.userDetail, 'editable': false});
+                            arguments: {
+                              'user': widget.userDetail,
+                              'editable': false
+                            });
                       }
                     },
                     type: UserViewType.information,
@@ -161,6 +173,27 @@ class _PostDetailsLoadedState extends State<PostDetailsLoaded> {
             ),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Theme.of(context).primaryColor,
+        onPressed: () {
+          showModalBottomSheet(
+            context: context,
+            builder: (context) {
+              return BlocProvider(
+                create: (context) => context.read<PostDetailCubit>(),
+                child: CommentsBottomSheet(
+                  forumId: widget.post.forumId,
+                  postId: widget.post.id,
+                ),
+              );
+            },
+          );
+        },
+        child: const Icon(
+          Icons.comment,
+          color: Colors.white,
+        ),
       ),
     );
   }

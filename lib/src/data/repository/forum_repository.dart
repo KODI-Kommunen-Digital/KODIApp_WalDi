@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:heidi/src/data/model/model.dart';
+import 'package:heidi/src/data/model/model_comment.dart';
 import 'package:heidi/src/data/model/model_forum_group.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_request_member.dart';
@@ -99,7 +100,7 @@ class ForumRepository {
 
   Future<bool> removeUserFromGroup(forumId, memberId) async {
     final cityId = prefs.getKeyValue(Preferences.cityId, 0);
-    final response = await Api.removeUserFromGroup(forumId, cityId, memberId) ;
+    final response = await Api.removeUserFromGroup(forumId, cityId, memberId);
     if (response.success) {
       return true;
     } else {
@@ -275,5 +276,39 @@ class ForumRepository {
 
   Future<int> getCategoryId() async {
     return await prefs.getKeyValue(Preferences.categoryId, 0);
+  }
+
+  Future<List<CommentModel>> getPostComments(int forumId, int postId) async {
+    int cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    final response = await Api.requestPostComments(cityId, forumId, postId);
+    if (response.success) {
+      final List<CommentModel> comments = [];
+      for (final jsonComment in response.data) {
+        final comment = CommentModel.fromJson(jsonComment);
+        comments.add(comment);
+      }
+      return comments;
+    } else {
+      logError('Get Post Comments Failed', response.message);
+      return [];
+    }
+  }
+
+  Future<List<CommentModel>> getPostCommentsReplies(
+      int forumId, int postId, int parentId, int pageNo) async {
+    int cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    final response = await Api.requestPostCommentsReplies(
+        cityId, forumId, postId, parentId, 1);
+    if (response.success) {
+      final List<CommentModel> replies = [];
+      for (final jsonReply in response.data) {
+        final reply = CommentModel.fromJson(jsonReply);
+        replies.add(reply);
+      }
+      return replies;
+    } else {
+      logError('Get Comment Replies Failed', response.message);
+      return [];
+    }
   }
 }

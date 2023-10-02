@@ -442,6 +442,21 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
+  static Future<ResultApiModel> requestPostComments(
+      cityId, forumId, postId) async {
+    var list = '/cities/$cityId/forums/$forumId/posts/$postId/comments';
+    final result = await HTTPManager(forum: true).get(url: list);
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> requestPostCommentsReplies(
+      cityId, forumId, postId, parentId, pageNo) async {
+    var list =
+        '/cities/$cityId/forums/$forumId/posts/$postId/comments?pageNo=$pageNo&pageSize=19&parentId=$parentId';
+    final result = await HTTPManager(forum: true).get(url: list);
+    return ResultApiModel.fromJson(result);
+  }
+
   ///Singleton factory
   static final Api _instance = Api._internal();
 
