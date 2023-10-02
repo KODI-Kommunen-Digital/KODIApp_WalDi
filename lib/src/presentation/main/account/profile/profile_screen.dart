@@ -406,6 +406,7 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
           userListingsList.removeAt(index);
         }
       });
+      await AppBloc.homeCubit.onLoad(false);
     }
   }
 

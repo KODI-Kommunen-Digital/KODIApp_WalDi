@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
+import 'package:heidi/src/presentation/cubit/app_bloc.dart';
+
 // import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/image.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
@@ -31,8 +33,9 @@ class HomeCubit extends Cubit<HomeState> {
       return CategoryModel.fromJson(item);
     }).toList();
 
-    if(!isRefreshLoader){
-    emit(HomeState.categoryLoading(location));}
+    if (!isRefreshLoader) {
+      emit(HomeState.categoryLoading(location));
+    }
 
     final categoryRequestResponse = await Api.requestHomeCategory();
     category = List.from(categoryRequestResponse.data ?? []).map((item) {
@@ -63,6 +66,8 @@ class HomeCubit extends Cubit<HomeState> {
     List<CategoryModel> formattedCategories =
         await formatCategoriesList(category, categoryCount, savedCity?.id);
 
+    await AppBloc.discoveryCubit.onLoad();
+
     // emit(const HomeState.categoryLoaded());
     emit(HomeStateLoaded(
       banner,
@@ -70,8 +75,6 @@ class HomeCubit extends Cubit<HomeState> {
       location,
       recent,
     ));
-
-
   }
 
   void scrollUp() {
