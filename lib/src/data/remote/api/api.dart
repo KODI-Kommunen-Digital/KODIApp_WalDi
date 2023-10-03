@@ -21,6 +21,7 @@ class Api {
   static const String cities = "/cities";
   static const String listings = "/listings?statusId=1";
   static const String contact = "/contactUs";
+  static const String faq = "/moreInfo";
 
   static Future<ResultApiModel> requestLogin(params) async {
     try {
@@ -324,6 +325,11 @@ class Api {
   static Future<ResultApiModel> deleteUserAccount(userId) async {
     final String deleteAccount = "/users/$userId";
     final result = await httpManager.delete(url: deleteAccount);
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> moreInfo() async {
+    final result = await httpManager.get(url: faq);
     return ResultApiModel.fromJson(result);
   }
 

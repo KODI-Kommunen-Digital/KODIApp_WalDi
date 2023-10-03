@@ -422,5 +422,7 @@
   "choose_etime":"Endzeit wählen",
   "message_sent":"Nachricht gesendet",
   "message_sent_success":"Die Nachricht wurde versandt.",
-  "submit_contactUs_message":"Vielen Dank für dein Feedback."
+  "submit_contactUs_message":"Vielen Dank für dein Feedback.",
+  "faq":"Häufige Fragen",
+  "info":"Info"
 }

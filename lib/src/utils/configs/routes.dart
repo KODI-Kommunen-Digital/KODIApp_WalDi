@@ -4,6 +4,8 @@ import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/presentation/main/account/change_password/change_password_screen.dart';
 import 'package:heidi/src/presentation/main/account/edit_profile/edit_profile_screen.dart';
+import 'package:heidi/src/presentation/main/account/faq/cubit/faq_cubit.dart';
+import 'package:heidi/src/presentation/main/account/faq/faq_screen.dart';
 import 'package:heidi/src/presentation/main/account/legal/imprint/imprint.dart';
 import 'package:heidi/src/presentation/main/account/legal/legal.dart';
 import 'package:heidi/src/presentation/main/account/legal/privacy_policy/privacy.dart';
@@ -75,6 +77,7 @@ class Routes {
   static const String privacy = "/privacy";
   static const String imageZoom = "/imageZoom";
   static const String profileSettings = "/profileSettings";
+  static const String faq = "/faq";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -225,6 +228,17 @@ class Routes {
           },
           fullscreenDialog: true,
         );
+
+      case faq:
+        return MaterialPageRoute(
+          builder: (context) {
+            return BlocProvider(
+              create: (context) => FaqCubit(),
+              child: const FaqScreen(),
+            );
+          },
+        );
+
       default:
         const SignInScreen();
 
