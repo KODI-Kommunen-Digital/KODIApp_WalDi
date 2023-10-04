@@ -51,7 +51,6 @@ class AppProductItem extends StatelessWidget {
                       height: 84,
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) {
-                        // Handle errors here
                         return AppPlaceholder(
                           child: Container(
                             decoration: BoxDecoration(
@@ -60,12 +59,11 @@ class AppProductItem extends StatelessWidget {
                             ),
                             width: 84,
                             height: 84,
-                            child: Icon(Icons.error),
+                            child: const Icon(Icons.error),
                           ),
                         );
                       },
                       loadingBuilder: (context, child, loadingProgress) {
-                        // Display the AppPlaceholder while the image is loading
                         if (loadingProgress == null) {
                           return child;
                         }
