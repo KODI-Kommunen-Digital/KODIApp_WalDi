@@ -16,12 +16,14 @@ class AppProductItem extends StatelessWidget {
     this.onPressed,
     required this.type,
     this.trailing,
+    required this.isRefreshLoader,
   }) : super(key: key);
 
   final ProductModel? item;
   final ProductViewType type;
   final VoidCallback? onPressed;
   final Widget? trailing;
+  final bool isRefreshLoader;
 
   @override
   Widget build(BuildContext context) {
@@ -37,54 +39,17 @@ class AppProductItem extends StatelessWidget {
           child: Row(
             children: <Widget>[
               item?.pdf == ''
-                  ? CachedNetworkImage(
-                      imageUrl: item?.sourceId == 2
+                  ? Image.network(
+                      item?.sourceId == 2
                           ? item!.image
                           : item!.image == 'admin/News.jpeg'
                               ? "${Application.picturesURL}${item!.image}"
-                              : "${Application.picturesURL}${item!.image}?cacheKey=$uniqueKey",
-                      cacheManager: memoryCacheManager,
-                      imageBuilder: (context, imageProvider) {
-                        return Container(
-                          width: 84,
-                          height: 84,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            image: DecorationImage(
-                              image: imageProvider,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        );
-                      },
-                      placeholder: (context, url) {
-                        return AppPlaceholder(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              color: Colors.white,
-                            ),
-                            width: 84,
-                            height: 84,
-                          ),
-                        );
-                      },
-                      errorWidget: (context, url, error) {
-                        return AppPlaceholder(
-                          child: Container(
-                            width: 84,
-                            height: 84,
-                            decoration: const BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(8),
-                                bottomLeft: Radius.circular(8),
-                              ),
-                            ),
-                            child: const Icon(Icons.error),
-                          ),
-                        );
-                      },
+                              : isRefreshLoader
+                                  ? "${Application.picturesURL}${item!.image}"
+                                  : "${Application.picturesURL}${item!.image}?cache=$uniqueKey",
+                      width: 84,
+                      height: 84,
+                      fit: BoxFit.cover,
                     )
                   : ClipRRect(
                       borderRadius: BorderRadius.circular(11),

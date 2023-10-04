@@ -40,6 +40,11 @@ class _HomeScreenState extends State<HomeScreen> {
   final _scrollController = ScrollController();
   bool isLoading = false;
   bool categoryLoading = false;
+  bool isRefreshLoader = false;
+  String? banner;
+  List<CategoryModel>? category = [];
+  List<CategoryModel>? location = [];
+  List<ProductModel>? recent = [];
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
     Factory(() => EagerGestureRecognizer())
   };
@@ -67,13 +72,13 @@ class _HomeScreenState extends State<HomeScreen> {
     _scrollController.dispose();
   }
 
-  void _scrollListener() {
+  Future<void> _scrollListener() async {
     if (_scrollController.position.atEdge) {
       if (_scrollController.position.pixels != 0) {
         setState(() {
           isLoading = true;
         });
-        AppBloc.homeCubit.newListings(++pageNo).then((_) {
+        recent = await AppBloc.homeCubit.newListings(++pageNo).then((_) {
           setState(() {
             isLoading = false;
           });
@@ -122,6 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: BlocConsumer<HomeCubit, HomeState>(
         listener: (context, state) {
@@ -132,10 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         },
         builder: (context, state) {
-          String? banner;
-          List<CategoryModel>? category;
-          List<CategoryModel>? location;
-          List<ProductModel>? recent;
+
           List<String> cityTitles = [
             Translate.of(context).translate('select_location')
           ];
@@ -145,17 +148,18 @@ class _HomeScreenState extends State<HomeScreen> {
             category = state.category;
             location = state.location;
             recent = state.recent;
+            isRefreshLoader = true;
             categoryLoading = false;
 
-            if (location.isNotEmpty) {
-              for (final ids in location) {
+            if (location != null) {
+              for (final ids in location!) {
                 cityTitles.add(ids.title.toString());
               }
               if (checkSavedCity) {
                 checkSavedCity = false;
-                _setSavedCity(location);
+                _setSavedCity(location!);
               } else if (AppBloc.homeCubit.getCalledExternally()) {
-                _setSavedCity(location);
+                _setSavedCity(location!);
                 AppBloc.homeCubit.setCalledExternally(false);
               }
             }
@@ -169,33 +173,14 @@ class _HomeScreenState extends State<HomeScreen> {
             categoryLoading = true;
             location = state.location;
             if (location!.isNotEmpty) {
-              for (final ids in location) {
+              for (final ids in location!) {
                 cityTitles.add(ids.title.toString());
               }
               if (checkSavedCity) {
                 checkSavedCity = false;
-                _setSavedCity(location);
+                _setSavedCity(location!);
               } else if (AppBloc.homeCubit.getCalledExternally()) {
-                _setSavedCity(location);
-                AppBloc.homeCubit.setCalledExternally(false);
-              }
-            }
-          }
-
-          if (state is HomeStateUpdated) {
-            banner = state.banner;
-            category = state.category;
-            location = state.location;
-            recent = state.recent;
-
-            if (location.isNotEmpty) {
-              for (final ids in location) {
-                cityTitles.add(ids.title.toString());
-              }
-              if (checkSavedCity) {
-                _setSavedCity(location);
-              } else if (AppBloc.homeCubit.getCalledExternally()) {
-                _setSavedCity(location);
+                _setSavedCity(location!);
                 AppBloc.homeCubit.setCalledExternally(false);
               }
             }
@@ -574,9 +559,9 @@ class _HomeScreenState extends State<HomeScreen> {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
-        return const Padding(
-          padding: EdgeInsets.only(bottom: 16),
-          child: AppProductItem(type: ProductViewType.small),
+        return  Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: AppProductItem(type: ProductViewType.small, isRefreshLoader: isRefreshLoader),
         );
       },
       itemCount: 8,
@@ -599,7 +584,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         _onProductDetail(item);
                       },
                       item: item,
-                      type: ProductViewType.small,
+                      type: ProductViewType.small, isRefreshLoader: isRefreshLoader,
                     ),
                   ),
                 )
@@ -609,6 +594,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     onPressed: () {
                       _onProductDetail(item);
                     },
+                    isRefreshLoader: isRefreshLoader,
                     item: item,
                     type: ProductViewType.small,
                   ),

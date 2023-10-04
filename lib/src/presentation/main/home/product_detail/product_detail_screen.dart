@@ -918,11 +918,17 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   if (productUserId?.id == loggedInUserId) {
                     if (!mounted) return;
                     Navigator.pushNamed(context, Routes.profile,
-                        arguments: {'user': userDetail, 'editable': true});
+                            arguments: {'user': userDetail, 'editable': true})
+                        .then((value) {
+                      setState(() {});
+                    });
                   } else {
                     if (!mounted) return;
                     Navigator.pushNamed(context, Routes.profile,
-                        arguments: {'user': userDetail, 'editable': false});
+                            arguments: {'user': userDetail, 'editable': false})
+                        .then((value) {
+                      setState(() {});
+                    });
                   }
                 },
                 type: UserViewType.information,
