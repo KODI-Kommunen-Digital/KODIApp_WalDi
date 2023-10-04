@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_faq.dart';
 import 'package:heidi/src/presentation/main/account/faq/cubit/faq_cubit.dart';
 import 'package:heidi/src/presentation/widget/app_list_title.dart';
+import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/language.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -29,13 +30,18 @@ class _FaqScreenState extends State<FaqScreen> {
   }
 
   void _onItemPressed(FaqModel item) {
-    _openInAppBrowser(item.link);
+    _openInAppBrowser(item.link, item.isPdf);
   }
 
-  Future<void> _openInAppBrowser(String link) async {
-    if (!link.startsWith("https://") && !link.startsWith("http://")) {
-      link = "https://$link";
+  Future<void> _openInAppBrowser(String link, String? isPdf) async {
+    if (isPdf == "true") {
+      link = "${Application.picturesURL}$link";
+    } else {
+      if (!link.startsWith("https://") && !link.startsWith("http://")) {
+        link = "https://$link";
+      }
     }
+
     await launchUrl(
       Uri.parse(link),
       mode: LaunchMode.inAppWebView,
