@@ -93,7 +93,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         email: _textEmailController.text,
         role: "3",
       );
-      if (result) {
+      if (result.success) {
         if (!mounted) return;
         AppBloc.loginCubit.onLogin(
           username: _textIDController.text,
@@ -101,7 +101,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
         );
         Navigator.pop(context);
       } else {
-        _showErrorSnackBar();
+        if (result.message.contains('is already registered')) {
+          if (!mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                Translate.of(context).translate("email_already_registered"),
+              ),
+            ),
+          );
+        }
       }
     } else {
       _showErrorSnackBar();
