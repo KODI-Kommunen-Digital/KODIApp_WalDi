@@ -409,6 +409,7 @@ class _ListLoadedState extends State<ListLoaded> {
           return Container(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: AppProductItem(
+              isRefreshLoader: false,
               onPressed: () {
                 _onProductDetail(item);
               },
@@ -420,12 +421,14 @@ class _ListLoadedState extends State<ListLoaded> {
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: AppProductItem(
+            isRefreshLoader: false,
             type: _listMode,
           ),
         );
       default:
         if (item != null) {
           return AppProductItem(
+            isRefreshLoader: false,
             onPressed: () {
               _onProductDetail(item);
             },
@@ -434,6 +437,7 @@ class _ListLoadedState extends State<ListLoaded> {
           );
         }
         return AppProductItem(
+          isRefreshLoader: false,
           type: _listMode,
         );
     }

@@ -10,19 +10,16 @@ class HomeState with _$HomeState {
 
   const factory HomeState.loading() = HomeStateLoading;
 
-  const factory HomeState.categoryLoading(List<CategoryModel>? location) = HomeStatecategoryLoading;
+  const factory HomeState.categoryLoading(List<CategoryModel>? location) =
+      HomeStatecategoryLoading;
 
   const factory HomeState.loaded(
-      String banner,
-      List<CategoryModel> category,
-      List<CategoryModel> location,
-      List<ProductModel> recent) = HomeStateLoaded;
-
-  const factory HomeState.updated(
-      String banner,
-      List<CategoryModel> category,
-      List<CategoryModel> location,
-      List<ProductModel> recent) = HomeStateUpdated;
+    String banner,
+    List<CategoryModel> category,
+    List<CategoryModel> location,
+    List<ProductModel> recent,
+    bool isRefreshLoader,
+  ) = HomeStateLoaded;
 
   const factory HomeState.error(String error) = HomeStateError;
 }
