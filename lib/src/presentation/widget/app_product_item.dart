@@ -7,6 +7,7 @@ import 'package:heidi/src/presentation/main/home/widget/empty_product_item.dart'
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/translate.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 class AppProductItem extends StatelessWidget {
   const AppProductItem({
@@ -25,6 +26,7 @@ class AppProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String uniqueKey = UniqueKey().toString();
+    final memoryCacheManager = DefaultCacheManager();
     switch (type) {
       case ProductViewType.small:
         if (item == null) {
@@ -41,6 +43,7 @@ class AppProductItem extends StatelessWidget {
                           : item!.image == 'admin/News.jpeg'
                               ? "${Application.picturesURL}${item!.image}"
                               : "${Application.picturesURL}${item!.image}?cacheKey=$uniqueKey",
+                      cacheManager: memoryCacheManager,
                       imageBuilder: (context, imageProvider) {
                         return Container(
                           width: 84,
@@ -181,6 +184,7 @@ class AppProductItem extends StatelessWidget {
                 imageUrl: item?.sourceId == 2
                     ? item!.image
                     : "${Application.picturesURL}${item!.image}",
+                cacheManager: memoryCacheManager,
                 imageBuilder: (context, imageProvider) {
                   return Container(
                     height: 120,
@@ -288,6 +292,7 @@ class AppProductItem extends StatelessWidget {
                               : item!.image == 'admin/News.jpeg'
                                   ? "${Application.picturesURL}${item!.image}"
                                   : "${Application.picturesURL}${item!.image}?cacheKey=$uniqueKey",
+                          cacheManager: memoryCacheManager,
                           imageBuilder: (context, imageProvider) {
                             return Container(
                               width: 120,

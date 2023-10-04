@@ -4,6 +4,7 @@ import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/translate.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 enum CategoryView { full, icon, cardLarge }
 
@@ -22,6 +23,7 @@ class AppCategory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final memoryCacheManager = DefaultCacheManager();
     switch (type) {
       case CategoryView.full:
         if (item == null) {
@@ -45,6 +47,7 @@ class AppCategory extends StatelessWidget {
             height: 120,
             child: CachedNetworkImage(
               imageUrl: "${Application.picturesURL}${item!.image}",
+              cacheManager: memoryCacheManager,
               imageBuilder: (context, imageProvider) {
                 return Container(
                   decoration: BoxDecoration(
@@ -254,6 +257,7 @@ class AppCategory extends StatelessWidget {
               ),
               child: CachedNetworkImage(
                 imageUrl: "$profilePicUrl${item!.image}",
+                cacheManager: memoryCacheManager,
                 imageBuilder: (context, imageProvider) {
                   return Container(
                     decoration: BoxDecoration(

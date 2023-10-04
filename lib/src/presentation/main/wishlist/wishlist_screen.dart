@@ -11,7 +11,7 @@ import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
-
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'cubit/cubit.dart';
 
 class WishListScreen extends StatefulWidget {
@@ -72,6 +72,7 @@ class WishListLoaded extends StatefulWidget {
 class _WishListLoadedState extends State<WishListLoaded> {
   bool isLoading = false;
   final _scrollController = ScrollController();
+  final memoryCacheManager = DefaultCacheManager();
 
   void scrollUp() {
     _scrollController.animateTo(0,
@@ -134,6 +135,7 @@ class _WishListLoadedState extends State<WishListLoaded> {
                                                     null
                                                 ? "${Application.picturesURL}admin/News.jpeg"
                                                 : "${Application.picturesURL}${widget.favoritesList[index].logo}"),
+                                        cacheManager: memoryCacheManager,
                                         imageBuilder: (context, imageProvider) {
                                           return Container(
                                             width: 120,
