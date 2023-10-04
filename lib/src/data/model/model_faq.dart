@@ -2,7 +2,7 @@ class FaqModel {
   final int id;
   final String title;
   final String link;
-  final String? isPdf;
+  final bool? isPdf;
 
   FaqModel({
     required this.id,

@@ -33,8 +33,8 @@ class _FaqScreenState extends State<FaqScreen> {
     _openInAppBrowser(item.link, item.isPdf);
   }
 
-  Future<void> _openInAppBrowser(String link, String? isPdf) async {
-    if (isPdf == "true") {
+  Future<void> _openInAppBrowser(String link, bool? isPdf) async {
+    if (isPdf!) {
       link = "${Application.picturesURL}$link";
     } else {
       if (!link.startsWith("https://") && !link.startsWith("http://")) {
@@ -60,7 +60,9 @@ class _FaqScreenState extends State<FaqScreen> {
           future: _faqDataFuture,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
+              return const Center(
+                child: CircularProgressIndicator.adaptive(),
+              );
             } else if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             } else if (snapshot.hasData) {
