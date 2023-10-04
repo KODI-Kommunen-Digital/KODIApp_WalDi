@@ -40,17 +40,97 @@ class AppProductItem extends StatelessWidget {
             children: <Widget>[
               item?.pdf == ''
                   ? Image.network(
-                      item?.sourceId == 2
-                          ? item!.image
-                          : item!.image == 'admin/News.jpeg'
-                              ? "${Application.picturesURL}${item!.image}"
-                              : isRefreshLoader
-                                  ? "${Application.picturesURL}${item!.image}"
-                                  : "${Application.picturesURL}${item!.image}?cache=$uniqueKey",
+                item?.sourceId == 2
+                    ? item!.image
+                    : item!.image == 'admin/News.jpeg'
+                    ? "${Application.picturesURL}${item!.image}"
+                    : isRefreshLoader
+                    ? "${Application.picturesURL}${item!.image}"
+                    : "${Application.picturesURL}${item!.image}?cache=$uniqueKey",
+                width: 84,
+                height: 84,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  // Handle errors here
+                  return AppPlaceholder(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: Colors.white,
+                      ),
                       width: 84,
                       height: 84,
-                      fit: BoxFit.cover,
-                    )
+                      child: Icon(Icons.error),
+                    ),
+                  );
+                },
+                loadingBuilder: (context, child, loadingProgress) {
+                  // Display the AppPlaceholder while the image is loading
+                  if (loadingProgress == null) {
+                    return child;
+                  }
+                  return AppPlaceholder(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: Colors.white,
+                      ),
+                      width: 84,
+                      height: 84,
+                    ),
+                  );
+                },
+              )
+
+              // ? CachedNetworkImage(
+                  //     imageUrl: item?.sourceId == 2
+                  //         ? item!.image
+                  //         : item!.image == 'admin/News.jpeg'
+                  //             ? "${Application.picturesURL}${item!.image}"
+                  //             : "${Application.picturesURL}${item!.image}",
+                  //     cacheManager: memoryCacheManager,
+                  //     imageBuilder: (context, imageProvider) {
+                  //       return Container(
+                  //         width: 84,
+                  //         height: 84,
+                  //         decoration: BoxDecoration(
+                  //           borderRadius: BorderRadius.circular(12),
+                  //           image: DecorationImage(
+                  //             image: imageProvider,
+                  //             fit: BoxFit.cover,
+                  //           ),
+                  //         ),
+                  //       );
+                  //     },
+                  //     placeholder: (context, url) {
+                  //       return AppPlaceholder(
+                  //         child: Container(
+                  //           decoration: BoxDecoration(
+                  //             borderRadius: BorderRadius.circular(12),
+                  //             color: Colors.white,
+                  //           ),
+                  //           width: 84,
+                  //           height: 84,
+                  //         ),
+                  //       );
+                  //     },
+                  //     errorWidget: (context, url, error) {
+                  //       return AppPlaceholder(
+                  //         child: Container(
+                  //           width: 84,
+                  //           height: 84,
+                  //           decoration: const BoxDecoration(
+                  //             color: Colors.white,
+                  //             borderRadius: BorderRadius.only(
+                  //               topLeft: Radius.circular(8),
+                  //               bottomLeft: Radius.circular(8),
+                  //             ),
+                  //           ),
+                  //           child: const Icon(Icons.error),
+                  //         ),
+                  //       );
+                  //     },
+                  //   )
                   : ClipRRect(
                       borderRadius: BorderRadius.circular(11),
                       child: SizedBox(
