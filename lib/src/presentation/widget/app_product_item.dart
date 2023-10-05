@@ -317,8 +317,8 @@ class AppProductItem extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(12),
                                   color: Colors.white,
                                 ),
-                                width: 84,
-                                height: 84,
+                                width: 120,
+                                height: 140,
                               ),
                             );
                           },
