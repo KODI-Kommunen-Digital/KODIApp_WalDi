@@ -281,48 +281,51 @@ class AppProductItem extends StatelessWidget {
               Row(
                 children: <Widget>[
                   item?.pdf == ''
-                      ? Image.network(
-                          item?.sourceId == 2
-                              ? item!.image
-                              : item!.image == 'admin/News.jpeg'
-                                  ? "${Application.picturesURL}${item!.image}"
-                                  : isRefreshLoader
-                                      ? "${Application.picturesURL}${item!.image}"
-                                      : "${Application.picturesURL}${item!.image}?cache=$uniqueKey",
-                          width: 120,
-                          height: 140,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) {
-                            // Handle errors here
-                            return AppPlaceholder(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  color: Colors.white,
+                      ? ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.network(
+                            item?.sourceId == 2
+                                ? item!.image
+                                : item!.image == 'admin/News.jpeg'
+                                    ? "${Application.picturesURL}${item!.image}"
+                                    : isRefreshLoader
+                                        ? "${Application.picturesURL}${item!.image}"
+                                        : "${Application.picturesURL}${item!.image}?cache=$uniqueKey",
+                            width: 120,
+                            height: 140,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              // Handle errors here
+                              return AppPlaceholder(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: Colors.white,
+                                  ),
+                                  width: 120,
+                                  height: 140,
+                                  child: const Icon(Icons.error),
                                 ),
-                                width: 120,
-                                height: 140,
-                                child: const Icon(Icons.error),
-                              ),
-                            );
-                          },
-                          loadingBuilder: (context, child, loadingProgress) {
-                            // Display the AppPlaceholder while the image is loading
-                            if (loadingProgress == null) {
-                              return child;
-                            }
-                            return AppPlaceholder(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  color: Colors.white,
+                              );
+                            },
+                            loadingBuilder: (context, child, loadingProgress) {
+                              // Display the AppPlaceholder while the image is loading
+                              if (loadingProgress == null) {
+                                return child;
+                              }
+                              return AppPlaceholder(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: Colors.white,
+                                  ),
+                                  width: 120,
+                                  height: 140,
                                 ),
-                                width: 120,
-                                height: 140,
-                              ),
-                            );
-                          },
-                        )
+                              );
+                            },
+                          ),
+                      )
                       : ClipRRect(
                           borderRadius: BorderRadius.circular(11),
                           child: SizedBox(
