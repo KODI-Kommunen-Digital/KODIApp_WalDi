@@ -289,8 +289,8 @@ class AppProductItem extends StatelessWidget {
                                   : isRefreshLoader
                                       ? "${Application.picturesURL}${item!.image}"
                                       : "${Application.picturesURL}${item!.image}?cache=$uniqueKey",
-                          width: 84,
-                          height: 84,
+                          width: 120,
+                          height: 140,
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) {
                             // Handle errors here
