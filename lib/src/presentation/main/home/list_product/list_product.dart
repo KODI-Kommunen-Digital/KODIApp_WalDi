@@ -292,9 +292,9 @@ class _ListLoadedState extends State<ListLoaded> {
         list = await context
             .read<ListCubit>()
             .newListings(++pageNo, widget.selectedId);
-          setState(() {
-            isLoadingMore = false;
-          });
+        setState(() {
+          isLoadingMore = false;
+        });
       }
     }
   }
@@ -481,7 +481,7 @@ class _ListLoadedState extends State<ListLoaded> {
                 contentList,
                 if (isLoadingMore)
                   const Positioned(
-                    bottom: 50,
+                    bottom: 5,
                     left: 0,
                     right: 0,
                     child: Center(

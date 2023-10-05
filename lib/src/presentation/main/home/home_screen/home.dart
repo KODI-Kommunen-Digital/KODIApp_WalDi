@@ -107,6 +107,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _onRefresh() async {
     await AppBloc.homeCubit.onLoad(true);
+    setState(() {
+      pageNo = 1;
+    });
   }
 
   Future<void> _setSavedCity(List<CategoryModel> location) async {
@@ -127,7 +130,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: BlocConsumer<HomeCubit, HomeState>(
         listener: (context, state) {
@@ -138,7 +140,6 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         },
         builder: (context, state) {
-
           List<String> cityTitles = [
             Translate.of(context).translate('select_location')
           ];
@@ -559,9 +560,10 @@ class _HomeScreenState extends State<HomeScreen> {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
-        return  Padding(
+        return Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: AppProductItem(type: ProductViewType.small, isRefreshLoader: isRefreshLoader),
+          child: AppProductItem(
+              type: ProductViewType.small, isRefreshLoader: isRefreshLoader),
         );
       },
       itemCount: 8,
@@ -584,7 +586,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         _onProductDetail(item);
                       },
                       item: item,
-                      type: ProductViewType.small, isRefreshLoader: isRefreshLoader,
+                      type: ProductViewType.small,
+                      isRefreshLoader: isRefreshLoader,
                     ),
                   ),
                 )
