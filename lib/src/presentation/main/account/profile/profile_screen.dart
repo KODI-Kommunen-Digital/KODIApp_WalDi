@@ -140,244 +140,261 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
               ),
             ),
             Expanded(
-              child: CustomScrollView(
-                controller: _scrollController,
-                slivers: <Widget>[
-                  SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      childCount: userListingsList.length,
-                      (BuildContext context, int index) {
-                        final item = userListingsList[index];
-                        return userListingsList == []
-                            ? Container()
-                            : Slidable(
-                                endActionPane: !widget.isEditable
-                                    ? null
-                                    : ActionPane(
-                                        motion: const ScrollMotion(),
-                                        children: [
-                                          SlidableAction(
-                                            onPressed: (aContext) {
-                                              Navigator.pushNamed(
-                                                  context, Routes.submit,
-                                                  arguments: {
-                                                    'item':
-                                                        userListingsList[index],
-                                                    'isNewList': false
-                                                  }).then((value) async {
-                                                final response = await context
-                                                    .read<ProfileCubit>()
-                                                    .loadUserListing(
-                                                        widget.user.id, 1);
-                                                setState(() {
-                                                  userListingsList = response;
+              child: Stack(children: [
+                CustomScrollView(
+                  controller: _scrollController,
+                  slivers: <Widget>[
+                    SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        childCount: userListingsList.length,
+                        (BuildContext context, int index) {
+                          final item = userListingsList[index];
+                          return userListingsList == []
+                              ? Container()
+                              : Slidable(
+                                  endActionPane: !widget.isEditable
+                                      ? null
+                                      : ActionPane(
+                                          motion: const ScrollMotion(),
+                                          children: [
+                                            SlidableAction(
+                                              onPressed: (aContext) {
+                                                Navigator.pushNamed(context,
+                                                    Routes.submit, arguments: {
+                                                  'item':
+                                                      userListingsList[index],
+                                                  'isNewList': false
+                                                }).then((value) async {
+                                                  final response = await context
+                                                      .read<ProfileCubit>()
+                                                      .loadUserListing(
+                                                          widget.user.id, 1);
+                                                  setState(() {
+                                                    userListingsList = response;
+                                                  });
                                                 });
-                                              });
-                                            },
-                                            backgroundColor: Colors.blue,
-                                            foregroundColor: Colors.white,
-                                            icon: Icons.edit,
-                                            label: Translate.of(context)
-                                                .translate('edit'),
-                                          ),
-                                          SlidableAction(
-                                            onPressed: (aContext) async {
-                                              showDeleteConfirmation(
-                                                  context, index);
-                                            },
-                                            backgroundColor: Colors.red,
-                                            foregroundColor: Colors.white,
-                                            icon: Icons.delete,
-                                            label: Translate.of(context)
-                                                .translate('delete'),
-                                          ),
-                                        ],
-                                      ),
-                                key: Key(
-                                    item.id.toString() + isSwiped.toString()),
-                                child: InkWell(
-                                  onTap: () {
-                                    _onProductDetail(item);
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(bottom: 16),
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 16),
-                                      child: Stack(
-                                        children: [
-                                          Row(
-                                            children: <Widget>[
-                                              item.pdf == ''
-                                                  ? CachedNetworkImage(
-                                                      imageUrl: item.sourceId ==
-                                                              2
-                                                          ? item.image
-                                                          : item.image ==
-                                                                  'admin/News.jpeg'
-                                                              ? "${Application.picturesURL}${item.image}"
-                                                              : "${Application.picturesURL}${item.image}?cacheKey=$uniqueKey",
-                                                      cacheManager:
-                                                          memoryCacheManager,
-                                                      imageBuilder: (context,
-                                                          imageProvider) {
-                                                        return Container(
-                                                          width: 120,
-                                                          height: 140,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            image:
-                                                                DecorationImage(
+                                              },
+                                              backgroundColor: Colors.blue,
+                                              foregroundColor: Colors.white,
+                                              icon: Icons.edit,
+                                              label: Translate.of(context)
+                                                  .translate('edit'),
+                                            ),
+                                            SlidableAction(
+                                              onPressed: (aContext) async {
+                                                showDeleteConfirmation(
+                                                    context, index);
+                                              },
+                                              backgroundColor: Colors.red,
+                                              foregroundColor: Colors.white,
+                                              icon: Icons.delete,
+                                              label: Translate.of(context)
+                                                  .translate('delete'),
+                                            ),
+                                          ],
+                                        ),
+                                  key: Key(
+                                      item.id.toString() + isSwiped.toString()),
+                                  child: InkWell(
+                                    onTap: () {
+                                      _onProductDetail(item);
+                                    },
+                                    child: Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 16),
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 16),
+                                        child: Stack(
+                                          children: [
+                                            Row(
+                                              children: <Widget>[
+                                                item.pdf == ''
+                                                    ? CachedNetworkImage(
+                                                        imageUrl: item
+                                                                    .sourceId ==
+                                                                2
+                                                            ? item.image
+                                                            : item.image ==
+                                                                    'admin/News.jpeg'
+                                                                ? "${Application.picturesURL}${item.image}"
+                                                                : "${Application.picturesURL}${item.image}?cacheKey=$uniqueKey",
+                                                        cacheManager:
+                                                            memoryCacheManager,
+                                                        imageBuilder: (context,
+                                                            imageProvider) {
+                                                          return Container(
+                                                            width: 120,
+                                                            height: 140,
+                                                            decoration:
+                                                                BoxDecoration(
                                                               image:
-                                                                  imageProvider,
-                                                              fit: BoxFit.cover,
-                                                            ),
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        11),
-                                                          ),
-                                                        );
-                                                      },
-                                                      placeholder:
-                                                          (context, url) {
-                                                        return AppPlaceholder(
-                                                          child: Container(
-                                                            width: 120,
-                                                            height: 140,
-                                                            decoration:
-                                                                const BoxDecoration(
-                                                              color:
-                                                                  Colors.white,
+                                                                  DecorationImage(
+                                                                image:
+                                                                    imageProvider,
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                              ),
                                                               borderRadius:
                                                                   BorderRadius
-                                                                      .only(
-                                                                topLeft: Radius
-                                                                    .circular(
-                                                                        8),
-                                                                bottomLeft: Radius
-                                                                    .circular(
-                                                                        8),
+                                                                      .circular(
+                                                                          11),
+                                                            ),
+                                                          );
+                                                        },
+                                                        placeholder:
+                                                            (context, url) {
+                                                          return AppPlaceholder(
+                                                            child: Container(
+                                                              width: 120,
+                                                              height: 140,
+                                                              decoration:
+                                                                  const BoxDecoration(
+                                                                color: Colors
+                                                                    .white,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .only(
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          8),
+                                                                  bottomLeft: Radius
+                                                                      .circular(
+                                                                          8),
+                                                                ),
                                                               ),
                                                             ),
-                                                          ),
-                                                        );
-                                                      },
-                                                      errorWidget: (context,
-                                                          url, error) {
-                                                        return AppPlaceholder(
-                                                          child: Container(
+                                                          );
+                                                        },
+                                                        errorWidget: (context,
+                                                            url, error) {
+                                                          return AppPlaceholder(
+                                                            child: Container(
+                                                              width: 120,
+                                                              height: 140,
+                                                              decoration:
+                                                                  const BoxDecoration(
+                                                                color: Colors
+                                                                    .white,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .only(
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          8),
+                                                                  bottomLeft: Radius
+                                                                      .circular(
+                                                                          8),
+                                                                ),
+                                                              ),
+                                                              child: const Icon(
+                                                                  Icons.error),
+                                                            ),
+                                                          );
+                                                        },
+                                                      )
+                                                    : ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(11),
+                                                        child: SizedBox(
                                                             width: 120,
                                                             height: 140,
-                                                            decoration:
-                                                                const BoxDecoration(
-                                                              color:
-                                                                  Colors.white,
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .only(
-                                                                topLeft: Radius
-                                                                    .circular(
-                                                                        8),
-                                                                bottomLeft: Radius
-                                                                    .circular(
-                                                                        8),
-                                                              ),
-                                                            ),
-                                                            child: const Icon(
-                                                                Icons.error),
-                                                          ),
-                                                        );
-                                                      },
-                                                    )
-                                                  : ClipRRect(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              11),
-                                                      child: SizedBox(
-                                                          width: 120,
-                                                          height: 140,
-                                                          child: const PDF()
-                                                              .cachedFromUrl(
-                                                            "${Application.picturesURL}${item.pdf}?cacheKey=$uniqueKey",
-                                                            placeholder:
-                                                                (progress) => Center(
-                                                                    child: Text(
-                                                                        '$progress %')),
-                                                            errorWidget:
-                                                                (error) => Center(
-                                                                    child: Text(
-                                                                        error
-                                                                            .toString())),
-                                                          )),
-                                                    ),
-                                              const SizedBox(width: 8),
-                                              Expanded(
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: <Widget>[
-                                                    Text(
-                                                      userListingsList[index]
-                                                              .category ??
-                                                          '',
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .bodySmall!
-                                                          .copyWith(
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                          ),
-                                                    ),
-                                                    const SizedBox(height: 8),
-                                                    Text(
-                                                      userListingsList[index]
-                                                          .title,
-                                                      maxLines: 2,
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .titleSmall!
-                                                          .copyWith(
+                                                            child: const PDF()
+                                                                .cachedFromUrl(
+                                                              "${Application.picturesURL}${item.pdf}?cacheKey=$uniqueKey",
+                                                              placeholder:
+                                                                  (progress) =>
+                                                                      Center(
+                                                                          child:
+                                                                              Text('$progress %')),
+                                                              errorWidget:
+                                                                  (error) => Center(
+                                                                      child: Text(
+                                                                          error
+                                                                              .toString())),
+                                                            )),
+                                                      ),
+                                                const SizedBox(width: 8),
+                                                Expanded(
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: <Widget>[
+                                                      Text(
+                                                        userListingsList[index]
+                                                                .category ??
+                                                            '',
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .bodySmall!
+                                                            .copyWith(
                                                               fontWeight:
                                                                   FontWeight
-                                                                      .bold),
-                                                    ),
-                                                    const SizedBox(height: 8),
-                                                    Text(
-                                                      userListingsList[index]
-                                                                  .categoryId ==
-                                                              3
-                                                          ? "${userListingsList[index].startDate} ${Translate.of(context).translate('to')} ${userListingsList[index].endDate}"
-                                                          : userListingsList[
-                                                                  index]
-                                                              .createDate,
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .bodySmall!
-                                                          .copyWith(
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                          ),
-                                                    ),
-                                                    const SizedBox(height: 8),
-                                                    const SizedBox(height: 8),
-                                                    const SizedBox(height: 4),
-                                                  ],
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        ],
+                                                                      .bold,
+                                                            ),
+                                                      ),
+                                                      const SizedBox(height: 8),
+                                                      Text(
+                                                        userListingsList[index]
+                                                            .title,
+                                                        maxLines: 2,
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .titleSmall!
+                                                            .copyWith(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                      ),
+                                                      const SizedBox(height: 8),
+                                                      Text(
+                                                        userListingsList[index]
+                                                                    .categoryId ==
+                                                                3
+                                                            ? "${userListingsList[index].startDate} ${Translate.of(context).translate('to')} ${userListingsList[index].endDate}"
+                                                            : userListingsList[
+                                                                    index]
+                                                                .createDate,
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .bodySmall!
+                                                            .copyWith(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                      ),
+                                                      const SizedBox(height: 8),
+                                                      const SizedBox(height: 8),
+                                                      const SizedBox(height: 4),
+                                                    ],
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              );
-                      },
+                                );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                if (isLoadingMore)
+                  const Positioned(
+                    bottom: 5,
+                    left: 0,
+                    right: 0,
+                    child: Center(
+                      child: CircularProgressIndicator.adaptive(),
                     ),
                   ),
-                ],
-              ),
+              ]),
             ),
           ],
         ),
@@ -390,7 +407,6 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
       if (_scrollController.position.pixels != 0) {
         setState(() {
           isLoadingMore = true;
-          // previousScrollPosition = _scrollController.position.pixels;
         });
         userListingsList.addAll(await context
             .read<ProfileCubit>()
