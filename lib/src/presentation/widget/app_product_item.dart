@@ -39,48 +39,51 @@ class AppProductItem extends StatelessWidget {
           child: Row(
             children: <Widget>[
               item?.pdf == ''
-                  ? Image.network(
-                      item?.sourceId == 2
-                          ? item!.image
-                          : item!.image == 'admin/News.jpeg'
-                              ? "${Application.picturesURL}${item!.image}"
-                              : isRefreshLoader
-                                  ? "${Application.picturesURL}${item!.image}"
-                                  : "${Application.picturesURL}${item!.image}?cache=$uniqueKey",
-                      width: 84,
-                      height: 84,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return AppPlaceholder(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              color: Colors.white,
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image.network(
+                        item?.sourceId == 2
+                            ? item!.image
+                            : item!.image == 'admin/News.jpeg'
+                                ? "${Application.picturesURL}${item!.image}"
+                                : isRefreshLoader
+                                    ? "${Application.picturesURL}${item!.image}"
+                                    : "${Application.picturesURL}${item!.image}?cache=$uniqueKey",
+                        width: 84,
+                        height: 84,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return AppPlaceholder(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: Colors.white,
+                              ),
+                              width: 84,
+                              height: 84,
+                              child: const Icon(Icons.error),
                             ),
-                            width: 84,
-                            height: 84,
-                            child: const Icon(Icons.error),
-                          ),
-                        );
-                      },
-                      loadingBuilder: (context, child, loadingProgress) {
-                        if (loadingProgress == null) {
-                          return child;
-                        }
-                        return AppPlaceholder(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              color: Colors.white,
+                          );
+                        },
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) {
+                            return child;
+                          }
+                          return AppPlaceholder(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: Colors.white,
+                              ),
+                              width: 84,
+                              height: 84,
                             ),
-                            width: 84,
-                            height: 84,
-                          ),
-                        );
-                      },
+                          );
+                        },
+                      ),
                     )
                   : ClipRRect(
-                      borderRadius: BorderRadius.circular(11),
+                      borderRadius: BorderRadius.circular(12),
                       child: SizedBox(
                           width: 84,
                           height: 84,
@@ -162,7 +165,6 @@ class AppProductItem extends StatelessWidget {
             ],
           ),
         );
-
       case ProductViewType.grid:
         if (item == null) {
           return const EmptyProductItem();
