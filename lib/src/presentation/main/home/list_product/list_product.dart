@@ -271,7 +271,6 @@ class _ListLoadedState extends State<ListLoaded> {
   @override
   void initState() {
     super.initState();
-    list.addAll(widget.list);
     _scrollController.addListener(_scrollListener);
     loadListingsList();
   }
@@ -305,7 +304,7 @@ class _ListLoadedState extends State<ListLoaded> {
     return Column(
       children: <Widget>[
         Expanded(
-          child: _buildContent(list),
+          child: _buildContent(),
         )
       ],
     );
@@ -435,7 +434,8 @@ class _ListLoadedState extends State<ListLoaded> {
     }
   }
 
-  Widget _buildContent(List<ProductModel> list) {
+  Widget _buildContent() {
+    list = widget.list;
     return BlocBuilder<ListCubit, ListState>(
       builder: (context, state) {
         if (_pageType == PageType.list) {
