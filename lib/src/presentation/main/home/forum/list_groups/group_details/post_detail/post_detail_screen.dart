@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model.dart';
@@ -71,7 +73,7 @@ class _PostDetailsLoadedState extends State<PostDetailsLoaded> {
         slivers: <Widget>[
           SliverAppBar(
             leading: IconButton(
-              icon: const Icon(Icons.arrow_back), // Change to your desired icon
+              icon: const Icon(Icons.arrow_back),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -138,7 +140,7 @@ class _PostDetailsLoadedState extends State<PostDetailsLoaded> {
                         offset: const Offset(
                           0,
                           2,
-                        ), // changes position of shadow
+                        ),
                       ),
                     ],
                   ),
@@ -178,11 +180,13 @@ class _PostDetailsLoadedState extends State<PostDetailsLoaded> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).primaryColor,
         onPressed: () async {
-          List<CommentModel> comments = await context.read<PostDetailCubit>().getPostComments(
-            widget.post.forumId,
-            widget.post.id,
-          );
-          if(!mounted) return;
+          final postDetailCubit = context.read<PostDetailCubit>();
+          List<CommentModel> comments =
+              await context.read<PostDetailCubit>().getPostComments(
+                    widget.post.forumId,
+                    widget.post.id,
+                  );
+          if (!mounted) return;
           showModalBottomSheet(
             context: context,
             builder: (context) {
@@ -190,6 +194,7 @@ class _PostDetailsLoadedState extends State<PostDetailsLoaded> {
                 forumId: widget.post.forumId,
                 postId: widget.post.id,
                 comments: comments,
+                postDetailCubit: postDetailCubit,
               );
             },
           );

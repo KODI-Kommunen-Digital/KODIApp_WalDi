@@ -279,7 +279,7 @@ class ForumRepository {
   }
 
   Future<List<CommentModel>> getPostComments(int forumId, int postId) async {
-    int cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    // int cityId = prefs.getKeyValue(Preferences.cityId, 0);
     final response = await Api.requestPostComments(1, forumId, postId);
     if (response.success) {
       final List<CommentModel> comments = [];
@@ -296,7 +296,7 @@ class ForumRepository {
 
   Future<List<CommentModel>> getPostCommentsReplies(
       int forumId, int postId, int parentId, int pageNo) async {
-    int cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    // int cityId = prefs.getKeyValue(Preferences.cityId, 0);
     final response =
         await Api.requestPostCommentsReplies(1, forumId, postId, parentId, 1);
     if (response.success) {

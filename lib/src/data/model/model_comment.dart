@@ -45,9 +45,9 @@ class CommentModel {
     lastname = json['lastname'];
     image = json['image'];
     parentId = json['parentId'];
-
     userName = json['username'];
     userProfileImage = json['image'];
+    replies = json['reples'];
   }
 
   Map<String, dynamic> toJson() {
@@ -64,7 +64,7 @@ class CommentModel {
     data['lastname'] = lastname;
     data['image'] = image;
     data['parentId'] = parentId;
-
+    data['reples'] = replies;
     data['userName'] = userName;
     data['userProfileImage'] = userProfileImage;
 
