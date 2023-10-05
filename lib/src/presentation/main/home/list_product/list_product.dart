@@ -9,7 +9,6 @@ import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:heidi/src/presentation/widget/app_navbar.dart';
 import 'package:heidi/src/presentation/widget/app_product_item.dart';
 import 'package:heidi/src/utils/configs/application.dart';
-import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -258,6 +257,7 @@ class ListLoaded extends StatefulWidget {
 }
 
 class _ListLoadedState extends State<ListLoaded> {
+  List<ProductModel> list = [];
   final _scrollController = ScrollController(initialScrollOffset: 0.0);
   bool isLoading = false;
   bool isLoadingMore = false;
@@ -282,28 +282,19 @@ class _ListLoadedState extends State<ListLoaded> {
     super.dispose();
   }
 
-  void _scrollListener() {
+  Future<void> _scrollListener() async {
     if (_scrollController.position.atEdge) {
       if (_scrollController.position.pixels != 0) {
         setState(() {
           isLoadingMore = true;
-          previousScrollPosition = _scrollController.position.pixels;
+          // previousScrollPosition = _scrollController.position.pixels;
         });
-        context
+        list = await context
             .read<ListCubit>()
-            .newListings(++pageNo, widget.selectedId)
-            .then((_) {
-          setState(() {
-            isLoadingMore = false;
-          });
-        }).catchError(
-          (error) {
-            setState(() {
-              isLoadingMore = false;
-            });
-            logError('Error loading more listings: $error');
-          },
-        );
+            .newListings(++pageNo, widget.selectedId);
+        setState(() {
+          isLoadingMore = false;
+        });
       }
     }
   }
@@ -313,7 +304,7 @@ class _ListLoadedState extends State<ListLoaded> {
     return Column(
       children: <Widget>[
         Expanded(
-          child: _buildContent(widget.list),
+          child: _buildContent(),
         )
       ],
     );
@@ -409,7 +400,7 @@ class _ListLoadedState extends State<ListLoaded> {
           return Container(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: AppProductItem(
-              isRefreshLoader: false,
+              isRefreshLoader: true,
               onPressed: () {
                 _onProductDetail(item);
               },
@@ -421,14 +412,14 @@ class _ListLoadedState extends State<ListLoaded> {
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: AppProductItem(
-            isRefreshLoader: false,
+            isRefreshLoader: true,
             type: _listMode,
           ),
         );
       default:
         if (item != null) {
           return AppProductItem(
-            isRefreshLoader: false,
+            isRefreshLoader: true,
             onPressed: () {
               _onProductDetail(item);
             },
@@ -437,13 +428,14 @@ class _ListLoadedState extends State<ListLoaded> {
           );
         }
         return AppProductItem(
-          isRefreshLoader: false,
+          isRefreshLoader: true,
           type: _listMode,
         );
     }
   }
 
-  Widget _buildContent(List<ProductModel> list) {
+  Widget _buildContent() {
+    list = widget.list;
     return BlocBuilder<ListCubit, ListState>(
       builder: (context, state) {
         if (_pageType == PageType.list) {
@@ -453,13 +445,13 @@ class _ListLoadedState extends State<ListLoaded> {
               SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
-                    final item = widget.list[index];
+                    final item = list[index];
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 16, top: 5),
                       child: _buildItem(item: item, type: _listMode),
                     );
                   },
-                  childCount: widget.list.length,
+                  childCount: list.length,
                 ),
               ),
             ],
@@ -489,7 +481,7 @@ class _ListLoadedState extends State<ListLoaded> {
                 contentList,
                 if (isLoadingMore)
                   const Positioned(
-                    bottom: 50,
+                    bottom: 5,
                     left: 0,
                     right: 0,
                     child: Center(
