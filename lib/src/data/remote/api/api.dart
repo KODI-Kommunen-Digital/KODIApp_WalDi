@@ -33,12 +33,12 @@ class Api {
   }
 
   static Future<ResultApiModel> requestFavorites(userId) async {
-    final result = await httpManager.get(url: '/users/$userId/favorites/');
+    final result = await httpManager.get(url: '/users/$userId/favorites?pageNo=1&pageSize=19');
     return ResultApiModel.fromJson(result);
   }
 
-  static Future<ResultApiModel> requestUserListings(userId) async {
-    final result = await httpManager.get(url: '/users/$userId/listings/');
+  static Future<ResultApiModel> requestUserListings(userId, pageNo) async {
+    final result = await httpManager.get(url: '/users/$userId/listings?pageNo=$pageNo&pageSize=5');
     return ResultApiModel.fromJson(result);
   }
 
