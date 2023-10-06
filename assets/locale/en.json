@@ -439,5 +439,11 @@
   "update_group":"Update Group", 
   "add_new_post":"Add New Post",
   "update_post":"Update Post",
-  "comments":"Comments"
+  "comments":"Comments",
+  "add_reply":"Add a reply",
+  "add_comment":"Add a comment",
+  "reply":"Reply",
+  "hide_reply":"Hide Replies",
+  "view_reply":"View Replies",
+  "no_reply":"No Replies"
 }

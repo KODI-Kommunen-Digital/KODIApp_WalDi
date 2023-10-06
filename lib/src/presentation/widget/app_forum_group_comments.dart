@@ -158,7 +158,7 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
               });
             },
           ),
-          const SizedBox(height: 8), // Add some spacing
+          const SizedBox(height: 8),
         ],
       ),
     );
@@ -260,9 +260,10 @@ class CommentWidgetState extends State<CommentWidget> {
                           }
                         });
                       },
-                      child: const Text(
-                        'Reply',
-                        style: TextStyle(fontSize: 12, color: Colors.grey),
+                      child: Text(
+                        Translate.of(context).translate('reply'),
+                        style:
+                            const TextStyle(fontSize: 12, color: Colors.grey),
                       ),
                     ),
                   const SizedBox(width: 8),
@@ -279,10 +280,10 @@ class CommentWidgetState extends State<CommentWidget> {
                         },
                         child: Text(
                           showReplies
-                              ? 'Hide Replies'
+                              ? Translate.of(context).translate('hide_reply')
                               : widget.comment.childrenCount != 0
-                                  ? 'View ${widget.comment.childrenCount} Replies'
-                                  : 'No Replies Available',
+                                  ? '${widget.comment.childrenCount} ${Translate.of(context).translate('view_reply')}'
+                                  : Translate.of(context).translate('no_reply'),
                           style:
                               const TextStyle(fontSize: 12, color: Colors.grey),
                         ),
@@ -459,8 +460,9 @@ class CommentInputWidgetState extends State<CommentInputWidget> {
                   ? widget.replyController
                   : widget.commentController,
               decoration: InputDecoration(
-                hintText:
-                    widget.isAddingReply ? 'Add a reply' : 'Add a comment',
+                hintText: widget.isAddingReply
+                    ? Translate.of(context).translate('add_reply')
+                    : Translate.of(context).translate('add_comment'),
                 hintStyle: const TextStyle(color: Colors.white),
                 border: InputBorder.none,
               ),
