@@ -56,10 +56,10 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
 
   void toggleAddingReply() {
     setState(() {
-      isAddingReply = !isAddingReply;
       if (!isAddingReply) {
         replyController.clear();
       }
+      isAddingReply = !isAddingReply;
     });
   }
 
@@ -128,8 +128,13 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
                   },
                 ),
                 if (isLoading)
-                  const Center(
-                    child: CircularProgressIndicator.adaptive(),
+                  const Positioned(
+                    bottom: 8,
+                    left: 0,
+                    right: 0,
+                    child: Center(
+                      child: CircularProgressIndicator.adaptive(),
+                    ),
                   ),
               ],
             ),
@@ -153,7 +158,7 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
               });
             },
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 8), // Add some spacing
         ],
       ),
     );
@@ -219,13 +224,72 @@ class CommentWidgetState extends State<CommentWidget> {
                   : "${Application.picturesURL}${widget.comment.userProfileImage}",
             ),
           ),
-          title: Text(
-            widget.comment.username!,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Text(
+                  widget.comment.username!,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 14),
+                ),
+              ),
+            ],
           ),
-          subtitle: Text(
-            widget.comment.comment!,
-            style: const TextStyle(fontSize: 16),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                widget.comment.comment!,
+                style: const TextStyle(fontSize: 16),
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (!widget.isAddingReply)
+                    TextButton(
+                      onPressed: () {
+                        setState(() {
+                          isAddingReply = !isAddingReply;
+                          if (isAddingReply) {
+                            currentCommentId = widget.comment.id;
+                            widget.toggleAddingReply?.call();
+                          } else {
+                            currentCommentId = null;
+                          }
+                        });
+                      },
+                      child: const Text(
+                        'Reply',
+                        style: TextStyle(fontSize: 12, color: Colors.grey),
+                      ),
+                    ),
+                  const SizedBox(width: 8),
+                  if (!widget.isAddingReply)
+                    if (widget.comment.childrenCount != 0)
+                      TextButton(
+                        onPressed: () {
+                          if (!showReplies) {
+                            fetchReplies();
+                          }
+                          setState(() {
+                            showReplies = !showReplies;
+                          });
+                        },
+                        child: Text(
+                          showReplies
+                              ? 'Hide Replies'
+                              : widget.comment.childrenCount != 0
+                                  ? 'View ${widget.comment.childrenCount} Replies'
+                                  : 'No Replies Available',
+                          style:
+                              const TextStyle(fontSize: 12, color: Colors.grey),
+                        ),
+                      ),
+                ],
+              ),
+            ],
           ),
         ),
         if (showReplies && replies != null)
@@ -239,51 +303,6 @@ class CommentWidgetState extends State<CommentWidget> {
                 ),
             ],
           ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (!widget.isAddingReply)
-              if (widget.comment.childrenCount != 0)
-                TextButton(
-                  onPressed: () {
-                    if (!showReplies) {
-                      fetchReplies();
-                    }
-                    setState(() {
-                      showReplies = !showReplies;
-                    });
-                  },
-                  child: Text(
-                    showReplies
-                        ? 'Hide Replies'
-                        : widget.comment.childrenCount != 0
-                            ? 'View Replies ${widget.comment.childrenCount}'
-                            : 'No Replies Available',
-                    style: const TextStyle(fontSize: 12),
-                  ),
-                ),
-            const SizedBox(width: 16),
-            if (!widget.isAddingReply)
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    isAddingReply = !isAddingReply;
-                    if (isAddingReply) {
-                      currentCommentId = widget.comment.id;
-                      widget.toggleAddingReply?.call();
-                    } else {
-                      currentCommentId = null;
-                    }
-                  });
-                },
-                child: const Text(
-                  'Add Reply',
-                  style: TextStyle(fontSize: 12),
-                ),
-              ),
-            const SizedBox(width: 16),
-          ],
-        ),
       ],
     );
   }
@@ -439,7 +458,6 @@ class CommentInputWidgetState extends State<CommentInputWidget> {
               controller: widget.isAddingReply
                   ? widget.replyController
                   : widget.commentController,
-              enabled: true, // Always enabled
               decoration: InputDecoration(
                 hintText:
                     widget.isAddingReply ? 'Add a reply' : 'Add a comment',
