@@ -14,7 +14,7 @@ class CommentsBottomSheet extends StatefulWidget {
   final int? postId;
   final List<CommentModel> comments;
   final PostDetailCubit postDetailCubit;
-  final String? userProfileImage; // User's profile image URL
+  final String? userProfileImage;
 
   const CommentsBottomSheet({
     Key? key,
@@ -32,25 +32,25 @@ class CommentsBottomSheet extends StatefulWidget {
 class CommentsBottomSheetState extends State<CommentsBottomSheet> {
   List<CommentModel> comments = [];
   bool isAddingReply = false;
-  int currentPage = 1; // Track the current page number
-  bool isLoading = false; // Track whether data is currently being loaded
+  int currentPage = 1;
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
     comments.addAll(widget.comments);
-    _scrollController.addListener(_scrollListener);
+    scrollController.addListener(_scrollListener);
   }
 
   TextEditingController commentController = TextEditingController();
   TextEditingController replyController = TextEditingController();
 
-  ScrollController _scrollController = ScrollController();
+  ScrollController scrollController = ScrollController();
 
   @override
   void dispose() {
-    _scrollController.removeListener(_scrollListener);
-    _scrollController.dispose();
+    scrollController.removeListener(_scrollListener);
+    scrollController.dispose();
     super.dispose();
   }
 
@@ -64,8 +64,7 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
   }
 
   void _scrollListener() {
-    if (_scrollController.offset >=
-            _scrollController.position.maxScrollExtent &&
+    if (scrollController.offset >= scrollController.position.maxScrollExtent &&
         !isLoading) {
       _loadNextPage();
     }
@@ -73,7 +72,7 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
 
   void _loadNextPage() async {
     setState(() {
-      isLoading = true; // Start loading
+      isLoading = true;
     });
 
     currentPage++;
@@ -89,12 +88,12 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
 
       setState(() {
         comments.addAll(updatedComments);
-        isLoading = false; // Stop loading
+        isLoading = false;
       });
     } catch (e) {
       logError('Failed to load next page of comments', e.toString());
       setState(() {
-        isLoading = false; // Stop loading in case of an error
+        isLoading = false;
       });
     }
   }
@@ -114,7 +113,7 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
             child: Stack(
               children: [
                 ListView.builder(
-                  controller: _scrollController,
+                  controller: scrollController,
                   itemCount: comments.length,
                   itemBuilder: (context, index) {
                     return Provider(
@@ -129,9 +128,8 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
                   },
                 ),
                 if (isLoading)
-                  Center(
-                    child:
-                        CircularProgressIndicator(), // Add a circular indicator
+                  const Center(
+                    child: CircularProgressIndicator.adaptive(),
                   ),
               ],
             ),
@@ -166,14 +164,14 @@ class CommentWidget extends StatefulWidget {
   final CommentModel comment;
   final PostDetailCubit postDetailCubit;
   final VoidCallback? toggleAddingReply;
-  final bool isAddingReply; // Added this prop
+  final bool isAddingReply;
 
   const CommentWidget({
     Key? key,
     required this.comment,
     required this.postDetailCubit,
     required this.toggleAddingReply,
-    required this.isAddingReply, // Added this prop
+    required this.isAddingReply,
   }) : super(key: key);
 
   @override
@@ -244,8 +242,7 @@ class CommentWidgetState extends State<CommentWidget> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (!widget
-                .isAddingReply) // Only show "View Replies" when not adding a reply
+            if (!widget.isAddingReply)
               if (widget.comment.childrenCount != 0)
                 TextButton(
                   onPressed: () {
@@ -266,18 +263,16 @@ class CommentWidgetState extends State<CommentWidget> {
                   ),
                 ),
             const SizedBox(width: 16),
-            if (!widget
-                .isAddingReply) // Only show "Add Reply" when not adding a reply
+            if (!widget.isAddingReply)
               TextButton(
                 onPressed: () {
                   setState(() {
                     isAddingReply = !isAddingReply;
                     if (isAddingReply) {
-                      currentCommentId =
-                          widget.comment.id; // Store the comment's ID
+                      currentCommentId = widget.comment.id;
                       widget.toggleAddingReply?.call();
                     } else {
-                      currentCommentId = null; // Clear the stored comment's ID
+                      currentCommentId = null;
                     }
                   });
                 },
@@ -367,9 +362,9 @@ class CommentInputWidget extends StatefulWidget {
   final VoidCallback? toggleAddingReply;
   final String? userProfileImage;
   final PostDetailCubit postDetailCubit;
-  final VoidCallback? onCommentAdded; // Callback after adding a comment
+  final VoidCallback? onCommentAdded;
 
-  CommentInputWidget({
+  const CommentInputWidget({
     Key? key,
     required this.forumId,
     required this.postId,
@@ -475,8 +470,7 @@ class CommentInputWidgetState extends State<CommentInputWidget> {
                 }
               }
               if (value.isNotEmpty && widget.isAddingReply) {
-                addReply(
-                    value, currentCommentId!); // Pass the current comment's ID
+                addReply(value, currentCommentId!);
 
                 widget.replyController!.clear();
 
