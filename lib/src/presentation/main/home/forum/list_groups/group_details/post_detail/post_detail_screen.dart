@@ -181,11 +181,9 @@ class _PostDetailsLoadedState extends State<PostDetailsLoaded> {
         backgroundColor: Theme.of(context).primaryColor,
         onPressed: () async {
           final postDetailCubit = context.read<PostDetailCubit>();
-          List<CommentModel> comments =
-              await context.read<PostDetailCubit>().getPostComments(
-                    widget.post.forumId,
-                    widget.post.id,
-                  );
+          List<CommentModel> comments = await context
+              .read<PostDetailCubit>()
+              .getPostComments(widget.post.forumId, widget.post.id, 1);
           if (!mounted) return;
           showModalBottomSheet(
             context: context,
@@ -195,6 +193,7 @@ class _PostDetailsLoadedState extends State<PostDetailsLoaded> {
                 postId: widget.post.id,
                 comments: comments,
                 postDetailCubit: postDetailCubit,
+                userProfileImage: widget.userDetail?.image,
               );
             },
           );

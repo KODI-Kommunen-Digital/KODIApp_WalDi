@@ -32,9 +32,10 @@ class PostDetailCubit extends Cubit<PostDetailState> {
     return await UserRepository.getLoggedUserId();
   }
 
-  Future<List<CommentModel>> getPostComments(int? forumId, int? postId) async {
+  Future<List<CommentModel>> getPostComments(
+      int? forumId, int? postId, int page) async {
     try {
-      final comments = await repo.getPostComments(forumId!, postId!);
+      final comments = await repo.getPostComments(forumId!, postId!, page);
       final commentsWithUserDetails =
           await fetchUserDetailsForComments(comments);
       return commentsWithUserDetails;
@@ -42,6 +43,19 @@ class PostDetailCubit extends Cubit<PostDetailState> {
       logError('Get Post Comments Failed', e.toString());
       return [];
     }
+  }
+
+  Future<ResultApiModel> addPostComments(
+      int? forumId, int? postId, String comment) async {
+    final response = await repo.addPostComments(forumId!, postId!, comment);
+    return response;
+  }
+
+  Future<ResultApiModel> addPostCommentsReply(
+      int? forumId, int? postId, String comment, int parentId) async {
+    final response =
+        await repo.addPostCommentsReply(forumId!, postId!, comment, parentId);
+    return response;
   }
 
   Future<List<CommentModel>> getCommentReplies(

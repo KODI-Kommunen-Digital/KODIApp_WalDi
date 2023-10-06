@@ -71,7 +71,8 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
-  static Future<ResultApiModel> removeUserFromGroup(forumId, cityId, memberId) async {
+  static Future<ResultApiModel> removeUserFromGroup(
+      forumId, cityId, memberId) async {
     ///TODO: CHANGE THIS HARDCODED CITYID
     final filepath = "/cities/1/forums/$forumId/members/$memberId";
     final result = await HTTPManager(forum: true).delete(url: filepath);
@@ -443,9 +444,30 @@ class Api {
   }
 
   static Future<ResultApiModel> requestPostComments(
-      cityId, forumId, postId) async {
-    var list = '/cities/$cityId/forums/$forumId/posts/$postId/comments';
+      cityId, forumId, postId, page) async {
+    var list =
+        '/cities/$cityId/forums/$forumId/posts/$postId/comments?pageNo=$page&pageSize=19';
     final result = await HTTPManager(forum: true).get(url: list);
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> addPostComments(
+      cityId, forumId, postId, params) async {
+    var list = '/cities/$cityId/forums/$forumId/posts/$postId/comments';
+    final result = await HTTPManager(forum: true).post(
+      url: list,
+      data: params,
+    );
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> addPostCommentsReply(
+      cityId, forumId, postId, params) async {
+    var list = '/cities/$cityId/forums/$forumId/posts/$postId/comments';
+    final result = await HTTPManager(forum: true).post(
+      url: list,
+      data: params,
+    );
     return ResultApiModel.fromJson(result);
   }
 

@@ -278,9 +278,10 @@ class ForumRepository {
     return await prefs.getKeyValue(Preferences.categoryId, 0);
   }
 
-  Future<List<CommentModel>> getPostComments(int forumId, int postId) async {
+  Future<List<CommentModel>> getPostComments(
+      int forumId, int postId, page) async {
     // int cityId = prefs.getKeyValue(Preferences.cityId, 0);
-    final response = await Api.requestPostComments(1, forumId, postId);
+    final response = await Api.requestPostComments(1, forumId, postId, page);
     if (response.success) {
       final List<CommentModel> comments = [];
       for (final jsonComment in response.data) {
@@ -291,6 +292,37 @@ class ForumRepository {
     } else {
       logError('Get Post Comments Failed', response.message);
       return [];
+    }
+  }
+
+  Future<ResultApiModel> addPostComments(
+      int forumId, int postId, String comment) async {
+    // int cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    Map<String, dynamic> params = {
+      "comment": comment,
+    };
+    final response = await Api.addPostComments(1, forumId, postId, params);
+    if (response.success) {
+      return response;
+    } else {
+      logError('Add Post Comment Failed', response.message);
+      return response;
+    }
+  }
+
+  Future<ResultApiModel> addPostCommentsReply(
+      int forumId, int postId, String comment, int parentId) async {
+    // int cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    Map<String, dynamic> params = {
+      "comment": comment,
+      "parentId": parentId,
+    };
+    final response = await Api.addPostComments(1, forumId, postId, params);
+    if (response.success) {
+      return response;
+    } else {
+      logError('Get Post Comments Failed', response.message);
+      return response;
     }
   }
 
