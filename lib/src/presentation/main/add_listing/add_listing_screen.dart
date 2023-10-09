@@ -193,7 +193,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       selectedSubCategory = loadCategoryResponse?.data.first['name'];
       listCity = loadCitiesResponse.data;
       selectedCategory = selectedSubCategory;
-      if (selectedCategory == "News" || selectedCategory == null) {
+      if (selectedCategory == "news" || selectedCategory == null) {
         selectSubCategory(selectedCategory);
       }
       _processing = true;
@@ -219,7 +219,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       final city = listCity
           .firstWhere((element) => element['id'] == widget.item?.cityId);
       selectedCity = city['name'];
-      if (selectedCategory == "News" || selectedCategory == null) {
+      if (selectedCategory == "news" || selectedCategory == null) {
         final subCategoryResponse = await context
             .read<AddListingCubit>()
             .loadSubCategory(selectedCategory);
@@ -271,7 +271,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       }
       if (!loadCategoryResponse?.data.isEmpty) {
         if (!mounted) return;
-        if (selectedCategory == "News" || selectedCategory == null) {
+        if (selectedCategory == "news" || selectedCategory == null) {
           final subCategoryResponse = await context
               .read<AddListingCubit>()
               .loadSubCategory(Translate.of(context).translate(
@@ -747,7 +747,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
                                             .setCategoryId(selectedCategory);
                                       },
                                     );
-                                    if (selectedCategory == "News" ||
+                                    if (selectedCategory == "new" ||
                                         selectedCategory == null) {
                                       selectSubCategory(selectedCategory);
                                     }
@@ -1036,7 +1036,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
               ),
             ),
             Visibility(
-              visible: selectedCategory == "Events",
+              visible: selectedCategory == "events",
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
