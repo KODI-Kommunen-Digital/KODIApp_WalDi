@@ -75,8 +75,11 @@ class PostDetailCubit extends Cubit<PostDetailState> {
       List<CommentModel> comments) async {
     final List<Future<CommentModel>> commentFutures =
         comments.map((comment) async {
+      // final userDetails =
+      //     await UserRepository.getUserDetails(comment.cityUserId, cityId);
+      ///TODO: CHANGE THIS HARDCODED CITYID
       final userDetails =
-          await UserRepository.requestUserDetails(comment.cityUserId);
+          await UserRepository.getUserDetails(comment.cityUserId, 1);
       if (userDetails != null) {
         comment.userName = userDetails.username;
         comment.userProfileImage = userDetails.image;
@@ -86,5 +89,12 @@ class PostDetailCubit extends Cubit<PostDetailState> {
 
     final commentsWithUserDetails = await Future.wait(commentFutures);
     return commentsWithUserDetails;
+  }
+
+  Future<String?> fetchLoggedInUserProfileImage() async {
+    final loggedInUserId = await UserRepository.getLoggedUserId();
+    final userDetails = await UserRepository.fetchUser(loggedInUserId);
+    final loggedInUserProfileImage = userDetails?.image;
+    return loggedInUserProfileImage;
   }
 }

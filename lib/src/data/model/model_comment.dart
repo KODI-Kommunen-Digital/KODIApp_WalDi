@@ -14,6 +14,7 @@ class CommentModel {
   List<CommentModel>? replies;
   String? userName;
   String? userProfileImage;
+  String? loggedInUserProfileImage;
 
   CommentModel(
       {this.id,
@@ -30,6 +31,7 @@ class CommentModel {
       this.parentId,
       this.userName = '',
       this.userProfileImage = '',
+      this.loggedInUserProfileImage = '',
       this.replies});
 
   CommentModel.fromJson(Map<String, dynamic> json) {
@@ -47,6 +49,7 @@ class CommentModel {
     parentId = json['parentId'];
     userName = json['username'];
     userProfileImage = json['image'];
+    loggedInUserProfileImage = json['image'];
     replies = json['reples'];
   }
 
@@ -67,7 +70,7 @@ class CommentModel {
     data['reples'] = replies;
     data['userName'] = userName;
     data['userProfileImage'] = userProfileImage;
-
+    data['loggedInUserProfileImage'] = loggedInUserProfileImage;
     return data;
   }
 }

@@ -251,13 +251,8 @@ class CommentWidgetState extends State<CommentWidget> {
                     TextButton(
                       onPressed: () {
                         setState(() {
-                          isAddingReply = !isAddingReply;
-                          if (isAddingReply) {
-                            currentCommentId = widget.comment.id;
-                            widget.toggleAddingReply?.call();
-                          } else {
-                            currentCommentId = null;
-                          }
+                          currentCommentId = widget.comment.id;
+                          widget.toggleAddingReply?.call();
                         });
                       },
                       child: Text(
