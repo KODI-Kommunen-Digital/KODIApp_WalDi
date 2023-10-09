@@ -119,6 +119,18 @@ class ForumRepository {
     }
   }
 
+  Future<ResultApiModel?> reportGroupPosts(forumId, postId, reason) async {
+    final cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    final Map<String, dynamic> params = {"Reason": reason};
+    final response = await Api.reportGroupPosts(forumId, cityId, postId, params);
+    if (response.success) {
+      return response;
+    } else {
+      logError('Report Group Post Response Failed', response.message);
+      return null;
+    }
+  }
+
   Future<ResultApiModel?> getGroupMembers(forumId) async {
     final cityId = prefs.getKeyValue(Preferences.cityId, 0);
     final response = await Api.getGroupMembers(forumId, cityId);
@@ -142,15 +154,15 @@ class ForumRepository {
     }
   }
 
-  Future<ResultApiModel?> requestRemoveAdmin(forumId, memberId) async {
+  Future<bool> requestRemoveAdmin(forumId, memberId) async {
     final cityId = prefs.getKeyValue(Preferences.cityId, 0);
     final Map<String, dynamic> params = {"isAdmin": 0};
     final response = await Api.requestRemoveAdmin(cityId, forumId, memberId, params);
     if (response.success) {
-      return response;
+      return true;
     } else {
       logError('Request Remove User Admin Failed', response.message);
-      return null;
+      return false;
     }
   }
 

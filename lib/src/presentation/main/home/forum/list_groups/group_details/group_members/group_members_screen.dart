@@ -67,7 +67,7 @@ class GroupMembersLoaded extends StatefulWidget {
 
 class _GroupMembersLoadedState extends State<GroupMembersLoaded> {
   int loggedUserId = 0;
-  bool isUserAdmin = false;
+  bool isMemberAdmin = false;
 
   @override
   void initState() {
@@ -95,7 +95,7 @@ class _GroupMembersLoadedState extends State<GroupMembersLoaded> {
           padding: const EdgeInsets.only(top: 8),
           itemCount: widget.membersList?.length,
           itemBuilder: (context, index) {
-            isUserAdmin =
+            isMemberAdmin =
                 widget.membersList?[index].isAdmin == 1 ? true : false;
             return InkWell(
               onTap: () {},
@@ -129,10 +129,10 @@ class _GroupMembersLoadedState extends State<GroupMembersLoaded> {
                                 style: Theme.of(context).textTheme.titleSmall,
                               ),
                               Text(
-                                isUserAdmin ? ' [Admin]' : ' [Member]',
+                                isMemberAdmin ? ' [Admin]' : ' [Member]',
                                 maxLines: 1,
                                 style: TextStyle(
-                                    color: isUserAdmin
+                                    color: isMemberAdmin
                                         ? Colors.green
                                         : Colors.red),
                               ),
@@ -150,50 +150,85 @@ class _GroupMembersLoadedState extends State<GroupMembersLoaded> {
                     ),
                     Visibility(
                       visible: widget.isAdmin,
-                      child: PopupMenuButton<String>(
-                        onSelected: (String choice) async {
-                          if (choice ==
-                              Translate.of(context).translate('make_admin')) {
-                            await context
-                                .read<GroupMembersCubit>()
-                                .requestMakeUserAdmin(widget.forumId,
-                                    widget.membersList?[index].memberId);
-                            if (!mounted) return;
-                            context.read<GroupMembersCubit>().onLoad();
-                          } else if (choice ==
-                              Translate.of(context).translate('remove_admin')) {
-                            await context
-                                .read<GroupMembersCubit>()
-                                .requestRemoveAdmin(widget.forumId,
-                                    widget.membersList?[index].memberId);
-                            if (!mounted) return;
-                            context.read<GroupMembersCubit>().onLoad();
-                          } else if (choice ==
-                              Translate.of(context)
-                                  .translate('remove_member')) {
-                            await context
-                                .read<GroupMembersCubit>()
-                                .removeUserFromGroup(widget.forumId,
-                                    widget.membersList?[index].memberId);
-                            if (!mounted) return;
-                            context.read<GroupMembersCubit>().onLoad();
-                          }
-                        },
-                        itemBuilder: (BuildContext context) {
-                          return {
-                            !isUserAdmin
-                                ? Translate.of(context).translate('make_admin')
-                                : Translate.of(context)
-                                    .translate('remove_admin'),
-                            Translate.of(context).translate('remove_member')
-                          }.map((String choice) {
-                            return PopupMenuItem<String>(
-                              value: choice,
-                              child: Text(choice),
-                            );
-                          }).toList();
-                        },
-                      ),
+                      child: isMemberAdmin
+                          ? PopupMenuButton<String>(
+                              onSelected: (String choice) async {
+                                if (choice ==
+                                    Translate.of(context)
+                                        .translate('remove_admin')) {
+                                  final response = await context
+                                      .read<GroupMembersCubit>()
+                                      .requestRemoveAdmin(widget.forumId,
+                                          widget.membersList?[index].memberId);
+                                  if (response) {
+                                    if (!mounted) return;
+                                    context.read<GroupMembersCubit>().onLoad();
+                                  } else {
+                                    if (!mounted) return;
+                                    showOnlyAdminPopup(context);
+                                  }
+                                }
+                              },
+                              itemBuilder: (BuildContext context) {
+                                return {
+                                  Translate.of(context)
+                                      .translate('remove_admin')
+                                }.map((String choice) {
+                                  return PopupMenuItem<String>(
+                                    value: choice,
+                                    child: Text(choice),
+                                  );
+                                }).toList();
+                              },
+                            )
+                          : PopupMenuButton<String>(
+                              onSelected: (String choice) async {
+                                if (choice ==
+                                    Translate.of(context)
+                                        .translate('make_admin')) {
+                                  await context
+                                      .read<GroupMembersCubit>()
+                                      .requestMakeUserAdmin(widget.forumId,
+                                          widget.membersList?[index].memberId);
+                                  if (!mounted) return;
+                                  context.read<GroupMembersCubit>().onLoad();
+                                } else if (choice ==
+                                    Translate.of(context)
+                                        .translate('remove_admin')) {
+                                  await context
+                                      .read<GroupMembersCubit>()
+                                      .requestRemoveAdmin(widget.forumId,
+                                          widget.membersList?[index].memberId);
+                                  if (!mounted) return;
+                                  context.read<GroupMembersCubit>().onLoad();
+                                } else if (choice ==
+                                    Translate.of(context)
+                                        .translate('remove_member')) {
+                                  await context
+                                      .read<GroupMembersCubit>()
+                                      .removeUserFromGroup(widget.forumId,
+                                          widget.membersList?[index].memberId);
+                                  if (!mounted) return;
+                                  context.read<GroupMembersCubit>().onLoad();
+                                }
+                              },
+                              itemBuilder: (BuildContext context) {
+                                return {
+                                  !isMemberAdmin
+                                      ? Translate.of(context)
+                                          .translate('make_admin')
+                                      : Translate.of(context)
+                                          .translate('remove_admin'),
+                                  Translate.of(context)
+                                      .translate('remove_member')
+                                }.map((String choice) {
+                                  return PopupMenuItem<String>(
+                                    value: choice,
+                                    child: Text(choice),
+                                  );
+                                }).toList();
+                              },
+                            ),
                       // IconButton(
                       //   icon: const Icon(Icons.more_vert),
                       //   onPressed: () {
@@ -208,6 +243,26 @@ class _GroupMembersLoadedState extends State<GroupMembersLoaded> {
           },
         ),
       ),
+    );
+  }
+
+  void showOnlyAdminPopup(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('You Are the Only Admin'),
+          content: const Text('You cannot remove yourself as a common member as you are the only admin. First, make someone else an admin before becoming just a member'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

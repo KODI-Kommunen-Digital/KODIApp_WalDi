@@ -73,7 +73,7 @@ class GroupMembersCubit extends Cubit<GroupMembersState> {
 
   Future<bool> requestRemoveAdmin(forumId, memberId) async {
     final response = await repo.requestRemoveAdmin(forumId, memberId);
-    if (response!.success) {
+    if (response) {
       return true;
     } else {
       return false;

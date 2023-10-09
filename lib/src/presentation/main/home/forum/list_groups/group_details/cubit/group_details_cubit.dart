@@ -38,6 +38,7 @@ class GroupDetailsCubit extends Cubit<GroupDetailsState> {
   }
 
   Future<bool> removeGroupMember(groupId) async {
+    int adminCount = 0;
     final groupMembersList = <GroupMembersModel>[];
     final requestGroupMembersResponse = await repo.getGroupMembers(groupId);
     if (requestGroupMembersResponse?.data != null) {
@@ -52,20 +53,27 @@ class GroupDetailsCubit extends Cubit<GroupDetailsState> {
           isAdmin: member['isAdmin'],
           joinedAt: member['joinedAt'],
         ));
+        if (member['isAdmin'] == 1) {
+          adminCount++;
+        }
       }
 
       int userId = await UserRepository.getLoggedUserId();
-      final groupMemberDetail = groupMembersList.firstWhere((element) =>
-      element.userId == userId);
+      final groupMemberDetail =
+          groupMembersList.firstWhere((element) => element.userId == userId);
       bool isUserAdmin = groupMemberDetail.isAdmin == 1 ? true : false;
       if (!isUserAdmin) {
         repo.removeUserFromGroup(groupId, groupMemberDetail.memberId);
         return true;
       } else {
-        return false;
+        if (adminCount > 1) {
+          repo.removeUserFromGroup(groupId, groupMemberDetail.memberId);
+          return true;
+        } else {
+          return false;
+        }
       }
-    }
-    else{
+    } else {
       return false;
     }
   }

@@ -297,6 +297,7 @@ class Routes {
                 settings.arguments as GroupPostsModel;
             return BlocProvider(
               create: (context) => PostDetailCubit(
+                context.read(),
                 arguments
               ),
               child: PostDetailsScreen(arguments),

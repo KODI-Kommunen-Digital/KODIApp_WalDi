@@ -271,7 +271,8 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                   Navigator.of(context).pop(true);
                 }
                 else{
-                  ///Show that you are admin
+                  if (!mounted) return;
+                  showAdminPopup(context);
                 }
               },
               child: Text(Translate.of(context).translate('yes')),
@@ -289,4 +290,25 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
       Navigator.pop(context);
     }
   }
+
+  void showAdminPopup(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('You Are the Only Admin'),
+          content: const Text('You cannot leave the forum as you are the only member. Delete forum instead'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 }

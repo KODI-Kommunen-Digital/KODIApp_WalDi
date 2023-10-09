@@ -86,6 +86,15 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
+  static Future<ResultApiModel> reportGroupPosts(
+      forumId, cityId, postId, params) async {
+    ///TODO: CHANGE THIS HARDCODED CITYID
+    final filepath = "/cities/1/forums/$forumId/posts/$postId/reports";
+    final result =
+        await HTTPManager(forum: true).post(data: params, url: filepath);
+    return ResultApiModel.fromJson(result);
+  }
+
   static Future<ResultApiModel> getGroupMembers(forumId, cityId) async {
     ///TODO: CHANGE THIS HARDCODED CITYID
     final filepath = "/cities/1/forums/$forumId/members";

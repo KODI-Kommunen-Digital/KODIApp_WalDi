@@ -5,6 +5,7 @@ import 'package:heidi/src/data/model/model_group_posts.dart';
 import 'package:heidi/src/presentation/widget/app_user_info.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
+import 'package:heidi/src/utils/translate.dart';
 
 import 'cubit/post_detail_cubit.dart';
 import 'cubit/post_detail_state.dart';
@@ -64,7 +65,7 @@ class _PostDetailsLoadedState extends State<PostDetailsLoaded> {
         slivers: <Widget>[
           SliverAppBar(
             leading: IconButton(
-              icon: const Icon(Icons.arrow_back), // Change to your desired icon
+              icon: const Icon(Icons.arrow_back),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -74,7 +75,7 @@ class _PostDetailsLoadedState extends State<PostDetailsLoaded> {
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
               background: InkWell(
-                onTap: (){
+                onTap: () {
                   Navigator.pushNamed(
                     context,
                     Routes.imageZoom,
@@ -93,15 +94,41 @@ class _PostDetailsLoadedState extends State<PostDetailsLoaded> {
           SliverList(
             delegate: SliverChildListDelegate(
               [
-                Container(
-                  padding: const EdgeInsets.fromLTRB(16,16,0,0),
-                  child: Text(
-                    widget.post.title!,
-                    style: const TextStyle(fontSize: 20),
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(16, 16, 0, 0),
+                      child: Text(
+                        widget.post.title!,
+                        style: const TextStyle(fontSize: 20),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
+                      child: PopupMenuButton<String>(
+                        onSelected: (String choice) {
+                          if (choice ==
+                              Translate.of(context).translate('report_post')) {
+                            showReportPostConfirmation(context);
+                          }
+                        },
+                        itemBuilder: (BuildContext context) {
+                          return {
+                            Translate.of(context).translate('report_post'),
+                          }.map((String choice) {
+                            return PopupMenuItem<String>(
+                              value: choice,
+                              child: Text(choice),
+                            );
+                          }).toList();
+                        },
+                      ),
+                    ),
+                  ],
                 ),
                 Container(
-                  padding: const EdgeInsets.fromLTRB(16,0,0,0),
+                  padding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
                   child: Text(
                     widget.post.createdAt!,
                     style: Theme.of(context).textTheme.bodyMedium,
@@ -124,8 +151,8 @@ class _PostDetailsLoadedState extends State<PostDetailsLoaded> {
                     boxShadow: [
                       BoxShadow(
                         color: Theme.of(context).dividerColor.withOpacity(
-                          .05,
-                        ),
+                              .05,
+                            ),
                         spreadRadius: 4,
                         blurRadius: 4,
                         offset: const Offset(
@@ -146,11 +173,17 @@ class _PostDetailsLoadedState extends State<PostDetailsLoaded> {
                       if (widget.post.userId == loggedInUserId) {
                         if (!mounted) return;
                         Navigator.pushNamed(context, Routes.profile,
-                            arguments: {'user': widget.userDetail, 'editable': true});
+                            arguments: {
+                              'user': widget.userDetail,
+                              'editable': true
+                            });
                       } else {
                         if (!mounted) return;
                         Navigator.pushNamed(context, Routes.profile,
-                            arguments: {'user': widget.userDetail, 'editable': false});
+                            arguments: {
+                              'user': widget.userDetail,
+                              'editable': false
+                            });
                       }
                     },
                     type: UserViewType.information,
@@ -164,4 +197,70 @@ class _PostDetailsLoadedState extends State<PostDetailsLoaded> {
       ),
     );
   }
+
+  Future<void> showReportPostConfirmation(BuildContext buildContext) async {
+    String reportReason = '';
+
+    final result = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(Translate.of(context).translate('post_report_confirmation')),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10.0),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                width: double.maxFinite,
+                child: TextField(
+                  maxLines: 5,
+                  onChanged: (value) {
+                    reportReason = value;
+                  },
+                  decoration: const InputDecoration(
+                    hintText: 'Berichtsgrund eingeben',
+                    border: InputBorder.none,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () async {
+                final isReported = await buildContext
+                    .read<PostDetailCubit>()
+                    .reportGroupPosts(
+                  widget.post.forumId,
+                  widget.post.id,
+                  reportReason,
+                );
+                if (isReported) {
+                  if (!mounted) return;
+                  Navigator.of(context).pop(true);
+                } else {
+                  // Handle the case where the post could not be reported
+                  // Show an error message or take appropriate action
+                }
+              },
+              child: Text(Translate.of(context).translate('yes')),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false), // No
+              child: Text(Translate.of(context).translate('no')),
+            ),
+          ],
+        );
+      },
+    );
+    if (result == true) {
+      if (!mounted) return;
+      // Navigator.pop(context);
+    }
+  }
+
 }
