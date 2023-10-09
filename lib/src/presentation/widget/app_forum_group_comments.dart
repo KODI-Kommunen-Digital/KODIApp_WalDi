@@ -397,6 +397,20 @@ class CommentInputWidget extends StatefulWidget {
 }
 
 class CommentInputWidgetState extends State<CommentInputWidget> {
+  Future<String?>? loggedInUserProfileImage;
+
+  @override
+  void initState() {
+    super.initState();
+    loggedInUserProfileImage = getLoggedInUserProfileImage();
+  }
+
+  Future<String?> getLoggedInUserProfileImage() async {
+    String? loggedInUserProfileImage =
+        await widget.postDetailCubit.fetchLoggedInUserProfileImage();
+    return loggedInUserProfileImage;
+  }
+
   void resetInput() {
     setState(() {
       widget.toggleAddingReply?.call();
@@ -438,15 +452,13 @@ class CommentInputWidgetState extends State<CommentInputWidget> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
         children: [
-          const CircleAvatar(
-            //profile pic of user is not shown correctly (TODO)
-            // backgroundImage: NetworkImage(
-            //   (widget.userProfileImage == 'Keine Angabe' ||
-            //           widget.userProfileImage == "")
-            //       ? Application.defaultPicturesURL
-            //       : "${Application.picturesURL}${widget.userProfileImage}",
-            // ),
-            backgroundImage: NetworkImage(Application.defaultPicturesURL),
+          CircleAvatar(
+            ///TODO: profile pic of user is not shown correctly
+            backgroundImage: NetworkImage(
+              (loggedInUserProfileImage != null)
+                  ? Application.defaultPicturesURL
+                  : "${Application.picturesURL}$loggedInUserProfileImage",
+            ),
           ),
           const SizedBox(width: 16),
           Expanded(
