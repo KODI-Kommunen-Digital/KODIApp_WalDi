@@ -74,13 +74,20 @@ class HomeCubit extends Cubit<HomeState> {
       formattedCategories,
       location,
       recent,
+      isRefreshLoader,
     ));
   }
 
   void scrollUp() {
     emit(const HomeStateLoading());
     const banner = Images.slider;
-    emit(HomeStateLoaded(banner, category, location, recent));
+    emit(HomeStateLoaded(
+      banner,
+      category,
+      location,
+      recent,
+      false,
+    ));
   }
 
   bool getDoesScroll() {
@@ -174,41 +181,15 @@ class HomeCubit extends Cubit<HomeState> {
     return false;
   }
 
-  Future<void> newListings(int pageNo) async {
+  Future<dynamic> newListings(int pageNo) async {
     if (!await hasInternet()) {
       emit(const HomeState.error("no_internet"));
     }
-    final categoryRequestResponse = await Api.requestHomeCategory();
-    final cityRequestResponse = await Api.requestCities();
-
-    category = List.from(categoryRequestResponse.data ?? []).map((item) {
-      return CategoryModel.fromJson(item);
-    }).toList();
-
-    location = List.from(cityRequestResponse.data ?? []).map((item) {
-      return CategoryModel.fromJson(item);
-    }).toList();
-
-    CategoryModel? savedCity = await checkSavedCity(location);
-    final categoryCountRequestResponse =
-        await Api.requestCategoryCount(savedCity?.id);
-    categoryCount =
-        List.from(categoryCountRequestResponse.data ?? []).map((item) {
-      return CategoryModel.fromJson(item);
-    }).toList();
-    const banner = Images.slider;
-    List<CategoryModel> formattedCategories =
-        await formatCategoriesList(category, categoryCount, savedCity?.id);
     final listingsRequestResponse = await Api.requestRecentListings(pageNo);
     final newRecent = List.from(listingsRequestResponse.data ?? []).map((item) {
       return ProductModel.fromJson(item);
     }).toList();
     recent.addAll(newRecent);
-    emit(HomeState.updated(
-      banner,
-      formattedCategories,
-      location,
-      recent,
-    ));
+    return recent;
   }
 }
