@@ -14,9 +14,9 @@ class HTTPManager {
   late String _baseUrl;
 
   HTTPManager({bool forum = false}) {
-    _baseUrl = forum
-        ? 'https://test.smartregion-auf.de/forumapi/'
-        : 'https://test.smartregion-auf.de/api';
+    _baseUrl = !forum
+        ? 'https://test.smartregion-auf.de/api'
+        : 'https://test.smartregion-auf.de/forumapi/';
 
     _dio = Dio(
       BaseOptions(
@@ -54,6 +54,8 @@ class HTTPManager {
         logError('Errors', error.response?.data);
         if (error.response?.data['message'] ==
             'Unauthorized! Token was expired!') {
+          _baseUrl = 'https://test.smartregion-auf.de/api';
+          // forum = false;
           final prefs = await Preferences.openBox();
           var rToken = prefs.getKeyValue(Preferences.refreshToken, '');
           final userId = prefs.getKeyValue(Preferences.userId, '');

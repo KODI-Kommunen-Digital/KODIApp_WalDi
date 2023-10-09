@@ -11,6 +11,7 @@ class GroupMembersState with _$GroupMembersState {
 
   const factory GroupMembersState.loaded(
       List<GroupMembersModel> list,
+      bool isAdmin,
       ) = GroupMembersLoaded;
 
   const factory GroupMembersState.error(String error) = GroupMembersStateError;

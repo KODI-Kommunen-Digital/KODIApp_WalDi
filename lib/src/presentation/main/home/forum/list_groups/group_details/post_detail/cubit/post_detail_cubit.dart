@@ -10,6 +10,7 @@ import 'post_detail_state.dart';
 
 class PostDetailCubit extends Cubit<PostDetailState> {
   UserModel? userDetail;
+  final ForumRepository repo;
   final GroupPostsModel postDetail;
   final ForumRepository repo;
 
@@ -33,6 +34,7 @@ class PostDetailCubit extends Cubit<PostDetailState> {
   Future<int> getLoggedInUserId() async {
     return await UserRepository.getLoggedUserId();
   }
+
 
   Future<List<CommentModel>> getPostComments(
       int? forumId, int? postId, int page) async {
@@ -99,4 +101,15 @@ class PostDetailCubit extends Cubit<PostDetailState> {
     final loggedInUserProfileImage = userDetails?.image;
     return loggedInUserProfileImage;
   }
+
+  Future<bool> reportGroupPosts(forumId, postId, reason) async{
+    final response = await repo.reportGroupPosts(forumId, postId, reason);
+    if(response!.success){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+
 }
