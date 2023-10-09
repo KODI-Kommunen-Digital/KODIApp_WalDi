@@ -57,6 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
     AppBloc.homeCubit.onLoad(false);
     connectivityInternet();
     scrollUp();
+    checkUserExist();
   }
 
   void connectivityInternet() {
@@ -70,6 +71,13 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
     _scrollController.removeListener(_scrollListener);
     _scrollController.dispose();
+  }
+
+  Future<void> checkUserExist() async {
+    bool exists = await AppBloc.homeCubit.doesUserExist();
+    if (!exists) {
+      AppBloc.loginCubit.onLogout();
+    }
   }
 
   Future<void> _scrollListener() async {

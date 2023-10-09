@@ -4,10 +4,12 @@ import 'package:bloc/bloc.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
+import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/utils/configs/image.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 
+import '../../../../../data/model/model.dart';
 import 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
@@ -71,6 +73,23 @@ class HomeCubit extends Cubit<HomeState> {
       recent,
       isRefreshLoader,
     ));
+  }
+
+  Future<bool> doesUserExist() async {
+    final int userId = await UserRepository.getLoggedUserId();
+    if (userId == 0) return true;
+
+    bool doesExist = await UserRepository.doesUserExist(userId);
+    UserModel? localUser = await UserRepository.loadUser();
+
+    if (doesExist) {
+      UserModel? savedUser = await UserRepository.requestUserDetails(userId);
+
+      if (localUser?.email == savedUser?.email) {
+        return true;
+      }
+    }
+    return false;
   }
 
   Future<bool> categoryHasContent(int id, int? cityId) async {
