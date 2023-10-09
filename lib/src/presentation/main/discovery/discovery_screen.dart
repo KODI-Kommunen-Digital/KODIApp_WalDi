@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_citizen_service.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
-import 'package:heidi/src/utils/configs/image.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
@@ -221,33 +220,8 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
   Future<void> navigateToLink(CitizenServiceModel service) async {
     final prefs = await Preferences.openBox();
     if (service.imageLink == "1") {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Image.asset(
-                  Images.loading,
-                  width: 200,
-                  height: 200,
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  Translate.of(context).translate('loading'),
-                ),
-              ],
-            ),
-          );
-        },
-      );
-      await Future.delayed(const Duration(seconds: 2));
-      Navigator.of(context).pop();
-      await launchUrl(
-        Uri.parse(await AppBloc.discoveryCubit.getMitredenLink() ?? ""),
-        mode: LaunchMode.inAppWebView,
-      );
+      String link = await AppBloc.discoveryCubit.getMitredenLink() ?? "";
+      Navigator.of(context).pushNamed(Routes.mitredenWebview, arguments: link);
     } else if (service.imageLink == "2") {
       await launchUrl(
           Uri.parse(await AppBloc.discoveryCubit.getCityLink() ?? ""),
