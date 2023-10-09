@@ -7,6 +7,7 @@
   "to": "to",
   "account": "Username",
   "my_account": "My Account",
+  "email_already_registered": "This email is already registered",
   "Choose_File_Type": "Choose File Type",
   "change_language": "Change Language",
   "dynamic_theme": "System Phone",
