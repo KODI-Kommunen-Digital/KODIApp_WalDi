@@ -62,6 +62,7 @@ class HTTPManager {
           final Map<String, dynamic> params = {
             "refreshToken": rToken,
           };
+          _baseUrl = 'https://test.smartregion-auf.de/api';
           final result =
               await post(url: '/users/$userId/refresh', data: params);
           final response = ResultApiModel.fromJson(result);

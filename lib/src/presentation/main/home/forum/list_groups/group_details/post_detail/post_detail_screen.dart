@@ -1,7 +1,11 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model.dart';
+import 'package:heidi/src/data/model/model_comment.dart';
 import 'package:heidi/src/data/model/model_group_posts.dart';
+import 'package:heidi/src/presentation/widget/app_forum_group_comments.dart';
 import 'package:heidi/src/presentation/widget/app_user_info.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
@@ -10,11 +14,16 @@ import 'package:heidi/src/utils/translate.dart';
 import 'cubit/post_detail_cubit.dart';
 import 'cubit/post_detail_state.dart';
 
-class PostDetailsScreen extends StatelessWidget {
+class PostDetailsScreen extends StatefulWidget {
   final GroupPostsModel item;
 
   const PostDetailsScreen(this.item, {super.key});
 
+  @override
+  State<PostDetailsScreen> createState() => _PostDetailsScreenState();
+}
+
+class _PostDetailsScreenState extends State<PostDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<PostDetailCubit, PostDetailState>(
@@ -27,7 +36,8 @@ class PostDetailsScreen extends StatelessWidget {
       },
       builder: (context, state) => state.maybeWhen(
         loading: () => const PostDetailsLoading(),
-        loaded: (userDetails) => PostDetailsLoaded(userDetails, item),
+        loaded: (userDetails, userImage) =>
+            PostDetailsLoaded(userDetails, widget.item, userImage: userImage),
         orElse: () => ErrorWidget('Failed to load Post Details.'),
       ),
     );
@@ -48,8 +58,10 @@ class PostDetailsLoading extends StatelessWidget {
 class PostDetailsLoaded extends StatefulWidget {
   final GroupPostsModel post;
   final UserModel? userDetail;
+  final String userImage;
 
-  const PostDetailsLoaded(this.userDetail, this.post, {super.key});
+  const PostDetailsLoaded(this.userDetail, this.post,
+      {super.key, required this.userImage});
 
   @override
   State<PostDetailsLoaded> createState() => _PostDetailsLoadedState();
@@ -158,7 +170,7 @@ class _PostDetailsLoadedState extends State<PostDetailsLoaded> {
                         offset: const Offset(
                           0,
                           2,
-                        ), // changes position of shadow
+                        ),
                       ),
                     ],
                   ),
@@ -194,6 +206,32 @@ class _PostDetailsLoadedState extends State<PostDetailsLoaded> {
             ),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Theme.of(context).primaryColor,
+        onPressed: () async {
+          final postDetailCubit = context.read<PostDetailCubit>();
+          List<CommentModel> comments = await context
+              .read<PostDetailCubit>()
+              .getPostComments(widget.post.forumId, widget.post.id, 1);
+          if (!mounted) return;
+          showModalBottomSheet(
+            context: context,
+            builder: (context) {
+              return CommentsBottomSheet(
+                  forumId: widget.post.forumId,
+                  postId: widget.post.id,
+                  comments: comments,
+                  postDetailCubit: postDetailCubit,
+                  userProfileImage: widget.userDetail?.image,
+                  userImage: widget.userImage);
+            },
+          );
+        },
+        child: const Icon(
+          Icons.comment,
+          color: Colors.white,
+        ),
       ),
     );
   }
