@@ -22,7 +22,9 @@ class PostDetailCubit extends Cubit<PostDetailState> {
     final userDetailResponse =
         await UserRepository.requestUserDetails(postDetail.userId);
     if (userDetailResponse != null) {
-      emit(PostDetailState.loaded(userDetailResponse));
+      final user = await UserRepository.loadUser();
+      final userImage = user!.image;
+      emit(PostDetailState.loaded(userDetailResponse, userImage));
     } else {
       logError('User Detail Response Failed', userDetailResponse);
     }

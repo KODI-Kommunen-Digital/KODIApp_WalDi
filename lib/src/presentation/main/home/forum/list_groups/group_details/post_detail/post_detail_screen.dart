@@ -35,7 +35,8 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
       },
       builder: (context, state) => state.maybeWhen(
         loading: () => const PostDetailsLoading(),
-        loaded: (userDetails) => PostDetailsLoaded(userDetails, widget.item),
+        loaded: (userDetails, userImage) =>
+            PostDetailsLoaded(userDetails, widget.item, userImage: userImage),
         orElse: () => ErrorWidget('Failed to load Post Details.'),
       ),
     );
@@ -56,8 +57,10 @@ class PostDetailsLoading extends StatelessWidget {
 class PostDetailsLoaded extends StatefulWidget {
   final GroupPostsModel post;
   final UserModel? userDetail;
+  final String userImage;
 
-  const PostDetailsLoaded(this.userDetail, this.post, {super.key});
+  const PostDetailsLoaded(this.userDetail, this.post,
+      {super.key, required this.userImage});
 
   @override
   State<PostDetailsLoaded> createState() => _PostDetailsLoadedState();
@@ -189,12 +192,12 @@ class _PostDetailsLoadedState extends State<PostDetailsLoaded> {
             context: context,
             builder: (context) {
               return CommentsBottomSheet(
-                forumId: widget.post.forumId,
-                postId: widget.post.id,
-                comments: comments,
-                postDetailCubit: postDetailCubit,
-                userProfileImage: widget.userDetail?.image,
-              );
+                  forumId: widget.post.forumId,
+                  postId: widget.post.id,
+                  comments: comments,
+                  postDetailCubit: postDetailCubit,
+                  userProfileImage: widget.userDetail?.image,
+                  userImage: widget.userImage);
             },
           );
         },

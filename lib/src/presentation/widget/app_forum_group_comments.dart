@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model_comment.dart';
-import 'package:heidi/src/data/model/model_result_api.dart';
 import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details/post_detail/cubit/post_detail_cubit.dart';
+import 'package:heidi/src/presentation/widget/app_forum_comment_input.dart';
+import 'package:heidi/src/presentation/widget/app_forum_comment_reply.dart';
 import 'package:heidi/src/utils/configs/application.dart';
+import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:loggy/loggy.dart';
 import 'package:provider/provider.dart';
-
-int? currentCommentId;
 
 class CommentsBottomSheet extends StatefulWidget {
   final int? forumId;
@@ -15,6 +15,7 @@ class CommentsBottomSheet extends StatefulWidget {
   final List<CommentModel> comments;
   final PostDetailCubit postDetailCubit;
   final String? userProfileImage;
+  final String userImage;
 
   const CommentsBottomSheet({
     Key? key,
@@ -23,6 +24,7 @@ class CommentsBottomSheet extends StatefulWidget {
     required this.comments,
     required this.postDetailCubit,
     required this.userProfileImage,
+    required this.userImage,
   }) : super(key: key);
 
   @override
@@ -147,6 +149,7 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
             isAddingReply: isAddingReply,
             toggleAddingReply: toggleAddingReply,
             userProfileImage: widget.userProfileImage,
+            userImage: widget.userImage,
             postDetailCubit: widget.postDetailCubit,
             onCommentAdded: () async {
               currentPage = 1;
@@ -250,8 +253,10 @@ class CommentWidgetState extends State<CommentWidget> {
                   if (!widget.isAddingReply)
                     TextButton(
                       onPressed: () {
-                        setState(() {
-                          currentCommentId = widget.comment.id;
+                        setState(() async {
+                          final prefs = await Preferences.openBox();
+                          prefs.setKeyValue(
+                              Preferences.commentId, widget.comment.id);
                           widget.toggleAddingReply?.call();
                         });
                       },
@@ -300,215 +305,6 @@ class CommentWidgetState extends State<CommentWidget> {
             ],
           ),
       ],
-    );
-  }
-}
-
-class CommentReplyWidget extends StatefulWidget {
-  final CommentModel comment;
-  final PostDetailCubit postDetailCubit;
-
-  const CommentReplyWidget({
-    Key? key,
-    required this.comment,
-    required this.postDetailCubit,
-  }) : super(key: key);
-
-  @override
-  CommentReplyWidgetState createState() => CommentReplyWidgetState();
-}
-
-class CommentReplyWidgetState extends State<CommentReplyWidget> {
-  List<CommentModel>? replies;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ListTile(
-          contentPadding: const EdgeInsets.only(left: 40),
-          leading: CircleAvatar(
-            backgroundImage: NetworkImage(
-              (widget.comment.userProfileImage == 'Keine Angabe' ||
-                      widget.comment.userProfileImage == "")
-                  ? Application.defaultPicturesURL
-                  : "${Application.picturesURL}${widget.comment.userProfileImage}",
-            ),
-            radius: 20,
-          ),
-          title: Text(
-            widget.comment.username!,
-            style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
-          ),
-          subtitle: Text(
-            widget.comment.comment!,
-            style: const TextStyle(fontSize: 16),
-          ),
-        ),
-        if (replies != null)
-          Column(
-            children: [
-              for (final reply in replies!)
-                Column(
-                  children: [
-                    const Divider(
-                      height: 8,
-                      thickness: 4,
-                    ),
-                    CommentReplyWidget(
-                      comment: reply,
-                      postDetailCubit: widget.postDetailCubit,
-                    ),
-                  ],
-                ),
-            ],
-          ),
-      ],
-    );
-  }
-}
-
-class CommentInputWidget extends StatefulWidget {
-  final int? forumId;
-  final int? postId;
-  final TextEditingController? commentController;
-  final TextEditingController? replyController;
-  final bool isAddingReply;
-  final VoidCallback? toggleAddingReply;
-  final String? userProfileImage;
-  final PostDetailCubit postDetailCubit;
-  final VoidCallback? onCommentAdded;
-
-  const CommentInputWidget({
-    Key? key,
-    required this.forumId,
-    required this.postId,
-    required this.commentController,
-    required this.replyController,
-    required this.isAddingReply,
-    required this.toggleAddingReply,
-    required this.userProfileImage,
-    required this.postDetailCubit,
-    this.onCommentAdded,
-  }) : super(key: key);
-
-  @override
-  CommentInputWidgetState createState() => CommentInputWidgetState();
-}
-
-class CommentInputWidgetState extends State<CommentInputWidget> {
-  Future<String?>? loggedInUserProfileImage;
-
-  @override
-  void initState() {
-    super.initState();
-    loggedInUserProfileImage = getLoggedInUserProfileImage();
-  }
-
-  Future<String?> getLoggedInUserProfileImage() async {
-    String? loggedInUserProfileImage =
-        await widget.postDetailCubit.fetchLoggedInUserProfileImage();
-    return loggedInUserProfileImage;
-  }
-
-  void resetInput() {
-    setState(() {
-      widget.toggleAddingReply?.call();
-      widget.commentController?.clear();
-    });
-  }
-
-  Future<ResultApiModel> addComment(String value) async {
-    final comment = value;
-    final response = await widget.postDetailCubit.addPostComments(
-      widget.forumId,
-      widget.postId,
-      comment,
-    );
-    if (response.success) {
-      widget.onCommentAdded?.call();
-    }
-    return response;
-  }
-
-  Future<ResultApiModel> addReply(String value, int parentId) async {
-    final reply = value;
-    final response = await widget.postDetailCubit.addPostCommentsReply(
-      widget.forumId,
-      widget.postId,
-      reply,
-      parentId,
-    );
-    if (response.success) {
-      widget.onCommentAdded?.call();
-    }
-    return response;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.black,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Row(
-        children: [
-          CircleAvatar(
-            ///TODO: profile pic of user is not shown correctly
-            backgroundImage: NetworkImage(
-              (loggedInUserProfileImage != null)
-                  ? Application.defaultPicturesURL
-                  : "${Application.picturesURL}$loggedInUserProfileImage",
-            ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: TextField(
-              controller: widget.isAddingReply
-                  ? widget.replyController
-                  : widget.commentController,
-              decoration: InputDecoration(
-                hintText: widget.isAddingReply
-                    ? Translate.of(context).translate('add_reply')
-                    : Translate.of(context).translate('add_comment'),
-                hintStyle: const TextStyle(color: Colors.white),
-                border: InputBorder.none,
-              ),
-            ),
-          ),
-          if (widget.isAddingReply)
-            IconButton(
-              icon: const Icon(Icons.clear, color: Colors.white),
-              onPressed: resetInput,
-            ),
-          IconButton(
-            icon: const Icon(Icons.send, color: Colors.white),
-            onPressed: () {
-              final value = widget.isAddingReply
-                  ? widget.replyController!.text
-                  : widget.commentController!.text;
-
-              if (value.isNotEmpty && !widget.isAddingReply) {
-                addComment(value);
-
-                widget.commentController!.clear();
-
-                if (widget.isAddingReply) {
-                  widget.toggleAddingReply!();
-                }
-              }
-              if (value.isNotEmpty && widget.isAddingReply) {
-                addReply(value, currentCommentId!);
-
-                widget.replyController!.clear();
-
-                if (widget.isAddingReply) {
-                  widget.toggleAddingReply!();
-                }
-              }
-            },
-          ),
-        ],
-      ),
     );
   }
 }

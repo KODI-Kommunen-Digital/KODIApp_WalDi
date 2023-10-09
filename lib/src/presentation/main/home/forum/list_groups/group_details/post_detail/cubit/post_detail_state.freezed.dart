@@ -20,7 +20,7 @@ mixin _$PostDetailState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(UserModel? userDetail) loaded,
+    required TResult Function(UserModel? userDetail, String userImage) loaded,
     required TResult Function(String error) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -28,7 +28,7 @@ mixin _$PostDetailState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(UserModel? userDetail)? loaded,
+    TResult? Function(UserModel? userDetail, String userImage)? loaded,
     TResult? Function(String error)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -36,7 +36,7 @@ mixin _$PostDetailState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(UserModel? userDetail)? loaded,
+    TResult Function(UserModel? userDetail, String userImage)? loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) =>
@@ -126,7 +126,7 @@ class _$PostDetailInitial implements PostDetailInitial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(UserModel? userDetail) loaded,
+    required TResult Function(UserModel? userDetail, String userImage) loaded,
     required TResult Function(String error) error,
   }) {
     return initial();
@@ -137,7 +137,7 @@ class _$PostDetailInitial implements PostDetailInitial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(UserModel? userDetail)? loaded,
+    TResult? Function(UserModel? userDetail, String userImage)? loaded,
     TResult? Function(String error)? error,
   }) {
     return initial?.call();
@@ -148,7 +148,7 @@ class _$PostDetailInitial implements PostDetailInitial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(UserModel? userDetail)? loaded,
+    TResult Function(UserModel? userDetail, String userImage)? loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
@@ -240,7 +240,7 @@ class _$PostDetailLoading implements PostDetailLoading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(UserModel? userDetail) loaded,
+    required TResult Function(UserModel? userDetail, String userImage) loaded,
     required TResult Function(String error) error,
   }) {
     return loading();
@@ -251,7 +251,7 @@ class _$PostDetailLoading implements PostDetailLoading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(UserModel? userDetail)? loaded,
+    TResult? Function(UserModel? userDetail, String userImage)? loaded,
     TResult? Function(String error)? error,
   }) {
     return loading?.call();
@@ -262,7 +262,7 @@ class _$PostDetailLoading implements PostDetailLoading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(UserModel? userDetail)? loaded,
+    TResult Function(UserModel? userDetail, String userImage)? loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
@@ -320,7 +320,7 @@ abstract class _$$PostDetailLoadedCopyWith<$Res> {
           _$PostDetailLoaded value, $Res Function(_$PostDetailLoaded) then) =
       __$$PostDetailLoadedCopyWithImpl<$Res>;
   @useResult
-  $Res call({UserModel? userDetail});
+  $Res call({UserModel? userDetail, String userImage});
 }
 
 /// @nodoc
@@ -335,12 +335,17 @@ class __$$PostDetailLoadedCopyWithImpl<$Res>
   @override
   $Res call({
     Object? userDetail = freezed,
+    Object? userImage = null,
   }) {
     return _then(_$PostDetailLoaded(
       freezed == userDetail
           ? _value.userDetail
           : userDetail // ignore: cast_nullable_to_non_nullable
               as UserModel?,
+      null == userImage
+          ? _value.userImage
+          : userImage // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -348,14 +353,16 @@ class __$$PostDetailLoadedCopyWithImpl<$Res>
 /// @nodoc
 
 class _$PostDetailLoaded implements PostDetailLoaded {
-  const _$PostDetailLoaded(this.userDetail);
+  const _$PostDetailLoaded(this.userDetail, this.userImage);
 
   @override
   final UserModel? userDetail;
+  @override
+  final String userImage;
 
   @override
   String toString() {
-    return 'PostDetailState.loaded(userDetail: $userDetail)';
+    return 'PostDetailState.loaded(userDetail: $userDetail, userImage: $userImage)';
   }
 
   @override
@@ -364,11 +371,13 @@ class _$PostDetailLoaded implements PostDetailLoaded {
         (other.runtimeType == runtimeType &&
             other is _$PostDetailLoaded &&
             (identical(other.userDetail, userDetail) ||
-                other.userDetail == userDetail));
+                other.userDetail == userDetail) &&
+            (identical(other.userImage, userImage) ||
+                other.userImage == userImage));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, userDetail);
+  int get hashCode => Object.hash(runtimeType, userDetail, userImage);
 
   @JsonKey(ignore: true)
   @override
@@ -381,10 +390,10 @@ class _$PostDetailLoaded implements PostDetailLoaded {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(UserModel? userDetail) loaded,
+    required TResult Function(UserModel? userDetail, String userImage) loaded,
     required TResult Function(String error) error,
   }) {
-    return loaded(userDetail);
+    return loaded(userDetail, userImage);
   }
 
   @override
@@ -392,10 +401,10 @@ class _$PostDetailLoaded implements PostDetailLoaded {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(UserModel? userDetail)? loaded,
+    TResult? Function(UserModel? userDetail, String userImage)? loaded,
     TResult? Function(String error)? error,
   }) {
-    return loaded?.call(userDetail);
+    return loaded?.call(userDetail, userImage);
   }
 
   @override
@@ -403,12 +412,12 @@ class _$PostDetailLoaded implements PostDetailLoaded {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(UserModel? userDetail)? loaded,
+    TResult Function(UserModel? userDetail, String userImage)? loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(userDetail);
+      return loaded(userDetail, userImage);
     }
     return orElse();
   }
@@ -452,10 +461,11 @@ class _$PostDetailLoaded implements PostDetailLoaded {
 }
 
 abstract class PostDetailLoaded implements PostDetailState {
-  const factory PostDetailLoaded(final UserModel? userDetail) =
-      _$PostDetailLoaded;
+  const factory PostDetailLoaded(
+      final UserModel? userDetail, final String userImage) = _$PostDetailLoaded;
 
   UserModel? get userDetail;
+  String get userImage;
   @JsonKey(ignore: true)
   _$$PostDetailLoadedCopyWith<_$PostDetailLoaded> get copyWith =>
       throw _privateConstructorUsedError;
@@ -527,7 +537,7 @@ class _$PostDetailError implements PostDetailError {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(UserModel? userDetail) loaded,
+    required TResult Function(UserModel? userDetail, String userImage) loaded,
     required TResult Function(String error) error,
   }) {
     return error(this.error);
@@ -538,7 +548,7 @@ class _$PostDetailError implements PostDetailError {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(UserModel? userDetail)? loaded,
+    TResult? Function(UserModel? userDetail, String userImage)? loaded,
     TResult? Function(String error)? error,
   }) {
     return error?.call(this.error);
@@ -549,7 +559,7 @@ class _$PostDetailError implements PostDetailError {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(UserModel? userDetail)? loaded,
+    TResult Function(UserModel? userDetail, String userImage)? loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
