@@ -19,6 +19,7 @@ import 'package:heidi/src/utils/multiple_gesture_detector.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   const ProductDetailScreen({Key? key, required this.item}) : super(key: key);
@@ -185,6 +186,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     String uniqueKey = UniqueKey().toString();
     List<Widget> action = [];
     Widget actionGalleries = Container();
+    final memoryCacheManager = DefaultCacheManager();
     // Widget actionMapView = Container();
     Widget banner = AppPlaceholder(
       child: Container(
@@ -431,6 +433,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     : product.image == 'admin/News.jpeg'
                         ? "${Application.picturesURL}${product.image}"
                         : "${Application.picturesURL}${product.image}?cacheKey=$uniqueKey",
+                cacheManager: memoryCacheManager,
                 placeholder: (context, url) {
                   return AppPlaceholder(
                     child: Container(

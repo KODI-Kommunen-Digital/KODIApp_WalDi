@@ -13,6 +13,7 @@ import 'package:heidi/src/presentation/widget/app_user_info.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 class ProfileScreen extends StatelessWidget {
   final UserModel user;
@@ -77,6 +78,7 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
   @override
   Widget build(BuildContext context) {
     String uniqueKey = UniqueKey().toString();
+    final memoryCacheManager = DefaultCacheManager();
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -211,6 +213,8 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                                                                 'admin/News.jpeg'
                                                             ? "${Application.picturesURL}${item.image}"
                                                             : "${Application.picturesURL}${item.image}?cacheKey=$uniqueKey",
+                                                    cacheManager:
+                                                        memoryCacheManager,
                                                     imageBuilder: (context,
                                                         imageProvider) {
                                                       return Container(
