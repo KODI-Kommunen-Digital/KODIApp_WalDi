@@ -102,6 +102,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _onRefresh() async {
     await AppBloc.homeCubit.onLoad(true);
+    setState(() {
+      pageNo = 1;
+    });
   }
 
   Future<void> _onUpdateCategory() async {
@@ -602,7 +605,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         _onProductDetail(item);
                       },
                       item: item,
-                      type: ProductViewType.small, isRefreshLoader: isRefreshLoader,
+                      type: ProductViewType.small,
+                      isRefreshLoader: isRefreshLoader,
                     ),
                   ),
                 )
