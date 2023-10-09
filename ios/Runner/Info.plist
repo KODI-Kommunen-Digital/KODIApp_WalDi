@@ -37,7 +37,7 @@
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Need microphone access for uploading audio</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Need photo library access for saving and uploading images</string>
+    <string>Need photo library access for uploading profile picture or listing image.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
