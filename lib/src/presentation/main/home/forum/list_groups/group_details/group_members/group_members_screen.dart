@@ -152,6 +152,9 @@ class _GroupMembersLoadedState extends State<GroupMembersLoaded> {
                       visible: widget.isAdmin,
                       child: isMemberAdmin
                           ? PopupMenuButton<String>(
+                              icon: const Icon(
+                                Icons.more_vert, // Three vertical dots icon
+                              ),
                               onSelected: (String choice) async {
                                 if (choice ==
                                     Translate.of(context)
@@ -182,6 +185,9 @@ class _GroupMembersLoadedState extends State<GroupMembersLoaded> {
                               },
                             )
                           : PopupMenuButton<String>(
+                              icon: const Icon(
+                                Icons.more_vert, // Three vertical dots icon
+                              ),
                               onSelected: (String choice) async {
                                 if (choice ==
                                     Translate.of(context)
@@ -252,7 +258,8 @@ class _GroupMembersLoadedState extends State<GroupMembersLoaded> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('You Are the Only Admin'),
-          content: const Text('You cannot remove yourself as a common member as you are the only admin. First, make someone else an admin before becoming just a member'),
+          content: const Text(
+              'You cannot remove yourself as a common member as you are the only admin. First, make someone else an admin before becoming just a member'),
           actions: <Widget>[
             TextButton(
               onPressed: () {
