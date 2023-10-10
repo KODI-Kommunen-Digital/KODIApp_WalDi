@@ -253,7 +253,8 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
           Uri.parse(await AppBloc.discoveryCubit.getCityLink() ?? ""),
           mode: LaunchMode.inAppWebView);
     } else if (service.imageLink == "11") {
-      await launchUrl(Uri.parse("https://www.ilztal.de"),
+      await launchUrl(
+          Uri.parse(await AppBloc.discoveryCubit.getToruismLink() ?? ""),
           mode: LaunchMode.inAppWebView);
     } else if (service.imageLink == "12") {
       await launchUrl(

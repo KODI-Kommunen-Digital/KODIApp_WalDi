@@ -70,7 +70,7 @@ class UserRepository {
     return null;
   }
 
-  static Future<int> getLoggedUserId() async{
+  static Future<int> getLoggedUserId() async {
     final prefs = await Preferences.openBox();
     final userId = prefs.getKeyValue(Preferences.userId, 0);
     return userId;
@@ -83,6 +83,7 @@ class UserRepository {
     }
     return null;
   }
+
   static Future<UserModel?> getUserDetails(userId, cityId) async {
     final response = await Api.getUserDetails(userId, cityId);
     if (response.success) {
@@ -104,7 +105,7 @@ class UserRepository {
     return prefs.deleteKey(Preferences.user);
   }
 
-  static Future<bool> register(
+  static Future<ResultApiModel> register(
       {required String username,
       required String firstname,
       required String lastname,
@@ -123,11 +124,11 @@ class UserRepository {
     };
     final response = await Api.requestRegister(params);
     if (response.success) {
-      return true;
+      return response;
     } else {
       logError('Register Response Error', response.message);
     }
-    return false;
+    return response;
   }
 
   static Future<bool> forgotPassword({required String username}) async {
