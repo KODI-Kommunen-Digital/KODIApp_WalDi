@@ -124,6 +124,9 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                       ),
                     ),
                     PopupMenuButton<String>(
+                      icon: const Icon(
+                        Icons.more_vert, // Three vertical dots icon
+                      ),
                       onSelected: (String choice) {
                         if (choice ==
                             Translate.of(context).translate('leave_group')) {
