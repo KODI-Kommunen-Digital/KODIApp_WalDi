@@ -439,7 +439,7 @@ class ListRepository {
     }
   }
 
-  Future<List<FavoriteDetailsModel>> loadUserListings(id) async {
+  Future<List<FavoriteDetailsModel>> loadUserListings(id, pageNo) async {
     int userId;
     final userList = <FavoriteDetailsModel>[];
     if (id == 0) {
@@ -448,7 +448,7 @@ class ListRepository {
       userId = id;
     }
 
-    final listResponse = await Api.requestUserListings(userId);
+    final listResponse = await Api.requestUserListings(userId, pageNo);
     if (listResponse.success) {
       final responseData = listResponse.data;
       if (responseData != []) {

@@ -1,11 +1,12 @@
 import 'package:bloc/bloc.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/presentation/main/login/signup/cubit/signup_state.dart';
+import 'package:heidi/src/data/model/model.dart';
 
 class SignUpCubit extends Cubit<SignUpState> {
   SignUpCubit() : super(const SignUpState.loading());
 
-  Future<bool> onRegister({
+  Future<ResultApiModel> onRegister({
     required String firstname,
     required String lastname,
     required String username,

@@ -20,6 +20,7 @@ class Api {
   static const String cities = "/cities";
   static const String listings = "/listings?statusId=1";
   static const String contact = "/contactUs";
+  static const String faq = "/moreInfo";
 
   static Future<ResultApiModel> requestLogin(params) async {
     try {
@@ -31,7 +32,7 @@ class Api {
   }
 
   static Future<ResultApiModel> requestFavorites(userId) async {
-    final result = await httpManager.get(url: '/users/$userId/favorites/');
+    final result = await httpManager.get(url: '/users/$userId/favorites?pageNo=1&pageSize=19');
     return ResultApiModel.fromJson(result);
   }
 
@@ -70,8 +71,8 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
-  static Future<ResultApiModel> requestUserListings(userId) async {
-    final result = await httpManager.get(url: '/users/$userId/listings/');
+  static Future<ResultApiModel> requestUserListings(userId, pageNo) async {
+    final result = await httpManager.get(url: '/users/$userId/listings?pageNo=$pageNo&pageSize=5');
     return ResultApiModel.fromJson(result);
   }
 
@@ -166,7 +167,7 @@ class Api {
 
   ///Get Recent Listings
   static Future<ResultApiModel> requestRecentListings(params) async {
-    final listings = "/listings?statusId=1&pageNo=$params&pageSize=19";
+    final listings = "/listings?statusId=1&pageNo=$params&pageSize=10";
     final result = await httpManager.get(url: listings);
     return ResultApiModel.fromJson(result);
   }
@@ -322,6 +323,11 @@ class Api {
   static Future<ResultApiModel> deleteUserAccount(userId) async {
     final String deleteAccount = "/users/$userId";
     final result = await httpManager.delete(url: deleteAccount);
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> moreInfo() async {
+    final result = await httpManager.get(url: faq);
     return ResultApiModel.fromJson(result);
   }
 
