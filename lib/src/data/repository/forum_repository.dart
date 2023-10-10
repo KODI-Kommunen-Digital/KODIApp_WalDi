@@ -8,6 +8,7 @@ import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_request_member.dart';
 import 'package:heidi/src/data/model/model_users_joined_group.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
+import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/logger.dart';
@@ -46,40 +47,45 @@ class ForumRepository {
             item,
           );
         }).toList();
-        final usersJoinedForumResponse = await Api.requestUsersForum(userId);
-
-        final requestGroupRequestResponse =
-            await Api.getGroupMemberRequests(userId);
-        if (requestGroupRequestResponse.success) {
-          for (final list in requestGroupRequestResponse.data) {
-            requestMemberList.add(RequestMemberModel(
-              forumId: list['forumId'],
-              userId: list['userId'],
-              statusId: list['statusId'],
-              createdAt: list['createdAt'],
-              updatedAt: list['updatedAt'],
-              id: list['id'],
-              reason: list['reason'],
-            ));
+        if (AppBloc.userCubit.state != null) {
+          final usersJoinedForumResponse = await Api.requestUsersForum(userId);
+          final requestGroupRequestResponse =
+              await Api.getGroupMemberRequests(userId);
+          if (requestGroupRequestResponse.success) {
+            for (final list in requestGroupRequestResponse.data) {
+              requestMemberList.add(RequestMemberModel(
+                forumId: list['forumId'],
+                userId: list['userId'],
+                statusId: list['statusId'],
+                createdAt: list['createdAt'],
+                updatedAt: list['updatedAt'],
+                id: list['id'],
+                reason: list['reason'],
+              ));
+            }
+          } else {
+            logError('Request To Get Group Members Response Failed',
+                requestGroupRequestResponse.message);
           }
+
+          final userJoinedList =
+              List.from(usersJoinedForumResponse.data ?? []).map((item) {
+            return UserJoinedGroupsModel.fromJson(
+              item,
+            );
+          }).toList();
+
+          return [
+            groupList,
+            requestForumResponse.pagination,
+            userJoinedList,
+            requestMemberList
+          ];
         } else {
-          logError('Request To Get Group Members Response Failed',
-              requestGroupRequestResponse.message);
+          return [
+            groupList,
+          ];
         }
-
-        final userJoinedList =
-            List.from(usersJoinedForumResponse.data ?? []).map((item) {
-          return UserJoinedGroupsModel.fromJson(
-            item,
-          );
-        }).toList();
-
-        return [
-          groupList,
-          requestForumResponse.pagination,
-          userJoinedList,
-          requestMemberList
-        ];
       }
     } else {
       logError('Forum Group List Error');
@@ -104,7 +110,8 @@ class ForumRepository {
     if (response.success) {
       return true;
     } else {
-      logError('Request To Remove User From Group Response Failed', response.message);
+      logError('Request To Remove User From Group Response Failed',
+          response.message);
       return false;
     }
   }
@@ -123,7 +130,8 @@ class ForumRepository {
   Future<ResultApiModel?> reportGroupPosts(forumId, postId, reason) async {
     final cityId = prefs.getKeyValue(Preferences.cityId, 0);
     final Map<String, dynamic> params = {"Reason": reason};
-    final response = await Api.reportGroupPosts(forumId, cityId, postId, params);
+    final response =
+        await Api.reportGroupPosts(forumId, cityId, postId, params);
     if (response.success) {
       return response;
     } else {
@@ -146,7 +154,8 @@ class ForumRepository {
   Future<ResultApiModel?> requestMakeUserAdmin(forumId, memberId) async {
     final cityId = prefs.getKeyValue(Preferences.cityId, 0);
     final Map<String, dynamic> params = {"isAdmin": 1};
-    final response = await Api.requestMakeUserAdmin(cityId, forumId, memberId, params);
+    final response =
+        await Api.requestMakeUserAdmin(cityId, forumId, memberId, params);
     if (response.success) {
       return response;
     } else {
@@ -158,7 +167,8 @@ class ForumRepository {
   Future<bool> requestRemoveAdmin(forumId, memberId) async {
     final cityId = prefs.getKeyValue(Preferences.cityId, 0);
     final Map<String, dynamic> params = {"isAdmin": 0};
-    final response = await Api.requestRemoveAdmin(cityId, forumId, memberId, params);
+    final response =
+        await Api.requestRemoveAdmin(cityId, forumId, memberId, params);
     if (response.success) {
       return true;
     } else {

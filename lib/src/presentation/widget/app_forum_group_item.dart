@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_forum_group.dart';
+import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/home/forum/list_groups/cubit/cubit.dart';
 import 'package:heidi/src/presentation/main/home/widget/empty_product_item.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
@@ -128,35 +129,36 @@ class _ForumGroupItemState extends State<ForumGroupItem> {
                     const SizedBox(
                       height: 10.0,
                     ),
-                    InkWell(
-                      onTap: () {
-                        if (isRequested == false) {
-                          if (isJoined == false) {
-                            showJoinGroupDialog(context, widget.item?.id);
-                          } else {
-                            Navigator.pushNamed(context, Routes.groupDetails,
-                                    arguments: widget.item)
-                                .then((value) async {
-                              logError('Value', value);
-                              await context.read<ListGroupsCubit>().onLoad();
-                            });
-                            // widget.onPressed;
+                    if (AppBloc.userCubit.state != null)
+                      InkWell(
+                        onTap: () {
+                          if (isRequested == false) {
+                            if (isJoined == false) {
+                              showJoinGroupDialog(context, widget.item?.id);
+                            } else {
+                              Navigator.pushNamed(context, Routes.groupDetails,
+                                      arguments: widget.item)
+                                  .then((value) async {
+                                logError('Value', value);
+                                await context.read<ListGroupsCubit>().onLoad();
+                              });
+                              // widget.onPressed;
+                            }
                           }
-                        }
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.fromLTRB(0, 0, 50, 0),
-                        padding: const EdgeInsets.all(2.0),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[600],
-                          borderRadius: BorderRadius.circular(6.0),
-                        ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          groupStatus,
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.fromLTRB(0, 0, 50, 0),
+                          padding: const EdgeInsets.all(2.0),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[600],
+                            borderRadius: BorderRadius.circular(6.0),
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            groupStatus,
+                          ),
                         ),
                       ),
-                    ),
                     const SizedBox(height: 8),
                     const Row(
                       children: <Widget>[
@@ -202,13 +204,12 @@ class _ForumGroupItemState extends State<ForumGroupItem> {
       if (!mounted) return;
       final joinRequestResponse =
           await context.read<ListGroupsCubit>().requestToJoinGroup(id);
-      if (joinRequestResponse == 'Member added successfully' ) {
+      if (joinRequestResponse == 'Member added successfully') {
         setState(() {
           groupStatus = 'zur Gruppe';
           isJoined = true;
           isRequested = false;
         });
-
       } else if (joinRequestResponse == 'Request sent successfully') {
         setState(() {
           groupStatus = 'Anfrage verschickt';
