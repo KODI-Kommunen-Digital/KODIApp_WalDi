@@ -7,6 +7,8 @@ import 'package:heidi/src/data/repository/user_repository.dart';
 
 import 'group_details_state.dart';
 
+enum RemoveUser { error, removed, onlyAdmin, onlyUser }
+
 class GroupDetailsCubit extends Cubit<GroupDetailsState> {
   final ForumRepository repo;
   final ForumGroupModel arguments;
@@ -37,7 +39,7 @@ class GroupDetailsCubit extends Cubit<GroupDetailsState> {
     }
   }
 
-  Future<bool> removeGroupMember(groupId) async {
+  Future<RemoveUser> removeGroupMember(groupId) async {
     int adminCount = 0;
     final groupMembersList = <GroupMembersModel>[];
     final requestGroupMembersResponse = await repo.getGroupMembers(groupId);
@@ -64,17 +66,21 @@ class GroupDetailsCubit extends Cubit<GroupDetailsState> {
       bool isUserAdmin = groupMemberDetail.isAdmin == 1 ? true : false;
       if (!isUserAdmin) {
         repo.removeUserFromGroup(groupId, groupMemberDetail.memberId);
-        return true;
+        return RemoveUser.removed;
       } else {
-        if (adminCount > 1) {
-          repo.removeUserFromGroup(groupId, groupMemberDetail.memberId);
-          return true;
+        if (groupMembersList.length > 1) {
+          if (adminCount > 1) {
+            repo.removeUserFromGroup(groupId, groupMemberDetail.memberId);
+            return RemoveUser.removed;
+          } else {
+            return RemoveUser.onlyAdmin;
+          }
         } else {
-          return false;
+          return RemoveUser.onlyUser;
         }
       }
     } else {
-      return false;
+      return RemoveUser.error;
     }
   }
 }

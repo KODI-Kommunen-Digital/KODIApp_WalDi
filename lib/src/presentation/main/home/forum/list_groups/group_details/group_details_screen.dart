@@ -278,12 +278,22 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                 final isRemoved = await buildContext
                     .read<GroupDetailsCubit>()
                     .removeGroupMember(widget.item.id);
-                if (isRemoved) {
+                if (isRemoved == RemoveUser.removed) {
                   if (!mounted) return;
                   Navigator.of(context).pop(true);
-                } else {
+                } else if(isRemoved == RemoveUser.onlyUser){
                   if (!mounted) return;
-                  showAdminPopup(context);
+                  Navigator.of(context).pop(false);
+                  final popUpTitle = Translate.of(context).translate('only_user');
+                  final content =  Translate.of(context).translate('only_user_in_group');
+                  showAdminPopup(context,popUpTitle, content);
+                }
+                else if(isRemoved == RemoveUser.onlyAdmin){
+                  if (!mounted) return;
+                  final popUpTitle = Translate.of(context).translate('only_admin');
+                  final content = Translate.of(context).translate('add_another_admin');
+                  Navigator.of(context).pop(false);
+                  showAdminPopup(context,popUpTitle, content);
                 }
               },
               child: Text(Translate.of(context).translate('yes')),
@@ -302,14 +312,14 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
     }
   }
 
-  void showAdminPopup(BuildContext context) {
+  void showAdminPopup(BuildContext context, title, content) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('You Are the Only Admin'),
-          content: const Text(
-              'You cannot leave the forum as you are the only member. Delete forum instead'),
+          title:  Text(title),
+          content:  Text(
+             content),
           actions: <Widget>[
             TextButton(
               onPressed: () {
