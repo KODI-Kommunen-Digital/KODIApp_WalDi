@@ -161,7 +161,6 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
               });
             },
           ),
-          const SizedBox(height: 8),
         ],
       ),
     );
