@@ -49,7 +49,9 @@ class _ListGroupScreenState extends State<ListGroupScreen> {
     }
     if (!mounted) return;
     Navigator.pushNamed(context, Routes.addGroups,
-        arguments: {'isNewGroup': true});
+        arguments: {'isNewGroup': true}).then((value){
+          context.read<ListGroupsCubit>().onLoad();
+    });
   }
 
   void _updateSelectedFilter(GroupFilter? filter) {

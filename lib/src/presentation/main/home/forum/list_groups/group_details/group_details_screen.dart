@@ -69,7 +69,10 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
     }
     if (!mounted) return;
     Navigator.pushNamed(context, Routes.addPosts,
-        arguments: {'isNewPost': true, 'item': widget.item});
+        arguments: {'isNewPost': true, 'item': widget.item}).then((value) {
+          context.read<GroupDetailsCubit>().onLoad();
+      setState(() {});
+    });
   }
 
   @override
@@ -122,17 +125,21 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                     ),
                     PopupMenuButton<String>(
                       onSelected: (String choice) {
-                        if (choice == Translate.of(context).translate('leave_group')) {
+                        if (choice ==
+                            Translate.of(context).translate('leave_group')) {
                           showLeaveGroupConfirmation(context);
-                        } else if (choice == Translate.of(context).translate('see_member')) {
+                        } else if (choice ==
+                            Translate.of(context).translate('see_member')) {
                           Navigator.pushNamed(
                               context, Routes.groupMembersDetails,
                               arguments: widget.item.id);
                         }
                       },
                       itemBuilder: (BuildContext context) {
-                        return {Translate.of(context).translate('leave_group'), Translate.of(context).translate('see_member')}
-                            .map((String choice) {
+                        return {
+                          Translate.of(context).translate('leave_group'),
+                          Translate.of(context).translate('see_member')
+                        }.map((String choice) {
                           return PopupMenuItem<String>(
                             value: choice,
                             child: Text(choice),
@@ -258,8 +265,10 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(Translate.of(context).translate('group_leave_confirmation')),
-          content: Text(Translate.of(context).translate('Are_you_sure_you_want_to_leave_this_group')),
+          title:
+              Text(Translate.of(context).translate('group_leave_confirmation')),
+          content: Text(Translate.of(context)
+              .translate('Are_you_sure_you_want_to_leave_this_group')),
           actions: <Widget>[
             TextButton(
               onPressed: () async {
@@ -269,8 +278,7 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                 if (isRemoved) {
                   if (!mounted) return;
                   Navigator.of(context).pop(true);
-                }
-                else{
+                } else {
                   if (!mounted) return;
                   showAdminPopup(context);
                 }
@@ -297,7 +305,8 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('You Are the Only Admin'),
-          content: const Text('You cannot leave the forum as you are the only member. Delete forum instead'),
+          content: const Text(
+              'You cannot leave the forum as you are the only member. Delete forum instead'),
           actions: <Widget>[
             TextButton(
               onPressed: () {
@@ -310,5 +319,4 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
       },
     );
   }
-
 }
