@@ -119,6 +119,9 @@ class _PostDetailsLoadedState extends State<PostDetailsLoaded> {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
                       child: PopupMenuButton<String>(
+                        icon: const Icon(
+                          Icons.more_vert, // Three vertical dots icon
+                        ),
                         onSelected: (String choice) {
                           if (choice ==
                               Translate.of(context).translate('report_post')) {
