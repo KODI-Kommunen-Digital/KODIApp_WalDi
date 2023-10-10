@@ -36,20 +36,24 @@ class _MitredenWebviewState extends State<MitredenWebview> {
         WebViewWidget(controller: webViewController!),
         Center(
             child: (isLoading)
-                ? AlertDialog(
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Image.asset(
-                          Images.loading,
-                          width: 200,
-                          height: 200,
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          Translate.of(context).translate('loading'),
-                        ),
-                      ],
+                ? Container(
+                    color: Theme.of(context).colorScheme.background,
+                    child: Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            Images.loading,
+                            width: 250,
+                            height: 250,
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            Translate.of(context).translate('loading'),
+                          ),
+                        ],
+                      ),
                     ),
                   )
                 : Container())
