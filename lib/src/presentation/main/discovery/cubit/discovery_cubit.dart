@@ -89,6 +89,28 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
     return cityWebsites[cityId];
   }
 
+  Future<String?> getToruismLink() async {
+    final prefs = await Preferences.openBox();
+    int cityId = await prefs.getKeyValue(Preferences.cityId, 0);
+    Map<int, String> cityWebsites = {
+      0: "https://www.ilztal.de",
+      1: "https://www.region-sonnenwald.de/",
+      2: "https://www.ilztal.de",
+      3: "https://www.ferienregion-nationalpark.de/index.html",
+      4: "https://www.ferienregion-nationalpark.de/index.html",
+      5: "https://www.grafenau.de/tourismus-grafenau/de/startseite",
+      6: "https://www.ilztal.de",
+      7: "https://www.ilztal.de",
+      8: "https://www.ilztal.de",
+      9: "https://www.ilztal.de",
+      10: "https://www.ilztal.de",
+      11: "https://www.ilztal.de",
+      12: "https://www.ilztal.de"
+    };
+
+    return cityWebsites[cityId];
+  }
+
   Future<void> hideEmptyService() async {}
 
   bool getDoesScroll() {
