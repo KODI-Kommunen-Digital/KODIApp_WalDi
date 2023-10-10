@@ -21,6 +21,8 @@ import 'package:heidi/src/presentation/main/login/forgot_password/forgot_passwor
 import 'package:heidi/src/presentation/main/login/signin/signin_screen.dart';
 import 'package:heidi/src/presentation/main/login/signup/signup.dart';
 import 'package:heidi/src/presentation/main/account/profile_settings/profile_settings_screen.dart';
+import 'package:heidi/src/presentation/main/account/faq/cubit/faq_cubit.dart';
+import 'package:heidi/src/presentation/main/account/faq/faq_screen.dart';
 
 class RouteArguments<T> {
   final T? item;
@@ -75,6 +77,7 @@ class Routes {
   static const String privacy = "/privacy";
   static const String imageZoom = "/imageZoom";
   static const String profileSettings = "/profileSettings";
+  static const String faq = "/faq";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -226,6 +229,15 @@ class Routes {
             return const ContactUsSuccessScreen();
           },
           fullscreenDialog: true,
+        );
+      case faq:
+        return MaterialPageRoute(
+          builder: (context) {
+            return BlocProvider(
+              create: (context) => FaqCubit(),
+              child: const FaqScreen(),
+            );
+          },
         );
       default:
         const SignInScreen();

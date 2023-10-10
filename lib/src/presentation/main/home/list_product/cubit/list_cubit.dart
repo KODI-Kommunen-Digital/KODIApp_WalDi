@@ -13,6 +13,7 @@ enum ProductFilter {
 
 class ListCubit extends Cubit<ListState> {
   final ListRepository repo;
+
   ListCubit(this.repo) : super(const ListStateLoading()) {
     // final isEvent = categoryPreferencesCall();
   }
@@ -47,7 +48,7 @@ class ListCubit extends Cubit<ListState> {
     }
   }
 
-  Future<void> newListings(int pageNo, cityId) async {
+  Future<List<ProductModel>> newListings(int pageNo, cityId) async {
     final prefs = await Preferences.openBox();
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
     final type = prefs.getKeyValue(Preferences.type, '');
@@ -65,9 +66,9 @@ class ListCubit extends Cubit<ListState> {
     final listUpdated = result?[0];
     if (listUpdated.isNotEmpty) {
       list.addAll(listUpdated);
-      listLoaded = list;
-      emit(ListStateUpdated(list));
+      return list;
     }
+    return list;
   }
 
   List<ProductModel> getLoadedList() => listLoaded;
@@ -102,17 +103,21 @@ class ListCubit extends Cubit<ListState> {
     }
   }
 
-  DateTime? _parseDate(String dateString) {
+  DateTime? _parseDate(String dateTimeString) {
     try {
-      final parts = dateString.split('.');
-      if (parts.length == 3) {
-        final day = int.parse(parts[0]);
-        final month = int.parse(parts[1]);
-        final year = int.parse(parts[2]);
-        return DateTime(year, month, day);
+      final dateAndTimeParts = dateTimeString.split(' ');
+      if (dateAndTimeParts.isNotEmpty) {
+        final datePart = dateAndTimeParts[0];
+        final dateParts = datePart.split('.');
+        if (dateParts.length == 3) {
+          final day = int.parse(dateParts[0]);
+          final month = int.parse(dateParts[1]);
+          final year = int.parse(dateParts[2]);
+          return DateTime(year, month, day);
+        }
       }
     } catch (e) {
-      logError("Error parsing date: $dateString");
+      logError("Error parsing date: $dateTimeString");
     }
     return null;
   }

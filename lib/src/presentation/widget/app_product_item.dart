@@ -7,6 +7,7 @@ import 'package:heidi/src/presentation/main/home/widget/empty_product_item.dart'
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/translate.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 class AppProductItem extends StatelessWidget {
   const AppProductItem({
@@ -15,16 +16,19 @@ class AppProductItem extends StatelessWidget {
     this.onPressed,
     required this.type,
     this.trailing,
+    required this.isRefreshLoader,
   }) : super(key: key);
 
   final ProductModel? item;
   final ProductViewType type;
   final VoidCallback? onPressed;
   final Widget? trailing;
+  final bool isRefreshLoader;
 
   @override
   Widget build(BuildContext context) {
     String uniqueKey = UniqueKey().toString();
+    final memoryCacheManager = DefaultCacheManager();
     switch (type) {
       case ProductViewType.small:
         if (item == null) {
@@ -35,26 +39,18 @@ class AppProductItem extends StatelessWidget {
           child: Row(
             children: <Widget>[
               item?.pdf == ''
-                  ? CachedNetworkImage(
-                      imageUrl: item?.sourceId == 2
+                  ? Image.network(
+                      item?.sourceId == 2
                           ? item!.image
                           : item!.image == 'admin/News.jpeg'
                               ? "${Application.picturesURL}${item!.image}"
-                              : "${Application.picturesURL}${item!.image}?cacheKey=$uniqueKey",
-                      imageBuilder: (context, imageProvider) {
-                        return Container(
-                          width: 84,
-                          height: 84,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            image: DecorationImage(
-                              image: imageProvider,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        );
-                      },
-                      placeholder: (context, url) {
+                              : isRefreshLoader
+                                  ? "${Application.picturesURL}${item!.image}"
+                                  : "${Application.picturesURL}${item!.image}?cache=$uniqueKey",
+                      width: 84,
+                      height: 84,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
                         return AppPlaceholder(
                           child: Container(
                             decoration: BoxDecoration(
@@ -63,22 +59,22 @@ class AppProductItem extends StatelessWidget {
                             ),
                             width: 84,
                             height: 84,
+                            child: const Icon(Icons.error),
                           ),
                         );
                       },
-                      errorWidget: (context, url, error) {
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) {
+                          return child;
+                        }
                         return AppPlaceholder(
                           child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              color: Colors.white,
+                            ),
                             width: 84,
                             height: 84,
-                            decoration: const BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(8),
-                                bottomLeft: Radius.circular(8),
-                              ),
-                            ),
-                            child: const Icon(Icons.error),
                           ),
                         );
                       },
@@ -181,6 +177,7 @@ class AppProductItem extends StatelessWidget {
                 imageUrl: item?.sourceId == 2
                     ? item!.image
                     : "${Application.picturesURL}${item!.image}",
+                cacheManager: memoryCacheManager,
                 imageBuilder: (context, imageProvider) {
                   return Container(
                     height: 120,
@@ -282,56 +279,50 @@ class AppProductItem extends StatelessWidget {
               Row(
                 children: <Widget>[
                   item?.pdf == ''
-                      ? CachedNetworkImage(
-                          imageUrl: item?.sourceId == 2
-                              ? item!.image
-                              : item!.image == 'admin/News.jpeg'
-                                  ? "${Application.picturesURL}${item!.image}"
-                                  : "${Application.picturesURL}${item!.image}?cacheKey=$uniqueKey",
-                          imageBuilder: (context, imageProvider) {
-                            return Container(
-                              width: 120,
-                              height: 140,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: imageProvider,
-                                  fit: BoxFit.cover,
-                                ),
-                                borderRadius: BorderRadius.circular(11),
-                              ),
-                            );
-                          },
-                          placeholder: (context, url) {
-                            return AppPlaceholder(
-                              child: Container(
-                                width: 120,
-                                height: 140,
-                                decoration: const BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(8),
-                                    bottomLeft: Radius.circular(8),
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: Image.network(
+                            item?.sourceId == 2
+                                ? item!.image
+                                : item!.image == 'admin/News.jpeg'
+                                    ? "${Application.picturesURL}${item!.image}"
+                                    : isRefreshLoader
+                                        ? "${Application.picturesURL}${item!.image}"
+                                        : "${Application.picturesURL}${item!.image}?cache=$uniqueKey",
+                            width: 120,
+                            height: 140,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              // Handle errors here
+                              return AppPlaceholder(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: Colors.white,
                                   ),
+                                  width: 120,
+                                  height: 140,
+                                  child: const Icon(Icons.error),
                                 ),
-                              ),
-                            );
-                          },
-                          errorWidget: (context, url, error) {
-                            return AppPlaceholder(
-                              child: Container(
-                                width: 120,
-                                height: 140,
-                                decoration: const BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(8),
-                                    bottomLeft: Radius.circular(8),
+                              );
+                            },
+                            loadingBuilder: (context, child, loadingProgress) {
+                              // Display the AppPlaceholder while the image is loading
+                              if (loadingProgress == null) {
+                                return child;
+                              }
+                              return AppPlaceholder(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: Colors.white,
                                   ),
+                                  width: 120,
+                                  height: 140,
                                 ),
-                                child: const Icon(Icons.error),
-                              ),
-                            );
-                          },
+                              );
+                            },
+                          ),
                         )
                       : ClipRRect(
                           borderRadius: BorderRadius.circular(11),

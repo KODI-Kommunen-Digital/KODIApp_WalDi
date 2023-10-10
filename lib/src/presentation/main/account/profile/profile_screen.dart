@@ -13,6 +13,7 @@ import 'package:heidi/src/presentation/widget/app_user_info.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 class ProfileScreen extends StatelessWidget {
   final UserModel user;
@@ -67,16 +68,28 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
   bool isLoading = false;
   bool isSwiped = false;
   List<ProductModel> userListingsList = [];
+  bool isLoadingMore = false;
+  int pageNo = 1;
+  final _scrollController = ScrollController(initialScrollOffset: 0.0);
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_scrollListener);
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
     super.initState();
     userListingsList.addAll(widget.userListings);
+    _scrollController.addListener(_scrollListener);
   }
 
   @override
   Widget build(BuildContext context) {
     String uniqueKey = UniqueKey().toString();
+    final memoryCacheManager = DefaultCacheManager();
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -85,286 +98,324 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
         ),
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: RefreshIndicator(
-            onRefresh: _onRefresh,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 16),
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  margin: const EdgeInsets.symmetric(horizontal: 8),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: Theme.of(context).cardColor,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Theme.of(context).dividerColor.withOpacity(
-                              .05,
-                            ),
-                        spreadRadius: 4,
-                        blurRadius: 4,
-                        offset: const Offset(
-                          0,
-                          2,
-                        ), // changes position of shadow
-                      ),
-                    ],
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.all(8),
+              margin: const EdgeInsets.symmetric(horizontal: 8),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: Theme.of(context).cardColor,
+                boxShadow: [
+                  BoxShadow(
+                    color: Theme.of(context).dividerColor.withOpacity(
+                          .05,
+                        ),
+                    spreadRadius: 4,
+                    blurRadius: 4,
+                    offset: const Offset(
+                      0,
+                      2,
+                    ), // changes position of shadow
                   ),
-                  child: AppUserInfo(
-                    user: widget.user,
-                    type: UserViewType.information,
-                    showDirectionIcon: false,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Text(
-                    Translate.of(context).translate('profile_listings'),
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge!
-                        .copyWith(fontWeight: FontWeight.bold),
-                  ),
-                ),
-                Stack(children: [
-                  Center(
-                    child: Visibility(
-                      visible: isLoading,
-                      child: const CircularProgressIndicator.adaptive(),
-                    ),
-                  ),
-                  userListingsList == []
-                      ? Container()
-                      : ListView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          padding: const EdgeInsets.only(top: 8),
-                          itemCount: userListingsList.length,
-                          itemBuilder: (context, index) {
-                            final item = userListingsList[index];
-                            return Slidable(
-                              endActionPane: !widget.isEditable
-                                  ? null
-                                  : ActionPane(
-                                      motion: const ScrollMotion(),
-                                      children: [
-                                        SlidableAction(
-                                          onPressed: (aContext) {
-                                            Navigator.pushNamed(
-                                                context, Routes.submit,
-                                                arguments: {
+                ],
+              ),
+              child: AppUserInfo(
+                user: widget.user,
+                type: UserViewType.information,
+                showDirectionIcon: false,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Text(
+                Translate.of(context).translate('profile_listings'),
+                style: Theme.of(context)
+                    .textTheme
+                    .titleLarge!
+                    .copyWith(fontWeight: FontWeight.bold),
+              ),
+            ),
+            Expanded(
+              child: Stack(children: [
+                CustomScrollView(
+                  controller: _scrollController,
+                  slivers: <Widget>[
+                    SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        childCount: userListingsList.length,
+                        (BuildContext context, int index) {
+                          final item = userListingsList[index];
+                          return userListingsList == []
+                              ? Container()
+                              : Slidable(
+                                  endActionPane: !widget.isEditable
+                                      ? null
+                                      : ActionPane(
+                                          motion: const ScrollMotion(),
+                                          children: [
+                                            SlidableAction(
+                                              onPressed: (aContext) {
+                                                Navigator.pushNamed(context,
+                                                    Routes.submit, arguments: {
                                                   'item':
                                                       userListingsList[index],
                                                   'isNewList': false
                                                 }).then((value) async {
-                                              final response = await context
-                                                  .read<ProfileCubit>()
-                                                  .loadUserListing(
-                                                      widget.user.id);
-                                              setState(() {
-                                                userListingsList = response;
-                                              });
-                                            });
-                                          },
-                                          backgroundColor: Colors.blue,
-                                          foregroundColor: Colors.white,
-                                          icon: Icons.edit,
-                                          label: Translate.of(context)
-                                              .translate('edit'),
-                                        ),
-                                        SlidableAction(
-                                          onPressed: (aContext) async {
-                                            showDeleteConfirmation(
-                                                context, index);
-                                          },
-                                          backgroundColor: Colors.red,
-                                          foregroundColor: Colors.white,
-                                          icon: Icons.delete,
-                                          label: Translate.of(context)
-                                              .translate('delete'),
-                                        ),
-                                      ],
-                                    ),
-                              key:
-                                  Key(item.id.toString() + isSwiped.toString()),
-                              child: InkWell(
-                                onTap: () {
-                                  _onProductDetail(item);
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.only(bottom: 16),
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 16),
-                                    child: Stack(
-                                      children: [
-                                        Row(
-                                          children: <Widget>[
-                                            item.pdf == ''
-                                                ? CachedNetworkImage(
-                                                    imageUrl: item.sourceId == 2
-                                                        ? item.image
-                                                        : item.image ==
-                                                                'admin/News.jpeg'
-                                                            ? "${Application.picturesURL}${item.image}"
-                                                            : "${Application.picturesURL}${item.image}?cacheKey=$uniqueKey",
-                                                    imageBuilder: (context,
-                                                        imageProvider) {
-                                                      return Container(
-                                                        width: 120,
-                                                        height: 140,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          image:
-                                                              DecorationImage(
-                                                            image:
-                                                                imageProvider,
-                                                            fit: BoxFit.cover,
-                                                          ),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(11),
-                                                        ),
-                                                      );
-                                                    },
-                                                    placeholder:
-                                                        (context, url) {
-                                                      return AppPlaceholder(
-                                                        child: Container(
-                                                          width: 120,
-                                                          height: 140,
-                                                          decoration:
-                                                              const BoxDecoration(
-                                                            color: Colors.white,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .only(
-                                                              topLeft: Radius
-                                                                  .circular(8),
-                                                              bottomLeft: Radius
-                                                                  .circular(8),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      );
-                                                    },
-                                                    errorWidget:
-                                                        (context, url, error) {
-                                                      return AppPlaceholder(
-                                                        child: Container(
-                                                          width: 120,
-                                                          height: 140,
-                                                          decoration:
-                                                              const BoxDecoration(
-                                                            color: Colors.white,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .only(
-                                                              topLeft: Radius
-                                                                  .circular(8),
-                                                              bottomLeft: Radius
-                                                                  .circular(8),
-                                                            ),
-                                                          ),
-                                                          child: const Icon(
-                                                              Icons.error),
-                                                        ),
-                                                      );
-                                                    },
-                                                  )
-                                                : ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            11),
-                                                    child: SizedBox(
-                                                        width: 120,
-                                                        height: 140,
-                                                        child: const PDF()
-                                                            .cachedFromUrl(
-                                                          "${Application.picturesURL}${item.pdf}?cacheKey=$uniqueKey",
-                                                          placeholder:
-                                                              (progress) => Center(
-                                                                  child: Text(
-                                                                      '$progress %')),
-                                                          errorWidget:
-                                                              (error) => Center(
-                                                                  child: Text(error
-                                                                      .toString())),
-                                                        )),
-                                                  ),
-                                            const SizedBox(width: 8),
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: <Widget>[
-                                                  Text(
-                                                    userListingsList[index]
-                                                            .category ??
-                                                        '',
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .bodySmall!
-                                                        .copyWith(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                  ),
-                                                  const SizedBox(height: 8),
-                                                  Text(
-                                                    userListingsList[index]
-                                                        .title,
-                                                    maxLines: 2,
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .titleSmall!
-                                                        .copyWith(
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                  ),
-                                                  const SizedBox(height: 8),
-                                                  Text(
-                                                    userListingsList[index]
-                                                                .categoryId ==
-                                                            3
-                                                        ? "${userListingsList[index].startDate} ${Translate.of(context).translate('to')} ${userListingsList[index].endDate}"
-                                                        : userListingsList[
-                                                                index]
-                                                            .createDate,
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .bodySmall!
-                                                        .copyWith(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                  ),
-                                                  const SizedBox(height: 8),
-                                                  const SizedBox(height: 8),
-                                                  const SizedBox(height: 4),
-                                                ],
-                                              ),
-                                            )
+                                                  final response = await context
+                                                      .read<ProfileCubit>()
+                                                      .loadUserListing(
+                                                          widget.user.id, 1);
+                                                  setState(() {
+                                                    userListingsList = response;
+                                                  });
+                                                });
+                                              },
+                                              backgroundColor: Colors.blue,
+                                              foregroundColor: Colors.white,
+                                              icon: Icons.edit,
+                                              label: Translate.of(context)
+                                                  .translate('edit'),
+                                            ),
+                                            SlidableAction(
+                                              onPressed: (aContext) async {
+                                                showDeleteConfirmation(
+                                                    context, index);
+                                              },
+                                              backgroundColor: Colors.red,
+                                              foregroundColor: Colors.white,
+                                              icon: Icons.delete,
+                                              label: Translate.of(context)
+                                                  .translate('delete'),
+                                            ),
                                           ],
                                         ),
-                                      ],
+                                  key: Key(
+                                      item.id.toString() + isSwiped.toString()),
+                                  child: InkWell(
+                                    onTap: () {
+                                      _onProductDetail(item);
+                                    },
+                                    child: Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 16),
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 16),
+                                        child: Stack(
+                                          children: [
+                                            Row(
+                                              children: <Widget>[
+                                                item.pdf == ''
+                                                    ? CachedNetworkImage(
+                                                        imageUrl: item
+                                                                    .sourceId ==
+                                                                2
+                                                            ? item.image
+                                                            : item.image ==
+                                                                    'admin/News.jpeg'
+                                                                ? "${Application.picturesURL}${item.image}"
+                                                                : "${Application.picturesURL}${item.image}?cacheKey=$uniqueKey",
+                                                        cacheManager:
+                                                            memoryCacheManager,
+                                                        imageBuilder: (context,
+                                                            imageProvider) {
+                                                          return Container(
+                                                            width: 120,
+                                                            height: 140,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              image:
+                                                                  DecorationImage(
+                                                                image:
+                                                                    imageProvider,
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                              ),
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          11),
+                                                            ),
+                                                          );
+                                                        },
+                                                        placeholder:
+                                                            (context, url) {
+                                                          return AppPlaceholder(
+                                                            child: Container(
+                                                              width: 120,
+                                                              height: 140,
+                                                              decoration:
+                                                                  const BoxDecoration(
+                                                                color: Colors
+                                                                    .white,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .only(
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          8),
+                                                                  bottomLeft: Radius
+                                                                      .circular(
+                                                                          8),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          );
+                                                        },
+                                                        errorWidget: (context,
+                                                            url, error) {
+                                                          return AppPlaceholder(
+                                                            child: Container(
+                                                              width: 120,
+                                                              height: 140,
+                                                              decoration:
+                                                                  const BoxDecoration(
+                                                                color: Colors
+                                                                    .white,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .only(
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          8),
+                                                                  bottomLeft: Radius
+                                                                      .circular(
+                                                                          8),
+                                                                ),
+                                                              ),
+                                                              child: const Icon(
+                                                                  Icons.error),
+                                                            ),
+                                                          );
+                                                        },
+                                                      )
+                                                    : ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(11),
+                                                        child: SizedBox(
+                                                            width: 120,
+                                                            height: 140,
+                                                            child: const PDF()
+                                                                .cachedFromUrl(
+                                                              "${Application.picturesURL}${item.pdf}?cacheKey=$uniqueKey",
+                                                              placeholder:
+                                                                  (progress) =>
+                                                                      Center(
+                                                                          child:
+                                                                              Text('$progress %')),
+                                                              errorWidget:
+                                                                  (error) => Center(
+                                                                      child: Text(
+                                                                          error
+                                                                              .toString())),
+                                                            )),
+                                                      ),
+                                                const SizedBox(width: 8),
+                                                Expanded(
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: <Widget>[
+                                                      Text(
+                                                        userListingsList[index]
+                                                                .category ??
+                                                            '',
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .bodySmall!
+                                                            .copyWith(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                      ),
+                                                      const SizedBox(height: 8),
+                                                      Text(
+                                                        userListingsList[index]
+                                                            .title,
+                                                        maxLines: 2,
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .titleSmall!
+                                                            .copyWith(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                      ),
+                                                      const SizedBox(height: 8),
+                                                      Text(
+                                                        userListingsList[index]
+                                                                    .categoryId ==
+                                                                3
+                                                            ? "${userListingsList[index].startDate} ${Translate.of(context).translate('to')} ${userListingsList[index].endDate}"
+                                                            : userListingsList[
+                                                                    index]
+                                                                .createDate,
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .bodySmall!
+                                                            .copyWith(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                      ),
+                                                      const SizedBox(height: 8),
+                                                      const SizedBox(height: 8),
+                                                      const SizedBox(height: 4),
+                                                    ],
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ),
-                            );
-                          }),
-                ]),
-              ],
+                                );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                if (isLoadingMore)
+                  const Positioned(
+                    bottom: 5,
+                    left: 0,
+                    right: 0,
+                    child: Center(
+                      child: CircularProgressIndicator.adaptive(),
+                    ),
+                  ),
+              ]),
             ),
-          ),
+          ],
         ),
       ),
     );
+  }
+
+  Future<void> _scrollListener() async {
+    if (_scrollController.position.atEdge) {
+      if (_scrollController.position.pixels != 0) {
+        setState(() {
+          isLoadingMore = true;
+        });
+        userListingsList.addAll(await context
+            .read<ProfileCubit>()
+            .newListings(widget.user.id, ++pageNo));
+        setState(() {
+          isLoadingMore = false;
+        });
+      }
+    }
   }
 
   void _onProductDetail(ProductModel item) {
@@ -408,9 +459,5 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
       });
       await AppBloc.homeCubit.onLoad(false);
     }
-  }
-
-  Future<void> _onRefresh() async {
-    context.read<ProfileCubit>().loadUserListing(widget.user.id);
   }
 }
