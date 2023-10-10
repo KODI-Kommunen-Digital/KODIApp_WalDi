@@ -350,6 +350,9 @@ class _ListLoadedState extends State<ListLoaded> {
                 .then((value) async {
               logError('Value', value);
               await context.read<ListGroupsCubit>().onLoad();
+              setState(() {
+
+              });
             });
             //     .then((value)
             // {

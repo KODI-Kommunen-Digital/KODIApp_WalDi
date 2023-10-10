@@ -62,12 +62,13 @@ class ListGroupsCubit extends Cubit<ListGroupsState> {
     }
   }
 
-  Future<bool> requestToJoinGroup(forumId) async {
+  Future<String> requestToJoinGroup(forumId) async {
     final response = await repo.requestToJoinGroup(forumId);
-    if (response) {
-      return true;
+    if (response!.success) {
+      final data = response.data;
+      return data['message'];
     } else {
-      return false;
+      return '';
     }
   }
 

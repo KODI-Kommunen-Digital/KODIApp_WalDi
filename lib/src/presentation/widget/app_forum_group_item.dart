@@ -130,12 +130,13 @@ class _ForumGroupItemState extends State<ForumGroupItem> {
                     ),
                     InkWell(
                       onTap: () {
-                        if (widget.item?.isRequested == false) {
-                          if (widget.item?.isJoined == false) {
+                        if (isRequested == false) {
+                          if (isJoined == false) {
                             showJoinGroupDialog(context, widget.item?.id);
                           } else {
                             Navigator.pushNamed(context, Routes.groupDetails,
-                                arguments: widget.item).then((value) async {
+                                    arguments: widget.item)
+                                .then((value) async {
                               logError('Value', value);
                               await context.read<ListGroupsCubit>().onLoad();
                             });
@@ -201,7 +202,14 @@ class _ForumGroupItemState extends State<ForumGroupItem> {
       if (!mounted) return;
       final joinRequestResponse =
           await context.read<ListGroupsCubit>().requestToJoinGroup(id);
-      if (joinRequestResponse) {
+      if (joinRequestResponse == 'Member added successfully' ) {
+        setState(() {
+          groupStatus = 'zur Gruppe';
+          isJoined = true;
+          isRequested = false;
+        });
+
+      } else if (joinRequestResponse == 'Request sent successfully') {
         setState(() {
           groupStatus = 'Anfrage verschickt';
           isJoined = true;

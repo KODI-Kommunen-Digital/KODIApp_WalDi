@@ -87,14 +87,14 @@ class ForumRepository {
     return null;
   }
 
-  Future<bool> requestToJoinGroup(forumId) async {
+  Future<ResultApiModel?> requestToJoinGroup(forumId) async {
     final cityId = prefs.getKeyValue(Preferences.cityId, 0);
     final response = await Api.requestToJoinGroup(forumId, cityId);
     if (response.success) {
-      return true;
+      return response;
     } else {
       logError('Request To Join Group Response Failed', response.message);
-      return false;
+      return null;
     }
   }
 
@@ -104,7 +104,7 @@ class ForumRepository {
     if (response.success) {
       return true;
     } else {
-      logError('Request To Join Group Response Failed', response.message);
+      logError('Request To Remove User From Group Response Failed', response.message);
       return false;
     }
   }
