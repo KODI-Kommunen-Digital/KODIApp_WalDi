@@ -33,6 +33,13 @@ class Api {
     }
   }
 
+  static Future<ResultApiModel> requestRefreshToken(userId, params) async {
+    final result = await HTTPManager(forum: false)
+        .post(url: '/users/$userId/refresh', data: params);
+
+    return ResultApiModel.fromJson(result);
+  }
+
   static Future<ResultApiModel> requestFavorites(userId) async {
     final result =
         await HTTPManager(forum: false).get(url: '/users/$userId/favorites/');

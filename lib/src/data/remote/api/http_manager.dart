@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
-import 'package:heidi/src/data/model/model.dart';
+import 'package:heidi/src/data/remote/api/api.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/logger.dart';
@@ -54,18 +54,13 @@ class HTTPManager {
         logError('Errors', error.response?.data);
         if (error.response?.data['message'] ==
             'Unauthorized! Token was expired!') {
-          _baseUrl = 'https://test.smartregion-auf.de/api';
-          // forum = false;
           final prefs = await Preferences.openBox();
           var rToken = prefs.getKeyValue(Preferences.refreshToken, '');
           final userId = prefs.getKeyValue(Preferences.userId, '');
           final Map<String, dynamic> params = {
             "refreshToken": rToken,
           };
-          _baseUrl = 'https://test.smartregion-auf.de/api';
-          final result =
-              await post(url: '/users/$userId/refresh', data: params);
-          final response = ResultApiModel.fromJson(result);
+          final response = await Api.requestRefreshToken(userId, params);
           if (response.success) {
             final newToken = response.data['accessToken'];
             prefs.setKeyValue(Preferences.token, newToken);
