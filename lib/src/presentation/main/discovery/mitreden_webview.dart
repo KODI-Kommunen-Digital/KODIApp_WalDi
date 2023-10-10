@@ -24,45 +24,48 @@ class _MitredenWebviewState extends State<MitredenWebview> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(children: [
-        InAppWebView(
-          initialUrlRequest: URLRequest(url: Uri.parse(widget.link)),
-          onWebViewCreated: (InAppWebViewController controller) {
-            webViewController = controller;
-          },
-          onProgressChanged: (InAppWebViewController controller, int progress) {
-            if (progress == 100) {
-              setState(() {
-                isLoading = false;
-              });
-            }
-          },
-        ),
-        Center(
-            child: (isLoading)
-                ? Container(
-                    color: Theme.of(context).colorScheme.background,
-                    child: Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            Images.loading,
-                            width: 250,
-                            height: 250,
-                          ),
-                          const SizedBox(height: 16),
-                          Text(
-                            Translate.of(context).translate('loading'),
-                          ),
-                        ],
+    return SafeArea(
+      child: Scaffold(
+        body: Stack(children: [
+          InAppWebView(
+            initialUrlRequest: URLRequest(url: Uri.parse(widget.link)),
+            onWebViewCreated: (InAppWebViewController controller) {
+              webViewController = controller;
+            },
+            onProgressChanged:
+                (InAppWebViewController controller, int progress) {
+              if (progress == 100) {
+                setState(() {
+                  isLoading = false;
+                });
+              }
+            },
+          ),
+          Center(
+              child: (isLoading)
+                  ? Container(
+                      color: Theme.of(context).colorScheme.background,
+                      child: Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              Images.loading,
+                              width: 250,
+                              height: 250,
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              Translate.of(context).translate('loading'),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  )
-                : Container())
-      ]),
+                    )
+                  : Container())
+        ]),
+      ),
     );
   }
 }
