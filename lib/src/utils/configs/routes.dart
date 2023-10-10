@@ -14,6 +14,7 @@ import 'package:heidi/src/presentation/main/account/profile/profile_screen.dart'
 import 'package:heidi/src/presentation/main/account/setting/settings_screen.dart';
 import 'package:heidi/src/presentation/main/add_listing/add_listing_screen.dart';
 import 'package:heidi/src/presentation/main/add_listing/add_listing_success/add_listing_success.dart';
+import 'package:heidi/src/presentation/main/discovery/mitreden_webview.dart';
 import 'package:heidi/src/presentation/main/home/list_product/list_product.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/image_zoom/image_zoom_screen.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/product_detail.dart';
@@ -77,6 +78,7 @@ class Routes {
   static const String privacy = "/privacy";
   static const String imageZoom = "/imageZoom";
   static const String profileSettings = "/profileSettings";
+  static const String mitredenWebview = "/mitredenWebview";
   static const String faq = "/faq";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -95,6 +97,13 @@ class Routes {
           builder: (context) {
             return ProductDetailScreen(
                 item: settings.arguments as ProductModel);
+          },
+        );
+
+      case mitredenWebview:
+        return MaterialPageRoute(
+          builder: (context) {
+            return MitredenWebview(link: settings.arguments as String);
           },
         );
 
