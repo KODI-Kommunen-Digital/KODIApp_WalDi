@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:heidi/src/utils/configs/image.dart';
 import 'package:heidi/src/utils/translate.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 class MitredenWebview extends StatefulWidget {
   final String link;
@@ -15,25 +15,30 @@ class MitredenWebview extends StatefulWidget {
 class _MitredenWebviewState extends State<MitredenWebview> {
   bool isLoading = true;
 
-  WebViewController? webViewController;
+  InAppWebViewController? webViewController;
 
   @override
   void initState() {
     super.initState();
-    webViewController = WebViewController()
-      ..loadRequest(Uri.parse(widget.link))
-      ..setNavigationDelegate(NavigationDelegate(onPageFinished: (url) {
-        setState(() {
-          isLoading = false;
-        });
-      }));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(children: [
-        WebViewWidget(controller: webViewController!),
+        InAppWebView(
+          initialUrlRequest: URLRequest(url: Uri.parse(widget.link)),
+          onWebViewCreated: (InAppWebViewController controller) {
+            webViewController = controller;
+          },
+          onProgressChanged: (InAppWebViewController controller, int progress) {
+            if (progress == 100) {
+              setState(() {
+                isLoading = false;
+              });
+            }
+          },
+        ),
         Center(
             child: (isLoading)
                 ? Container(
