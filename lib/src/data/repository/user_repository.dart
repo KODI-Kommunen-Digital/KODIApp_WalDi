@@ -56,6 +56,11 @@ class UserRepository {
     return UserModel.fromJson(response1.data);
   }
 
+  static Future<bool> doesUserExist(userId) async {
+    final response = await Api.requestUser(userId: userId);
+    return response.success;
+  }
+
   static Future<UserModel?> loadUser() async {
     final prefs = await Preferences.openBox();
     final result = prefs.getKeyValue(Preferences.user, '');
