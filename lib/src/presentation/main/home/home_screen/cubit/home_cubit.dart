@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
-import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
@@ -80,16 +79,7 @@ class HomeCubit extends Cubit<HomeState> {
     if (userId == 0) return true;
 
     bool doesExist = await UserRepository.doesUserExist(userId);
-    UserModel? localUser = await UserRepository.loadUser();
-
-    if (doesExist) {
-      UserModel? savedUser = await UserRepository.requestUserDetails(userId);
-
-      if (localUser?.email == savedUser?.email) {
-        return true;
-      }
-    }
-    return false;
+    return doesExist;
   }
 
   Future<bool> categoryHasContent(int id, int? cityId) async {
