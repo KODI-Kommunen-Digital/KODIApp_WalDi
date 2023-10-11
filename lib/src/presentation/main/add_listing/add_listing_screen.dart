@@ -92,6 +92,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
   bool isImageChanged = false;
 
   int? currentCity;
+  late List<dynamic> jsonCategory;
 
   @override
   void initState() {
@@ -170,7 +171,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
     final loadCategoryResponse =
         await context.read<AddListingCubit>().loadCategory();
     if (!loadCategoryResponse?.data.isEmpty) {
-      var jsonCategory = loadCategoryResponse!.data;
+      jsonCategory = loadCategoryResponse!.data;
       final selectedCategory = jsonCategory.first['name'];
       if (!mounted) return;
       final subCategoryResponse = await context
@@ -215,7 +216,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
       _textPhoneController.text = widget.item?.phone ?? '';
       _textEmailController.text = widget.item?.email ?? '';
       _textWebsiteController.text = widget.item?.website ?? '';
-      selectedCategory = widget.item!.category;
+      selectedCategory = jsonCategory
+          .firstWhere((element) => element["id"] == widget.item!.categoryId)["name"];
+
       final city = listCity
           .firstWhere((element) => element['id'] == widget.item?.cityId);
       selectedCity = city['name'];
@@ -274,9 +277,10 @@ class _AddListingScreenState extends State<AddListingScreen> {
         if (selectedCategory == "news" || selectedCategory == null) {
           final subCategoryResponse = await context
               .read<AddListingCubit>()
-              .loadSubCategory(Translate.of(context).translate(
-                  _getCategoryTranslation(
-                      loadCategoryResponse!.data.first['id'])).toLowerCase());
+              .loadSubCategory(Translate.of(context)
+                  .translate(_getCategoryTranslation(
+                      loadCategoryResponse!.data.first['id']))
+                  .toLowerCase());
           setState(() {
             listSubCategory = subCategoryResponse!.data;
           });
@@ -508,7 +512,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
     _errorContent =
         UtilValidator.validate(_textContentController.text, allowEmpty: false);
 
-    if (selectedCategory == "Events") {
+    if (selectedCategory == "events") {
       if (_startDate == null || _startDate == "" || _startTime == null) {
         _errorSDate = "value_not_date_empty";
       } else {
@@ -756,9 +760,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
                           )),
               ],
             ),
-            if (selectedCategory == "News" || selectedCategory == null)
+            if (selectedCategory == "news" || selectedCategory == null)
               const SizedBox(height: 8),
-            if (selectedCategory == "News" || selectedCategory == null)
+            if (selectedCategory == "news" || selectedCategory == null)
               Text.rich(
                 TextSpan(
                   text: Translate.of(context).translate('subCategory'),
@@ -780,7 +784,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
             const SizedBox(height: 8),
             Row(
               children: [
-                if (selectedCategory == "News")
+                if (selectedCategory == "news")
                   Expanded(
                       child: listSubCategory.isEmpty
                           ? const LinearProgressIndicator()
@@ -810,7 +814,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
                             )),
               ],
             ),
-            if (selectedCategory == "News" || selectedCategory == null)
+            if (selectedCategory == "news" || selectedCategory == null)
               const SizedBox(height: 8),
             const SizedBox(height: 8),
             Text.rich(
