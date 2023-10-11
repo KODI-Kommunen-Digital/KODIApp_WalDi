@@ -81,11 +81,6 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
           updated: (list) {
             return Container();
           },
-          // {
-          //   return DiscoveryLoaded(
-          //     services: list,
-          //   );
-          // },
           error: (e) => ErrorWidget('Failed to load listings.'),
           initial: () {
             return Container();
@@ -238,8 +233,15 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
           Uri.parse(await AppBloc.discoveryCubit.getCityLink() ?? ""),
           mode: LaunchMode.inAppWebView);
     } else if (service.imageLink == "10") {
-      Navigator.pushNamed(context, Routes.listGroups,
-          arguments: {'id': service.arguments, 'title': 'Forums'});
+      final cityId = await context.read<DiscoveryCubit>().getCitySelected();
+      if (cityId != 0) {
+        if (!mounted) return;
+        Navigator.pushNamed(context, Routes.listGroups,
+            arguments: {'id': service.arguments, 'title': 'Forums'});
+      } else {
+        if (!mounted) return;
+        _showCitySelectionPopup(context);
+      }
     } else {
       AppBloc.discoveryCubit
           .setServiceValue(Preferences.type, service.type, null);
@@ -250,5 +252,31 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
       Navigator.pushNamed(context, Routes.listProduct,
           arguments: {'id': service.arguments, 'title': ''});
     }
+  }
+
+  void _showCitySelectionPopup(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Select City'),
+          content: const Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Please select a city to enter the forum.'),
+              SizedBox(height: 16),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
