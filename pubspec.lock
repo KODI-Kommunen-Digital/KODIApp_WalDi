@@ -1210,8 +1210,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.10.0"
-<<<<<<< HEAD
-=======
   sprintf:
     dependency: transitive
     description:
@@ -1220,7 +1218,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.0.0"
->>>>>>> feature/forum_view_groups
   sqflite:
     dependency: transitive
     description:
@@ -1582,10 +1579,5 @@ packages:
     source: hosted
     version: "3.1.2"
 sdks:
-<<<<<<< HEAD
-  dart: ">=3.1.0-185.0.dev <4.0.0"
-  flutter: ">=3.10.0"
-=======
   dart: ">=3.1.0 <4.0.0"
   flutter: ">=3.13.0"
->>>>>>> feature/forum_view_groups
