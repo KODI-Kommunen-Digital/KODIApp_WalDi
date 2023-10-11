@@ -10,13 +10,13 @@ class ForumGroupModel {
 
   ForumGroupModel(
       {this.id,
-        this.forumName,
-        this.createdAt,
-        this.description,
-        this.image,
-        this.isPrivate,
-        this.isJoined,
-        this.isRequested});
+      this.forumName,
+      this.createdAt,
+      this.description,
+      this.image,
+      this.isPrivate,
+      this.isJoined,
+      this.isRequested});
 
   ForumGroupModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];

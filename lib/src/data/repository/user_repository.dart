@@ -70,7 +70,7 @@ class UserRepository {
     return null;
   }
 
-  static Future<int> getLoggedUserId() async{
+  static Future<int> getLoggedUserId() async {
     final prefs = await Preferences.openBox();
     final userId = prefs.getKeyValue(Preferences.userId, 0);
     return userId;
@@ -83,6 +83,7 @@ class UserRepository {
     }
     return null;
   }
+
   static Future<UserModel?> getUserDetails(userId, cityId) async {
     final response = await Api.getUserDetails(userId, cityId);
     if (response.success) {

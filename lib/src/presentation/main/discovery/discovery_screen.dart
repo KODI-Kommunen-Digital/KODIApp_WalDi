@@ -217,22 +217,6 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
     );
   }
 
-  void _onPopUpError() {
-    showDialog<String>(
-      context: context,
-      builder: (BuildContext context) => AlertDialog(
-        title: Text(Translate.of(context).translate('functionNotAvail')),
-        content: Text(Translate.of(context).translate('functionNotAvailBody')),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () => Navigator.pop(context, 'OK'),
-            child: const Text('OK'),
-          ),
-        ],
-      ),
-    );
-  }
-
   Future<void> navigateToLink(CitizenServiceModel service) async {
     if (service.imageLink == "1") {
       await launchUrl(Uri.parse('https://mitreden.ilzerland.bayern/ringelai'),
@@ -242,7 +226,8 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
           Uri.parse(await AppBloc.discoveryCubit.getCityLink() ?? ""),
           mode: LaunchMode.inAppWebView);
     } else if (service.imageLink == "10") {
-      _onPopUpError();
+      Navigator.pushNamed(context, Routes.listGroups,
+          arguments: {'id': service.arguments, 'title': 'Forums'});
     } else {
       AppBloc.discoveryCubit
           .setServiceValue(Preferences.type, service.type, null);

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/utils/configs/application.dart';
@@ -23,6 +24,7 @@ class AppUserInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String uniqueKey = UniqueKey().toString();
+
     switch (type) {
       case UserViewType.information:
         if (user == null) {
