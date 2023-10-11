@@ -46,13 +46,6 @@ class DashboardScreen extends StatelessWidget {
                 );
               },
             ),
-            GridItemButton(
-              icon: Icons.group,
-              title: Translate.of(context).translate("my_groups"),
-              onPressed: () {
-                // Add your action here
-              },
-            ),
           ],
         ),
       ),
