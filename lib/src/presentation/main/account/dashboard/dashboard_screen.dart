@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:heidi/src/presentation/cubit/app_bloc.dart';
+import 'package:heidi/src/data/model/model_user.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class DashboardScreen extends StatelessWidget {
-  const DashboardScreen({super.key});
+  final UserModel user;
+
+  const DashboardScreen({required this.user, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +33,7 @@ class DashboardScreen extends StatelessWidget {
               title: Translate.of(context).translate("all_listings"),
               onPressed: () {
                 Navigator.of(context).pushNamed(Routes.allListings, arguments: {
-                  "user": AppBloc.userCubit.state!,
-                  "isEditable": true
+                  "user": user,
                 });
               },
             ),

@@ -157,10 +157,8 @@ class _AccountLoadedState extends State<AccountLoaded> {
                       AppListTitle(
                         title: Translate.of(context).translate('dashboard'),
                         onPressed: () {
-                          Navigator.pushNamed(
-                            context,
-                            Routes.dashboard,
-                          );
+                          Navigator.pushNamed(context, Routes.dashboard,
+                              arguments: {"user": user});
                         },
                         trailing: RotatedBox(
                           quarterTurns: AppLanguage.isRTL() ? 2 : 0,
