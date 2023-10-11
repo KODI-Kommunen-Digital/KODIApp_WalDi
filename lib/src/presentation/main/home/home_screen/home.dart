@@ -86,7 +86,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-
   Future<void> _scrollListener() async {
     if (_scrollController.position.atEdge) {
       if (_scrollController.position.pixels != 0) {
@@ -138,6 +137,19 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  List<ProductModel>? filterList(List<ProductModel>? recent) {
+    if (recent != null) {
+      List<ProductModel> newRecent = [];
+      for (var listing in recent) {
+        if (listing.categoryId != 16) {
+          newRecent.add(listing);
+        }
+      }
+      return newRecent;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -179,6 +191,8 @@ class _HomeScreenState extends State<HomeScreen> {
             recent = state.recent;
             categoryLoading = false;
             isRefreshLoader = true;
+
+            recent = filterList(recent);
 
             if (location != null) {
               for (final ids in location!) {
