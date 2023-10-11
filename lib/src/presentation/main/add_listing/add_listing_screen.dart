@@ -276,7 +276,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
               .read<AddListingCubit>()
               .loadSubCategory(Translate.of(context).translate(
                   _getCategoryTranslation(
-                      loadCategoryResponse!.data.first['id'])));
+                      loadCategoryResponse!.data.first['id'])).toLowerCase());
           setState(() {
             listSubCategory = subCategoryResponse!.data;
           });
