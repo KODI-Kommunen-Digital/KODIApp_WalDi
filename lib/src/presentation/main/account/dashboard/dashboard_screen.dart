@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:heidi/src/presentation/cubit/app_bloc.dart';
+import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class DashboardScreen extends StatelessWidget {
@@ -27,7 +29,12 @@ class DashboardScreen extends StatelessWidget {
             GridItemButton(
               icon: Icons.list,
               title: Translate.of(context).translate("all_listings"),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pushNamed(Routes.allListings, arguments: {
+                  "user": AppBloc.userCubit.state!,
+                  "isEditable": true
+                });
+              },
             ),
             GridItemButton(
               icon: Icons.local_offer,
