@@ -4,6 +4,7 @@ import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/all_listings/cubit/all_listings_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/all_listings/cubit/all_listings_state.dart';
+import 'package:heidi/src/utils/translate.dart';
 
 class AllListingsScreen extends StatelessWidget {
   final UserModel user;
@@ -44,6 +45,15 @@ class AllListingsLoaded extends StatefulWidget {
 class _AllListingsLoadedState extends State<AllListingsLoaded> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text(
+            Translate.of(context).translate('all_listings'),
+          ),
+        ),
+        body: SafeArea(
+          child: Container(),
+        ));
   }
 }

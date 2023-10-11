@@ -4,7 +4,9 @@ import 'package:heidi/src/data/remote/api/api.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/all_listings/cubit/all_listings_state.dart';
 
 class AllListingsCubit extends Cubit<AllListingsState> {
-  AllListingsCubit() : super(const AllListingsState.loading());
+  AllListingsCubit() : super(const AllListingsState.loading()) {
+    onLoad();
+  }
 
   dynamic posts;
 
