@@ -5,7 +5,6 @@ import 'package:heidi/src/data/model/model_request_member.dart';
 import 'package:heidi/src/data/model/model_users_joined_group.dart';
 import 'package:heidi/src/data/repository/forum_repository.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
-import 'package:heidi/src/utils/configs/preferences.dart';
 
 import 'cubit.dart';
 
