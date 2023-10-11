@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_forum_group.dart';
 import 'package:heidi/src/data/model/model_setting.dart';
-import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/home/list_product/cubit/cubit.dart';
 import 'package:heidi/src/presentation/widget/app_forum_group_item.dart';
 import 'package:heidi/src/presentation/widget/app_navbar.dart';
@@ -39,19 +38,25 @@ class _ListGroupScreenState extends State<ListGroupScreen> {
   }
 
   void _onAddGroup() async {
-    if (AppBloc.userCubit.state == null) {
+    final userId = await context.read<ListGroupsCubit>().getLoggedInUserId();
+    if (userId == 0) {
+      if(!mounted) return;
       final result = await Navigator.pushNamed(
         context,
         Routes.signIn,
         arguments: Routes.addGroups,
-      );
+      ).then((value) {
+        context.read<ListGroupsCubit>().onLoad();
+      });
       if (result == null) return;
     }
-    if (!mounted) return;
-    Navigator.pushNamed(context, Routes.addGroups,
-        arguments: {'isNewGroup': true}).then((value) {
-      context.read<ListGroupsCubit>().onLoad();
-    });
+    else {
+      if (!mounted) return;
+      Navigator.pushNamed(context, Routes.addGroups,
+          arguments: {'isNewGroup': true}).then((value) {
+        context.read<ListGroupsCubit>().onLoad();
+      });
+    }
   }
 
   void _updateSelectedFilter(GroupFilter? filter) {
