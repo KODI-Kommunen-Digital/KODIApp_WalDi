@@ -5,6 +5,7 @@ import 'package:heidi/src/data/model/model_request_member.dart';
 import 'package:heidi/src/data/model/model_users_joined_group.dart';
 import 'package:heidi/src/data/repository/forum_repository.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
+import 'package:heidi/src/utils/configs/preferences.dart';
 
 import 'cubit.dart';
 
@@ -37,7 +38,7 @@ class ListGroupsCubit extends Cubit<ListGroupsState> {
     );
     if (AppBloc.userCubit.state == null) {
       if (result != null) {
-        groupsList = result[0];
+        groupsList = result[1];
 
         for (final list in groupsList) {
           bool joined =
@@ -57,14 +58,15 @@ class ListGroupsCubit extends Cubit<ListGroupsState> {
         }
         emit(ListGroupsStateLoaded(
           listLoaded,
+          result[0],
         ));
       }
     } else {
       if (result != null) {
-        groupsList = result[0];
-        pagination = result[1];
-        userJoinedGroupsList = result[2];
-        requestMemberList = result[3];
+        groupsList = result[1];
+        pagination = result[2];
+        userJoinedGroupsList = result[3];
+        requestMemberList = result[4];
 
         for (final list in groupsList) {
           bool joined =
@@ -82,11 +84,20 @@ class ListGroupsCubit extends Cubit<ListGroupsState> {
               isJoined: joined,
               isRequested: requested));
         }
+
         emit(ListGroupsStateLoaded(
           listLoaded,
+          result[0],
         ));
       }
     }
+  }
+
+  Future<int> getLoggedInUserId() async {
+    // final prefs = await Preferences.openBox();
+    // final userId = prefs.getKeyValue(Preferences.userId, 0);
+    final userId = await repo.getLoggedInUserId();
+    return userId;
   }
 
   Future<String> requestToJoinGroup(forumId) async {
@@ -101,89 +112,17 @@ class ListGroupsCubit extends Cubit<ListGroupsState> {
 
   List<ForumGroupModel> getLoadedList() => listLoaded;
 
-// Future<void> newListings(int pageNo, cityId) async {
-//   final prefs = await Preferences.openBox();
-//   final type = prefs.getKeyValue(Preferences.type, '');
-//   if (type == 'location') {
-//     prefs.setKeyValue(Preferences.categoryId, '');
-//   }
-//
-//   final result = await repo.loadForumsList(
-//     pageNo: pageNo,
-//   );
-//
-//   final listUpdated = result?[0];
-//   if (listUpdated.isNotEmpty) {
-//     list.addAll(listUpdated);
-//     listLoaded = list;
-//     emit(ListGroupsStateUpdated(list));
-//   }
-// }
-//
-// List<ForumGroupModel> getLoadedList() => listLoaded;
-
-  void onGroupFilter(GroupFilter? type, List<ForumGroupModel> loadedList) {
+  Future<void> onGroupFilter(GroupFilter? type, List<ForumGroupModel> loadedList) async {
+    final userId = await  getLoggedInUserId();
     if (type == GroupFilter.myGroups) {
       filteredList = loadedList.where((product) {
         return product.isJoined == true;
       }).toList();
-
-      emit(ListGroupsStateUpdated(filteredList));
+      emit(ListGroupsStateUpdated(filteredList, userId));
     } else if (type == GroupFilter.allGroups) {
-      emit(ListGroupsStateUpdated(loadedList));
+      emit(ListGroupsStateUpdated(loadedList, userId));
     } else {
-      emit(ListGroupsStateUpdated(loadedList));
+      emit(ListGroupsStateUpdated(loadedList, userId));
     }
   }
-
-/*  DateTime? _parseDate(String dateString) {
-    try {
-      final parts = dateString.split('.');
-      if (parts.length == 3) {
-        final day = int.parse(parts[0]);
-        final month = int.parse(parts[1]);
-        final year = int.parse(parts[2]);
-        return DateTime(year, month, day);
-      }
-    } catch (e) {
-      logError("Error parsing date: $dateString");
-    }
-    return null;
-  }
-
-  int _getWeekNumber(DateTime date) {
-    final startOfYear = DateTime(date.year, 1, 1);
-    final daysSinceStartOfYear = date.difference(startOfYear).inDays;
-    return (daysSinceStartOfYear / 7).ceil();
-  }
-
-  Future<bool?> categoryPreferencesCall() async {
-    final prefs = await Preferences.openBox();
-    final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
-    if (categoryId == 3) {
-      return true;
-    } else {
-      return null;
-    }
-  }
-
-  Future<String?> getCategory() async {
-    final categoryId = await repo.getCategoryId();
-    Map<int, String> categories = {
-      1: "category_news",
-      2: "category_traffic",
-      3: "category_events",
-      4: "category_clubs",
-      5: "category_products",
-      6: "category_offer_search",
-      7: "category_citizen_info",
-      8: "category_defect_report",
-      9: "category_lost_found",
-      10: "category_companies",
-      11: "category_public_transport",
-      12: "category_offers",
-      13: "category_food"
-    };
-    return categories[categoryId];
-  }*/
 }

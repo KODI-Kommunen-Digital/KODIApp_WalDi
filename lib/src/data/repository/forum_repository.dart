@@ -8,7 +8,6 @@ import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_request_member.dart';
 import 'package:heidi/src/data/model/model_users_joined_group.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
-import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/logger.dart';
@@ -47,7 +46,7 @@ class ForumRepository {
             item,
           );
         }).toList();
-        if (AppBloc.userCubit.state != null) {
+        if (userId != 0) {
           final usersJoinedForumResponse = await Api.requestUsersForum(userId);
           final requestGroupRequestResponse =
               await Api.getGroupMemberRequests(userId);
@@ -76,13 +75,15 @@ class ForumRepository {
           }).toList();
 
           return [
+            userId,
             groupList,
             requestForumResponse.pagination,
             userJoinedList,
-            requestMemberList
+            requestMemberList,
           ];
         } else {
           return [
+            userId,
             groupList,
           ];
         }
@@ -91,6 +92,12 @@ class ForumRepository {
       logError('Forum Group List Error');
     }
     return null;
+  }
+
+  Future<int> getLoggedInUserId() async {
+    final prefs = await Preferences.openBox();
+    final userId = prefs.getKeyValue(Preferences.userId, 0);
+    return userId;
   }
 
   Future<ResultApiModel?> requestToJoinGroup(forumId) async {

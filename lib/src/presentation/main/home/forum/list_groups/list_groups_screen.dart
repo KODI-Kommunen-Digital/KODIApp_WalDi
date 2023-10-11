@@ -49,8 +49,8 @@ class _ListGroupScreenState extends State<ListGroupScreen> {
     }
     if (!mounted) return;
     Navigator.pushNamed(context, Routes.addGroups,
-        arguments: {'isNewGroup': true}).then((value){
-          context.read<ListGroupsCubit>().onLoad();
+        arguments: {'isNewGroup': true}).then((value) {
+      context.read<ListGroupsCubit>().onLoad();
     });
   }
 
@@ -223,14 +223,16 @@ class _ListGroupScreenState extends State<ListGroupScreen> {
           },
           builder: (context, state) => state.when(
             loading: () => const ListLoading(),
-            loaded: (list) => ListLoaded(
+            loaded: (list, userId) => ListLoaded(
               list: list,
               selectedId: widget.arguments['id'],
+              userId: userId,
             ),
-            updated: (list) {
+            updated: (list, userId) {
               return ListLoaded(
                 list: list,
                 selectedId: widget.arguments['id'],
+                userId: userId,
               );
             },
             error: (e) => ErrorWidget('Failed to load listings.'),
@@ -258,11 +260,13 @@ class ListLoading extends StatelessWidget {
 class ListLoaded extends StatefulWidget {
   final List<ForumGroupModel> list;
   final int selectedId;
+  final int userId;
 
   const ListLoaded({
     Key? key,
     required this.list,
     required this.selectedId,
+    required this.userId,
   }) : super(key: key);
 
   @override
@@ -347,21 +351,32 @@ class _ListLoadedState extends State<ListLoaded> {
       return Container(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: ForumGroupItem(
-          onPressed: () {
-            Navigator.pushNamed(context, Routes.groupDetails, arguments: item)
-                .then((value) async {
-              logError('Value', value);
-              await context.read<ListGroupsCubit>().onLoad();
-              setState(() {
-
+          userId: widget.userId,
+          onPressed: (value) async {
+            if (value) {
+              Navigator.pushNamed(context, Routes.groupDetails, arguments: item)
+                  .then((value) async {
+                await context.read<ListGroupsCubit>().onLoad();
+                setState(() {});
               });
-            });
-            //     .then((value)
-            // {
-            //   logError('Value', value),
-            //   setState(() {})
-            //   // await context.read<ListGroupsCubit>().onLoad()}
-            // });
+            } else {
+              final popUpResult = await _showLoginPopup(context);
+              if (popUpResult == true) {
+                if (!mounted) return;
+
+                await Navigator.pushNamed(
+                  context,
+                  Routes.signIn,
+                  arguments: Routes.submit,
+                ).then((value) async {
+                  await context.read<ListGroupsCubit>().onLoad();
+                  // final prefs = await Preferences.openBox();
+                  // final userId = prefs.getKeyValue(Preferences.userId, 0);
+                  //   logError('UserId:', userId);
+                  setState(() {});
+                });
+              }
+            }
           },
           item: item,
         ),
@@ -433,6 +448,32 @@ class _ListLoadedState extends State<ListLoaded> {
           );
         }
         return Container();
+      },
+    );
+  }
+
+  Future<dynamic> _showLoginPopup(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(Translate.of(context).translate('login_required')),
+          content: Text(Translate.of(context).translate('Please_log_in_to_enter_any_group.')),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () async {
+                Navigator.of(context).pop(true);
+              },
+              child: Text(Translate.of(context).translate('login')),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(false); // Close the dialog
+              },
+              child: Text(Translate.of(context).translate('cancel')),
+            ),
+          ],
+        );
       },
     );
   }

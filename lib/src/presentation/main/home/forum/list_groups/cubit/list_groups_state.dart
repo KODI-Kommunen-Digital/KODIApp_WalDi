@@ -11,10 +11,12 @@ class ListGroupsState with _$ListGroupsState {
 
   const factory ListGroupsState.loaded(
     List<ForumGroupModel> list,
+    int userId,
   ) = ListGroupsStateLoaded;
 
   const factory ListGroupsState.updated(
     List<ForumGroupModel> list,
+    int userId,
   ) = ListGroupsStateUpdated;
 
   const factory ListGroupsState.error(String error) = ListGroupsStateError;

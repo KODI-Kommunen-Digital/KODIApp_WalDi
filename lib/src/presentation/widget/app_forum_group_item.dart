@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_forum_group.dart';
-import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/home/forum/list_groups/cubit/cubit.dart';
 import 'package:heidi/src/presentation/main/home/widget/empty_product_item.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
@@ -15,11 +14,13 @@ class ForumGroupItem extends StatefulWidget {
   const ForumGroupItem({
     Key? key,
     this.item,
-    this.onPressed,
+    required this.userId,
+    required this.onPressed,
   }) : super(key: key);
 
   final ForumGroupModel? item;
-  final VoidCallback? onPressed;
+  final void Function(bool) onPressed;
+  final int userId;
 
   @override
   State<ForumGroupItem> createState() => _ForumGroupItemState();
@@ -38,8 +39,8 @@ class _ForumGroupItemState extends State<ForumGroupItem> {
     groupStatus = widget.item?.isRequested == true
         ? 'Anfrage verschickt'
         : widget.item?.isJoined == false
-            ? 'Beitreten'
-            : 'zur Gruppe';
+        ? 'Beitreten'
+        : 'zur Gruppe';
   }
 
   @override
@@ -51,7 +52,13 @@ class _ForumGroupItemState extends State<ForumGroupItem> {
     }
 
     return InkWell(
-      onTap: isRequested || isJoined == false ? null : widget.onPressed,
+      onTap: () {
+       return widget.userId != 0
+            ? isRequested || isJoined == false
+            ? null
+            : widget.onPressed(true)
+            : widget.onPressed(false);
+      },
       child: Stack(
         children: [
           Row(
@@ -59,7 +66,8 @@ class _ForumGroupItemState extends State<ForumGroupItem> {
               CachedNetworkImage(
                 imageUrl: widget.item?.image == 'admin/News.jpeg'
                     ? "${Application.picturesURL}${widget.item?.image}"
-                    : "${Application.picturesURL}${widget.item!.image}?cacheKey=$uniqueKey",
+                    : "${Application.picturesURL}${widget.item!
+                    .image}?cacheKey=$uniqueKey",
                 imageBuilder: (context, imageProvider) {
                   return Container(
                     width: 120,
@@ -113,7 +121,8 @@ class _ForumGroupItemState extends State<ForumGroupItem> {
                     Text(
                       widget.item?.forumName ?? '',
                       maxLines: 2,
-                      style: Theme.of(context)
+                      style: Theme
+                          .of(context)
                           .textTheme
                           .titleSmall!
                           .copyWith(fontWeight: FontWeight.bold),
@@ -124,12 +133,14 @@ class _ForumGroupItemState extends State<ForumGroupItem> {
                             : Translate.of(context).translate('private'),
                         maxLines: 2,
                         style: TextStyle(
-                          color: Theme.of(context).primaryColor,
+                          color: Theme
+                              .of(context)
+                              .primaryColor,
                         )),
                     const SizedBox(
                       height: 10.0,
                     ),
-                    if (AppBloc.userCubit.state != null)
+                    if (widget.userId != 0)
                       InkWell(
                         onTap: () {
                           if (isRequested == false) {
@@ -137,7 +148,7 @@ class _ForumGroupItemState extends State<ForumGroupItem> {
                               showJoinGroupDialog(context, widget.item?.id);
                             } else {
                               Navigator.pushNamed(context, Routes.groupDetails,
-                                      arguments: widget.item)
+                                  arguments: widget.item)
                                   .then((value) async {
                                 logError('Value', value);
                                 await context.read<ListGroupsCubit>().onLoad();
@@ -203,7 +214,7 @@ class _ForumGroupItemState extends State<ForumGroupItem> {
     if (result == true) {
       if (!mounted) return;
       final joinRequestResponse =
-          await context.read<ListGroupsCubit>().requestToJoinGroup(id);
+      await context.read<ListGroupsCubit>().requestToJoinGroup(id);
       if (joinRequestResponse == 'Member added successfully') {
         setState(() {
           groupStatus = 'zur Gruppe';
