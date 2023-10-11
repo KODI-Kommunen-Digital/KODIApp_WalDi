@@ -259,12 +259,12 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Select City'),
-          content: const Column(
+          title: const Text('Stadt Auswählen'),
+          content:  Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('Please select a city to enter the forum.'),
-              SizedBox(height: 16),
+              Text(Translate.of(context).translate('please_select_city')),
+              const SizedBox(height: 16),
             ],
           ),
           actions: <Widget>[
