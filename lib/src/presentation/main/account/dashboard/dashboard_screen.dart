@@ -19,7 +19,7 @@ class DashboardScreen extends StatelessWidget {
           children: <Widget>[
             GridItemButton(
               icon: Icons.group,
-              title: Translate.of(context).translate("my_groups"),
+              title: Translate.of(context).translate("requests"),
               onPressed: () {
                 // Add your action here
               },
@@ -37,8 +37,8 @@ class DashboardScreen extends StatelessWidget {
               },
             ),
             GridItemButton(
-              icon: Icons.article,
-              title: Translate.of(context).translate("my_posts"),
+              icon: Icons.group,
+              title: Translate.of(context).translate("my_groups"),
               onPressed: () {
                 // Add your action here
               },
