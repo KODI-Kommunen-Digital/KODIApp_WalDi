@@ -92,7 +92,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
   bool isImageChanged = false;
 
   int? currentCity;
-  var jsonCategory;
+  late List<dynamic> jsonCategory;
 
   @override
   void initState() {
