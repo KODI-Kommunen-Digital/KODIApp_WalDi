@@ -6,6 +6,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:heidi/src/data/repository/forum_repository.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/multiple_gesture_detector.dart';
@@ -22,6 +23,7 @@ class AppUploadImage extends StatefulWidget {
   final Function(String) onChange;
   final UploadImageType type;
   final bool profile;
+  final bool forumGroup;
 
   const AppUploadImage({
     Key? key,
@@ -30,6 +32,7 @@ class AppUploadImage extends StatefulWidget {
     required this.onChange,
     this.type = UploadImageType.square,
     required this.profile,
+    required this.forumGroup,
   }) : super(key: key);
 
   @override
@@ -86,9 +89,14 @@ class _AppUploadImageState extends State<AppUploadImage> {
           _file = File(pickedFile.path);
         });
         final profile = widget.profile;
+        final forumGroup = widget.forumGroup;
+
         if (!profile) {
           await ListRepository.uploadImage(_file!, profile);
-        } else {
+        }
+        if (forumGroup) {
+          await ForumRepository.uploadImage(_file!, forumGroup);
+        } else if (profile) {
           final response = await ListRepository.uploadImage(_file!, profile);
           if (response!.data['status'] == 'success') {
             setState(() {
