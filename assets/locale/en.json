@@ -430,5 +430,6 @@
   "my_groups": "My Groups",
   "all_listings": "All Listings",
   "my_posts": "My Posts",
-  "requests": "Requests"
+  "requests": "Requests",
+  "all_listings_not_admin": "You need to be an admin to access this page!"
 }

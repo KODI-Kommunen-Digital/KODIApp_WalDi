@@ -430,5 +430,6 @@
   "my_groups": "Meine Gruppen",
   "all_listings": "Alle Beiträge",
   "my_posts": "Meine Posts", 
-  "requests": "Anfragen"
+  "requests": "Anfragen",
+  "all_listings_not_admin": "Sie müssen ein Admin sein um diese Seite zu öffnen!"
 }
