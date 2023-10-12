@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/presentation/main/account/change_password/change_password_screen.dart';
-import 'package:heidi/src/presentation/main/account/dashboard/dashboard_screen.dart';
 import 'package:heidi/src/presentation/main/account/edit_profile/edit_profile_screen.dart';
 import 'package:heidi/src/presentation/main/account/faq/cubit/faq_cubit.dart';
 import 'package:heidi/src/presentation/main/account/faq/faq_screen.dart';
@@ -49,7 +48,6 @@ class Routes {
   static const String changePassword = "/changePassword";
   static const String changeLanguage = "/changeLanguage";
   static const String contactUs = "/contactUs";
-  static const String dashboard = "/dashboard";
   static const String aboutUs = "/aboutUs";
   static const String gallery = "/gallery";
   static const String themeSetting = "/themeSetting";
@@ -220,13 +218,6 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) {
             return const ContactUsScreen();
-          },
-        );
-
-        case dashboard:
-        return MaterialPageRoute(
-          builder: (context) {
-            return const DashboardScreen();
           },
         );
 
