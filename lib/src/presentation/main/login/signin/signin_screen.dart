@@ -115,7 +115,7 @@ class _SignInLoadedState extends State<SignInLoaded> {
             child: Column(
               children: <Widget>[
                 AppTextInput(
-                  hintText: Translate.of(context).translate('account'),
+                  hintText: Translate.of(context).translate('accountOrEmail'),
                   errorText: _errorID,
                   controller: _textIDController,
                   focusNode: _focusID,
