@@ -21,12 +21,11 @@ import 'cubit/add_listing_cubit.dart';
 class AddListingScreen extends StatefulWidget {
   final ProductModel? item;
   final bool isNewList;
+  final bool isAdmin;
 
-  const AddListingScreen({
-    Key? key,
-    this.item,
-    required this.isNewList,
-  }) : super(key: key);
+  const AddListingScreen(
+      {Key? key, this.item, required this.isNewList, this.isAdmin = false})
+      : super(key: key);
 
   @override
   State<AddListingScreen> createState() => _AddListingScreenState();
@@ -75,6 +74,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
   int? villageId;
   int? categoryId;
   int? subCategoryId;
+  int? statusId;
   List listCity = [];
   List listVillage = [];
   List listCategory = [];
@@ -189,6 +189,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       if (!mounted) return;
       _featureImage = widget.item?.image;
       _featurePdf = widget.item?.pdf;
+      statusId = widget.item?.statusId;
       _textTitleController.text = widget.item!.title;
       _textContentController.text = widget.item!.description;
       _textAddressController.text = widget.item!.address;
@@ -414,7 +415,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
             endDate: _endDate,
             startTime: _startTime,
             endTime: _endTime,
-            isImageChanged: isImageChanged);
+            isImageChanged: isImageChanged,
+            statusId: statusId);
         if (result) {
           _onSuccess();
         }
@@ -603,24 +605,48 @@ class _AddListingScreenState extends State<AddListingScreen> {
             ),
             const SizedBox(height: 16),
             const SizedBox(height: 16),
-            Text.rich(
-              TextSpan(
-                text: Translate.of(context).translate('title'),
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium!
-                    .copyWith(fontWeight: FontWeight.bold),
-                children: const <TextSpan>[
-                  TextSpan(
-                    text: ' *',
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontWeight: FontWeight.bold,
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+              Text.rich(
+                TextSpan(
+                  text: Translate.of(context).translate('title'),
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium!
+                      .copyWith(fontWeight: FontWeight.bold),
+                  children: const <TextSpan>[
+                    TextSpan(
+                      text: ' *',
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
+              if (widget.isAdmin)
+                DropdownButton(
+                  value: statusId ?? 3,
+                  onChanged: (int? newStatus) {
+                    setState(() {
+                      statusId = newStatus;
+                    });
+                  },
+                  items: [
+                    DropdownMenuItem<int>(
+                        value: 1,
+                        child: Text(Translate.of(context).translate('active'))),
+                    DropdownMenuItem<int>(
+                      value: 2,
+                      child: Text(Translate.of(context).translate('pending')),
+                    ),
+                    DropdownMenuItem<int>(
+                        value: 3,
+                        child: Text(
+                            Translate.of(context).translate('under_review'))),
+                  ],
+                )
+            ]),
             const SizedBox(height: 8),
             AppTextInput(
               hintText: Translate.of(context).translate('input_title'),

@@ -431,5 +431,7 @@
   "all_listings": "All Listings",
   "my_posts": "My Posts",
   "requests": "Requests",
-  "all_listings_not_admin": "You need to be an admin to access this page!"
+  "all_listings_not_admin": "You need to be an admin to access this page!",
+  "active": "Active",
+  "under_review": "Under Review"
 }

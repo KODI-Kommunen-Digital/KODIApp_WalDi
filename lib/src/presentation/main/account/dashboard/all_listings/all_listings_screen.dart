@@ -123,7 +123,8 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                   Navigator.pushNamed(context, Routes.submit,
                                       arguments: {
                                         'item': item,
-                                        'isNewList': false
+                                        'isNewList': false,
+                                        'isAdmin': true
                                       }).then((value) async {
                                     await context
                                         .read<AllListingsCubit>()
@@ -300,6 +301,19 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                                     ),
                                               ),
                                               const SizedBox(height: 8),
+                                              Text(
+                                                Translate.of(context).translate(
+                                                    getStatusTanslation(
+                                                        item.statusId ?? 0)),
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodySmall!
+                                                    .copyWith(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                              ),
+                                              const SizedBox(height: 8),
                                               const SizedBox(height: 8),
                                               const SizedBox(height: 4),
                                             ],
@@ -409,6 +423,17 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
     } else {
       Navigator.pushNamed(context, Routes.productDetail, arguments: item);
     }
+  }
+
+  String getStatusTanslation(int statusId) {
+    if (statusId == 1) {
+      return "active";
+    } else if (statusId == 2) {
+      return "under_review";
+    } else if (statusId == 3) {
+      return "pending";
+    }
+    return "";
   }
 
   void _makeAction(String link) async {

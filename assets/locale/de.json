@@ -431,5 +431,7 @@
   "all_listings": "Alle Beiträge",
   "my_posts": "Meine Posts", 
   "requests": "Anfragen",
-  "all_listings_not_admin": "Sie müssen ein Admin sein um diese Seite zu öffnen!"
+  "all_listings_not_admin": "Sie müssen ein Admin sein um diese Seite zu öffnen!",
+  "active": "Aktiv",
+  "under_review": "In Prüfung"
 }
