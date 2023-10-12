@@ -28,15 +28,17 @@ class DashboardScreen extends StatelessWidget {
                 // Add your action here
               },
             ),
-            GridItemButton(
-              icon: Icons.list,
-              title: Translate.of(context).translate("all_listings"),
-              onPressed: () {
-                Navigator.of(context).pushNamed(Routes.allListings, arguments: {
-                  "user": user,
-                });
-              },
-            ),
+            if (user.roleId == 1)
+              GridItemButton(
+                icon: Icons.list,
+                title: Translate.of(context).translate("all_listings"),
+                onPressed: () {
+                  Navigator.of(context)
+                      .pushNamed(Routes.allListings, arguments: {
+                    "user": user,
+                  });
+                },
+              ),
             GridItemButton(
               icon: Icons.local_offer,
               title: Translate.of(context).translate("my_listings"),
