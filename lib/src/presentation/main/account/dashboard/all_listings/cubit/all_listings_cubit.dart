@@ -1,7 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:heidi/src/data/model/model_product.dart';
+import 'package:heidi/src/data/model/model_result_api.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/all_listings/cubit/all_listings_state.dart';
+import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:loggy/loggy.dart';
 
 class AllListingsCubit extends Cubit<AllListingsState> {
@@ -13,7 +15,16 @@ class AllListingsCubit extends Cubit<AllListingsState> {
 
   Future<void> onLoad() async {
     emit(const AllListingsState.loading());
-    final listingsRequestResponse = await Api.requestAllListings(1);
+
+    int status = await getCurrentStatus();
+    final ResultApiModel listingsRequestResponse;
+
+    if (status == 0) {
+      listingsRequestResponse = await Api.requestAllListings(1);
+    } else {
+      listingsRequestResponse = await Api.requestStatusListings(status, 1);
+    }
+
     posts = List.from(listingsRequestResponse.data ?? []).map((item) {
       return ProductModel.fromJson(item);
     }).toList();
@@ -23,7 +34,15 @@ class AllListingsCubit extends Cubit<AllListingsState> {
 
   Future<dynamic> newListings(int pageNo) async {
     if (pageNo == 1) posts = [];
-    final listingsRequestResponse = await Api.requestAllListings(pageNo);
+    int status = await getCurrentStatus();
+    final ResultApiModel listingsRequestResponse;
+
+    if (status == 0) {
+      listingsRequestResponse = await Api.requestAllListings(pageNo);
+    } else {
+      listingsRequestResponse = await Api.requestStatusListings(status, pageNo);
+    }
+
     final newRecent = List.from(listingsRequestResponse.data ?? []).map((item) {
       return ProductModel.fromJson(item);
     }).toList();
@@ -39,5 +58,16 @@ class AllListingsCubit extends Cubit<AllListingsState> {
       logError('Remove UserList Response Failed', response.message);
       return false;
     }
+  }
+
+  Future<int> getCurrentStatus() async {
+    final prefs = await Preferences.openBox();
+    int status = await prefs.getKeyValue(Preferences.listingStatusFilter, 0);
+    return status;
+  }
+
+  Future<void> setCurrentStatus(int status) async {
+    final prefs = await Preferences.openBox();
+    prefs.setKeyValue(Preferences.listingStatusFilter, status);
   }
 }

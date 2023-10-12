@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -25,6 +27,49 @@ class AllListingsScreen extends StatelessWidget {
 
   const AllListingsScreen({required this.user, super.key});
 
+  Future<void> _openFilterDrawer(BuildContext context) async {
+    List<String> statusNames = [
+      Translate.of(context).translate("active"),
+      Translate.of(context).translate("under_review"),
+      Translate.of(context).translate("pending")
+    ];
+    int selectedStatus = await AppBloc.allListingsCubit.getCurrentStatus();
+    await showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Container(
+          color: Colors.grey[900],
+          height: 200,
+          child: ListView.separated(
+            itemCount: 3,
+            separatorBuilder: (BuildContext context, int index) =>
+                const Divider(
+              color: Colors.white,
+              height: 1,
+              thickness: 1,
+            ),
+            itemBuilder: (context, index) {
+              return ListTile(
+                title: Text(statusNames[index]),
+                trailing: (selectedStatus == index + 1)
+                    ? const Icon(Icons.check, color: Colors.white)
+                    : null,
+                onTap: () async {
+                  if (selectedStatus != index + 1) {
+                    await AppBloc.allListingsCubit.setCurrentStatus(index + 1);
+                  } else {
+                    await AppBloc.allListingsCubit.setCurrentStatus(0);
+                  }
+                  await AppBloc.allListingsCubit.onLoad();
+                },
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     if (user.roleId == 1) {
@@ -34,11 +79,31 @@ class AllListingsScreen extends StatelessWidget {
           title: Text(
             Translate.of(context).translate('all_listings'),
           ),
+          actions: [
+            TextButton(
+              onPressed: () async {
+                _openFilterDrawer(context);
+              },
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context)
+                    .textTheme
+                    .titleSmall!
+                    .copyWith(fontWeight: FontWeight.bold),
+              ),
+              child: const Icon(
+                Icons.menu,
+                color: Colors.white,
+              ),
+            ),
+          ],
         ),
         body: BlocBuilder<AllListingsCubit, AllListingsState>(
             builder: (context, state) => state.maybeWhen(
                 loading: () => const AllListingsLoading(),
-                loaded: (posts) => AllListingsLoaded(user: user, posts: posts),
+                loaded: (posts) => AllListingsLoaded(
+                      user: user,
+                      posts: posts,
+                    ),
                 orElse: () => ErrorWidget("Failed to load listings."))),
       );
     }
@@ -74,6 +139,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
   int pageNo = 1;
   List<ProductModel>? posts;
   bool isSwiped = false;
+  int selectedStatus = 0;
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
     Factory(() => EagerGestureRecognizer())
   };
