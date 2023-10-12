@@ -56,7 +56,7 @@ class ListGroupsCubit extends Cubit<ListGroupsState> {
               isRequested: requested));
         }
         emit(ListGroupsStateLoaded(
-          listLoaded,
+          listLoaded.reversed.toList(),
           result[0],
         ));
       }
@@ -85,7 +85,7 @@ class ListGroupsCubit extends Cubit<ListGroupsState> {
         }
 
         emit(ListGroupsStateLoaded(
-          listLoaded,
+          listLoaded.reversed.toList(),
           result[0],
         ));
       }
@@ -111,8 +111,9 @@ class ListGroupsCubit extends Cubit<ListGroupsState> {
 
   List<ForumGroupModel> getLoadedList() => listLoaded;
 
-  Future<void> onGroupFilter(GroupFilter? type, List<ForumGroupModel> loadedList) async {
-    final userId = await  getLoggedInUserId();
+  Future<void> onGroupFilter(
+      GroupFilter? type, List<ForumGroupModel> loadedList) async {
+    final userId = await getLoggedInUserId();
     if (type == GroupFilter.myGroups) {
       filteredList = loadedList.where((product) {
         return product.isJoined == true;
