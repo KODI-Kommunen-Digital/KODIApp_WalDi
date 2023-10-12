@@ -4,6 +4,7 @@
   "message": "Messages",
   "notification": "Notification",
   "maccount": "Account",
+  "accountOrEmail": "Username or E-mail",
   "to": "to",
   "account": "Username",
   "my_account": "My Account",
