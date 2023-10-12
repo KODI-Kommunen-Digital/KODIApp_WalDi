@@ -91,7 +91,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
           child: Stack(children: [
         (posts?.isNotEmpty ?? false)
             ? Padding(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 50),
                 child: CustomScrollView(
                   physics: const BouncingScrollPhysics(
                     parent: AlwaysScrollableScrollPhysics(),
@@ -140,7 +140,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
               ),
         (isLoadingMore)
             ? const Positioned(
-                bottom: 50,
+                bottom: 20,
                 left: 0,
                 right: 0,
                 child: Center(
