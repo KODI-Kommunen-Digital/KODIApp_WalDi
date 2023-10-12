@@ -638,12 +638,13 @@ class _AddListingScreenState extends State<AddListingScreen> {
                         child: Text(Translate.of(context).translate('active'))),
                     DropdownMenuItem<int>(
                       value: 2,
-                      child: Text(Translate.of(context).translate('pending')),
+                      child:
+                          Text(Translate.of(context).translate('under_review')),
                     ),
                     DropdownMenuItem<int>(
                         value: 3,
-                        child: Text(
-                            Translate.of(context).translate('under_review'))),
+                        child:
+                            Text(Translate.of(context).translate('pending'))),
                   ],
                 )
             ]),

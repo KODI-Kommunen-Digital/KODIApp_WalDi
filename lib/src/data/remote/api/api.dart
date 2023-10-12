@@ -33,12 +33,14 @@ class Api {
   }
 
   static Future<ResultApiModel> requestFavorites(userId) async {
-    final result = await httpManager.get(url: '/users/$userId/favorites?pageNo=1&pageSize=19');
+    final result = await httpManager.get(
+        url: '/users/$userId/favorites?pageNo=1&pageSize=19');
     return ResultApiModel.fromJson(result);
   }
 
   static Future<ResultApiModel> requestUserListings(userId, pageNo) async {
-    final result = await httpManager.get(url: '/users/$userId/listings?pageNo=$pageNo&pageSize=5');
+    final result = await httpManager.get(
+        url: '/users/$userId/listings?pageNo=$pageNo&pageSize=5');
     return ResultApiModel.fromJson(result);
   }
 
@@ -161,6 +163,13 @@ class Api {
   ///Get Recent Listings
   static Future<ResultApiModel> requestRecentListings(params) async {
     final listings = "/listings?statusId=1&pageNo=$params&pageSize=10";
+    final result = await httpManager.get(url: listings);
+    return ResultApiModel.fromJson(result);
+  }
+
+  ///Get All Listings
+  static Future<ResultApiModel> requestAllListings(params) async {
+    final listings = "/listings?pageNo=$params&pageSize=10";
     final result = await httpManager.get(url: listings);
     return ResultApiModel.fromJson(result);
   }

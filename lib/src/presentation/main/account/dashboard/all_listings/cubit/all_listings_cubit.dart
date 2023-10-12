@@ -13,7 +13,7 @@ class AllListingsCubit extends Cubit<AllListingsState> {
 
   Future<void> onLoad() async {
     emit(const AllListingsState.loading());
-    final listingsRequestResponse = await Api.requestRecentListings(1);
+    final listingsRequestResponse = await Api.requestAllListings(1);
     posts = List.from(listingsRequestResponse.data ?? []).map((item) {
       return ProductModel.fromJson(item);
     }).toList();
@@ -23,7 +23,7 @@ class AllListingsCubit extends Cubit<AllListingsState> {
 
   Future<dynamic> newListings(int pageNo) async {
     if (pageNo == 1) posts = [];
-    final listingsRequestResponse = await Api.requestRecentListings(pageNo);
+    final listingsRequestResponse = await Api.requestAllListings(pageNo);
     final newRecent = List.from(listingsRequestResponse.data ?? []).map((item) {
       return ProductModel.fromJson(item);
     }).toList();
