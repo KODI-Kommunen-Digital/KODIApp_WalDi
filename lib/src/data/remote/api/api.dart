@@ -32,7 +32,8 @@ class Api {
   }
 
   static Future<ResultApiModel> requestFavorites(userId) async {
-    final result = await httpManager.get(url: '/users/$userId/favorites?pageNo=1&pageSize=19');
+    final result = await httpManager.get(
+        url: '/users/$userId/favorites?pageNo=1&pageSize=19');
     return ResultApiModel.fromJson(result);
   }
 
@@ -72,7 +73,8 @@ class Api {
   }
 
   static Future<ResultApiModel> requestUserListings(userId, pageNo) async {
-    final result = await httpManager.get(url: '/users/$userId/listings?pageNo=$pageNo&pageSize=5');
+    final result = await httpManager.get(
+        url: '/users/$userId/listings?pageNo=$pageNo&pageSize=5');
     return ResultApiModel.fromJson(result);
   }
 
@@ -254,17 +256,31 @@ class Api {
   }
 
   ///Get Product List
-  static Future<ResultApiModel> requestCatList(params, pageNo) async {
+  static Future<ResultApiModel> requestCatList(params, cityId, pageNo) async {
     if (params == 3) {
-      var list =
-          '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&sortByStartDate=true';
-      final result = await httpManager.get(url: list);
-      return ResultApiModel.fromJson(result);
+      if (cityId != 0 && cityId != null) {
+        var list =
+            '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&sortByStartDate=true&cityId=$cityId';
+        final result = await httpManager.get(url: list);
+        return ResultApiModel.fromJson(result);
+      } else {
+        var list =
+            '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&sortByStartDate=true';
+        final result = await httpManager.get(url: list);
+        return ResultApiModel.fromJson(result);
+      }
     } else {
-      var list =
-          '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19';
-      final result = await httpManager.get(url: list);
-      return ResultApiModel.fromJson(result);
+      if (cityId != 0 && cityId != null) {
+        var list =
+            '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&cityId=$cityId';
+        final result = await httpManager.get(url: list);
+        return ResultApiModel.fromJson(result);
+      } else {
+        var list =
+            '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19';
+        final result = await httpManager.get(url: list);
+        return ResultApiModel.fromJson(result);
+      }
     }
   }
 
