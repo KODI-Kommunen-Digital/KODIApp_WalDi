@@ -29,7 +29,7 @@ class ListRepository {
 
     if (type == "category") {
       int params = categoryId;
-      final response = await Api.requestCatList(params, pageNo);
+      final response = await Api.requestCatList(params, cityId, pageNo);
       if (response.success) {
         final list = List.from(response.data ?? []).map((item) {
           return ProductModel.fromJson(item, setting: Application.setting);
@@ -51,7 +51,7 @@ class ListRepository {
       }
     } else if (type == "categoryService") {
       int params = categoryId;
-      final response = await Api.requestCatList(params, pageNo);
+      final response = await Api.requestCatList(params, cityId, pageNo);
       if (response.success) {
         final list = List.from(response.data ?? []).map((item) {
           return ProductModel.fromJson(item, setting: Application.setting);
