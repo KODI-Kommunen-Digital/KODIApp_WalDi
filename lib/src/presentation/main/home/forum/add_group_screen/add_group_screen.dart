@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:heidi/src/data/model/model_product.dart';
+import 'package:heidi/src/data/model/model_forum_group.dart';
 import 'package:heidi/src/presentation/main/home/forum/add_group_screen/cubit/add_group_cubit.dart';
 import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/presentation/widget/app_text_input.dart';
@@ -13,7 +13,7 @@ import 'package:heidi/src/utils/translate.dart';
 import 'package:heidi/src/utils/validate.dart';
 
 class AddGroupScreen extends StatefulWidget {
-  final ProductModel? item;
+  final ForumGroupModel? item;
   final bool isNewGroup;
 
   const AddGroupScreen({
@@ -38,19 +38,10 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
   String? _errorContent;
   String? selectedCity;
   int? cityId;
-  int? villageId;
-  int? categoryId;
-  int? subCategoryId;
   List listCity = [];
-  List listVillage = [];
-  List listCategory = [];
-  List listSubCategory = [];
 
   String? _featureImage;
-  String? selectedVillage;
-  String? selectedCategory;
   String? selectedPrivacy;
-  String? selectedSubCategory;
   bool isImageChanged = false;
 
   late int? currentCity;
@@ -59,7 +50,6 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
   void initState() {
     super.initState();
     _onProcess();
-    selectedPrivacy = 'public';
   }
 
   @override
@@ -82,7 +72,7 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
   Widget build(BuildContext context) {
     String textTitle = Translate.of(context).translate('add_new_group');
     String textAction = Translate.of(context).translate('add');
-    if (widget.item != null) {
+    if (!widget.isNewGroup) {
       textTitle = Translate.of(context).translate('update_group');
       textAction = Translate.of(context).translate('update');
     }
@@ -111,7 +101,20 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
   void _onProcess() async {
     final loadCitiesResponse = await context.read<AddGroupCubit>().loadCities();
     if (!mounted) return;
-
+    if (widget.item != null) {
+      final selectedCityDetails = loadCitiesResponse!
+          .firstWhere((element) => element['id'] == widget.item!.cityId);
+      if (!mounted) return;
+      _textTitleController.text = widget.item!.forumName ?? '';
+      _textContentController.text = widget.item!.description ?? '';
+      _featureImage = widget.item?.image;
+      cityId = widget.item?.cityId ?? 1;
+      selectedPrivacy = widget.item!.isPrivate == 1 ? 'private' : 'public';
+      selectedCity = selectedCityDetails['name'];
+    } else {
+      selectedCity = loadCitiesResponse?.first['name'];
+      selectedPrivacy = 'public';
+    }
     setState(() {
       listCity = loadCitiesResponse!;
       _processing = true;
@@ -130,7 +133,7 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
         }
       }
     } else {
-      selectedCity = loadCitiesResponse?.first['name'];
+      // selectedCity = loadCitiesResponse?.first['name'];
     }
 
     setState(() {
@@ -141,15 +144,30 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
   void _onSubmit() async {
     final success = _validData();
     if (success) {
-      final result = await context.read<AddGroupCubit>().onSubmit(
-          cityId: cityId ?? 1,
-          title: _textTitleController.text,
-          city: selectedCity,
-          description: _textContentController.text,
-          type: selectedPrivacy);
-      if (result) {
-        _onSuccess();
-        if (!mounted) return;
+      if (widget.item == null) {
+        final result = await context.read<AddGroupCubit>().onSubmit(
+            cityId: cityId ?? 1,
+            title: _textTitleController.text,
+            city: selectedCity,
+            description: _textContentController.text,
+            type: selectedPrivacy);
+        if (result) {
+          _onSuccess();
+          if (!mounted) return;
+        }
+      } else {
+        final result = await context.read<AddGroupCubit>().onEditForum(
+            _textTitleController.text,
+            _textContentController.text,
+            selectedCity,
+            selectedPrivacy,
+            isImageChanged,
+            widget.item!.id,
+            widget.item!.createdAt);
+        if (result) {
+          _onSuccess();
+          if (!mounted) return;
+        }
       }
     }
   }
@@ -215,7 +233,9 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
                 profile: true,
                 forumGroup: true,
                 onChange: (result) {
-                  isImageChanged = true;
+                  setState(() {
+                    isImageChanged = true;
+                  });
                 },
               ),
             ),
@@ -331,11 +351,13 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
                         child: Text(Translate.of(context).translate('public')),
                       ),
                     ],
-                    onChanged: (value) {
-                      setState(() {
-                        selectedPrivacy = value as String;
-                      });
-                    },
+                    onChanged: widget.item == null
+                        ? (value) {
+                            setState(() {
+                              selectedPrivacy = value as String;
+                            });
+                          }
+                        : null,
                   ),
                 ),
               ],
@@ -375,16 +397,18 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
                             return DropdownMenuItem(
                                 value: city['name'], child: Text(city['name']));
                           }).toList(),
-                          onChanged: (value) async {
-                            setState(() {
-                              selectedCity = value as String?;
-                              for (var element in listCity) {
-                                if (element["name"] == value) {
-                                  cityId = element["id"];
+                          onChanged: widget.item == null
+                              ? (value) async {
+                                  setState(() {
+                                    selectedCity = value as String?;
+                                    for (var element in listCity) {
+                                      if (element["name"] == value) {
+                                        cityId = element["id"];
+                                      }
+                                    }
+                                  });
                                 }
-                              }
-                            });
-                          },
+                              : null,
                         ),
                 ),
               ],

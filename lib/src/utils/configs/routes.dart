@@ -6,6 +6,8 @@ import 'package:heidi/src/data/model/model_group_posts.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/presentation/main/account/change_password/change_password_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/dashboard_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/my_groups/cubit/my_groups_cubit.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/my_groups/my_groups_screen.dart';
 import 'package:heidi/src/presentation/main/account/edit_profile/edit_profile_screen.dart';
 import 'package:heidi/src/presentation/main/account/faq/cubit/faq_cubit.dart';
 import 'package:heidi/src/presentation/main/account/faq/faq_screen.dart';
@@ -95,6 +97,7 @@ class Routes {
   static const String profileSettings = "/profileSettings";
   static const String faq = "/faq";
   static const String listGroups = "/listGroups";
+  static const String myGroups = "/myGroups";
   static const String groupDetails = "/groupDetails";
   static const String groupMembersDetails = "/groupMembersDetails";
   static const String postDetails = "/postDetails";
@@ -268,6 +271,19 @@ class Routes {
           },
         );
 
+      case myGroups:
+        return MaterialPageRoute(
+          builder: (context) {
+            return BlocProvider(
+              create: (context) => MyGroupsCubit(
+                context.read(),
+              ),
+              child: const MyGroupsScreen(),
+            );
+          },
+          fullscreenDialog: true,
+        );
+
       case listGroups:
         return MaterialPageRoute(
           builder: (context) {
@@ -290,7 +306,7 @@ class Routes {
                 settings.arguments as ForumGroupModel;
             return BlocProvider(
               create: (context) => GroupDetailsCubit(context.read(), arguments),
-              child: GroupDetailsScreen(arguments),
+              child: const GroupDetailsScreen(),
             );
           },
           fullscreenDialog: true,
@@ -331,7 +347,7 @@ class Routes {
                 context.read(),
               ),
               child: AddGroupScreen(
-                item: arguments['item'] as ProductModel?,
+                item: arguments['forumDetails'] as ForumGroupModel?,
                 isNewGroup: arguments['isNewGroup'] as bool,
               ),
             );

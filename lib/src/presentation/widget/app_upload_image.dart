@@ -87,6 +87,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
         setState(() {
           isImageUploaded = false;
           _file = File(pickedFile.path);
+          widget.onChange('');
         });
         final profile = widget.profile;
         final forumGroup = widget.forumGroup;

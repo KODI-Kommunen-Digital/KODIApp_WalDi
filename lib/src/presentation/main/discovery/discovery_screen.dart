@@ -79,11 +79,7 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
             updated: (list) {
               return Container();
             },
-            // {
-            //   return DiscoveryLoaded(
-            //     services: list,
-            //   );
-            // },
+
             error: (e) => ErrorWidget('Failed to load listings.'),
             initial: () {
               return Container();
@@ -138,11 +134,6 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
       },
     );
   }
-//  void _updateSelectedFilter(ProductFilter? filter) {
-//    setState(() {
-//      selectedFilter = filter;
-//    });
-//  }
 }
 
 class DiscoveryLoading extends StatelessWidget {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class DashboardScreen extends StatelessWidget {
@@ -40,6 +41,10 @@ class DashboardScreen extends StatelessWidget {
               icon: Icons.group,
               title: Translate.of(context).translate("my_groups"),
               onPressed: () {
+                Navigator.pushNamed(
+                  context,
+                  Routes.myGroups,
+                );
                 // Add your action here
               },
             ),

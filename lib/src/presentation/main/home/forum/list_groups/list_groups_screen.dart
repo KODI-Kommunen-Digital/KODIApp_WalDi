@@ -229,13 +229,13 @@ class _ListGroupScreenState extends State<ListGroupScreen> {
             loading: () => const ListLoading(),
             loaded: (list, userId) => ListLoaded(
               list: list,
-              selectedId: widget.arguments['id'],
+              selectedCityId: widget.arguments['id'],
               userId: userId,
             ),
             updated: (list, userId) {
               return ListLoaded(
                 list: list,
-                selectedId: widget.arguments['id'],
+                selectedCityId: widget.arguments['id'],
                 userId: userId,
               );
             },
@@ -263,13 +263,13 @@ class ListLoading extends StatelessWidget {
 
 class ListLoaded extends StatefulWidget {
   final List<ForumGroupModel> list;
-  final int selectedId;
+  final int selectedCityId;
   final int userId;
 
   const ListLoaded({
     Key? key,
     required this.list,
-    required this.selectedId,
+    required this.selectedCityId,
     required this.userId,
   }) : super(key: key);
 
@@ -279,7 +279,6 @@ class ListLoaded extends StatefulWidget {
 
 class _ListLoadedState extends State<ListLoaded> {
   final _scrollController = ScrollController(initialScrollOffset: 0.0);
-  bool isLoading = false;
   bool isLoadingMore = false;
   final PageType _pageType = PageType.list;
   final ProductViewType _listMode = Application.setting.listMode;
@@ -290,7 +289,6 @@ class _ListLoadedState extends State<ListLoaded> {
   void initState() {
     super.initState();
     _scrollController.addListener(_scrollListener);
-    loadListingsList();
   }
 
   @override
@@ -309,7 +307,7 @@ class _ListLoadedState extends State<ListLoaded> {
         });
         context
             .read<ListCubit>()
-            .newListings(++pageNo, widget.selectedId)
+            .newListings(++pageNo, widget.selectedCityId)
             .then((_) {
           setState(() {
             isLoadingMore = false;
@@ -335,16 +333,6 @@ class _ListLoadedState extends State<ListLoaded> {
         )
       ],
     );
-  }
-
-  Future<void> loadListingsList() async {
-    setState(() {
-      isLoading = true;
-    });
-    await context.read<ListCubit>().onLoad(widget.selectedId);
-    setState(() {
-      isLoading = false;
-    });
   }
 
   Widget _buildItem({
@@ -374,9 +362,6 @@ class _ListLoadedState extends State<ListLoaded> {
                   arguments: Routes.submit,
                 ).then((value) async {
                   await context.read<ListGroupsCubit>().onLoad();
-                  // final prefs = await Preferences.openBox();
-                  // final userId = prefs.getKeyValue(Preferences.userId, 0);
-                  //   logError('UserId:', userId);
                   setState(() {});
                 });
               }

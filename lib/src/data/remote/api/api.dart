@@ -79,6 +79,13 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
+  static Future<ResultApiModel> requestGroupDetails(forumId, cityId) async {
+    ///TODO: CHANGE THIS HARDCODED CITYID
+    final filepath = "/cities/1/forums/$forumId";
+    final result = await HTTPManager(forum: true).get(url: filepath);
+    return ResultApiModel.fromJson(result);
+  }
+
   static Future<ResultApiModel> removeUserFromGroup(
       forumId, cityId, memberId) async {
     ///TODO: CHANGE THIS HARDCODED CITYID
@@ -312,6 +319,17 @@ class Api {
     if (pickedFile != null) {
       Api.requestForumImageUpload(cityId, forumId, pickedFile);
     }
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> requestEditForum(
+      cityId, id, params, isImageChanged) async {
+    final filePath = '/cities/$cityId/forums/$id/';
+    final result = await HTTPManager(forum: true).patch(
+      url: filePath,
+      data: params,
+      loading: true,
+    );
     return ResultApiModel.fromJson(result);
   }
 

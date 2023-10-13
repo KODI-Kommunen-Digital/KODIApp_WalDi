@@ -21,6 +21,20 @@ class GroupDetailsCubit extends Cubit<GroupDetailsState> {
   Future<void> onLoad() async {
     final groupPostsList = <GroupPostsModel>[];
     final requestGroupPostResponse = await repo.requestGroupPosts(arguments.id);
+    final requestGroupDetailResponse =
+        await repo.requestGroupDetails(arguments.id);
+    final response = requestGroupDetailResponse!.data;
+    final group = ForumGroupModel(
+      id: response['id'],
+      forumName: response['forumName'],
+      createdAt: response['createdAt'],
+      description: response['description'],
+      cityId: arguments.cityId,
+      image: response['image'],
+      isRequested: arguments.isRequested,
+      isJoined: arguments.isJoined,
+      isPrivate: response['isPrivate'],
+    );
     if (requestGroupPostResponse?.data != null) {
       for (final post in requestGroupPostResponse!.data) {
         groupPostsList.add(GroupPostsModel(
@@ -35,7 +49,8 @@ class GroupDetailsCubit extends Cubit<GroupDetailsState> {
         ));
       }
 
-      emit(GroupDetailsState.loaded(groupPostsList));
+      emit(
+          GroupDetailsState.loaded(groupPostsList, group));
     }
   }
 
