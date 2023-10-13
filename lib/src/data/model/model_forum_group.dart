@@ -5,6 +5,7 @@ class ForumGroupModel {
   String? description;
   String? image;
   int? isPrivate;
+  int? cityId;
   bool? isJoined;
   bool? isRequested;
 
@@ -15,7 +16,9 @@ class ForumGroupModel {
       this.description,
       this.image,
       this.isPrivate,
-      this.isJoined,
+        this.cityId,
+
+        this.isJoined,
       this.isRequested});
 
   ForumGroupModel.fromJson(Map<String, dynamic> json) {

@@ -13,9 +13,7 @@ import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class GroupDetailsScreen extends StatelessWidget {
-  final ForumGroupModel item;
-
-  const GroupDetailsScreen(this.item, {super.key});
+  const GroupDetailsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +27,8 @@ class GroupDetailsScreen extends StatelessWidget {
       },
       builder: (context, state) => state.maybeWhen(
         loading: () => const GroupDetailsLoading(),
-        loaded: (posts) => GroupDetailsLoaded(posts, item),
+        loaded: (posts, item, isAdmin) =>
+            GroupDetailsLoaded(posts, item, isAdmin),
         orElse: () => ErrorWidget('Failed to load Accounts.'),
       ),
     );
@@ -49,9 +48,11 @@ class GroupDetailsLoading extends StatelessWidget {
 
 class GroupDetailsLoaded extends StatefulWidget {
   final List<GroupPostsModel> posts;
-  final ForumGroupModel item;
+  final ForumGroupModel groupModel;
+  final bool isAdmin;
 
-  const GroupDetailsLoaded(this.posts, this.item, {super.key});
+  const GroupDetailsLoaded(this.posts, this.groupModel, this.isAdmin,
+      {super.key});
 
   @override
   State<GroupDetailsLoaded> createState() => _GroupDetailsLoadedState();
@@ -69,8 +70,9 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
     }
     if (!mounted) return;
     Navigator.pushNamed(context, Routes.addPosts,
-        arguments: {'isNewPost': true, 'item': widget.item}).then((value) {
-          context.read<GroupDetailsCubit>().onLoad();
+            arguments: {'isNewPost': true, 'item': widget.groupModel})
+        .then((value) {
+      context.read<GroupDetailsCubit>().onLoad();
       setState(() {});
     });
   }
@@ -98,12 +100,13 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                   Navigator.pushNamed(
                     context,
                     Routes.imageZoom,
-                    arguments: "${Application.picturesURL}${widget.item.image}",
+                    arguments:
+                        "${Application.picturesURL}${widget.groupModel.image}",
                   );
                 },
                 child: Image.network(
-                  widget.item.image != null
-                      ? "${Application.picturesURL}${widget.item.image}"
+                  widget.groupModel.image != null
+                      ? "${Application.picturesURL}${widget.groupModel.image}"
                       : "${Application.picturesURL}admin/News.jpeg",
                   fit: BoxFit.cover,
                 ),
@@ -119,7 +122,7 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                     Container(
                       padding: const EdgeInsets.all(16),
                       child: Text(
-                        widget.item.forumName!,
+                        widget.groupModel.forumName!,
                         style: const TextStyle(fontSize: 20),
                       ),
                     ),
@@ -135,19 +138,40 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                             Translate.of(context).translate('see_member')) {
                           Navigator.pushNamed(
                               context, Routes.groupMembersDetails,
-                              arguments: widget.item.id);
+                              arguments: widget.groupModel.id);
+                        } else if (choice ==
+                            Translate.of(context).translate('edit_group')) {
+                          Navigator.pushNamed(context, Routes.addGroups,
+                              arguments: {
+                                'isNewGroup': false,
+                                'forumDetails': widget.groupModel
+                              }).then((value) async {
+                            await context.read<GroupDetailsCubit>().onLoad();
+                            setState(() {});
+                          });
                         }
                       },
                       itemBuilder: (BuildContext context) {
-                        return {
-                          Translate.of(context).translate('leave_group'),
-                          Translate.of(context).translate('see_member')
-                        }.map((String choice) {
-                          return PopupMenuItem<String>(
-                            value: choice,
-                            child: Text(choice),
-                          );
-                        }).toList();
+                        return widget.isAdmin
+                            ? {
+                                Translate.of(context).translate('leave_group'),
+                                Translate.of(context).translate('see_member'),
+                                Translate.of(context).translate('edit_group'),
+                              }.map((String choice) {
+                                return PopupMenuItem<String>(
+                                  value: choice,
+                                  child: Text(choice),
+                                );
+                              }).toList()
+                            : {
+                                Translate.of(context).translate('leave_group'),
+                                Translate.of(context).translate('see_member'),
+                              }.map((String choice) {
+                                return PopupMenuItem<String>(
+                                  value: choice,
+                                  child: Text(choice),
+                                );
+                              }).toList();
                       },
                     ),
                   ],
@@ -155,7 +179,7 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                 Container(
                   padding: const EdgeInsets.all(16),
                   child: Text(
-                    widget.item.description!,
+                    widget.groupModel.description!,
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ),
@@ -277,23 +301,26 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
               onPressed: () async {
                 final isRemoved = await buildContext
                     .read<GroupDetailsCubit>()
-                    .removeGroupMember(widget.item.id);
+                    .removeGroupMember(widget.groupModel.id);
                 if (isRemoved == RemoveUser.removed) {
                   if (!mounted) return;
                   Navigator.of(context).pop(true);
-                } else if(isRemoved == RemoveUser.onlyUser){
+                } else if (isRemoved == RemoveUser.onlyUser) {
                   if (!mounted) return;
                   Navigator.of(context).pop(false);
-                  final popUpTitle = Translate.of(context).translate('only_user');
-                  final content =  Translate.of(context).translate('only_user_in_group');
-                  showAdminPopup(context,popUpTitle, content);
-                }
-                else if(isRemoved == RemoveUser.onlyAdmin){
+                  final popUpTitle =
+                      Translate.of(context).translate('only_user');
+                  final content =
+                      Translate.of(context).translate('only_user_in_group');
+                  showAdminPopup(context, popUpTitle, content);
+                } else if (isRemoved == RemoveUser.onlyAdmin) {
                   if (!mounted) return;
-                  final popUpTitle = Translate.of(context).translate('only_admin');
-                  final content = Translate.of(context).translate('add_another_admin');
+                  final popUpTitle =
+                      Translate.of(context).translate('only_admin');
+                  final content =
+                      Translate.of(context).translate('add_another_admin');
                   Navigator.of(context).pop(false);
-                  showAdminPopup(context,popUpTitle, content);
+                  showAdminPopup(context, popUpTitle, content);
                 }
               },
               child: Text(Translate.of(context).translate('yes')),
@@ -317,9 +344,8 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title:  Text(title),
-          content:  Text(
-             content),
+          title: Text(title),
+          content: Text(content),
           actions: <Widget>[
             TextButton(
               onPressed: () {

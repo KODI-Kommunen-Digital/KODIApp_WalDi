@@ -111,6 +111,17 @@ class ForumRepository {
     }
   }
 
+  Future<ResultApiModel?> requestGroupDetails(forumId) async {
+    final cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    final response = await Api.requestGroupDetails(forumId, cityId);
+    if (response.success) {
+      return response;
+    } else {
+      logError('Request Group Detail Response Failed', response.message);
+      return null;
+    }
+  }
+
   Future<bool> removeUserFromGroup(forumId, memberId) async {
     final cityId = prefs.getKeyValue(Preferences.cityId, 0);
     final response = await Api.removeUserFromGroup(forumId, cityId, memberId);
@@ -257,7 +268,7 @@ class ForumRepository {
   }
 
   Future<ResultApiModel> loadForumCities() async {
-    final response = await Api.requestHasForum();
+    final response = await Api.requestCities();
     return response;
   }
 
@@ -287,6 +298,48 @@ class ForumRepository {
       "visibility": "",
     };
     final response = await Api.requestSaveForum(cityId, params);
+    if (response.success) {
+      prefs.deleteKey('pickedFile');
+    }
+    return response;
+  }
+
+  Future<ResultApiModel> editForum(
+    String title,
+    String description,
+    String? city,
+    String? type,
+    isImageChanged,
+    forumId,
+    String createdDate,
+  ) async {
+    final cityId = await getCityId(city);
+    final image = prefs.getKeyValue(Preferences.path, null);
+    bool isPrivate = false;
+    if (type == 'public') {
+      isPrivate = false;
+    } else if (type == 'private') {
+      isPrivate = true;
+    }
+
+    Map<String, dynamic> params = {
+      "id": forumId,
+      "forumName": title,
+      "createdAt": createdDate,
+      "description": description,
+      "image": image,
+      "isPrivate": isPrivate,
+      "cityId": cityId,
+    };
+    final response =
+        await Api.requestEditForum(cityId, forumId, params, isImageChanged);
+    if (isImageChanged) {
+      final prefs = await Preferences.openBox();
+      FormData? pickedFile = prefs.getPickedFile();
+      if (pickedFile != null) {
+        Api.requestForumImageUpload(cityId, forumId, pickedFile);
+      }
+    }
     if (response.success) {
       prefs.deleteKey('pickedFile');
     }

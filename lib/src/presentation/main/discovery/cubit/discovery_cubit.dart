@@ -19,6 +19,7 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
   bool doesScroll = false;
 
   Future<void> onLoad() async {
+    emit(const DiscoveryStateLoading());
     final cityRequestResponse = await Api.requestCities();
     location = List.from(cityRequestResponse.data ?? []).map((item) {
       return CategoryModel.fromJson(item);

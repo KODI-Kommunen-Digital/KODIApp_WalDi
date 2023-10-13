@@ -11,12 +11,12 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   ProfileCubit(this.repo, this.userModel)
       : super(const ProfileState.loading()) {
-    loadUserListing(userModel.id);
+    loadUserListing(userModel.id, 1);
   }
 
-  Future<List<ProductModel>> loadUserListing(userId) async {
+  Future<List<ProductModel>> loadUserListing(userId, pageNo) async {
     List<ProductModel> listDataList = [];
-    final result = await repo.loadUserListings(userId);
+    final result = await repo.loadUserListings(userId, pageNo);
     for (final list in result) {
       final product = await loadProduct(list.cityId, list.id);
       if (product != null) {
@@ -37,10 +37,41 @@ class ProfileCubit extends Cubit<ProfileState> {
             email: product.email,
             website: product.website,
             description: product.description,
-            userId: product.userId));
+            userId: product.userId,
+            sourceId: product.sourceId));
       }
     }
     emit(ProfileState.loaded(listDataList));
+    return listDataList;
+  }
+
+  Future<List<ProductModel>> newListings(userId, pageNo ) async {
+    List<ProductModel> listDataList = [];
+    final result = await repo.loadUserListings(userId, pageNo);
+    for (final list in result) {
+      final product = await loadProduct(list.cityId, list.id);
+      if (product != null) {
+        listDataList.add(ProductModel(
+            id: list.id,
+            cityId: list.cityId,
+            title: product.title,
+            image: product.image,
+            pdf: product.pdf,
+            category: product.category,
+            categoryId: product.categoryId,
+            startDate: product.startDate,
+            endDate: product.endDate,
+            createDate: product.createDate,
+            favorite: product.favorite,
+            address: product.address,
+            phone: product.phone,
+            email: product.email,
+            website: product.website,
+            description: product.description,
+            userId: product.userId,
+            sourceId: product.sourceId));
+      }
+    }
     return listDataList;
   }
 
@@ -60,5 +91,4 @@ class ProfileCubit extends Cubit<ProfileState> {
     final deleteResponse = await repo.deleteUserList(id, listingId);
     return deleteResponse;
   }
-
 }

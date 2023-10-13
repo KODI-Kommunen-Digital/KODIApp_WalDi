@@ -1,9 +1,11 @@
-// ignore_for_file: no_leading_underscores_for_local_identifiers
+// ignore_for_file: no_leading_underscores_for_local_identifiers, depend_on_referenced_packages
 
 import 'dart:async';
 
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_category.dart';
@@ -18,6 +20,7 @@ import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:heidi/src/utils/translate.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 import 'cubit/home_cubit.dart';
 import 'cubit/home_state.dart';
@@ -37,6 +40,14 @@ class _HomeScreenState extends State<HomeScreen> {
   final _scrollController = ScrollController();
   bool isLoading = false;
   bool categoryLoading = false;
+  bool isRefreshLoader = false;
+  String? banner;
+  List<CategoryModel>? category = [];
+  List<CategoryModel>? location = [];
+  List<ProductModel>? recent = [];
+  final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
+    Factory(() => EagerGestureRecognizer())
+  };
 
   @override
   void initState() {
@@ -46,6 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
     AppBloc.homeCubit.onLoad(false);
     connectivityInternet();
     scrollUp();
+    checkUserExist();
   }
 
   void connectivityInternet() {
@@ -61,13 +73,20 @@ class _HomeScreenState extends State<HomeScreen> {
     _scrollController.dispose();
   }
 
-  void _scrollListener() {
+  Future<void> checkUserExist() async {
+    bool exists = await AppBloc.homeCubit.doesUserExist();
+    if (!exists) {
+      AppBloc.loginCubit.onLogout();
+    }
+  }
+
+  Future<void> _scrollListener() async {
     if (_scrollController.position.atEdge) {
       if (_scrollController.position.pixels != 0) {
         setState(() {
           isLoading = true;
         });
-        AppBloc.homeCubit.newListings(++pageNo).then((_) {
+        recent = await AppBloc.homeCubit.newListings(++pageNo).then((_) {
           setState(() {
             isLoading = false;
           });
@@ -96,6 +115,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _onRefresh() async {
     await AppBloc.homeCubit.onLoad(true);
+    setState(() {
+      pageNo = 1;
+    });
   }
 
   Future<void> _setSavedCity(List<CategoryModel> location) async {
@@ -126,10 +148,6 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         },
         builder: (context, state) {
-          String? banner;
-          List<CategoryModel>? category;
-          List<CategoryModel>? location;
-          List<ProductModel>? recent;
           List<String> cityTitles = [
             Translate.of(context).translate('select_location')
           ];
@@ -139,17 +157,18 @@ class _HomeScreenState extends State<HomeScreen> {
             category = state.category;
             location = state.location;
             recent = state.recent;
+            isRefreshLoader = true;
             categoryLoading = false;
 
-            if (location.isNotEmpty) {
-              for (final ids in location) {
+            if (location != null) {
+              for (final ids in location!) {
                 cityTitles.add(ids.title.toString());
               }
               if (checkSavedCity) {
                 checkSavedCity = false;
-                _setSavedCity(location);
+                _setSavedCity(location!);
               } else if (AppBloc.homeCubit.getCalledExternally()) {
-                _setSavedCity(location);
+                _setSavedCity(location!);
                 AppBloc.homeCubit.setCalledExternally(false);
               }
             }
@@ -163,33 +182,14 @@ class _HomeScreenState extends State<HomeScreen> {
             categoryLoading = true;
             location = state.location;
             if (location!.isNotEmpty) {
-              for (final ids in location) {
+              for (final ids in location!) {
                 cityTitles.add(ids.title.toString());
               }
               if (checkSavedCity) {
                 checkSavedCity = false;
-                _setSavedCity(location);
+                _setSavedCity(location!);
               } else if (AppBloc.homeCubit.getCalledExternally()) {
-                _setSavedCity(location);
-                AppBloc.homeCubit.setCalledExternally(false);
-              }
-            }
-          }
-
-          if (state is HomeStateUpdated) {
-            banner = state.banner;
-            category = state.category;
-            location = state.location;
-            recent = state.recent;
-
-            if (location.isNotEmpty) {
-              for (final ids in location) {
-                cityTitles.add(ids.title.toString());
-              }
-              if (checkSavedCity) {
-                _setSavedCity(location);
-              } else if (AppBloc.homeCubit.getCalledExternally()) {
-                _setSavedCity(location);
+                _setSavedCity(location!);
                 AppBloc.homeCubit.setCalledExternally(false);
               }
             }
@@ -360,8 +360,73 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  void _makeAction(String link) async {
+    if (!link.startsWith("https://") && !link.startsWith("http://")) {
+      link = "https://$link";
+    }
+    final webViewController = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..loadRequest(Uri.parse(link));
+
+    await showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return SafeArea(
+          top: false,
+          bottom: false,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                color: Colors.black,
+                padding: const EdgeInsets.fromLTRB(16, 32, 16, 0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        link,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(
+                        Icons.close,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height:
+                    MediaQuery.of(context).size.height - kToolbarHeight - 30,
+                child: WebViewWidget(
+                  controller: webViewController,
+                  gestureRecognizers: gestureRecognizers,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   void _onProductDetail(ProductModel item) {
-    Navigator.pushNamed(context, Routes.productDetail, arguments: item);
+    if (item.sourceId == 2) {
+      _makeAction(item.website);
+    } else {
+      Navigator.pushNamed(context, Routes.productDetail, arguments: item);
+    }
   }
 
   Widget _buildCategory(List<CategoryModel>? category) {
@@ -503,9 +568,10 @@ class _HomeScreenState extends State<HomeScreen> {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
-        return const Padding(
-          padding: EdgeInsets.only(bottom: 16),
-          child: AppProductItem(type: ProductViewType.small),
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: AppProductItem(
+              type: ProductViewType.small, isRefreshLoader: isRefreshLoader),
         );
       },
       itemCount: 8,
@@ -529,6 +595,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                       item: item,
                       type: ProductViewType.small,
+                      isRefreshLoader: isRefreshLoader,
                     ),
                   ),
                 )
@@ -538,6 +605,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     onPressed: () {
                       _onProductDetail(item);
                     },
+                    isRefreshLoader: isRefreshLoader,
                     item: item,
                     type: ProductViewType.small,
                   ),

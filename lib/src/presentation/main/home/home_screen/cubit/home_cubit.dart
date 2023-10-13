@@ -4,6 +4,8 @@ import 'package:bloc/bloc.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
+import 'package:heidi/src/data/repository/user_repository.dart';
+import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/utils/configs/image.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 
@@ -29,8 +31,9 @@ class HomeCubit extends Cubit<HomeState> {
       return CategoryModel.fromJson(item);
     }).toList();
 
-    if(!isRefreshLoader){
-      emit(HomeState.categoryLoading(location));}
+    if (!isRefreshLoader) {
+      emit(HomeState.categoryLoading(location));
+    }
 
     final categoryRequestResponse = await Api.requestHomeCategory();
     category = List.from(categoryRequestResponse.data ?? []).map((item) {
@@ -50,23 +53,33 @@ class HomeCubit extends Cubit<HomeState> {
       }).toList();
     }
     final categoryCountRequestResponse =
-    await Api.requestCategoryCount(savedCity?.id);
+        await Api.requestCategoryCount(savedCity?.id);
     categoryCount =
         List.from(categoryCountRequestResponse.data ?? []).map((item) {
-          return CategoryModel.fromJson(item);
-        }).toList();
+      return CategoryModel.fromJson(item);
+    }).toList();
 
     const banner = Images.slider;
 
     List<CategoryModel> formattedCategories =
-    await formatCategoriesList(category, categoryCount, savedCity?.id);
+        await formatCategoriesList(category, categoryCount, savedCity?.id);
 
+    await AppBloc.discoveryCubit.onLoad();
     emit(HomeStateLoaded(
       banner,
       formattedCategories,
       location,
       recent,
+      isRefreshLoader,
     ));
+  }
+
+  Future<bool> doesUserExist() async {
+    final int userId = await UserRepository.getLoggedUserId();
+    if (userId == 0) return true;
+
+    bool doesExist = await UserRepository.doesUserExist(userId);
+    return doesExist;
   }
 
   Future<bool> categoryHasContent(int id, int? cityId) async {
@@ -85,13 +98,18 @@ class HomeCubit extends Cubit<HomeState> {
   void scrollUp() {
     emit(const HomeStateLoading());
     const banner = Images.slider;
-    emit(HomeStateLoaded(banner, category, location, recent));
+    emit(HomeStateLoaded(
+      banner,
+      category,
+      location,
+      recent,
+      false,
+    ));
   }
 
   bool getCalledExternally() {
     return calledExternally;
   }
-
 
   void setCalledExternally(bool called) {
     calledExternally = called;
@@ -167,41 +185,16 @@ class HomeCubit extends Cubit<HomeState> {
     return null;
   }
 
-  Future<void> newListings(int pageNo) async {
+  Future<dynamic> newListings(int pageNo) async {
     if (!await hasInternet()) {
       emit(const HomeState.error("no_internet"));
     }
-    final categoryRequestResponse = await Api.requestHomeCategory();
-    final cityRequestResponse = await Api.requestCities();
 
-    category = List.from(categoryRequestResponse.data ?? []).map((item) {
-      return CategoryModel.fromJson(item);
-    }).toList();
-
-    location = List.from(cityRequestResponse.data ?? []).map((item) {
-      return CategoryModel.fromJson(item);
-    }).toList();
-
-    CategoryModel? savedCity = await checkSavedCity(location);
-    final categoryCountRequestResponse =
-        await Api.requestCategoryCount(savedCity?.id);
-    categoryCount =
-        List.from(categoryCountRequestResponse.data ?? []).map((item) {
-      return CategoryModel.fromJson(item);
-    }).toList();
-    const banner = Images.slider;
-    List<CategoryModel> formattedCategories =
-        await formatCategoriesList(category, categoryCount, savedCity?.id);
     final listingsRequestResponse = await Api.requestRecentListings(pageNo);
     final newRecent = List.from(listingsRequestResponse.data ?? []).map((item) {
       return ProductModel.fromJson(item);
     }).toList();
     recent.addAll(newRecent);
-    emit(HomeState.updated(
-      banner,
-      formattedCategories,
-      location,
-      recent,
-    ));
+    return recent;
   }
 }

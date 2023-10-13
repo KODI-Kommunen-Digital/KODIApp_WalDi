@@ -33,6 +33,37 @@ class AddGroupCubit extends Cubit<AddGroupState> {
     }
   }
 
+  Future<bool> onEditForum(
+    String title,
+    String description,
+    String? city,
+    String? type,
+    bool isImageChanged,
+    forumId,
+    createdDate,
+  ) async {
+    try {
+      final response = await _repo.editForum(
+        title,
+        description,
+        city,
+        type,
+        isImageChanged,
+        forumId,
+        createdDate,
+      );
+      if (response.success) {
+        return true;
+      } else {
+        logError('Edit Forum Response Failed', response.message);
+        return false;
+      }
+    } catch (e) {
+      logError('Edit Forum Error', e);
+      return false;
+    }
+  }
+
   Future<int?> getCurrentCityId() async {
     final prefs = await Preferences.openBox();
     return prefs.getKeyValue(Preferences.cityId, 0);

@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_citizen_service.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
-import 'package:heidi/src/presentation/main/home/home_screen/cubit/home_cubit.dart';
-import 'package:heidi/src/presentation/main/home/home_screen/cubit/home_state.dart';
 import 'package:heidi/src/presentation/main/home/list_product/cubit/list_cubit.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
@@ -64,29 +62,30 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
         ],
       ),
       body: BlocConsumer<DiscoveryCubit, DiscoveryState>(
-        listener: (context, state) {
-          state.maybeWhen(
-            error: (msg) => ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text(msg))),
-            orElse: () {},
-          );
-        },
-        builder: (context, state) => state.when(
-          loading: () {
-            return const DiscoveryLoading();
+          listener: (context, state) {
+            state.maybeWhen(
+              error: (msg) => ScaffoldMessenger.of(context)
+                  .showSnackBar(SnackBar(content: Text(msg))),
+              orElse: () {},
+            );
           },
-          loaded: (list) => DiscoveryLoaded(
-            services: list,
+          builder: (context, state) => state.when(
+            loading: () {
+              return const DiscoveryLoading();
+            },
+            loaded: (list) => DiscoveryLoaded(
+              services: list,
+            ),
+            updated: (list) {
+              return Container();
+            },
+
+            error: (e) => ErrorWidget('Failed to load listings.'),
+            initial: () {
+              return Container();
+            },
           ),
-          updated: (list) {
-            return Container();
-          },
-          error: (e) => ErrorWidget('Failed to load listings.'),
-          initial: () {
-            return Container();
-          },
         ),
-      ),
     );
   }
 
@@ -135,11 +134,6 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
       },
     );
   }
-//  void _updateSelectedFilter(ProductFilter? filter) {
-//    setState(() {
-//      selectedFilter = filter;
-//    });
-//  }
 }
 
 class DiscoveryLoading extends StatelessWidget {
@@ -183,43 +177,33 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
 
   @override
   Widget build(BuildContext context) {
+    if (AppBloc.discoveryCubit.getDoesScroll()) {
+      AppBloc.discoveryCubit.setDoesScroll(false);
+      scrollUp();
+    }
     return Scaffold(
-      body: BlocListener<HomeCubit, HomeState>(
-        listener: (context, state) {
-          AppBloc.discoveryCubit.onLoad();
-          // hideEmptyService();
-        },
-        child: BlocListener<DiscoveryCubit, DiscoveryState>(
-          listener: (context, state) {
-            if (AppBloc.discoveryCubit.getDoesScroll()) {
-              AppBloc.discoveryCubit.setDoesScroll(false);
-              scrollUp();
-            }
-          },
-          child: GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, // Adjust the number of columns as desired
-                crossAxisSpacing: 10.0,
-                mainAxisSpacing: 10.0,
-                mainAxisExtent: 300.0),
-            itemCount: widget.services.length,
-            controller: _scrollController,
-            itemBuilder: (BuildContext context, int index) {
-              return InkWell(
-                onTap: () {
-                  navigateToLink(widget.services[index]);
-                },
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(15.0),
-                  child: Image.asset(
-                    widget.services[index].imageUrl,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              );
+      body: GridView.builder(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2, // Adjust the number of columns as desired
+            crossAxisSpacing: 10.0,
+            mainAxisSpacing: 10.0,
+            mainAxisExtent: 300.0),
+        itemCount: widget.services.length,
+        controller: _scrollController,
+        itemBuilder: (BuildContext context, int index) {
+          return InkWell(
+            onTap: () {
+              navigateToLink(widget.services[index]);
             },
-          ),
-        ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(15.0),
+              child: Image.asset(
+                widget.services[index].imageUrl,
+                fit: BoxFit.cover,
+              ),
+            ),
+          );
+        },
       ),
     );
   }

@@ -1,6 +1,8 @@
-import 'dart:async';
+// ignore_for_file: depend_on_referenced_packages
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
@@ -17,6 +19,8 @@ import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/multiple_gesture_detector.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   const ProductDetailScreen({Key? key, required this.item}) : super(key: key);
@@ -31,6 +35,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   final _scrollController = ScrollController();
   final _productDetailCubit = ProductDetailCubit();
   Color? _iconColor = Colors.white;
+  final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
+    Factory(() => EagerGestureRecognizer())
+  };
 
   @override
   void initState() {
@@ -112,15 +119,66 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     }
   }
 
-  Future<void> _makeAction(String link) async {
+  void _makeAction(String link) async {
     if (!link.startsWith("https://") && !link.startsWith("http://")) {
       link = "https://$link";
     }
-    if (await canLaunchUrl(Uri.parse(link))) {
-      await launchUrl(Uri.parse(link), mode: LaunchMode.inAppWebView);
-    } else {
-      throw 'Could not launch $link';
-    }
+
+    final webViewController = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..loadRequest(Uri.parse(link));
+
+    await showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return SafeArea(
+          top: false,
+          bottom: false,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                color: Colors.black,
+                padding: const EdgeInsets.fromLTRB(16, 32, 16, 0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        link,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(
+                        Icons.close,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height:
+                    MediaQuery.of(context).size.height - kToolbarHeight - 30,
+                child: WebViewWidget(
+                  controller: webViewController,
+                  gestureRecognizers: gestureRecognizers,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   ///Build content UI
@@ -129,6 +187,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     String uniqueKey = UniqueKey().toString();
     List<Widget> action = [];
     Widget actionGalleries = Container();
+    final memoryCacheManager = DefaultCacheManager();
     // Widget actionMapView = Container();
     Widget banner = AppPlaceholder(
       child: Container(
@@ -364,13 +423,18 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 Navigator.pushNamed(
                   context,
                   Routes.imageZoom,
-                  arguments: "${Application.picturesURL}${product.image}",
+                  arguments: product.sourceId == 2
+                      ? product.image
+                      : "${Application.picturesURL}${product.image}",
                 );
               },
               child: CachedNetworkImage(
-                imageUrl: product.image == 'admin/News.jpeg'
-                    ? "${Application.picturesURL}${product.image}"
-                    : "${Application.picturesURL}${product.image}?cacheKey=$uniqueKey",
+                imageUrl: product.sourceId == 2
+                    ? product.image
+                    : product.image == 'admin/News.jpeg'
+                        ? "${Application.picturesURL}${product.image}"
+                        : "${Application.picturesURL}${product.image}?cacheKey=$uniqueKey",
+                cacheManager: memoryCacheManager,
                 placeholder: (context, url) {
                   return AppPlaceholder(
                     child: Container(
@@ -854,11 +918,17 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   if (productUserId?.id == loggedInUserId) {
                     if (!mounted) return;
                     Navigator.pushNamed(context, Routes.profile,
-                        arguments: {'user': userDetail, 'editable': true});
+                            arguments: {'user': userDetail, 'editable': true})
+                        .then((value) {
+                      setState(() {});
+                    });
                   } else {
                     if (!mounted) return;
                     Navigator.pushNamed(context, Routes.profile,
-                        arguments: {'user': userDetail, 'editable': false});
+                            arguments: {'user': userDetail, 'editable': false})
+                        .then((value) {
+                      setState(() {});
+                    });
                   }
                 },
                 type: UserViewType.information,

@@ -1,5 +1,7 @@
+// ignore_for_file: depend_on_referenced_packages
 import 'dart:async';
-
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_product.dart';
@@ -7,9 +9,9 @@ import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:heidi/src/presentation/widget/app_navbar.dart';
 import 'package:heidi/src/presentation/widget/app_product_item.dart';
 import 'package:heidi/src/utils/configs/application.dart';
-import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 import 'cubit/cubit.dart';
 
@@ -255,6 +257,7 @@ class ListLoaded extends StatefulWidget {
 }
 
 class _ListLoadedState extends State<ListLoaded> {
+  List<ProductModel> list = [];
   final _scrollController = ScrollController(initialScrollOffset: 0.0);
   bool isLoading = false;
   bool isLoadingMore = false;
@@ -262,7 +265,9 @@ class _ListLoadedState extends State<ListLoaded> {
   final ProductViewType _listMode = Application.setting.listMode;
   double previousScrollPosition = 0;
   int pageNo = 1;
-
+  final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
+    Factory(() => EagerGestureRecognizer())
+  };
   @override
   void initState() {
     super.initState();
@@ -277,28 +282,19 @@ class _ListLoadedState extends State<ListLoaded> {
     super.dispose();
   }
 
-  void _scrollListener() {
+  Future<void> _scrollListener() async {
     if (_scrollController.position.atEdge) {
       if (_scrollController.position.pixels != 0) {
         setState(() {
           isLoadingMore = true;
-          previousScrollPosition = _scrollController.position.pixels;
+          // previousScrollPosition = _scrollController.position.pixels;
         });
-        context
+        list = await context
             .read<ListCubit>()
-            .newListings(++pageNo, widget.selectedId)
-            .then((_) {
-          setState(() {
-            isLoadingMore = false;
-          });
-        }).catchError(
-          (error) {
-            setState(() {
-              isLoadingMore = false;
-            });
-            logError('Error loading more listings: $error');
-          },
-        );
+            .newListings(++pageNo, widget.selectedId);
+        setState(() {
+          isLoadingMore = false;
+        });
       }
     }
   }
@@ -308,7 +304,7 @@ class _ListLoadedState extends State<ListLoaded> {
     return Column(
       children: <Widget>[
         Expanded(
-          child: _buildContent(widget.list),
+          child: _buildContent(),
         )
       ],
     );
@@ -324,8 +320,74 @@ class _ListLoadedState extends State<ListLoaded> {
     });
   }
 
+  void _makeAction(String link) async {
+    if (!link.startsWith("https://") && !link.startsWith("http://")) {
+      link = "https://$link";
+    }
+
+    final webViewController = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..loadRequest(Uri.parse(link));
+
+    await showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return SafeArea(
+          top: false,
+          bottom: false,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                color: Colors.black,
+                padding: const EdgeInsets.fromLTRB(16, 32, 16, 0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        link,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(
+                        Icons.close,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height:
+                    MediaQuery.of(context).size.height - kToolbarHeight - 30,
+                child: WebViewWidget(
+                  controller: webViewController,
+                  gestureRecognizers: gestureRecognizers,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   void _onProductDetail(ProductModel item) {
-    Navigator.pushNamed(context, Routes.productDetail, arguments: item);
+    if (item.sourceId == 2) {
+      _makeAction(item.website);
+    } else {
+      Navigator.pushNamed(context, Routes.productDetail, arguments: item);
+    }
   }
 
   Widget _buildItem({
@@ -338,6 +400,7 @@ class _ListLoadedState extends State<ListLoaded> {
           return Container(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: AppProductItem(
+              isRefreshLoader: true,
               onPressed: () {
                 _onProductDetail(item);
               },
@@ -349,12 +412,14 @@ class _ListLoadedState extends State<ListLoaded> {
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: AppProductItem(
+            isRefreshLoader: true,
             type: _listMode,
           ),
         );
       default:
         if (item != null) {
           return AppProductItem(
+            isRefreshLoader: true,
             onPressed: () {
               _onProductDetail(item);
             },
@@ -363,12 +428,14 @@ class _ListLoadedState extends State<ListLoaded> {
           );
         }
         return AppProductItem(
+          isRefreshLoader: true,
           type: _listMode,
         );
     }
   }
 
-  Widget _buildContent(List<ProductModel> list) {
+  Widget _buildContent() {
+    list = widget.list;
     return BlocBuilder<ListCubit, ListState>(
       builder: (context, state) {
         if (_pageType == PageType.list) {
@@ -378,13 +445,13 @@ class _ListLoadedState extends State<ListLoaded> {
               SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
-                    final item = widget.list[index];
+                    final item = list[index];
                     return Padding(
-                      padding: const EdgeInsets.only(bottom: 16),
+                      padding: const EdgeInsets.only(bottom: 16, top: 5),
                       child: _buildItem(item: item, type: _listMode),
                     );
                   },
-                  childCount: widget.list.length,
+                  childCount: list.length,
                 ),
               ),
             ],
@@ -414,7 +481,7 @@ class _ListLoadedState extends State<ListLoaded> {
                 contentList,
                 if (isLoadingMore)
                   const Positioned(
-                    bottom: 50,
+                    bottom: 5,
                     left: 0,
                     right: 0,
                     child: Center(

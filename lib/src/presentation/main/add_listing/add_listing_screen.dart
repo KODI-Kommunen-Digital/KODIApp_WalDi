@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_product.dart';
+import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/presentation/widget/app_picker_item.dart';
 import 'package:heidi/src/presentation/widget/app_text_input.dart';
@@ -200,7 +201,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       final city = listCity
           .firstWhere((element) => element['id'] == widget.item?.cityId);
       selectedCity = city['name'];
-      if (selectedCategory == "News" || selectedCategory == null) {
+      if (selectedCategory == "news" || selectedCategory == null) {
         final subCategoryResponse = await context
             .read<AddListingCubit>()
             .loadSubCategory(selectedCategory);
@@ -433,6 +434,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
             startTime: _startTime,
             endTime: _endTime);
         if (result) {
+          await AppBloc.homeCubit.onLoad(false);
           _onSuccess();
           if (!mounted) return;
           context.read<AddListingCubit>().clearImagePath();

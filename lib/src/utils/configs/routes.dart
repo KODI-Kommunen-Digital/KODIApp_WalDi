@@ -5,7 +5,12 @@ import 'package:heidi/src/data/model/model_forum_group.dart';
 import 'package:heidi/src/data/model/model_group_posts.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/presentation/main/account/change_password/change_password_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/dashboard_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/my_groups/cubit/my_groups_cubit.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/my_groups/my_groups_screen.dart';
 import 'package:heidi/src/presentation/main/account/edit_profile/edit_profile_screen.dart';
+import 'package:heidi/src/presentation/main/account/faq/cubit/faq_cubit.dart';
+import 'package:heidi/src/presentation/main/account/faq/faq_screen.dart';
 import 'package:heidi/src/presentation/main/account/legal/imprint/imprint.dart';
 import 'package:heidi/src/presentation/main/account/legal/legal.dart';
 import 'package:heidi/src/presentation/main/account/legal/privacy_policy/privacy.dart';
@@ -60,6 +65,7 @@ class Routes {
   static const String changePassword = "/changePassword";
   static const String changeLanguage = "/changeLanguage";
   static const String contactUs = "/contactUs";
+  static const String dashboard = "/dashboard";
   static const String aboutUs = "/aboutUs";
   static const String gallery = "/gallery";
   static const String themeSetting = "/themeSetting";
@@ -89,7 +95,9 @@ class Routes {
   static const String privacy = "/privacy";
   static const String imageZoom = "/imageZoom";
   static const String profileSettings = "/profileSettings";
+  static const String faq = "/faq";
   static const String listGroups = "/listGroups";
+  static const String myGroups = "/myGroups";
   static const String groupDetails = "/groupDetails";
   static const String groupMembersDetails = "/groupMembersDetails";
   static const String postDetails = "/postDetails";
@@ -238,10 +246,40 @@ class Routes {
           },
         );
 
+      case dashboard:
+        return MaterialPageRoute(
+          builder: (context) {
+            return const DashboardScreen();
+          },
+        );
+
       case contactUsSuccess:
         return MaterialPageRoute(
           builder: (context) {
             return const ContactUsSuccessScreen();
+          },
+          fullscreenDialog: true,
+        );
+
+      case faq:
+        return MaterialPageRoute(
+          builder: (context) {
+            return BlocProvider(
+              create: (context) => FaqCubit(),
+              child: const FaqScreen(),
+            );
+          },
+        );
+
+      case myGroups:
+        return MaterialPageRoute(
+          builder: (context) {
+            return BlocProvider(
+              create: (context) => MyGroupsCubit(
+                context.read(),
+              ),
+              child: const MyGroupsScreen(),
+            );
           },
           fullscreenDialog: true,
         );
@@ -268,7 +306,7 @@ class Routes {
                 settings.arguments as ForumGroupModel;
             return BlocProvider(
               create: (context) => GroupDetailsCubit(context.read(), arguments),
-              child: GroupDetailsScreen(arguments),
+              child: const GroupDetailsScreen(),
             );
           },
           fullscreenDialog: true,
@@ -292,10 +330,7 @@ class Routes {
             final GroupPostsModel arguments =
                 settings.arguments as GroupPostsModel;
             return BlocProvider(
-              create: (context) => PostDetailCubit(
-                context.read(),
-                arguments
-              ),
+              create: (context) => PostDetailCubit(context.read(), arguments),
               child: PostDetailsScreen(arguments),
             );
           },
@@ -312,7 +347,7 @@ class Routes {
                 context.read(),
               ),
               child: AddGroupScreen(
-                item: arguments['item'] as ProductModel?,
+                item: arguments['forumDetails'] as ForumGroupModel?,
                 isNewGroup: arguments['isNewGroup'] as bool,
               ),
             );
