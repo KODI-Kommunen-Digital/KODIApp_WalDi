@@ -109,7 +109,7 @@ class ListGroupsCubit extends Cubit<ListGroupsState> {
     }
   }
 
-  List<ForumGroupModel> getLoadedList() => listLoaded;
+  List<ForumGroupModel> getLoadedList() => listLoaded.reversed.toList();
 
   Future<void> onGroupFilter(
       GroupFilter? type, List<ForumGroupModel> loadedList) async {
