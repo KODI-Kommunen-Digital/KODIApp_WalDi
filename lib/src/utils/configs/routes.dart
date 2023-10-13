@@ -8,6 +8,7 @@ import 'package:heidi/src/presentation/main/account/change_password/change_passw
 import 'package:heidi/src/presentation/main/account/dashboard/dashboard_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/my_groups/cubit/my_groups_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/my_groups/my_groups_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/my_listings/my_listings_screen.dart';
 import 'package:heidi/src/presentation/main/account/edit_profile/edit_profile_screen.dart';
 import 'package:heidi/src/presentation/main/account/faq/cubit/faq_cubit.dart';
 import 'package:heidi/src/presentation/main/account/faq/faq_screen.dart';
@@ -103,6 +104,7 @@ class Routes {
   static const String postDetails = "/postDetails";
   static const String addGroups = "/addGroup";
   static const String addPosts = "/addPosts";
+  static const String myListings = "/myListings";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -249,7 +251,36 @@ class Routes {
       case dashboard:
         return MaterialPageRoute(
           builder: (context) {
-            return const DashboardScreen();
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return BlocProvider(
+              create: (context) => ProfileCubit(
+                context.read(),
+                arguments['user'] as UserModel,
+              ),
+              child: DashboardScreen(
+                user: arguments['user'] as UserModel,
+                isEditable: arguments['editable'] as bool,
+              ),
+            );
+          },
+        );
+
+      case myListings:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return BlocProvider(
+              create: (context) => ProfileCubit(
+                context.read(),
+                arguments['user'] as UserModel,
+              ),
+              child: MyListingsScreen(
+                user: arguments['user'] as UserModel,
+                isEditable: arguments['editable'] as bool,
+              ),
+            );
           },
         );
 
