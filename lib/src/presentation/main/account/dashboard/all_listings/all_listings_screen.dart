@@ -327,7 +327,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                                   CrossAxisAlignment.start,
                                               children: <Widget>[
                                                 const SizedBox(
-                                                  height: 16,
+                                                  height: 24,
                                                 ),
                                                 Text(
                                                   item.category ?? '',
@@ -409,7 +409,6 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                                           icon: const Icon(
                                                               Icons.more_vert))
                                                     ]),
-                                                const SizedBox(height: 8),
                                                 const SizedBox(height: 8),
                                                 const SizedBox(height: 4),
                                               ],
