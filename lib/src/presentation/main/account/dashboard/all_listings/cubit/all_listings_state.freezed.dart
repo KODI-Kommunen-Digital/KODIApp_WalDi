@@ -20,21 +20,22 @@ mixin _$AllListingsState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<ProductModel> recent) loaded,
+    required TResult Function(List<ProductModel> recent, bool isRefreshLoader)
+        loaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<ProductModel> recent)? loaded,
+    TResult? Function(List<ProductModel> recent, bool isRefreshLoader)? loaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<ProductModel> recent)? loaded,
+    TResult Function(List<ProductModel> recent, bool isRefreshLoader)? loaded,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -121,7 +122,8 @@ class _$AllListingsStateInitial implements AllListingsStateInitial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<ProductModel> recent) loaded,
+    required TResult Function(List<ProductModel> recent, bool isRefreshLoader)
+        loaded,
   }) {
     return initial();
   }
@@ -131,7 +133,7 @@ class _$AllListingsStateInitial implements AllListingsStateInitial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<ProductModel> recent)? loaded,
+    TResult? Function(List<ProductModel> recent, bool isRefreshLoader)? loaded,
   }) {
     return initial?.call();
   }
@@ -141,7 +143,7 @@ class _$AllListingsStateInitial implements AllListingsStateInitial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<ProductModel> recent)? loaded,
+    TResult Function(List<ProductModel> recent, bool isRefreshLoader)? loaded,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -230,7 +232,8 @@ class _$AllListingsStateLoading implements AllListingsStateLoading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<ProductModel> recent) loaded,
+    required TResult Function(List<ProductModel> recent, bool isRefreshLoader)
+        loaded,
   }) {
     return loading();
   }
@@ -240,7 +243,7 @@ class _$AllListingsStateLoading implements AllListingsStateLoading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<ProductModel> recent)? loaded,
+    TResult? Function(List<ProductModel> recent, bool isRefreshLoader)? loaded,
   }) {
     return loading?.call();
   }
@@ -250,7 +253,7 @@ class _$AllListingsStateLoading implements AllListingsStateLoading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<ProductModel> recent)? loaded,
+    TResult Function(List<ProductModel> recent, bool isRefreshLoader)? loaded,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -304,7 +307,7 @@ abstract class _$$AllListingsStateLoadedCopyWith<$Res> {
           $Res Function(_$AllListingsStateLoaded) then) =
       __$$AllListingsStateLoadedCopyWithImpl<$Res>;
   @useResult
-  $Res call({List<ProductModel> recent});
+  $Res call({List<ProductModel> recent, bool isRefreshLoader});
 }
 
 /// @nodoc
@@ -319,12 +322,17 @@ class __$$AllListingsStateLoadedCopyWithImpl<$Res>
   @override
   $Res call({
     Object? recent = null,
+    Object? isRefreshLoader = null,
   }) {
     return _then(_$AllListingsStateLoaded(
       null == recent
           ? _value._recent
           : recent // ignore: cast_nullable_to_non_nullable
               as List<ProductModel>,
+      null == isRefreshLoader
+          ? _value.isRefreshLoader
+          : isRefreshLoader // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -332,7 +340,8 @@ class __$$AllListingsStateLoadedCopyWithImpl<$Res>
 /// @nodoc
 
 class _$AllListingsStateLoaded implements AllListingsStateLoaded {
-  const _$AllListingsStateLoaded(final List<ProductModel> recent)
+  const _$AllListingsStateLoaded(
+      final List<ProductModel> recent, this.isRefreshLoader)
       : _recent = recent;
 
   final List<ProductModel> _recent;
@@ -344,8 +353,11 @@ class _$AllListingsStateLoaded implements AllListingsStateLoaded {
   }
 
   @override
+  final bool isRefreshLoader;
+
+  @override
   String toString() {
-    return 'AllListingsState.loaded(recent: $recent)';
+    return 'AllListingsState.loaded(recent: $recent, isRefreshLoader: $isRefreshLoader)';
   }
 
   @override
@@ -353,12 +365,14 @@ class _$AllListingsStateLoaded implements AllListingsStateLoaded {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AllListingsStateLoaded &&
-            const DeepCollectionEquality().equals(other._recent, _recent));
+            const DeepCollectionEquality().equals(other._recent, _recent) &&
+            (identical(other.isRefreshLoader, isRefreshLoader) ||
+                other.isRefreshLoader == isRefreshLoader));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(_recent));
+  int get hashCode => Object.hash(runtimeType,
+      const DeepCollectionEquality().hash(_recent), isRefreshLoader);
 
   @JsonKey(ignore: true)
   @override
@@ -372,9 +386,10 @@ class _$AllListingsStateLoaded implements AllListingsStateLoaded {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<ProductModel> recent) loaded,
+    required TResult Function(List<ProductModel> recent, bool isRefreshLoader)
+        loaded,
   }) {
-    return loaded(recent);
+    return loaded(recent, isRefreshLoader);
   }
 
   @override
@@ -382,9 +397,9 @@ class _$AllListingsStateLoaded implements AllListingsStateLoaded {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<ProductModel> recent)? loaded,
+    TResult? Function(List<ProductModel> recent, bool isRefreshLoader)? loaded,
   }) {
-    return loaded?.call(recent);
+    return loaded?.call(recent, isRefreshLoader);
   }
 
   @override
@@ -392,11 +407,11 @@ class _$AllListingsStateLoaded implements AllListingsStateLoaded {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<ProductModel> recent)? loaded,
+    TResult Function(List<ProductModel> recent, bool isRefreshLoader)? loaded,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(recent);
+      return loaded(recent, isRefreshLoader);
     }
     return orElse();
   }
@@ -437,10 +452,12 @@ class _$AllListingsStateLoaded implements AllListingsStateLoaded {
 }
 
 abstract class AllListingsStateLoaded implements AllListingsState {
-  const factory AllListingsStateLoaded(final List<ProductModel> recent) =
+  const factory AllListingsStateLoaded(
+          final List<ProductModel> recent, final bool isRefreshLoader) =
       _$AllListingsStateLoaded;
 
   List<ProductModel> get recent;
+  bool get isRefreshLoader;
   @JsonKey(ignore: true)
   _$$AllListingsStateLoadedCopyWith<_$AllListingsStateLoaded> get copyWith =>
       throw _privateConstructorUsedError;

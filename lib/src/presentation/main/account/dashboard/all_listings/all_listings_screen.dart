@@ -1,12 +1,10 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:heidi/src/data/model/model.dart';
@@ -36,10 +34,8 @@ class AllListingsScreen extends StatelessWidget {
       return BlocBuilder<AllListingsCubit, AllListingsState>(
           builder: (context, state) => state.maybeWhen(
               loading: () => const AllListingsLoading(),
-              loaded: (posts) => AllListingsLoaded(
-                    user: user,
-                    posts: posts,
-                  ),
+              loaded: (posts, isRefreshLoader) => AllListingsLoaded(
+                  user: user, posts: posts, isRefreshLoader: isRefreshLoader),
               orElse: () => ErrorWidget("Failed to load listings.")));
     }
     return const AllListingsBlocked();
@@ -65,8 +61,13 @@ class AllListingsLoading extends StatelessWidget {
 class AllListingsLoaded extends StatefulWidget {
   final List<ProductModel>? posts;
   final UserModel user;
+  final bool isRefreshLoader;
 
-  const AllListingsLoaded({required this.user, this.posts, super.key});
+  const AllListingsLoaded(
+      {required this.user,
+      required this.isRefreshLoader,
+      this.posts,
+      super.key});
 
   @override
   State<AllListingsLoaded> createState() => _AllListingsLoadedState();
@@ -146,7 +147,6 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
   @override
   Widget build(BuildContext context) {
     String uniqueKey = UniqueKey().toString();
-    final memoryCacheManager = DefaultCacheManager();
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(
@@ -241,76 +241,65 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                       Row(
                                         children: <Widget>[
                                           item.pdf == ''
-                                              ? CachedNetworkImage(
-                                                  imageUrl: item.sourceId == 2
-                                                      ? item.image
-                                                      : item.image ==
-                                                              'admin/News.jpeg'
-                                                          ? "${Application.picturesURL}${item.image}"
-                                                          : "${Application.picturesURL}${item.image}?cacheKey=$uniqueKey",
-                                                  cacheManager:
-                                                      memoryCacheManager,
-                                                  imageBuilder:
-                                                      (context, imageProvider) {
-                                                    return Container(
-                                                      width: 120,
-                                                      height: 140,
-                                                      decoration: BoxDecoration(
-                                                        image: DecorationImage(
-                                                          image: imageProvider,
-                                                          fit: BoxFit.cover,
-                                                        ),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(11),
-                                                      ),
-                                                    );
-                                                  },
-                                                  placeholder: (context, url) {
-                                                    return AppPlaceholder(
-                                                      child: Container(
-                                                        width: 120,
-                                                        height: 140,
-                                                        decoration:
-                                                            const BoxDecoration(
-                                                          color: Colors.white,
-                                                          borderRadius:
-                                                              BorderRadius.only(
-                                                            topLeft:
-                                                                Radius.circular(
-                                                                    8),
-                                                            bottomLeft:
-                                                                Radius.circular(
-                                                                    8),
+                                              ? ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                  child: Image.network(
+                                                    item.sourceId == 2
+                                                        ? item.image
+                                                        : item.image ==
+                                                                'admin/News.jpeg'
+                                                            ? "${Application.picturesURL}${item.image}"
+                                                            : widget.isRefreshLoader
+                                                                ? "${Application.picturesURL}${item.image}"
+                                                                : "${Application.picturesURL}${item.image}?cache=$uniqueKey",
+                                                    width: 120,
+                                                    height: 140,
+                                                    fit: BoxFit.cover,
+                                                    errorBuilder: (context,
+                                                        error, stackTrace) {
+                                                      // Handle errors here
+                                                      return AppPlaceholder(
+                                                        child: Container(
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        12),
+                                                            color: Colors.white,
                                                           ),
+                                                          width: 120,
+                                                          height: 140,
+                                                          child: const Icon(
+                                                              Icons.error),
                                                         ),
-                                                      ),
-                                                    );
-                                                  },
-                                                  errorWidget:
-                                                      (context, url, error) {
-                                                    return AppPlaceholder(
-                                                      child: Container(
-                                                        width: 120,
-                                                        height: 140,
-                                                        decoration:
-                                                            const BoxDecoration(
-                                                          color: Colors.white,
-                                                          borderRadius:
-                                                              BorderRadius.only(
-                                                            topLeft:
-                                                                Radius.circular(
-                                                                    8),
-                                                            bottomLeft:
-                                                                Radius.circular(
-                                                                    8),
+                                                      );
+                                                    },
+                                                    loadingBuilder: (context,
+                                                        child,
+                                                        loadingProgress) {
+                                                      // Display the AppPlaceholder while the image is loading
+                                                      if (loadingProgress ==
+                                                          null) {
+                                                        return child;
+                                                      }
+                                                      return AppPlaceholder(
+                                                        child: Container(
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        12),
+                                                            color: Colors.white,
                                                           ),
+                                                          width: 120,
+                                                          height: 140,
                                                         ),
-                                                        child: const Icon(
-                                                            Icons.error),
-                                                      ),
-                                                    );
-                                                  },
+                                                      );
+                                                    },
+                                                  ),
                                                 )
                                               : ClipRRect(
                                                   borderRadius:
@@ -362,18 +351,18 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                                               FontWeight.bold),
                                                 ),
                                                 const SizedBox(height: 8),
-                                                  Text(
-                                                    item.categoryId == 3
-                                                        ? "${item.startDate} ${Translate.of(context).translate('to')} ${item.endDate}"
-                                                        : item.createDate,
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .bodySmall!
-                                                        .copyWith(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                  ),
+                                                Text(
+                                                  item.categoryId == 3
+                                                      ? "${item.startDate} ${Translate.of(context).translate('to')} ${item.endDate}"
+                                                      : item.createDate,
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodySmall!
+                                                      .copyWith(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                ),
                                                 const SizedBox(height: 8),
                                                 Row(
                                                     mainAxisAlignment:
@@ -629,7 +618,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
   }
 
   Future _onRefresh() async {
-    await context.read<AllListingsCubit>().onLoad();
+    await context.read<AllListingsCubit>().onLoad(true);
   }
 
   void _onProductDetail(ProductModel item) {

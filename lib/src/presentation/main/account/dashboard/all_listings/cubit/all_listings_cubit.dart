@@ -8,13 +8,13 @@ import 'package:loggy/loggy.dart';
 
 class AllListingsCubit extends Cubit<AllListingsState> {
   AllListingsCubit() : super(const AllListingsState.loading()) {
-    onLoad();
+    onLoad(false);
   }
 
   dynamic posts;
 
-  Future<void> onLoad() async {
-    emit(const AllListingsState.loading());
+  Future<void> onLoad(bool isRefreshLoader) async {
+    if (!isRefreshLoader) emit(const AllListingsState.loading());
 
     int status = await getCurrentStatus();
     final ResultApiModel listingsRequestResponse;
@@ -29,7 +29,7 @@ class AllListingsCubit extends Cubit<AllListingsState> {
       return ProductModel.fromJson(item);
     }).toList();
 
-    emit(AllListingsState.loaded(posts));
+    emit(AllListingsState.loaded(posts, isRefreshLoader));
   }
 
   Future<dynamic> newListings(int pageNo) async {
