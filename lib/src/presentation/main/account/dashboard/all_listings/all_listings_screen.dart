@@ -157,9 +157,8 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                   .titleSmall!
                   .copyWith(fontWeight: FontWeight.bold),
             ),
-            child: const Icon(
-              Icons.menu,
-              color: Colors.white,
+            child: const Text(
+              "Filter"
             ),
           ),
         ],
