@@ -14,6 +14,8 @@ import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/all_listings/cubit/all_listings_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/all_listings/cubit/all_listings_state.dart';
+import 'package:heidi/src/presentation/main/add_listing/cubit/add_listing_cubit.dart';
+import 'package:heidi/src/presentation/main/add_listing/cubit/add_listing_state.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
@@ -72,7 +74,8 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
   int pageNo = 1;
   List<ProductModel>? posts;
   bool isSwiped = false;
-  int selectedStatus = 0;
+  String selectedListingStatusValue = "pending";
+
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
     Factory(() => EagerGestureRecognizer())
   };
@@ -157,9 +160,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                   .titleSmall!
                   .copyWith(fontWeight: FontWeight.bold),
             ),
-            child: const Text(
-              "Filter"
-            ),
+            child: const Text("Filter"),
           ),
         ],
       ),
@@ -366,20 +367,34 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                                       ),
                                                 ),
                                                 const SizedBox(height: 8),
-                                                Text(
-                                                  Translate.of(context)
-                                                      .translate(
-                                                          getStatusTanslation(
-                                                              item.statusId ??
-                                                                  0)),
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodySmall!
-                                                      .copyWith(
-                                                        fontWeight:
-                                                            FontWeight.bold,
+                                                Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Text(
+                                                        Translate.of(context).translate(
+                                                            getStatusTanslation(
+                                                                item.statusId ??
+                                                                    0,
+                                                                null)),
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .bodySmall!
+                                                            .copyWith(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
                                                       ),
-                                                ),
+                                                      IconButton(
+                                                          onPressed: () {
+                                                            _openListingActionPopUp(
+                                                                item);
+                                                          },
+                                                          icon: const Icon(
+                                                              Icons.more_vert))
+                                                    ]),
                                                 const SizedBox(height: 8),
                                                 const SizedBox(height: 8),
                                                 const SizedBox(height: 4),
@@ -428,6 +443,111 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
             : Container()
       ]),
     ));
+  }
+
+  Future _onListingAction(int? chosen, ProductModel item) async {
+    if (chosen == null) return;
+
+    switch (chosen) {
+      case 1:
+        Navigator.pushNamed(context, Routes.submit,
+                arguments: {'item': item, 'isNewList': false, 'isAdmin': true})
+            .then((value) async {
+          await _onRefresh();
+        });
+        break;
+      case 2:
+        bool response = await showDeleteConfirmation(context, item);
+        if (response) {
+          await AppBloc.homeCubit.onLoad(false).then((value) => _onRefresh());
+        }
+        break;
+    }
+  }
+
+  void _openListingActionPopUp(ProductModel item) {
+    selectedListingStatusValue = Translate.of(context)
+        .translate(getStatusTanslation(item.statusId!, null));
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return BlocBuilder<AddListingCubit, AddListingState>(
+            builder: (context, state) => state.maybeWhen(loading: () {
+                  return const CircularProgressIndicator();
+                }, loaded: () {
+                  return SimpleDialog(
+                      title: Text(Translate.of(context).translate('options'),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          )),
+                      children: [
+                        SimpleDialogOption(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            _onListingAction(1, item);
+                          },
+                          child: Text(Translate.of(context).translate('edit')),
+                        ),
+                        SimpleDialogOption(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            _onListingAction(2, item);
+                          },
+                          child:
+                              Text(Translate.of(context).translate('delete')),
+                        ),
+                        SimpleDialogOption(
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton(
+                              isExpanded: false,
+                              hint: Text(Translate.of(context)
+                                  .translate('change_status')),
+                              value: selectedListingStatusValue,
+                              onChanged: (chosen) async {
+                                int choice = int.parse(
+                                    getStatusTanslation(null, chosen));
+                                await context
+                                    .read<AddListingCubit>()
+                                    .changeStatus(item, choice);
+                                selectedListingStatusValue =
+                                    Translate.of(context)
+                                        .translate(chosen ?? "pending");
+                                Navigator.of(context).pop();
+                                _onRefresh();
+                              },
+                              items: [
+                                DropdownMenuItem<String>(
+                                    value: Translate.of(context)
+                                        .translate('active'),
+                                    child: Text(Translate.of(context)
+                                        .translate('active'))),
+                                DropdownMenuItem<String>(
+                                  value: Translate.of(context)
+                                      .translate('under_review'),
+                                  child: Text(Translate.of(context)
+                                      .translate('under_review')),
+                                ),
+                                DropdownMenuItem<String>(
+                                  value: Translate.of(context)
+                                      .translate('pending'),
+                                  child: Text(Translate.of(context)
+                                      .translate('pending')),
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      ]);
+                }, orElse: () {
+                  return AlertDialog(
+                    title: Text(Translate.of(context).translate("error")),
+                    content: Text(Translate.of(context)
+                        .translate("cannot_connect_to_server")),
+                  );
+                }));
+      },
+    );
   }
 
   Future _scrollListener() async {
@@ -493,14 +613,27 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
     }
   }
 
-  String getStatusTanslation(int statusId) {
-    if (statusId == 1) {
-      return "active";
-    } else if (statusId == 2) {
-      return "under_review";
-    } else if (statusId == 3) {
-      return "pending";
+  String getStatusTanslation(int? statusId, String? statusName) {
+    if (statusId != null) {
+      switch (statusId) {
+        case 1:
+          return "active";
+        case 2:
+          return "under_review";
+        case 3:
+          return "pending";
+      }
+    } else if (statusName != null) {
+      if (statusName == Translate.of(context).translate('active')) {
+        return "1";
+      } else if (statusName ==
+          Translate.of(context).translate('under_review')) {
+        return "2";
+      } else if (statusName == Translate.of(context).translate('pending')) {
+        return "3";
+      }
     }
+
     return "";
   }
 
