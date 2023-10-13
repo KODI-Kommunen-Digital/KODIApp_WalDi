@@ -51,9 +51,14 @@ class AllListingsLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: CircularProgressIndicator.adaptive(),
-    );
+    return Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text(
+            Translate.of(context).translate('all_listings'),
+          ),
+        ),
+        body: const Center(child: CircularProgressIndicator.adaptive()));
   }
 }
 
@@ -229,8 +234,8 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                               child: Padding(
                                 padding: const EdgeInsets.only(bottom: 16),
                                 child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 4),
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 4),
                                   child: Stack(
                                     children: [
                                       Row(
@@ -332,6 +337,9 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: <Widget>[
+                                                const SizedBox(
+                                                  height: 16,
+                                                ),
                                                 Text(
                                                   item.category ?? '',
                                                   style: Theme.of(context)
@@ -354,18 +362,20 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                                               FontWeight.bold),
                                                 ),
                                                 const SizedBox(height: 8),
-                                                Text(
-                                                  item.categoryId == 3
-                                                      ? "${item.startDate} ${Translate.of(context).translate('to')} ${item.endDate}"
-                                                      : item.createDate,
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodySmall!
-                                                      .copyWith(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                ),
+                                                if (item.categoryId == 3 ||
+                                                    item.createDate.isNotEmpty)
+                                                  Text(
+                                                    item.categoryId == 3
+                                                        ? "${item.startDate} ${Translate.of(context).translate('to')} ${item.endDate}"
+                                                        : item.createDate,
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodySmall!
+                                                        .copyWith(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                  ),
                                                 const SizedBox(height: 8),
                                                 Row(
                                                     mainAxisAlignment:
@@ -413,8 +423,6 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                                               Icons.more_vert))
                                                     ]),
                                                 const SizedBox(height: 8),
-                                                const SizedBox(height: 8),
-                                                const SizedBox(height: 4),
                                               ],
                                             ),
                                           )
