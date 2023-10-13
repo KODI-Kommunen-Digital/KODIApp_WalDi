@@ -34,7 +34,7 @@ class AllListingsCubit extends Cubit<AllListingsState> {
 
   Future<dynamic> newListings(int pageNo) async {
     if (pageNo == 1) posts = [];
-    int status = await getCurrentStatus();
+    final int status = await getCurrentStatus();
     final ResultApiModel listingsRequestResponse;
 
     if (status == 0) {
