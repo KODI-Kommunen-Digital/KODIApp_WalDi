@@ -172,7 +172,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
       body: Stack(children: [
         (posts?.isNotEmpty ?? false)
             ? Padding(
-                padding: const EdgeInsets.fromLTRB(8, 16, 4, 50),
+                padding: const EdgeInsets.fromLTRB(8, 16, 4, 0),
                 child: CustomScrollView(
                   physics: const BouncingScrollPhysics(
                     parent: AlwaysScrollableScrollPhysics(),
@@ -185,54 +185,54 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                     SliverList(
                       delegate: SliverChildBuilderDelegate(
                         (BuildContext context, int index) {
-                          final item = posts![index];
-                          return Slidable(
-                            endActionPane: ActionPane(
-                              motion: const ScrollMotion(),
-                              children: [
-                                SlidableAction(
-                                  onPressed: (aContext) {
-                                    Navigator.pushNamed(context, Routes.submit,
-                                        arguments: {
-                                          'item': item,
-                                          'isNewList': false,
-                                          'isAdmin': true
-                                        }).then((value) async {
-                                      await _onRefresh();
-                                    });
-                                  },
-                                  backgroundColor: Colors.blue,
-                                  foregroundColor: Colors.white,
-                                  icon: Icons.edit,
-                                  label:
-                                      Translate.of(context).translate('edit'),
-                                ),
-                                SlidableAction(
-                                  onPressed: (aContext) async {
-                                    bool response =
-                                        await showDeleteConfirmation(
-                                            context, item);
-                                    if (response) {
-                                      await AppBloc.homeCubit
-                                          .onLoad(false)
-                                          .then((value) => _onRefresh());
-                                    }
-                                  },
-                                  backgroundColor: Colors.red,
-                                  foregroundColor: Colors.white,
-                                  icon: Icons.delete,
-                                  label:
-                                      Translate.of(context).translate('delete'),
-                                ),
-                              ],
-                            ),
-                            key: Key(item.id.toString() + isSwiped.toString()),
-                            child: InkWell(
-                              onTap: () {
-                                _onProductDetail(item);
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.only(bottom: 16),
+                          if (index < posts!.length) {
+                            final item = posts![index];
+                            return Slidable(
+                              endActionPane: ActionPane(
+                                motion: const ScrollMotion(),
+                                children: [
+                                  SlidableAction(
+                                    onPressed: (aContext) {
+                                      Navigator.pushNamed(
+                                          context, Routes.submit, arguments: {
+                                        'item': item,
+                                        'isNewList': false,
+                                        'isAdmin': true
+                                      }).then((value) async {
+                                        await _onRefresh();
+                                      });
+                                    },
+                                    backgroundColor: Colors.blue,
+                                    foregroundColor: Colors.white,
+                                    icon: Icons.edit,
+                                    label:
+                                        Translate.of(context).translate('edit'),
+                                  ),
+                                  SlidableAction(
+                                    onPressed: (aContext) async {
+                                      bool response =
+                                          await showDeleteConfirmation(
+                                              context, item);
+                                      if (response) {
+                                        await AppBloc.homeCubit
+                                            .onLoad(false)
+                                            .then((value) => _onRefresh());
+                                      }
+                                    },
+                                    backgroundColor: Colors.red,
+                                    foregroundColor: Colors.white,
+                                    icon: Icons.delete,
+                                    label: Translate.of(context)
+                                        .translate('delete'),
+                                  ),
+                                ],
+                              ),
+                              key:
+                                  Key(item.id.toString() + isSwiped.toString()),
+                              child: InkWell(
+                                onTap: () {
+                                  _onProductDetail(item);
+                                },
                                 child: Container(
                                   padding:
                                       const EdgeInsets.symmetric(horizontal: 4),
@@ -362,8 +362,6 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                                               FontWeight.bold),
                                                 ),
                                                 const SizedBox(height: 8),
-                                                if (item.categoryId == 3 ||
-                                                    item.createDate.isNotEmpty)
                                                   Text(
                                                     item.categoryId == 3
                                                         ? "${item.startDate} ${Translate.of(context).translate('to')} ${item.endDate}"
@@ -423,6 +421,8 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                                               Icons.more_vert))
                                                     ]),
                                                 const SizedBox(height: 8),
+                                                const SizedBox(height: 8),
+                                                const SizedBox(height: 4),
                                               ],
                                             ),
                                           )
@@ -432,10 +432,22 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                   ),
                                 ),
                               ),
-                            ),
-                          );
+                            );
+                          } else {
+                            return (isLoadingMore)
+                                ? const Positioned(
+                                    bottom: 20,
+                                    left: 0,
+                                    right: 0,
+                                    child: Center(
+                                      child:
+                                          CircularProgressIndicator.adaptive(),
+                                    ),
+                                  )
+                                : Container();
+                          }
                         },
-                        childCount: posts!.length,
+                        childCount: posts!.length + 1,
                       ),
                     ),
                   ],
@@ -456,16 +468,6 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                   ],
                 ),
               ),
-        (isLoadingMore)
-            ? const Positioned(
-                bottom: 20,
-                left: 0,
-                right: 0,
-                child: Center(
-                  child: CircularProgressIndicator.adaptive(),
-                ),
-              )
-            : Container()
       ]),
     ));
   }
