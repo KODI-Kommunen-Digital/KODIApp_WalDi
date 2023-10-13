@@ -427,6 +427,7 @@
   "category_food": "Eat or Drink",
   "login" : "Login",
   "login_required" : "Login Required",
+  "please_select_city": "Please select a city to enter the forum.",
   "Please_log_in_to_enter_any_group." : "Please log in to enter any group.",
   "login_invalid_username": "No account found with this username",
   "login_invalid_password": "Password is not correct",

@@ -430,6 +430,7 @@
   "category_offers": "Angebote",
   "category_food": "Essen & Trinken",
   "login" : "Anmeldung",
+  "please_select_city": "Bitte wählen Sie eine Stadt, um das Forum zu betreten.",
   "login_required" : "Anmeldung erforderlich",
   "Please_log_in_to_enter_any_group." : "Bitte melden Sie sich an, um eine Gruppe zu betreten.",
   "login_invalid_username": "Kein Account mit diesem Benutzernamen gefunden",
