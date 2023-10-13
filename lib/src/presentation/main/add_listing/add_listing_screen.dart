@@ -21,10 +21,8 @@ import 'cubit/add_listing_cubit.dart';
 class AddListingScreen extends StatefulWidget {
   final ProductModel? item;
   final bool isNewList;
-  final bool isAdmin;
 
-  const AddListingScreen(
-      {Key? key, this.item, required this.isNewList, this.isAdmin = false})
+  const AddListingScreen({Key? key, this.item, required this.isNewList})
       : super(key: key);
 
   @override
@@ -624,29 +622,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
                   ],
                 ),
               ),
-              if (widget.isAdmin)
-                DropdownButton(
-                  value: statusId ?? 3,
-                  onChanged: (int? newStatus) {
-                    setState(() {
-                      statusId = newStatus;
-                    });
-                  },
-                  items: [
-                    DropdownMenuItem<int>(
-                        value: 1,
-                        child: Text(Translate.of(context).translate('active'))),
-                    DropdownMenuItem<int>(
-                      value: 2,
-                      child:
-                          Text(Translate.of(context).translate('under_review')),
-                    ),
-                    DropdownMenuItem<int>(
-                        value: 3,
-                        child:
-                            Text(Translate.of(context).translate('pending'))),
-                  ],
-                )
             ]),
             const SizedBox(height: 8),
             AppTextInput(

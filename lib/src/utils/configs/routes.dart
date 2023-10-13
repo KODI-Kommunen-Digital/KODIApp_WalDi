@@ -172,14 +172,12 @@ class Routes {
       case submit:
         return MaterialPageRoute(
           builder: (context) {
-            bool isAdmin = false;
             final Map<String, dynamic> arguments =
                 settings.arguments as Map<String, dynamic>;
-            if (arguments["isAdmin"] != null) isAdmin = true;
             return AddListingScreen(
-                item: arguments['item'] as ProductModel?,
-                isNewList: arguments['isNewList'] as bool,
-                isAdmin: isAdmin);
+              item: arguments['item'] as ProductModel?,
+              isNewList: arguments['isNewList'] as bool,
+            );
           },
           fullscreenDialog: true,
         );

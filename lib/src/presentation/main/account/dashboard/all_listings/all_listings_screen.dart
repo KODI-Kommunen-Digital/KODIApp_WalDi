@@ -372,20 +372,37 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                                         MainAxisAlignment
                                                             .spaceBetween,
                                                     children: [
-                                                      Text(
-                                                        Translate.of(context).translate(
-                                                            getStatusTanslation(
-                                                                item.statusId ??
-                                                                    0,
-                                                                null)),
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .bodySmall!
-                                                            .copyWith(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                            ),
+                                                      Container(
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: Colors.white30,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(10),
+                                                        ),
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(3.5),
+                                                          child: Text(
+                                                            Translate.of(
+                                                                    context)
+                                                                .translate(
+                                                                    getStatusTanslation(
+                                                                        item.statusId ??
+                                                                            0,
+                                                                        null)),
+                                                            style: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .bodySmall!
+                                                                .copyWith(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                          ),
+                                                        ),
                                                       ),
                                                       IconButton(
                                                           onPressed: () {
