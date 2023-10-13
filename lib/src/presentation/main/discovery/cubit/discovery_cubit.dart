@@ -34,8 +34,8 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
         }
       }
     }
-
-    services.removeWhere((element) => hiddenServices.contains(element));
+    ///TODO: unComment this line
+    // services.removeWhere((element) => hiddenServices.contains(element));
 
     emit(DiscoveryStateLoaded(
       services,
@@ -131,7 +131,11 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
           imageLink: "9",
           arguments: 9,
           categoryId: 6),
-      CitizenServiceModel(imageUrl: Images.service10, imageLink: "10"),
+      CitizenServiceModel(
+          imageUrl: Images.service10,
+          imageLink: "10",
+          arguments: 10,
+          categoryId: 3),
     ];
   }
 

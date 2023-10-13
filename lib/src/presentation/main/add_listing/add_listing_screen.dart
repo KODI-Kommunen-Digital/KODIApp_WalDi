@@ -201,7 +201,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       final city = listCity
           .firstWhere((element) => element['id'] == widget.item?.cityId);
       selectedCity = city['name'];
-      if (selectedCategory == "News" || selectedCategory == null) {
+      if (selectedCategory == "news" || selectedCategory == null) {
         final subCategoryResponse = await context
             .read<AddListingCubit>()
             .loadSubCategory(selectedCategory);
@@ -593,9 +593,11 @@ class _AddListingScreenState extends State<AddListingScreen> {
             SizedBox(
               height: 180,
               child: AppUploadImage(
-                title: Translate.of(context).translate('upload_feature_image'),
+                title:
+                    Translate.of(context).translate('upload_feature_image_pdf'),
                 image: _featurePdf == '' ? _featureImage : _featurePdf,
                 profile: false,
+                forumGroup: false,
                 onChange: (result) {
                   isImageChanged = true;
                 },
