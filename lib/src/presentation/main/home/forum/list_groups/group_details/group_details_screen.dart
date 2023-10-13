@@ -27,7 +27,8 @@ class GroupDetailsScreen extends StatelessWidget {
       },
       builder: (context, state) => state.maybeWhen(
         loading: () => const GroupDetailsLoading(),
-        loaded: (posts, item) => GroupDetailsLoaded(posts, item),
+        loaded: (posts, item, isAdmin) =>
+            GroupDetailsLoaded(posts, item, isAdmin),
         orElse: () => ErrorWidget('Failed to load Accounts.'),
       ),
     );
@@ -48,8 +49,10 @@ class GroupDetailsLoading extends StatelessWidget {
 class GroupDetailsLoaded extends StatefulWidget {
   final List<GroupPostsModel> posts;
   final ForumGroupModel groupModel;
+  final bool isAdmin;
 
-  const GroupDetailsLoaded(this.posts, this.groupModel, {super.key});
+  const GroupDetailsLoaded(this.posts, this.groupModel, this.isAdmin,
+      {super.key});
 
   @override
   State<GroupDetailsLoaded> createState() => _GroupDetailsLoadedState();
@@ -139,25 +142,36 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                         } else if (choice ==
                             Translate.of(context).translate('edit_group')) {
                           Navigator.pushNamed(context, Routes.addGroups,
-                              arguments: {'isNewGroup': false, 'forumDetails': widget.groupModel}).then((value) async {
-                                await context.read<GroupDetailsCubit>().onLoad();
-                                setState(() {
-
-                                });
+                              arguments: {
+                                'isNewGroup': false,
+                                'forumDetails': widget.groupModel
+                              }).then((value) async {
+                            await context.read<GroupDetailsCubit>().onLoad();
+                            setState(() {});
                           });
                         }
                       },
                       itemBuilder: (BuildContext context) {
-                        return {
-                          Translate.of(context).translate('leave_group'),
-                          Translate.of(context).translate('see_member'),
-                          Translate.of(context).translate('edit_group'),
-                        }.map((String choice) {
-                          return PopupMenuItem<String>(
-                            value: choice,
-                            child: Text(choice),
-                          );
-                        }).toList();
+                        return widget.isAdmin
+                            ? {
+                                Translate.of(context).translate('leave_group'),
+                                Translate.of(context).translate('see_member'),
+                                Translate.of(context).translate('edit_group'),
+                              }.map((String choice) {
+                                return PopupMenuItem<String>(
+                                  value: choice,
+                                  child: Text(choice),
+                                );
+                              }).toList()
+                            : {
+                                Translate.of(context).translate('leave_group'),
+                                Translate.of(context).translate('see_member'),
+                              }.map((String choice) {
+                                return PopupMenuItem<String>(
+                                  value: choice,
+                                  child: Text(choice),
+                                );
+                              }).toList();
                       },
                     ),
                   ],

@@ -20,6 +20,8 @@ class GroupDetailsCubit extends Cubit<GroupDetailsState> {
 
   Future<void> onLoad() async {
     final groupPostsList = <GroupPostsModel>[];
+    final groupMembersList = <GroupMembersModel>[];
+    bool isAdmin = false;
     final requestGroupPostResponse = await repo.requestGroupPosts(arguments.id);
     final requestGroupDetailResponse =
         await repo.requestGroupDetails(arguments.id);
@@ -49,8 +51,27 @@ class GroupDetailsCubit extends Cubit<GroupDetailsState> {
         ));
       }
 
-      emit(
-          GroupDetailsState.loaded(groupPostsList, group));
+      final requestGroupMembersResponse = await repo.getGroupMembers(group.id);
+      if (requestGroupMembersResponse?.data != null) {
+        for (final member in requestGroupMembersResponse!.data) {
+          groupMembersList.add(GroupMembersModel(
+            userId: member['userId'],
+            username: member['username'],
+            memberId: member['memberId'],
+            firstname: member['firstname'],
+            lastname: member['lastname'],
+            image: member['image'],
+            isAdmin: member['isAdmin'],
+            joinedAt: member['joinedAt'],
+          ));
+        }
+      }
+      final userId = await UserRepository.getLoggedUserId();
+      GroupMembersModel groupMember =
+          groupMembersList.firstWhere((element) => element.userId == userId);
+      isAdmin = groupMember.isAdmin == 1 ? true : false;
+
+      emit(GroupDetailsState.loaded(groupPostsList, group, isAdmin));
     }
   }
 

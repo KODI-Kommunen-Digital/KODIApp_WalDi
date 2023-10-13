@@ -13,6 +13,7 @@ class GroupDetailsState with _$GroupDetailsState {
   const factory GroupDetailsState.loaded(
       List<GroupPostsModel> list,
       ForumGroupModel arguments,
+      bool isAdmin,
       ) = GroupDetailsStateLoaded;
 
   const factory GroupDetailsState.error(String error) = GroupDetailsStateError;
