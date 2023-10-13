@@ -7,7 +7,6 @@ import 'package:heidi/src/data/repository/forum_repository.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/my_groups/cubit/my_groups_state.dart';
 
-
 enum GroupFilter {
   myGroups,
   allGroups,
@@ -41,9 +40,9 @@ class MyGroupsCubit extends Cubit<MyGroupsState> {
 
         for (final list in groupsList) {
           bool joined =
-          userJoinedGroupsList.any((element) => element.forumId == list.id);
+              userJoinedGroupsList.any((element) => element.forumId == list.id);
           bool requested =
-          requestMemberList.any((element) => element.forumId == list.id);
+              requestMemberList.any((element) => element.forumId == list.id);
 
           listLoaded.add(ForumGroupModel(
               id: list.id,
@@ -56,7 +55,7 @@ class MyGroupsCubit extends Cubit<MyGroupsState> {
               isRequested: requested));
         }
         emit(MyGroupsStateLoaded(
-          listLoaded,
+          listLoaded.reversed.toList(),
           result[0],
         ));
       }
@@ -69,15 +68,15 @@ class MyGroupsCubit extends Cubit<MyGroupsState> {
 
         for (final list in groupsList) {
           bool joined =
-          userJoinedGroupsList.any((element) => element.forumId == list.id);
+              userJoinedGroupsList.any((element) => element.forumId == list.id);
           int? cityId = 0;
-          for(final userGroup in userJoinedGroupsList){
-            if(userGroup.forumId == list.id){
+          for (final userGroup in userJoinedGroupsList) {
+            if (userGroup.forumId == list.id) {
               cityId = userGroup.cityId;
             }
           }
           bool requested =
-          requestMemberList.any((element) => element.forumId == list.id);
+              requestMemberList.any((element) => element.forumId == list.id);
 
           listLoaded.add(ForumGroupModel(
               id: list.id,
@@ -96,7 +95,7 @@ class MyGroupsCubit extends Cubit<MyGroupsState> {
         }).toList();
 
         emit(MyGroupsStateLoaded(
-          filteredList,
+          filteredList.reversed.toList(),
           result[0],
         ));
       }
@@ -120,8 +119,9 @@ class MyGroupsCubit extends Cubit<MyGroupsState> {
 
   List<ForumGroupModel> getLoadedList() => listLoaded;
 
-  Future<void> onGroupFilter(GroupFilter? type, List<ForumGroupModel> loadedList) async {
-    final userId = await  getLoggedInUserId();
+  Future<void> onGroupFilter(
+      GroupFilter? type, List<ForumGroupModel> loadedList) async {
+    final userId = await getLoggedInUserId();
     if (type == GroupFilter.myGroups) {
       filteredList = loadedList.where((product) {
         return product.isJoined == true;
