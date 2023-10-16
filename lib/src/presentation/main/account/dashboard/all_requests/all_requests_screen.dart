@@ -102,6 +102,7 @@ class _AllRequestsLoadedState extends State<AllRequestsLoaded> {
 
   @override
   Widget build(BuildContext context) {
+    posts = widget.posts;
     String uniqueKey = UniqueKey().toString();
     return SafeArea(
         child: Scaffold(
@@ -284,7 +285,7 @@ class _AllRequestsLoadedState extends State<AllRequestsLoaded> {
                                                 const SizedBox(height: 8),
                                                 Text(
                                                   item.title,
-                                                  maxLines: 2,
+                                                  maxLines: 1,
                                                   style: Theme.of(context)
                                                       .textTheme
                                                       .titleSmall!
@@ -312,40 +313,38 @@ class _AllRequestsLoadedState extends State<AllRequestsLoaded> {
                                                             .spaceBetween,
                                                     children: [
                                                       Container(
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color: Colors.white30,
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(10),
-                                                        ),
-                                                        child: MaterialButton(
-                                                          padding: EdgeInsets
-                                                              .zero, // Set padding to zero to remove the default padding
-                                                          onPressed: () async {
-                                                            _openListingStatusActionPopUp(
-                                                                item);
-                                                          },
-                                                          child: Text(
-                                                            Translate.of(
-                                                                    context)
-                                                                .translate(
-                                                                    getStatusTanslation(
-                                                                        item.statusId ??
-                                                                            0,
-                                                                        null)),
-                                                            style: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .bodySmall!
-                                                                .copyWith(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                ),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10),
                                                           ),
-                                                        ),
-                                                      )
+                                                          child: ElevatedButton(
+                                                            onPressed:
+                                                                () async {
+                                                              _openListingStatusActionPopUp(
+                                                                  item);
+                                                            },
+                                                            child: Text(
+                                                              Translate.of(
+                                                                      context)
+                                                                  .translate(
+                                                                      getStatusTanslation(
+                                                                          item.statusId ??
+                                                                              0,
+                                                                          null)),
+                                                              style: Theme.of(
+                                                                      context)
+                                                                  .textTheme
+                                                                  .bodySmall!
+                                                                  .copyWith(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                  ),
+                                                            ),
+                                                          ))
                                                     ]),
                                                 const SizedBox(height: 8),
                                                 const SizedBox(height: 4),
@@ -434,7 +433,7 @@ class _AllRequestsLoadedState extends State<AllRequestsLoaded> {
                                     Translate.of(context)
                                         .translate(chosen ?? "pending");
                                 Navigator.of(context).pop();
-                                await _onRefresh();
+                                _onRefresh();
                               },
                               items: [
                                 DropdownMenuItem<String>(
@@ -522,10 +521,8 @@ class _AllRequestsLoadedState extends State<AllRequestsLoaded> {
   }
 
   Future _onRefresh() async {
+    // posts = widget.posts;
     await context.read<AllRequestsCubit>().onLoad(true);
-    setState(() {
-      posts = posts;
-    });
   }
 
   void _onProductDetail(ProductModel item) {
