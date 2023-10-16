@@ -382,6 +382,21 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
+  static Future<ResultApiModel> requestEditProductStatus(
+    cityId,
+    listingId,
+    params,
+  ) async {
+    final filePath = '/cities/$cityId/listings/$listingId';
+    final result = await HTTPManager(forum: false).patch(
+      url: filePath,
+      data: params,
+      loading: true,
+    );
+
+    return ResultApiModel.fromJson(result);
+  }
+
   ///Remove Wish List
   static Future<ResultApiModel> requestRemoveWishList(
       userId, int listingId) async {

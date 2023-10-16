@@ -23,13 +23,17 @@ class DashboardScreen extends StatelessWidget {
           crossAxisSpacing: 16.0,
           mainAxisSpacing: 16.0,
           children: <Widget>[
-            GridItemButton(
-              icon: Icons.group,
-              title: Translate.of(context).translate("requests"),
-              onPressed: () {
-                // Add your action here
-              },
-            ),
+            if (user.roleId == 1)
+              GridItemButton(
+                icon: Icons.group,
+                title: Translate.of(context).translate("requests"),
+                onPressed: () {
+                  Navigator.of(context)
+                      .pushNamed(Routes.allRequests, arguments: {
+                    "user": user,
+                  });
+                },
+              ),
             if (user.roleId == 1)
               GridItemButton(
                 icon: Icons.list,
