@@ -313,38 +313,37 @@ class _AllRequestsLoadedState extends State<AllRequestsLoaded> {
                                                             .spaceBetween,
                                                     children: [
                                                       Container(
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(10),
+                                                        ),
+                                                        child: ElevatedButton(
+                                                          onPressed: () async {
+                                                            _openListingStatusActionPopUp(
+                                                                item);
+                                                          },
+                                                          child: Text(
+                                                            Translate.of(
+                                                                    context)
+                                                                .translate(
+                                                                    getStatusTanslation(
+                                                                        item.statusId ??
+                                                                            0,
+                                                                        null)),
+                                                            style: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .bodySmall!
+                                                                .copyWith(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
                                                           ),
-                                                          child: ElevatedButton(
-                                                            onPressed:
-                                                                () async {
-                                                              _openListingStatusActionPopUp(
-                                                                  item);
-                                                            },
-                                                            child: Text(
-                                                              Translate.of(
-                                                                      context)
-                                                                  .translate(
-                                                                      getStatusTanslation(
-                                                                          item.statusId ??
-                                                                              0,
-                                                                          null)),
-                                                              style: Theme.of(
-                                                                      context)
-                                                                  .textTheme
-                                                                  .bodySmall!
-                                                                  .copyWith(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                  ),
-                                                            ),
-                                                          ))
+                                                        ),
+                                                      )
                                                     ]),
                                                 const SizedBox(height: 8),
                                                 const SizedBox(height: 4),

@@ -146,6 +146,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
 
   @override
   Widget build(BuildContext context) {
+    posts = widget.posts;
     String uniqueKey = UniqueKey().toString();
     return SafeArea(
         child: Scaffold(
@@ -372,15 +373,15 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                                       Container(
                                                         decoration:
                                                             BoxDecoration(
-                                                          color: Colors.white30,
                                                           borderRadius:
                                                               BorderRadius
                                                                   .circular(10),
                                                         ),
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(3.5),
+                                                        child: ElevatedButton(
+                                                          onPressed: () async {
+                                                            _openListingStatusActionPopUp(
+                                                                item);
+                                                          },
                                                           child: Text(
                                                             Translate.of(
                                                                     context)
@@ -491,11 +492,13 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                   return const CircularProgressIndicator();
                 }, loaded: () {
                   return SimpleDialog(
-                      title: Text(Translate.of(context).translate('options'),
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          )),
+                      title: Center(
+                        child: Text(Translate.of(context).translate('options'),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            )),
+                      ),
                       children: [
                         SimpleDialogOption(
                           onPressed: () {
@@ -512,6 +515,37 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                           child:
                               Text(Translate.of(context).translate('delete')),
                         ),
+                      ]);
+                }, orElse: () {
+                  return AlertDialog(
+                    title: Text(Translate.of(context).translate("error")),
+                    content: Text(Translate.of(context)
+                        .translate("cannot_connect_to_server")),
+                  );
+                }));
+      },
+    );
+  }
+
+  void _openListingStatusActionPopUp(ProductModel item) {
+    selectedListingStatusValue = Translate.of(context)
+        .translate(getStatusTanslation(item.statusId!, null));
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return BlocBuilder<AddListingCubit, AddListingState>(
+            builder: (context, state) => state.maybeWhen(loading: () {
+                  return const CircularProgressIndicator();
+                }, loaded: () {
+                  return SimpleDialog(
+                      title: Center(
+                        child: Text(Translate.of(context).translate('status'),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            )),
+                      ),
+                      children: [
                         SimpleDialogOption(
                           child: DropdownButtonHideUnderline(
                             child: DropdownButton(

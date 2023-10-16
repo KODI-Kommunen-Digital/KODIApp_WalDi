@@ -6,17 +6,10 @@ import 'package:heidi/src/presentation/main/account/dashboard/all_requests/cubit
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:loggy/loggy.dart';
 
-enum StatusFilter {
-  week,
-  month,
-}
-
 class AllRequestsCubit extends Cubit<AllRequestsState> {
   AllRequestsCubit() : super(const AllRequestsState.loading()) {
     onLoad(false);
   }
-
-  StatusFilter? selectedStatusFilter;
 
   dynamic posts;
 

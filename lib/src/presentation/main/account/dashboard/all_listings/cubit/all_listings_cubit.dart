@@ -6,12 +6,18 @@ import 'package:heidi/src/presentation/main/account/dashboard/all_listings/cubit
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:loggy/loggy.dart';
 
+enum StatusFilter {
+  week,
+  month,
+}
+
 class AllListingsCubit extends Cubit<AllListingsState> {
   AllListingsCubit() : super(const AllListingsState.loading()) {
     onLoad(false);
   }
 
   dynamic posts;
+  StatusFilter? selectedStatusFilter;
 
   Future<void> onLoad(bool isRefreshLoader) async {
     if (!isRefreshLoader) emit(const AllListingsState.loading());
