@@ -69,14 +69,15 @@ class MyGroupsCubit extends Cubit<MyGroupsState> {
         for (final list in groupsList) {
           bool joined =
               userJoinedGroupsList.any((element) => element.forumId == list.id);
+          bool requested =
+          requestMemberList.any((element) => element.forumId == list.id);
+
           int? cityId = 0;
           for (final userGroup in userJoinedGroupsList) {
             if (userGroup.forumId == list.id) {
               cityId = userGroup.cityId;
             }
           }
-          bool requested =
-              requestMemberList.any((element) => element.forumId == list.id);
 
           listLoaded.add(ForumGroupModel(
               id: list.id,

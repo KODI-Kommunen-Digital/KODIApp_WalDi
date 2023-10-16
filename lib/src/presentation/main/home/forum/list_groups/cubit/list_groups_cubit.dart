@@ -73,6 +73,13 @@ class ListGroupsCubit extends Cubit<ListGroupsState> {
           bool requested =
               requestMemberList.any((element) => element.forumId == list.id);
 
+          int? cityId = 0;
+          for (final userGroup in userJoinedGroupsList) {
+            if (userGroup.forumId == list.id) {
+              cityId = userGroup.cityId;
+            }
+          }
+
           listLoaded.add(ForumGroupModel(
               id: list.id,
               forumName: list.forumName,
@@ -80,6 +87,7 @@ class ListGroupsCubit extends Cubit<ListGroupsState> {
               description: list.description,
               image: list.image,
               isPrivate: list.isPrivate,
+              cityId: cityId,
               isJoined: joined,
               isRequested: requested));
         }
