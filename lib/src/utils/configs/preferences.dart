@@ -31,6 +31,7 @@ class Preferences {
   static const String type = 'type';
   static const String path = 'path';
   static const String categoryCount = "categoryCount";
+  static const String listingStatusFilter = "listingStatusFilter";
   static const String commentId = "categoryCount";
 
   Preferences._(this._box);

@@ -445,7 +445,7 @@ class ListRepository {
       "price": 100, //dummy data
       "discountPrice": 100, //dummy data
       "logo": media,
-      "statusId": 1, //dummy data
+      "statusId": statusId ?? 1, //change 1 to 3 when done
       "sourceId": 1, //dummy data
       "longitude": 245.65, //dummy data
       "latitude": 22.456, //dummy data

@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_category.dart';
+import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/add_listing/cubit/add_listing_state.dart';
@@ -144,6 +145,97 @@ class AddListingCubit extends Cubit<AddListingState> {
       }
     } catch (e) {
       logError('edit Product Error', e);
+      return false;
+    }
+  }
+
+  Future<bool> changeStatus(ProductModel item, int newStatus) async {
+    int listingId = item.id;
+    int? categoryId = item.categoryId;
+    int? cityId = item.cityId;
+    String title = item.title;
+    String description = item.description;
+    String place = "";
+    CategoryModel? country = item.country;
+    CategoryModel? state = item.state;
+    CategoryModel? city = item.city;
+    int? statusId = newStatus;
+    int? sourceId = item.sourceId;
+    String address = item.address;
+    String? zipcode = item.zipCode;
+    String? phone = item.phone;
+    String? email = item.email;
+    String? website = item.website;
+    String? status = item.status;
+    String? startDate = item.startDate;
+    String? endDate = item.endDate;
+    String? price = item.price;
+    bool isImageChanged = false;
+    TimeOfDay? startTime;
+    TimeOfDay? endTime;
+
+    if(startDate.isEmpty && endDate.isEmpty) {
+      startDate = null;
+      endDate = null;
+    }
+
+    //Parse Times
+    if (startDate != null && endDate != null) {
+      List<String> startDateTime = startDate.split(' ');
+      List<String> endDateTime = endDate.split(' ');
+
+      if (startDateTime.length == 2) {
+        List<String> startTimeParts = startDateTime[1].split(':');
+        int startHour = int.parse(startTimeParts[0]);
+        int startMinute = int.parse(startTimeParts[1]);
+        startTime = TimeOfDay(hour: startHour, minute: startMinute);
+        if (endDateTime.length == 2) {
+          List<String> endTimeParts = endDateTime[1].split(':');
+          int endHour = int.parse(endTimeParts[0]);
+          int endMinute = int.parse(endTimeParts[1]);
+          endTime = TimeOfDay(hour: endHour, minute: endMinute);
+        } else {
+          List<String> endTimeParts = endDateTime[0].split(':');
+          int endHour = int.parse(endTimeParts[0]);
+          int endMinute = int.parse(endTimeParts[1]);
+          endTime = TimeOfDay(hour: endHour, minute: endMinute);
+        }
+      }
+    }
+
+    try {
+      final response = await _repo.editProduct(
+          listingId,
+          categoryId,
+          cityId,
+          title,
+          description,
+          place,
+          country,
+          state,
+          city,
+          statusId,
+          sourceId,
+          address,
+          zipcode,
+          phone,
+          email,
+          website,
+          status,
+          startDate,
+          endDate,
+          price,
+          isImageChanged,
+          startTime,
+          endTime);
+      if (response.success) {
+        return true;
+      } else {
+        logError('save Product Response Failed', response.message);
+        return false;
+      }
+    } catch (e) {
+      logError('save Product Error', e);
       return false;
     }
   }

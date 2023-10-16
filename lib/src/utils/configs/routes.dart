@@ -5,6 +5,8 @@ import 'package:heidi/src/data/model/model_forum_group.dart';
 import 'package:heidi/src/data/model/model_group_posts.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/presentation/main/account/change_password/change_password_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/all_listings/all_listings_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/all_listings/cubit/all_listings_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/dashboard_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/my_groups/cubit/my_groups_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/my_groups/my_groups_screen.dart';
@@ -97,6 +99,7 @@ class Routes {
   static const String imageZoom = "/imageZoom";
   static const String profileSettings = "/profileSettings";
   static const String faq = "/faq";
+  static const String allListings = "/allListings";
   static const String listGroups = "/listGroups";
   static const String myGroups = "/myGroups";
   static const String groupDetails = "/groupDetails";
@@ -151,6 +154,18 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) {
             return const EditProfileScreen();
+          },
+        );
+
+      case allListings:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return BlocProvider(
+              create: (context) => AllListingsCubit(),
+              child: AllListingsScreen(user: arguments["user"] as UserModel),
+            );
           },
         );
 

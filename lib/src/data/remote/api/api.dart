@@ -267,6 +267,20 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
+  ///Get All Listings
+  static Future<ResultApiModel> requestAllListings(params) async {
+    final listings = "/listings?pageNo=$params&pageSize=10";
+    final result = await httpManager.get(url: listings);
+    return ResultApiModel.fromJson(result);
+  }
+
+  ///Get Listings by status
+  static Future<ResultApiModel> requestStatusListings(status, params) async {
+    final listings = "/listings?statusId=$status&pageNo=$params&pageSize=10";
+    final result = await httpManager.get(url: listings);
+    return ResultApiModel.fromJson(result);
+  }
+
   ///Get Home Slider Images
   static Future<ResultApiModel> requestSliderImages() async {
     final result = await UtilAsset.loadJson("assets/data/sliders.json");
