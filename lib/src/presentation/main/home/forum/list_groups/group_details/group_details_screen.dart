@@ -140,6 +140,16 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                               context, Routes.groupMembersDetails,
                               arguments: widget.groupModel.id);
                         } else if (choice ==
+                            Translate.of(context).translate('see_member')) {
+                          Navigator.pushNamed(
+                              context, Routes.groupMembersDetails,
+                              arguments: widget.groupModel.id);
+                        }else if (choice ==
+                            Translate.of(context).translate('member_requests')) {
+                          Navigator.pushNamed(
+                              context, Routes.memberRequestDetails,
+                              arguments: widget.groupModel.id);
+                        } else if (choice ==
                             Translate.of(context).translate('edit_group')) {
                           Navigator.pushNamed(context, Routes.addGroups,
                               arguments: {
@@ -157,6 +167,7 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                                 Translate.of(context).translate('leave_group'),
                                 Translate.of(context).translate('see_member'),
                                 Translate.of(context).translate('edit_group'),
+                                Translate.of(context).translate('member_requests'),
                               }.map((String choice) {
                                 return PopupMenuItem<String>(
                                   value: choice,

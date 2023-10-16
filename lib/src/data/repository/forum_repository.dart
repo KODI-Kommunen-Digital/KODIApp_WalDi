@@ -164,7 +164,18 @@ class ForumRepository {
     if (response.success) {
       return response;
     } else {
-      logError('Request Group Post Response Failed', response.message);
+      logError('Request Group Members Response Failed', response.message);
+      return null;
+    }
+  }
+
+  Future<ResultApiModel?> getMemberRequests(forumId) async {
+    final cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    final response = await Api.getMemberRequests(forumId, cityId);
+    if (response.success) {
+      return response;
+    } else {
+      logError('Request Member Requests Response Failed', response.message);
       return null;
     }
   }
