@@ -273,7 +273,7 @@ class ListRepository {
   Future<ResultApiModel> loadSubCategory(value) async {
     final response = await Api.requestSubmitCategory();
     var jsonCategory = response.data;
-    final item = jsonCategory.firstWhere((item) => item['name'] == value);
+    final item = jsonCategory.firstWhere((item) => item['name'] == value.toLowerCase());
     final itemId = item['id'];
     final categoryId = itemId;
     final requestSubmitResponse =
@@ -498,7 +498,7 @@ class ListRepository {
   void setCategoryId(value) async {
     final response = await Api.requestSubmitCategory();
     var jsonCategory = response.data;
-    final item = jsonCategory.firstWhere((item) => item['name'] == value);
+    final item = jsonCategory.firstWhere((item) => item['name'] == value.toLowerCase());
     final itemId = item['id'];
     final categoryId = itemId;
     prefs.setKeyValue(Preferences.categoryId, categoryId);
@@ -521,7 +521,7 @@ class ListRepository {
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
     final response = await Api.requestSubmitSubCategory(categoryId: categoryId);
     var jsonCategory = response.data;
-    final item = jsonCategory.firstWhere((item) => item['name'] == value);
+    final item = jsonCategory.firstWhere((item) => item['name'] == value.toLowerCase());
     final itemId = item['id'];
     final subCategoryId = itemId;
     prefs.setKeyValue(Preferences.subCategoryId, subCategoryId);
