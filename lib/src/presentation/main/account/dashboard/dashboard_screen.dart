@@ -5,8 +5,10 @@ import 'package:heidi/src/utils/translate.dart';
 
 class DashboardScreen extends StatelessWidget {
   final UserModel user;
+  final bool isEditable;
 
-  const DashboardScreen({required this.user, super.key});
+  const DashboardScreen(
+      {required this.user, required this.isEditable, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -43,13 +45,21 @@ class DashboardScreen extends StatelessWidget {
               icon: Icons.local_offer,
               title: Translate.of(context).translate("my_listings"),
               onPressed: () {
-                // Add your action here
+                Navigator.pushNamed(
+                  context,
+                  Routes.myListings,
+                  arguments: {'user': user, 'editable': true},
+                );
               },
             ),
             GridItemButton(
               icon: Icons.group,
               title: Translate.of(context).translate("my_groups"),
               onPressed: () {
+                Navigator.pushNamed(
+                  context,
+                  Routes.myGroups,
+                );
                 // Add your action here
               },
             ),

@@ -158,7 +158,7 @@ class _AccountLoadedState extends State<AccountLoaded> {
                         title: Translate.of(context).translate('dashboard'),
                         onPressed: () {
                           Navigator.pushNamed(context, Routes.dashboard,
-                              arguments: {"user": user});
+                              arguments: {'user': user, 'editable': true});
                         },
                         trailing: RotatedBox(
                           quarterTurns: AppLanguage.isRTL() ? 2 : 0,
@@ -216,6 +216,9 @@ class _AccountLoadedState extends State<AccountLoaded> {
   }
 
   void _onNavigate(String route) {
-    Navigator.pushNamed(context, route);
+    Navigator.pushNamed(context, route).then((value) {
+      setState(() {});
+    });
+
   }
 }
