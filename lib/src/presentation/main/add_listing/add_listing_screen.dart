@@ -169,9 +169,11 @@ class _AddListingScreenState extends State<AddListingScreen> {
         await context.read<AddListingCubit>().loadCategory();
     setState(() {
       listCategory = loadCategoryResponse?.data;
-      selectedSubCategory = loadCategoryResponse?.data.first['name'];
+      selectedSubCategory = Translate.of(context).translate(
+          _getSubCategoryTranslation(loadCategoryResponse?.data.first['id']));
       listCity = loadCitiesResponse?.data;
-      selectedCategory = selectedSubCategory;
+      selectedCategory = Translate.of(context).translate(
+          _getCategoryTranslation(loadCategoryResponse?.data.first['id']));
       if (selectedCategory == "News" || selectedCategory == null) {
         selectSubCategory(selectedCategory);
       }
@@ -200,7 +202,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       final city = listCity
           .firstWhere((element) => element['id'] == widget.item?.cityId);
       selectedCity = city['name'];
-      if (selectedCategory == "news" || selectedCategory == null) {
+      if (selectedCategory?.toLowerCase() == "news" || selectedCategory == null) {
         final subCategoryResponse = await context
             .read<AddListingCubit>()
             .loadSubCategory(selectedCategory);
