@@ -7,6 +7,8 @@ import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/presentation/main/account/change_password/change_password_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/all_listings/all_listings_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/all_listings/cubit/all_listings_cubit.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/all_requests/all_requests_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/all_requests/cubit/all_requests_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/dashboard_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/my_groups/cubit/my_groups_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/my_groups/my_groups_screen.dart';
@@ -100,6 +102,7 @@ class Routes {
   static const String profileSettings = "/profileSettings";
   static const String faq = "/faq";
   static const String allListings = "/allListings";
+  static const String allRequests = "/allRequests";
   static const String listGroups = "/listGroups";
   static const String myGroups = "/myGroups";
   static const String groupDetails = "/groupDetails";
@@ -165,6 +168,18 @@ class Routes {
             return BlocProvider(
               create: (context) => AllListingsCubit(),
               child: AllListingsScreen(user: arguments["user"] as UserModel),
+            );
+          },
+        );
+
+      case allRequests:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return BlocProvider(
+              create: (context) => AllRequestsCubit(),
+              child: AllRequestsScreen(user: arguments["user"] as UserModel),
             );
           },
         );

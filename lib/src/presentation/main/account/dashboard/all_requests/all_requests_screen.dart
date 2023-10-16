@@ -10,8 +10,8 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
-import 'package:heidi/src/presentation/main/account/dashboard/all_listings/cubit/all_listings_cubit.dart';
-import 'package:heidi/src/presentation/main/account/dashboard/all_listings/cubit/all_listings_state.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/all_requests/cubit/all_requests_cubit.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/all_requests/cubit/all_requests_state.dart';
 import 'package:heidi/src/presentation/main/add_listing/cubit/add_listing_cubit.dart';
 import 'package:heidi/src/presentation/main/add_listing/cubit/add_listing_state.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
@@ -23,27 +23,27 @@ import 'package:heidi/src/utils/translate.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 // ignore: must_be_immutable
-class AllListingsScreen extends StatelessWidget {
+class AllRequestsScreen extends StatelessWidget {
   final UserModel user;
 
-  const AllListingsScreen({required this.user, super.key});
+  const AllRequestsScreen({required this.user, super.key});
 
   @override
   Widget build(BuildContext context) {
     if (user.roleId == 1) {
-      return BlocBuilder<AllListingsCubit, AllListingsState>(
+      return BlocBuilder<AllRequestsCubit, AllRequestsState>(
           builder: (context, state) => state.maybeWhen(
-              loading: () => const AllListingsLoading(),
-              loaded: (posts, isRefreshLoader) => AllListingsLoaded(
+              loading: () => const AllRequestsLoading(),
+              loaded: (posts, isRefreshLoader) => AllRequestsLoaded(
                   user: user, posts: posts, isRefreshLoader: isRefreshLoader),
               orElse: () => ErrorWidget("Failed to load listings.")));
     }
-    return const AllListingsBlocked();
+    return const AllRequestsBlocked();
   }
 }
 
-class AllListingsLoading extends StatelessWidget {
-  const AllListingsLoading({super.key});
+class AllRequestsLoading extends StatelessWidget {
+  const AllRequestsLoading({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -51,29 +51,29 @@ class AllListingsLoading extends StatelessWidget {
         appBar: AppBar(
           centerTitle: true,
           title: Text(
-            Translate.of(context).translate('all_listings'),
+            Translate.of(context).translate('all_requests'),
           ),
         ),
         body: const Center(child: CircularProgressIndicator.adaptive()));
   }
 }
 
-class AllListingsLoaded extends StatefulWidget {
+class AllRequestsLoaded extends StatefulWidget {
   final List<ProductModel>? posts;
   final UserModel user;
   final bool isRefreshLoader;
 
-  const AllListingsLoaded(
+  const AllRequestsLoaded(
       {required this.user,
       required this.isRefreshLoader,
       this.posts,
       super.key});
 
   @override
-  State<AllListingsLoaded> createState() => _AllListingsLoadedState();
+  State<AllRequestsLoaded> createState() => _AllRequestsLoadedState();
 }
 
-class _AllListingsLoadedState extends State<AllListingsLoaded> {
+class _AllRequestsLoadedState extends State<AllRequestsLoaded> {
   final _scrollController = ScrollController(initialScrollOffset: 0.0);
   double previousScrollPosition = 0;
   bool isLoadingMore = false;
@@ -100,50 +100,6 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
     super.dispose();
   }
 
-  Future<void> _openFilterDrawer(BuildContext context) async {
-    List<String> statusNames = [
-      Translate.of(context).translate("active"),
-      Translate.of(context).translate("under_review"),
-      Translate.of(context).translate("pending")
-    ];
-    int selectedStatus = await AppBloc.allListingsCubit.getCurrentStatus();
-    await showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return Container(
-          color: Colors.grey[900],
-          height: 200,
-          child: ListView.separated(
-            itemCount: 3,
-            separatorBuilder: (BuildContext context, int index) =>
-                const Divider(
-              color: Colors.white,
-              height: 1,
-              thickness: 1,
-            ),
-            itemBuilder: (context, index) {
-              return ListTile(
-                title: Text(statusNames[index]),
-                trailing: (selectedStatus == index + 1)
-                    ? const Icon(Icons.check, color: Colors.white)
-                    : null,
-                onTap: () async {
-                  if (selectedStatus != index + 1) {
-                    await AppBloc.allListingsCubit.setCurrentStatus(index + 1);
-                  } else {
-                    await AppBloc.allListingsCubit.setCurrentStatus(0);
-                  }
-                  Navigator.of(context).pop();
-                  await _onRefresh();
-                },
-              );
-            },
-          ),
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     String uniqueKey = UniqueKey().toString();
@@ -152,22 +108,8 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          Translate.of(context).translate('all_listings'),
+          Translate.of(context).translate('all_requests'),
         ),
-        actions: [
-          TextButton(
-            onPressed: () async {
-              _openFilterDrawer(context);
-            },
-            style: TextButton.styleFrom(
-              textStyle: Theme.of(context)
-                  .textTheme
-                  .titleSmall!
-                  .copyWith(fontWeight: FontWeight.bold),
-            ),
-            child: const Text("Filter"),
-          ),
-        ],
       ),
       body: Stack(children: [
         (posts?.isNotEmpty ?? false)
@@ -377,10 +319,13 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                                               BorderRadius
                                                                   .circular(10),
                                                         ),
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(3.5),
+                                                        child: MaterialButton(
+                                                          padding: EdgeInsets
+                                                              .zero, // Set padding to zero to remove the default padding
+                                                          onPressed: () async {
+                                                            _openListingStatusActionPopUp(
+                                                                item);
+                                                          },
                                                           child: Text(
                                                             Translate.of(
                                                                     context)
@@ -400,14 +345,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                                                 ),
                                                           ),
                                                         ),
-                                                      ),
-                                                      IconButton(
-                                                          onPressed: () {
-                                                            _openListingActionPopUp(
-                                                                item);
-                                                          },
-                                                          icon: const Icon(
-                                                              Icons.more_vert))
+                                                      )
                                                     ]),
                                                 const SizedBox(height: 8),
                                                 const SizedBox(height: 4),
@@ -460,27 +398,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
     ));
   }
 
-  Future _onListingAction(int? chosen, ProductModel item) async {
-    if (chosen == null) return;
-
-    switch (chosen) {
-      case 1:
-        Navigator.pushNamed(context, Routes.submit,
-                arguments: {'item': item, 'isNewList': false, 'isAdmin': true})
-            .then((value) async {
-          await _onRefresh();
-        });
-        break;
-      case 2:
-        bool response = await showDeleteConfirmation(context, item);
-        if (response) {
-          await AppBloc.homeCubit.onLoad(false).then((value) => _onRefresh());
-        }
-        break;
-    }
-  }
-
-  void _openListingActionPopUp(ProductModel item) {
+  void _openListingStatusActionPopUp(ProductModel item) {
     selectedListingStatusValue = Translate.of(context)
         .translate(getStatusTanslation(item.statusId!, null));
     showDialog(
@@ -491,27 +409,14 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                   return const CircularProgressIndicator();
                 }, loaded: () {
                   return SimpleDialog(
-                      title: Text(Translate.of(context).translate('options'),
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          )),
+                      title: Center(
+                        child: Text(Translate.of(context).translate('status'),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            )),
+                      ),
                       children: [
-                        SimpleDialogOption(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                            _onListingAction(1, item);
-                          },
-                          child: Text(Translate.of(context).translate('edit')),
-                        ),
-                        SimpleDialogOption(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                            _onListingAction(2, item);
-                          },
-                          child:
-                              Text(Translate.of(context).translate('delete')),
-                        ),
                         SimpleDialogOption(
                           child: DropdownButtonHideUnderline(
                             child: DropdownButton(
@@ -529,7 +434,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                     Translate.of(context)
                                         .translate(chosen ?? "pending");
                                 Navigator.of(context).pop();
-                                _onRefresh();
+                                await _onRefresh();
                               },
                               items: [
                                 DropdownMenuItem<String>(
@@ -539,9 +444,9 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                         .translate('active'))),
                                 DropdownMenuItem<String>(
                                   value: Translate.of(context)
-                                      .translate('under_review'),
+                                      .translate('inactive'),
                                   child: Text(Translate.of(context)
-                                      .translate('under_review')),
+                                      .translate('inactive')),
                                 ),
                                 DropdownMenuItem<String>(
                                   value: Translate.of(context)
@@ -572,7 +477,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
           isLoadingMore = true;
           previousScrollPosition = _scrollController.position.pixels;
         });
-        posts = await context.read<AllListingsCubit>().newListings(++pageNo);
+        posts = await context.read<AllRequestsCubit>().newListings(++pageNo);
         setState(() {
           isLoadingMore = false;
         });
@@ -607,7 +512,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
     if (result == true) {
       if (!mounted) return false;
       final deleteResponse =
-          await context.read<AllListingsCubit>().deleteUserList(
+          await context.read<AllRequestsCubit>().deleteUserList(
                 item.cityId,
                 item.id,
               );
@@ -617,7 +522,10 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
   }
 
   Future _onRefresh() async {
-    await context.read<AllListingsCubit>().onLoad(true);
+    await context.read<AllRequestsCubit>().onLoad(true);
+    setState(() {
+      posts = posts;
+    });
   }
 
   void _onProductDetail(ProductModel item) {
@@ -634,15 +542,14 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
         case 1:
           return "active";
         case 2:
-          return "under_review";
+          return "inactive";
         case 3:
           return "pending";
       }
     } else if (statusName != null) {
       if (statusName == Translate.of(context).translate('active')) {
         return "1";
-      } else if (statusName ==
-          Translate.of(context).translate('under_review')) {
+      } else if (statusName == Translate.of(context).translate('inactive')) {
         return "2";
       } else if (statusName == Translate.of(context).translate('pending')) {
         return "3";
@@ -714,8 +621,8 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
   }
 }
 
-class AllListingsBlocked extends StatelessWidget {
-  const AllListingsBlocked({super.key});
+class AllRequestsBlocked extends StatelessWidget {
+  const AllRequestsBlocked({super.key});
 
   @override
   Widget build(BuildContext context) {
