@@ -30,15 +30,12 @@ class AllListingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (user.roleId == 1) {
-      return BlocBuilder<AllListingsCubit, AllListingsState>(
-          builder: (context, state) => state.maybeWhen(
-              loading: () => const AllListingsLoading(),
-              loaded: (posts, isRefreshLoader) => AllListingsLoaded(
-                  user: user, posts: posts, isRefreshLoader: isRefreshLoader),
-              orElse: () => ErrorWidget("Failed to load listings.")));
-    }
-    return const AllListingsBlocked();
+    return BlocBuilder<AllListingsCubit, AllListingsState>(
+        builder: (context, state) => state.maybeWhen(
+            loading: () => const AllListingsLoading(),
+            loaded: (posts, isRefreshLoader) => AllListingsLoaded(
+                user: user, posts: posts, isRefreshLoader: isRefreshLoader),
+            orElse: () => ErrorWidget("Failed to load listings.")));
   }
 }
 
@@ -744,27 +741,6 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
           ),
         );
       },
-    );
-  }
-}
-
-class AllListingsBlocked extends StatelessWidget {
-  const AllListingsBlocked({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          Translate.of(context).translate('all_listings'),
-        ),
-      ),
-      body: Center(
-          child: Text(
-        Translate.of(context).translate('all_listings_not_admin'),
-        overflow: TextOverflow.fade,
-      )),
     );
   }
 }
