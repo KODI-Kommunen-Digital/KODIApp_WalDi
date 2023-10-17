@@ -32,7 +32,8 @@ class Api {
   }
 
   static Future<ResultApiModel> requestFavorites(userId) async {
-    final result = await httpManager.get(url: '/users/$userId/favorites?pageNo=1&pageSize=19');
+    final result = await httpManager.get(
+        url: '/users/$userId/favorites?pageNo=1&pageSize=19');
     return ResultApiModel.fromJson(result);
   }
 
@@ -72,7 +73,8 @@ class Api {
   }
 
   static Future<ResultApiModel> requestUserListings(userId, pageNo) async {
-    final result = await httpManager.get(url: '/users/$userId/listings?pageNo=$pageNo&pageSize=5');
+    final result = await httpManager.get(
+        url: '/users/$userId/listings?pageNo=$pageNo&pageSize=5');
     return ResultApiModel.fromJson(result);
   }
 
@@ -328,6 +330,34 @@ class Api {
 
   static Future<ResultApiModel> moreInfo() async {
     final result = await httpManager.get(url: faq);
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> requestEditProductStatus(
+    cityId,
+    listingId,
+    params,
+  ) async {
+    final filePath = '/cities/$cityId/listings/$listingId';
+    final result = await httpManager.patch(
+      url: filePath,
+      data: params,
+      loading: true,
+    );
+
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> requestAllListings(params) async {
+    final listings = "/listings?pageNo=$params&pageSize=10";
+    final result = await httpManager.get(url: listings);
+    return ResultApiModel.fromJson(result);
+  }
+
+  ///Get Listings by status
+  static Future<ResultApiModel> requestStatusListings(status, params) async {
+    final listings = "/listings?statusId=$status&pageNo=$params&pageSize=10";
+    final result = await httpManager.get(url: listings);
     return ResultApiModel.fromJson(result);
   }
 

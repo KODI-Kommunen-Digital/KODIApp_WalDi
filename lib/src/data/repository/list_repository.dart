@@ -387,6 +387,22 @@ class ListRepository {
     return response;
   }
 
+  Future<ResultApiModel> editProductStatus(
+    int? listingId,
+    cityId,
+    int? statusId,
+  ) async {
+    final userId = prefs.getKeyValue(Preferences.userId, '');
+
+    Map<String, dynamic> params = {
+      "userId": userId,
+      "statusId": statusId ?? 1,
+    };
+    final response =
+        await Api.requestEditProductStatus(cityId, listingId, params);
+    return response;
+  }
+
   Future<ResultApiModel> loadVillages(value) async {
     final response = await Api.requestSubmitCities();
     var jsonCity = response.data;
