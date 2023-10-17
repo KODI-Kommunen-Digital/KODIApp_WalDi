@@ -107,7 +107,7 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                 child: Image.network(
                   widget.groupModel.image != null
                       ? "${Application.picturesURL}${widget.groupModel.image}"
-                      : "${Application.picturesURL}admin/News.jpeg",
+                      : "${Application.picturesURL}admin/DefaultForum.jpeg",
                   fit: BoxFit.cover,
                 ),
               ),
@@ -192,8 +192,10 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                       onPressed: () {
                         _onAddPost();
                       },
-                      child: const Text('Create post',
-                          style: TextStyle(color: Colors.white)),
+                      child: Text(
+                        Translate.of(context).translate('add_post'),
+                        style: const TextStyle(color: Colors.white),
+                      ),
                     )),
                 ListView.builder(
                   shrinkWrap: true,
@@ -211,7 +213,7 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                           children: <Widget>[
                             CachedNetworkImage(
                               imageUrl: widget.posts[index].image == null
-                                  ? '${Application.picturesURL}admin/News.jpeg'
+                                  ? '${Application.picturesURL}admin/DefaultForum.jpeg'
                                   : "${Application.picturesURL}${widget.posts[index].image}?cacheKey=$uniqueKey",
                               imageBuilder: (context, imageProvider) {
                                 return Container(

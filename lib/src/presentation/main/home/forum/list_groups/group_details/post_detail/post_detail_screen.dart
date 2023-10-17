@@ -97,7 +97,7 @@ class _PostDetailsLoadedState extends State<PostDetailsLoaded> {
                 child: Image.network(
                   widget.post.image != null
                       ? "${Application.picturesURL}${widget.post.image}?cacheKey=$uniqueKey"
-                      : "${Application.picturesURL}admin/News.jpeg",
+                      : "${Application.picturesURL}admin/DefaultForum.jpeg",
                   fit: BoxFit.cover,
                 ),
               ),
@@ -130,7 +130,7 @@ class _PostDetailsLoadedState extends State<PostDetailsLoaded> {
                         },
                         itemBuilder: (BuildContext context) {
                           return {
-                            Translate.of(context).translate('report_post'),
+                            Translate.of(context).translate('report_post_hint'),
                           }.map((String choice) {
                             return PopupMenuItem<String>(
                               value: choice,
@@ -246,7 +246,8 @@ class _PostDetailsLoadedState extends State<PostDetailsLoaded> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(Translate.of(context).translate('post_report_confirmation')),
+          title:
+              Text(Translate.of(context).translate('post_report_confirmation')),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -273,13 +274,12 @@ class _PostDetailsLoadedState extends State<PostDetailsLoaded> {
           actions: <Widget>[
             TextButton(
               onPressed: () async {
-                final isReported = await buildContext
-                    .read<PostDetailCubit>()
-                    .reportGroupPosts(
-                  widget.post.forumId,
-                  widget.post.id,
-                  reportReason,
-                );
+                final isReported =
+                    await buildContext.read<PostDetailCubit>().reportGroupPosts(
+                          widget.post.forumId,
+                          widget.post.id,
+                          reportReason,
+                        );
                 if (isReported) {
                   if (!mounted) return;
                   Navigator.of(context).pop(true);
@@ -303,5 +303,4 @@ class _PostDetailsLoadedState extends State<PostDetailsLoaded> {
       // Navigator.pop(context);
     }
   }
-
 }

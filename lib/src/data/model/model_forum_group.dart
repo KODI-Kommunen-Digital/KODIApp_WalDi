@@ -16,9 +16,8 @@ class ForumGroupModel {
       this.description,
       this.image,
       this.isPrivate,
-        this.cityId,
-
-        this.isJoined,
+      this.cityId,
+      this.isJoined,
       this.isRequested});
 
   ForumGroupModel.fromJson(Map<String, dynamic> json) {
@@ -26,7 +25,7 @@ class ForumGroupModel {
     forumName = json['forumName'];
     createdAt = json['createdAt'];
     description = json['description'];
-    image = json['image'] ?? 'admin/News.jpeg';
+    image = json['image'] ?? 'admin/DefaultForum.jpeg';
     isPrivate = json['isPrivate'];
   }
 
@@ -36,7 +35,7 @@ class ForumGroupModel {
     data['forumName'] = forumName ?? '';
     data['createdAt'] = createdAt ?? '';
     data['description'] = description ?? '';
-    data['image'] = image ?? 'admin/News.jpeg';
+    data['image'] = image ?? 'admin/DefaultForum.jpeg';
     data['isPrivate'] = isPrivate ?? 0;
     return data;
   }
