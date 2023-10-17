@@ -201,7 +201,7 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                   physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) {
                     return Padding(
-                      padding: const EdgeInsets.only(bottom: 16),
+                      padding: const EdgeInsets.only(bottom: 16, left: 16),
                       child: InkWell(
                         onTap: () {
                           Navigator.pushNamed(context, Routes.postDetails,
