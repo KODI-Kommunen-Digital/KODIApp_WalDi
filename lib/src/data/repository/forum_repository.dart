@@ -180,6 +180,41 @@ class ForumRepository {
     }
   }
 
+  Future<ResultApiModel?> acceptMemberRequests(
+      forumId, memberRequestId) async {
+    Map<String, dynamic> params = {
+      "accept": true,
+    };
+    final cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    final response =
+        await Api.acceptMemberRequests(forumId, cityId, memberRequestId, params);
+    if (response.success) {
+      return response;
+    } else {
+      logError(
+          'Request Accept Member Requests Response Failed', response.message);
+      return null;
+    }
+  }
+
+  Future<ResultApiModel?> rejectMemberRequests(
+      forumId, memberRequestId, reason) async {
+    Map<String, dynamic> params = {
+      "accept": false,
+      "reason": reason,
+    };
+    final cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    final response = await Api.rejectMemberRequests(
+        forumId, cityId, memberRequestId, params);
+    if (response.success) {
+      return response;
+    } else {
+      logError(
+          'Request Reject Member Requests Response Failed', response.message);
+      return null;
+    }
+  }
+
   Future<ResultApiModel?> requestMakeUserAdmin(forumId, memberId) async {
     final cityId = prefs.getKeyValue(Preferences.cityId, 0);
     final Map<String, dynamic> params = {"isAdmin": 1};

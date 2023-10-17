@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:heidi/src/data/model/model_group_members.dart';
-import 'package:heidi/src/data/model/model_request_member.dart';
+import 'package:heidi/src/data/model/model_member_request.dart';
 import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details/group_members/cubit/group_members_cubit.dart';
-import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details/group_members/cubit/group_members_state.dart';
 import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details/member_requests/cubit/member_request_cubit.dart';
 import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details/member_requests/cubit/member_request_state.dart';
 import 'package:heidi/src/utils/configs/application.dart';
@@ -32,7 +30,6 @@ class _MemberRequestScreenState extends State<MemberRequestScreen> {
       builder: (context, state) => state.maybeWhen(
         loading: () => const MemberRequestLoading(),
         loaded: (membersList) => MemberRequestLoaded(
-          isAdmin: true,
           membersList: membersList,
           forumId: widget.groupId,
         ),
@@ -54,15 +51,11 @@ class MemberRequestLoading extends StatelessWidget {
 }
 
 class MemberRequestLoaded extends StatefulWidget {
-  final List<RequestMemberModel>? membersList;
-  final bool isAdmin;
+  final List<MemberRequestModel>? membersList;
   final int forumId;
 
   const MemberRequestLoaded(
-      {this.membersList,
-        super.key,
-        required this.isAdmin,
-        required this.forumId});
+      {this.membersList, super.key, required this.forumId});
 
   @override
   State<MemberRequestLoaded> createState() => _MemberRequestLoadedState();
@@ -74,7 +67,6 @@ class _MemberRequestLoadedState extends State<MemberRequestLoaded> {
 
   @override
   void initState() {
-    // isAdmin = widget.isAdmin;
     super.initState();
   }
 
@@ -108,15 +100,15 @@ class _MemberRequestLoadedState extends State<MemberRequestLoaded> {
                       width: 80,
                       height: 80,
                       child: ClipOval(
-                          child: Image.network(
-                            // widget.membersList?[index].image != null
-                            //      '${Application.picturesURL}${widget.membersList?[index].image}'
-                            //     :
-                                '${Application.picturesURL}admin/News.jpeg',
-                            width: 100,
-                            height: 100,
-                            fit: BoxFit.cover,
-                          )),
+                        child: Image.network(
+                          widget.membersList?[index].image != null
+                              ? '${Application.picturesURL}${widget.membersList?[index].image}'
+                              : '${Application.picturesURL}admin/News.jpeg',
+                          width: 100,
+                          height: 100,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
                     ),
                     const SizedBox(width: 8),
                     Expanded(
@@ -124,86 +116,75 @@ class _MemberRequestLoadedState extends State<MemberRequestLoaded> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                       ''
-                           , maxLines: 1,
+                            '${widget.membersList?[index].firstname} ${widget.membersList?[index].lastname}',
+                            maxLines: 1,
                             style: Theme.of(context).textTheme.titleSmall,
                           ),
                           // description,
                           const SizedBox(height: 4),
                           Text(
-                            '',
+                            '${widget.membersList?[index].createdAt}',
                             maxLines: 2,
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
                         ],
                       ),
                     ),
-                    Visibility(
-                      visible: widget.isAdmin,
-                      child: isMemberAdmin
-                          ? PopupMenuButton<String>(
-                        icon: const Icon(
-                          Icons.more_vert, // Three vertical dots icon
-                        ),
-                        onSelected: (String choice) async {
-                          // if (choice ==
-                              // Translate.of(context)
-                              //     .translate('remove_admin')) {
-                            // final response = await context
-                            //     .read<GroupMembersCubit>()
-                            //     .requestRemoveAdmin(widget.forumId,
-                            //     widget.membersList?[index].memberId);
-                          //   if (response) {
-                          //     if (!mounted) return;
-                          //     context.read<GroupMembersCubit>().onLoad();
-                          //   } else {
-                          //     if (!mounted) return;
-                          //     showOnlyAdminPopup(context);
-                          //   }
-                          // }
-                        },
-                        itemBuilder: (BuildContext context) {
-                          return {
-                            Translate.of(context)
-                                .translate('remove_admin')
-                          }.map((String choice) {
-                            return PopupMenuItem<String>(
-                              value: choice,
-                              child: Text(choice),
-                            );
-                          }).toList();
-                        },
-                      )
-                          : PopupMenuButton<String>(
-                        icon: const Icon(
-                          Icons.more_vert, // Three vertical dots icon
-                        ),
-                        onSelected: (String choice) async {
+                    // Add tick and cross buttons here
+                    Row(
+                      children: [
+                        InkWell(
+                          onTap: () async{
+                            await context
+                                .read<MembersRequestsCubit>()
+                                .acceptMemberRequests(
+                                    widget.membersList?[index].requestId);
+                            if(!mounted) return;
+                            await context
+                                .read<MembersRequestsCubit>().onLoad();
+                            setState(() {
 
-                        },
-                        itemBuilder: (BuildContext context) {
-                          return {
-                            !isMemberAdmin
-                                ? Translate.of(context)
-                                .translate('make_admin')
-                                : Translate.of(context)
-                                .translate('remove_admin'),
-                            Translate.of(context)
-                                .translate('remove_member')
-                          }.map((String choice) {
-                            return PopupMenuItem<String>(
-                              value: choice,
-                              child: Text(choice),
-                            );
-                          }).toList();
-                        },
-                      ),
-                      // IconButton(
-                      //   icon: const Icon(Icons.more_vert),
-                      //   onPressed: () {
-                      //
-                      //   },
-                      // ),
+                            });
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.only(right: 8),
+                            decoration: const BoxDecoration(
+                              color: Colors.green,
+                              shape: BoxShape.circle,
+                            ),
+                            padding: const EdgeInsets.all(5),
+                            child: const Icon(
+                              Icons.check,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () async{
+                            await context
+                                .read<MembersRequestsCubit>()
+                                .rejectMemberRequests(
+                                widget.membersList?[index].requestId, 'reject request');
+                            if(!mounted) return;
+                            await context
+                                .read<MembersRequestsCubit>().onLoad();
+                            setState(() {
+
+                            });
+                          },
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              color: Colors.red,
+                              shape: BoxShape.circle,
+                            ),
+                            padding: const EdgeInsets.all(5),
+                            child: const Icon(
+                              Icons.close,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),

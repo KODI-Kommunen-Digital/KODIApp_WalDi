@@ -28,13 +28,13 @@ class MemberRequestModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['cityUserId'] = cityUserId;
-    data['username'] = username;
-    data['requestId'] = requestId;
-    data['firstname'] = firstname;
-    data['lastname'] = lastname;
-    data['image'] = image;
-    data['createdAt'] = createdAt;
+    data['cityUserId'] = cityUserId ?? 0;
+    data['username'] = username ?? '';
+    data['requestId'] = requestId ?? 0;
+    data['firstname'] = firstname ?? '';
+    data['lastname'] = lastname ?? '';
+    data['image'] = image ?? '';
+    data['createdAt'] = createdAt ?? '';
     return data;
   }
 }

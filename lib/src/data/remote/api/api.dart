@@ -119,8 +119,29 @@ class Api {
 
   static Future<ResultApiModel> getMemberRequests(forumId, cityId) async {
     ///TODO: CHANGE THIS HARDCODED CITYID
-    final filepath = "/cities/1/forums/$forumId/membersRequests";
+    final filepath = "/cities/1/forums/$forumId/memberRequests";
     final result = await HTTPManager(forum: true).get(url: filepath);
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> acceptMemberRequests(
+      forumId, cityId, memberRequestId, params) async {
+    ///TODO: CHANGE THIS HARDCODED CITYID
+    final filepath = "/cities/1/forums/$forumId/memberRequests/$memberRequestId";
+    final result =
+        await HTTPManager(forum: true).patch(data: params, url: filepath);
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> rejectMemberRequests(
+      forumId, cityId, memberRequestId, params) async {
+    ///TODO: CHANGE THIS HARDCODED CITYID
+    final filepath =
+        "/cities/1/forums/$forumId/memberRequests/$memberRequestId";
+    final result = await HTTPManager(forum: true).patch(
+      data: params,
+      url: filepath,
+    );
     return ResultApiModel.fromJson(result);
   }
 

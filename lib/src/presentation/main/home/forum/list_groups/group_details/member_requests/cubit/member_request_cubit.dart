@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:heidi/src/data/model/model_group_members.dart';
-import 'package:heidi/src/data/model/model_request_member.dart';
+import 'package:heidi/src/data/model/model_member_request.dart';
 import 'package:heidi/src/data/repository/forum_repository.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details/member_requests/cubit/member_request_state.dart';
@@ -15,25 +14,50 @@ class MembersRequestsCubit extends Cubit<MemberRequestState> {
   }
 
   Future<void> onLoad() async {
-    final memberRequestList = <RequestMemberModel>[];
+    final memberRequestList = <MemberRequestModel>[];
     final requestMemberRequestResponse = await repo.getMemberRequests(groupId);
-      if (requestMemberRequestResponse?.data != null) {
+    if (requestMemberRequestResponse?.data != null) {
       for (final member in requestMemberRequestResponse!.data) {
-        memberRequestList.add(RequestMemberModel(
-          forumId: member['forumId'],
-          userId: member['userId'],
-          reason: member['reason'],
-          statusId: member['statusId'],
-          id: member['id'],
+        memberRequestList.add(MemberRequestModel(
+          cityUserId: member['cityUserId'],
+          image: member['image'],
+          username: member['username'],
+          firstname: member['firstname'],
+          lastname: member['lastname'],
           createdAt: member['createdAt'],
-          updatedAt: member['updatedAt'],
+          requestId: member['requestId'],
         ));
       }
     }
-  //   emit(GroupMembersState.loaded(groupMembersList, isAdmin));
+    emit(MemberRequestState.loaded(memberRequestList));
   }
 
   Future<int> getLoggedInUserId() async {
     return UserRepository.getLoggedUserId();
+  }
+
+  Future<bool> acceptMemberRequests(memberRequestId) async {
+    final response = await repo.acceptMemberRequests(
+      groupId,
+      memberRequestId,
+    );
+    if (response!.success) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> rejectMemberRequests(memberRequestId, reason) async {
+    final response = await repo.rejectMemberRequests(
+      groupId,
+      memberRequestId,
+      reason,
+    );
+    if (response!.success) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
