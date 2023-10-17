@@ -433,5 +433,13 @@
   "message_sent_success": "Die Nachricht wurde versandt.",
   "submit_contactUs_message": "Vielen Dank für dein Feedback.",
   "faq": "Häufige Fragen",
-  "info": "Info"
+  "info": "Info",
+  "dashboard": "Armaturenbrett",
+  "my_groups": "Meine Gruppen",
+  "all_listings": "Alle Beiträge",
+  "my_posts": "Meine Posts", 
+  "requests": "Anfragen", "active": "Aktiv",  
+  "inactive": "Inaktiv",
+  "under_review": "In Prüfung",  
+  "all_requests":"Alle Anfragen"
 }

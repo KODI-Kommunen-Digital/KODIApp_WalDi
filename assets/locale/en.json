@@ -431,5 +431,14 @@
   "message_sent_success": "Message Sent Successfully",
   "submit_contactUs_message": "Your messsage has been sent successfully. Thank you for your feedback.",
   "faq": "FAQ (Frequently Asked Questions)",
-  "info": "Info"
+  "info": "Info",
+  "dashboard": "Dashboard",
+  "my_groups": "My Groups",
+  "all_listings": "All Listings",
+  "my_posts": "My Posts",
+  "requests": "Requests",  
+  "active": "Active",
+  "inactive": "Inactive",
+  "under_review": "Under Review",  
+  "all_requests":"All Requests"
 }
