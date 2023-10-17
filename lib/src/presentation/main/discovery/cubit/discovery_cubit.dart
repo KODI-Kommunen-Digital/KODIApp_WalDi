@@ -166,6 +166,16 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
           arguments: 9,
           categoryId: 6),
       CitizenServiceModel(
+          imageUrl: Images.service13,
+          imageLink: "13",
+          arguments: 10,
+          categoryId: 15),
+      CitizenServiceModel(
+          imageUrl: Images.service14,
+          imageLink: "14",
+          arguments: 11,
+          categoryId: 14),
+      CitizenServiceModel(
         imageUrl: Images.service11,
         imageLink: "11",
       ),
@@ -180,7 +190,7 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
     final prefs = await Preferences.openBox();
     int cityId = await prefs.getKeyValue(Preferences.cityId, int);
     Map<int, String> cityWebsites = {
-      0: "https://mitreden.ilzerland.bayern/projekts?order=index_order_all",
+      0: "https://mitreden.ilzerland.bayern/ ",
       1: "https://mitreden.ilzerland.bayern/schoefweg",
       2: "https://mitreden.ilzerland.bayern/innernzell",
       3: "https://mitreden.ilzerland.bayern/eppenschlag",
