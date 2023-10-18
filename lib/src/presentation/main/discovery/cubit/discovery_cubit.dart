@@ -211,7 +211,7 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
 
   Future<String?> getVirtualTourLink() async {
     final prefs = await Preferences.openBox();
-    int cityId = await prefs.getKeyValue(Preferences.cityId, int);
+    int cityId = await prefs.getKeyValue(Preferences.cityId, 0);
     Map<int, String> cityWebsites = {
       0: "https://ilzerland.bayern/interaktive-karte/",
       1: "https://tourmkr.com/F1Rg5oRge1/40641615p&310.64h&63.33t",
