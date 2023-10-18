@@ -47,13 +47,16 @@ class _ListGroupScreenState extends State<ListGroupScreen> {
         arguments: Routes.addGroups,
       ).then((value) {
         context.read<ListGroupsCubit>().onLoad();
+        setState(() {});
       });
       if (result == null) return;
     } else {
       if (!mounted) return;
       Navigator.pushNamed(context, Routes.addGroups,
-          arguments: {'isNewGroup': true}).then((value) {
-        context.read<ListGroupsCubit>().onLoad();
+          arguments: {'isNewGroup': true}).then((value) async {
+        if (!mounted) return;
+        await context.read<ListGroupsCubit>().onLoad();
+        setState(() {});
       });
     }
   }

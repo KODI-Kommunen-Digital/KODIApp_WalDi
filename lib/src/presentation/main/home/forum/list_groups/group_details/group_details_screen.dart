@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:heidi/src/data/model/model_forum_group.dart';
 import 'package:heidi/src/data/model/model_group_posts.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
@@ -59,6 +60,8 @@ class GroupDetailsLoaded extends StatefulWidget {
 }
 
 class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
+  final memoryCacheManager = DefaultCacheManager();
+
   void _onAddPost() async {
     if (AppBloc.userCubit.state == null) {
       final result = await Navigator.pushNamed(
@@ -104,11 +107,62 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                         "${Application.picturesURL}${widget.groupModel.image}",
                   );
                 },
-                child: Image.network(
-                  widget.groupModel.image != null
-                      ? "${Application.picturesURL}${widget.groupModel.image}"
-                      : "${Application.picturesURL}admin/News.jpeg",
-                  fit: BoxFit.cover,
+                // child: Image.network(
+                //   widget.groupModel.image != null
+                //       ? "${Application.picturesURL}${widget.groupModel.image}?cacheKey=$uniqueKey"
+                //       : "${Application.picturesURL}admin/News.jpeg",
+                //   fit: BoxFit.cover,
+                // ),
+                child: CachedNetworkImage(
+                  imageUrl: widget.groupModel.image != null
+                        ? "${Application.picturesURL}${widget.groupModel.image}?cacheKey=$uniqueKey"
+                        : "${Application.picturesURL}admin/News.jpeg",
+                  cacheManager: memoryCacheManager,
+                  imageBuilder: (context, imageProvider) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
+                        ),
+                        borderRadius:
+                        BorderRadius.circular(11),
+                      ),
+                    );
+                  },
+                  placeholder: (context, url) {
+                    return AppPlaceholder(
+                      child: Container(
+                        width: 120,
+                        height: 140,
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(8),
+                            bottomLeft:
+                            Radius.circular(8),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                  errorWidget: (context, url, error) {
+                    return AppPlaceholder(
+                      child: Container(
+                        width: 120,
+                        height: 140,
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(8),
+                            bottomLeft:
+                            Radius.circular(8),
+                          ),
+                        ),
+                        child: const Icon(Icons.error),
+                      ),
+                    );
+                  },
                 ),
               ),
             ),
@@ -140,12 +194,8 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                               context, Routes.groupMembersDetails,
                               arguments: widget.groupModel.id);
                         } else if (choice ==
-                            Translate.of(context).translate('see_member')) {
-                          Navigator.pushNamed(
-                              context, Routes.groupMembersDetails,
-                              arguments: widget.groupModel.id);
-                        }else if (choice ==
-                            Translate.of(context).translate('member_requests')) {
+                            Translate.of(context)
+                                .translate('member_requests')) {
                           Navigator.pushNamed(
                               context, Routes.memberRequestDetails,
                               arguments: widget.groupModel.id);
@@ -163,17 +213,35 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                       },
                       itemBuilder: (BuildContext context) {
                         return widget.isAdmin
-                            ? {
-                                Translate.of(context).translate('leave_group'),
-                                Translate.of(context).translate('see_member'),
-                                Translate.of(context).translate('edit_group'),
-                                Translate.of(context).translate('member_requests'),
-                              }.map((String choice) {
-                                return PopupMenuItem<String>(
-                                  value: choice,
-                                  child: Text(choice),
-                                );
-                              }).toList()
+                            ? widget.groupModel.isPrivate == 1
+                                ? {
+                                    Translate.of(context)
+                                        .translate('leave_group'),
+                                    Translate.of(context)
+                                        .translate('see_member'),
+                                    Translate.of(context)
+                                        .translate('edit_group'),
+                                    Translate.of(context)
+                                        .translate('member_requests'),
+                                  }.map((String choice) {
+                                    return PopupMenuItem<String>(
+                                      value: choice,
+                                      child: Text(choice),
+                                    );
+                                  }).toList()
+                                : {
+                                    Translate.of(context)
+                                        .translate('leave_group'),
+                                    Translate.of(context)
+                                        .translate('see_member'),
+                                    Translate.of(context)
+                                        .translate('edit_group'),
+                                  }.map((String choice) {
+                                    return PopupMenuItem<String>(
+                                      value: choice,
+                                      child: Text(choice),
+                                    );
+                                  }).toList()
                             : {
                                 Translate.of(context).translate('leave_group'),
                                 Translate.of(context).translate('see_member'),

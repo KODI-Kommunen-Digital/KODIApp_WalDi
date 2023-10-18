@@ -343,8 +343,13 @@ class ForumRepository {
       "villageId": 0,
       "visibility": "",
     };
+    FormData? pickedFile = prefs.getPickedFile();
     final response = await Api.requestSaveForum(cityId, params);
     if (response.success) {
+      final forumId = response.id;
+      if (pickedFile != null) {
+        await Api.requestForumImageUpload(cityId, forumId, pickedFile);
+      }
       prefs.deleteKey('pickedFile');
     }
     return response;
@@ -379,14 +384,15 @@ class ForumRepository {
     };
     final response =
         await Api.requestEditForum(cityId, forumId, params, isImageChanged);
-    if (isImageChanged) {
-      final prefs = await Preferences.openBox();
-      FormData? pickedFile = prefs.getPickedFile();
-      if (pickedFile != null) {
-        Api.requestForumImageUpload(cityId, forumId, pickedFile);
-      }
-    }
+
     if (response.success) {
+      if (isImageChanged) {
+        final prefs = await Preferences.openBox();
+        FormData? pickedFile = prefs.getPickedFile();
+        if (pickedFile != null) {
+          await Api.requestForumImageUpload(cityId, forumId, pickedFile);
+        }
+      }
       prefs.deleteKey('pickedFile');
     }
     return response;

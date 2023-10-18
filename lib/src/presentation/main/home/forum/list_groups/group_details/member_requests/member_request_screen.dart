@@ -75,7 +75,7 @@ class _MemberRequestLoadedState extends State<MemberRequestLoaded> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext buildContext) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -118,7 +118,7 @@ class _MemberRequestLoadedState extends State<MemberRequestLoaded> {
                           Text(
                             '${widget.membersList?[index].firstname} ${widget.membersList?[index].lastname}',
                             maxLines: 1,
-                            style: Theme.of(context).textTheme.titleSmall,
+                            style: Theme.of(buildContext).textTheme.titleSmall,
                           ),
                           // description,
                           const SizedBox(height: 4),
@@ -161,16 +161,7 @@ class _MemberRequestLoadedState extends State<MemberRequestLoaded> {
                         ),
                         InkWell(
                           onTap: () async{
-                            await context
-                                .read<MembersRequestsCubit>()
-                                .rejectMemberRequests(
-                                widget.membersList?[index].requestId, 'reject request');
-                            if(!mounted) return;
-                            await context
-                                .read<MembersRequestsCubit>().onLoad();
-                            setState(() {
-
-                            });
+                            showIgnoreRequestConfirmation(buildContext, index);
                           },
                           child: Container(
                             decoration: const BoxDecoration(
@@ -215,5 +206,73 @@ class _MemberRequestLoadedState extends State<MemberRequestLoaded> {
         );
       },
     );
+  }
+
+  Future<void> showIgnoreRequestConfirmation(BuildContext buildContext, index) async {
+    String reason = '';
+
+    final result = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(Translate.of(context).translate('ignore_member_request_confirmation')),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10.0),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                width: double.maxFinite,
+                child: TextField(
+                  maxLines: 5,
+                  onChanged: (value) {
+                    reason = value;
+                  },
+                  decoration:  InputDecoration(
+                    hintText: Translate.of(context).translate('give_reason'),
+                    border: InputBorder.none,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () async {
+                final response = await buildContext
+                    .read<MembersRequestsCubit>()
+                    .rejectMemberRequests(
+                    widget.membersList?[index].requestId, reason);
+                if(!mounted) return;
+                await buildContext
+                    .read<MembersRequestsCubit>().onLoad();
+                setState(() {
+
+                });
+                if (response) {
+                  if (!mounted) return;
+                  Navigator.of(context).pop(true);
+                } else {
+                  // Handle the case where the post could not be reported
+                  // Show an error message or take appropriate action
+                }
+              },
+              child: Text(Translate.of(context).translate('yes')),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false), // No
+              child: Text(Translate.of(context).translate('no')),
+            ),
+          ],
+        );
+      },
+    );
+    if (result == true) {
+      if (!mounted) return;
+      // Navigator.pop(context);
+    }
   }
 }

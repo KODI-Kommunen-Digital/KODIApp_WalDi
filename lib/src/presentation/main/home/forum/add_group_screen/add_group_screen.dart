@@ -8,7 +8,6 @@ import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/presentation/widget/app_text_input.dart';
 import 'package:heidi/src/presentation/widget/app_upload_image.dart';
 import 'package:heidi/src/utils/common.dart';
-import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:heidi/src/utils/validate.dart';
 
@@ -152,8 +151,9 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
             description: _textContentController.text,
             type: selectedPrivacy);
         if (result) {
-          _onSuccess();
           if (!mounted) return;
+          _onSuccess();
+
         }
       } else {
         final result = await context.read<AddGroupCubit>().onEditForum(
@@ -165,8 +165,8 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
             widget.item!.id,
             widget.item!.createdAt);
         if (result) {
-          _onSuccess();
           if (!mounted) return;
+          _onSuccess();
         }
       }
     }
@@ -174,9 +174,9 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
 
   void _onSuccess() {
     Navigator.pop(context);
-    if (widget.isNewGroup) {
-      Navigator.pushNamed(context, Routes.submitSuccess);
-    }
+    // if (widget.isNewGroup) {
+    //   Navigator.pushNamed(context, Routes.submitSuccess);
+    // }
   }
 
   bool _validData() {
