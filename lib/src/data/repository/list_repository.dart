@@ -51,7 +51,7 @@ class ListRepository {
       }
     } else if (type == "categoryService") {
       int params = categoryId;
-      final response = await Api.requestCatList(params, cityId, pageNo);
+      final response = await Api.requestCatList(params, selectedCityId, pageNo);
       if (response.success) {
         final list = List.from(response.data ?? []).map((item) {
           return ProductModel.fromJson(item, setting: Application.setting);
@@ -384,6 +384,22 @@ class ListRepository {
     };
     final response =
         await Api.requestEditProduct(cityId, listingId, params, isImageChanged);
+    return response;
+  }
+
+  Future<ResultApiModel> editProductStatus(
+    int? listingId,
+    cityId,
+    int? statusId,
+  ) async {
+    final userId = prefs.getKeyValue(Preferences.userId, '');
+
+    Map<String, dynamic> params = {
+      "userId": userId,
+      "statusId": statusId ?? 1,
+    };
+    final response =
+        await Api.requestEditProductStatus(cityId, listingId, params);
     return response;
   }
 

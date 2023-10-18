@@ -87,7 +87,8 @@
   "avg_price": "AVG-Preis",
   "business_color": "Geschäftsfarbe",
   "open_time": "Offene Zeit",
-  "time": "Zeit",
+  "time": "Zeit",  
+  "options": "Optionen",
   "bookings": "Buchungen",
   "my_booking": "Meine Buchung",
   "request_booking": "Buchung anfordern",
@@ -433,5 +434,13 @@
   "message_sent_success": "Die Nachricht wurde versandt.",
   "submit_contactUs_message": "Vielen Dank für dein Feedback.",
   "faq": "Häufige Fragen",
-  "info": "Info"
+  "info": "Info",
+  "dashboard": "Dashboard",
+  "my_groups": "Meine Gruppen",
+  "all_listings": "Alle Beiträge",
+  "my_posts": "Meine Posts", 
+  "requests": "Anfragen", "active": "Aktiv",  
+  "inactive": "Inaktiv",
+  "under_review": "In Prüfung",  
+  "all_requests":"Alle Anfragen"
 }

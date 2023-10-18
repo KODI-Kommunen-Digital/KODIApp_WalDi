@@ -347,6 +347,34 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
+  static Future<ResultApiModel> requestEditProductStatus(
+    cityId,
+    listingId,
+    params,
+  ) async {
+    final filePath = '/cities/$cityId/listings/$listingId';
+    final result = await httpManager.patch(
+      url: filePath,
+      data: params,
+      loading: true,
+    );
+
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> requestAllListings(params) async {
+    final listings = "/listings?pageNo=$params&pageSize=10";
+    final result = await httpManager.get(url: listings);
+    return ResultApiModel.fromJson(result);
+  }
+
+  ///Get Listings by status
+  static Future<ResultApiModel> requestStatusListings(status, params) async {
+    final listings = "/listings?statusId=$status&pageNo=$params&pageSize=10";
+    final result = await httpManager.get(url: listings);
+    return ResultApiModel.fromJson(result);
+  }
+
   ///Singleton factory
   static final Api _instance = Api._internal();
 

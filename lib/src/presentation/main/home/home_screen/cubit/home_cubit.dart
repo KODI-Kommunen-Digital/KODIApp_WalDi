@@ -125,6 +125,9 @@ class HomeCubit extends Cubit<HomeState> {
       if (!hasContent) {
         element.hide = true;
       }
+      if (element.id == 14 || element.id == 15) {
+        element.hide = true;
+      }
     }
 
     return categories;
