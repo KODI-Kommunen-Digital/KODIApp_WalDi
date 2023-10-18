@@ -485,8 +485,12 @@ class _AddListingScreenState extends State<AddListingScreen> {
     _errorTitle =
         UtilValidator.validate(_textTitleController.text, allowEmpty: false);
 
-    _errorContent =
-        UtilValidator.validate(_textContentController.text, allowEmpty: false);
+    if (_textContentController.text.length >= 10001) {
+      _errorContent = "Info should not exceed 1000 characters.";
+    } else {
+      _errorContent = UtilValidator.validate(_textContentController.text,
+          allowEmpty: false);
+    }
 
     logError('selectedCategory', selectedCategory);
     if (selectedCategory == "Events") {
