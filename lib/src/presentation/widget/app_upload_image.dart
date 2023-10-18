@@ -139,12 +139,13 @@ class _AppUploadImageState extends State<AppUploadImage> {
       status = PermissionStatus.granted;
     } else {
       String androidVersion = await _getAndroidVersion();
-      if (int.parse(androidVersion) > 11) {
-        status = await Permission.photos.status;
-      } else {
+      if (int.parse(androidVersion) < 11) {
         status = await Permission.storage.status;
+      } else {
+        status = await Permission.photos.status;
       }
       status = await Permission.storage.request();
+      status = await Permission.photos.request();
     }
 
     if (!mounted) return;
@@ -257,10 +258,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
         },
       );
     } else if (status.isPermanentlyDenied) {
-      if (isPermanentlyDenied) {
-        await openAppSettings();
-      }
-      isPermanentlyDenied = true;
+      await openAppSettings();
     }
   }
 
