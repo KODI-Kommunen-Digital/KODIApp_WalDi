@@ -502,15 +502,24 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                             Navigator.of(context).pop();
                             _onListingAction(1, item);
                           },
-                          child: Text(Translate.of(context).translate('edit')),
+                          child: ListTile(
+                            leading: const Icon(Icons.edit),
+                            title: Text(
+                              Translate.of(context).translate('edit'),
+                            ),
+                          ),
                         ),
                         SimpleDialogOption(
                           onPressed: () {
                             Navigator.of(context).pop();
                             _onListingAction(2, item);
                           },
-                          child:
-                              Text(Translate.of(context).translate('delete')),
+                          child: ListTile(
+                            leading: const Icon(Icons.delete),
+                            title: Text(
+                              Translate.of(context).translate('delete'),
+                            ),
+                          ),
                         ),
                       ]);
                 }, orElse: () {
