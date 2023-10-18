@@ -363,50 +363,49 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                                 ),
                                                 const SizedBox(height: 8),
                                                 Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Container(
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(10),
-                                                        ),
-                                                        child: ElevatedButton(
-                                                          onPressed: () async {
-                                                            _openListingStatusActionPopUp(
-                                                                item);
-                                                          },
-                                                          child: Text(
-                                                            Translate.of(
-                                                                    context)
-                                                                .translate(
-                                                                    getStatusTanslation(
-                                                                        item.statusId ??
-                                                                            0,
-                                                                        null)),
-                                                            style: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .bodySmall!
-                                                                .copyWith(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                ),
-                                                          ),
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Container(
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                      ),
+                                                      child: ElevatedButton(
+                                                        onPressed: () async {
+                                                          _openListingStatusActionPopUp(
+                                                              item);
+                                                        },
+                                                        child: Text(
+                                                          Translate.of(context)
+                                                              .translate(
+                                                                  getStatusTanslation(
+                                                                      item.statusId ??
+                                                                          0,
+                                                                      null)),
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .bodySmall!
+                                                                  .copyWith(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                  ),
                                                         ),
                                                       ),
-                                                      IconButton(
-                                                          onPressed: () {
-                                                            _openListingActionPopUp(
-                                                                item);
-                                                          },
-                                                          icon: const Icon(
-                                                              Icons.more_vert))
-                                                    ]),
+                                                    ),
+                                                    IconButton(
+                                                        onPressed: () {
+                                                          _openListingActionPopUp(
+                                                              item);
+                                                        },
+                                                        icon: const Icon(
+                                                            Icons.more_vert))
+                                                  ],
+                                                ),
                                                 const SizedBox(height: 8),
                                                 const SizedBox(height: 4),
                                               ],
@@ -502,15 +501,22 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                             Navigator.of(context).pop();
                             _onListingAction(1, item);
                           },
-                          child: Text(Translate.of(context).translate('edit')),
+                          child: ListTile(
+                            leading: const Icon(Icons.edit),
+                            title:
+                                Text(Translate.of(context).translate('edit')),
+                          ),
                         ),
                         SimpleDialogOption(
                           onPressed: () {
                             Navigator.of(context).pop();
                             _onListingAction(2, item);
                           },
-                          child:
-                              Text(Translate.of(context).translate('delete')),
+                          child: ListTile(
+                            leading: const Icon(Icons.delete),
+                            title:
+                                Text(Translate.of(context).translate('delete')),
+                          ),
                         ),
                       ]);
                 }, orElse: () {
