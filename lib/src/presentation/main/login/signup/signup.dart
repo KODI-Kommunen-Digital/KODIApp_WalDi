@@ -62,6 +62,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
   void _signUp() async {
     Utils.hiddenKeyboard(context);
     setState(() {
+      _textIDController.text = _textIDController.text.replaceAll(" ", "");
+      _textFNController.text = _textFNController.text.replaceAll(" ", "");
+      _textLNController.text = _textLNController.text.replaceAll(" ", "");
+      _textPassController.text = _textPassController.text.replaceAll(" ", "");
+      _textCPassController.text = _textCPassController.text.replaceAll(" ", "");
+
       _errorID = AppBloc.signupCubit.validateUsername(_textIDController.text);
       _errorFN = UtilValidator.validate(_textFNController.text);
       _errorLN = UtilValidator.validate(_textLNController.text);
@@ -153,8 +159,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   focusNode: _focusID,
                   textInputAction: TextInputAction.next,
                   onChanged: (text) {
-                    setState(() {
-                    });
+                    setState(() {});
                   },
                   onSubmitted: (text) {
                     Utils.fieldFocusChange(context, _focusID, _focusFN);
