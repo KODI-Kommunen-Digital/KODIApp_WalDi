@@ -135,13 +135,7 @@ class _MemberRequestLoadedState extends State<MemberRequestLoaded> {
                       children: [
                         InkWell(
                           onTap: () async {
-                            await context
-                                .read<MembersRequestsCubit>()
-                                .acceptMemberRequests(
-                                    widget.membersList?[index].requestId);
-                            if (!mounted) return;
-                            await context.read<MembersRequestsCubit>().onLoad();
-                            setState(() {});
+                            showAcceptRequestConfirmation(context, index);
                           },
                           child: Container(
                             margin: const EdgeInsets.only(right: 14),
@@ -262,6 +256,58 @@ class _MemberRequestLoadedState extends State<MemberRequestLoaded> {
             ),
             TextButton(
               onPressed: () => Navigator.of(context).pop(false), // No
+              child: Text(Translate.of(context).translate('no')),
+            ),
+          ],
+        );
+      },
+    );
+    if (result == true) {
+      if (!mounted) return;
+      // Navigator.pop(context);
+    }
+  }
+
+  Future<void> showAcceptRequestConfirmation(
+      BuildContext context, index) async {
+    final result = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(Translate.of(context)
+              .translate('accept_request_confirmation_message')),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10.0),
+                width: double.maxFinite,
+                child: Text(Translate.of(context)
+                    .translate("accept_request_confirmation")),
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () async {
+                final response = await context
+                    .read<MembersRequestsCubit>()
+                    .acceptMemberRequests(widget.membersList?[index].requestId);
+                if (!mounted) return;
+                await context.read<MembersRequestsCubit>().onLoad();
+                setState(() {});
+                if (response) {
+                  if (!mounted) return;
+                  Navigator.of(context).pop(true);
+                } else {
+                  // Handle the case where the post could not be reported
+                  // Show an error message or take appropriate action
+                }
+              },
+              child: Text(Translate.of(context).translate('yes')),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
               child: Text(Translate.of(context).translate('no')),
             ),
           ],

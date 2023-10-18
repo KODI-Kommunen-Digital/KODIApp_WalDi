@@ -22,6 +22,8 @@
   "Are_you_sure_you_want_to_report_this_post" : "Are you sure you want to report this post?",
   "Are_you_sure_you_want_to_leave_this_group" : "Are you sure you want to leave this group?",
   "ignore_member_request_confirmation" : "Ignore Member Request Confirmation",
+  "accept_request_confirmation_message" : "Accept Member Request Confirmation",  
+  "accept_request_confirmation" : "Are you sure you want to accept this member's request?",
   "Are_you_sure_you_want_to_ignore_this_member's_request" : "Are you sure you want to ignore this member 's request?",
   "give_reason": "Please give the reason.",
   "remove_member": "Remove Member",

@@ -18,6 +18,8 @@
   "group_leave_confirmation" : "Bestätigung des Gruppenurlaubs",
   "post_report_confirmation" : "Nachberichtsbestätigungs",
   "ignore_member_request_confirmation" : "Bestätigung der Mitgliederanfrage ignorieren",
+  "accept_request_confirmation" : "Akzeptieren Sie die Bestätigung der Mitgliedsanfrage",  
+  "accept_request_confirmation_message" : "Sind Sie sicher, dass Sie die Anfrage dieses Mitglieds annehmen möchten?",
   "Are_you_sure_you_want_to_ignore_this_member's_request" : "Bestätigung der Mitgliederanfrage ignorieren",
   "give_reason": "Bitte gib einen Grund an.",
   "Are_you_sure_you_want_to_leave_this_group" : "Sind Sie sicher, dass Sie diese Gruppe verlassen wollen?",
