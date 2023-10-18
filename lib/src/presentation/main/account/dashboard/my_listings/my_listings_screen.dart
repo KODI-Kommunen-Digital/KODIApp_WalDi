@@ -354,13 +354,12 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                                                               height: 8),
                                                           Align(
                                                             alignment: Alignment
-                                                                .bottomRight, // Align to the right side
+                                                                .bottomRight,
                                                             child: Padding(
                                                               padding:
                                                                   const EdgeInsets
                                                                       .only(
-                                                                      top:
-                                                                          8.0), // Add space only below the IconButton
+                                                                      top: 8.0),
                                                               child: IconButton(
                                                                 icon: const Icon(
                                                                     Icons
@@ -440,11 +439,11 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
             TextButton(
               onPressed: () async {
                 Navigator.of(context).pop(true);
-              }, // Yes
+              },
               child: Text(Translate.of(context).translate('yes')),
             ),
             TextButton(
-              onPressed: () => Navigator.of(context).pop(false), // No
+              onPressed: () => Navigator.of(context).pop(false),
               child: Text(Translate.of(context).translate('no')),
             ),
           ],
@@ -481,7 +480,6 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
           children: [
             SimpleDialogOption(
               onPressed: () {
-                // Close the dialog and navigate to the edit screen
                 Navigator.pop(context);
                 Navigator.pushNamed(context, Routes.submit, arguments: {
                   'item': userListingsList[index],
@@ -502,7 +500,6 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
             ),
             SimpleDialogOption(
               onPressed: () async {
-                // Close the dialog and show the delete confirmation dialog
                 Navigator.pop(context);
                 showDeleteConfirmation(context, index);
               },
