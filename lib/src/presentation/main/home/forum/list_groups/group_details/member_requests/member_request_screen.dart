@@ -134,20 +134,17 @@ class _MemberRequestLoadedState extends State<MemberRequestLoaded> {
                     Row(
                       children: [
                         InkWell(
-                          onTap: () async{
+                          onTap: () async {
                             await context
                                 .read<MembersRequestsCubit>()
                                 .acceptMemberRequests(
                                     widget.membersList?[index].requestId);
-                            if(!mounted) return;
-                            await context
-                                .read<MembersRequestsCubit>().onLoad();
-                            setState(() {
-
-                            });
+                            if (!mounted) return;
+                            await context.read<MembersRequestsCubit>().onLoad();
+                            setState(() {});
                           },
                           child: Container(
-                            margin: const EdgeInsets.only(right: 8),
+                            margin: const EdgeInsets.only(right: 14),
                             decoration: const BoxDecoration(
                               color: Colors.green,
                               shape: BoxShape.circle,
@@ -156,11 +153,12 @@ class _MemberRequestLoadedState extends State<MemberRequestLoaded> {
                             child: const Icon(
                               Icons.check,
                               color: Colors.white,
+                              size: 35,
                             ),
                           ),
                         ),
                         InkWell(
-                          onTap: () async{
+                          onTap: () async {
                             showIgnoreRequestConfirmation(buildContext, index);
                           },
                           child: Container(
@@ -172,6 +170,7 @@ class _MemberRequestLoadedState extends State<MemberRequestLoaded> {
                             child: const Icon(
                               Icons.close,
                               color: Colors.white,
+                              size: 35,
                             ),
                           ),
                         ),
@@ -208,14 +207,16 @@ class _MemberRequestLoadedState extends State<MemberRequestLoaded> {
     );
   }
 
-  Future<void> showIgnoreRequestConfirmation(BuildContext buildContext, index) async {
+  Future<void> showIgnoreRequestConfirmation(
+      BuildContext buildContext, index) async {
     String reason = '';
 
     final result = await showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(Translate.of(context).translate('ignore_member_request_confirmation')),
+          title: Text(Translate.of(context)
+              .translate('ignore_member_request_confirmation')),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -231,7 +232,7 @@ class _MemberRequestLoadedState extends State<MemberRequestLoaded> {
                   onChanged: (value) {
                     reason = value;
                   },
-                  decoration:  InputDecoration(
+                  decoration: InputDecoration(
                     hintText: Translate.of(context).translate('give_reason'),
                     border: InputBorder.none,
                   ),
@@ -245,13 +246,10 @@ class _MemberRequestLoadedState extends State<MemberRequestLoaded> {
                 final response = await buildContext
                     .read<MembersRequestsCubit>()
                     .rejectMemberRequests(
-                    widget.membersList?[index].requestId, reason);
-                if(!mounted) return;
-                await buildContext
-                    .read<MembersRequestsCubit>().onLoad();
-                setState(() {
-
-                });
+                        widget.membersList?[index].requestId, reason);
+                if (!mounted) return;
+                await buildContext.read<MembersRequestsCubit>().onLoad();
+                setState(() {});
                 if (response) {
                   if (!mounted) return;
                   Navigator.of(context).pop(true);
