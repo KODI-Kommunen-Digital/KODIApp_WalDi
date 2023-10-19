@@ -6,6 +6,7 @@ import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details
 import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details/member_requests/cubit/member_request_state.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/translate.dart';
+import 'package:intl/intl.dart';
 
 class MemberRequestScreen extends StatefulWidget {
   final int groupId;
@@ -76,6 +77,8 @@ class _MemberRequestLoadedState extends State<MemberRequestLoaded> {
 
   @override
   Widget build(BuildContext buildContext) {
+    final dateFormat = DateFormat('yyyy.MM.dd');
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -123,7 +126,7 @@ class _MemberRequestLoadedState extends State<MemberRequestLoaded> {
                           // description,
                           const SizedBox(height: 4),
                           Text(
-                            '${widget.membersList?[index].createdAt}',
+                              (dateFormat.format(DateTime.parse(widget.membersList![index].createdAt!))).toString(),
                             maxLines: 2,
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
