@@ -75,6 +75,9 @@ class GroupDetailsCubit extends Cubit<GroupDetailsState> {
     }
   }
 
+  Future<void> requestDeleteGroup(forumId, cityId) async{
+     await repo.requestDeleteForum(forumId, cityId);
+  }
   Future<RemoveUser> removeGroupMember(groupId) async {
     int adminCount = 0;
     final groupMembersList = <GroupMembersModel>[];

@@ -138,7 +138,7 @@ class _MemberRequestLoadedState extends State<MemberRequestLoaded> {
                       children: [
                         InkWell(
                           onTap: () async {
-                            showAcceptRequestConfirmation(context, index);
+                            showAcceptRequestConfirmation(buildContext, index);
                           },
                           child: Container(
                             margin: const EdgeInsets.only(right: 14),
@@ -272,7 +272,7 @@ class _MemberRequestLoadedState extends State<MemberRequestLoaded> {
   }
 
   Future<void> showAcceptRequestConfirmation(
-      BuildContext context, index) async {
+      BuildContext buildContext, index) async {
     final result = await showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -293,11 +293,11 @@ class _MemberRequestLoadedState extends State<MemberRequestLoaded> {
           actions: <Widget>[
             TextButton(
               onPressed: () async {
-                final response = await context
+                final response = await buildContext
                     .read<MembersRequestsCubit>()
                     .acceptMemberRequests(widget.membersList?[index].requestId);
                 if (!mounted) return;
-                await context.read<MembersRequestsCubit>().onLoad();
+                await buildContext.read<MembersRequestsCubit>().onLoad();
                 setState(() {});
                 if (response) {
                   if (!mounted) return;

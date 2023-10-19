@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
@@ -8,6 +10,7 @@ import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:path_provider/path_provider.dart';
 
 class AppProductItem extends StatelessWidget {
   const AppProductItem({
@@ -35,66 +38,75 @@ class AppProductItem extends StatelessWidget {
           return const EmptyProductItem();
         }
         return InkWell(
-          onTap: onPressed,
+          onTap: () async {
+            if(item?.pdf != ''){
+              String pdfUrl = "${Application.picturesURL}${item
+                  ?.pdf}?cacheKey=$uniqueKey";
+              savePDFLocally(pdfUrl);
+            }
+            onPressed!();
+          },
           child: Row(
             children: <Widget>[
               item?.pdf == ''
                   ? ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: Image.network(
-                        item?.sourceId == 2
-                            ? item!.image
-                            : item!.image == 'admin/News.jpeg'
-                                ? "${Application.picturesURL}${item!.image}"
-                                : isRefreshLoader
-                                    ? "${Application.picturesURL}${item!.image}"
-                                    : "${Application.picturesURL}${item!.image}?cache=$uniqueKey",
+                borderRadius: BorderRadius.circular(12),
+                child: Image.network(
+                  item?.sourceId == 2
+                      ? item!.image
+                      : item!.image == 'admin/News.jpeg'
+                      ? "${Application.picturesURL}${item!.image}"
+                      : isRefreshLoader
+                      ? "${Application.picturesURL}${item!.image}"
+                      : "${Application.picturesURL}${item!
+                      .image}?cache=$uniqueKey",
+                  width: 84,
+                  height: 84,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return AppPlaceholder(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: Colors.white,
+                        ),
                         width: 84,
                         height: 84,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return AppPlaceholder(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                color: Colors.white,
-                              ),
-                              width: 84,
-                              height: 84,
-                              child: const Icon(Icons.error),
-                            ),
-                          );
-                        },
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) {
-                            return child;
-                          }
-                          return AppPlaceholder(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                color: Colors.white,
-                              ),
-                              width: 84,
-                              height: 84,
-                            ),
-                          );
-                        },
+                        child: const Icon(Icons.error),
                       ),
-                    )
+                    );
+                  },
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) {
+                      return child;
+                    }
+                    return AppPlaceholder(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: Colors.white,
+                        ),
+                        width: 84,
+                        height: 84,
+                      ),
+                    );
+                  },
+                ),
+              )
                   : ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: SizedBox(
-                          width: 84,
-                          height: 84,
-                          child: const PDF().cachedFromUrl(
-                            "${Application.picturesURL}${item?.pdf}?cacheKey=$uniqueKey",
-                            placeholder: (progress) =>
-                                Center(child: Text('$progress %')),
-                            errorWidget: (error) =>
-                                Center(child: Text(error.toString())),
-                          )),
-                    ),
+                borderRadius: BorderRadius.circular(12),
+                child: SizedBox(
+                    width: 84,
+                    height: 84,
+                    child: const PDF().cachedFromUrl(
+                      "${Application.picturesURL}${item
+                          ?.pdf}?cacheKey=$uniqueKey",
+                      placeholder: (progress) =>
+                          Center(child: Text('$progress %')),
+                      errorWidget: (error) =>
+                          Center(child: Text(error.toString())),
+                    )),
+              ),
               const SizedBox(width: 8),
               Expanded(
                 child: Column(
@@ -103,7 +115,8 @@ class AppProductItem extends StatelessWidget {
                     Text(
                       item!.title,
                       maxLines: 2,
-                      style: Theme.of(context)
+                      style: Theme
+                          .of(context)
                           .textTheme
                           .bodyLarge!
                           .copyWith(fontWeight: FontWeight.bold),
@@ -111,7 +124,8 @@ class AppProductItem extends StatelessWidget {
                     const SizedBox(height: 2),
                     Text(
                       item?.category ?? '',
-                      style: Theme.of(context)
+                      style: Theme
+                          .of(context)
                           .textTheme
                           .bodySmall!
                           .copyWith(fontWeight: FontWeight.bold),
@@ -128,8 +142,10 @@ class AppProductItem extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(3.5),
                           child: Text(
-                            "${item?.startDate} ${Translate.of(context).translate('to')} ${item?.endDate}",
-                            style: Theme.of(context)
+                            "${item?.startDate} ${Translate.of(context)
+                                .translate('to')} ${item?.endDate}",
+                            style: Theme
+                                .of(context)
                                 .textTheme
                                 .bodySmall!
                                 .copyWith(fontWeight: FontWeight.bold),
@@ -148,8 +164,10 @@ class AppProductItem extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(3.5),
                           child: Text(
-                            "${item?.startDate} ${Translate.of(context).translate('to')} ${item?.endDate}",
-                            style: Theme.of(context)
+                            "${item?.startDate} ${Translate.of(context)
+                                .translate('to')} ${item?.endDate}",
+                            style: Theme
+                                .of(context)
                                 .textTheme
                                 .bodySmall!
                                 .copyWith(fontWeight: FontWeight.bold),
@@ -244,7 +262,8 @@ class AppProductItem extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                 item?.category ?? '',
-                style: Theme.of(context)
+                style: Theme
+                    .of(context)
                     .textTheme
                     .bodySmall!
                     .copyWith(fontWeight: FontWeight.bold),
@@ -253,7 +272,8 @@ class AppProductItem extends StatelessWidget {
               Text(
                 item!.title,
                 maxLines: 2,
-                style: Theme.of(context)
+                style: Theme
+                    .of(context)
                     .textTheme
                     .titleSmall!
                     .copyWith(fontWeight: FontWeight.bold),
@@ -263,7 +283,10 @@ class AppProductItem extends StatelessWidget {
               Text(
                 item!.address,
                 maxLines: 1,
-                style: Theme.of(context).textTheme.bodySmall,
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .bodySmall,
               ),
             ],
           ),
@@ -284,61 +307,63 @@ class AppProductItem extends StatelessWidget {
                       ? ClipRRect(
                     borderRadius: BorderRadius.circular(12),
                     child: Image.network(
-                            item?.sourceId == 2
-                                ? item!.image
-                                : item!.image == 'admin/News.jpeg'
-                                    ? "${Application.picturesURL}${item!.image}"
-                                    : isRefreshLoader
-                                        ? "${Application.picturesURL}${item!.image}"
-                                        : "${Application.picturesURL}${item!.image}?cache=$uniqueKey",
+                      item?.sourceId == 2
+                          ? item!.image
+                          : item!.image == 'admin/News.jpeg'
+                          ? "${Application.picturesURL}${item!.image}"
+                          : isRefreshLoader
+                          ? "${Application.picturesURL}${item!.image}"
+                          : "${Application.picturesURL}${item!
+                          .image}?cache=$uniqueKey",
+                      width: 120,
+                      height: 140,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        // Handle errors here
+                        return AppPlaceholder(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              color: Colors.white,
+                            ),
                             width: 120,
                             height: 140,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              // Handle errors here
-                              return AppPlaceholder(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
-                                    color: Colors.white,
-                                  ),
-                                  width: 120,
-                                  height: 140,
-                                  child: const Icon(Icons.error),
-                                ),
-                              );
-                            },
-                            loadingBuilder: (context, child, loadingProgress) {
-                              // Display the AppPlaceholder while the image is loading
-                              if (loadingProgress == null) {
-                                return child;
-                              }
-                              return AppPlaceholder(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
-                                    color: Colors.white,
-                                  ),
-                                  width: 120,
-                                  height: 140,
-                                ),
-                              );
-                            },
+                            child: const Icon(Icons.error),
                           ),
-                      )
+                        );
+                      },
+                      loadingBuilder: (context, child, loadingProgress) {
+                        // Display the AppPlaceholder while the image is loading
+                        if (loadingProgress == null) {
+                          return child;
+                        }
+                        return AppPlaceholder(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              color: Colors.white,
+                            ),
+                            width: 120,
+                            height: 140,
+                          ),
+                        );
+                      },
+                    ),
+                  )
                       : ClipRRect(
-                          borderRadius: BorderRadius.circular(11),
-                          child: SizedBox(
-                              width: 120,
-                              height: 140,
-                              child: const PDF().cachedFromUrl(
-                                "${Application.picturesURL}${item?.pdf}?cacheKey=$uniqueKey",
-                                placeholder: (progress) =>
-                                    Center(child: Text('$progress %')),
-                                errorWidget: (error) =>
-                                    Center(child: Text(error.toString())),
-                              )),
-                        ),
+                    borderRadius: BorderRadius.circular(11),
+                    child: SizedBox(
+                        width: 120,
+                        height: 140,
+                        child: const PDF().cachedFromUrl(
+                          "${Application.picturesURL}${item
+                              ?.pdf}?cacheKey=$uniqueKey",
+                          placeholder: (progress) =>
+                              Center(child: Text('$progress %')),
+                          errorWidget: (error) =>
+                              Center(child: Text(error.toString())),
+                        )),
+                  ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Column(
@@ -347,7 +372,8 @@ class AppProductItem extends StatelessWidget {
                         Text(
                           item!.title,
                           maxLines: 2,
-                          style: Theme.of(context)
+                          style: Theme
+                              .of(context)
                               .textTheme
                               .titleSmall!
                               .copyWith(fontWeight: FontWeight.bold),
@@ -355,40 +381,48 @@ class AppProductItem extends StatelessWidget {
                         const SizedBox(height: 8),
                         (item?.categoryId == 3)
                             ? Container(
-                                padding: const EdgeInsets.all(3.5),
-                                decoration: BoxDecoration(
-                                  color: Colors.white30,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Text(
-                                  item?.categoryId == 3
-                                      ? "${item?.startDate} ${Translate.of(context).translate('to')} ${item?.endDate}"
-                                      : "",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodySmall!
-                                      .copyWith(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                ),
-                              )
+                          padding: const EdgeInsets.all(3.5),
+                          decoration: BoxDecoration(
+                            color: Colors.white30,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            item?.categoryId == 3
+                                ? "${item?.startDate} ${Translate.of(context)
+                                .translate('to')} ${item?.endDate}"
+                                : "",
+                            style: Theme
+                                .of(context)
+                                .textTheme
+                                .bodySmall!
+                                .copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        )
                             : Text(
-                                item?.categoryId == 3
-                                    ? "${item?.startDate} ${Translate.of(context).translate('to')} ${item?.endDate}"
-                                    : "",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall!
-                                    .copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                              ),
+                          item?.categoryId == 3
+                              ? "${item?.startDate} ${Translate.of(context)
+                              .translate('to')} ${item?.endDate}"
+                              : "",
+                          style: Theme
+                              .of(context)
+                              .textTheme
+                              .bodySmall!
+                              .copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                         Text(
                           item?.categoryId == 1 ? "${item?.createDate}" : "",
                           style:
-                              Theme.of(context).textTheme.bodySmall!.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                          Theme
+                              .of(context)
+                              .textTheme
+                              .bodySmall!
+                              .copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         const SizedBox(height: 4),
                         const SizedBox(height: 8),
@@ -409,6 +443,16 @@ class AppProductItem extends StatelessWidget {
 
       default:
         return Container(width: 160.0);
+    }
+  }
+
+  Future<void> savePDFLocally(String pdfContent) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final filePath = '${directory.path}/$pdfContent';
+    final file = File(filePath);
+
+    if (!await file.exists()) {
+      await file.writeAsBytes(pdfContent.codeUnits);
     }
   }
 }

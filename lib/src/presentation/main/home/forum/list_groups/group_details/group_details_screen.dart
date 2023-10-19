@@ -107,16 +107,10 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                         "${Application.picturesURL}${widget.groupModel.image}",
                   );
                 },
-                // child: Image.network(
-                //   widget.groupModel.image != null
-                //       ? "${Application.picturesURL}${widget.groupModel.image}?cacheKey=$uniqueKey"
-                //       : "${Application.picturesURL}admin/News.jpeg",
-                //   fit: BoxFit.cover,
-                // ),
                 child: CachedNetworkImage(
                   imageUrl: widget.groupModel.image != null
-                        ? "${Application.picturesURL}${widget.groupModel.image}?cacheKey=$uniqueKey"
-                        : "${Application.picturesURL}admin/News.jpeg",
+                      ? "${Application.picturesURL}${widget.groupModel.image}?cacheKey=$uniqueKey"
+                      : "${Application.picturesURL}admin/News.jpeg",
                   cacheManager: memoryCacheManager,
                   imageBuilder: (context, imageProvider) {
                     return Container(
@@ -125,8 +119,7 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                           image: imageProvider,
                           fit: BoxFit.cover,
                         ),
-                        borderRadius:
-                        BorderRadius.circular(11),
+                        borderRadius: BorderRadius.circular(11),
                       ),
                     );
                   },
@@ -139,8 +132,7 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                           color: Colors.white,
                           borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(8),
-                            bottomLeft:
-                            Radius.circular(8),
+                            bottomLeft: Radius.circular(8),
                           ),
                         ),
                       ),
@@ -155,8 +147,7 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                           color: Colors.white,
                           borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(8),
-                            bottomLeft:
-                            Radius.circular(8),
+                            bottomLeft: Radius.circular(8),
                           ),
                         ),
                         child: const Icon(Icons.error),
@@ -200,6 +191,9 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                               context, Routes.memberRequestDetails,
                               arguments: widget.groupModel.id);
                         } else if (choice ==
+                            Translate.of(context).translate('delete_group')) {
+                          showDeleteGroupConfirmation(context);
+                        } else if (choice ==
                             Translate.of(context).translate('edit_group')) {
                           Navigator.pushNamed(context, Routes.addGroups,
                               arguments: {
@@ -223,6 +217,8 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                                         .translate('edit_group'),
                                     Translate.of(context)
                                         .translate('member_requests'),
+                                    Translate.of(context)
+                                        .translate('delete_group'),
                                   }.map((String choice) {
                                     return PopupMenuItem<String>(
                                       value: choice,
@@ -236,6 +232,8 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                                         .translate('see_member'),
                                     Translate.of(context)
                                         .translate('edit_group'),
+                                    Translate.of(context)
+                                        .translate('delete_group'),
                                   }.map((String choice) {
                                     return PopupMenuItem<String>(
                                       value: choice,
@@ -415,6 +413,40 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
     if (result == true) {
       if (!mounted) return;
       Navigator.pop(context);
+    }
+  }
+
+  Future<void> showDeleteGroupConfirmation(BuildContext buildContext) async {
+    final result = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title:
+              Text(Translate.of(context).translate('group_delete_confirmation')),
+          content: Text(Translate.of(context)
+              .translate('are you sure you want to delete this group?')),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () async {
+                await buildContext
+                    .read<GroupDetailsCubit>()
+                    .requestDeleteGroup(widget.groupModel.id, widget.groupModel.cityId);
+                if (!mounted) return;
+                Navigator.pop(context);
+                Navigator.pop(context);
+              },
+              child: Text(Translate.of(context).translate('yes')),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false), // No
+              child: Text(Translate.of(context).translate('no')),
+            ),
+          ],
+        );
+      },
+    );
+    if (result == true) {
+
     }
   }
 

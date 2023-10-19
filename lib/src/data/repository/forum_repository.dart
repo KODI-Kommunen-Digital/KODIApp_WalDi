@@ -180,14 +180,13 @@ class ForumRepository {
     }
   }
 
-  Future<ResultApiModel?> acceptMemberRequests(
-      forumId, memberRequestId) async {
+  Future<ResultApiModel?> acceptMemberRequests(forumId, memberRequestId) async {
     Map<String, dynamic> params = {
       "accept": true,
     };
     final cityId = prefs.getKeyValue(Preferences.cityId, 0);
-    final response =
-        await Api.acceptMemberRequests(forumId, cityId, memberRequestId, params);
+    final response = await Api.acceptMemberRequests(
+        forumId, cityId, memberRequestId, params);
     if (response.success) {
       return response;
     } else {
@@ -355,6 +354,19 @@ class ForumRepository {
     return response;
   }
 
+  Future<ResultApiModel?> requestDeleteForum(
+    forumId,
+    cityId,
+  ) async {
+    final response = await Api.requestDeleteForum(cityId, forumId);
+    if (response.success) {
+      return response;
+    } else {
+      logError('Delete Forum Failed', response.message);
+      return null;
+    }
+  }
+
   Future<ResultApiModel> editForum(
     String title,
     String description,
@@ -382,8 +394,7 @@ class ForumRepository {
       "isPrivate": isPrivate,
       "cityId": cityId,
     };
-    final response =
-        await Api.requestEditForum(cityId, forumId, params, isImageChanged);
+    final response = await Api.requestEditForum(cityId, forumId, params);
 
     if (response.success) {
       if (isImageChanged) {
