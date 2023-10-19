@@ -329,12 +329,15 @@ class _ListLoadedState extends State<ListLoaded> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Expanded(
-          child: _buildContent(widget.list),
-        )
-      ],
+    return Padding(
+      padding: const EdgeInsets.only(top: 16),
+      child: Column(
+        children: <Widget>[
+          Expanded(
+            child: _buildContent(widget.list),
+          )
+        ],
+      ),
     );
   }
 
