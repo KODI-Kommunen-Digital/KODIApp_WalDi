@@ -263,8 +263,9 @@ class _PostDetailsLoadedState extends State<PostDetailsLoaded> {
                   onChanged: (value) {
                     reportReason = value;
                   },
-                  decoration: const InputDecoration(
-                    hintText: 'Berichtsgrund eingeben',
+                  decoration: InputDecoration(
+                    hintText: Translate.of(context)
+                        .translate('report_post_hint'),
                     border: InputBorder.none,
                   ),
                 ),

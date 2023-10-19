@@ -486,5 +486,6 @@
   "reply":"Reply",
   "hide_reply":"Hide Replies",
   "view_reply":"View Replies",
-  "no_reply":"No Replies"
+  "no_reply":"No Replies",
+  "report_post_hint":"Give reason"
 }
