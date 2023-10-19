@@ -10,13 +10,13 @@ class GroupMembersModel {
 
   GroupMembersModel(
       {this.userId,
-        this.username,
-        this.memberId,
-        this.firstname,
-        this.lastname,
-        this.image,
-        this.isAdmin,
-        this.joinedAt});
+      this.username,
+      this.memberId,
+      this.firstname,
+      this.lastname,
+      this.image,
+      this.isAdmin,
+      this.joinedAt});
 
   GroupMembersModel.fromJson(Map<String, dynamic> json) {
     userId = json['userId'];
@@ -36,7 +36,7 @@ class GroupMembersModel {
     data['memberId'] = memberId ?? 0;
     data['firstname'] = firstname ?? '';
     data['lastname'] = lastname ?? '';
-    data['image'] = image ?? 'admin/News.jpeg';
+    data['image'] = image ?? 'admin/DefaultForum.jpeg';
     data['isAdmin'] = isAdmin ?? 0;
     data['joinedAt'] = joinedAt ?? '';
     return data;

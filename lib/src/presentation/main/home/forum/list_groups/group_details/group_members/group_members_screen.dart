@@ -110,7 +110,7 @@ class _GroupMembersLoadedState extends State<GroupMembersLoaded> {
                           child: Image.network(
                         widget.membersList?[index].image != null
                             ? '${Application.picturesURL}${widget.membersList?[index].image}'
-                            : '${Application.picturesURL}admin/News.jpeg',
+                            : '${Application.picturesURL}admin/DefaultForum.jpeg',
                         width: 100,
                         height: 100,
                         fit: BoxFit.cover,
@@ -129,7 +129,9 @@ class _GroupMembersLoadedState extends State<GroupMembersLoaded> {
                                 style: Theme.of(context).textTheme.titleSmall,
                               ),
                               Text(
-                                isMemberAdmin ? ' [Admin]' : ' [Member]',
+                                isMemberAdmin
+                                    ? ' [Admin]'
+                                    : Translate.of(context).translate('member'),
                                 maxLines: 1,
                                 style: TextStyle(
                                     color: isMemberAdmin

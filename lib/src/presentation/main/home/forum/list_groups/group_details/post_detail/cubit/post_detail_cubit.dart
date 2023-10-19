@@ -4,6 +4,7 @@ import 'package:heidi/src/data/model/model_group_posts.dart';
 import 'package:heidi/src/data/model/model_comment.dart';
 import 'package:heidi/src/data/repository/forum_repository.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
+import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:loggy/loggy.dart';
 
 import 'post_detail_state.dart';
@@ -75,13 +76,12 @@ class PostDetailCubit extends Cubit<PostDetailState> {
 
   Future<List<CommentModel>> fetchUserDetailsForComments(
       List<CommentModel> comments) async {
+    final prefs = await Preferences.openBox();
+    int cityId = prefs.getKeyValue(Preferences.cityId, 0);
     final List<Future<CommentModel>> commentFutures =
         comments.map((comment) async {
-      // final userDetails =
-      //     await UserRepository.getUserDetails(comment.cityUserId, cityId);
-      ///TODO: CHANGE THIS HARDCODED CITYID
       final userDetails =
-          await UserRepository.getUserDetails(comment.cityUserId, 1);
+          await UserRepository.getUserDetails(comment.cityUserId, cityId);
       if (userDetails != null) {
         comment.userName = userDetails.username;
         comment.userProfileImage = userDetails.image;

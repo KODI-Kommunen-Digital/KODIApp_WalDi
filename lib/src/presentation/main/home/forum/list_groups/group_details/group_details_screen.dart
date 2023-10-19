@@ -107,62 +107,11 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                         "${Application.picturesURL}${widget.groupModel.image}",
                   );
                 },
-                // child: Image.network(
-                //   widget.groupModel.image != null
-                //       ? "${Application.picturesURL}${widget.groupModel.image}?cacheKey=$uniqueKey"
-                //       : "${Application.picturesURL}admin/News.jpeg",
-                //   fit: BoxFit.cover,
-                // ),
-                child: CachedNetworkImage(
-                  imageUrl: widget.groupModel.image != null
-                        ? "${Application.picturesURL}${widget.groupModel.image}?cacheKey=$uniqueKey"
-                        : "${Application.picturesURL}admin/News.jpeg",
-                  cacheManager: memoryCacheManager,
-                  imageBuilder: (context, imageProvider) {
-                    return Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: imageProvider,
-                          fit: BoxFit.cover,
-                        ),
-                        borderRadius:
-                        BorderRadius.circular(11),
-                      ),
-                    );
-                  },
-                  placeholder: (context, url) {
-                    return AppPlaceholder(
-                      child: Container(
-                        width: 120,
-                        height: 140,
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(8),
-                            bottomLeft:
-                            Radius.circular(8),
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                  errorWidget: (context, url, error) {
-                    return AppPlaceholder(
-                      child: Container(
-                        width: 120,
-                        height: 140,
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(8),
-                            bottomLeft:
-                            Radius.circular(8),
-                          ),
-                        ),
-                        child: const Icon(Icons.error),
-                      ),
-                    );
-                  },
+                child: Image.network(
+                  widget.groupModel.image != null
+                      ? "${Application.picturesURL}${widget.groupModel.image}"
+                      : "${Application.picturesURL}admin/DefaultForum.jpeg",
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
@@ -271,8 +220,10 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                       onPressed: () {
                         _onAddPost();
                       },
-                      child: const Text('Create post',
-                          style: TextStyle(color: Colors.white)),
+                      child: Text(
+                        Translate.of(context).translate('add_post'),
+                        style: const TextStyle(color: Colors.white),
+                      ),
                     )),
                 ListView.builder(
                   shrinkWrap: true,
@@ -280,7 +231,7 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                   physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) {
                     return Padding(
-                      padding: const EdgeInsets.only(bottom: 16),
+                      padding: const EdgeInsets.only(bottom: 16, left: 16),
                       child: InkWell(
                         onTap: () {
                           Navigator.pushNamed(context, Routes.postDetails,
@@ -290,7 +241,7 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                           children: <Widget>[
                             CachedNetworkImage(
                               imageUrl: widget.posts[index].image == null
-                                  ? '${Application.picturesURL}admin/News.jpeg'
+                                  ? '${Application.picturesURL}admin/DefaultForum.jpeg'
                                   : "${Application.picturesURL}${widget.posts[index].image}?cacheKey=$uniqueKey",
                               imageBuilder: (context, imageProvider) {
                                 return Container(
