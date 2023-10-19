@@ -190,7 +190,7 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
     final prefs = await Preferences.openBox();
     int cityId = await prefs.getKeyValue(Preferences.cityId, int);
     Map<int, String> cityWebsites = {
-      0: "https://mitreden.ilzerland.bayern/ ",
+      0: "https://mitreden.ilzerland.bayern/",
       1: "https://mitreden.ilzerland.bayern/schoefweg",
       2: "https://mitreden.ilzerland.bayern/innernzell",
       3: "https://mitreden.ilzerland.bayern/eppenschlag",
