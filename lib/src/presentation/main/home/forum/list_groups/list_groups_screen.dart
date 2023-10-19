@@ -47,7 +47,7 @@ class _ListGroupScreenState extends State<ListGroupScreen> {
         arguments: Routes.addGroups,
       ).then((value) {
         context.read<ListGroupsCubit>().onLoad();
-        setState(() {});
+        //setState(() {});
       });
       if (result == null) return;
     } else {
@@ -56,7 +56,7 @@ class _ListGroupScreenState extends State<ListGroupScreen> {
           arguments: {'isNewGroup': true}).then((value) async {
         if (!mounted) return;
         await context.read<ListGroupsCubit>().onLoad();
-        setState(() {});
+        //setState(() {});
       });
     }
   }
@@ -355,7 +355,7 @@ class _ListLoadedState extends State<ListLoaded> {
               Navigator.pushNamed(context, Routes.groupDetails, arguments: item)
                   .then((value) async {
                 await context.read<ListGroupsCubit>().onLoad();
-                setState(() {});
+                //setState(() {});
               });
             } else {
               final popUpResult = await _showLoginPopup(context);
@@ -368,7 +368,7 @@ class _ListLoadedState extends State<ListLoaded> {
                   arguments: Routes.submit,
                 ).then((value) async {
                   await context.read<ListGroupsCubit>().onLoad();
-                  setState(() {});
+                  //setState(() {});
                 });
               }
             }
