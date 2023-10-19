@@ -360,7 +360,7 @@ class ForumRepository {
       "title": title,
       "image": image,
     };
-    final response = await Api.requestSavePost(1, forumId, params);
+    final response = await Api.requestSavePost(cityId, forumId, params);
     if (response.success) {
       prefs.deleteKey('pickedFile');
     }
@@ -386,8 +386,9 @@ class ForumRepository {
 
   Future<List<CommentModel>> getPostComments(
       int forumId, int postId, page) async {
-    // int cityId = prefs.getKeyValue(Preferences.cityId, 0);
-    final response = await Api.requestPostComments(1, forumId, postId, page);
+    int cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    final response =
+        await Api.requestPostComments(cityId, forumId, postId, page);
     if (response.success) {
       final List<CommentModel> comments = [];
       for (final jsonComment in response.data) {
@@ -403,11 +404,11 @@ class ForumRepository {
 
   Future<ResultApiModel> addPostComments(
       int forumId, int postId, String comment) async {
-    // int cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    int cityId = prefs.getKeyValue(Preferences.cityId, 0);
     Map<String, dynamic> params = {
       "comment": comment,
     };
-    final response = await Api.addPostComments(1, forumId, postId, params);
+    final response = await Api.addPostComments(cityId, forumId, postId, params);
     if (response.success) {
       return response;
     } else {
@@ -418,12 +419,12 @@ class ForumRepository {
 
   Future<ResultApiModel> addPostCommentsReply(
       int forumId, int postId, String comment, int parentId) async {
-    // int cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    int cityId = prefs.getKeyValue(Preferences.cityId, 0);
     Map<String, dynamic> params = {
       "comment": comment,
       "parentId": parentId,
     };
-    final response = await Api.addPostComments(1, forumId, postId, params);
+    final response = await Api.addPostComments(cityId, forumId, postId, params);
     if (response.success) {
       return response;
     } else {
@@ -434,9 +435,9 @@ class ForumRepository {
 
   Future<List<CommentModel>> getPostCommentsReplies(
       int forumId, int postId, int parentId, int pageNo) async {
-    // int cityId = prefs.getKeyValue(Preferences.cityId, 0);
-    final response =
-        await Api.requestPostCommentsReplies(1, forumId, postId, parentId, 1);
+    int cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    final response = await Api.requestPostCommentsReplies(
+        cityId, forumId, postId, parentId, pageNo);
     if (response.success) {
       final List<CommentModel> replies = [];
       for (final jsonReply in response.data) {
