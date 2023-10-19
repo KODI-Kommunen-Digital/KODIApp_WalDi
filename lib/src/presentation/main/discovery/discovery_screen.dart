@@ -62,30 +62,29 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
         ],
       ),
       body: BlocConsumer<DiscoveryCubit, DiscoveryState>(
-          listener: (context, state) {
-            state.maybeWhen(
-              error: (msg) => ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(content: Text(msg))),
-              orElse: () {},
-            );
+        listener: (context, state) {
+          state.maybeWhen(
+            error: (msg) => ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(msg))),
+            orElse: () {},
+          );
+        },
+        builder: (context, state) => state.when(
+          loading: () {
+            return const DiscoveryLoading();
           },
-          builder: (context, state) => state.when(
-            loading: () {
-              return const DiscoveryLoading();
-            },
-            loaded: (list) => DiscoveryLoaded(
-              services: list,
-            ),
-            updated: (list) {
-              return Container();
-            },
-
-            error: (e) => ErrorWidget('Failed to load listings.'),
-            initial: () {
-              return Container();
-            },
+          loaded: (list) => DiscoveryLoaded(
+            services: list,
           ),
+          updated: (list) {
+            return Container();
+          },
+          error: (e) => ErrorWidget('Failed to load listings.'),
+          initial: () {
+            return Container();
+          },
         ),
+      ),
     );
   }
 
@@ -221,7 +220,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
       if (cityId != 0) {
         if (!mounted) return;
         Navigator.pushNamed(context, Routes.listGroups,
-            arguments: {'id': service.arguments, 'title': 'Forums'});
+            arguments: {'id': service.arguments, 'title': 'Forum'});
       } else {
         if (!mounted) return;
         _showCitySelectionPopup(context);
@@ -244,7 +243,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Stadt Auswählen'),
-          content:  Column(
+          content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(Translate.of(context).translate('please_select_city')),

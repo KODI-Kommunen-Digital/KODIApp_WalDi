@@ -54,8 +54,7 @@ class Api {
   }
 
   static Future<ResultApiModel> requestForum(cityId) async {
-    ///TODO: CHANGE THIS HARDCODED CITYID
-    const filepath = "/cities/1/forums";
+    final filepath = "/cities/$cityId/forums";
     final result = await HTTPManager(forum: true).get(url: filepath);
     return ResultApiModel.fromJson(result);
   }
@@ -73,46 +72,40 @@ class Api {
   }
 
   static Future<ResultApiModel> requestToJoinGroup(forumId, cityId) async {
-    ///TODO: CHANGE THIS HARDCODED CITYID
-    final filepath = "/cities/1/forums/$forumId/memberRequests";
+    final filepath = "/cities/$cityId/forums/$forumId/memberRequests";
     final result = await HTTPManager(forum: true).post(url: filepath);
     return ResultApiModel.fromJson(result);
   }
 
   static Future<ResultApiModel> requestGroupDetails(forumId, cityId) async {
-    ///TODO: CHANGE THIS HARDCODED CITYID
-    final filepath = "/cities/1/forums/$forumId";
+    final filepath = "/cities/$cityId/forums/$forumId";
     final result = await HTTPManager(forum: true).get(url: filepath);
     return ResultApiModel.fromJson(result);
   }
 
   static Future<ResultApiModel> removeUserFromGroup(
       forumId, cityId, memberId) async {
-    ///TODO: CHANGE THIS HARDCODED CITYID
-    final filepath = "/cities/1/forums/$forumId/members/$memberId";
+    final filepath = "/cities/$cityId/forums/$forumId/members/$memberId";
     final result = await HTTPManager(forum: true).delete(url: filepath);
     return ResultApiModel.fromJson(result);
   }
 
   static Future<ResultApiModel> requestGroupPosts(forumId, cityId) async {
-    ///TODO: CHANGE THIS HARDCODED CITYID
-    final filepath = "/cities/1/forums/$forumId/posts";
+    final filepath = "/cities/$cityId/forums/$forumId/posts";
     final result = await HTTPManager(forum: true).get(url: filepath);
     return ResultApiModel.fromJson(result);
   }
 
   static Future<ResultApiModel> reportGroupPosts(
       forumId, cityId, postId, params) async {
-    ///TODO: CHANGE THIS HARDCODED CITYID
-    final filepath = "/cities/1/forums/$forumId/posts/$postId/reports";
+    final filepath = "/cities/$cityId/forums/$forumId/posts/$postId/reports";
     final result =
         await HTTPManager(forum: true).post(data: params, url: filepath);
     return ResultApiModel.fromJson(result);
   }
 
   static Future<ResultApiModel> getGroupMembers(forumId, cityId) async {
-    ///TODO: CHANGE THIS HARDCODED CITYID
-    final filepath = "/cities/1/forums/$forumId/members";
+    final filepath = "/cities/$cityId/forums/$forumId/members";
     final result = await HTTPManager(forum: true).get(url: filepath);
     return ResultApiModel.fromJson(result);
   }
@@ -147,8 +140,7 @@ class Api {
 
   static Future<ResultApiModel> requestMakeUserAdmin(
       cityId, forumId, memberId, params) async {
-    ///TODO: CHANGE THIS HARDCODED CITYID
-    final filepath = "/cities/1/forums/$forumId/members/$memberId";
+    final filepath = "/cities/$cityId/forums/$forumId/members/$memberId";
     final result = await HTTPManager(forum: true).patch(
       data: params,
       url: filepath,
@@ -158,8 +150,7 @@ class Api {
 
   static Future<ResultApiModel> requestRemoveAdmin(
       cityId, forumId, memberId, params) async {
-    ///TODO: CHANGE THIS HARDCODED CITYID
-    final filepath = "/cities/1/forums/$forumId/members/$memberId";
+    final filepath = "/cities/$cityId/forums/$forumId/members/$memberId";
     final result = await HTTPManager(forum: true).patch(
       data: params,
       url: filepath,
@@ -412,6 +403,21 @@ class Api {
         await Api.requestListingUploadMedia(listingId, cityId, pickedFile);
       }
     }
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> requestEditProductStatus(
+    cityId,
+    listingId,
+    params,
+  ) async {
+    final filePath = '/cities/$cityId/listings/$listingId';
+    final result = await HTTPManager(forum: false).patch(
+      url: filePath,
+      data: params,
+      loading: true,
+    );
+
     return ResultApiModel.fromJson(result);
   }
 

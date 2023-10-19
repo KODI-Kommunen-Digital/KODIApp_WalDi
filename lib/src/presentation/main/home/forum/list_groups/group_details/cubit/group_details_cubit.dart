@@ -4,6 +4,7 @@ import 'package:heidi/src/data/model/model_group_members.dart';
 import 'package:heidi/src/data/model/model_group_posts.dart';
 import 'package:heidi/src/data/repository/forum_repository.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
+import 'package:intl/intl.dart';
 
 import 'group_details_state.dart';
 
@@ -29,13 +30,13 @@ class GroupDetailsCubit extends Cubit<GroupDetailsState> {
     final group = ForumGroupModel(
       id: response['id'],
       forumName: response['forumName'],
-      createdAt: response['createdAt'],
       description: response['description'],
       cityId: arguments.cityId,
       image: response['image'],
       isRequested: arguments.isRequested,
       isJoined: arguments.isJoined,
       isPrivate: response['isPrivate'],
+      createdAt: response['createdAt'],
     );
     if (requestGroupPostResponse?.data != null) {
       for (final post in requestGroupPostResponse!.data) {
@@ -46,7 +47,11 @@ class GroupDetailsCubit extends Cubit<GroupDetailsState> {
           description: post['description'],
           userId: post['userId'],
           image: post['image'],
-          createdAt: post['createdAt'],
+          createdAt: DateFormat('dd.MM.yyyy').format(
+            DateTime.parse(
+              post['createdAt'],
+            ),
+          ),
           isHidden: post['isHidden'],
         ));
       }

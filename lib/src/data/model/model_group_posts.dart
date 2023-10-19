@@ -10,13 +10,13 @@ class GroupPostsModel {
 
   GroupPostsModel(
       {this.id,
-        this.forumId,
-        this.title,
-        this.description,
-        this.userId,
-        this.image,
-        this.createdAt,
-        this.isHidden});
+      this.forumId,
+      this.title,
+      this.description,
+      this.userId,
+      this.image,
+      this.createdAt,
+      this.isHidden});
 
   GroupPostsModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -36,7 +36,7 @@ class GroupPostsModel {
     data['title'] = title ?? '';
     data['description'] = description ?? '';
     data['userId'] = userId ?? 0;
-    data['image'] = image ?? 'admin/News.jpeg';
+    data['image'] = image ?? 'admin/DefaultForum.jpeg';
     data['createdAt'] = createdAt ?? '';
     data['isHidden'] = isHidden ?? 0;
     return data;

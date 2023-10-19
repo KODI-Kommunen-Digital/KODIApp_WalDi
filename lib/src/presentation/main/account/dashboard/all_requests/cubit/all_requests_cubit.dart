@@ -2,52 +2,34 @@ import 'package:bloc/bloc.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_result_api.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
-import 'package:heidi/src/presentation/main/account/dashboard/all_listings/cubit/all_listings_state.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/all_requests/cubit/all_requests_state.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:loggy/loggy.dart';
 
-enum StatusFilter {
-  week,
-  month,
-}
-
-class AllListingsCubit extends Cubit<AllListingsState> {
-  AllListingsCubit() : super(const AllListingsState.loading()) {
+class AllRequestsCubit extends Cubit<AllRequestsState> {
+  AllRequestsCubit() : super(const AllRequestsState.loading()) {
     onLoad(false);
   }
 
   dynamic posts;
-  StatusFilter? selectedStatusFilter;
 
   Future<void> onLoad(bool isRefreshLoader) async {
-    if (!isRefreshLoader) emit(const AllListingsState.loading());
+    if (!isRefreshLoader) emit(const AllRequestsState.loading());
 
-    int status = await getCurrentStatus();
-    final ResultApiModel listingsRequestResponse;
-
-    if (status == 0) {
-      listingsRequestResponse = await Api.requestAllListings(1);
-    } else {
-      listingsRequestResponse = await Api.requestStatusListings(status, 1);
-    }
+    final ResultApiModel listingsRequestResponse =
+        await Api.requestStatusListings(3, 1);
 
     posts = List.from(listingsRequestResponse.data ?? []).map((item) {
       return ProductModel.fromJson(item);
     }).toList();
 
-    emit(AllListingsState.loaded(posts, isRefreshLoader));
+    emit(AllRequestsState.loaded(posts, isRefreshLoader));
   }
 
   Future<dynamic> newListings(int pageNo) async {
     if (pageNo == 1) posts = [];
-    final int status = await getCurrentStatus();
-    final ResultApiModel listingsRequestResponse;
-
-    if (status == 0) {
-      listingsRequestResponse = await Api.requestAllListings(pageNo);
-    } else {
-      listingsRequestResponse = await Api.requestStatusListings(status, pageNo);
-    }
+    final ResultApiModel listingsRequestResponse =
+        await Api.requestStatusListings(3, pageNo);
 
     final newRecent = List.from(listingsRequestResponse.data ?? []).map((item) {
       return ProductModel.fromJson(item);

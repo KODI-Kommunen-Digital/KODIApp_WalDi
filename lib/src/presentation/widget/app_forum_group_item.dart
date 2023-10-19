@@ -39,8 +39,8 @@ class _ForumGroupItemState extends State<ForumGroupItem> {
     groupStatus = widget.item?.isRequested == true
         ? 'Anfrage verschickt'
         : widget.item?.isJoined == false
-        ? 'Beitreten'
-        : 'zur Gruppe';
+            ? 'Beitreten'
+            : 'zur Gruppe';
   }
 
   @override
@@ -53,10 +53,10 @@ class _ForumGroupItemState extends State<ForumGroupItem> {
 
     return InkWell(
       onTap: () {
-       return widget.userId != 0
+        return widget.userId != 0
             ? isRequested || isJoined == false
-            ? null
-            : widget.onPressed(true)
+                ? null
+                : widget.onPressed(true)
             : widget.onPressed(false);
       },
       child: Stack(
@@ -64,10 +64,9 @@ class _ForumGroupItemState extends State<ForumGroupItem> {
           Row(
             children: <Widget>[
               CachedNetworkImage(
-                imageUrl: widget.item?.image == 'admin/News.jpeg'
+                imageUrl: widget.item?.image == 'admin/DefaultForum.jpeg'
                     ? "${Application.picturesURL}${widget.item?.image}"
-                    : "${Application.picturesURL}${widget.item!
-                    .image}?cacheKey=$uniqueKey",
+                    : "${Application.picturesURL}${widget.item!.image}?cacheKey=$uniqueKey",
                 imageBuilder: (context, imageProvider) {
                   return Container(
                     width: 120,
@@ -121,8 +120,7 @@ class _ForumGroupItemState extends State<ForumGroupItem> {
                     Text(
                       widget.item?.forumName ?? '',
                       maxLines: 2,
-                      style: Theme
-                          .of(context)
+                      style: Theme.of(context)
                           .textTheme
                           .titleSmall!
                           .copyWith(fontWeight: FontWeight.bold),
@@ -133,9 +131,7 @@ class _ForumGroupItemState extends State<ForumGroupItem> {
                             : Translate.of(context).translate('private'),
                         maxLines: 2,
                         style: TextStyle(
-                          color: Theme
-                              .of(context)
-                              .primaryColor,
+                          color: Theme.of(context).primaryColor,
                         )),
                     const SizedBox(
                       height: 10.0,
@@ -148,7 +144,7 @@ class _ForumGroupItemState extends State<ForumGroupItem> {
                               showJoinGroupDialog(context, widget.item?.id);
                             } else {
                               Navigator.pushNamed(context, Routes.groupDetails,
-                                  arguments: widget.item)
+                                      arguments: widget.item)
                                   .then((value) async {
                                 logError('Value', value);
                                 await context.read<ListGroupsCubit>().onLoad();
@@ -214,7 +210,7 @@ class _ForumGroupItemState extends State<ForumGroupItem> {
     if (result == true) {
       if (!mounted) return;
       final joinRequestResponse =
-      await context.read<ListGroupsCubit>().requestToJoinGroup(id);
+          await context.read<ListGroupsCubit>().requestToJoinGroup(id);
       if (joinRequestResponse == 'Member added successfully') {
         setState(() {
           groupStatus = 'zur Gruppe';
