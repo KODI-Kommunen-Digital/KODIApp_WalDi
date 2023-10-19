@@ -34,6 +34,8 @@ import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details
 import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details/group_details_screen.dart';
 import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details/group_members/cubit/group_members_cubit.dart';
 import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details/group_members/group_members_screen.dart';
+import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details/member_requests/cubit/member_request_cubit.dart';
+import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details/member_requests/member_request_screen.dart';
 import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details/post_detail/cubit/post_detail_cubit.dart';
 import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details/post_detail/post_detail_screen.dart';
 import 'package:heidi/src/presentation/main/home/forum/list_groups/list_groups_screen.dart';
@@ -107,6 +109,7 @@ class Routes {
   static const String myGroups = "/myGroups";
   static const String groupDetails = "/groupDetails";
   static const String groupMembersDetails = "/groupMembersDetails";
+  static const String memberRequestDetails = "/memberRequestDetails";
   static const String postDetails = "/postDetails";
   static const String addGroups = "/addGroup";
   static const String addPosts = "/addPosts";
@@ -380,6 +383,18 @@ class Routes {
             return BlocProvider(
               create: (context) => GroupMembersCubit(context.read(), arguments),
               child: GroupMembersScreen(arguments),
+            );
+          },
+          fullscreenDialog: true,
+        );
+
+        case memberRequestDetails:
+        return MaterialPageRoute(
+          builder: (context) {
+            final int arguments = settings.arguments as int;
+            return BlocProvider(
+              create: (context) => MembersRequestsCubit(context.read(), arguments),
+              child: MemberRequestScreen(arguments),
             );
           },
           fullscreenDialog: true,

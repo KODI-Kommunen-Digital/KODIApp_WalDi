@@ -164,7 +164,53 @@ class ForumRepository {
     if (response.success) {
       return response;
     } else {
-      logError('Request Group Post Response Failed', response.message);
+      logError('Request Group Members Response Failed', response.message);
+      return null;
+    }
+  }
+
+  Future<ResultApiModel?> getMemberRequests(forumId) async {
+    final cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    final response = await Api.getMemberRequests(forumId, cityId);
+    if (response.success) {
+      return response;
+    } else {
+      logError('Request Member Requests Response Failed', response.message);
+      return null;
+    }
+  }
+
+  Future<ResultApiModel?> acceptMemberRequests(
+      forumId, memberRequestId) async {
+    Map<String, dynamic> params = {
+      "accept": true,
+    };
+    final cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    final response =
+        await Api.acceptMemberRequests(forumId, cityId, memberRequestId, params);
+    if (response.success) {
+      return response;
+    } else {
+      logError(
+          'Request Accept Member Requests Response Failed', response.message);
+      return null;
+    }
+  }
+
+  Future<ResultApiModel?> rejectMemberRequests(
+      forumId, memberRequestId, reason) async {
+    Map<String, dynamic> params = {
+      "accept": false,
+      "reason": reason,
+    };
+    final cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    final response = await Api.rejectMemberRequests(
+        forumId, cityId, memberRequestId, params);
+    if (response.success) {
+      return response;
+    } else {
+      logError(
+          'Request Reject Member Requests Response Failed', response.message);
       return null;
     }
   }
@@ -297,8 +343,13 @@ class ForumRepository {
       "villageId": 0,
       "visibility": "",
     };
+    FormData? pickedFile = prefs.getPickedFile();
     final response = await Api.requestSaveForum(cityId, params);
     if (response.success) {
+      final forumId = response.id;
+      if (pickedFile != null) {
+        await Api.requestForumImageUpload(cityId, forumId, pickedFile);
+      }
       prefs.deleteKey('pickedFile');
     }
     return response;
@@ -333,14 +384,15 @@ class ForumRepository {
     };
     final response =
         await Api.requestEditForum(cityId, forumId, params, isImageChanged);
-    if (isImageChanged) {
-      final prefs = await Preferences.openBox();
-      FormData? pickedFile = prefs.getPickedFile();
-      if (pickedFile != null) {
-        Api.requestForumImageUpload(cityId, forumId, pickedFile);
-      }
-    }
+
     if (response.success) {
+      if (isImageChanged) {
+        final prefs = await Preferences.openBox();
+        FormData? pickedFile = prefs.getPickedFile();
+        if (pickedFile != null) {
+          await Api.requestForumImageUpload(cityId, forumId, pickedFile);
+        }
+      }
       prefs.deleteKey('pickedFile');
     }
     return response;

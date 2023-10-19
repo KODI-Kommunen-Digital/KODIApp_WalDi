@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:heidi/src/data/model/model_forum_group.dart';
 import 'package:heidi/src/data/model/model_group_posts.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
@@ -59,6 +60,8 @@ class GroupDetailsLoaded extends StatefulWidget {
 }
 
 class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
+  final memoryCacheManager = DefaultCacheManager();
+
   void _onAddPost() async {
     if (AppBloc.userCubit.state == null) {
       final result = await Navigator.pushNamed(
@@ -140,6 +143,12 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                               context, Routes.groupMembersDetails,
                               arguments: widget.groupModel.id);
                         } else if (choice ==
+                            Translate.of(context)
+                                .translate('member_requests')) {
+                          Navigator.pushNamed(
+                              context, Routes.memberRequestDetails,
+                              arguments: widget.groupModel.id);
+                        } else if (choice ==
                             Translate.of(context).translate('edit_group')) {
                           Navigator.pushNamed(context, Routes.addGroups,
                               arguments: {
@@ -153,16 +162,35 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                       },
                       itemBuilder: (BuildContext context) {
                         return widget.isAdmin
-                            ? {
-                                Translate.of(context).translate('leave_group'),
-                                Translate.of(context).translate('see_member'),
-                                Translate.of(context).translate('edit_group'),
-                              }.map((String choice) {
-                                return PopupMenuItem<String>(
-                                  value: choice,
-                                  child: Text(choice),
-                                );
-                              }).toList()
+                            ? widget.groupModel.isPrivate == 1
+                                ? {
+                                    Translate.of(context)
+                                        .translate('leave_group'),
+                                    Translate.of(context)
+                                        .translate('see_member'),
+                                    Translate.of(context)
+                                        .translate('edit_group'),
+                                    Translate.of(context)
+                                        .translate('member_requests'),
+                                  }.map((String choice) {
+                                    return PopupMenuItem<String>(
+                                      value: choice,
+                                      child: Text(choice),
+                                    );
+                                  }).toList()
+                                : {
+                                    Translate.of(context)
+                                        .translate('leave_group'),
+                                    Translate.of(context)
+                                        .translate('see_member'),
+                                    Translate.of(context)
+                                        .translate('edit_group'),
+                                  }.map((String choice) {
+                                    return PopupMenuItem<String>(
+                                      value: choice,
+                                      child: Text(choice),
+                                    );
+                                  }).toList()
                             : {
                                 Translate.of(context).translate('leave_group'),
                                 Translate.of(context).translate('see_member'),

@@ -8,7 +8,6 @@ import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/presentation/widget/app_text_input.dart';
 import 'package:heidi/src/presentation/widget/app_upload_image.dart';
 import 'package:heidi/src/utils/common.dart';
-import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:heidi/src/utils/validate.dart';
 
@@ -131,9 +130,9 @@ class _AddPostScreenState extends State<AddPostScreen> {
 
   void _onSuccess() {
     Navigator.pop(context);
-    if (widget.isNewPost) {
-      Navigator.pushNamed(context, Routes.submitSuccess);
-    }
+    // if (widget.isNewPost) {
+    //   Navigator.pushNamed(context, Routes.submitSuccess);
+    // }
   }
 
   bool _validData() {

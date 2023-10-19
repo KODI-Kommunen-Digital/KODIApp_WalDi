@@ -110,6 +110,34 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
+  static Future<ResultApiModel> getMemberRequests(forumId, cityId) async {
+    ///TODO: CHANGE THIS HARDCODED CITYID
+    final filepath = "/cities/1/forums/$forumId/memberRequests?statusId=1";
+    final result = await HTTPManager(forum: true).get(url: filepath);
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> acceptMemberRequests(
+      forumId, cityId, memberRequestId, params) async {
+    ///TODO: CHANGE THIS HARDCODED CITYID
+    final filepath = "/cities/1/forums/$forumId/memberRequests/$memberRequestId";
+    final result =
+        await HTTPManager(forum: true).patch(data: params, url: filepath);
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> rejectMemberRequests(
+      forumId, cityId, memberRequestId, params) async {
+    ///TODO: CHANGE THIS HARDCODED CITYID
+    final filepath =
+        "/cities/1/forums/$forumId/memberRequests/$memberRequestId";
+    final result = await HTTPManager(forum: true).patch(
+      data: params,
+      url: filepath,
+    );
+    return ResultApiModel.fromJson(result);
+  }
+
   static Future<ResultApiModel> requestMakeUserAdmin(
       cityId, forumId, memberId, params) async {
     final filepath = "/cities/$cityId/forums/$forumId/members/$memberId";
@@ -313,17 +341,12 @@ class Api {
   ///Save Forum
   static Future<ResultApiModel> requestSaveForum(cityId, params) async {
     final filePath = '/cities/$cityId/forums';
-    final prefs = await Preferences.openBox();
-    FormData? pickedFile = prefs.getPickedFile();
     final result = await HTTPManager(forum: true).post(
       url: filePath,
       data: params,
       loading: true,
     );
-    final forumId = result['id'];
-    if (pickedFile != null) {
-      Api.requestForumImageUpload(cityId, forumId, pickedFile);
-    }
+
     return ResultApiModel.fromJson(result);
   }
 
