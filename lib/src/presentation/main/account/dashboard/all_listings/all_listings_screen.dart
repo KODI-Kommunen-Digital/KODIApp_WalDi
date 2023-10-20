@@ -92,6 +92,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
 
   @override
   void dispose() {
+    AppBloc.allListingsCubit.setCurrentStatus(0);
     _scrollController.removeListener(_scrollListener);
     _scrollController.dispose();
     super.dispose();

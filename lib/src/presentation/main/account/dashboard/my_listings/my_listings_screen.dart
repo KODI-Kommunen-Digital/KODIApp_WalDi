@@ -427,9 +427,10 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
     Navigator.pushNamed(context, Routes.productDetail, arguments: item);
   }
 
-  Future<void> showDeleteConfirmation(BuildContext context, int index) async {
+  Future<void> showDeleteConfirmation(
+      BuildContext buildContext, int index) async {
     final result = await showDialog(
-      context: context,
+      context: buildContext,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(Translate.of(context).translate('delete_Confirmation')),
