@@ -60,7 +60,7 @@ class Api {
   }
 
   static Future<ResultApiModel> requestUsersForum(userId) async {
-    final filepath = "/users/$userId/forums";
+    final filepath = "/users/$userId/forums?statusId=1";
     final result = await HTTPManager(forum: true).get(url: filepath);
     return ResultApiModel.fromJson(result);
   }
@@ -350,11 +350,21 @@ class Api {
   }
 
   static Future<ResultApiModel> requestEditForum(
-      cityId, id, params, isImageChanged) async {
+      cityId, id, params) async {
     final filePath = '/cities/$cityId/forums/$id/';
     final result = await HTTPManager(forum: true).patch(
       url: filePath,
       data: params,
+      loading: true,
+    );
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> requestDeleteForum(
+      cityId, id) async {
+    final filePath = '/cities/$cityId/forums/$id/';
+    final result = await HTTPManager(forum: true).delete(
+      url: filePath,
       loading: true,
     );
     return ResultApiModel.fromJson(result);
