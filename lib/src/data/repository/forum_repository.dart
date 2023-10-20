@@ -164,8 +164,9 @@ class ForumRepository {
     }
   }
 
-  Future<ResultApiModel?> reportGroupPosts(forumId, postId, reason) async {
-    final cityId = prefs.getKeyValue(Preferences.cityId, 0);
+  Future<ResultApiModel?> reportGroupPosts(
+      forumId, postId, reason, cityId) async {
+    // final cityId = prefs.getKeyValue(Preferences.cityId, 0);
     final Map<String, dynamic> params = {"Reason": reason};
     final response =
         await Api.reportGroupPosts(forumId, cityId, postId, params);
@@ -466,8 +467,8 @@ class ForumRepository {
   }
 
   Future<List<CommentModel>> getPostComments(
-      int forumId, int postId, page) async {
-    int cityId = prefs.getKeyValue(Preferences.cityId, 0);
+      int forumId, int postId, page, cityId) async {
+    // int cityId = prefs.getKeyValue(Preferences.cityId, 0);
     final response =
         await Api.requestPostComments(cityId, forumId, postId, page);
     if (response.success) {
@@ -484,8 +485,8 @@ class ForumRepository {
   }
 
   Future<ResultApiModel> addPostComments(
-      int forumId, int postId, String comment) async {
-    int cityId = prefs.getKeyValue(Preferences.cityId, 0);
+      int forumId, int postId, String comment, cityId) async {
+    // int cityId = prefs.getKeyValue(Preferences.cityId, 0);
     Map<String, dynamic> params = {
       "comment": comment,
     };
@@ -499,8 +500,8 @@ class ForumRepository {
   }
 
   Future<ResultApiModel> addPostCommentsReply(
-      int forumId, int postId, String comment, int parentId) async {
-    int cityId = prefs.getKeyValue(Preferences.cityId, 0);
+      int forumId, int postId, String comment, int parentId, cityId) async {
+    // int cityId = prefs.getKeyValue(Preferences.cityId, 0);
     Map<String, dynamic> params = {
       "comment": comment,
       "parentId": parentId,
@@ -515,8 +516,8 @@ class ForumRepository {
   }
 
   Future<List<CommentModel>> getPostCommentsReplies(
-      int forumId, int postId, int parentId, int pageNo) async {
-    int cityId = prefs.getKeyValue(Preferences.cityId, 0);
+      int forumId, int postId, int parentId, int pageNo, cityId) async {
+    // int cityId = prefs.getKeyValue(Preferences.cityId, 0);
     final response = await Api.requestPostCommentsReplies(
         cityId, forumId, postId, parentId, pageNo);
     if (response.success) {

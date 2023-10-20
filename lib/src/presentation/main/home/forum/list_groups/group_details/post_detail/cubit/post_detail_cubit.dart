@@ -4,7 +4,6 @@ import 'package:heidi/src/data/model/model_group_posts.dart';
 import 'package:heidi/src/data/model/model_comment.dart';
 import 'package:heidi/src/data/repository/forum_repository.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
-import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:loggy/loggy.dart';
 
 import 'post_detail_state.dart';
@@ -13,8 +12,9 @@ class PostDetailCubit extends Cubit<PostDetailState> {
   UserModel? userDetail;
   final ForumRepository repo;
   final GroupPostsModel postDetail;
+  final int cityId;
 
-  PostDetailCubit(this.repo, this.postDetail)
+  PostDetailCubit(this.repo, this.postDetail, this.cityId)
       : super(const PostDetailLoading()) {
     onLoad();
   }
@@ -38,7 +38,8 @@ class PostDetailCubit extends Cubit<PostDetailState> {
   Future<List<CommentModel>> getPostComments(
       int? forumId, int? postId, int page) async {
     try {
-      final comments = await repo.getPostComments(forumId!, postId!, page);
+      final comments =
+          await repo.getPostComments(forumId!, postId!, page, cityId);
       final commentsWithUserDetails =
           await fetchUserDetailsForComments(comments);
       return commentsWithUserDetails;
@@ -50,14 +51,15 @@ class PostDetailCubit extends Cubit<PostDetailState> {
 
   Future<ResultApiModel> addPostComments(
       int? forumId, int? postId, String comment) async {
-    final response = await repo.addPostComments(forumId!, postId!, comment);
+    final response =
+        await repo.addPostComments(forumId!, postId!, comment, cityId);
     return response;
   }
 
   Future<ResultApiModel> addPostCommentsReply(
       int? forumId, int? postId, String comment, int parentId) async {
-    final response =
-        await repo.addPostCommentsReply(forumId!, postId!, comment, parentId);
+    final response = await repo.addPostCommentsReply(
+        forumId!, postId!, comment, parentId, cityId);
     return response;
   }
 
@@ -65,7 +67,7 @@ class PostDetailCubit extends Cubit<PostDetailState> {
       int? forumId, int? postId, int? parentId, int? pageNo) async {
     try {
       final replies = await repo.getPostCommentsReplies(
-          forumId!, postId!, parentId!, pageNo!);
+          forumId!, postId!, parentId!, pageNo!, cityId);
       final repliesWithUserDetails = await fetchUserDetailsForComments(replies);
       return repliesWithUserDetails;
     } catch (e) {
@@ -76,8 +78,8 @@ class PostDetailCubit extends Cubit<PostDetailState> {
 
   Future<List<CommentModel>> fetchUserDetailsForComments(
       List<CommentModel> comments) async {
-    final prefs = await Preferences.openBox();
-    int cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    // final prefs = await Preferences.openBox();
+    // int cityId = prefs.getKeyValue(Preferences.cityId, 0);
     final List<Future<CommentModel>> commentFutures =
         comments.map((comment) async {
       final userDetails =
@@ -101,7 +103,8 @@ class PostDetailCubit extends Cubit<PostDetailState> {
   }
 
   Future<bool> reportGroupPosts(forumId, postId, reason) async {
-    final response = await repo.reportGroupPosts(forumId, postId, reason);
+    final response =
+        await repo.reportGroupPosts(forumId, postId, reason, cityId);
     if (response!.success) {
       return true;
     } else {

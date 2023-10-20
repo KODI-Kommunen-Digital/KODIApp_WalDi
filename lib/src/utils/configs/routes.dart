@@ -409,11 +409,14 @@ class Routes {
       case postDetails:
         return MaterialPageRoute(
           builder: (context) {
-            final GroupPostsModel arguments =
-                settings.arguments as GroupPostsModel;
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            final GroupPostsModel item = arguments['item'];
+            final int cityId = arguments['cityId'] as int;
             return BlocProvider(
-              create: (context) => PostDetailCubit(context.read(), arguments),
-              child: PostDetailsScreen(arguments),
+              create: (context) =>
+                  PostDetailCubit(context.read(), item, cityId),
+              child: PostDetailsScreen(item),
             );
           },
           fullscreenDialog: true,

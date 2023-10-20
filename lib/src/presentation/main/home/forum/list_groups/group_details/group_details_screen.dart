@@ -246,8 +246,14 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                       padding: const EdgeInsets.only(bottom: 16, left: 16),
                       child: InkWell(
                         onTap: () {
-                          Navigator.pushNamed(context, Routes.postDetails,
-                              arguments: widget.posts[index]);
+                          Navigator.pushNamed(
+                            context,
+                            Routes.postDetails,
+                            arguments: {
+                              'item': widget.posts[index],
+                              'cityId': widget.groupModel.cityId
+                            },
+                          );
                         },
                         child: Row(
                           children: <Widget>[

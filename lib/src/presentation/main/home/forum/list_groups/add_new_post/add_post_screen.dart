@@ -59,7 +59,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
   @override
   void didChangeDependencies() async {
     super.didChangeDependencies();
-    currentCity = await context.read<AddPostCubit>().getCurrentCityId();
+    // currentCity = await context.read<AddPostCubit>().getCurrentCityId();
+    currentCity = widget.item?.cityId;
     _onProcess();
   }
 

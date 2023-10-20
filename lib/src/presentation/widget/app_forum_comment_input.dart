@@ -50,11 +50,8 @@ class CommentInputWidgetState extends State<CommentInputWidget> {
 
   Future<ResultApiModel> addComment(String value) async {
     final comment = value;
-    final response = await widget.postDetailCubit.addPostComments(
-      widget.forumId,
-      widget.postId,
-      comment,
-    );
+    final response = await widget.postDetailCubit
+        .addPostComments(widget.forumId, widget.postId, comment);
     if (response.success) {
       widget.onCommentAdded?.call();
     }
