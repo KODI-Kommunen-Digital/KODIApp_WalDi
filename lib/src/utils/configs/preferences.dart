@@ -9,6 +9,7 @@ class Preferences {
   static const String domain = 'domain';
   static const String reviewIntro = 'review';
   static const String user = 'user';
+  static const String userImage = 'userImage';
   static const String language = 'language';
   static const String notification = 'notification';
   static const String theme = 'theme';
@@ -23,12 +24,16 @@ class Preferences {
   static const String cityId = 'cityId';
   static const sessionTokenKey = '_sessionTokenKey';
   static const _pickedFileKey = 'pickedFile';
+  static const pdfPath = 'pdfPath';
   static const String categoryId = 'categoryId';
   static const String villageId = 'villageId';
+  static const String forumId = 'forumId';
   static const String subCategoryId = 'subCategoryId';
   static const String type = 'type';
   static const String path = 'path';
   static const String categoryCount = "categoryCount";
+  static const String listingStatusFilter = "listingStatusFilter";
+  static const String commentId = "categoryCount";
 
   Preferences._(this._box);
 

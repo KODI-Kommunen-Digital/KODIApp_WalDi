@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_category.dart';
+import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/add_listing/cubit/add_listing_state.dart';
@@ -144,6 +145,26 @@ class AddListingCubit extends Cubit<AddListingState> {
       }
     } catch (e) {
       logError('edit Product Error', e);
+      return false;
+    }
+  }
+
+  Future<bool> changeStatus(ProductModel item, int newStatus) async {
+    int listingId = item.id;
+    int? cityId = item.cityId;
+    int? statusId = newStatus;
+
+    try {
+      final response =
+          await _repo.editProductStatus(listingId, cityId, statusId);
+      if (response.success) {
+        return true;
+      } else {
+        logError('save Product Response Failed', response.message);
+        return false;
+      }
+    } catch (e) {
+      logError('save Product Error', e);
       return false;
     }
   }

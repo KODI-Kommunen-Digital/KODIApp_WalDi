@@ -273,7 +273,7 @@ class ListRepository {
   Future<ResultApiModel> loadSubCategory(value) async {
     final response = await Api.requestSubmitCategory();
     var jsonCategory = response.data;
-    final item = jsonCategory.firstWhere((item) => item['name'] == value);
+    final item = jsonCategory.firstWhere((item) => item['name'] == value.toLowerCase());
     final itemId = item['id'];
     final categoryId = itemId;
     final requestSubmitResponse =
@@ -445,7 +445,7 @@ class ListRepository {
       "price": 100, //dummy data
       "discountPrice": 100, //dummy data
       "logo": media,
-      "statusId": 1, //dummy data
+      "statusId": statusId ?? 1, //change 1 to 3 when done
       "sourceId": 1, //dummy data
       "longitude": 245.65, //dummy data
       "latitude": 22.456, //dummy data
@@ -457,6 +457,22 @@ class ListRepository {
     };
     final response =
         await Api.requestEditProduct(cityId, listingId, params, isImageChanged);
+    return response;
+  }
+
+  Future<ResultApiModel> editProductStatus(
+    int? listingId,
+    cityId,
+    int? statusId,
+  ) async {
+    final userId = prefs.getKeyValue(Preferences.userId, '');
+
+    Map<String, dynamic> params = {
+      "userId": userId,
+      "statusId": statusId ?? 1,
+    };
+    final response =
+        await Api.requestEditProductStatus(cityId, listingId, params);
     return response;
   }
 
@@ -482,7 +498,7 @@ class ListRepository {
   void setCategoryId(value) async {
     final response = await Api.requestSubmitCategory();
     var jsonCategory = response.data;
-    final item = jsonCategory.firstWhere((item) => item['name'] == value);
+    final item = jsonCategory.firstWhere((item) => item['name'] == value.toLowerCase());
     final itemId = item['id'];
     final categoryId = itemId;
     prefs.setKeyValue(Preferences.categoryId, categoryId);
@@ -505,7 +521,7 @@ class ListRepository {
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
     final response = await Api.requestSubmitSubCategory(categoryId: categoryId);
     var jsonCategory = response.data;
-    final item = jsonCategory.firstWhere((item) => item['name'] == value);
+    final item = jsonCategory.firstWhere((item) => item['name'] == value.toLowerCase());
     final itemId = item['id'];
     final subCategoryId = itemId;
     prefs.setKeyValue(Preferences.subCategoryId, subCategoryId);

@@ -23,6 +23,7 @@ class AppUserInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String uniqueKey = UniqueKey().toString();
+
     switch (type) {
       case UserViewType.information:
         if (user == null) {

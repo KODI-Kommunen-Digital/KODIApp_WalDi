@@ -155,6 +155,20 @@ class _AccountLoadedState extends State<AccountLoaded> {
                         ),
                       ),
                       AppListTitle(
+                        title: Translate.of(context).translate('dashboard'),
+                        onPressed: () {
+                          Navigator.pushNamed(context, Routes.dashboard,
+                              arguments: {'user': user, 'editable': true});
+                        },
+                        trailing: RotatedBox(
+                          quarterTurns: AppLanguage.isRTL() ? 2 : 0,
+                          child: const Icon(
+                            Icons.keyboard_arrow_right,
+                            textDirection: TextDirection.ltr,
+                          ),
+                        ),
+                      ),
+                      AppListTitle(
                         title: Translate.of(context).translate('contact'),
                         onPressed: () {
                           _onNavigate(Routes.contactUs);
@@ -202,6 +216,8 @@ class _AccountLoadedState extends State<AccountLoaded> {
   }
 
   void _onNavigate(String route) {
-    Navigator.pushNamed(context, route);
+    Navigator.pushNamed(context, route).then((value) {
+      setState(() {});
+    });
   }
 }
