@@ -24,6 +24,7 @@ class Preferences {
   static const String cityId = 'cityId';
   static const sessionTokenKey = '_sessionTokenKey';
   static const _pickedFileKey = 'pickedFile';
+  static const pdfPath = 'pdfPath';
   static const String categoryId = 'categoryId';
   static const String villageId = 'villageId';
   static const String forumId = 'forumId';
