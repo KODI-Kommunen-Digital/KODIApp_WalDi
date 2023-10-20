@@ -4,7 +4,6 @@ import 'package:heidi/src/data/model/model_forum_group.dart';
 import 'package:heidi/src/data/model/model_request_member.dart';
 import 'package:heidi/src/data/model/model_users_joined_group.dart';
 import 'package:heidi/src/data/repository/forum_repository.dart';
-import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/my_groups/cubit/my_groups_state.dart';
 
 enum GroupFilter {
@@ -31,75 +30,29 @@ class MyGroupsCubit extends Cubit<MyGroupsState> {
     listLoaded.clear();
     emit(const MyGroupsStateLoading());
     pageNo = 1;
-    final result = await repo.loadForumsList(
+    final result = await repo.loadMyForumsList(
       pageNo: pageNo,
     );
-    if (AppBloc.userCubit.state == null) {
-      if (result != null) {
-        groupsList = result[1];
+    if (result != null) {
+      groupsList = result[1];
 
-        for (final list in groupsList) {
-          bool joined =
-              userJoinedGroupsList.any((element) => element.forumId == list.id);
-          bool requested =
-              requestMemberList.any((element) => element.forumId == list.id);
-
-          listLoaded.add(ForumGroupModel(
-              id: list.id,
-              forumName: list.forumName,
-              createdAt: list.createdAt,
-              description: list.description,
-              image: list.image,
-              isPrivate: list.isPrivate,
-              isJoined: joined,
-              isRequested: requested));
-        }
-        emit(MyGroupsStateLoaded(
-          listLoaded.reversed.toList(),
-          result[0],
-        ));
+      for (final list in groupsList) {
+        listLoaded.add(ForumGroupModel(
+            id: list.forumId,
+            forumName: list.forumName,
+            createdAt: list.createdAt,
+            description: list.description,
+            image: list.image,
+            isPrivate: list.isPrivate,
+            cityId: list.cityId,
+            isJoined: true,
+            isRequested: false));
       }
-    } else {
-      if (result != null) {
-        groupsList = result[1];
-        pagination = result[2];
-        userJoinedGroupsList = result[3];
-        requestMemberList = result[4];
 
-        for (final list in groupsList) {
-          bool joined =
-              userJoinedGroupsList.any((element) => element.forumId == list.id);
-          bool requested =
-          requestMemberList.any((element) => element.forumId == list.id);
-
-          int? cityId = 0;
-          for (final userGroup in userJoinedGroupsList) {
-            if (userGroup.forumId == list.id) {
-              cityId = userGroup.cityId;
-            }
-          }
-
-          listLoaded.add(ForumGroupModel(
-              id: list.id,
-              forumName: list.forumName,
-              createdAt: list.createdAt,
-              description: list.description,
-              image: list.image,
-              isPrivate: list.isPrivate,
-              cityId: cityId,
-              isJoined: joined,
-              isRequested: requested));
-        }
-
-        filteredList = listLoaded.where((product) {
-          return product.isJoined == true;
-        }).toList();
-
-        emit(MyGroupsStateLoaded(
-          filteredList.reversed.toList(),
-          result[0],
-        ));
-      }
+      emit(MyGroupsStateLoaded(
+        listLoaded.reversed.toList(),
+        result[0],
+      ));
     }
   }
 

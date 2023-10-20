@@ -130,7 +130,7 @@ class _PostDetailsLoadedState extends State<PostDetailsLoaded> {
                         },
                         itemBuilder: (BuildContext context) {
                           return {
-                            Translate.of(context).translate('report_post_hint'),
+                            Translate.of(context).translate('report_post'),
                           }.map((String choice) {
                             return PopupMenuItem<String>(
                               value: choice,
@@ -264,8 +264,8 @@ class _PostDetailsLoadedState extends State<PostDetailsLoaded> {
                     reportReason = value;
                   },
                   decoration: InputDecoration(
-                    hintText: Translate.of(context)
-                        .translate('report_post_hint'),
+                    hintText:
+                        Translate.of(context).translate('report_post_hint'),
                     border: InputBorder.none,
                   ),
                 ),

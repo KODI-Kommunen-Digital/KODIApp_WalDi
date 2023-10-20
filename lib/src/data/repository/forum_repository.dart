@@ -94,6 +94,27 @@ class ForumRepository {
     return null;
   }
 
+  Future<List?> loadMyForumsList({required pageNo}) async {
+    int userId = prefs.getKeyValue(Preferences.userId, 0);
+    final usersJoinedForumResponse = await Api.requestUsersForum(userId);
+
+    if (usersJoinedForumResponse.success) {
+      final groupList =
+          List.from(usersJoinedForumResponse.data ?? []).map((item) {
+        return ForumGroupModel.fromJson(
+          item,
+        );
+      }).toList();
+
+      return [
+        userId,
+        groupList,
+      ];
+    }
+
+    return null;
+  }
+
   Future<int> getLoggedInUserId() async {
     final prefs = await Preferences.openBox();
     final userId = prefs.getKeyValue(Preferences.userId, 0);
@@ -111,8 +132,7 @@ class ForumRepository {
     }
   }
 
-  Future<ResultApiModel?> requestGroupDetails(forumId) async {
-    final cityId = prefs.getKeyValue(Preferences.cityId, 0);
+  Future<ResultApiModel?> requestGroupDetails(forumId, cityId) async {
     final response = await Api.requestGroupDetails(forumId, cityId);
     if (response.success) {
       return response;
@@ -134,13 +154,12 @@ class ForumRepository {
     }
   }
 
-  Future<ResultApiModel?> requestGroupPosts(forumId) async {
-    final cityId = prefs.getKeyValue(Preferences.cityId, 0);
+  Future<ResultApiModel?> requestGroupPosts(forumId, cityId) async {
     final response = await Api.requestGroupPosts(forumId, cityId);
     if (response.success) {
       return response;
     } else {
-      logError('Request Group Post Response Failed', response.message);
+      logError('Request Group Detail Response Failed', response.message);
       return null;
     }
   }
@@ -158,8 +177,7 @@ class ForumRepository {
     }
   }
 
-  Future<ResultApiModel?> getGroupMembers(forumId) async {
-    final cityId = prefs.getKeyValue(Preferences.cityId, 0);
+  Future<ResultApiModel?> getGroupMembers(forumId, cityId) async {
     final response = await Api.getGroupMembers(forumId, cityId);
     if (response.success) {
       return response;

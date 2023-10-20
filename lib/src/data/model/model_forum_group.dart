@@ -1,5 +1,6 @@
 class ForumGroupModel {
   int? id;
+  int? forumId;
   String? forumName;
   String? createdAt;
   String? description;
@@ -11,6 +12,7 @@ class ForumGroupModel {
 
   ForumGroupModel(
       {this.id,
+      this.forumId,
       this.forumName,
       this.createdAt,
       this.description,
@@ -22,11 +24,13 @@ class ForumGroupModel {
 
   ForumGroupModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    forumId = json['forumId'];
     forumName = json['forumName'];
     createdAt = json['createdAt'];
     description = json['description'];
     image = json['image'] ?? 'admin/DefaultForum.jpeg';
     isPrivate = json['isPrivate'];
+    cityId = json['cityId'];
   }
 
   Map<String, dynamic> toJson() {

@@ -379,21 +379,27 @@ class Routes {
       case groupMembersDetails:
         return MaterialPageRoute(
           builder: (context) {
-            final int arguments = settings.arguments as int;
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            final int groupId = arguments['groupId'] as int;
+            final int cityId = arguments['cityId'] as int;
+
             return BlocProvider(
-              create: (context) => GroupMembersCubit(context.read(), arguments),
-              child: GroupMembersScreen(arguments),
+              create: (context) =>
+                  GroupMembersCubit(context.read(), groupId, cityId),
+              child: GroupMembersScreen(groupId),
             );
           },
           fullscreenDialog: true,
         );
 
-        case memberRequestDetails:
+      case memberRequestDetails:
         return MaterialPageRoute(
           builder: (context) {
             final int arguments = settings.arguments as int;
             return BlocProvider(
-              create: (context) => MembersRequestsCubit(context.read(), arguments),
+              create: (context) =>
+                  MembersRequestsCubit(context.read(), arguments),
               child: MemberRequestScreen(arguments),
             );
           },

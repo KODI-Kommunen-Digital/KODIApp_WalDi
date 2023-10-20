@@ -8,8 +8,9 @@ import 'group_members_state.dart';
 class GroupMembersCubit extends Cubit<GroupMembersState> {
   final ForumRepository repo;
   final int groupId;
+  final int cityId;
 
-  GroupMembersCubit(this.repo, this.groupId)
+  GroupMembersCubit(this.repo, this.groupId, this.cityId)
       : super(const GroupMembersLoading()) {
     onLoad();
   }
@@ -17,7 +18,8 @@ class GroupMembersCubit extends Cubit<GroupMembersState> {
   Future<void> onLoad() async {
     final groupMembersList = <GroupMembersModel>[];
     bool isAdmin = false;
-    final requestGroupMembersResponse = await repo.getGroupMembers(groupId);
+    final requestGroupMembersResponse =
+        await repo.getGroupMembers(groupId, cityId);
     if (requestGroupMembersResponse?.data != null) {
       for (final member in requestGroupMembersResponse!.data) {
         groupMembersList.add(GroupMembersModel(

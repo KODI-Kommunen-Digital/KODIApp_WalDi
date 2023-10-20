@@ -349,8 +349,7 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
-  static Future<ResultApiModel> requestEditForum(
-      cityId, id, params) async {
+  static Future<ResultApiModel> requestEditForum(cityId, id, params) async {
     final filePath = '/cities/$cityId/forums/$id/';
     final result = await HTTPManager(forum: true).patch(
       url: filePath,
@@ -360,8 +359,7 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
-  static Future<ResultApiModel> requestDeleteForum(
-      cityId, id) async {
+  static Future<ResultApiModel> requestDeleteForum(cityId, id) async {
     final filePath = '/cities/$cityId/forums/$id/';
     final result = await HTTPManager(forum: true).delete(
       url: filePath,

@@ -82,11 +82,8 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
     try {
       final forumId = widget.forumId;
       final postId = widget.postId;
-      final updatedComments = await widget.postDetailCubit.getPostComments(
-        forumId!,
-        postId!,
-        currentPage,
-      );
+      final updatedComments = await widget.postDetailCubit
+          .getPostComments(forumId!, postId!, currentPage);
 
       setState(() {
         comments.addAll(updatedComments);
@@ -197,12 +194,8 @@ class CommentWidgetState extends State<CommentWidget> {
       final parentId = widget.comment.id;
 
       if (forumId != null && postId != null && parentId != null) {
-        final fetchedReplies = await widget.postDetailCubit.getCommentReplies(
-          forumId,
-          postId,
-          parentId,
-          1,
-        );
+        final fetchedReplies = await widget.postDetailCubit
+            .getCommentReplies(forumId, postId, parentId, 1);
 
         setState(() {
           replies = fetchedReplies;

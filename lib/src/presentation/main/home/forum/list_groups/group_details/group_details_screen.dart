@@ -140,8 +140,13 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                         } else if (choice ==
                             Translate.of(context).translate('see_member')) {
                           Navigator.pushNamed(
-                              context, Routes.groupMembersDetails,
-                              arguments: widget.groupModel.id);
+                            context,
+                            Routes.groupMembersDetails,
+                            arguments: {
+                              'groupId': widget.groupModel.id,
+                              'cityId': widget.groupModel.cityId
+                            },
+                          );
                         } else if (choice ==
                             Translate.of(context)
                                 .translate('member_requests')) {
@@ -338,7 +343,8 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
               onPressed: () async {
                 final isRemoved = await buildContext
                     .read<GroupDetailsCubit>()
-                    .removeGroupMember(widget.groupModel.id);
+                    .removeGroupMember(
+                        widget.groupModel.id, widget.groupModel.cityId);
                 if (isRemoved == RemoveUser.removed) {
                   if (!mounted) return;
                   Navigator.of(context).pop(true);
@@ -381,16 +387,15 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title:
-              Text(Translate.of(context).translate('group_delete_confirmation')),
+          title: Text(
+              Translate.of(context).translate('group_delete_confirmation')),
           content: Text(Translate.of(context)
               .translate('are you sure you want to delete this group?')),
           actions: <Widget>[
             TextButton(
               onPressed: () async {
-                await buildContext
-                    .read<GroupDetailsCubit>()
-                    .requestDeleteGroup(widget.groupModel.id, widget.groupModel.cityId);
+                await buildContext.read<GroupDetailsCubit>().requestDeleteGroup(
+                    widget.groupModel.id, widget.groupModel.cityId);
                 if (!mounted) return;
                 Navigator.pop(context);
                 Navigator.pop(context);
@@ -405,9 +410,7 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
         );
       },
     );
-    if (result == true) {
-
-    }
+    if (result == true) {}
   }
 
   void showAdminPopup(BuildContext context, title, content) {
