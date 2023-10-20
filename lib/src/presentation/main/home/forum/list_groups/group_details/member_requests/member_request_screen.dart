@@ -126,7 +126,9 @@ class _MemberRequestLoadedState extends State<MemberRequestLoaded> {
                           // description,
                           const SizedBox(height: 4),
                           Text(
-                              (dateFormat.format(DateTime.parse(widget.membersList![index].createdAt!))).toString(),
+                            (dateFormat.format(DateTime.parse(
+                                    widget.membersList![index].createdAt!)))
+                                .toString(),
                             maxLines: 2,
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
@@ -188,9 +190,8 @@ class _MemberRequestLoadedState extends State<MemberRequestLoaded> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('You Are the Only Admin'),
-          content: const Text(
-              'You cannot remove yourself as a common member as you are the only admin. First, make someone else an admin before becoming just a member'),
+          title: Text(Translate.of(context).translate('only_admin')),
+          content: Text(Translate.of(context).translate('add_another_admin')),
           actions: <Widget>[
             TextButton(
               onPressed: () {

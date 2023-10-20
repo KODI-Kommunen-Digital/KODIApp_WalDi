@@ -5,6 +5,7 @@ import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details
 import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details/group_members/cubit/group_members_state.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/translate.dart';
+import 'package:intl/intl.dart';
 
 class GroupMembersScreen extends StatefulWidget {
   final int groupId;
@@ -81,6 +82,7 @@ class _GroupMembersLoadedState extends State<GroupMembersLoaded> {
 
   @override
   Widget build(BuildContext context) {
+    final dateFormat = DateFormat('yyyy.MM.dd');
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -143,7 +145,9 @@ class _GroupMembersLoadedState extends State<GroupMembersLoaded> {
                           // description,
                           const SizedBox(height: 4),
                           Text(
-                            '${widget.membersList?[index].joinedAt}',
+                            (dateFormat.format(DateTime.parse(
+                                    widget.membersList![index].joinedAt!)))
+                                .toString(),
                             maxLines: 2,
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
@@ -259,9 +263,8 @@ class _GroupMembersLoadedState extends State<GroupMembersLoaded> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('You Are the Only Admin'),
-          content: const Text(
-              'You cannot remove yourself as a common member as you are the only admin. First, make someone else an admin before becoming just a member'),
+          title: Text(Translate.of(context).translate('only_admin')),
+          content: Text(Translate.of(context).translate('add_another_admin')),
           actions: <Widget>[
             TextButton(
               onPressed: () {
