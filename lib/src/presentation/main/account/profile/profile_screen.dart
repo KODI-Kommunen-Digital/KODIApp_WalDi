@@ -12,6 +12,7 @@ import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/presentation/widget/app_user_info.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
+import 'package:heidi/src/utils/pdf_downloader.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
@@ -71,6 +72,7 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
   bool isLoadingMore = false;
   int pageNo = 1;
   final _scrollController = ScrollController(initialScrollOffset: 0.0);
+  final pdfService = PDFService();
 
   @override
   void dispose() {
@@ -196,7 +198,11 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                                   key: Key(
                                       item.id.toString() + isSwiped.toString()),
                                   child: InkWell(
-                                    onTap: () {
+                                    onTap: () async {
+                                      String pdfURL =
+                                          '${Application.picturesURL}${item.pdf}?cacheKey=$uniqueKey';
+                                      await pdfService.downloadPDF(pdfURL);
+
                                       _onProductDetail(item);
                                     },
                                     child: Padding(

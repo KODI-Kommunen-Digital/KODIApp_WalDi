@@ -23,6 +23,8 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
     } else {
       isLoggedIn = true;
     }
+    final prefs = await Preferences.openBox();
+    final pdfPath = await prefs.getKeyValue(Preferences.pdfPath, '');
 
     if (item.cityId != null) {
       final result = await ListRepository.loadProduct(item.cityId, item.id);
@@ -41,14 +43,15 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
             }
           }
           emit(ProductDetailLoaded(
-              product!, favoritesList, userDetail, isLoggedIn));
+              product!, favoritesList, userDetail, isLoggedIn, pdfPath));
         } else {
-          emit(ProductDetailLoaded(product!, null, userDetail, isLoggedIn));
+          emit(ProductDetailLoaded(
+              product!, null, userDetail, isLoggedIn, pdfPath));
         }
       }
     } else {
       isFavorite = true;
-      emit(ProductDetailLoaded(item, null, userDetail, isLoggedIn));
+      emit(ProductDetailLoaded(item, null, userDetail, isLoggedIn, pdfPath));
     }
   }
 

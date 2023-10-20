@@ -37,6 +37,7 @@ dependencies:
   dio: ^4.0.6
   retrofit: ^3.3.1
   http_parser: ^4.0.2
+  http: ^0.13.3
 
   ### Code Generation
   freezed_annotation: ^2.2.0
@@ -72,6 +73,8 @@ dependencies:
   flutter_pdfview: ^1.0.1
   flutter_cached_pdfview: ^0.4.2
   flutter_cache_manager: ^3.3.1
+  path_provider: ^2.1.1
+  webview_flutter: ^4.4.1
 
 dev_dependencies:
   flutter_test:

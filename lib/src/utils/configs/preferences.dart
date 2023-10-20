@@ -30,6 +30,7 @@ class Preferences {
   static const String path = 'path';
   static const String listingStatusFilter = "listingStatusFilter";
   static const String categoryCount = "categoryCount";
+  static const pdfPath = 'pdfPath';
 
   Preferences._(this._box);
 

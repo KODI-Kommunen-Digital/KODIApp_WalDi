@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
@@ -6,8 +8,10 @@ import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:heidi/src/presentation/main/home/widget/empty_product_item.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/utils/configs/application.dart';
+import 'package:heidi/src/utils/pdf_downloader.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:path_provider/path_provider.dart';
 
 class AppProductItem extends StatelessWidget {
   const AppProductItem({
@@ -27,6 +31,7 @@ class AppProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final pdfService = PDFService();
     String uniqueKey = UniqueKey().toString();
     final memoryCacheManager = DefaultCacheManager();
     switch (type) {
@@ -35,7 +40,12 @@ class AppProductItem extends StatelessWidget {
           return const EmptyProductItem();
         }
         return InkWell(
-          onTap: onPressed,
+          onTap: () async {
+            String pdfURL =
+                '${Application.picturesURL}${item?.pdf}?cacheKey=$uniqueKey';
+            await pdfService.downloadPDF(pdfURL);
+            onPressed!();
+          },
           child: Row(
             children: <Widget>[
               item?.pdf == ''
@@ -83,7 +93,7 @@ class AppProductItem extends StatelessWidget {
                       ),
                     )
                   : ClipRRect(
-                      borderRadius: BorderRadius.circular(11),
+                      borderRadius: BorderRadius.circular(12),
                       child: SizedBox(
                           width: 84,
                           height: 84,
@@ -148,7 +158,7 @@ class AppProductItem extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(3.5),
                           child: Text(
-                            "${item?.startDate} ${Translate.of(context).translate('to')} ",
+                            "${item?.startDate} ${Translate.of(context).translate('to')} ${item?.endDate}",
                             style: Theme.of(context)
                                 .textTheme
                                 .bodySmall!
@@ -165,7 +175,6 @@ class AppProductItem extends StatelessWidget {
             ],
           ),
         );
-
       case ProductViewType.grid:
         if (item == null) {
           return const EmptyProductItem();
@@ -410,6 +419,16 @@ class AppProductItem extends StatelessWidget {
 
       default:
         return Container(width: 160.0);
+    }
+  }
+
+  Future<void> savePDFLocally(String pdfContent) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final filePath = '${directory.path}/$pdfContent';
+    final file = File(filePath);
+
+    if (!await file.exists()) {
+      await file.writeAsBytes(pdfContent.codeUnits);
     }
   }
 }
