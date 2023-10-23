@@ -15,7 +15,7 @@ class HTTPManager {
 
   HTTPManager({bool forum = false}) {
     _baseUrl = !forum
-        ? 'http://195.201.250.99/api'
+        ? 'http://195.201.250.99/api/'
         : 'http://195.201.250.99/forumapi/';
 
     _dio = Dio(
