@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>AUF App</string>
+	<string>Geseke App</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -15,19 +15,21 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>AUF App</string>
+	<string>Geseke App</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.2</string>
+	<string>1.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.2</string>
+	<string>1.0</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>Need camera access for uploading images</string>
+	<key>NSDownloadsFolderUsageDescription</key>
+	<string>We need access to the Downloads folder for file access.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>We need your location to provide location-based services and enhance your experience.</string>
 	<key>NSLocationUsageDescription</key>
@@ -37,9 +39,7 @@
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Need microphone access for uploading audio</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-        <string>Wir benötigen Zugang zur Bildergalerie, sodass du Bilder hochladen kannst.</string>
-	<key>NSDownloadsFolderUsageDescription</key>
-    <string>We need access to the Downloads folder for file access.</string>
+	<string>Wir benötigen Zugang zur Bildergalerie, sodass du Bilder hochladen kannst.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
