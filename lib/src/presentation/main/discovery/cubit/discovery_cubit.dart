@@ -26,7 +26,9 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
     }).toList();
 
     services = initializeServices();
-    for (var element in services) {
+    List<CitizenServiceModel> servicesCopy = List.from(services);
+
+    for (var element in servicesCopy) {
       if (element.categoryId != null || element.type == "subCategoryService") {
         bool hasContent = await element.hasContent();
         if (!hasContent) {
