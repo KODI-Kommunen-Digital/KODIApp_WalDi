@@ -472,34 +472,29 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             )
           : RawGestureDetector(
               gestures: {
-                  AllowMultipleGestureRecognizer:
-                      GestureRecognizerFactoryWithHandlers<
-                          AllowMultipleGestureRecognizer>(
-                    () => AllowMultipleGestureRecognizer(), //constructor
-                    (AllowMultipleGestureRecognizer instance) {
-                      instance.onTap = () async {
-                        if (!mounted) return;
-                        Navigator.pushNamed(
-                          context,
-                          Routes.imageZoom,
-                          arguments: pdfPath,
-                        );
-                      };
-                    },
-                  )
-                },
+                AllowMultipleGestureRecognizer:
+                    GestureRecognizerFactoryWithHandlers<
+                        AllowMultipleGestureRecognizer>(
+                  () => AllowMultipleGestureRecognizer(), //constructor
+                  (AllowMultipleGestureRecognizer instance) {
+                    instance.onTap = () async {
+                      if (!mounted) return;
+                      Navigator.pushNamed(
+                        context,
+                        Routes.imageZoom,
+                        arguments: pdfPath,
+                      );
+                    };
+                  },
+                )
+              },
               child: PDFView(
                 filePath: pdfPath,
                 enableSwipe: true,
                 autoSpacing: false,
                 pageFling: true,
-              )
-              // const PDF().cachedFromUrl(
-              //   "${Application.picturesURL}${product.pdf}?cacheKey=$uniqueKey",
-              //   placeholder: (progress) => Center(child: Text('$progress %')),
-              //   errorWidget: (error) => Center(child: Text(error.toString())),
-              // ),
-              );
+              ),
+            );
 
       if (product.address.isNotEmpty) {
         address = Column(
