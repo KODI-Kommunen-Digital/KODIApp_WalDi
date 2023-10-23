@@ -7,7 +7,7 @@ import 'package:heidi/src/utils/asset.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 
 class Api {
-  static const String login = "users/login";
+  static const String login = "/users/login";
   static const String user = "/users/";
   static const String register = "/users/register";
   static const String forgotPassword = "/users/forgotPassword";
@@ -27,7 +27,6 @@ class Api {
     try {
       final result =
           await HTTPManager(forum: false).post(url: login, data: params);
-
       return ResultApiModel.fromJson(result);
     } catch (e) {
       return await HTTPManager(forum: false).post(url: login, data: params);

@@ -9,7 +9,8 @@ class Application {
 
   static const String picturesURL =
       // 'https://test1heidi.obs.eu-de.otc.t-systems.com/';
-      'https://smrauf1heidi.obs.eu-de.otc.t-systems.com/';
+      // 'https://smrauf1heidi.obs.eu-de.otc.t-systems.com/';
+      'https://gesekeheidi.obs.eu-de.otc.t-systems.com/';
 
   static const String defaultPicturesURL =
       // 'https://test1heidi.obs.eu-de.otc.t-systems.com/';
