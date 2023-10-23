@@ -8,20 +8,20 @@ import 'package:heidi/src/utils/configs/preferences.dart';
 
 class Api {
   static const String login = "users/login";
-  static const String user = "users/";
-  static const String register = "users/register";
-  static const String forgotPassword = "users/forgotPassword";
-  static const String changePassword = "users/resetPassword";
-  static const String categories = "categories";
-  static const String categoriesCount = "categories/listingsCount";
-  static const String list = "listings";
-  static const String uploadImage = "users/4/imageUpload";
-  static const String cities = "cities";
-  static const String listings = "listings?statusId=1";
-  static const String contact = "contactUs";
-  static const String faq = "moreInfo";
-  static const String forum = "forumapi/cities/1/forums";
-  static const String hasForum = "cities?hasForum=true";
+  static const String user = "/users/";
+  static const String register = "/users/register";
+  static const String forgotPassword = "/users/forgotPassword";
+  static const String changePassword = "/users/resetPassword";
+  static const String categories = "/categories";
+  static const String categoriesCount = "/categories/listingsCount";
+  static const String list = "/listings";
+  static const String uploadImage = "/users/4/imageUpload";
+  static const String cities = "/cities";
+  static const String listings = "/listings?statusId=1";
+  static const String contact = "/contactUs";
+  static const String faq = "/moreInfo";
+  static const String forum = "/forumapi/cities/1/forums";
+  static const String hasForum = "/cities?hasForum=true";
 
   static Future<ResultApiModel> requestLogin(params) async {
     try {
@@ -266,7 +266,7 @@ class Api {
   }
 
   static Future<ResultApiModel> requestVillages({required cityId}) async {
-    final filePath = 'cities/$cityId/villages';
+    final filePath = '/cities/$cityId/villages';
     final result = await HTTPManager(forum: false).get(url: filePath);
     return ResultApiModel.fromJson(result);
   }
@@ -279,21 +279,21 @@ class Api {
 
   ///Get Recent Listings
   static Future<ResultApiModel> requestRecentListings(params) async {
-    final listings = "listings?statusId=1&pageNo=$params&pageSize=19";
+    final listings = "/listings?statusId=1&pageNo=$params&pageSize=19";
     final result = await HTTPManager(forum: false).get(url: listings);
     return ResultApiModel.fromJson(result);
   }
 
   ///Get All Listings
   static Future<ResultApiModel> requestAllListings(params) async {
-    final listings = "listings?pageNo=$params&pageSize=10";
+    final listings = "/listings?pageNo=$params&pageSize=10";
     final result = await HTTPManager(forum: false).get(url: listings);
     return ResultApiModel.fromJson(result);
   }
 
   ///Get Listings by status
   static Future<ResultApiModel> requestStatusListings(status, params) async {
-    final listings = "listings?statusId=$status&pageNo=$params&pageSize=10";
+    final listings = "/listings?statusId=$status&pageNo=$params&pageSize=10";
     final result = await HTTPManager(forum: false).get(url: listings);
     return ResultApiModel.fromJson(result);
   }
@@ -306,14 +306,14 @@ class Api {
 
   ///Get ProductDetail
   static Future<ResultApiModel> requestProduct(cityId, id) async {
-    final filePath = 'cities/$cityId/listings/$id';
+    final filePath = '/cities/$cityId/listings/$id';
     final result = await HTTPManager(forum: false).get(url: filePath);
     return ResultApiModel.fromJson(result);
   }
 
   ///Save Wish List
   static Future<ResultApiModel> requestAddWishList(userId, params) async {
-    final String addWishList = "users/$userId/favorites/";
+    final String addWishList = "/users/$userId/favorites/";
     final result =
         await HTTPManager(forum: false).post(url: addWishList, data: params);
     return ResultApiModel.fromJson(result);
@@ -321,7 +321,7 @@ class Api {
 
   ///Save Product
   static Future<ResultApiModel> requestSaveProduct(cityId, params) async {
-    final filePath = 'cities/$cityId/listings';
+    final filePath = '/cities/$cityId/listings';
     final prefs = await Preferences.openBox();
     FormData? pickedFile = prefs.getPickedFile();
     final result = await HTTPManager(forum: false).post(
@@ -338,7 +338,7 @@ class Api {
 
   ///Save Forum
   static Future<ResultApiModel> requestSaveForum(cityId, params) async {
-    final filePath = 'cities/$cityId/forums';
+    final filePath = '/cities/$cityId/forums';
     final result = await HTTPManager(forum: true).post(
       url: filePath,
       data: params,
@@ -349,7 +349,7 @@ class Api {
   }
 
   static Future<ResultApiModel> requestEditForum(cityId, id, params) async {
-    final filePath = 'cities/$cityId/forums/$id/';
+    final filePath = '/cities/$cityId/forums/$id/';
     final result = await HTTPManager(forum: true).patch(
       url: filePath,
       data: params,
@@ -359,7 +359,7 @@ class Api {
   }
 
   static Future<ResultApiModel> requestDeleteForum(cityId, id) async {
-    final filePath = 'cities/$cityId/forums/$id/';
+    final filePath = '/cities/$cityId/forums/$id/';
     final result = await HTTPManager(forum: true).delete(
       url: filePath,
       loading: true,
@@ -369,7 +369,7 @@ class Api {
 
   ///Save Post
   static Future<ResultApiModel> requestSavePost(cityId, fId, params) async {
-    final filePath = 'cities/$cityId/forums/$fId/posts';
+    final filePath = '/cities/$cityId/forums/$fId/posts';
     final prefs = await Preferences.openBox();
     FormData? pickedFile = prefs.getPickedFile();
     final result = await HTTPManager(forum: true).post(
@@ -386,7 +386,7 @@ class Api {
 
   static Future<ResultApiModel> requestEditProduct(
       cityId, listingId, params, bool isImageChanged) async {
-    final filePath = 'cities/$cityId/listings/$listingId';
+    final filePath = '/cities/$cityId/listings/$listingId';
     final prefs = await Preferences.openBox();
     FormData? pickedFile = prefs.getPickedFile();
     final result = await HTTPManager(forum: false).patch(
@@ -407,7 +407,7 @@ class Api {
     listingId,
     params,
   ) async {
-    final filePath = 'cities/$cityId/listings/$listingId';
+    final filePath = '/cities/$cityId/listings/$listingId';
     final result = await HTTPManager(forum: false).patch(
       url: filePath,
       data: params,
@@ -420,7 +420,7 @@ class Api {
   ///Remove Wish List
   static Future<ResultApiModel> requestRemoveWishList(
       userId, int listingId) async {
-    final String removeWishList = "users/$userId/favorites/$listingId";
+    final String removeWishList = "/users/$userId/favorites/$listingId";
     final result = await HTTPManager(forum: false).delete(
       url: removeWishList,
     );
@@ -429,7 +429,7 @@ class Api {
 
   static Future<ResultApiModel> deletePdf(cityId, listingId) async {
     final result = await HTTPManager(forum: false).delete(
-      url: 'cities/$cityId/listings/$listingId/pdfDelete',
+      url: '/cities/$cityId/listings/$listingId/pdfDelete',
       loading: true,
     );
     return ResultApiModel.fromJson(result);
@@ -437,14 +437,14 @@ class Api {
 
   static Future<ResultApiModel> deleteImage(cityId, listingId) async {
     final result = await HTTPManager(forum: false).delete(
-      url: 'cities/$cityId/listings/$listingId/imageDelete',
+      url: '/cities/$cityId/listings/$listingId/imageDelete',
       loading: true,
     );
     return ResultApiModel.fromJson(result);
   }
 
   static Future<ResultApiModel> deleteUserList(cityId, int listingId) async {
-    final String removeList = "cities/$cityId/listings/$listingId";
+    final String removeList = "/cities/$cityId/listings/$listingId";
     final result = await HTTPManager(forum: false).delete(
       url: removeList,
     );
@@ -456,24 +456,24 @@ class Api {
     if (params == 3) {
       if (cityId != 0 && cityId != null) {
         var list =
-            'listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&sortByStartDate=true&cityId=$cityId';
+            '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&sortByStartDate=true&cityId=$cityId';
         final result = await HTTPManager(forum: false).get(url: list);
         return ResultApiModel.fromJson(result);
       } else {
         var list =
-            'listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&sortByStartDate=true';
+            '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&sortByStartDate=true';
         final result = await HTTPManager(forum: false).get(url: list);
         return ResultApiModel.fromJson(result);
       }
     } else {
       if (cityId != 0 && cityId != null) {
         var list =
-            'listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&cityId=$cityId';
+            '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&cityId=$cityId';
         final result = await HTTPManager(forum: false).get(url: list);
         return ResultApiModel.fromJson(result);
       } else {
         var list =
-            'listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19';
+            '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19';
         final result = await HTTPManager(forum: false).get(url: list);
         return ResultApiModel.fromJson(result);
       }
@@ -482,13 +482,13 @@ class Api {
 
   static Future<ResultApiModel> requestSubCatList(params, pageNo) async {
     var list =
-        'listings?subCategoryId=10&categoryId=1&statusId=1&pageNo=$pageNo&pageSize=19';
+        '/listings?subCategoryId=10&categoryId=1&statusId=1&pageNo=$pageNo&pageSize=19';
     final result = await HTTPManager(forum: false).get(url: list);
     return ResultApiModel.fromJson(result);
   }
 
   static Future<ResultApiModel> requestLocList(params, pageNo) async {
-    var list = 'listings?cityId=$params&statusId=1&pageNo=$pageNo&pageSize=19';
+    var list = '/listings?cityId=$params&statusId=1&pageNo=$pageNo&pageSize=19';
     final result = await HTTPManager(forum: false).get(url: list);
     return ResultApiModel.fromJson(result);
   }
@@ -505,7 +505,7 @@ class Api {
   static Future<ResultApiModel> requestUploadImage(formData) async {
     final prefs = await Preferences.openBox();
     final userId = prefs.getKeyValue(Preferences.userId, '');
-    var filepath = 'users/$userId/imageUpload';
+    var filepath = '/users/$userId/imageUpload';
     var result = await HTTPManager(forum: false).post(
       url: filepath,
       formData: formData,
@@ -521,9 +521,9 @@ class Api {
 
     var firstFileEntry = pickedFile?.files[0];
     if (firstFileEntry?.key == 'pdf') {
-      filePath = 'cities/$cityId/listings/$listingId/pdfUpload';
+      filePath = '/cities/$cityId/listings/$listingId/pdfUpload';
     } else if (firstFileEntry?.key == 'image') {
-      filePath = 'cities/$cityId/listings/$listingId/imageUpload';
+      filePath = '/cities/$cityId/listings/$listingId/imageUpload';
     }
     var result = await HTTPManager(forum: false).post(
       url: filePath,
@@ -536,7 +536,7 @@ class Api {
   static Future<ResultApiModel> requestForumImageUpload(
       cityId, forumId, pickedFile) async {
     var filePath = '';
-    filePath = 'cities/$cityId/forums/$forumId/imageUpload';
+    filePath = '/cities/$cityId/forums/$forumId/imageUpload';
     var result = await HTTPManager(forum: true).post(
       url: filePath,
       formData: pickedFile,
@@ -548,7 +548,7 @@ class Api {
   static Future<ResultApiModel> requestPostImageUpload(
       cityId, forumId, postId, pickedFile) async {
     var filePath = '';
-    filePath = 'cities/$cityId/forums/$forumId/posts/$postId/imageUpload';
+    filePath = '/cities/$cityId/forums/$forumId/posts/$postId/imageUpload';
     var result = await HTTPManager(forum: true).post(
       url: filePath,
       formData: pickedFile,
@@ -558,7 +558,7 @@ class Api {
   }
 
   static Future<ResultApiModel> deleteUserAccount(userId) async {
-    final String deleteAccount = "users/$userId";
+    final String deleteAccount = "/users/$userId";
     final result = await HTTPManager(forum: false).delete(url: deleteAccount);
     return ResultApiModel.fromJson(result);
   }
@@ -566,14 +566,14 @@ class Api {
   static Future<ResultApiModel> requestPostComments(
       cityId, forumId, postId, page) async {
     var list =
-        'cities/$cityId/forums/$forumId/posts/$postId/comments?pageNo=$page&pageSize=19';
+        '/cities/$cityId/forums/$forumId/posts/$postId/comments?pageNo=$page&pageSize=19';
     final result = await HTTPManager(forum: true).get(url: list);
     return ResultApiModel.fromJson(result);
   }
 
   static Future<ResultApiModel> addPostComments(
       cityId, forumId, postId, params) async {
-    var list = 'cities/$cityId/forums/$forumId/posts/$postId/comments';
+    var list = '/cities/$cityId/forums/$forumId/posts/$postId/comments';
     final result = await HTTPManager(forum: true).post(
       url: list,
       data: params,
@@ -583,7 +583,7 @@ class Api {
 
   static Future<ResultApiModel> addPostCommentsReply(
       cityId, forumId, postId, params) async {
-    var list = 'cities/$cityId/forums/$forumId/posts/$postId/comments';
+    var list = '/cities/$cityId/forums/$forumId/posts/$postId/comments';
     final result = await HTTPManager(forum: true).post(
       url: list,
       data: params,
@@ -594,7 +594,7 @@ class Api {
   static Future<ResultApiModel> requestPostCommentsReplies(
       cityId, forumId, postId, parentId, pageNo) async {
     var list =
-        'cities/$cityId/forums/$forumId/posts/$postId/comments?pageNo=$pageNo&pageSize=19&parentId=$parentId';
+        '/cities/$cityId/forums/$forumId/posts/$postId/comments?pageNo=$pageNo&pageSize=19&parentId=$parentId';
     final result = await HTTPManager(forum: true).get(url: list);
     return ResultApiModel.fromJson(result);
   }
