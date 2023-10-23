@@ -41,10 +41,22 @@ class AppProductItem extends StatelessWidget {
         }
         return InkWell(
           onTap: () async {
-            String pdfURL =
-                '${Application.picturesURL}${item?.pdf}?cacheKey=$uniqueKey';
-            await pdfService.downloadPDF(pdfURL);
-            onPressed!();
+            if(item?.pdf != '') {
+              String pdfURL =
+                  '${Application.picturesURL}${item?.pdf}?cacheKey=$uniqueKey';
+              final pdfName = PDFService.extractPdfName(item?.pdf);
+              final fileExists = await pdfService.doesFileExist(pdfName);
+              if (fileExists == false) {
+                await pdfService.downloadPDF(pdfURL, item?.pdf);
+                onPressed!();
+              }
+              else {
+                onPressed!();
+              }
+            }
+            else{
+              onPressed!();
+            }
           },
           child: Row(
             children: <Widget>[

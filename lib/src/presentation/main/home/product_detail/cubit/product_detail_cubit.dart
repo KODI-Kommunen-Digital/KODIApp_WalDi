@@ -7,6 +7,8 @@ import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/cubit/cubit.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
+import 'package:heidi/src/utils/pdf_downloader.dart';
+import 'package:path_provider/path_provider.dart';
 
 class ProductDetailCubit extends Cubit<ProductDetailState> {
   ProductDetailCubit() : super(const ProductDetailLoading());
@@ -23,14 +25,16 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
     } else {
       isLoggedIn = true;
     }
-    final prefs = await Preferences.openBox();
-    final pdfPath = await prefs.getKeyValue(Preferences.pdfPath, '');
+    final directory = await getApplicationDocumentsDirectory();
+    String pdfPath = '';
 
     if (item.cityId != null) {
       final result = await ListRepository.loadProduct(item.cityId, item.id);
 
       if (result != null) {
         product = result;
+        String pdf = PDFService.extractPdfName(product?.pdf);
+        final pdfPath = '${directory.path}/$pdf';
         userDetail = await getUserDetails(item.userId, item.cityId);
         if (userId != 0) {
           favoritesList = await UserRepository.loadFavorites(userId);

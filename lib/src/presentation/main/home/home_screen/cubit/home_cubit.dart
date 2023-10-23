@@ -9,7 +9,6 @@ import 'package:heidi/src/data/repository/user_repository.dart';
 // import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/image.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
-import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
@@ -24,7 +23,6 @@ class HomeCubit extends Cubit<HomeState> {
   HomeCubit() : super(const HomeState.loading());
 
   Future<void> onLoad(bool isRefreshLoader) async {
-    logError('onLoadCalled');
     if (!await hasInternet()) {
       emit(const HomeState.error("no_internet"));
     }
