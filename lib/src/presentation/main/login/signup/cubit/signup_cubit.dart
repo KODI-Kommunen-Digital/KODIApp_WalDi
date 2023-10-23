@@ -80,6 +80,10 @@ class SignUpCubit extends Cubit<SignUpState> {
       return "Username must not exceed 15 characters.";
     }
 
+    if (username.contains(' ')) {
+      return 'Username cannot contain spaces';
+    }
+
     if (!RegExp(r'^[a-z_]+$').hasMatch(username)) {
       return "Username can only contain lowercase letters and underscores.";
     }
