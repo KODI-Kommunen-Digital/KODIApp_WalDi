@@ -421,7 +421,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                               ),
                             );
                           } else {
-                            return (isLoadingMore)
+                            isLoadingMore
                                 ? const Positioned(
                                     bottom: 20,
                                     left: 0,
@@ -433,6 +433,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                   )
                                 : Container();
                           }
+                          return null;
                         },
                         childCount: posts!.length + 1,
                       ),
