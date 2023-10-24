@@ -26,7 +26,7 @@ class Api {
   static Future<ResultApiModel> requestLogin(params) async {
     try {
       final result =
-          await HTTPManager(forum: false).post(url: login, data: params);
+          await  HTTPManager(forum: false).post(url: login, data: params);
 
       return ResultApiModel.fromJson(result);
     } catch (e) {
@@ -120,7 +120,7 @@ class Api {
   static Future<ResultApiModel> acceptMemberRequests(
       forumId, cityId, memberRequestId, params) async {
     final filepath =
-        "/cities/$cityId/forums/$forumId/memberRequests/$memberRequestId";
+        "/cities/$cityId/forums/$forumId/memberRequests/$memberRequestId?statusId=1";
     final result =
         await HTTPManager(forum: true).patch(data: params, url: filepath);
     return ResultApiModel.fromJson(result);
