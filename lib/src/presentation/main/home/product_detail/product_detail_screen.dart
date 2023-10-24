@@ -79,10 +79,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               children: <Widget>[
                 Text(
                   message,
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .bodyLarge,
+                  style: Theme.of(context).textTheme.bodyLarge,
                 ),
               ],
             ),
@@ -171,10 +168,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               ),
               SizedBox(
                 height:
-                MediaQuery
-                    .of(context)
-                    .size
-                    .height - kToolbarHeight - 30,
+                    MediaQuery.of(context).size.height - kToolbarHeight - 30,
                 child: WebViewWidget(
                   controller: webViewController,
                   gestureRecognizers: gestureRecognizers,
@@ -425,90 +419,89 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
       banner = product.pdf == ''
           ? InkWell(
-        onTap: () {
-          Navigator.pushNamed(
-            context,
-            Routes.imageZoom,
-            arguments: product.sourceId == 2
-                ? product.image
-                : "${Application.picturesURL}${product.image}",
-          );
-        },
-        child: CachedNetworkImage(
-          imageUrl: product.sourceId == 2
-              ? product.image
-              : product.image == 'admin/News.jpeg'
-              ? "${Application.picturesURL}${product.image}"
-              : "${Application.picturesURL}${product
-              .image}?cacheKey=$uniqueKey",
-          cacheManager: memoryCacheManager,
-          placeholder: (context, url) {
-            return AppPlaceholder(
-              child: Container(
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                ),
-              ),
-            );
-          },
-          imageBuilder: (context, imageProvider) {
-            return Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: imageProvider,
-                  fit: BoxFit.fitHeight,
-                ),
-              ),
-            );
-          },
-          errorWidget: (context, url, error) {
-            return AppPlaceholder(
-              child: Container(
-                width: 120,
-                height: 140,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(8),
-                    bottomLeft: Radius.circular(8),
-                  ),
-                ),
-                child: const Icon(Icons.error),
-              ),
-            );
-          },
-        ),
-      )
-          : RawGestureDetector(
-        gestures: {
-          AllowMultipleGestureRecognizer:
-          GestureRecognizerFactoryWithHandlers<
-              AllowMultipleGestureRecognizer>(
-                () => AllowMultipleGestureRecognizer(), //constructor
-                (AllowMultipleGestureRecognizer instance) {
-              instance.onTap = () async{
-                if(!mounted) return;
+              onTap: () {
                 Navigator.pushNamed(
                   context,
                   Routes.imageZoom,
-                  arguments: pdfPath,
+                  arguments: product.sourceId == 2
+                      ? product.image
+                      : "${Application.picturesURL}${product.image}",
                 );
-              };
-            },
-          )
-        },
-        child: PDFView(
-          filePath: pdfPath,
-          enableSwipe: true,
-          autoSpacing: false,
-          pageFling: true,
-        )
-        // const PDF().cachedFromUrl(
-        //   "${Application.picturesURL}${product.pdf}?cacheKey=$uniqueKey",
-        //   placeholder: (progress) => Center(child: Text('$progress %')),
-        //   errorWidget: (error) => Center(child: Text(error.toString())),
-        // ),
-      );
+              },
+              child: CachedNetworkImage(
+                imageUrl: product.sourceId == 2
+                    ? product.image
+                    : product.image == 'admin/News.jpeg'
+                        ? "${Application.picturesURL}${product.image}"
+                        : "${Application.picturesURL}${product.image}?cacheKey=$uniqueKey",
+                cacheManager: memoryCacheManager,
+                placeholder: (context, url) {
+                  return AppPlaceholder(
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                      ),
+                    ),
+                  );
+                },
+                imageBuilder: (context, imageProvider) {
+                  return Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.fitHeight,
+                      ),
+                    ),
+                  );
+                },
+                errorWidget: (context, url, error) {
+                  return AppPlaceholder(
+                    child: Container(
+                      width: 120,
+                      height: 140,
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(8),
+                          bottomLeft: Radius.circular(8),
+                        ),
+                      ),
+                      child: const Icon(Icons.error),
+                    ),
+                  );
+                },
+              ),
+            )
+          : RawGestureDetector(
+              gestures: {
+                  AllowMultipleGestureRecognizer:
+                      GestureRecognizerFactoryWithHandlers<
+                          AllowMultipleGestureRecognizer>(
+                    () => AllowMultipleGestureRecognizer(), //constructor
+                    (AllowMultipleGestureRecognizer instance) {
+                      instance.onTap = () async {
+                        if (!mounted) return;
+                        Navigator.pushNamed(
+                          context,
+                          Routes.imageZoom,
+                          arguments: pdfPath,
+                        );
+                      };
+                    },
+                  )
+                },
+              child: PDFView(
+                filePath: pdfPath,
+                enableSwipe: true,
+                autoSpacing: false,
+                pageFling: true,
+              )
+              // const PDF().cachedFromUrl(
+              //   "${Application.picturesURL}${product.pdf}?cacheKey=$uniqueKey",
+              //   placeholder: (progress) => Center(child: Text('$progress %')),
+              //   errorWidget: (error) => Center(child: Text(error.toString())),
+              // ),
+              );
 
       if (product.address.isNotEmpty) {
         address = Column(
@@ -526,9 +519,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           height: 32,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: Theme
-                                .of(context)
-                                .dividerColor,
+                            color: Theme.of(context).dividerColor,
                           ),
                           child: const Icon(
                             Icons.location_on_outlined,
@@ -543,17 +534,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             children: <Widget>[
                               Text(
                                 Translate.of(context).translate('address'),
-                                style: Theme
-                                    .of(context)
-                                    .textTheme
-                                    .bodySmall,
+                                style: Theme.of(context).textTheme.bodySmall,
                               ),
                               Text(
                                 product.address,
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
-                                style: Theme
-                                    .of(context)
+                                style: Theme.of(context)
                                     .textTheme
                                     .bodyLarge!
                                     .copyWith(fontWeight: FontWeight.bold),
@@ -587,9 +574,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     height: 32,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Theme
-                          .of(context)
-                          .dividerColor,
+                      color: Theme.of(context).dividerColor,
                     ),
                     child: const Icon(
                       Icons.phone_outlined,
@@ -604,17 +589,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       children: <Widget>[
                         Text(
                           Translate.of(context).translate('phone'),
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .bodySmall,
+                          style: Theme.of(context).textTheme.bodySmall,
                         ),
                         Text(
                           product.phone,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: Theme
-                              .of(context)
+                          style: Theme.of(context)
                               .textTheme
                               .bodyLarge!
                               .copyWith(fontWeight: FontWeight.bold),
@@ -645,9 +626,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     height: 32,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Theme
-                          .of(context)
-                          .dividerColor,
+                      color: Theme.of(context).dividerColor,
                     ),
                     child: const Icon(
                       Icons.email_outlined,
@@ -662,17 +641,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       children: <Widget>[
                         Text(
                           Translate.of(context).translate('email'),
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .bodySmall,
+                          style: Theme.of(context).textTheme.bodySmall,
                         ),
                         Text(
                           product.email,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: Theme
-                              .of(context)
+                          style: Theme.of(context)
                               .textTheme
                               .bodyLarge!
                               .copyWith(fontWeight: FontWeight.bold),
@@ -703,9 +678,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     height: 32,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Theme
-                          .of(context)
-                          .dividerColor,
+                      color: Theme.of(context).dividerColor,
                     ),
                     child: const Icon(
                       Icons.language_outlined,
@@ -720,17 +693,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       children: <Widget>[
                         Text(
                           Translate.of(context).translate('website'),
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .bodySmall,
+                          style: Theme.of(context).textTheme.bodySmall,
                         ),
                         Text(
                           product.website,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: Theme
-                              .of(context)
+                          style: Theme.of(context)
                               .textTheme
                               .bodyLarge!
                               .copyWith(fontWeight: FontWeight.bold),
@@ -753,16 +722,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               Translate.of(context).translate(
                 'start_date',
               ),
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .bodySmall,
+              style: Theme.of(context).textTheme.bodySmall,
             ),
             const SizedBox(width: 8),
             Text(
               product.startDate,
-              style: Theme
-                  .of(context)
+              style: Theme.of(context)
                   .textTheme
                   .titleSmall!
                   .copyWith(fontWeight: FontWeight.bold),
@@ -779,16 +744,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               Translate.of(context).translate(
                 'end_date',
               ),
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .bodySmall,
+              style: Theme.of(context).textTheme.bodySmall,
             ),
             const SizedBox(width: 8),
             Text(
               product.endDate,
-              style: Theme
-                  .of(context)
+              style: Theme.of(context)
                   .textTheme
                   .titleSmall!
                   .copyWith(fontWeight: FontWeight.bold),
@@ -804,8 +765,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           children: <Widget>[
             Text(
               product.createDate,
-              style: Theme
-                  .of(context)
+              style: Theme.of(context)
                   .textTheme
                   .titleSmall!
                   .copyWith(fontWeight: FontWeight.bold),
@@ -823,7 +783,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         description = HtmlWidget(
           modifiedDescription,
           textStyle:
-          const TextStyle(fontSize: 16.0, color: Colors.white, height: 1.6),
+              const TextStyle(fontSize: 16.0, color: Colors.white, height: 1.6),
           customStylesBuilder: (element) {
             if (element.localName == 'img') {
               return {'max-width': '100%'};
@@ -861,13 +821,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 Expanded(
                   child: Text(
                     product.title,
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .titleMedium!
-                        .copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -888,8 +844,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       product.category != null
                           ? product.category as String
                           : '',
-                      style: Theme
-                          .of(context)
+                      style: Theme.of(context)
                           .textTheme
                           .bodySmall
                           ?.copyWith(fontWeight: FontWeight.bold),
@@ -902,9 +857,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   child: IconButton(
                     icon: Icon(
                       product.favorite ? Icons.favorite : Icons.favorite_border,
-                      color: Theme
-                          .of(context)
-                          .primaryColor,
+                      color: Theme.of(context).primaryColor,
                     ),
                     onPressed: () async {
                       setState(() {
@@ -945,17 +898,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               margin: const EdgeInsets.symmetric(horizontal: 8),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
-                color: Theme
-                    .of(context)
-                    .cardColor,
+                color: Theme.of(context).cardColor,
                 boxShadow: [
                   BoxShadow(
-                    color: Theme
-                        .of(context)
-                        .dividerColor
-                        .withOpacity(
-                      .05,
-                    ),
+                    color: Theme.of(context).dividerColor.withOpacity(
+                          .05,
+                        ),
                     spreadRadius: 4,
                     blurRadius: 4,
                     offset: const Offset(
@@ -979,14 +927,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   if (productUserId?.id == loggedInUserId) {
                     if (!mounted) return;
                     Navigator.pushNamed(context, Routes.profile,
-                        arguments: {'user': userDetail, 'editable': true})
+                            arguments: {'user': userDetail, 'editable': true})
                         .then((value) {
                       setState(() {});
                     });
                   } else {
                     if (!mounted) return;
                     Navigator.pushNamed(context, Routes.profile,
-                        arguments: {'user': userDetail, 'editable': false})
+                            arguments: {'user': userDetail, 'editable': false})
                         .then((value) {
                       setState(() {});
                     });
@@ -1009,16 +957,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       controller: _scrollController,
       slivers: <Widget>[
         SliverAppBar(
-          expandedHeight: MediaQuery
-              .of(context)
-              .size
-              .height * 0.25,
+          expandedHeight: MediaQuery.of(context).size.height * 0.25,
           pinned: true,
           actions: action,
-          iconTheme: Theme
-              .of(context)
-              .iconTheme
-              .copyWith(color: _iconColor),
+          iconTheme: Theme.of(context).iconTheme.copyWith(color: _iconColor),
           flexibleSpace: FlexibleSpaceBar(
             collapseMode: CollapseMode.none,
             background: banner,
@@ -1065,7 +1007,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               userDetail = state.userDetail;
               pdfPath = state.pdfPath;
             }
-            return _buildContent(product, favoriteList, userDetail, isLoggedIn, pdfPath);
+            return _buildContent(
+                product, favoriteList, userDetail, isLoggedIn, pdfPath);
           },
         ),
       ),

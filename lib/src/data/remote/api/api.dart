@@ -120,7 +120,7 @@ class Api {
   static Future<ResultApiModel> acceptMemberRequests(
       forumId, cityId, memberRequestId, params) async {
     final filepath =
-        "/cities/$cityId/forums/$forumId/memberRequests/$memberRequestId?statusId=1";
+        "/cities/$cityId/forums/$forumId/memberRequests/$memberRequestId";
     final result =
         await HTTPManager(forum: true).patch(data: params, url: filepath);
     return ResultApiModel.fromJson(result);
