@@ -165,7 +165,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
                 visible: isLoading,
                 child: Container(
                   color: Colors.black.withOpacity(0.5), // Overlay background
-                  child: Center(
+                  child: const Center(
                     child: CircularProgressIndicator(),
                   ),
                 ),
