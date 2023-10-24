@@ -534,8 +534,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
     _errorTitle =
         UtilValidator.validate(_textTitleController.text, allowEmpty: false);
 
-    if (_textContentController.text.length >= 10001) {
-      _errorContent = "Info should not exceed 1000 characters.";
+    if (_textContentController.text.length >= 65535) {
+      _errorContent = "value_desc_limit_exceeded";
     } else {
       _errorContent = UtilValidator.validate(_textContentController.text,
           allowEmpty: false);

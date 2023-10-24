@@ -130,6 +130,8 @@
   "review_rating": "Review Rating",
   "delete": "Delete",
   "phone": "Phone",
+  "value_desc_limit_exceeded":"Description should not exceed 65535 characters.",  
+  "value_user_desc_limit_exceeded":"Description should not exceed 255 characters.",
   "date_established": "Date Established",
   "featured": "Featured",
   "latest": "Latest",
