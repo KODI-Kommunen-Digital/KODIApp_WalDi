@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:dio/dio.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/remote/api/http_manager.dart';
 import 'package:heidi/src/utils/asset.dart';
@@ -208,18 +207,11 @@ class Api {
   static Future<ResultApiModel> requestEditProduct(
       cityId, listingId, params, bool isImageChanged) async {
     final filePath = '/cities/$cityId/listings/$listingId';
-    final prefs = await Preferences.openBox();
-    FormData? pickedFile = prefs.getPickedFile();
     final result = await httpManager.patch(
       url: filePath,
       data: params,
       loading: true,
     );
-    if (isImageChanged) {
-      if (pickedFile!.files.isNotEmpty) {
-        await Api.requestListingUploadMedia(listingId, cityId, pickedFile);
-      }
-    }
     return ResultApiModel.fromJson(result);
   }
 

@@ -390,6 +390,15 @@ class ListRepository {
     };
     final response =
         await Api.requestEditProduct(cityId, listingId, params, isImageChanged);
+    if(response.success){
+      final prefs = await Preferences.openBox();
+      FormData? pickedFile = prefs.getPickedFile();
+      if (isImageChanged) {
+        if (pickedFile!.files.isNotEmpty) {
+          await Api.requestListingUploadMedia(listingId, cityId, pickedFile);
+        }
+      }
+    }
     return response;
   }
 

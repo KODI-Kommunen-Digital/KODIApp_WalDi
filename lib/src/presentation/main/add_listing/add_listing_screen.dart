@@ -433,6 +433,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
               .read<AddListingCubit>()
               .deletePdf(widget.item?.cityId, widget.item?.id);
         }
+        setState(() {
+          isLoading = true;
+        });
         final result = await context.read<AddListingCubit>().onEdit(
               cityId: widget.item?.cityId,
               categoryId: widget.item!.categoryId,
@@ -452,6 +455,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
               endTime: _endTime,
             );
         if (result) {
+          setState(() {
+            isLoading = false;
+          });
           _onSuccess();
         }
       } else {
