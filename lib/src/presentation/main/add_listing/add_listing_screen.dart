@@ -457,8 +457,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
             startTime: _startTime,
             endTime: _endTime);
         if (result) {
-          await AppBloc.homeCubit.onLoad(false);
           _onSuccess();
+          await AppBloc.homeCubit.onLoad(false);
           if (!mounted) return;
           context.read<AddListingCubit>().clearImagePath();
         }
