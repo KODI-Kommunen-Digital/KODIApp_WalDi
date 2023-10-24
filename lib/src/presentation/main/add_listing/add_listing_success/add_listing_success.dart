@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
@@ -33,6 +34,17 @@ class _AddListingSuccessScreenState extends State<AddListingSuccessScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.close),
+          onPressed: () {
+            Future.delayed(const Duration(seconds: 2), () async {
+              await AppBloc.homeCubit
+                  .onLoad(false);
+              if(!mounted) return;
+              Navigator.pop(context);
+            });
+          },
+        ),
         title: Text(
           Translate.of(context).translate('completed'),
         ),

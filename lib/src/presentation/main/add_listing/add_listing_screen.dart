@@ -457,8 +457,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
             startTime: _startTime,
             endTime: _endTime);
         if (result) {
+          // await AppBloc.homeCubit.onLoad(false);
           _onSuccess();
-          await AppBloc.homeCubit.onLoad(false);
           if (!mounted) return;
           context.read<AddListingCubit>().clearImagePath();
         }
@@ -468,7 +468,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
 
   void _onSuccess() {
     Navigator.pop(context);
-    context.read<HomeCubit>().onLoad(false);
+    // context.read<HomeCubit>().onLoad(false);
     if (widget.isNewList) {
       Navigator.pushNamed(context, Routes.submitSuccess);
     }
