@@ -197,17 +197,11 @@ class Api {
   ///Save Product
   static Future<ResultApiModel> requestSaveProduct(cityId, params) async {
     final filePath = '/cities/$cityId/listings';
-    final prefs = await Preferences.openBox();
-    FormData? pickedFile = prefs.getPickedFile();
     final result = await httpManager.post(
       url: filePath,
       data: params,
       loading: true,
     );
-    final id = result['id'];
-    if (pickedFile != null) {
-      Api.requestListingUploadMedia(id, cityId, pickedFile);
-    }
     return ResultApiModel.fromJson(result);
   }
 

@@ -295,6 +295,12 @@ class ListRepository {
     };
     final response = await Api.requestSaveProduct(cityId, params);
     if (response.success) {
+      final prefs = await Preferences.openBox();
+      FormData? pickedFile = prefs.getPickedFile();
+      final id = response.id;
+      if (pickedFile != null) {
+        await Api.requestListingUploadMedia(id, cityId, pickedFile);
+      }
       prefs.deleteKey('pickedFile');
     }
     return response;
