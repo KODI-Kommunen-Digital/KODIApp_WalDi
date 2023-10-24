@@ -89,6 +89,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
   String? selectedCategory;
   String? selectedSubCategory;
   bool isImageChanged = false;
+  bool isLoading = false;
 
   int? currentCity;
   late List<dynamic> jsonCategory;
@@ -157,7 +158,20 @@ class _AddListingScreenState extends State<AddListingScreen> {
           ],
         ),
         body: SafeArea(
-          child: _buildContent(),
+          child: Stack(
+            children: [
+              _buildContent(),
+              Visibility(
+                visible: isLoading,
+                child: Container(
+                  color: Colors.black.withOpacity(0.5), // Overlay background
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -441,6 +455,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
           _onSuccess();
         }
       } else {
+        setState(() {
+          isLoading = true;
+        });
         final result = await context.read<AddListingCubit>().onSubmit(
             title: _textTitleController.text,
             city: selectedCity,
@@ -457,6 +474,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
             endTime: _endTime);
         if (result) {
           await AppBloc.homeCubit.onLoad(false);
+          setState(() {
+            isLoading = false;
+          });
           _onSuccess();
           if (!mounted) return;
           context.read<AddListingCubit>().clearImagePath();
@@ -888,34 +908,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
             ),
             const SizedBox(height: 16),
             const SizedBox(height: 8),
-            // Text(
-            //   Translate.of(context).translate('village'),
-            //   style: Theme.of(context)
-            //       .textTheme
-            //       .titleMedium!
-            //       .copyWith(fontWeight: FontWeight.bold),
-            // ),
-            // Row(
-            //   children: [
-            //     Expanded(
-            //         child: DropdownButton(
-            //       isExpanded: true,
-            //       menuMaxHeight: 200,
-            //       hint: Text(Translate.of(context).translate('input_village')),
-            //       value: selectedVillage,
-            //       items: listVillage.map((village) {
-            //         return DropdownMenuItem(
-            //             value: village['name'], child: Text(village['name']));
-            //       }).toList(),
-            //       onChanged: (value) {
-            //         setState(() {
-            //           selectedVillage = value as String?;
-            //         });
-            //       },
-            //     )),
-            //   ],
-            // ),
-            // const SizedBox(height: 16),
             AppTextInput(
               hintText: Translate.of(context).translate('input_address'),
               // errorText: _errorAddress,
