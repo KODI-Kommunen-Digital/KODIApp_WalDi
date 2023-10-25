@@ -96,7 +96,7 @@
   "At least one of the following special characters required.": "At least one of the following special characters required.",
   "Password contains invalid characters.": "Password contains invalid characters.",
   "Password hint": "-Minimum length 8 \n- Must not contain space.",
-  "Username hint": "-Minimum length 6 \n-Maximum length 15 \n-Lowercase letters (a-z) \n-UnderScore",
+  "Username hint": "-Minimum length 6 \n-Maximum length 15 \n-Lowercase letters (a-z) \n-UnderScore\n-No empty space",
   "Username is required.": "Username is required.",
   "Username cannot contain spaces": "Username can not contain spaces.",
   "Username must be at least 6 characters long.": "Username must be at least 6 characters long.",
