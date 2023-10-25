@@ -1,6 +1,14 @@
 {
     "status": "success",
-    "data": [
+    "data": [ 
+        {
+        "id": 1,
+        "name": "Forum",
+        "noOfSubcategories": 8,
+        "icon": "fas fa-user-group",
+        "color": "#5A5A5A",
+        "categoryType" : "category"
+        },
         {
             "id": 1,
             "name": "News",
