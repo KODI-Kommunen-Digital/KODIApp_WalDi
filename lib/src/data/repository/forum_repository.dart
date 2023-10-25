@@ -24,6 +24,9 @@ class ForumRepository {
     final requestMemberList = <RequestMemberModel>[];
 
     int cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    if (cityId == 0) {
+      cityId = 1;
+    }
     int userId = prefs.getKeyValue(Preferences.userId, 0);
 
     bool hasForumFlag = false;
