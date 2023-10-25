@@ -165,9 +165,6 @@ class _HomeScreenState extends State<HomeScreen> {
               if (checkSavedCity) {
                 checkSavedCity = false;
                 _setSavedCity(location!);
-              } else if (AppBloc.homeCubit.getCalledExternally()) {
-                _setSavedCity(location!);
-                AppBloc.homeCubit.setCalledExternally(false);
               }
             }
           }
@@ -364,7 +361,7 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedCityId = 0;
       });
     }
-    AppBloc.homeCubit.onLoad(false);
+    AppBloc.homeCubit.onLoad(true);
   }
 
   Future<void> _onLocation(CategoryModel item) async {
