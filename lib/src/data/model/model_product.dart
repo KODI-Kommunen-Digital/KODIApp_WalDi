@@ -227,7 +227,7 @@ class ProductModel {
       fax: json['fax'] ?? '',
       email: json['email'] ?? '',
       website: json['website'] ?? '',
-      description: json['description'] ?? '',
+      description: json['Description'] ?? '',
       color: json['color'] ?? '',
       categoryId: json['categoryId'] ?? 0,
       subcategoryId: json['subcategoryId'] ?? 0,
