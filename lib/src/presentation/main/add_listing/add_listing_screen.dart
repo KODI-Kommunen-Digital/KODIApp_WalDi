@@ -255,7 +255,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       }
       if (!loadCategoryResponse?.data.isEmpty) {
         if (!mounted) return;
-        if (selectedCategory == "news" || selectedCategory == null) {
+        if (selectedCategory == "News" || selectedCategory == null) {
           final subCategoryResponse = await context
               .read<AddListingCubit>()
               .loadSubCategory(Translate.of(context).translate(
@@ -734,7 +734,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
                                       },
                                     );
 
-                                    if (selectedCategory == "news" ||
+                                    if (selectedCategory == "News" ||
                                         selectedCategory == null) {
                                       selectSubCategory(selectedCategory);
                                     }
@@ -743,9 +743,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
                           )),
               ],
             ),
-            if (selectedCategory == "news" || selectedCategory == null)
+            if (selectedCategory == "News" || selectedCategory == null)
               const SizedBox(height: 8),
-            if (selectedCategory == "news" || selectedCategory == null)
+            if (selectedCategory == "News" || selectedCategory == null)
               Text.rich(
                 TextSpan(
                   text: Translate.of(context).translate('subCategory'),
@@ -767,7 +767,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
             const SizedBox(height: 8),
             Row(
               children: [
-                if (selectedCategory == "news")
+                if (selectedCategory == "News")
                   Expanded(
                       child: listSubCategory.isEmpty
                           ? const LinearProgressIndicator()
@@ -797,7 +797,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
                             )),
               ],
             ),
-            if (selectedCategory == "news" || selectedCategory == null)
+            if (selectedCategory == "News" || selectedCategory == null)
               const SizedBox(height: 8),
             const SizedBox(height: 8),
             Text.rich(
