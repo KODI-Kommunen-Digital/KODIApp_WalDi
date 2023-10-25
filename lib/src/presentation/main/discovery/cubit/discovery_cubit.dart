@@ -97,12 +97,12 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
 
   List<CitizenServiceModel> initializeServices() {
     return [
-      CitizenServiceModel(imageUrl: Images.service2, imageLink: "2"),
-      CitizenServiceModel(
-          imageUrl: Images.service3,
-          imageLink: "3",
-          type: "subCategoryService",
-          arguments: 4),
+      // CitizenServiceModel(imageUrl: Images.service2, imageLink: "2"),
+      // CitizenServiceModel(
+      //     imageUrl: Images.service3,
+      //     imageLink: "3",
+      //     type: "subCategoryService",
+      //     arguments: 4),
       CitizenServiceModel(
           imageUrl: Images.service4,
           imageLink: "4",
