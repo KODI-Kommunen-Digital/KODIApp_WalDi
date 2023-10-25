@@ -569,6 +569,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                         .translate(chosen ?? "pending");
                                 Navigator.of(context).pop();
                                 _onRefresh();
+                                AppBloc.homeCubit.onLoad(true);
                               },
                               items: [
                                 DropdownMenuItem<String>(
