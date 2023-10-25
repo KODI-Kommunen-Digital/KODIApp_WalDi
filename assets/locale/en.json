@@ -98,6 +98,7 @@
   "Password hint": "-Minimum length 8 \n- Must not contain space.",
   "Username hint": "-Minimum length 6 \n-Maximum length 15 \n-Lowercase letters (a-z) \n-UnderScore",
   "Username is required.": "Username is required.",
+  "Username cannot contain spaces": "Username can not contain spaces.",
   "Username must be at least 6 characters long.": "Username must be at least 6 characters long.",
   "Username must not exceed 15 characters.": "Username must not exceed 15 characters.",
   "Username can only contain lowercase letters and underscores.": "Username can only contain lowercase letters and underscores.",

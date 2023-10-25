@@ -88,6 +88,7 @@
   "Password hint": "-Mindestlänge 8 Buchstaben \n-Es darf keine Leerzeichen enthalten.",
   "Username hint": "-Mindestlänge 6 Buchstaben \n-Maximallänge 15 \n-Kleinbuchstaben (a-z) \n-Vermeide ein Leerzeichen und verwende stattdessen “_”",
   "Username is required.": "Benutzername wird benötigt.",
+  "Username cannot contain spaces": "Das Benutzername darf keine Leerzeichen enthalten.",
   "Username must be at least 6 characters long.": "Der Benutzername muss mindestens 6 Zeichen lang sein.",
   "Username must not exceed 15 characters.": "Der Benutzername darf nicht länger als 15 Zeichen sein.",
   "Username can only contain lowercase letters and underscores.": "Nur Kleinbuchstaben und ein Unterstrich sind erlaubt.",
