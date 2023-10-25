@@ -16,7 +16,7 @@ class UserRepository {
     required String password,
   }) async {
     final prefs = await Preferences.openBox();
-    prefs.deleteKey(Preferences.cityId);
+    //prefs.deleteKey(Preferences.cityId);
     List<int> cityIds = [];
 
     final Map<String, dynamic> params = {
