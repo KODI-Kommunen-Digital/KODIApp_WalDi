@@ -273,7 +273,7 @@ class ListRepository {
   Future<ResultApiModel> loadSubCategory(value) async {
     final response = await Api.requestSubmitCategory();
     var jsonCategory = response.data;
-    final item = jsonCategory.firstWhere((item) => item['name'] == value.toLowerCase());
+    final item = jsonCategory.firstWhere((item) => item['name'] == value);
     final itemId = item['id'];
     final categoryId = itemId;
     final requestSubmitResponse =
