@@ -396,11 +396,12 @@ class Routes {
       case memberRequestDetails:
         return MaterialPageRoute(
           builder: (context) {
-            final int arguments = settings.arguments as int;
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
             return BlocProvider(
-              create: (context) =>
-                  MembersRequestsCubit(context.read(), arguments),
-              child: MemberRequestScreen(arguments),
+              create: (context) => MembersRequestsCubit(
+                  context.read(), arguments['groupId'], arguments['cityId']),
+              child: MemberRequestScreen(arguments['groupId']),
             );
           },
           fullscreenDialog: true,

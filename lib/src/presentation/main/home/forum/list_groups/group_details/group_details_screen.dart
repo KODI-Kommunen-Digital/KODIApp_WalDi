@@ -152,7 +152,10 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                                 .translate('member_requests')) {
                           Navigator.pushNamed(
                               context, Routes.memberRequestDetails,
-                              arguments: widget.groupModel.id);
+                              arguments: {
+                                'groupId': widget.groupModel.id,
+                                'cityId': widget.groupModel.cityId
+                              });
                         } else if (choice ==
                             Translate.of(context).translate('delete_group')) {
                           showDeleteGroupConfirmation(context);
