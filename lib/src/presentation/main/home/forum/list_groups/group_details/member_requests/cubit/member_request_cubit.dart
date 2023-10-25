@@ -7,15 +7,16 @@ import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details
 class MembersRequestsCubit extends Cubit<MemberRequestState> {
   final ForumRepository repo;
   final int groupId;
+  final int cityId;
 
-  MembersRequestsCubit(this.repo, this.groupId)
+  MembersRequestsCubit(this.repo, this.groupId, this.cityId)
       : super(const MemberRequestLoading()) {
     onLoad();
   }
 
   Future<void> onLoad() async {
     final memberRequestList = <MemberRequestModel>[];
-    final requestMemberRequestResponse = await repo.getMemberRequests(groupId);
+    final requestMemberRequestResponse = await repo.getMemberRequests(groupId, cityId);
     if (requestMemberRequestResponse?.data != null) {
       for (final member in requestMemberRequestResponse!.data) {
         memberRequestList.add(MemberRequestModel(
@@ -40,6 +41,7 @@ class MembersRequestsCubit extends Cubit<MemberRequestState> {
     final response = await repo.acceptMemberRequests(
       groupId,
       memberRequestId,
+      cityId
     );
     if (response!.success) {
       return true;
@@ -53,6 +55,7 @@ class MembersRequestsCubit extends Cubit<MemberRequestState> {
       groupId,
       memberRequestId,
       reason,
+      cityId
     );
     if (response!.success) {
       return true;
