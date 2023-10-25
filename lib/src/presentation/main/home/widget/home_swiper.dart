@@ -17,7 +17,7 @@ class HomeSwipe extends StatelessWidget {
     if (images != null) {
       return Swiper(
           itemBuilder: (BuildContext context, int index) {
-            return Image.asset(images!, fit: BoxFit.cover,
+            return Image.asset(images!, fit: BoxFit.fill,
                 errorBuilder: (context, error, stackTrace) {
               return AppPlaceholder(
                 child: Container(

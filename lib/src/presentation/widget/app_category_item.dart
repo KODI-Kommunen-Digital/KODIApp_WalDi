@@ -276,16 +276,16 @@ class AppCategory extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Padding(
-                          padding: const EdgeInsets.all(8),
+                          padding: const EdgeInsets.only(left: 4, bottom: 8),
                           child: Text(
                             item!.title,
                             style: Theme.of(context)
                                 .textTheme
                                 .titleSmall!
                                 .copyWith(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 12),
                           ),
                         )
                       ],
