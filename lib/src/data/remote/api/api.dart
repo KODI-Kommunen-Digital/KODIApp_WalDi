@@ -27,6 +27,7 @@ class Api {
     try {
       final result =
           await HTTPManager(forum: false).post(url: login, data: params);
+
       return ResultApiModel.fromJson(result);
     } catch (e) {
       return await HTTPManager(forum: false).post(url: login, data: params);
@@ -42,7 +43,7 @@ class Api {
 
   static Future<ResultApiModel> requestFavorites(userId) async {
     final result = await HTTPManager(forum: false)
-        .get(url: 'users/$userId/favorites?pageNo=1&pageSize=19');
+        .get(url: '/users/$userId/favorites?pageNo=1&pageSize=19');
     return ResultApiModel.fromJson(result);
   }
 

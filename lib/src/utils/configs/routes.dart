@@ -110,8 +110,8 @@ class Routes {
   static const String groupMembersDetails = "/groupMembersDetails";
   static const String memberRequestDetails = "/memberRequestDetails";
   static const String postDetails = "/postDetails";
-  static const String addGroups = "/addGroup";
   static const String dashboard = "/dashboard";
+  static const String addGroups = "/addGroup";
   static const String addPosts = "/addPosts";
   static const String myListings = "/myListings";
 
