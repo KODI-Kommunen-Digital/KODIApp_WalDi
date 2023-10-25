@@ -39,7 +39,6 @@ class HomeCubit extends Cubit<HomeState> {
     category = List.from(categoryRequestResponse.data ?? []).map((item) {
       return CategoryModel.fromJson(item);
     }).toList();
-
     CategoryModel? savedCity = await checkSavedCity(location);
     if (savedCity != null) {
       final listingsRequestResponse = await Api.requestLocList(savedCity.id, 1);
@@ -64,7 +63,10 @@ class HomeCubit extends Cubit<HomeState> {
     List<CategoryModel> formattedCategories =
         await formatCategoriesList(category, categoryCount, savedCity?.id);
 
-    await AppBloc.discoveryCubit.onLoad();
+    if (!calledExternally && !isRefreshLoader) {
+      await AppBloc.discoveryCubit.onLoad();
+    }
+
     emit(HomeStateLoaded(
       banner,
       formattedCategories,
