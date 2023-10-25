@@ -455,6 +455,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
               endTime: _endTime,
             );
         if (result) {
+          await AppBloc.homeCubit.onLoad(false);
           setState(() {
             isLoading = false;
           });
