@@ -328,8 +328,8 @@ class _SignInLoadedState extends State<SignInLoaded> {
     });
     if (_errorID == null && _errorPass == null) {
       AppBloc.loginCubit.onLogin(
-        username: _textIDController.text,
-        password: _textPassController.text,
+        username: _textIDController.text.trim(),
+        password: _textPassController.text.trim(),
       );
     }
   }
