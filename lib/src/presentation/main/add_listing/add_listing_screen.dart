@@ -715,14 +715,10 @@ class _AddListingScreenState extends State<AddListingScreen> {
                             menuMaxHeight: 200,
                             hint: Text(Translate.of(context)
                                 .translate('input_category')),
-                            value: selectedCategory ??
-                                Translate.of(context).translate(
-                                    _getCategoryTranslation(
-                                        listCategory.first['id'])),
+                            value: selectedCategory,
                             items: listCategory.map((category) {
                               return DropdownMenuItem(
-                                  value: Translate.of(context).translate(
-                                      _getCategoryTranslation(category['id'])),
+                                  value: category['name'],
                                   child: Text(Translate.of(context).translate(
                                       _getCategoryTranslation(
                                           category['id']))));
