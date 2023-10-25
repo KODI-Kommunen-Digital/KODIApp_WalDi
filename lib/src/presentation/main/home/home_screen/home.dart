@@ -12,6 +12,7 @@ import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
+import 'package:heidi/src/presentation/main/discovery/cubit/cubit.dart';
 import 'package:heidi/src/presentation/main/home/widget/home_category_item.dart';
 import 'package:heidi/src/presentation/main/home/widget/home_sliver_app_bar.dart';
 import 'package:heidi/src/presentation/widget/app_category_item.dart';
@@ -133,7 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedCityId = 0;
       });
     }
-    AppBloc.homeCubit.onLoad(false);
+    AppBloc.homeCubit.onLoad(true);
   }
 
   @override
@@ -188,9 +189,6 @@ class _HomeScreenState extends State<HomeScreen> {
               if (checkSavedCity) {
                 checkSavedCity = false;
                 _setSavedCity(location!);
-              } else if (AppBloc.homeCubit.getCalledExternally()) {
-                _setSavedCity(location!);
-                AppBloc.homeCubit.setCalledExternally(false);
               }
             }
           }
@@ -284,6 +282,32 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  void _showCitySelectionPopup(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Stadt Auswählen'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(Translate.of(context).translate('please_select_city')),
+              const SizedBox(height: 16),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Future<void> _onCategory(
       CategoryModel item, List<CategoryModel> listBuild) async {
     if (item.id == -1) {
@@ -331,13 +355,25 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     if (item.id != -1) {
-      final prefs = await Preferences.openBox();
-      prefs.setKeyValue(Preferences.categoryId, item.id);
-      prefs.setKeyValue(Preferences.categoryId, item.id);
-      prefs.setKeyValue(Preferences.type, "category");
-      if (!mounted) return;
-      Navigator.pushNamed(context, Routes.listProduct,
-          arguments: {'id': selectedCityId, 'title': ''});
+      if (item.id == 14) {
+        final cityId = await context.read<DiscoveryCubit>().getCitySelected();
+        if (cityId != 0) {
+          if (!mounted) return;
+          Navigator.pushNamed(context, Routes.listGroups,
+              arguments: {'id': item.id, 'title': 'Forum'});
+        } else {
+          if (!mounted) return;
+          _showCitySelectionPopup(context);
+        }
+      } else {
+        final prefs = await Preferences.openBox();
+        prefs.setKeyValue(Preferences.categoryId, item.id);
+        prefs.setKeyValue(Preferences.categoryId, item.id);
+        prefs.setKeyValue(Preferences.type, "category");
+        if (!mounted) return;
+        Navigator.pushNamed(context, Routes.listProduct,
+            arguments: {'id': selectedCityId, 'title': ''});
+      }
     } else if (item.id != -1 && !item.hasChild) {
       _onPopUpCatError();
     }
