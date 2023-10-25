@@ -487,8 +487,12 @@ class _AddListingScreenState extends State<AddListingScreen> {
     _errorTitle =
         UtilValidator.validate(_textTitleController.text, allowEmpty: false);
 
-    _errorContent =
-        UtilValidator.validate(_textContentController.text, allowEmpty: false);
+    if (_textContentController.text.length >= 10001) {
+      _errorContent = "Info should not exceed 1000 characters.";
+    } else {
+      _errorContent = UtilValidator.validate(_textContentController.text,
+          allowEmpty: false);
+    }
 
     logError('selectedCategory', selectedCategory);
     if (selectedCategory == "Events") {
@@ -710,14 +714,10 @@ class _AddListingScreenState extends State<AddListingScreen> {
                             menuMaxHeight: 200,
                             hint: Text(Translate.of(context)
                                 .translate('input_category')),
-                            value: selectedCategory ??
-                                Translate.of(context).translate(
-                                    _getCategoryTranslation(
-                                        listCategory.first['id'])),
+                            value: selectedCategory,
                             items: listCategory.map((category) {
                               return DropdownMenuItem(
-                                  value: Translate.of(context).translate(
-                                      _getCategoryTranslation(category['id'])),
+                                  value: category['name'],
                                   child: Text(Translate.of(context).translate(
                                       _getCategoryTranslation(
                                           category['id']))));

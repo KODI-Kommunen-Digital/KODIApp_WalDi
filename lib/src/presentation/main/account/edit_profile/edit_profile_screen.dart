@@ -68,7 +68,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         type: ValidateType.email,
       );
       _errorWebsite = UtilValidator.validate(_textWebsiteController.text);
-      _errorInfo = UtilValidator.validate(_textInfoController.text);
+      if (_textInfoController.text.length >= 1001) {
+        _errorInfo = "Info should not exceed 1000 characters.";
+      } else {
+        _errorInfo = UtilValidator.validate(_textInfoController.text);
+      }
     });
     if (_errorUName == null &&
         _errorFName == null &&

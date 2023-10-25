@@ -219,6 +219,5 @@ class _AccountLoadedState extends State<AccountLoaded> {
     Navigator.pushNamed(context, route).then((value) {
       setState(() {});
     });
-
   }
 }

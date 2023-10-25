@@ -39,25 +39,29 @@ class SignUpCubit extends Cubit<SignUpState> {
       return "Password must be at least 8 characters long.";
     }
 
-    if (!RegExp(r'[A-Z]').hasMatch(password)) {
-      return "Password must contain at least one uppercase letter.";
+    if (password.contains(' ')) {
+      return 'Password cannot contain spaces';
     }
 
-    if (!RegExp(r'[a-z]').hasMatch(password)) {
-      return "Password must contain at least one lowercase letter.";
-    }
-
-    if (!RegExp(r'[0-9]').hasMatch(password)) {
-      return "Password must contain at least one digit.";
-    }
-
-    if (!RegExp(r'[@#\$%&]').hasMatch(password)) {
-      return "At least one of the following special characters required.";
-    }
-
-    if (RegExp(r'[^a-zA-Z0-9@#\$%&]').hasMatch(password)) {
-      return "Password contains invalid characters.";
-    }
+    // if (!RegExp(r'[A-Z]').hasMatch(password)) {
+    //   return "Password must contain at least one uppercase letter.";
+    // }
+    //
+    // if (!RegExp(r'[a-z]').hasMatch(password)) {
+    //   return "Password must contain at least one lowercase letter.";
+    // }
+    //
+    // if (!RegExp(r'[0-9]').hasMatch(password)) {
+    //   return "Password must contain at least one digit.";
+    // }
+    //
+    // if (!RegExp(r'[@#\$%&]').hasMatch(password)) {
+    //   return "At least one of the following special characters required.";
+    // }
+    //
+    // if (RegExp(r'[^a-zA-Z0-9@#\$%&]').hasMatch(password)) {
+    //   return "Password contains invalid characters.";
+    // }
 
     return null; // Password is valid.
   }

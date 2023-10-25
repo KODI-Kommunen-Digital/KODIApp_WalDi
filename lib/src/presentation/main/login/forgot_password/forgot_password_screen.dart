@@ -29,6 +29,16 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     super.dispose();
   }
 
+  void _showSuccessSnackBar() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          Translate.of(context).translate("forgot_password_success"),
+        ),
+      ),
+    );
+  }
+
   ///Fetch API
   void _forgotPassword() async {
     Utils.hiddenKeyboard(context);
@@ -43,6 +53,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         textUserNameController.text,
       );
       if (result) {
+        _showSuccessSnackBar();
         if (!mounted) return;
         Navigator.pop(context);
       }

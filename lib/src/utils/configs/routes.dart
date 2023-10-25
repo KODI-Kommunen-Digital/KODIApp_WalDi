@@ -72,7 +72,6 @@ class Routes {
   static const String changePassword = "/changePassword";
   static const String changeLanguage = "/changeLanguage";
   static const String contactUs = "/contactUs";
-  static const String dashboard = "/dashboard";
   static const String aboutUs = "/aboutUs";
   static const String gallery = "/gallery";
   static const String themeSetting = "/themeSetting";
@@ -111,6 +110,7 @@ class Routes {
   static const String groupMembersDetails = "/groupMembersDetails";
   static const String memberRequestDetails = "/memberRequestDetails";
   static const String postDetails = "/postDetails";
+  static const String dashboard = "/dashboard";
   static const String addGroups = "/addGroup";
   static const String addPosts = "/addPosts";
   static const String myListings = "/myListings";
