@@ -196,7 +196,7 @@ class ListRepository {
             data['title'] ?? '',
             data['place'] ?? '',
             '',
-            data['Description'] ?? '',
+            data['description'] ?? '',
             data['media'] ?? '',
             data['categoryId'] ?? 0,
             data['subcategoryId'] ?? 0,
