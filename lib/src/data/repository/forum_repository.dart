@@ -192,6 +192,7 @@ class ForumRepository {
   }
 
   Future<ResultApiModel?> getMemberRequests(forumId, cityId) async {
+    // final cityId = prefs.getKeyValue(Preferences.cityId, 0);
     final response = await Api.getMemberRequests(forumId, cityId);
     if (response.success) {
       return response;
@@ -202,13 +203,14 @@ class ForumRepository {
   }
 
   Future<ResultApiModel?> acceptMemberRequests(
-      forumId,
-      memberRequestId,
-      cityId,
-      ) async {
+    forumId,
+    memberRequestId,
+    cityId,
+  ) async {
     Map<String, dynamic> params = {
       "accept": true,
     };
+    // final cityId = prefs.getKeyValue(Preferences.cityId, 0);
     final response = await Api.acceptMemberRequests(
         forumId, cityId, memberRequestId, params);
     if (response.success) {
@@ -226,6 +228,7 @@ class ForumRepository {
       "accept": false,
       "reason": reason,
     };
+    // final cityId = prefs.getKeyValue(Preferences.cityId, 0);
     final response = await Api.rejectMemberRequests(
         forumId, cityId, memberRequestId, params);
     if (response.success) {

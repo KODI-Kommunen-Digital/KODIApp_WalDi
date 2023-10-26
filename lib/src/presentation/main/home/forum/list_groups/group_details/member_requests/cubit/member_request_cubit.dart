@@ -16,7 +16,8 @@ class MembersRequestsCubit extends Cubit<MemberRequestState> {
 
   Future<void> onLoad() async {
     final memberRequestList = <MemberRequestModel>[];
-    final requestMemberRequestResponse = await repo.getMemberRequests(groupId, cityId);
+    final requestMemberRequestResponse =
+        await repo.getMemberRequests(groupId, cityId);
     if (requestMemberRequestResponse?.data != null) {
       for (final member in requestMemberRequestResponse!.data) {
         memberRequestList.add(MemberRequestModel(
@@ -38,11 +39,8 @@ class MembersRequestsCubit extends Cubit<MemberRequestState> {
   }
 
   Future<bool> acceptMemberRequests(memberRequestId) async {
-    final response = await repo.acceptMemberRequests(
-      groupId,
-      memberRequestId,
-      cityId
-    );
+    final response =
+        await repo.acceptMemberRequests(groupId, memberRequestId, cityId);
     if (response!.success) {
       return true;
     } else {
@@ -52,11 +50,7 @@ class MembersRequestsCubit extends Cubit<MemberRequestState> {
 
   Future<bool> rejectMemberRequests(memberRequestId, reason) async {
     final response = await repo.rejectMemberRequests(
-      groupId,
-      memberRequestId,
-      reason,
-      cityId
-    );
+        groupId, memberRequestId, reason, cityId);
     if (response!.success) {
       return true;
     } else {
