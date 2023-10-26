@@ -64,7 +64,9 @@ class HomeCubit extends Cubit<HomeState> {
     List<CategoryModel> formattedCategories =
         await formatCategoriesList(category, categoryCount, savedCity?.id);
 
-    await AppBloc.discoveryCubit.onLoad();
+    if (!calledExternally && !isRefreshLoader) {
+      await AppBloc.discoveryCubit.onLoad();
+    }
     emit(HomeStateLoaded(
       banner,
       formattedCategories,
