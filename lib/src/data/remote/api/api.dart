@@ -322,17 +322,11 @@ class Api {
   ///Save Product
   static Future<ResultApiModel> requestSaveProduct(cityId, params) async {
     final filePath = '/cities/$cityId/listings';
-    final prefs = await Preferences.openBox();
-    FormData? pickedFile = prefs.getPickedFile();
     final result = await HTTPManager(forum: false).post(
       url: filePath,
       data: params,
       loading: true,
     );
-    final id = result['id'];
-    if (pickedFile != null) {
-      Api.requestListingUploadMedia(id, cityId, pickedFile);
-    }
     return ResultApiModel.fromJson(result);
   }
 
@@ -387,18 +381,11 @@ class Api {
   static Future<ResultApiModel> requestEditProduct(
       cityId, listingId, params, bool isImageChanged) async {
     final filePath = '/cities/$cityId/listings/$listingId';
-    final prefs = await Preferences.openBox();
-    FormData? pickedFile = prefs.getPickedFile();
     final result = await HTTPManager(forum: false).patch(
       url: filePath,
       data: params,
       loading: true,
     );
-    if (isImageChanged) {
-      if (pickedFile!.files.isNotEmpty) {
-        await Api.requestListingUploadMedia(listingId, cityId, pickedFile);
-      }
-    }
     return ResultApiModel.fromJson(result);
   }
 
