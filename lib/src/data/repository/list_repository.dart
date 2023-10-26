@@ -273,7 +273,7 @@ class ListRepository {
   Future<ResultApiModel> loadSubCategory(value) async {
     final response = await Api.requestSubmitCategory();
     var jsonCategory = response.data;
-    final item = jsonCategory.firstWhere((item) => item['name'] == value.toLowerCase());
+    final item = jsonCategory.firstWhere((item) => item['name'] == value);
     final itemId = item['id'];
     final categoryId = itemId;
     final requestSubmitResponse =
@@ -367,6 +367,12 @@ class ListRepository {
     };
     final response = await Api.requestSaveProduct(cityId, params);
     if (response.success) {
+      final prefs = await Preferences.openBox();
+      FormData? pickedFile = prefs.getPickedFile();
+      final id = response.id;
+      if (pickedFile != null) {
+        await Api.requestListingUploadMedia(id, cityId, pickedFile);
+      }
       prefs.deleteKey('pickedFile');
     }
     return response;
@@ -457,6 +463,15 @@ class ListRepository {
     };
     final response =
         await Api.requestEditProduct(cityId, listingId, params, isImageChanged);
+    if(response.success){
+      final prefs = await Preferences.openBox();
+      FormData? pickedFile = prefs.getPickedFile();
+      if (isImageChanged) {
+        if (pickedFile!.files.isNotEmpty) {
+          await Api.requestListingUploadMedia(listingId, cityId, pickedFile);
+        }
+      }
+    }
     return response;
   }
 
@@ -498,7 +513,7 @@ class ListRepository {
   void setCategoryId(value) async {
     final response = await Api.requestSubmitCategory();
     var jsonCategory = response.data;
-    final item = jsonCategory.firstWhere((item) => item['name'] == value.toLowerCase());
+    final item = jsonCategory.firstWhere((item) => item['name'] == value);
     final itemId = item['id'];
     final categoryId = itemId;
     prefs.setKeyValue(Preferences.categoryId, categoryId);

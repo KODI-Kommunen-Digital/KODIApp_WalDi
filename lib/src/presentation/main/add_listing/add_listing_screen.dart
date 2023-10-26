@@ -88,6 +88,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
   String? selectedCategory;
   String? selectedSubCategory;
   bool isImageChanged = false;
+  bool isLoading = false;
 
   late int? currentCity;
 
@@ -155,7 +156,21 @@ class _AddListingScreenState extends State<AddListingScreen> {
           ],
         ),
         body: SafeArea(
-          child: _buildContent(),
+          child: Stack(
+            children: [
+              _buildContent(),
+              Visibility(
+                visible: isLoading,
+                child: Container(
+                  color: Colors.black.withOpacity(0.5), // Overlay background
+                  child: const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+              ),
+            ],
+          ),
+
         ),
       ),
     );
@@ -399,6 +414,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
               .read<AddListingCubit>()
               .deletePdf(widget.item?.cityId, widget.item?.id);
         }
+        setState(() {
+          isLoading = true;
+        });
         final result = await context.read<AddListingCubit>().onEdit(
             cityId: widget.item?.cityId,
             categoryId: widget.item!.categoryId,
@@ -418,9 +436,16 @@ class _AddListingScreenState extends State<AddListingScreen> {
             isImageChanged: isImageChanged,
             statusId: statusId);
         if (result) {
+          await AppBloc.homeCubit.onLoad(false);
+          setState(() {
+            isLoading = false;
+          });
           _onSuccess();
         }
       } else {
+        setState(() {
+          isLoading = true;
+        });
         final result = await context.read<AddListingCubit>().onSubmit(
             cityId: cityId ?? 1,
             title: _textTitleController.text,
@@ -437,6 +462,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
             endTime: _endTime);
         if (result) {
           await AppBloc.homeCubit.onLoad(false);
+          setState(() {
+            isLoading = false;
+          });
           _onSuccess();
           if (!mounted) return;
           context.read<AddListingCubit>().clearImagePath();
