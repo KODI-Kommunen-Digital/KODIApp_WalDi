@@ -201,7 +201,6 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                                     onTap: () async {
                                       String pdfURL = '${Application.picturesURL}${item.pdf}?cacheKey=$uniqueKey';
                                       await pdfService.downloadPDF(pdfURL, item.pdf);
-
                                       _onProductDetail(item);
                                     },
                                     child: Padding(
