@@ -10,6 +10,7 @@
   "my_account": "My Account",
   "options": "Options",
   "email_already_registered": "This email is already registered",
+  "username_already_registered": "This username already exists",
   "Choose_File_Type": "Choose File Type",
   "change_language": "Change Language",
   "dynamic_theme": "System Phone",

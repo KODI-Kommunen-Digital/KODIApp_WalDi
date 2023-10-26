@@ -116,6 +116,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
             ),
           );
+        } else if (result.message.contains('username')) {
+          if (!mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                Translate.of(context).translate("username_already_registered"),
+              ),
+            ),
+          );
         } else {
           _showErrorSnackBar(result.message);
         }

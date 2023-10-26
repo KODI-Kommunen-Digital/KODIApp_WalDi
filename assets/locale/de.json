@@ -394,6 +394,7 @@
   "categorization": "Kategorisierung",
   "category_coming_soon": "Diese Funktion wird in Kürze fertiggestellt. Durch die Kategorien hast du die Möglichkeit deine Interessen zu filtern. Es werden dir dann nur die relevanten Informationen angezeigt.",
   "email_already_registered": "Diese E-Mail ist bereits registriert",
+  "username_already_registered": "Diese Nutzername existiert bereits",
   "no_internet": "Keine Verbindung! Bitte verbinden Sie sich mit dem Internet.",
   "value_not_equal_password": "Passwort stimmt nicht überein",
   "register_fail": "Registrierung fehlgeschlagen",
