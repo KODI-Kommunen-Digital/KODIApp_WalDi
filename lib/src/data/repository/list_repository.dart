@@ -305,6 +305,7 @@ class ListRepository {
     String? endDate,
     TimeOfDay? startTime,
     TimeOfDay? endTime,
+    List<File>? imagesList,
   ) async {
     final subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
@@ -368,6 +369,10 @@ class ListRepository {
     final response = await Api.requestSaveProduct(cityId, params);
     if (response.success) {
       final prefs = await Preferences.openBox();
+
+      ///Todo: we need to remove this preference picked file and use the imageList from the parameter
+      ///and add in FormData to upload multiple images
+
       FormData? pickedFile = prefs.getPickedFile();
       final id = response.id;
       if (pickedFile != null) {
@@ -463,7 +468,7 @@ class ListRepository {
     };
     final response =
         await Api.requestEditProduct(cityId, listingId, params, isImageChanged);
-    if(response.success){
+    if (response.success) {
       final prefs = await Preferences.openBox();
       FormData? pickedFile = prefs.getPickedFile();
       if (isImageChanged) {

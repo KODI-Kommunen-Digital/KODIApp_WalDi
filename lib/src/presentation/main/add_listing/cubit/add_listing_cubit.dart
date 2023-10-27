@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model.dart';
@@ -47,6 +49,7 @@ class AddListingCubit extends Cubit<AddListingState> {
     String? price,
     TimeOfDay? startTime,
     TimeOfDay? endTime,
+    List<File>? imagesList,
   }) async {
     try {
       final response = await _repo.saveProduct(
@@ -67,7 +70,8 @@ class AddListingCubit extends Cubit<AddListingState> {
           startDate,
           endDate,
           startTime,
-          endTime);
+          endTime,
+          imagesList);
       if (response.success) {
         return true;
       } else {
