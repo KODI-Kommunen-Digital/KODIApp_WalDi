@@ -175,7 +175,8 @@ class _AppUploadImageState extends State<AppUploadImage> {
                     allowedExtensions: ['pdf'],
                   );
                   if (result != null) {
-                    _file = File('');
+                    _file = null;
+                    images.clear();
                     widget.onChange([]);
                     setState(() {
                       _file = File(result.files.single.path!);
@@ -199,12 +200,12 @@ class _AppUploadImageState extends State<AppUploadImage> {
                     if (await Permission.photos.isGranted ||
                         await Permission.photos.isLimited) {
                       status = PermissionStatus.granted;
+
                       await multipleImagePicker();
                       final profile = widget.profile;
                       if (!profile) {
                         if (_file != null) {
                           await ListRepository.uploadImage(_file!, profile);
-                          // widget.onChange(images);
                         }
                       } else {
                         final response =
@@ -459,6 +460,25 @@ class _AppUploadImageState extends State<AppUploadImage> {
               child: _buildContent(),
             ),
           ),
+          Visibility(
+            visible: _file != null,
+            child: Positioned(
+              top: -10,
+              right: -10,
+              child: IconButton(
+                icon:  Icon(
+                  Icons.delete,
+                  color: Colors.red[900],
+                ),
+                onPressed: () {
+                  setState(() {
+                    images.remove(images[0]);
+                    _file = null;
+                  });
+                },
+              ),
+            ),
+          ),
           Positioned.fill(child: circle),
         ],
       ),
@@ -472,8 +492,9 @@ class _AppUploadImageState extends State<AppUploadImage> {
     );
 
     if (result != null) {
-      images.clear();
+
       setState(() {
+        _file = null;
         images.addAll(result.paths.map((path) => File(path!)).toList());
         isImageUploaded = false;
         _file ??= File(images[0].path);

@@ -639,6 +639,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
                 onChange: (result) {
                   if (result.isNotEmpty) {
                     setState(() {
+                      selectedImages?.clear();
                       selectedImages?.addAll(result);
                     });
                   }
@@ -1240,12 +1241,12 @@ class _AddListingScreenState extends State<AddListingScreen> {
                   ),
                 ),
                 Positioned(
-                  top: 0,
-                  right: 0,
+                  top: -10,
+                  right: -10,
                   child: IconButton(
-                    icon: const Icon(
-                      Icons.close,
-                      color: Colors.black,
+                    icon:  Icon(
+                      Icons.delete,
+                      color: Colors.red[900],
                     ),
                     onPressed: () {
                       setState(() {
