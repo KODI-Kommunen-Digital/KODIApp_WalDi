@@ -59,6 +59,80 @@ class _AppUploadImageState extends State<AppUploadImage> {
     super.dispose();
   }
 
+  @override
+  Widget build(BuildContext context) {
+    DecorationImage? decorationImage;
+    BorderType borderType = BorderType.RRect;
+    Widget circle = Container();
+
+    if (widget.image != null && !widget.image!.contains(".pdf")) {
+      decorationImage = DecorationImage(
+        image: NetworkImage("${Application.picturesURL}${widget.image!}"),
+        fit: BoxFit.cover,
+      );
+    }
+
+    if (_file != null && !_file!.path.contains(".pdf")) {
+      decorationImage = DecorationImage(
+        image: FileImage(
+          _file!,
+        ),
+        fit: BoxFit.cover,
+      );
+    }
+
+    BoxDecoration decoration = BoxDecoration(
+      borderRadius: BorderRadius.circular(8),
+      image: decorationImage,
+    );
+
+    if (widget.type == UploadImageType.circle) {
+      borderType = BorderType.Circle;
+      decoration = BoxDecoration(
+        shape: BoxShape.circle,
+        image: decorationImage,
+      );
+    }
+
+    return InkWell(
+      onTap: widget.profile ? _uploadImage : showChooseFileTypeDialog,
+      child: Stack(
+        children: [
+          DottedBorder(
+            borderType: borderType,
+            radius: const Radius.circular(8),
+            color: Theme.of(context).primaryColor,
+            child: Container(
+              decoration: decoration,
+              alignment: Alignment.center,
+              child: _buildContent(),
+            ),
+          ),
+          Visibility(
+            visible: _file != null,
+            child: Positioned(
+              top: -10,
+              right: -10,
+              child: IconButton(
+                icon: Icon(
+                  Icons.delete,
+                  color: Colors.red[900],
+                ),
+                onPressed: () {
+                  setState(() {
+                    images.remove(images[0]);
+                    _file = null;
+                  });
+                },
+              ),
+            ),
+          ),
+          Positioned.fill(child: circle),
+        ],
+      ),
+    );
+  }
+
   Future<void> _uploadImage() async {
     Platform.isAndroid
         ? await Permission.storage.request()
@@ -286,9 +360,8 @@ class _AppUploadImageState extends State<AppUploadImage> {
                 AllowMultipleGestureRecognizer:
                     GestureRecognizerFactoryWithHandlers<
                         AllowMultipleGestureRecognizer>(
-                  () => AllowMultipleGestureRecognizer(), //constructor
+                  () => AllowMultipleGestureRecognizer(),
                   (AllowMultipleGestureRecognizer instance) {
-                    //initializer
                     instance.onTap = () => showChooseFileTypeDialog();
                   },
                 )
@@ -411,80 +484,6 @@ class _AppUploadImageState extends State<AppUploadImage> {
     return null;
   }
 
-  @override
-  Widget build(BuildContext context) {
-    DecorationImage? decorationImage;
-    BorderType borderType = BorderType.RRect;
-    Widget circle = Container();
-
-    if (widget.image != null && !widget.image!.contains(".pdf")) {
-      decorationImage = DecorationImage(
-        image: NetworkImage("${Application.picturesURL}${widget.image!}"),
-        fit: BoxFit.cover,
-      );
-    }
-
-    if (_file != null && !_file!.path.contains(".pdf")) {
-      decorationImage = DecorationImage(
-        image: FileImage(
-          _file!,
-        ),
-        fit: BoxFit.cover,
-      );
-    }
-
-    BoxDecoration decoration = BoxDecoration(
-      borderRadius: BorderRadius.circular(8),
-      image: decorationImage,
-    );
-
-    if (widget.type == UploadImageType.circle) {
-      borderType = BorderType.Circle;
-      decoration = BoxDecoration(
-        shape: BoxShape.circle,
-        image: decorationImage,
-      );
-    }
-
-    return InkWell(
-      onTap: widget.profile ? _uploadImage : showChooseFileTypeDialog,
-      child: Stack(
-        children: [
-          DottedBorder(
-            borderType: borderType,
-            radius: const Radius.circular(8),
-            color: Theme.of(context).primaryColor,
-            child: Container(
-              decoration: decoration,
-              alignment: Alignment.center,
-              child: _buildContent(),
-            ),
-          ),
-          Visibility(
-            visible: _file != null,
-            child: Positioned(
-              top: -10,
-              right: -10,
-              child: IconButton(
-                icon:  Icon(
-                  Icons.delete,
-                  color: Colors.red[900],
-                ),
-                onPressed: () {
-                  setState(() {
-                    images.remove(images[0]);
-                    _file = null;
-                  });
-                },
-              ),
-            ),
-          ),
-          Positioned.fill(child: circle),
-        ],
-      ),
-    );
-  }
-
   Future<void> multipleImagePicker() async {
     final result = await FilePicker.platform.pickFiles(
       allowMultiple: true,
@@ -492,7 +491,6 @@ class _AppUploadImageState extends State<AppUploadImage> {
     );
 
     if (result != null) {
-
       setState(() {
         _file = null;
         images.addAll(result.paths.map((path) => File(path!)).toList());
