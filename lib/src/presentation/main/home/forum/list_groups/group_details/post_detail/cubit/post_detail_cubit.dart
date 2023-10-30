@@ -13,8 +13,11 @@ class PostDetailCubit extends Cubit<PostDetailState> {
   final ForumRepository repo;
   final GroupPostsModel postDetail;
   final int cityId;
+  final int userId;
+  final bool isAdmin;
 
-  PostDetailCubit(this.repo, this.postDetail, this.cityId)
+  PostDetailCubit(
+      this.repo, this.postDetail, this.cityId, this.userId, this.isAdmin)
       : super(const PostDetailLoading()) {
     onLoad();
   }
@@ -25,7 +28,8 @@ class PostDetailCubit extends Cubit<PostDetailState> {
     if (userDetailResponse != null) {
       final user = await UserRepository.loadUser();
       final userImage = user!.image;
-      emit(PostDetailState.loaded(userDetailResponse, userImage));
+      emit(PostDetailState.loaded(
+          userDetailResponse, userImage, userId, isAdmin));
     } else {
       logError('User Detail Response Failed', userDetailResponse);
     }
@@ -105,6 +109,15 @@ class PostDetailCubit extends Cubit<PostDetailState> {
   Future<bool> reportGroupPosts(forumId, postId, reason) async {
     final response =
         await repo.reportGroupPosts(forumId, postId, reason, cityId);
+    if (response!.success) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> deleteGroupPost(forumId, postId) async {
+    final response = await repo.deleteGroupPost(forumId, cityId, postId);
     if (response!.success) {
       return true;
     } else {
