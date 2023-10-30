@@ -167,6 +167,16 @@ class ForumRepository {
     }
   }
 
+  Future<ResultApiModel?> deleteGroupPost(forumId, cityId, postId) async {
+    final response = await Api.deleteGroupPost(forumId, cityId, postId);
+    if (response.success) {
+      return response;
+    } else {
+      logError('Request Group Detail Response Failed', response.message);
+      return null;
+    }
+  }
+
   Future<ResultApiModel?> reportGroupPosts(
       forumId, postId, reason, cityId) async {
     // final cityId = prefs.getKeyValue(Preferences.cityId, 0);

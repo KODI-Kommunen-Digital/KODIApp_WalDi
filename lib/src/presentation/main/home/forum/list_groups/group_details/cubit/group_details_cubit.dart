@@ -78,7 +78,7 @@ class GroupDetailsCubit extends Cubit<GroupDetailsState> {
           groupMembersList.firstWhere((element) => element.userId == userId);
       isAdmin = groupMember.isAdmin == 1 ? true : false;
 
-      emit(GroupDetailsState.loaded(groupPostsList, group, isAdmin));
+      emit(GroupDetailsState.loaded(groupPostsList, group, isAdmin, userId));
     }
   }
 

@@ -28,8 +28,8 @@ class GroupDetailsScreen extends StatelessWidget {
       },
       builder: (context, state) => state.maybeWhen(
         loading: () => const GroupDetailsLoading(),
-        loaded: (posts, item, isAdmin) =>
-            GroupDetailsLoaded(posts, item, isAdmin),
+        loaded: (posts, item, isAdmin, userId) =>
+            GroupDetailsLoaded(posts, item, isAdmin, userId),
         orElse: () => ErrorWidget('Failed to load Accounts.'),
       ),
     );
@@ -51,8 +51,10 @@ class GroupDetailsLoaded extends StatefulWidget {
   final List<GroupPostsModel> posts;
   final ForumGroupModel groupModel;
   final bool isAdmin;
+  final int userId;
 
-  const GroupDetailsLoaded(this.posts, this.groupModel, this.isAdmin,
+  const GroupDetailsLoaded(
+      this.posts, this.groupModel, this.isAdmin, this.userId,
       {super.key});
 
   @override
@@ -151,11 +153,10 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                             Translate.of(context)
                                 .translate('member_requests')) {
                           Navigator.pushNamed(
-                              context, Routes.memberRequestDetails,
-                              arguments: {
-                                'groupId': widget.groupModel.id,
-                                'cityId': widget.groupModel.cityId
-                              });
+                              context, Routes.memberRequestDetails, arguments: {
+                            'groupId': widget.groupModel.id,
+                            'cityId': widget.groupModel.cityId
+                          });
                         } else if (choice ==
                             Translate.of(context).translate('delete_group')) {
                           showDeleteGroupConfirmation(context);
@@ -254,9 +255,14 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                             Routes.postDetails,
                             arguments: {
                               'item': widget.posts[index],
-                              'cityId': widget.groupModel.cityId
+                              'cityId': widget.groupModel.cityId,
+                              'userId': widget.userId,
+                              'isAdmin': widget.isAdmin,
                             },
-                          );
+                          ).then((value) async {
+                            await context.read<GroupDetailsCubit>().onLoad();
+                            setState(() {});
+                          });
                         },
                         child: Row(
                           children: <Widget>[
