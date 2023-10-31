@@ -414,9 +414,12 @@ class Routes {
                 settings.arguments as Map<String, dynamic>;
             final GroupPostsModel item = arguments['item'];
             final int cityId = arguments['cityId'] as int;
+            final int userId = arguments['userId'] as int;
+            final bool isAdmin = arguments['isAdmin'] as bool;
+
             return BlocProvider(
-              create: (context) =>
-                  PostDetailCubit(context.read(), item, cityId),
+              create: (context) => PostDetailCubit(
+                  context.read(), item, cityId, userId, isAdmin),
               child: PostDetailsScreen(item),
             );
           },

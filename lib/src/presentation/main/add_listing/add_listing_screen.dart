@@ -94,6 +94,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
   bool isLoading = false;
   List<File>? selectedImages = [];
 
+
   late int? currentCity;
 
   @override

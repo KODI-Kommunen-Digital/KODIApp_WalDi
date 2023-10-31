@@ -44,15 +44,17 @@ class AppProductItem extends StatelessWidget {
             if(item?.pdf != '') {
               String pdfURL =
                   '${Application.picturesURL}${item?.pdf}?cacheKey=$uniqueKey';
-              final pdfName = PDFService.extractPdfName(item?.pdf);
-              final fileExists = await pdfService.doesFileExist(pdfName);
-              if (fileExists == false) {
-                await pdfService.downloadPDF(pdfURL, item?.pdf);
-                onPressed!();
-              }
-              else {
-                onPressed!();
-              }
+              await pdfService.downloadPDF(pdfURL, item?.pdf);
+              onPressed!();
+              // final pdfName = PDFService.extractPdfName(item?.pdf);
+              // final fileExists = await pdfService.doesFileExist(pdfName);
+              // if (fileExists == false) {
+              //   await pdfService.downloadPDF(pdfURL, item?.pdf);
+              //   onPressed!();
+              // }
+              // else {
+              //   onPressed!();
+              // }
             }
             else{
               onPressed!();
@@ -197,15 +199,17 @@ class AppProductItem extends StatelessWidget {
             if(item?.pdf != '') {
               String pdfURL =
                   '${Application.picturesURL}${item?.pdf}?cacheKey=$uniqueKey';
-              final pdfName = PDFService.extractPdfName(item?.pdf);
-              final fileExists = await pdfService.doesFileExist(pdfName);
-              if (fileExists == false) {
-                await pdfService.downloadPDF(pdfURL, item?.pdf);
-                onPressed!();
-              }
-              else {
-                onPressed!();
-              }
+              await pdfService.downloadPDF(pdfURL, item?.pdf);
+              onPressed!();
+              // final pdfName = PDFService.extractPdfName(item?.pdf);
+              // final fileExists = await pdfService.doesFileExist(pdfName);
+              // if (fileExists == false) {
+              //   await pdfService.downloadPDF(pdfURL, item?.pdf);
+              //   onPressed!();
+              // }
+              // else {
+              //   onPressed!();
+              // }
             }
             else{
               onPressed!();
@@ -318,15 +322,17 @@ class AppProductItem extends StatelessWidget {
             if(item?.pdf != '') {
               String pdfURL =
                   '${Application.picturesURL}${item?.pdf}?cacheKey=$uniqueKey';
-              final pdfName = PDFService.extractPdfName(item?.pdf);
-              final fileExists = await pdfService.doesFileExist(pdfName);
-              if (fileExists == false) {
-                await pdfService.downloadPDF(pdfURL, item?.pdf);
-                onPressed!();
-              }
-              else {
-                onPressed!();
-              }
+              await pdfService.downloadPDF(pdfURL, item?.pdf);
+              onPressed!();
+              // final pdfName = PDFService.extractPdfName(item?.pdf);
+              // final fileExists = await pdfService.doesFileExist(pdfName);
+              // if (fileExists == false) {
+              //   await pdfService.downloadPDF(pdfURL, item?.pdf);
+              //   onPressed!();
+              // }
+              // else {
+              //   onPressed!();
+              // }
             }
             else{
               onPressed!();

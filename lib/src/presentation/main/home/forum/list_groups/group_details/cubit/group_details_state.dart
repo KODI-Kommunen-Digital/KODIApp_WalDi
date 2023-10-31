@@ -11,10 +11,11 @@ class GroupDetailsState with _$GroupDetailsState {
   const factory GroupDetailsState.loading() = GroupDetailsStateLoading;
 
   const factory GroupDetailsState.loaded(
-      List<GroupPostsModel> list,
-      ForumGroupModel arguments,
-      bool isAdmin,
-      ) = GroupDetailsStateLoaded;
+    List<GroupPostsModel> list,
+    ForumGroupModel arguments,
+    bool isAdmin,
+    int userId,
+  ) = GroupDetailsStateLoaded;
 
   const factory GroupDetailsState.error(String error) = GroupDetailsStateError;
 }

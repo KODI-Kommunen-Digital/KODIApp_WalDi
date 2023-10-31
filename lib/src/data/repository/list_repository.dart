@@ -369,10 +369,6 @@ class ListRepository {
     final response = await Api.requestSaveProduct(cityId, params);
     if (response.success) {
       final prefs = await Preferences.openBox();
-
-      ///Todo: we need to remove this preference picked file and use the imageList from the parameter
-      ///and add in FormData to upload multiple images
-
       FormData? pickedFile = prefs.getPickedFile();
       final id = response.id;
       if (pickedFile != null) {

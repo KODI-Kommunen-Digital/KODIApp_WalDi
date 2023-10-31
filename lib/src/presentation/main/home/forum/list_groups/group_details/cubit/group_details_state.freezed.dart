@@ -20,8 +20,8 @@ mixin _$GroupDetailsState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(
-            List<GroupPostsModel> list, ForumGroupModel arguments, bool isAdmin)
+    required TResult Function(List<GroupPostsModel> list,
+            ForumGroupModel arguments, bool isAdmin, int userId)
         loaded,
     required TResult Function(String error) error,
   }) =>
@@ -31,7 +31,7 @@ mixin _$GroupDetailsState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<GroupPostsModel> list, ForumGroupModel arguments,
-            bool isAdmin)?
+            bool isAdmin, int userId)?
         loaded,
     TResult? Function(String error)? error,
   }) =>
@@ -41,7 +41,7 @@ mixin _$GroupDetailsState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<GroupPostsModel> list, ForumGroupModel arguments,
-            bool isAdmin)?
+            bool isAdmin, int userId)?
         loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
@@ -133,8 +133,8 @@ class _$GroupDetailsStateInitial implements GroupDetailsStateInitial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(
-            List<GroupPostsModel> list, ForumGroupModel arguments, bool isAdmin)
+    required TResult Function(List<GroupPostsModel> list,
+            ForumGroupModel arguments, bool isAdmin, int userId)
         loaded,
     required TResult Function(String error) error,
   }) {
@@ -147,7 +147,7 @@ class _$GroupDetailsStateInitial implements GroupDetailsStateInitial {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<GroupPostsModel> list, ForumGroupModel arguments,
-            bool isAdmin)?
+            bool isAdmin, int userId)?
         loaded,
     TResult? Function(String error)? error,
   }) {
@@ -160,7 +160,7 @@ class _$GroupDetailsStateInitial implements GroupDetailsStateInitial {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<GroupPostsModel> list, ForumGroupModel arguments,
-            bool isAdmin)?
+            bool isAdmin, int userId)?
         loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
@@ -254,8 +254,8 @@ class _$GroupDetailsStateLoading implements GroupDetailsStateLoading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(
-            List<GroupPostsModel> list, ForumGroupModel arguments, bool isAdmin)
+    required TResult Function(List<GroupPostsModel> list,
+            ForumGroupModel arguments, bool isAdmin, int userId)
         loaded,
     required TResult Function(String error) error,
   }) {
@@ -268,7 +268,7 @@ class _$GroupDetailsStateLoading implements GroupDetailsStateLoading {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<GroupPostsModel> list, ForumGroupModel arguments,
-            bool isAdmin)?
+            bool isAdmin, int userId)?
         loaded,
     TResult? Function(String error)? error,
   }) {
@@ -281,7 +281,7 @@ class _$GroupDetailsStateLoading implements GroupDetailsStateLoading {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<GroupPostsModel> list, ForumGroupModel arguments,
-            bool isAdmin)?
+            bool isAdmin, int userId)?
         loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
@@ -341,7 +341,10 @@ abstract class _$$GroupDetailsStateLoadedCopyWith<$Res> {
       __$$GroupDetailsStateLoadedCopyWithImpl<$Res>;
   @useResult
   $Res call(
-      {List<GroupPostsModel> list, ForumGroupModel arguments, bool isAdmin});
+      {List<GroupPostsModel> list,
+      ForumGroupModel arguments,
+      bool isAdmin,
+      int userId});
 }
 
 /// @nodoc
@@ -358,6 +361,7 @@ class __$$GroupDetailsStateLoadedCopyWithImpl<$Res>
     Object? list = null,
     Object? arguments = null,
     Object? isAdmin = null,
+    Object? userId = null,
   }) {
     return _then(_$GroupDetailsStateLoaded(
       null == list
@@ -372,6 +376,10 @@ class __$$GroupDetailsStateLoadedCopyWithImpl<$Res>
           ? _value.isAdmin
           : isAdmin // ignore: cast_nullable_to_non_nullable
               as bool,
+      null == userId
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -379,8 +387,8 @@ class __$$GroupDetailsStateLoadedCopyWithImpl<$Res>
 /// @nodoc
 
 class _$GroupDetailsStateLoaded implements GroupDetailsStateLoaded {
-  const _$GroupDetailsStateLoaded(
-      final List<GroupPostsModel> list, this.arguments, this.isAdmin)
+  const _$GroupDetailsStateLoaded(final List<GroupPostsModel> list,
+      this.arguments, this.isAdmin, this.userId)
       : _list = list;
 
   final List<GroupPostsModel> _list;
@@ -395,10 +403,12 @@ class _$GroupDetailsStateLoaded implements GroupDetailsStateLoaded {
   final ForumGroupModel arguments;
   @override
   final bool isAdmin;
+  @override
+  final int userId;
 
   @override
   String toString() {
-    return 'GroupDetailsState.loaded(list: $list, arguments: $arguments, isAdmin: $isAdmin)';
+    return 'GroupDetailsState.loaded(list: $list, arguments: $arguments, isAdmin: $isAdmin, userId: $userId)';
   }
 
   @override
@@ -409,12 +419,13 @@ class _$GroupDetailsStateLoaded implements GroupDetailsStateLoaded {
             const DeepCollectionEquality().equals(other._list, _list) &&
             (identical(other.arguments, arguments) ||
                 other.arguments == arguments) &&
-            (identical(other.isAdmin, isAdmin) || other.isAdmin == isAdmin));
+            (identical(other.isAdmin, isAdmin) || other.isAdmin == isAdmin) &&
+            (identical(other.userId, userId) || other.userId == userId));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType,
-      const DeepCollectionEquality().hash(_list), arguments, isAdmin);
+      const DeepCollectionEquality().hash(_list), arguments, isAdmin, userId);
 
   @JsonKey(ignore: true)
   @override
@@ -428,12 +439,12 @@ class _$GroupDetailsStateLoaded implements GroupDetailsStateLoaded {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(
-            List<GroupPostsModel> list, ForumGroupModel arguments, bool isAdmin)
+    required TResult Function(List<GroupPostsModel> list,
+            ForumGroupModel arguments, bool isAdmin, int userId)
         loaded,
     required TResult Function(String error) error,
   }) {
-    return loaded(list, arguments, isAdmin);
+    return loaded(list, arguments, isAdmin, userId);
   }
 
   @override
@@ -442,11 +453,11 @@ class _$GroupDetailsStateLoaded implements GroupDetailsStateLoaded {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<GroupPostsModel> list, ForumGroupModel arguments,
-            bool isAdmin)?
+            bool isAdmin, int userId)?
         loaded,
     TResult? Function(String error)? error,
   }) {
-    return loaded?.call(list, arguments, isAdmin);
+    return loaded?.call(list, arguments, isAdmin, userId);
   }
 
   @override
@@ -455,13 +466,13 @@ class _$GroupDetailsStateLoaded implements GroupDetailsStateLoaded {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<GroupPostsModel> list, ForumGroupModel arguments,
-            bool isAdmin)?
+            bool isAdmin, int userId)?
         loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(list, arguments, isAdmin);
+      return loaded(list, arguments, isAdmin, userId);
     }
     return orElse();
   }
@@ -508,11 +519,13 @@ abstract class GroupDetailsStateLoaded implements GroupDetailsState {
   const factory GroupDetailsStateLoaded(
       final List<GroupPostsModel> list,
       final ForumGroupModel arguments,
-      final bool isAdmin) = _$GroupDetailsStateLoaded;
+      final bool isAdmin,
+      final int userId) = _$GroupDetailsStateLoaded;
 
   List<GroupPostsModel> get list;
   ForumGroupModel get arguments;
   bool get isAdmin;
+  int get userId;
   @JsonKey(ignore: true)
   _$$GroupDetailsStateLoadedCopyWith<_$GroupDetailsStateLoaded> get copyWith =>
       throw _privateConstructorUsedError;
@@ -585,8 +598,8 @@ class _$GroupDetailsStateError implements GroupDetailsStateError {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(
-            List<GroupPostsModel> list, ForumGroupModel arguments, bool isAdmin)
+    required TResult Function(List<GroupPostsModel> list,
+            ForumGroupModel arguments, bool isAdmin, int userId)
         loaded,
     required TResult Function(String error) error,
   }) {
@@ -599,7 +612,7 @@ class _$GroupDetailsStateError implements GroupDetailsStateError {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<GroupPostsModel> list, ForumGroupModel arguments,
-            bool isAdmin)?
+            bool isAdmin, int userId)?
         loaded,
     TResult? Function(String error)? error,
   }) {
@@ -612,7 +625,7 @@ class _$GroupDetailsStateError implements GroupDetailsStateError {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<GroupPostsModel> list, ForumGroupModel arguments,
-            bool isAdmin)?
+            bool isAdmin, int userId)?
         loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
