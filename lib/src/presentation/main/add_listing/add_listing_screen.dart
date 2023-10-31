@@ -1250,6 +1250,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
                     ),
                     onPressed: () {
                       setState(() {
+                        context.read<AddListingCubit>().removeAssets(index + 1);
                         selectedImages?.remove(selectedImages?[index + 1]);
                       });
                     },

@@ -9,9 +9,11 @@ import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/presentation/main/add_listing/cubit/add_listing_state.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
+import 'package:multiple_images_picker/multiple_images_picker.dart';
 
 class AddListingCubit extends Cubit<AddListingState> {
   final ListRepository _repo;
+  List<Asset> selectedAssets = [];
 
   AddListingCubit(this._repo) : super(const AddListingState.loaded());
 
@@ -219,6 +221,22 @@ class AddListingCubit extends Cubit<AddListingState> {
     } catch (e) {
       logError('request subCategoryID Error', e);
     }
+  }
+
+  void saveAssets(assetList){
+    selectedAssets = assetList;
+  }
+
+  void removeAssets(index){
+    selectedAssets.removeAt(index);
+  }
+
+  void clearAssets(){
+    selectedAssets.clear();
+  }
+
+  List<Asset> getSelectedAssets(){
+    return selectedAssets;
   }
 
   Future<ResultApiModel?> loadSubCategory(value) async {

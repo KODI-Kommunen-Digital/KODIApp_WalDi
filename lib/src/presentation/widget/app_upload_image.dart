@@ -4,15 +4,20 @@ import 'package:device_info/device_info.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:heidi/src/data/repository/forum_repository.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
+import 'package:heidi/src/presentation/main/add_listing/cubit/add_listing_cubit.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/multiple_gesture_detector.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:multiple_images_picker/multiple_images_picker.dart';
 import 'package:loggy/loggy.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 enum UploadImageType { circle, square }
@@ -48,6 +53,9 @@ class _AppUploadImageState extends State<AppUploadImage> {
   String title = '';
   bool isPermanentlyDenied = false;
   List<File> images = [];
+  List<Asset> resultList = <Asset>[];
+  List<File> selectedFiles = [];
+  List<Asset> selectedAssets = [];
 
   @override
   void initState() {
@@ -95,7 +103,11 @@ class _AppUploadImageState extends State<AppUploadImage> {
     }
 
     return InkWell(
-      onTap: widget.profile ? _uploadImage : showChooseFileTypeDialog,
+      onTap: widget.profile
+          ? _uploadImage
+          : images.length > 1
+              ? selectImages
+              : showChooseFileTypeDialog,
       child: Stack(
         children: [
           DottedBorder(
@@ -109,7 +121,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
             ),
           ),
           Visibility(
-            visible: _file != null,
+            visible: images.isNotEmpty,
             child: Positioned(
               top: -10,
               right: -10,
@@ -121,6 +133,8 @@ class _AppUploadImageState extends State<AppUploadImage> {
                 onPressed: () {
                   setState(() {
                     images.remove(images[0]);
+                    context.read<AddListingCubit>().removeAssets(0);
+                    // selectedAssets.remove(selectedAssets[0]);
                     _file = null;
                   });
                 },
@@ -249,13 +263,17 @@ class _AppUploadImageState extends State<AppUploadImage> {
                     allowedExtensions: ['pdf'],
                   );
                   if (result != null) {
-                    _file = null;
-                    images.clear();
                     widget.onChange([]);
                     setState(() {
+                      _file = null;
+                      images.clear();
                       _file = File(result.files.single.path!);
                       isImageUploaded = false;
+                      selectedAssets.clear();
                     });
+                    if(!mounted) return;
+                    context.read<AddListingCubit>().clearAssets();
+
                     final profile = widget.profile;
                     if (!profile) {
                       await ListRepository.uploadPdf(_file!);
@@ -275,7 +293,12 @@ class _AppUploadImageState extends State<AppUploadImage> {
                         await Permission.photos.isLimited) {
                       status = PermissionStatus.granted;
 
-                      await multipleImagePicker();
+                      // await multipleImagePicker();
+                      setState(() {
+                        selectedAssets =
+                            context.read<AddListingCubit>().getSelectedAssets();
+                      });
+                      await selectImages();
                       final profile = widget.profile;
                       if (!profile) {
                         if (_file != null) {
@@ -498,6 +521,59 @@ class _AppUploadImageState extends State<AppUploadImage> {
         _file ??= File(images[0].path);
       });
       widget.onChange(images);
+    }
+  }
+
+  Future<void> selectImages() async {
+    try {
+      if (!mounted) return;
+      setState(() {
+        selectedAssets = context.read<AddListingCubit>().getSelectedAssets();
+      });
+      if (!mounted) return;
+      resultList = await MultipleImagesPicker.pickImages(
+        maxImages: 300,
+        // enableCamera: true,
+        selectedAssets: selectedAssets,
+        // cupertinoOptions: CupertinoOptions(takePhotoIcon: "chat"),
+        // materialOptions: MaterialOptions(
+        //   actionBarColor: "#abcdef",
+        //   actionBarTitle: "Example App",
+        //   allViewTitle: "All Photos",
+        //   useDetailsView: false,
+        //   selectCircleStrokeColor: "#000000",
+        // ),
+      );
+      if (resultList.isNotEmpty) {
+        if (!mounted) return;
+        context.read<AddListingCubit>().clearAssets();
+        images.clear();
+        context.read<AddListingCubit>().saveAssets(resultList);
+
+        for (Asset asset in resultList) {
+          final ByteData byteData = await asset.getByteData();
+          final List<int> imageData = byteData.buffer.asUint8List();
+          final tempDir = await getTemporaryDirectory();
+          final filePath = '${tempDir.path}/${asset.name}';
+
+          final imageFile = File(filePath);
+          await imageFile.writeAsBytes(imageData);
+
+          setState(() {
+            _file = null;
+            // images.addAll(result.paths.map((path) => File(path!)).toList());
+            // isImageUploaded = false;
+            images.add(imageFile);
+            _file ??= File(images[0].path);
+            widget.onChange(images);
+            context.read<AddListingCubit>().saveAssets(resultList);
+            selectedAssets =
+                context.read<AddListingCubit>().getSelectedAssets();
+          });
+        }
+      }
+     } on Exception catch (e) {
+      logError('Error Selecting Multiple Images', e);
     }
   }
 }
