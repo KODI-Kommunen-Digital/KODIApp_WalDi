@@ -134,9 +134,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
                   setState(() {
                     images.remove(images[0]);
                     context.read<AddListingCubit>().removeAssets(0);
-                    // selectedAssets = context.read<AddListingCubit>().getSelectedAssets();
-                    // selectedAssets.remove(selectedAssets[0]);
-                    _file = null;
+                     _file = null;
                   });
                 },
               ),
@@ -294,7 +292,6 @@ class _AppUploadImageState extends State<AppUploadImage> {
                         await Permission.photos.isLimited) {
                       status = PermissionStatus.granted;
 
-                      // await multipleImagePicker();
                       setState(() {
                         selectedAssets =
                             context.read<AddListingCubit>().getSelectedAssets();
@@ -534,16 +531,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
       if (!mounted) return;
       resultList = await MultipleImagesPicker.pickImages(
         maxImages: 300,
-        // enableCamera: true,
         selectedAssets: selectedAssets,
-        // cupertinoOptions: CupertinoOptions(takePhotoIcon: "chat"),
-        // materialOptions: MaterialOptions(
-        //   actionBarColor: "#abcdef",
-        //   actionBarTitle: "Example App",
-        //   allViewTitle: "All Photos",
-        //   useDetailsView: false,
-        //   selectCircleStrokeColor: "#000000",
-        // ),
       );
       if (resultList.isNotEmpty) {
         if (!mounted) return;
@@ -562,8 +550,6 @@ class _AppUploadImageState extends State<AppUploadImage> {
 
           setState(() {
             _file = null;
-            // images.addAll(result.paths.map((path) => File(path!)).toList());
-            // isImageUploaded = false;
             images.add(imageFile);
             _file ??= File(images[0].path);
             widget.onChange(images);
