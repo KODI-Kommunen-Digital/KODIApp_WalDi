@@ -105,7 +105,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
     return InkWell(
       onTap: widget.profile
           ? _uploadImage
-          : images.length > 1
+          : selectedAssets.length > 1
               ? selectImages
               : showChooseFileTypeDialog,
       child: Stack(
@@ -121,7 +121,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
             ),
           ),
           Visibility(
-            visible: images.isNotEmpty,
+            visible: selectedAssets.length > 1,
             child: Positioned(
               top: -10,
               right: -10,
@@ -134,6 +134,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
                   setState(() {
                     images.remove(images[0]);
                     context.read<AddListingCubit>().removeAssets(0);
+                    // selectedAssets = context.read<AddListingCubit>().getSelectedAssets();
                     // selectedAssets.remove(selectedAssets[0]);
                     _file = null;
                   });
