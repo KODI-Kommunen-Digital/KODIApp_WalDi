@@ -85,7 +85,7 @@
         },
         {
             "id": 13,
-            "name": "Essen & Trinken",
+            "name": "Essen",
             "noOfSubcategories": 0,
             "icon": "fas fa-mug-hot",
             "color": "#58d68d",
