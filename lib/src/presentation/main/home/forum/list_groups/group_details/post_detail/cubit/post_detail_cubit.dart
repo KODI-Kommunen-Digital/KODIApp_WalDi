@@ -24,7 +24,7 @@ class PostDetailCubit extends Cubit<PostDetailState> {
 
   void onLoad() async {
     final userDetailResponse =
-        await UserRepository.requestUserDetails(postDetail.userId);
+        await UserRepository.getUserDetails(postDetail.userId, cityId);
     if (userDetailResponse != null) {
       final user = await UserRepository.loadUser();
       final userImage = user!.image;
