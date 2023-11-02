@@ -111,8 +111,8 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                 },
                 child: Image.network(
                   widget.groupModel.image != null
-                      ? "${Application.picturesURL}${widget.groupModel.image}"
-                      : "${Application.picturesURL}admin/DefaultForum.jpeg",
+                      ? "${Application.picturesURL}${widget.groupModel.image}?cacheKey=$uniqueKey"
+                      : "${Application.picturesURL}admin/DefaultForum.jpeg?cacheKey=$uniqueKey",
                   fit: BoxFit.cover,
                 ),
               ),

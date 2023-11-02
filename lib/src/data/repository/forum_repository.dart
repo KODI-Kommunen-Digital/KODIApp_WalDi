@@ -461,6 +461,12 @@ class ForumRepository {
     };
     final response = await Api.requestSavePost(cityId, forumId, params);
     if (response.success) {
+      final postId = response.id;
+      final prefs = await Preferences.openBox();
+      FormData? pickedFile = prefs.getPickedFile();
+      if (pickedFile != null) {
+        await Api.requestPostImageUpload(cityId, forumId, postId, pickedFile);
+      }
       prefs.deleteKey('pickedFile');
     }
     return response;

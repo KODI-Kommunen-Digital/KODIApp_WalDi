@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:dio/dio.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/remote/api/http_manager.dart';
 import 'package:heidi/src/utils/asset.dart';
@@ -371,17 +370,11 @@ class Api {
   ///Save Post
   static Future<ResultApiModel> requestSavePost(cityId, fId, params) async {
     final filePath = '/cities/$cityId/forums/$fId/posts';
-    final prefs = await Preferences.openBox();
-    FormData? pickedFile = prefs.getPickedFile();
     final result = await HTTPManager(forum: true).post(
       url: filePath,
       data: params,
       loading: true,
     );
-    final postId = result['id'];
-    if (pickedFile != null) {
-      Api.requestPostImageUpload(cityId, fId, postId, pickedFile);
-    }
     return ResultApiModel.fromJson(result);
   }
 
