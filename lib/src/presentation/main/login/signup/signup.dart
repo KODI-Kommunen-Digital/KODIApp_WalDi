@@ -116,6 +116,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
             ),
           );
+        } else if (result.message.contains('username')) {
+          if (!mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                Translate.of(context).translate("username_already_registered"),
+              ),
+            ),
+          );
+        } else {
+          _showErrorSnackBar(result.message);
         }
       }
     } else {
@@ -354,9 +365,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  void _showErrorSnackBar() {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(Translate.of(context).translate("register_fail"))));
+  void _showErrorSnackBar([String? message]) {
+    final translatedMessage = message?.isNotEmpty == true
+        ? message
+        : Translate.of(context).translate("register_fail");
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(translatedMessage!),
+      ),
+    );
   }
 
   void setPasswordListener() {
