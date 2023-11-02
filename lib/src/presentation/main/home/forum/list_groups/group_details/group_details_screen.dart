@@ -41,9 +41,7 @@ class GroupDetailsLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: CircularProgressIndicator.adaptive(),
-    );
+    return Container();
   }
 }
 
