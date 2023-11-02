@@ -8,7 +8,10 @@ import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/cubit/cubit.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/pdf_downloader.dart';
+import 'package:loggy/loggy.dart';
 import 'package:path_provider/path_provider.dart';
+
+import '../../../../../data/remote/api/api.dart';
 
 class ProductDetailCubit extends Cubit<ProductDetailState> {
   ProductDetailCubit() : super(const ProductDetailLoading());
@@ -19,6 +22,7 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
 
   void onLoad(ProductModel item) async {
     final int userId = await UserRepository.getLoggedUserId();
+    final cityList = await getCityList() ?? [];
     bool isLoggedIn = false;
     if (userId == 0) {
       isLoggedIn = false;
@@ -47,16 +51,42 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
             }
           }
           emit(ProductDetailLoaded(
-              product!, favoritesList, userDetail, isLoggedIn, pdfPath));
+              product!, favoritesList, userDetail, isLoggedIn, pdfPath, cityList));
         } else {
           emit(ProductDetailLoaded(
-              product!, null, userDetail, isLoggedIn, pdfPath));
+              product!, null, userDetail, isLoggedIn, pdfPath, cityList));
         }
       }
     } else {
       isFavorite = true;
-      emit(ProductDetailLoaded(item, null, userDetail, isLoggedIn, pdfPath));
+      emit(ProductDetailLoaded(item, null, userDetail, isLoggedIn, pdfPath, cityList));
     }
+  }
+
+  Future<List?> getCityList() async {
+    ResultApiModel? loadCitiesResponse;
+    try {
+      loadCitiesResponse = await loadCities();
+    } catch (e) {
+      logError('load cities error', e.toString());
+      return null;
+    }
+
+    List listCity = loadCitiesResponse.data;
+    return listCity;
+  }
+
+  String getCityNameFromId(List listCity, int cityId) {
+    if (listCity.isNotEmpty) {
+      final city = listCity.firstWhere((cityData) => cityData["id"] == cityId);
+      return city["name"];
+    }
+    return "";
+  }
+
+  Future<ResultApiModel> loadCities() async {
+    final response = await Api.requestSubmitCities();
+    return response;
   }
 
   bool getFavoriteIconValue() => isFavorite;

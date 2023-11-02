@@ -16,7 +16,8 @@ class ProductDetailState with _$ProductDetailState {
       List<FavoriteModel>? favoritesList,
       UserModel? userDetail,
       bool isLoggedIn,
-      String pdfPath) = ProductDetailLoaded;
+      String pdfPath,
+      List cityList) = ProductDetailLoaded;
 
   const factory ProductDetailState.error(String error) = ProductDetailError;
 }
