@@ -165,6 +165,15 @@ class HomeCubit extends Cubit<HomeState> {
     return null;
   }
 
+  String getCityName(List<CategoryModel>? cities, int cityId) {
+    if (cities != null) {
+      String name =
+          cities[cities.indexWhere((category) => category.id == cityId)].title;
+      return name;
+    }
+    return "";
+  }
+
   List<CategoryModel> getCategoriesWithoutHidden(
       List<CategoryModel> categoryList) {
     List<CategoryModel> noHiddenCategoryList = [];

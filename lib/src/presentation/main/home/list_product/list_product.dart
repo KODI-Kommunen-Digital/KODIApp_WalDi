@@ -212,13 +212,15 @@ class _ListProductScreenState extends State<ListProductScreen> {
           },
           builder: (context, state) => state.when(
             loading: () => const ListLoading(),
-            loaded: (list) => ListLoaded(
+            loaded: (list, listCity) => ListLoaded(
               list: list,
+              listCity: listCity,
               selectedId: widget.arguments['id'],
             ),
-            updated: (list) {
+            updated: (list, listCity) {
               return ListLoaded(
                 list: list,
+                listCity: listCity,
                 selectedId: widget.arguments['id'],
               );
             },
@@ -246,12 +248,14 @@ class ListLoading extends StatelessWidget {
 
 class ListLoaded extends StatefulWidget {
   final List<ProductModel> list;
+  final List listCity;
   final int selectedId;
 
   const ListLoaded({
     Key? key,
     required this.list,
     required this.selectedId,
+    required this.listCity
   }) : super(key: key);
 
   @override
@@ -259,6 +263,7 @@ class ListLoaded extends StatefulWidget {
 }
 
 class _ListLoadedState extends State<ListLoaded> {
+  List listCity = [];
   List<ProductModel> list = [];
   final _scrollController = ScrollController(initialScrollOffset: 0.0);
   bool isLoading = false;
@@ -404,6 +409,7 @@ class _ListLoadedState extends State<ListLoaded> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: AppProductItem(
               isRefreshLoader: true,
+              cityName: context.read<ListCubit>().getCityNameFromId(widget.listCity, item.cityId ?? 0),
               onPressed: () {
                 _onProductDetail(item);
               },
