@@ -199,9 +199,9 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                                       item.id.toString() + isSwiped.toString()),
                                   child: InkWell(
                                     onTap: () async {
-                                      String pdfURL =
-                                          '${Application.picturesURL}${item.pdf}?cacheKey=$uniqueKey';
-                                      await pdfService.downloadPDF(pdfURL, item.pdf);
+                                      // String pdfURL =
+                                      //     '${Application.picturesURL}${item.pdf}?cacheKey=$uniqueKey';
+                                      // await pdfService.downloadPDF(pdfURL, item.pdf);
 
                                       _onProductDetail(item);
                                     },
