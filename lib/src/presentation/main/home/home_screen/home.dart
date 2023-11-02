@@ -287,7 +287,7 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Stadt Auswählen'),
+          title: Text(Translate.of(context).translate('input_city')),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
