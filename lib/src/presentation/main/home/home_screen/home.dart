@@ -256,7 +256,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       category ?? []),
                                 ),
                           _buildLocation(location),
-                          _buildRecent(recent, selectedCityId),
+                          _buildRecent(recent, selectedCityId, location),
                           if (isLoading)
                             const CircularProgressIndicator.adaptive(),
                           const SizedBox(height: 50),
@@ -583,7 +583,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildRecent(List<ProductModel>? recent, int selectedCity) {
+  Widget _buildRecent(List<ProductModel>? recent, int selectedCity, List<CategoryModel>? cities) {
     Widget content = ListView.builder(
       padding: const EdgeInsets.all(0),
       shrinkWrap: true,
@@ -617,6 +617,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       item: item,
                       type: ProductViewType.small,
                       isRefreshLoader: isRefreshLoader,
+                      cityName: AppBloc.homeCubit.getCityName(cities, item.cityId ?? 0),
                     ),
                   ),
                 )
@@ -629,6 +630,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     isRefreshLoader: isRefreshLoader,
                     item: item,
                     type: ProductViewType.small,
+                    cityName: AppBloc.homeCubit.getCityName(cities, item.cityId ?? 0),
                   ),
                 );
         },

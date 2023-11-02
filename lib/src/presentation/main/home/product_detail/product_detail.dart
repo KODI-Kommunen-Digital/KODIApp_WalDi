@@ -181,7 +181,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   ///Build content UI
   Widget _buildContent(ProductModel? product, List<FavoriteModel>? favoriteList,
-      UserModel? userDetail, bool isLoggedIn, String pdfPath) {
+      UserModel? userDetail, bool isLoggedIn, String pdfPath, List cityList) {
     String uniqueKey = UniqueKey().toString();
     List<Widget> action = [];
     Widget actionGalleries = Container();
@@ -197,6 +197,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     Widget fax = Container();
     Widget email = Container();
     Widget website = Container();
+    Widget cityName = Container();
     Widget startDate = Container();
     Widget endDate = Container();
     Widget openHours = Container();
@@ -551,6 +552,20 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         );
       }
 
+      if (product.categoryId == 3 &&
+          cityList.isNotEmpty &&
+          widget.item.cityId != null &&
+          widget.item.cityId != 0) {
+        cityName = Text(
+            "${Translate.of(context).translate("city")}: ${context.read<ProductDetailCubit>().getCityNameFromId(cityList, widget.item.cityId!)}",
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(context)
+                .textTheme
+                .bodySmall!
+                .copyWith(fontWeight: FontWeight.bold));
+      }
+
       if (product.phone.isNotEmpty) {
         phone = Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -869,6 +884,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               ],
             ),
             createdDate,
+            cityName,
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -993,15 +1009,17 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             UserModel? userDetail;
             bool isLoggedIn = false;
             String pdfPath = '';
+            List cityList = [];
             if (state is ProductDetailLoaded) {
               product = state.product;
               favoriteList = state.favoritesList;
               isLoggedIn = state.isLoggedIn;
               userDetail = state.userDetail;
               pdfPath = state.pdfPath;
+              cityList = state.cityList;
             }
-            return _buildContent(
-                product, favoriteList, userDetail, isLoggedIn, pdfPath);
+            return _buildContent(product, favoriteList, userDetail, isLoggedIn,
+                pdfPath, cityList);
           },
         ),
       ),
