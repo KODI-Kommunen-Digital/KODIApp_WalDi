@@ -152,8 +152,7 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
             type: selectedPrivacy);
         if (result) {
           if (!mounted) return;
-          _onSuccess();
-
+          Navigator.pop(context);
         }
       } else {
         final result = await context.read<AddGroupCubit>().onEditForum(
@@ -166,17 +165,10 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
             widget.item!.createdAt);
         if (result) {
           if (!mounted) return;
-          _onSuccess();
+          Navigator.pop(context);
         }
       }
     }
-  }
-
-  void _onSuccess() {
-    Navigator.pop(context);
-    // if (widget.isNewGroup) {
-    //   Navigator.pushNamed(context, Routes.submitSuccess);
-    // }
   }
 
   bool _validData() {

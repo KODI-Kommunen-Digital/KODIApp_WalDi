@@ -135,7 +135,11 @@ class ForumRepository {
     }
   }
 
-  Future<ResultApiModel?> requestGroupDetails(forumId, cityId) async {
+  Future<ResultApiModel?> requestGroupDetails(forumId) async {
+    int cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    if (cityId == 0) {
+      cityId = 1;
+    }
     final response = await Api.requestGroupDetails(forumId, cityId);
     if (response.success) {
       return response;

@@ -26,7 +26,7 @@ class GroupDetailsCubit extends Cubit<GroupDetailsState> {
     final requestGroupPostResponse =
         await repo.requestGroupPosts(arguments.id, arguments.cityId);
     final requestGroupDetailResponse =
-        await repo.requestGroupDetails(arguments.id, arguments.cityId);
+        await repo.requestGroupDetails(arguments.id);
     final response = requestGroupDetailResponse!.data;
     final group = ForumGroupModel(
       id: response['id'],
