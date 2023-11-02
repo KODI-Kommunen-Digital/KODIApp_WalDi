@@ -81,7 +81,7 @@ class CommentInputWidgetState extends State<CommentInputWidget> {
         children: [
           CircleAvatar(
             backgroundImage: NetworkImage(
-              (widget.userImage == "")
+              (widget.userImage == "" || widget.userImage == "Keine Angabe")
                   ? Application.defaultPicturesURL
                   : "${Application.picturesURL}${widget.userImage}",
             ),
