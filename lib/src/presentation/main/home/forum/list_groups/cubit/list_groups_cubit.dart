@@ -100,6 +100,47 @@ class ListGroupsCubit extends Cubit<ListGroupsState> {
     }
   }
 
+  Future<List<ForumGroupModel>> newListings(int pageNo) async {
+    final result = await repo.loadForumsList(
+      pageNo: pageNo,
+    );
+
+    if (result != null) {
+      groupsList = result[1];
+      pagination = result[2];
+      userJoinedGroupsList = result[3];
+      requestMemberList = result[4];
+
+      for (final list in groupsList) {
+        bool joined =
+            userJoinedGroupsList.any((element) => element.forumId == list.id);
+        bool requested =
+            requestMemberList.any((element) => element.forumId == list.id);
+
+        int? cityId = 0;
+        for (final userGroup in userJoinedGroupsList) {
+          if (userGroup.forumId == list.id) {
+            cityId = userGroup.cityId;
+          }
+        }
+
+        listLoaded.add(ForumGroupModel(
+            id: list.id,
+            forumName: list.forumName,
+            createdAt: list.createdAt,
+            description: list.description,
+            image: list.image,
+            isPrivate: list.isPrivate,
+            cityId: cityId,
+            isJoined: joined,
+            isRequested: requested));
+      }
+
+      return listLoaded;
+    }
+    return listLoaded;
+  }
+
   Future<int> getLoggedInUserId() async {
     // final prefs = await Preferences.openBox();
     // final userId = prefs.getKeyValue(Preferences.userId, 0);
