@@ -41,7 +41,7 @@ class ForumRepository {
     }
 
     if (hasForumFlag) {
-      final requestForumResponse = await Api.requestForum(cityId);
+      final requestForumResponse = await Api.requestForum(cityId, pageNo);
       if (requestForumResponse.success) {
         final groupList =
             List.from(requestForumResponse.data ?? []).map((item) {
@@ -195,7 +195,8 @@ class ForumRepository {
     }
   }
 
-  Future<ResultApiModel?> getGroupMembers(forumId, cityId) async {
+  Future<ResultApiModel?> getGroupMembers(forumId) async {
+    final cityId = prefs.getKeyValue(Preferences.cityId, 0);
     final response = await Api.getGroupMembers(forumId, cityId);
     if (response.success) {
       return response;

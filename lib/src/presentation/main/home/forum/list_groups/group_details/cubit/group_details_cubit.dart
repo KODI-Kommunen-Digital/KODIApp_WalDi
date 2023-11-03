@@ -56,9 +56,11 @@ class GroupDetailsCubit extends Cubit<GroupDetailsState> {
           isHidden: post['isHidden'],
         ));
       }
+    }
 
-      final requestGroupMembersResponse =
-          await repo.getGroupMembers(group.id, group.cityId);
+    final userId = await UserRepository.getLoggedUserId();
+    final requestGroupMembersResponse =
+          await repo.getGroupMembers(group.id);
       if (requestGroupMembersResponse?.data != null) {
         for (final member in requestGroupMembersResponse!.data) {
           groupMembersList.add(GroupMembersModel(
@@ -72,14 +74,12 @@ class GroupDetailsCubit extends Cubit<GroupDetailsState> {
             joinedAt: member['joinedAt'],
           ));
         }
+        GroupMembersModel groupMember =
+        groupMembersList.firstWhere((element) => element.userId == userId);
+        isAdmin = groupMember.isAdmin == 1 ? true : false;
       }
-      final userId = await UserRepository.getLoggedUserId();
-      GroupMembersModel groupMember =
-          groupMembersList.firstWhere((element) => element.userId == userId);
-      isAdmin = groupMember.isAdmin == 1 ? true : false;
-
       emit(GroupDetailsState.loaded(groupPostsList, group, isAdmin, userId));
-    }
+
   }
 
   Future<void> requestDeleteGroup(forumId, cityId) async {
@@ -90,7 +90,7 @@ class GroupDetailsCubit extends Cubit<GroupDetailsState> {
     int adminCount = 0;
     final groupMembersList = <GroupMembersModel>[];
     final requestGroupMembersResponse =
-        await repo.getGroupMembers(groupId, cityId);
+        await repo.getGroupMembers(groupId);
     if (requestGroupMembersResponse?.data != null) {
       for (final member in requestGroupMembersResponse!.data) {
         groupMembersList.add(GroupMembersModel(
