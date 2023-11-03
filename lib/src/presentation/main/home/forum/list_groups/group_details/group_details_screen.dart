@@ -74,8 +74,8 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
     if (!mounted) return;
     Navigator.pushNamed(context, Routes.addPosts,
             arguments: {'isNewPost': true, 'item': widget.groupModel})
-        .then((value) {
-      context.read<GroupDetailsCubit>().onLoad();
+        .then((value) async {
+      await context.read<GroupDetailsCubit>().onLoad();
       setState(() {});
     });
   }
@@ -354,30 +354,32 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
           actions: <Widget>[
             TextButton(
               onPressed: () async {
-                final isRemoved = await buildContext
+                await buildContext
                     .read<GroupDetailsCubit>()
                     .removeGroupMember(
-                        widget.groupModel.id, widget.groupModel.cityId);
-                if (isRemoved == RemoveUser.removed) {
-                  if (!mounted) return;
-                  Navigator.of(context).pop(true);
-                } else if (isRemoved == RemoveUser.onlyUser) {
-                  if (!mounted) return;
-                  Navigator.of(context).pop(false);
-                  final popUpTitle =
-                      Translate.of(context).translate('only_user');
-                  final content =
-                      Translate.of(context).translate('only_user_in_group');
-                  showAdminPopup(context, popUpTitle, content);
-                } else if (isRemoved == RemoveUser.onlyAdmin) {
-                  if (!mounted) return;
-                  final popUpTitle =
-                      Translate.of(context).translate('only_admin');
-                  final content =
-                      Translate.of(context).translate('add_another_admin');
-                  Navigator.of(context).pop(false);
-                  showAdminPopup(context, popUpTitle, content);
-                }
+                        widget.groupModel.id, widget.groupModel.cityId).then((isRemoved) {
+                  if (isRemoved == RemoveUser.removed) {
+                    if (!mounted) return;
+                    Navigator.of(context).pop(true);
+                  } else if (isRemoved == RemoveUser.onlyUser) {
+                    if (!mounted) return;
+                    Navigator.of(context).pop(false);
+                    final popUpTitle =
+                    Translate.of(context).translate('only_user');
+                    final content =
+                    Translate.of(context).translate('only_user_in_group');
+                    showAdminPopup(context, popUpTitle, content);
+                  } else if (isRemoved == RemoveUser.onlyAdmin) {
+                    if (!mounted) return;
+                    final popUpTitle =
+                    Translate.of(context).translate('only_admin');
+                    final content =
+                    Translate.of(context).translate('add_another_admin');
+                    Navigator.of(context).pop(false);
+                    showAdminPopup(context, popUpTitle, content);
+                  }
+                });
+
               },
               child: Text(Translate.of(context).translate('yes')),
             ),

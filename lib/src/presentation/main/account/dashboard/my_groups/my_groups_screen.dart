@@ -183,6 +183,7 @@ class _ListLoadedState extends State<ListLoaded> {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: ForumGroupItem(
           userId: widget.userId,
+          fromGroupList: false,
           onPressed: (value) async {
             if (value) {
               Navigator.pushNamed(context, Routes.groupDetails, arguments: item)

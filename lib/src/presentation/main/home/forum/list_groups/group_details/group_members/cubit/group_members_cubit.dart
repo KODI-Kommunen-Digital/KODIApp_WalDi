@@ -19,7 +19,7 @@ class GroupMembersCubit extends Cubit<GroupMembersState> {
     final groupMembersList = <GroupMembersModel>[];
     bool isAdmin = false;
     final requestGroupMembersResponse =
-        await repo.getGroupMembers(groupId );
+        await repo.getGroupMembers(groupId, cityId);
     if (requestGroupMembersResponse?.data != null) {
       for (final member in requestGroupMembersResponse!.data) {
         groupMembersList.add(GroupMembersModel(

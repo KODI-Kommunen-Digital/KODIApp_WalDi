@@ -162,7 +162,8 @@ class ForumRepository {
   }
 
   Future<ResultApiModel?> requestGroupPosts(forumId, cityId) async {
-    final response = await Api.requestGroupPosts(forumId, cityId);
+    final cityIdPref = prefs.getKeyValue(Preferences.cityId, 0);
+    final response = await Api.requestGroupPosts(forumId, cityId == 0 ? cityIdPref : cityId);
     if (response.success) {
       return response;
     } else {
@@ -195,9 +196,10 @@ class ForumRepository {
     }
   }
 
-  Future<ResultApiModel?> getGroupMembers(forumId) async {
-    final cityId = prefs.getKeyValue(Preferences.cityId, 0);
-    final response = await Api.getGroupMembers(forumId, cityId);
+  Future<ResultApiModel?> getGroupMembers(forumId, cityId) async {
+    final cityIdPref = prefs.getKeyValue(Preferences.cityId, 0);
+    final response =
+        await Api.getGroupMembers(forumId, cityId == 0 ? cityIdPref : cityId);
     if (response.success) {
       return response;
     } else {
@@ -457,14 +459,15 @@ class ForumRepository {
     int? forumId,
   ) async {
     final image = prefs.getKeyValue(Preferences.path, null);
+    final cityIdPref = prefs.getKeyValue(Preferences.cityId, 0);
 
     Map<String, dynamic> params = {
-      "cityId": cityId,
+      "cityId": cityId == 0 ? cityIdPref : cityId,
       "description": description,
       "title": title,
       "image": image,
     };
-    final response = await Api.requestSavePost(cityId, forumId, params);
+    final response = await Api.requestSavePost(cityId == 0 ? cityIdPref : cityId, forumId, params);
     if (response.success) {
       final postId = response.id;
       final prefs = await Preferences.openBox();

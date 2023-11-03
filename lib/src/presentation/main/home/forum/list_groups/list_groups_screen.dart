@@ -309,9 +309,7 @@ class _ListLoadedState extends State<ListLoaded> {
           isLoadingMore = true;
           previousScrollPosition = _scrollController.position.pixels;
         });
-         list = await context
-            .read<ListGroupsCubit>()
-            .newListings(++pageNo);
+        list = await context.read<ListGroupsCubit>().newListings(++pageNo);
 
         setState(() {
           // list = [];
@@ -383,6 +381,7 @@ class _ListLoadedState extends State<ListLoaded> {
             }
           },
           item: item,
+          fromGroupList: true,
         ),
       );
     }
