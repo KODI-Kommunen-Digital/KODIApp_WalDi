@@ -58,6 +58,12 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
+  static Future<ResultApiModel> requestForumStatus(userId, cityId, forumIds) async {
+    final filepath = "users/$userId/cities/$cityId/checkMembership?forumIds=$forumIds";
+    final result = await HTTPManager(forum: true).get(url: filepath);
+    return ResultApiModel.fromJson(result);
+  }
+
   static Future<ResultApiModel> requestUsersForum(userId) async {
     final filepath = "/users/$userId/forums?statusId=1";
     final result = await HTTPManager(forum: true).get(url: filepath);
