@@ -4,9 +4,9 @@ import 'package:dio/dio.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_comment.dart';
 import 'package:heidi/src/data/model/model_forum_group.dart';
+import 'package:heidi/src/data/model/model_forum_status.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_request_member.dart';
-import 'package:heidi/src/data/model/model_users_joined_group.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
@@ -21,7 +21,6 @@ class ForumRepository {
 
   Future<List?> loadForumsList({required pageNo}) async {
     final hasForum = await Api.requestHasForum();
-    final requestMemberList = <RequestMemberModel>[];
 
     int cityId = prefs.getKeyValue(Preferences.cityId, 0);
     if (cityId == 0) {
@@ -50,29 +49,14 @@ class ForumRepository {
           );
         }).toList();
         if (userId != 0) {
-          final usersJoinedForumResponse = await Api.requestUsersForum(userId);
-          final requestGroupRequestResponse =
-              await Api.getGroupMemberRequests(userId);
-          if (requestGroupRequestResponse.success) {
-            for (final list in requestGroupRequestResponse.data) {
-              requestMemberList.add(RequestMemberModel(
-                forumId: list['forumId'],
-                userId: list['userId'],
-                statusId: list['statusId'],
-                createdAt: list['createdAt'],
-                updatedAt: list['updatedAt'],
-                id: list['id'],
-                reason: list['reason'],
-              ));
-            }
-          } else {
-            logError('Request To Get Group Members Response Failed',
-                requestGroupRequestResponse.message);
-          }
+          String forumIds =
+              groupList.map((item) => item.id.toString()).join(', ');
+          final forumWithStatusResponse =
+              await Api.requestForumStatus(userId, cityId, forumIds);
 
-          final userJoinedList =
-              List.from(usersJoinedForumResponse.data ?? []).map((item) {
-            return UserJoinedGroupsModel.fromJson(
+          final forumStatusList =
+              List.from(forumWithStatusResponse.data ?? []).map((item) {
+            return ForumStatusModel.fromJson(
               item,
             );
           }).toList();
@@ -81,8 +65,7 @@ class ForumRepository {
             userId,
             groupList,
             requestForumResponse.pagination,
-            userJoinedList,
-            requestMemberList,
+            forumStatusList,
           ];
         } else {
           return [
@@ -163,7 +146,8 @@ class ForumRepository {
 
   Future<ResultApiModel?> requestGroupPosts(forumId, cityId) async {
     final cityIdPref = prefs.getKeyValue(Preferences.cityId, 0);
-    final response = await Api.requestGroupPosts(forumId, cityId == 0 ? cityIdPref : cityId);
+    final response =
+        await Api.requestGroupPosts(forumId, cityId == 0 ? cityIdPref : cityId);
     if (response.success) {
       return response;
     } else {
@@ -209,8 +193,11 @@ class ForumRepository {
   }
 
   Future<ResultApiModel?> getMemberRequests(forumId, cityId) async {
-    // final cityId = prefs.getKeyValue(Preferences.cityId, 0);
-    final response = await Api.getMemberRequests(forumId, cityId);
+    final cityIdPref = prefs.getKeyValue(Preferences.cityId, 0);
+    final response = await Api.getMemberRequests(
+      forumId,
+      cityId == 0 ? cityIdPref : cityId,
+    );
     if (response.success) {
       return response;
     } else {
@@ -227,9 +214,9 @@ class ForumRepository {
     Map<String, dynamic> params = {
       "accept": true,
     };
-    // final cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    final cityIdPref = prefs.getKeyValue(Preferences.cityId, 0);
     final response = await Api.acceptMemberRequests(
-        forumId, cityId, memberRequestId, params);
+        forumId, cityId == 0 ? cityIdPref : cityId, memberRequestId, params);
     if (response.success) {
       return response;
     } else {
@@ -467,7 +454,8 @@ class ForumRepository {
       "title": title,
       "image": image,
     };
-    final response = await Api.requestSavePost(cityId == 0 ? cityIdPref : cityId, forumId, params);
+    final response = await Api.requestSavePost(
+        cityId == 0 ? cityIdPref : cityId, forumId, params);
     if (response.success) {
       final postId = response.id;
       final prefs = await Preferences.openBox();
