@@ -85,7 +85,9 @@ class UserRepository {
   }
 
   static Future<UserModel?> getUserDetails(userId, cityId) async {
-    final response = await Api.getUserDetails(userId, cityId);
+    final prefs = await Preferences.openBox();
+    final cityIdPref = prefs.getKeyValue(Preferences.cityId, 0);
+    final response = await Api.getUserDetails(userId, cityId == 0 ? cityIdPref : cityId);
     if (response.success) {
       return UserModel.fromJson(response.data);
     }
