@@ -138,14 +138,20 @@ class _AppUploadImageState extends State<AppUploadImage> {
     if (await Permission.storage.isGranted) {
       status = PermissionStatus.granted;
     } else {
-      String androidVersion = await _getAndroidVersion();
-      if (int.parse(androidVersion) < 11) {
-        status = await Permission.storage.status;
-      } else {
-        status = await Permission.photos.status;
+      if (Platform.isAndroid) {
+        final androidInfo = await DeviceInfoPlugin().androidInfo;
+        if (androidInfo.version.sdkInt <= 32) {
+          status = await Permission.storage.status;
+          status = await Permission.storage.request();
+        }  else {
+          status = await Permission.photos.status;
+          status = await Permission.photos.request();
+        }
       }
-      status = await Permission.storage.request();
-      status = await Permission.photos.request();
+      else{
+        status = await Permission.photos.status;
+        status = await Permission.photos.request();
+      }
     }
 
     if (!mounted) return;
@@ -213,7 +219,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
                           widget.onChange(item);
                         }
                       }
-                    } else if (await Permission.photos.isDenied) {
+                    } else if (await Permission.photos.isDenied || await Permission.storage.isDenied) {
                       await Permission.photos.request();
                     } else if (await Permission.photos.isPermanentlyDenied) {
                       status = PermissionStatus.permanentlyDenied;
