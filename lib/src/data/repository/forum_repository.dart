@@ -232,9 +232,9 @@ class ForumRepository {
       "accept": false,
       "reason": reason,
     };
-    // final cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    final cityIdPref = prefs.getKeyValue(Preferences.cityId, 0);
     final response = await Api.rejectMemberRequests(
-        forumId, cityId, memberRequestId, params);
+        forumId, cityId == 0 ? cityIdPref : cityId, memberRequestId, params);
     if (response.success) {
       return response;
     } else {
@@ -388,7 +388,8 @@ class ForumRepository {
     forumId,
     cityId,
   ) async {
-    final response = await Api.requestDeleteForum(cityId, forumId);
+    int cityIdPref = prefs.getKeyValue(Preferences.cityId, 0);
+    final response = await Api.requestDeleteForum(cityId == 0 ? cityIdPref : cityId, forumId);
     if (response.success) {
       return response;
     } else {

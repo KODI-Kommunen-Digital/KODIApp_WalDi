@@ -1,10 +1,11 @@
 import 'package:bloc/bloc.dart';
+import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_citizen_service.dart';
 import 'package:heidi/src/utils/configs/image.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
-import '../../../../data/model/model_category.dart';
+
 import 'discovery_state.dart';
 
 class DiscoveryCubit extends Cubit<DiscoveryState> {
@@ -19,7 +20,7 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
   bool doesScroll = false;
 
   Future<void> onLoad() async {
-    emit(const DiscoveryStateLoading());
+    emit(const DiscoveryState.loading());
     final cityRequestResponse = await Api.requestCities();
     location = List.from(cityRequestResponse.data ?? []).map((item) {
       return CategoryModel.fromJson(item);
@@ -97,7 +98,10 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
 
   List<CitizenServiceModel> initializeServices() {
     return [
-      CitizenServiceModel(imageUrl: Images.service2, imageLink: "2"),
+      CitizenServiceModel(
+        imageUrl: Images.service2,
+        imageLink: "2",
+      ),
       CitizenServiceModel(
           imageUrl: Images.service3,
           imageLink: "3",
