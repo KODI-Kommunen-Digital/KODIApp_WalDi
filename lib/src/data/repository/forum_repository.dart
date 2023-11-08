@@ -168,10 +168,10 @@ class ForumRepository {
 
   Future<ResultApiModel?> reportGroupPosts(
       forumId, postId, reason, cityId) async {
-    // final cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    final cityIdPref = prefs.getKeyValue(Preferences.cityId, 0);
     final Map<String, dynamic> params = {"Reason": reason};
     final response =
-        await Api.reportGroupPosts(forumId, cityId, postId, params);
+        await Api.reportGroupPosts(forumId, cityId == 0 ? cityIdPref : cityId, postId, params);
     if (response.success) {
       return response;
     } else {
