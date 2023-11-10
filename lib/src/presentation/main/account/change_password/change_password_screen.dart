@@ -60,6 +60,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       if (result) {
         Navigator.pop(context);
       }
+      else{
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text('New password should not be same as the old password')));
+      }
     }
   }
 

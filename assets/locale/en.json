@@ -56,6 +56,7 @@
   "fname": "First name",
   "lname": "Last name",
   "password": "Password",
+  "New password should not be same as the old password": "New password should not be same as the old password",
   "cur_password": "Current password",
   "functionNotAvail": "Function Not Available",
   "functionNotAvailBody": "This feature will be available soon",

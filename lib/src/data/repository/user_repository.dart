@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_favorite.dart';
@@ -168,7 +169,15 @@ class UserRepository {
     final userId = prefs.getKeyValue(Preferences.userId, '');
     final response = await Api.requestChangeProfile(params, userId);
     if (response.success) {
-      return true;
+      FormData? pickedFile = prefs.getPickedFile();
+      final responseImageUpload = await Api.requestUploadImage(pickedFile);
+      if(responseImageUpload.success){
+        return true;
+      }
+      else{
+        logError('Image Upload Error Response', response.message);
+
+      }
     }
     return false;
   }
