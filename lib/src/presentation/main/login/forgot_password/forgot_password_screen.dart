@@ -52,10 +52,16 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       final result = await AppBloc.forgotPasswordCubit.onForgotPassword(
         textUserNameController.text,
       );
-      if (result) {
-        _showSuccessSnackBar();
-        if (!mounted) return;
-        Navigator.pop(context);
+        if (result.success) {
+          _showSuccessSnackBar();
+          if (!mounted) return;
+          Navigator.pop(context);
+        }
+        else{
+            if(!mounted) return;
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content:
+                Text(Translate.of(context).translate("username_does_not_exist"))));
       }
     }
   }

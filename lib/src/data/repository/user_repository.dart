@@ -134,15 +134,15 @@ class UserRepository {
     return response;
   }
 
-  static Future<bool> forgotPassword({required String username}) async {
+  static Future<ResultApiModel> forgotPassword({required String username}) async {
     final Map<String, dynamic> params = {"username": username};
     final response = await Api.requestForgotPassword(params);
     if (response.success) {
-      return true;
+      return response;
     } else {
       logError('Forgot Password Response Error');
+      return response;
     }
-    return false;
   }
 
   static Future<bool> changeProfile({
