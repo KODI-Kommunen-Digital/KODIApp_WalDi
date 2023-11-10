@@ -1,8 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model.dart';
+import 'package:heidi/src/data/model/model_forum_group.dart';
+import 'package:heidi/src/data/model/model_group_posts.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/presentation/main/account/change_password/change_password_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/all_listings/all_listings_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/all_listings/cubit/all_listings_cubit.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/all_requests/all_requests_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/all_requests/cubit/all_requests_cubit.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/dashboard_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/my_groups/cubit/my_groups_cubit.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/my_groups/my_groups_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/my_listings/my_listings_screen.dart';
 import 'package:heidi/src/presentation/main/account/edit_profile/edit_profile_screen.dart';
 import 'package:heidi/src/presentation/main/account/faq/cubit/faq_cubit.dart';
 import 'package:heidi/src/presentation/main/account/faq/faq_screen.dart';
@@ -15,6 +25,20 @@ import 'package:heidi/src/presentation/main/account/profile_settings/profile_set
 import 'package:heidi/src/presentation/main/account/setting/settings_screen.dart';
 import 'package:heidi/src/presentation/main/add_listing/add_listing_screen.dart';
 import 'package:heidi/src/presentation/main/add_listing/add_listing_success/add_listing_success.dart';
+import 'package:heidi/src/presentation/main/home/forum/add_group_screen/add_group_screen.dart';
+import 'package:heidi/src/presentation/main/home/forum/add_group_screen/cubit/add_group_cubit.dart';
+import 'package:heidi/src/presentation/main/home/forum/list_groups/add_new_post/add_post_screen.dart';
+import 'package:heidi/src/presentation/main/home/forum/list_groups/add_new_post/cubit/add_post_cubit.dart';
+import 'package:heidi/src/presentation/main/home/forum/list_groups/cubit/cubit.dart';
+import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details/cubit/group_details_cubit.dart';
+import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details/group_details_screen.dart';
+import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details/group_members/cubit/group_members_cubit.dart';
+import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details/group_members/group_members_screen.dart';
+import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details/member_requests/cubit/member_request_cubit.dart';
+import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details/member_requests/member_request_screen.dart';
+import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details/post_detail/cubit/post_detail_cubit.dart';
+import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details/post_detail/post_detail_screen.dart';
+import 'package:heidi/src/presentation/main/home/forum/list_groups/list_groups_screen.dart';
 import 'package:heidi/src/presentation/main/home/list_product/list_product.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/image_zoom/image_zoom_screen.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/product_detail_screen.dart';
@@ -78,6 +102,18 @@ class Routes {
   static const String imageZoom = "/imageZoom";
   static const String profileSettings = "/profileSettings";
   static const String faq = "/faq";
+  static const String allListings = "/allListings";
+  static const String allRequests = "/allRequests";
+  static const String listGroups = "/listGroups";
+  static const String myGroups = "/myGroups";
+  static const String groupDetails = "/groupDetails";
+  static const String groupMembersDetails = "/groupMembersDetails";
+  static const String memberRequestDetails = "/memberRequestDetails";
+  static const String postDetails = "/postDetails";
+  static const String dashboard = "/dashboard";
+  static const String addGroups = "/addGroup";
+  static const String addPosts = "/addPosts";
+  static const String myListings = "/myListings";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -124,6 +160,30 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) {
             return const EditProfileScreen();
+          },
+        );
+
+      case allListings:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return BlocProvider(
+              create: (context) => AllListingsCubit(),
+              child: AllListingsScreen(user: arguments["user"] as UserModel),
+            );
+          },
+        );
+
+      case allRequests:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return BlocProvider(
+              create: (context) => AllRequestsCubit(),
+              child: AllRequestsScreen(user: arguments["user"] as UserModel),
+            );
           },
         );
 
@@ -221,6 +281,42 @@ class Routes {
           },
         );
 
+      case dashboard:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return BlocProvider(
+              create: (context) => ProfileCubit(
+                context.read(),
+                arguments['user'] as UserModel,
+              ),
+              child: DashboardScreen(
+                user: arguments['user'] as UserModel,
+                isEditable: arguments['editable'] as bool,
+              ),
+            );
+          },
+        );
+
+      case myListings:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return BlocProvider(
+              create: (context) => ProfileCubit(
+                context.read(),
+                arguments['user'] as UserModel,
+              ),
+              child: MyListingsScreen(
+                user: arguments['user'] as UserModel,
+                isEditable: arguments['editable'] as bool,
+              ),
+            );
+          },
+        );
+
       case contactUsSuccess:
         return MaterialPageRoute(
           builder: (context) {
@@ -237,6 +333,133 @@ class Routes {
               child: const FaqScreen(),
             );
           },
+        );
+
+      case myGroups:
+        return MaterialPageRoute(
+          builder: (context) {
+            return BlocProvider(
+              create: (context) => MyGroupsCubit(
+                context.read(),
+              ),
+              child: const MyGroupsScreen(),
+            );
+          },
+          fullscreenDialog: true,
+        );
+
+      case listGroups:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return BlocProvider(
+              create: (context) => ListGroupsCubit(
+                context.read(),
+              ),
+              child: ListGroupScreen(arguments: arguments),
+            );
+          },
+          fullscreenDialog: true,
+        );
+
+      case groupDetails:
+        return MaterialPageRoute(
+          builder: (context) {
+            final ForumGroupModel arguments =
+                settings.arguments as ForumGroupModel;
+            return BlocProvider(
+              create: (context) => GroupDetailsCubit(context.read(), arguments),
+              child: const GroupDetailsScreen(),
+            );
+          },
+          fullscreenDialog: true,
+        );
+
+      case groupMembersDetails:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            final int groupId = arguments['groupId'] as int;
+            final int cityId = arguments['cityId'] as int;
+
+            return BlocProvider(
+              create: (context) =>
+                  GroupMembersCubit(context.read(), groupId, cityId),
+              child: GroupMembersScreen(groupId),
+            );
+          },
+          fullscreenDialog: true,
+        );
+
+      case memberRequestDetails:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return BlocProvider(
+              create: (context) => MembersRequestsCubit(
+                  context.read(), arguments['groupId'], arguments['cityId']),
+              child: MemberRequestScreen(arguments['groupId']),
+            );
+          },
+          fullscreenDialog: true,
+        );
+
+      case postDetails:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            final GroupPostsModel item = arguments['item'];
+            final int cityId = arguments['cityId'] as int;
+            final int userId = arguments['userId'] as int;
+            final bool isAdmin = arguments['isAdmin'] as bool;
+
+            return BlocProvider(
+              create: (context) => PostDetailCubit(
+                  context.read(), item, cityId, userId, isAdmin),
+              child: PostDetailsScreen(item),
+            );
+          },
+          fullscreenDialog: true,
+        );
+
+      case addGroups:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return BlocProvider(
+              create: (context) => AddGroupCubit(
+                context.read(),
+              ),
+              child: AddGroupScreen(
+                item: arguments['forumDetails'] as ForumGroupModel?,
+                isNewGroup: arguments['isNewGroup'] as bool,
+              ),
+            );
+          },
+          fullscreenDialog: true,
+        );
+
+      case addPosts:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return BlocProvider(
+              create: (context) => AddPostCubit(
+                context.read(),
+              ),
+              child: AddPostScreen(
+                item: arguments['item'],
+                isNewPost: arguments['isNewPost'] as bool,
+              ),
+            );
+          },
+          fullscreenDialog: true,
         );
 
       default:

@@ -139,8 +139,9 @@ class ListRepository {
           contentType: MediaType('image', imageExtension)),
     });
     if (profile) {
-      final response = await Api.requestUploadImage(formData);
-      return response;
+      await prefs.setPickedFile(formData);
+      // final response = await Api.requestUploadImage(formData);
+      // return response;
     } else if (!profile) {
       await prefs.setPickedFile(formData);
     }
@@ -367,6 +368,12 @@ class ListRepository {
     };
     final response = await Api.requestSaveProduct(cityId, params);
     if (response.success) {
+      final prefs = await Preferences.openBox();
+      FormData? pickedFile = prefs.getPickedFile();
+      final id = response.id;
+      if (pickedFile != null) {
+        await Api.requestListingUploadMedia(id, cityId, pickedFile);
+      }
       prefs.deleteKey('pickedFile');
     }
     return response;
@@ -445,7 +452,7 @@ class ListRepository {
       "price": 100, //dummy data
       "discountPrice": 100, //dummy data
       "logo": media,
-      "statusId": 1, //dummy data
+      "statusId": statusId ?? 1, //change 1 to 3 when done
       "sourceId": 1, //dummy data
       "longitude": 245.65, //dummy data
       "latitude": 22.456, //dummy data
@@ -457,6 +464,31 @@ class ListRepository {
     };
     final response =
         await Api.requestEditProduct(cityId, listingId, params, isImageChanged);
+    if(response.success){
+      final prefs = await Preferences.openBox();
+      FormData? pickedFile = prefs.getPickedFile();
+      if (isImageChanged) {
+        if (pickedFile!.files.isNotEmpty) {
+          await Api.requestListingUploadMedia(listingId, cityId, pickedFile);
+        }
+      }
+    }
+    return response;
+  }
+
+  Future<ResultApiModel> editProductStatus(
+    int? listingId,
+    cityId,
+    int? statusId,
+  ) async {
+    final userId = prefs.getKeyValue(Preferences.userId, '');
+
+    Map<String, dynamic> params = {
+      "userId": userId,
+      "statusId": statusId ?? 1,
+    };
+    final response =
+        await Api.requestEditProductStatus(cityId, listingId, params);
     return response;
   }
 
@@ -505,7 +537,7 @@ class ListRepository {
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
     final response = await Api.requestSubmitSubCategory(categoryId: categoryId);
     var jsonCategory = response.data;
-    final item = jsonCategory.firstWhere((item) => item['name'] == value);
+    final item = jsonCategory.firstWhere((item) => item['name'] == value.toLowerCase());
     final itemId = item['id'];
     final subCategoryId = itemId;
     prefs.setKeyValue(Preferences.subCategoryId, subCategoryId);

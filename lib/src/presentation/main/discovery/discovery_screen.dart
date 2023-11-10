@@ -62,34 +62,29 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
         ],
       ),
       body: BlocConsumer<DiscoveryCubit, DiscoveryState>(
-          listener: (context, state) {
-            state.maybeWhen(
-              error: (msg) => ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(content: Text(msg))),
-              orElse: () {},
-            );
+        listener: (context, state) {
+          state.maybeWhen(
+            error: (msg) => ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(msg))),
+            orElse: () {},
+          );
+        },
+        builder: (context, state) => state.when(
+          loading: () {
+            return const DiscoveryLoading();
           },
-          builder: (context, state) => state.when(
-            loading: () {
-              return const DiscoveryLoading();
-            },
-            loaded: (list) => DiscoveryLoaded(
-              services: list,
-            ),
-            updated: (list) {
-              return Container();
-            },
-            // {
-            //   return DiscoveryLoaded(
-            //     services: list,
-            //   );
-            // },
-            error: (e) => ErrorWidget('Failed to load listings.'),
-            initial: () {
-              return Container();
-            },
+          loaded: (list) => DiscoveryLoaded(
+            services: list,
           ),
+          updated: (list) {
+            return Container();
+          },
+          error: (e) => ErrorWidget('Failed to load listings.'),
+          initial: () {
+            return Container();
+          },
         ),
+      ),
     );
   }
 
@@ -138,11 +133,6 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
       },
     );
   }
-//  void _updateSelectedFilter(ProductFilter? filter) {
-//    setState(() {
-//      selectedFilter = filter;
-//    });
-//  }
 }
 
 class DiscoveryLoading extends StatelessWidget {
@@ -171,10 +161,12 @@ class DiscoveryLoaded extends StatefulWidget {
 class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
   bool isLoading = false;
   final _scrollController = ScrollController();
+  List<CitizenServiceModel> services = [];
 
   @override
   void initState() {
     super.initState();
+    services = widget.services;
   }
 
   void scrollUp() {
@@ -197,38 +189,22 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
             crossAxisSpacing: 10.0,
             mainAxisSpacing: 10.0,
             mainAxisExtent: 300.0),
-        itemCount: widget.services.length,
+        itemCount: services.length,
         controller: _scrollController,
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
             onTap: () {
-              navigateToLink(widget.services[index]);
+              navigateToLink(services[index]);
             },
             child: ClipRRect(
               borderRadius: BorderRadius.circular(15.0),
               child: Image.asset(
-                widget.services[index].imageUrl,
+                services[index].imageUrl,
                 fit: BoxFit.cover,
               ),
             ),
           );
         },
-      ),
-    );
-  }
-
-  void _onPopUpError() {
-    showDialog<String>(
-      context: context,
-      builder: (BuildContext context) => AlertDialog(
-        title: Text(Translate.of(context).translate('functionNotAvail')),
-        content: Text(Translate.of(context).translate('functionNotAvailBody')),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () => Navigator.pop(context, 'OK'),
-            child: const Text('OK'),
-          ),
-        ],
       ),
     );
   }
@@ -242,7 +218,15 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
           Uri.parse(await AppBloc.discoveryCubit.getCityLink() ?? ""),
           mode: LaunchMode.inAppWebView);
     } else if (service.imageLink == "10") {
-      _onPopUpError();
+      final cityId = await context.read<DiscoveryCubit>().getCitySelected();
+      if (cityId != 0) {
+        if (!mounted) return;
+        Navigator.pushNamed(context, Routes.listGroups,
+            arguments: {'id': service.arguments, 'title': 'Forum'});
+      } else {
+        if (!mounted) return;
+        _showCitySelectionPopup(context);
+      }
     } else {
       AppBloc.discoveryCubit
           .setServiceValue(Preferences.type, service.type, null);
@@ -253,5 +237,31 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
       Navigator.pushNamed(context, Routes.listProduct,
           arguments: {'id': service.arguments, 'title': ''});
     }
+  }
+
+  void _showCitySelectionPopup(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Stadt Auswählen'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(Translate.of(context).translate('please_select_city')),
+              const SizedBox(height: 16),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

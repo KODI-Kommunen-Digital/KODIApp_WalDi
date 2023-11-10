@@ -25,11 +25,6 @@ class SignUpCubit extends Cubit<SignUpState> {
         role: "3");
   }
 
-  ///Event forgot password
-  Future<bool> onForgotPassword(String username) async {
-    return await UserRepository.forgotPassword(username: username);
-  }
-
   String? validatePassword(String password) {
     if (password.isEmpty) {
       return "Password is required.";
@@ -77,6 +72,10 @@ class SignUpCubit extends Cubit<SignUpState> {
 
     if(username.length > 15) {
       return "Username must not exceed 15 characters.";
+    }
+
+    if (username.contains(' ')) {
+      return 'Username cannot contain spaces';
     }
 
     if (!RegExp(r'^[a-z_]+$').hasMatch(username)) {

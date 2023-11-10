@@ -14,43 +14,44 @@ class UserModel {
   late int total;
   late final String token;
   late String email;
+  late final int roleId;
 
-  UserModel({
-    required this.id,
-    required this.username,
-    required this.firstname,
-    required this.lastname,
-    required this.nickname,
-    required this.image,
-    required this.url,
-    required this.level,
-    required this.description,
-    required this.tag,
-    required this.rate,
-    required this.comment,
-    required this.total,
-    required this.token,
-    required this.email,
-  });
+  UserModel(
+      {required this.id,
+      required this.username,
+      required this.firstname,
+      required this.lastname,
+      required this.nickname,
+      required this.image,
+      required this.url,
+      required this.level,
+      required this.description,
+      required this.tag,
+      required this.rate,
+      required this.comment,
+      required this.total,
+      required this.token,
+      required this.email,
+      required this.roleId});
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      id: json['id'] ?? 0,
-      username: json['username'] ?? 'Keine Angabe',
-      firstname: json['firstname'] ?? 'Keine Angabe',
-      lastname: json['lastname'] ?? 'Keine Angabe',
-      nickname: json['user_nicename'] ?? 'Keine Angabe',
-      image: json['image'] ?? 'Keine Angabe',
-      url: json['website'] ?? 'Keine Angabe',
-      level: json['user_level'] ?? 0,
-      description: json['description'] ?? 'Keine Angabe',
-      tag: json['tag'] ?? 'Keine Angabe',
-      rate: double.tryParse('${json['rating_avg']}') ?? 0.0,
-      comment: int.tryParse('${json['total_comment']}') ?? 0,
-      total: json['total'] ?? 0,
-      token: json['accessToken'] ?? "Keine Angabe",
-      email: json['email'] ?? 'Keine Angabe',
-    );
+        id: json['id'] ?? 0,
+        username: json['username'] ?? 'Keine Angabe',
+        firstname: json['firstname'] ?? 'Keine Angabe',
+        lastname: json['lastname'] ?? 'Keine Angabe',
+        nickname: json['user_nicename'] ?? 'Keine Angabe',
+        image: json['image'] ?? 'Keine Angabe',
+        url: json['website'] ?? 'Keine Angabe',
+        level: json['user_level'] ?? 0,
+        description: json['description'] ?? 'Keine Angabe',
+        tag: json['tag'] ?? 'Keine Angabe',
+        rate: double.tryParse('${json['rating_avg']}') ?? 0.0,
+        comment: int.tryParse('${json['total_comment']}') ?? 0,
+        total: json['total'] ?? 0,
+        token: json['accessToken'] ?? "Keine Angabe",
+        email: json['email'] ?? 'Keine Angabe',
+        roleId: json['roleId'] ?? 3);
   }
 
   UserModel updateUser({
@@ -91,6 +92,7 @@ class UserModel {
     total = source.total;
     token = source.token;
     email = source.email;
+    roleId = source.roleId;
   }
 
   UserModel clone() {
@@ -113,7 +115,8 @@ class UserModel {
       'total_comment': rate,
       'total': total,
       'token': token,
-      'email': email
+      'email': email,
+      'roleId': roleId
     };
   }
 }
