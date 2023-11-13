@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_favorite.dart';
@@ -183,7 +183,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   ///Build content UI
   Widget _buildContent(ProductModel? product, List<FavoriteModel>? favoriteList,
-      UserModel? userDetail, bool isLoggedIn, String pdfPath) {
+      UserModel? userDetail, bool isLoggedIn) {
     String uniqueKey = UniqueKey().toString();
     List<Widget> action = [];
     Widget actionGalleries = Container();
@@ -474,34 +474,29 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             )
           : RawGestureDetector(
               gestures: {
-                  AllowMultipleGestureRecognizer:
-                      GestureRecognizerFactoryWithHandlers<
-                          AllowMultipleGestureRecognizer>(
-                    () => AllowMultipleGestureRecognizer(), //constructor
-                    (AllowMultipleGestureRecognizer instance) {
-                      instance.onTap = () async {
-                        if (!mounted) return;
-                        Navigator.pushNamed(
-                          context,
-                          Routes.imageZoom,
-                          arguments: pdfPath,
-                        );
-                      };
-                    },
-                  )
-                },
-              child: PDFView(
-                filePath: pdfPath,
-                enableSwipe: true,
-                autoSpacing: false,
-                pageFling: true,
-              )
-              // const PDF().cachedFromUrl(
-              //   "${Application.picturesURL}${product.pdf}?cacheKey=$uniqueKey",
-              //   placeholder: (progress) => Center(child: Text('$progress %')),
-              //   errorWidget: (error) => Center(child: Text(error.toString())),
-              // ),
-              );
+                AllowMultipleGestureRecognizer:
+                    GestureRecognizerFactoryWithHandlers<
+                        AllowMultipleGestureRecognizer>(
+                  () => AllowMultipleGestureRecognizer(), //constructor
+                  (AllowMultipleGestureRecognizer instance) {
+                    instance.onTap = () async {
+                      if (!mounted) return;
+                      Navigator.pushNamed(
+                        context,
+                        Routes.imageZoom,
+                        arguments:
+                            "${Application.picturesURL}${product.pdf}?cacheKey=$uniqueKey",
+                      );
+                    };
+                  },
+                )
+              },
+              child: const PDF().cachedFromUrl(
+                "${Application.picturesURL}${product.pdf}?cacheKey=$uniqueKey",
+                placeholder: (progress) => Center(child: Text('$progress %')),
+                errorWidget: (error) => Center(child: Text(error.toString())),
+              ),
+            );
 
       if (product.address.isNotEmpty) {
         address = Column(
@@ -999,16 +994,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             List<FavoriteModel>? favoriteList;
             UserModel? userDetail;
             bool isLoggedIn = false;
-            String pdfPath = '';
             if (state is ProductDetailLoaded) {
               product = state.product;
               favoriteList = state.favoritesList;
               isLoggedIn = state.isLoggedIn;
               userDetail = state.userDetail;
-              pdfPath = state.pdfPath;
             }
-            return _buildContent(
-                product, favoriteList, userDetail, isLoggedIn, pdfPath);
+            return _buildContent(product, favoriteList, userDetail, isLoggedIn);
           },
         ),
       ),

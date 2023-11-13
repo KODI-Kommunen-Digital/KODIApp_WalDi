@@ -13,7 +13,6 @@ import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/presentation/widget/app_user_info.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
-import 'package:heidi/src/utils/pdf_downloader.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -72,7 +71,6 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
   int pageNo = 1;
   List<ProductModel> userListingsList = [];
   final _scrollController = ScrollController(initialScrollOffset: 0.0);
-  final pdfService = PDFService();
 
   @override
   void dispose() {
@@ -214,8 +212,32 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                                           children: [
                                             Row(
                                               children: <Widget>[
-                                                item.pdf == ''
-                                                    ? CachedNetworkImage(
+                                                item.pdf != '' &&
+                                                        item.image ==
+                                                            'admin/News.jpeg'
+                                                    ? ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(11),
+                                                        child: SizedBox(
+                                                            width: 120,
+                                                            height: 140,
+                                                            child: const PDF()
+                                                                .cachedFromUrl(
+                                                              "${Application.picturesURL}${item.pdf}?cacheKey=$uniqueKey",
+                                                              placeholder:
+                                                                  (progress) =>
+                                                                      Center(
+                                                                          child:
+                                                                              Text('$progress %')),
+                                                              errorWidget:
+                                                                  (error) => Center(
+                                                                      child: Text(
+                                                                          error
+                                                                              .toString())),
+                                                            )),
+                                                      )
+                                                    : CachedNetworkImage(
                                                         imageUrl: item
                                                                     .sourceId ==
                                                                 2
@@ -297,28 +319,6 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                                                             ),
                                                           );
                                                         },
-                                                      )
-                                                    : ClipRRect(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(11),
-                                                        child: SizedBox(
-                                                            width: 120,
-                                                            height: 140,
-                                                            child: const PDF()
-                                                                .cachedFromUrl(
-                                                              "${Application.picturesURL}${item.pdf}?cacheKey=$uniqueKey",
-                                                              placeholder:
-                                                                  (progress) =>
-                                                                      Center(
-                                                                          child:
-                                                                              Text('$progress %')),
-                                                              errorWidget:
-                                                                  (error) => Center(
-                                                                      child: Text(
-                                                                          error
-                                                                              .toString())),
-                                                            )),
                                                       ),
                                                 const SizedBox(width: 8),
                                                 Expanded(
