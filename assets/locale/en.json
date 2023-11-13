@@ -90,6 +90,7 @@
   "value_not_valid_id": "Input not valid ID",
   "edit_profile": "Edit Profile",
   "edit_group": "Edit Group",
+  "dashboard": "Dashboard",
   "member_requests": "Member Request",
   "Password is required": "Password is required.",
   "Password cannot contain spaces": "Password cannot contain spaces.",
