@@ -56,16 +56,23 @@ class _AppUploadImageState extends State<AppUploadImage> {
   }
 
   Future<void> _uploadImage() async {
-    Platform.isAndroid
-        ? await Permission.storage.request()
-        : await Permission.photos.request();
-
-    String androidVersion = await _getAndroidVersion();
-    var statusImage = await Permission.photos.status;
-    if (int.parse(androidVersion) > 11) {
-      statusImage = await Permission.photos.status;
+    PermissionStatus statusImage;
+    if (await Permission.storage.isGranted) {
+      statusImage = PermissionStatus.granted;
     } else {
-      statusImage = await Permission.storage.status;
+      if (Platform.isAndroid) {
+        final androidInfo = await DeviceInfoPlugin().androidInfo;
+        if (androidInfo.version.sdkInt <= 32) {
+          statusImage = await Permission.storage.status;
+          statusImage = await Permission.storage.request();
+        } else {
+          statusImage = await Permission.photos.status;
+          statusImage = await Permission.photos.request();
+        }
+      } else {
+        statusImage = await Permission.photos.status;
+        statusImage = await Permission.photos.request();
+      }
     }
 
     if (showAction) {
@@ -74,8 +81,45 @@ class _AppUploadImageState extends State<AppUploadImage> {
       });
       return;
     }
-    try {
-      if (statusImage.isGranted || statusImage.isLimited) {
+
+    if (!mounted) return;
+
+    if (statusImage == PermissionStatus.granted) {
+      if (Platform.isIOS) {
+        final photoPermissionStatus =
+        await Permission.photos.status; // Check permission status separately
+        if (photoPermissionStatus.isGranted || photoPermissionStatus.isLimited) {
+          final pickedFile = await _picker.pickImage(
+            source: ImageSource.gallery,
+          );
+          if (pickedFile == null) return;
+          if (!mounted) return;
+          setState(() {
+            isImageUploaded = false;
+            _file = File(pickedFile.path);
+            widget.onChange('');
+          });
+          final profile = widget.profile;
+
+          if (!profile) {
+            await ListRepository.uploadImage(_file!, profile);
+          } else {
+            final response = await ListRepository.uploadImage(_file!, profile);
+            if (response!.data['status'] == 'success') {
+              setState(() {
+                isImageUploaded = true;
+              });
+              final item = response.data['data']?['image'];
+              widget.onChange(item);
+            }
+          }
+        } else if (photoPermissionStatus.isDenied) {
+          await Permission.photos.request();
+        } else if (photoPermissionStatus.isPermanentlyDenied) {
+          await openAppSettings();
+        }
+      } else {
+        // Platform is not iOS
         final pickedFile = await _picker.pickImage(
           source: ImageSource.gallery,
         );
@@ -84,8 +128,10 @@ class _AppUploadImageState extends State<AppUploadImage> {
         setState(() {
           isImageUploaded = false;
           _file = File(pickedFile.path);
+          widget.onChange('');
         });
         final profile = widget.profile;
+
         if (!profile) {
           await ListRepository.uploadImage(_file!, profile);
         } else {
@@ -96,42 +142,16 @@ class _AppUploadImageState extends State<AppUploadImage> {
             });
             final item = response.data['data']?['image'];
             widget.onChange(item);
-          } else {}
-        }
-      } else if (statusImage.isDenied) {
-        await openAppSettings();
-        if (statusImage.isGranted || statusImage.isLimited) {
-          final pickedFile = await _picker.pickImage(
-            source: ImageSource.gallery,
-          );
-          if (pickedFile == null) return;
-          if (!mounted) return;
-          setState(() {
-            isImageUploaded = false;
-            _file = File(pickedFile.path);
-          });
-          final profile = widget.profile;
-          if (!profile) {
           } else {
-            final response = await ListRepository.uploadImage(_file!, profile);
-            if (response!.data['status'] == 'success') {
-              setState(() {
-                isImageUploaded = true;
-              });
-              final item = response.data['data']?['image'];
-              widget.onChange(item);
-            } else {
-              logError('Image Upload Permission Error', response);
-            }
+            logError('Image Upload Permission Error', response);
           }
         }
-      } else if (statusImage.isPermanentlyDenied) {
-        await openAppSettings();
       }
-    } catch (e) {
-      logError('Image Upload Permission Error', e);
+    } else if (statusImage.isPermanentlyDenied) {
+      await openAppSettings();
     }
   }
+
 
   Future<void> showChooseFileTypeDialog() async {
     PermissionStatus status;
@@ -143,12 +163,11 @@ class _AppUploadImageState extends State<AppUploadImage> {
         if (androidInfo.version.sdkInt <= 32) {
           status = await Permission.storage.status;
           status = await Permission.storage.request();
-        }  else {
+        } else {
           status = await Permission.photos.status;
           status = await Permission.photos.request();
         }
-      }
-      else{
+      } else {
         status = await Permission.photos.status;
         status = await Permission.photos.request();
       }
@@ -219,7 +238,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
                           widget.onChange(item);
                         }
                       }
-                    } else if (await Permission.photos.isDenied || await Permission.storage.isDenied) {
+                    } else if (await Permission.photos.isDenied) {
                       await Permission.photos.request();
                     } else if (await Permission.photos.isPermanentlyDenied) {
                       status = PermissionStatus.permanentlyDenied;
@@ -265,15 +284,6 @@ class _AppUploadImageState extends State<AppUploadImage> {
       );
     } else if (status.isPermanentlyDenied) {
       await openAppSettings();
-    }
-  }
-
-  Future<String> _getAndroidVersion() async {
-    if (Platform.isAndroid) {
-      var androidInfo = await DeviceInfoPlugin().androidInfo;
-      return androidInfo.version.release;
-    } else {
-      return "0";
     }
   }
 

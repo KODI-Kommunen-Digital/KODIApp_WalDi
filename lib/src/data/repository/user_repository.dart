@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_favorite.dart';
@@ -131,15 +132,15 @@ class UserRepository {
     return response;
   }
 
-  static Future<bool> forgotPassword({required String username}) async {
+  static Future<ResultApiModel> forgotPassword({required String username}) async {
     final Map<String, dynamic> params = {"username": username};
     final response = await Api.requestForgotPassword(params);
     if (response.success) {
-      return true;
+      return response;
     } else {
       logError('Forgot Password Response Error');
+      return response;
     }
-    return false;
   }
 
   static Future<bool> changeProfile({
@@ -166,7 +167,14 @@ class UserRepository {
     final userId = prefs.getKeyValue(Preferences.userId, '');
     final response = await Api.requestChangeProfile(params, userId);
     if (response.success) {
-      return true;
+      FormData? pickedFile = prefs.getPickedFile();
+      final responseImageUpload = await Api.requestUploadImage(pickedFile);
+      if(responseImageUpload.success){
+        return true;
+      }
+      else{
+        logError('Image Upload Error Response', response.message);
+      }
     }
     return false;
   }

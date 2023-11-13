@@ -116,12 +116,7 @@ class ListRepository {
           filename: image.path,
           contentType: MediaType('image', imageExtension)),
     });
-    if (profile) {
-      final response = await Api.requestUploadImage(formData);
-      return response;
-    } else if (!profile) {
-      await prefs.setPickedFile(formData);
-    }
+    await prefs.setPickedFile(formData);
     return null;
   }
 
