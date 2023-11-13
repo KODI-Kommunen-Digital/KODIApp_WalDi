@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_favorite.dart';
@@ -181,7 +181,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   ///Build content UI
   Widget _buildContent(ProductModel? product, List<FavoriteModel>? favoriteList,
-      UserModel? userDetail, bool isLoggedIn, String pdfPath, List cityList) {
+      UserModel? userDetail, bool isLoggedIn, List cityList) {
     String uniqueKey = UniqueKey().toString();
     List<Widget> action = [];
     Widget actionGalleries = Container();
@@ -483,17 +483,17 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       Navigator.pushNamed(
                         context,
                         Routes.imageZoom,
-                        arguments: pdfPath,
+                        arguments:
+                            "${Application.picturesURL}${product.pdf}?cacheKey=$uniqueKey",
                       );
                     };
                   },
                 )
               },
-              child: PDFView(
-                filePath: pdfPath,
-                enableSwipe: true,
-                autoSpacing: false,
-                pageFling: true,
+              child: const PDF().cachedFromUrl(
+                "${Application.picturesURL}${product.pdf}?cacheKey=$uniqueKey",
+                placeholder: (progress) => Center(child: Text('$progress %')),
+                errorWidget: (error) => Center(child: Text(error.toString())),
               ),
             );
 
@@ -1008,18 +1008,16 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             List<FavoriteModel>? favoriteList;
             UserModel? userDetail;
             bool isLoggedIn = false;
-            String pdfPath = '';
             List cityList = [];
             if (state is ProductDetailLoaded) {
               product = state.product;
               favoriteList = state.favoritesList;
               isLoggedIn = state.isLoggedIn;
               userDetail = state.userDetail;
-              pdfPath = state.pdfPath;
               cityList = state.cityList;
             }
-            return _buildContent(product, favoriteList, userDetail, isLoggedIn,
-                pdfPath, cityList);
+            return _buildContent(
+                product, favoriteList, userDetail, isLoggedIn, cityList);
           },
         ),
       ),
