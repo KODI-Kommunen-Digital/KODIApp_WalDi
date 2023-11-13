@@ -31,8 +31,7 @@ class ProductDetailState with _$ProductDetailState {
       ProductModel product,
       List<FavoriteModel>? favoritesList,
       UserModel? userDetail,
-      bool isLoggedIn,
-      String pdfPath) = ProductDetailLoaded;
+      bool isLoggedIn,) = ProductDetailLoaded;
 
   const factory ProductDetailState.error(String error) = ProductDetailError;
 }
