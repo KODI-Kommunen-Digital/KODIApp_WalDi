@@ -139,8 +139,9 @@ class ListRepository {
           contentType: MediaType('image', imageExtension)),
     });
     if (profile) {
-      final response = await Api.requestUploadImage(formData);
-      return response;
+      await prefs.setPickedFile(formData);
+      // final response = await Api.requestUploadImage(formData);
+      // return response;
     } else if (!profile) {
       await prefs.setPickedFile(formData);
     }

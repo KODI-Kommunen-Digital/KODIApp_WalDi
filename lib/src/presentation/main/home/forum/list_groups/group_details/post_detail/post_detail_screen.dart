@@ -36,8 +36,9 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
       },
       builder: (context, state) => state.maybeWhen(
         loading: () => const PostDetailsLoading(),
-        loaded: (userDetails, userImage) =>
-            PostDetailsLoaded(userDetails, widget.item, userImage: userImage),
+        loaded: (userDetails, userImage, userId, isAdmin) => PostDetailsLoaded(
+            userDetails, widget.item,
+            userImage: userImage, userId: userId, isAdmin: isAdmin),
         orElse: () => ErrorWidget('Failed to load Post Details.'),
       ),
     );
@@ -59,9 +60,14 @@ class PostDetailsLoaded extends StatefulWidget {
   final GroupPostsModel post;
   final UserModel? userDetail;
   final String userImage;
+  final int userId;
+  final bool isAdmin;
 
   const PostDetailsLoaded(this.userDetail, this.post,
-      {super.key, required this.userImage});
+      {super.key,
+      required this.userImage,
+      required this.userId,
+      required this.isAdmin});
 
   @override
   State<PostDetailsLoaded> createState() => _PostDetailsLoadedState();
@@ -126,11 +132,17 @@ class _PostDetailsLoadedState extends State<PostDetailsLoaded> {
                           if (choice ==
                               Translate.of(context).translate('report_post')) {
                             showReportPostConfirmation(context);
+                          } else if (choice ==
+                              Translate.of(context).translate('delete_post')) {
+                            showDeletePostConfirmation(context);
                           }
                         },
                         itemBuilder: (BuildContext context) {
                           return {
                             Translate.of(context).translate('report_post'),
+                            if ((widget.post.userId == widget.userId) ||
+                                widget.isAdmin)
+                              Translate.of(context).translate('delete_post'),
                           }.map((String choice) {
                             return PopupMenuItem<String>(
                               value: choice,
@@ -284,6 +296,57 @@ class _PostDetailsLoadedState extends State<PostDetailsLoaded> {
                 if (isReported) {
                   if (!mounted) return;
                   Navigator.of(context).pop(true);
+                } else {
+                  // Handle the case where the post could not be reported
+                  // Show an error message or take appropriate action
+                }
+              },
+              child: Text(Translate.of(context).translate('yes')),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false), // No
+              child: Text(Translate.of(context).translate('no')),
+            ),
+          ],
+        );
+      },
+    );
+    if (result == true) {
+      if (!mounted) return;
+      // Navigator.pop(context);
+    }
+  }
+
+  Future<void> showDeletePostConfirmation(BuildContext buildContext) async {
+    final result = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title:
+              Text(Translate.of(context).translate('post_delete_confirmation')),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10.0),
+                width: double.maxFinite,
+                child: Text(Translate.of(context)
+                    .translate('post_delete_confirmation_body')),
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () async {
+                final isDeleted =
+                    await buildContext.read<PostDetailCubit>().deleteGroupPost(
+                          widget.post.forumId,
+                          widget.post.id,
+                        );
+                if (isDeleted) {
+                  if (!mounted) return;
+                  Navigator.of(context).pop(true);
+                  Navigator.of(context).pop();
                 } else {
                   // Handle the case where the post could not be reported
                   // Show an error message or take appropriate action

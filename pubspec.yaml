@@ -11,6 +11,9 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
+  ### Update
+  upgrader: ^8.2.0
+
   ### Logging
   loggy: ^2.0.3
   flutter_loggy: ^2.0.2

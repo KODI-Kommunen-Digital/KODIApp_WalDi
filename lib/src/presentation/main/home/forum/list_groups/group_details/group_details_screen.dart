@@ -28,8 +28,8 @@ class GroupDetailsScreen extends StatelessWidget {
       },
       builder: (context, state) => state.maybeWhen(
         loading: () => const GroupDetailsLoading(),
-        loaded: (posts, item, isAdmin) =>
-            GroupDetailsLoaded(posts, item, isAdmin),
+        loaded: (posts, item, isAdmin, userId) =>
+            GroupDetailsLoaded(posts, item, isAdmin, userId),
         orElse: () => ErrorWidget('Failed to load Accounts.'),
       ),
     );
@@ -49,8 +49,10 @@ class GroupDetailsLoaded extends StatefulWidget {
   final List<GroupPostsModel> posts;
   final ForumGroupModel groupModel;
   final bool isAdmin;
+  final int userId;
 
-  const GroupDetailsLoaded(this.posts, this.groupModel, this.isAdmin,
+  const GroupDetailsLoaded(
+      this.posts, this.groupModel, this.isAdmin, this.userId,
       {super.key});
 
   @override
@@ -72,8 +74,8 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
     if (!mounted) return;
     Navigator.pushNamed(context, Routes.addPosts,
             arguments: {'isNewPost': true, 'item': widget.groupModel})
-        .then((value) {
-      context.read<GroupDetailsCubit>().onLoad();
+        .then((value) async {
+      await context.read<GroupDetailsCubit>().onLoad();
       setState(() {});
     });
   }
@@ -107,8 +109,8 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                 },
                 child: Image.network(
                   widget.groupModel.image != null
-                      ? "${Application.picturesURL}${widget.groupModel.image}"
-                      : "${Application.picturesURL}admin/DefaultForum.jpeg",
+                      ? "${Application.picturesURL}${widget.groupModel.image}?cacheKey=$uniqueKey"
+                      : "${Application.picturesURL}admin/DefaultForum.jpeg?cacheKey=$uniqueKey",
                   fit: BoxFit.cover,
                 ),
               ),
@@ -251,9 +253,14 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                             Routes.postDetails,
                             arguments: {
                               'item': widget.posts[index],
-                              'cityId': widget.groupModel.cityId
+                              'cityId': widget.groupModel.cityId,
+                              'userId': widget.userId,
+                              'isAdmin': widget.isAdmin,
                             },
-                          );
+                          ).then((value) async {
+                            await context.read<GroupDetailsCubit>().onLoad();
+                            setState(() {});
+                          });
                         },
                         child: Row(
                           children: <Widget>[
@@ -347,30 +354,32 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
           actions: <Widget>[
             TextButton(
               onPressed: () async {
-                final isRemoved = await buildContext
+                await buildContext
                     .read<GroupDetailsCubit>()
                     .removeGroupMember(
-                        widget.groupModel.id, widget.groupModel.cityId);
-                if (isRemoved == RemoveUser.removed) {
-                  if (!mounted) return;
-                  Navigator.of(context).pop(true);
-                } else if (isRemoved == RemoveUser.onlyUser) {
-                  if (!mounted) return;
-                  Navigator.of(context).pop(false);
-                  final popUpTitle =
-                      Translate.of(context).translate('only_user');
-                  final content =
-                      Translate.of(context).translate('only_user_in_group');
-                  showAdminPopup(context, popUpTitle, content);
-                } else if (isRemoved == RemoveUser.onlyAdmin) {
-                  if (!mounted) return;
-                  final popUpTitle =
-                      Translate.of(context).translate('only_admin');
-                  final content =
-                      Translate.of(context).translate('add_another_admin');
-                  Navigator.of(context).pop(false);
-                  showAdminPopup(context, popUpTitle, content);
-                }
+                        widget.groupModel.id, widget.groupModel.cityId).then((isRemoved) {
+                  if (isRemoved == RemoveUser.removed) {
+                    if (!mounted) return;
+                    Navigator.of(context).pop(true);
+                  } else if (isRemoved == RemoveUser.onlyUser) {
+                    if (!mounted) return;
+                    Navigator.of(context).pop(false);
+                    final popUpTitle =
+                    Translate.of(context).translate('only_user');
+                    final content =
+                    Translate.of(context).translate('only_user_in_group');
+                    showAdminPopup(context, popUpTitle, content);
+                  } else if (isRemoved == RemoveUser.onlyAdmin) {
+                    if (!mounted) return;
+                    final popUpTitle =
+                    Translate.of(context).translate('only_admin');
+                    final content =
+                    Translate.of(context).translate('add_another_admin');
+                    Navigator.of(context).pop(false);
+                    showAdminPopup(context, popUpTitle, content);
+                  }
+                });
+
               },
               child: Text(Translate.of(context).translate('yes')),
             ),

@@ -25,11 +25,6 @@ class SignUpCubit extends Cubit<SignUpState> {
         role: "3");
   }
 
-  ///Event forgot password
-  Future<bool> onForgotPassword(String username) async {
-    return await UserRepository.forgotPassword(username: username);
-  }
-
   String? validatePassword(String password) {
     if (password.isEmpty) {
       return "Password is required.";

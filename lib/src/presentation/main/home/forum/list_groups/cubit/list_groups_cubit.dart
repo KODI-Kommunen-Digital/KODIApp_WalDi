@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_forum_group.dart';
+import 'package:heidi/src/data/model/model_forum_status.dart';
 import 'package:heidi/src/data/model/model_request_member.dart';
 import 'package:heidi/src/data/model/model_users_joined_group.dart';
 import 'package:heidi/src/data/repository/forum_repository.dart';
@@ -26,12 +27,15 @@ class ListGroupsCubit extends Cubit<ListGroupsState> {
   List<ForumGroupModel> listLoaded = [];
   List<ForumGroupModel> filteredList = [];
   List<RequestMemberModel> requestMemberList = [];
+  List<ForumStatusModel> forumsWithStatusResponse = [];
   var userJoinedGroupsList = <UserJoinedGroupsModel>[];
 
   Future<void> onLoad() async {
     listLoaded.clear();
     emit(const ListGroupsStateLoading());
     pageNo = 1;
+    bool joined = false;
+    bool requested = false;
     final result = await repo.loadForumsList(
       pageNo: pageNo,
     );
@@ -40,11 +44,6 @@ class ListGroupsCubit extends Cubit<ListGroupsState> {
         groupsList = result[1];
 
         for (final list in groupsList) {
-          bool joined =
-              userJoinedGroupsList.any((element) => element.forumId == list.id);
-          bool requested =
-              requestMemberList.any((element) => element.forumId == list.id);
-
           listLoaded.add(ForumGroupModel(
               id: list.id,
               forumName: list.forumName,
@@ -64,15 +63,21 @@ class ListGroupsCubit extends Cubit<ListGroupsState> {
       if (result != null) {
         groupsList = result[1];
         pagination = result[2];
-        userJoinedGroupsList = result[3];
-        requestMemberList = result[4];
+        forumsWithStatusResponse = result[3];
 
         for (final list in groupsList) {
-          bool joined =
-              userJoinedGroupsList.any((element) => element.forumId == list.id);
-          bool requested =
-              requestMemberList.any((element) => element.forumId == list.id);
-
+          int index = forumsWithStatusResponse
+              .indexWhere((element) => element.forumIds == list.id);
+          if (forumsWithStatusResponse[index].statusId == 0) {
+            joined = false;
+            requested = false;
+          } else if (forumsWithStatusResponse[index].statusId == 1) {
+            requested = true;
+            joined = false;
+          } else if (forumsWithStatusResponse[index].statusId == 2) {
+            joined = true;
+            requested = false;
+          }
           int? cityId = 0;
           for (final userGroup in userJoinedGroupsList) {
             if (userGroup.forumId == list.id) {
@@ -100,9 +105,55 @@ class ListGroupsCubit extends Cubit<ListGroupsState> {
     }
   }
 
+  Future<List<ForumGroupModel>> newListings(int pageNo) async {
+    bool joined = false;
+    bool requested = false;
+    final result = await repo.loadForumsList(
+      pageNo: pageNo,
+    );
+
+    if (result != null) {
+      groupsList = result[1];
+      pagination = result[2];
+      forumsWithStatusResponse = result[3];
+
+      for (final list in groupsList) {
+        int index = forumsWithStatusResponse
+            .indexWhere((element) => element.forumIds == list.id);
+        if (forumsWithStatusResponse[index].statusId == 0) {
+          joined = false;
+          requested = false;
+        } else if (forumsWithStatusResponse[index].statusId == 1) {
+          requested = true;
+          joined = false;
+        } else if (forumsWithStatusResponse[index].statusId == 2) {
+          joined = true;
+          requested = false;
+        }
+        int? cityId = 0;
+        for (final userGroup in userJoinedGroupsList) {
+          if (userGroup.forumId == list.id) {
+            cityId = userGroup.cityId;
+          }
+        }
+
+        listLoaded.add(ForumGroupModel(
+            id: list.id,
+            forumName: list.forumName,
+            createdAt: list.createdAt,
+            description: list.description,
+            image: list.image,
+            isPrivate: list.isPrivate,
+            cityId: cityId,
+            isJoined: joined,
+            isRequested: requested));
+      }
+      return listLoaded.reversed.toList();
+    }
+    return listLoaded.reversed.toList();
+  }
+
   Future<int> getLoggedInUserId() async {
-    // final prefs = await Preferences.openBox();
-    // final userId = prefs.getKeyValue(Preferences.userId, 0);
     final userId = await repo.getLoggedInUserId();
     return userId;
   }

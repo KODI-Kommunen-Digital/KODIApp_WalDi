@@ -26,7 +26,7 @@ class GroupDetailsCubit extends Cubit<GroupDetailsState> {
     final requestGroupPostResponse =
         await repo.requestGroupPosts(arguments.id, arguments.cityId);
     final requestGroupDetailResponse =
-        await repo.requestGroupDetails(arguments.id, arguments.cityId);
+        await repo.requestGroupDetails(arguments.id);
     final response = requestGroupDetailResponse!.data;
     final group = ForumGroupModel(
       id: response['id'],
@@ -56,8 +56,10 @@ class GroupDetailsCubit extends Cubit<GroupDetailsState> {
           isHidden: post['isHidden'],
         ));
       }
+    }
 
-      final requestGroupMembersResponse =
+    final userId = await UserRepository.getLoggedUserId();
+    final requestGroupMembersResponse =
           await repo.getGroupMembers(group.id, group.cityId);
       if (requestGroupMembersResponse?.data != null) {
         for (final member in requestGroupMembersResponse!.data) {
@@ -72,14 +74,12 @@ class GroupDetailsCubit extends Cubit<GroupDetailsState> {
             joinedAt: member['joinedAt'],
           ));
         }
+        GroupMembersModel groupMember =
+        groupMembersList.firstWhere((element) => element.userId == userId);
+        isAdmin = groupMember.isAdmin == 1 ? true : false;
       }
-      final userId = await UserRepository.getLoggedUserId();
-      GroupMembersModel groupMember =
-          groupMembersList.firstWhere((element) => element.userId == userId);
-      isAdmin = groupMember.isAdmin == 1 ? true : false;
+      emit(GroupDetailsState.loaded(groupPostsList, group, isAdmin, userId));
 
-      emit(GroupDetailsState.loaded(groupPostsList, group, isAdmin));
-    }
   }
 
   Future<void> requestDeleteGroup(forumId, cityId) async {
@@ -113,12 +113,12 @@ class GroupDetailsCubit extends Cubit<GroupDetailsState> {
           groupMembersList.firstWhere((element) => element.userId == userId);
       bool isUserAdmin = groupMemberDetail.isAdmin == 1 ? true : false;
       if (!isUserAdmin) {
-        repo.removeUserFromGroup(groupId, groupMemberDetail.memberId);
+        await repo.removeUserFromGroup(groupId, groupMemberDetail.memberId);
         return RemoveUser.removed;
       } else {
         if (groupMembersList.length > 1) {
           if (adminCount > 1) {
-            repo.removeUserFromGroup(groupId, groupMemberDetail.memberId);
+            await repo.removeUserFromGroup(groupId, groupMemberDetail.memberId);
             return RemoveUser.removed;
           } else {
             return RemoveUser.onlyAdmin;

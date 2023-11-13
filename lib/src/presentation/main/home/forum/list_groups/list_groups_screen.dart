@@ -8,7 +8,6 @@ import 'package:heidi/src/presentation/widget/app_forum_group_item.dart';
 import 'package:heidi/src/presentation/widget/app_navbar.dart';
 import 'package:heidi/src/presentation/widget/app_product_item.dart';
 import 'package:heidi/src/utils/configs/application.dart';
-import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
@@ -287,11 +286,13 @@ class _ListLoadedState extends State<ListLoaded> {
   final ProductViewType _listMode = Application.setting.listMode;
   double previousScrollPosition = 0;
   int pageNo = 1;
+  List<ForumGroupModel>? list;
 
   @override
   void initState() {
     super.initState();
     _scrollController.addListener(_scrollListener);
+    list = widget.list;
   }
 
   @override
@@ -301,28 +302,34 @@ class _ListLoadedState extends State<ListLoaded> {
     super.dispose();
   }
 
-  void _scrollListener() {
+  Future<void> _scrollListener() async {
     if (_scrollController.position.atEdge) {
       if (_scrollController.position.pixels != 0) {
         setState(() {
           isLoadingMore = true;
           previousScrollPosition = _scrollController.position.pixels;
         });
-        context
-            .read<ListCubit>()
-            .newListings(++pageNo, widget.selectedCityId)
-            .then((_) {
-          setState(() {
-            isLoadingMore = false;
-          });
-        }).catchError(
-          (error) {
-            setState(() {
-              isLoadingMore = false;
-            });
-            logError('Error loading more listings: $error');
-          },
-        );
+        list = await context.read<ListGroupsCubit>().newListings(++pageNo);
+
+        setState(() {
+          // list = [];
+          // list = response;
+          isLoadingMore = false;
+          // list!.clear();
+          // list!.addAll(response);
+        });
+        //     .then((_) {
+        //   setState(() {
+        //     isLoadingMore = false;
+        //   });
+        // }).catchError(
+        //   (error) {
+        //     setState(() {
+        //       isLoadingMore = false;
+        //     });
+        //     logError('Error loading more listings: $error');
+        //   },
+        // );
       }
     }
   }
@@ -334,7 +341,7 @@ class _ListLoadedState extends State<ListLoaded> {
       child: Column(
         children: <Widget>[
           Expanded(
-            child: _buildContent(widget.list),
+            child: _buildContent(list!),
           )
         ],
       ),
@@ -374,6 +381,7 @@ class _ListLoadedState extends State<ListLoaded> {
             }
           },
           item: item,
+          fromGroupList: true,
         ),
       );
     }
@@ -396,13 +404,13 @@ class _ListLoadedState extends State<ListLoaded> {
               SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
-                    final item = widget.list[index];
+                    final item = list[index];
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 16),
                       child: _buildItem(item: item, type: _listMode),
                     );
                   },
-                  childCount: widget.list.length,
+                  childCount: list.length,
                 ),
               ),
             ],

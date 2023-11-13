@@ -2,25 +2,27 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_forum_group.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/my_groups/cubit/my_groups_cubit.dart';
 import 'package:heidi/src/presentation/main/home/forum/list_groups/cubit/cubit.dart';
 import 'package:heidi/src/presentation/main/home/widget/empty_product_item.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
-import 'package:loggy/loggy.dart';
 
 class ForumGroupItem extends StatefulWidget {
-  const ForumGroupItem({
-    Key? key,
-    this.item,
-    required this.userId,
-    required this.onPressed,
-  }) : super(key: key);
+  const ForumGroupItem(
+      {Key? key,
+      this.item,
+      required this.userId,
+      required this.onPressed,
+      required this.fromGroupList})
+      : super(key: key);
 
   final ForumGroupModel? item;
   final void Function(bool) onPressed;
   final int userId;
+  final bool fromGroupList;
 
   @override
   State<ForumGroupItem> createState() => _ForumGroupItemState();
@@ -146,8 +148,13 @@ class _ForumGroupItemState extends State<ForumGroupItem> {
                               Navigator.pushNamed(context, Routes.groupDetails,
                                       arguments: widget.item)
                                   .then((value) async {
-                                logError('Value', value);
-                                await context.read<ListGroupsCubit>().onLoad();
+                                if (widget.fromGroupList) {
+                                  await context
+                                      .read<ListGroupsCubit>()
+                                      .onLoad();
+                                } else {
+                                  await context.read<MyGroupsCubit>().onLoad();
+                                }
                               });
                               // widget.onPressed;
                             }

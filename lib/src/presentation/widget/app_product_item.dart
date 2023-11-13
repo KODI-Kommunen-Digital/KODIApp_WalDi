@@ -8,7 +8,6 @@ import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:heidi/src/presentation/main/home/widget/empty_product_item.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/utils/configs/application.dart';
-import 'package:heidi/src/utils/pdf_downloader.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:path_provider/path_provider.dart';
@@ -31,7 +30,6 @@ class AppProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final pdfService = PDFService();
     String uniqueKey = UniqueKey().toString();
     final memoryCacheManager = DefaultCacheManager();
     switch (type) {
@@ -41,27 +39,25 @@ class AppProductItem extends StatelessWidget {
         }
         return InkWell(
           onTap: () async {
-            if(item?.pdf != '') {
-              String pdfURL =
-                  '${Application.picturesURL}${item?.pdf}?cacheKey=$uniqueKey';
-              final pdfName = PDFService.extractPdfName(item?.pdf);
-              final fileExists = await pdfService.doesFileExist(pdfName);
-              if (fileExists == false) {
-                await pdfService.downloadPDF(pdfURL, item?.pdf);
-                onPressed!();
-              }
-              else {
-                onPressed!();
-              }
-            }
-            else{
-              onPressed!();
-            }
+            onPressed!();
           },
           child: Row(
             children: <Widget>[
-              item?.pdf == ''
+              item?.pdf != '' && item?.image == 'admin/News.jpeg'
                   ? ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: SizedBox(
+                          width: 84,
+                          height: 84,
+                          child: const PDF().cachedFromUrl(
+                            "${Application.picturesURL}${item?.pdf}?cacheKey=$uniqueKey",
+                            placeholder: (progress) =>
+                                Center(child: Text('$progress %')),
+                            errorWidget: (error) =>
+                                Center(child: Text(error.toString())),
+                          )),
+                    )
+                  : ClipRRect(
                       borderRadius: BorderRadius.circular(12),
                       child: Image.network(
                         item?.sourceId == 2
@@ -103,19 +99,6 @@ class AppProductItem extends StatelessWidget {
                           );
                         },
                       ),
-                    )
-                  : ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: SizedBox(
-                          width: 84,
-                          height: 84,
-                          child: const PDF().cachedFromUrl(
-                            "${Application.picturesURL}${item?.pdf}?cacheKey=$uniqueKey",
-                            placeholder: (progress) =>
-                                Center(child: Text('$progress %')),
-                            errorWidget: (error) =>
-                                Center(child: Text(error.toString())),
-                          )),
                     ),
               const SizedBox(width: 8),
               Expanded(
@@ -194,22 +177,7 @@ class AppProductItem extends StatelessWidget {
 
         return InkWell(
           onTap: () async {
-            if(item?.pdf != '') {
-              String pdfURL =
-                  '${Application.picturesURL}${item?.pdf}?cacheKey=$uniqueKey';
-              final pdfName = PDFService.extractPdfName(item?.pdf);
-              final fileExists = await pdfService.doesFileExist(pdfName);
-              if (fileExists == false) {
-                await pdfService.downloadPDF(pdfURL, item?.pdf);
-                onPressed!();
-              }
-              else {
-                onPressed!();
-              }
-            }
-            else{
-              onPressed!();
-            }
+            onPressed!();
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -315,29 +283,27 @@ class AppProductItem extends StatelessWidget {
 
         return InkWell(
           onTap: () async {
-            if(item?.pdf != '') {
-              String pdfURL =
-                  '${Application.picturesURL}${item?.pdf}?cacheKey=$uniqueKey';
-              final pdfName = PDFService.extractPdfName(item?.pdf);
-              final fileExists = await pdfService.doesFileExist(pdfName);
-              if (fileExists == false) {
-                await pdfService.downloadPDF(pdfURL, item?.pdf);
-                onPressed!();
-              }
-              else {
-                onPressed!();
-              }
-            }
-            else{
-              onPressed!();
-            }
+            onPressed!();
           },
           child: Stack(
             children: [
               Row(
                 children: <Widget>[
-                  item?.pdf == ''
+                  item?.pdf != '' && item?.image == 'admin/News.jpeg'
                       ? ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: SizedBox(
+                              width: 84,
+                              height: 84,
+                              child: const PDF().cachedFromUrl(
+                                "${Application.picturesURL}${item?.pdf}?cacheKey=$uniqueKey",
+                                placeholder: (progress) =>
+                                    Center(child: Text('$progress %')),
+                                errorWidget: (error) =>
+                                    Center(child: Text(error.toString())),
+                              )),
+                        )
+                      : ClipRRect(
                           borderRadius: BorderRadius.circular(12),
                           child: Image.network(
                             item?.sourceId == 2
@@ -347,25 +313,23 @@ class AppProductItem extends StatelessWidget {
                                     : isRefreshLoader
                                         ? "${Application.picturesURL}${item!.image}"
                                         : "${Application.picturesURL}${item!.image}?cache=$uniqueKey",
-                            width: 120,
-                            height: 140,
+                            width: 84,
+                            height: 84,
                             fit: BoxFit.cover,
                             errorBuilder: (context, error, stackTrace) {
-                              // Handle errors here
                               return AppPlaceholder(
                                 child: Container(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(12),
                                     color: Colors.white,
                                   ),
-                                  width: 120,
-                                  height: 140,
+                                  width: 84,
+                                  height: 84,
                                   child: const Icon(Icons.error),
                                 ),
                               );
                             },
                             loadingBuilder: (context, child, loadingProgress) {
-                              // Display the AppPlaceholder while the image is loading
                               if (loadingProgress == null) {
                                 return child;
                               }
@@ -375,25 +339,12 @@ class AppProductItem extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(12),
                                     color: Colors.white,
                                   ),
-                                  width: 120,
-                                  height: 140,
+                                  width: 84,
+                                  height: 84,
                                 ),
                               );
                             },
                           ),
-                        )
-                      : ClipRRect(
-                          borderRadius: BorderRadius.circular(11),
-                          child: SizedBox(
-                              width: 120,
-                              height: 140,
-                              child: const PDF().cachedFromUrl(
-                                "${Application.picturesURL}${item?.pdf}?cacheKey=$uniqueKey",
-                                placeholder: (progress) =>
-                                    Center(child: Text('$progress %')),
-                                errorWidget: (error) =>
-                                    Center(child: Text(error.toString())),
-                              )),
                         ),
                   const SizedBox(width: 8),
                   Expanded(

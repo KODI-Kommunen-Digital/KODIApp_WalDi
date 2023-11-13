@@ -10,9 +10,8 @@ class PostDetailState with _$PostDetailState {
   const factory PostDetailState.loading() = PostDetailLoading;
 
   const factory PostDetailState.loaded(
-    UserModel? userDetail,
-    String userImage,
-  ) = PostDetailLoaded;
+          UserModel? userDetail, String userImage, int userId, bool isAdmin) =
+      PostDetailLoaded;
 
   const factory PostDetailState.error(String error) = PostDetailError;
 }
