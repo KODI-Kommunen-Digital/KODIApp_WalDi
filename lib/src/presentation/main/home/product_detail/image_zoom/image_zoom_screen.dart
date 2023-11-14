@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:photo_view/photo_view.dart';
 
 class ImageZoomScreen extends StatelessWidget {
@@ -22,11 +22,15 @@ class ImageZoomScreen extends StatelessWidget {
               child: SizedBox(
                 height: height * 0.8,
                 child: imageUrl.contains('.pdf')
-                    ? PDFView(
-                        filePath: imageUrl,
-                        enableSwipe: true,
-                        autoSpacing: false,
-                        pageFling: true,
+                    ? const PDF().cachedFromUrl(
+                        imageUrl,
+                        placeholder: (progress) =>
+                            Center(child: Text('$progress %')),
+                        errorWidget: (error) => Center(
+                          child: Text(
+                            error.toString(),
+                          ),
+                        ),
                       )
                     : PhotoView(
                         imageProvider: CachedNetworkImageProvider(
