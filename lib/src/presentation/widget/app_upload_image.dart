@@ -134,7 +134,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
                   setState(() {
                     images.remove(images[0]);
                     context.read<AddListingCubit>().removeAssets(0);
-                     _file = null;
+                    _file = null;
                   });
                 },
               ),
@@ -185,7 +185,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
           setState(() {
             isImageUploaded = false;
             _file = File(pickedFile.path);
-            widget.onChange('');
+            widget.onChange([]);
           });
           final profile = widget.profile;
           final forumGroup = widget.forumGroup;
@@ -299,7 +299,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
                       isImageUploaded = false;
                       selectedAssets.clear();
                     });
-                    if(!mounted) return;
+                    if (!mounted) return;
                     context.read<AddListingCubit>().clearAssets();
 
                     final profile = widget.profile;
@@ -579,7 +579,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
           });
         }
       }
-     } on Exception catch (e) {
+    } on Exception catch (e) {
       logError('Error Selecting Multiple Images', e);
     }
   }
