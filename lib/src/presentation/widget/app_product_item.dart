@@ -386,7 +386,6 @@ class AppProductItem extends StatelessWidget {
                                   ),
                             ),
                           ),
-                        if (item?.categoryId == 3 && cityName != null)
                           Padding(
                             padding: const EdgeInsets.only(top: 5),
                             child: Text(
