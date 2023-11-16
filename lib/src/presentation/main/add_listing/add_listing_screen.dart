@@ -65,7 +65,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
   String? _errorWebsite;
   String? _errorStatus;
   String? _errorSDate;
-  String? _errorEDate;
   String? _errorCategory;
   String? selectedCity;
   int? cityId;
@@ -170,7 +169,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
               ),
             ],
           ),
-
         ),
       ),
     );
@@ -217,7 +215,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
       final city = listCity
           .firstWhere((element) => element['id'] == widget.item?.cityId);
       selectedCity = city['name'];
-      if (selectedCategory?.toLowerCase() == "news" || selectedCategory == null) {
+      if (selectedCategory?.toLowerCase() == "News" ||
+          selectedCategory == null) {
         final subCategoryResponse = await context
             .read<AddListingCubit>()
             .loadSubCategory(selectedCategory);
@@ -269,7 +268,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       }
       if (!loadCategoryResponse?.data.isEmpty) {
         if (!mounted) return;
-        if (selectedCategory == "news" || selectedCategory == null) {
+        if (selectedCategory == "News" || selectedCategory == null) {
           final subCategoryResponse = await context
               .read<AddListingCubit>()
               .loadSubCategory(Translate.of(context).translate(
@@ -515,25 +514,19 @@ class _AddListingScreenState extends State<AddListingScreen> {
     _errorTitle =
         UtilValidator.validate(_textTitleController.text, allowEmpty: false);
 
-    if (_textContentController.text.length >= 10001) {
-      _errorContent = "Info should not exceed 1000 characters.";
+    if (_textContentController.text.length >= 65535) {
+      _errorContent = "value_desc_limit_exceeded";
     } else {
       _errorContent = UtilValidator.validate(_textContentController.text,
           allowEmpty: false);
     }
 
     logError('selectedCategory', selectedCategory);
-    if (selectedCategory == "Events") {
+    if (selectedCategory == "events") {
       if (_startDate == null || _startDate == "" || _startTime == null) {
         _errorSDate = "value_not_date_empty";
       } else {
         _errorSDate = null;
-      }
-
-      if (_endDate == null || _endDate == "" || _endTime == null) {
-        _errorEDate = "value_not_date_empty";
-      } else {
-        _errorEDate = null;
       }
     }
 
@@ -546,7 +539,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
       _errorWebsite,
       _errorStatus,
       _errorSDate,
-      _errorEDate,
     ];
 
     if (_errorTitle != null ||
@@ -556,8 +548,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
         _errorEmail != null ||
         _errorWebsite != null ||
         _errorStatus != null ||
-        _errorSDate != null ||
-        _errorEDate != null) {
+        _errorSDate != null) {
       String errorMessage = "";
       for (var element in errors) {
         if (element != null &&
@@ -761,7 +752,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
                                       },
                                     );
 
-                                    if (selectedCategory == "news" ||
+                                    if (selectedCategory == "News" ||
                                         selectedCategory == null) {
                                       selectSubCategory(selectedCategory);
                                     }
@@ -770,9 +761,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
                           )),
               ],
             ),
-            if (selectedCategory == "news" || selectedCategory == null)
+            if (selectedCategory == "News" || selectedCategory == null)
               const SizedBox(height: 8),
-            if (selectedCategory == "news" || selectedCategory == null)
+            if (selectedCategory == "News" || selectedCategory == null)
               Text.rich(
                 TextSpan(
                   text: Translate.of(context).translate('subCategory'),
@@ -794,7 +785,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
             const SizedBox(height: 8),
             Row(
               children: [
-                if (selectedCategory == "news")
+                if (selectedCategory == "News")
                   Expanded(
                       child: listSubCategory.isEmpty
                           ? const LinearProgressIndicator()
@@ -824,7 +815,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
                             )),
               ],
             ),
-            if (selectedCategory == "news" || selectedCategory == null)
+            if (selectedCategory == "News" || selectedCategory == null)
               const SizedBox(height: 8),
             const SizedBox(height: 8),
             Text.rich(
@@ -1050,7 +1041,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
               ),
             ),
             Visibility(
-              visible: selectedCategory == "Events",
+              visible: selectedCategory == "events",
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -1127,15 +1118,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
                           .textTheme
                           .titleMedium!
                           .copyWith(fontWeight: FontWeight.bold),
-                      children: const <TextSpan>[
-                        TextSpan(
-                          text: ' *',
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -1160,15 +1142,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
                           .textTheme
                           .titleMedium!
                           .copyWith(fontWeight: FontWeight.bold),
-                      children: const <TextSpan>[
-                        TextSpan(
-                          text: ' *',
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
                     ),
                   ),
                   const SizedBox(height: 8),

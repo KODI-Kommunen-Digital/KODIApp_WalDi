@@ -162,6 +162,45 @@ class AppProductItem extends StatelessWidget {
                         ),
                       ),
                     ),
+                    Visibility(
+                      visible:
+                          item!.startDate.isNotEmpty && item!.endDate == "",
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white30,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(3.5),
+                          child: Text(
+                            "${item?.startDate}",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall!
+                                .copyWith(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Visibility(
+                      visible: item?.categoryId == 1,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white30,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(3.5),
+                          child: Text(
+                            "${item?.createDate}",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall!
+                                .copyWith(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    ),
                     const SizedBox(height: 4),
                   ],
                 ),
@@ -360,36 +399,25 @@ class AppProductItem extends StatelessWidget {
                               .copyWith(fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 8),
-                        (item?.categoryId == 3)
-                            ? Container(
-                                padding: const EdgeInsets.all(3.5),
-                                decoration: BoxDecoration(
-                                  color: Colors.white30,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Text(
-                                  item?.categoryId == 3
-                                      ? "${item?.startDate} ${Translate.of(context).translate('to')} ${item?.endDate}"
-                                      : "",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodySmall!
-                                      .copyWith(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                ),
-                              )
-                            : Text(
-                                item?.categoryId == 3
-                                    ? "${item?.startDate} ${Translate.of(context).translate('to')} ${item?.endDate}"
-                                    : "",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall!
-                                    .copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                              ),
+                        if (item?.categoryId == 3)
+                          Container(
+                            padding: const EdgeInsets.all(3.5),
+                            decoration: BoxDecoration(
+                              color: Colors.white30,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text(
+                              item?.endDate == ""
+                                  ? "${item?.startDate}"
+                                  : "${item?.startDate} ${Translate.of(context).translate('to')} ${item?.endDate}",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall!
+                                  .copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                            ),
+                          ),
                         Text(
                           item?.categoryId == 1 ? "${item?.createDate}" : "",
                           style:
