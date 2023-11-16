@@ -34,7 +34,7 @@ class HomeCubit extends Cubit<HomeState> {
     if (!calledExternally && !isRefreshLoader) {
       await AppBloc.discoveryCubit.onLoad();
     }
-    
+
     if (!isRefreshLoader) {
       emit(HomeState.categoryLoading(location));
     }
@@ -43,7 +43,6 @@ class HomeCubit extends Cubit<HomeState> {
     category = List.from(categoryRequestResponse.data ?? []).map((item) {
       return CategoryModel.fromJson(item);
     }).toList();
-
     CategoryModel? savedCity = await checkSavedCity(location);
     if (savedCity != null) {
       final listingsRequestResponse = await Api.requestLocList(savedCity.id, 1);
@@ -135,14 +134,12 @@ class HomeCubit extends Cubit<HomeState> {
     for (var obj in categoryCount) {
       idToCountMap[obj.id] = obj.count;
     }
-
     categories.sort((a, b) {
       if (a.id == 14) return -1;
       if (b.id == 14) return 1;
 
       return (idToCountMap[b.id] ?? 0).compareTo(idToCountMap[a.id] ?? 0);
     });
-
     // Hide tag on empty categories
     for (var element in categories) {
       bool hasContent = await categoryHasContent(element.id, cityId);

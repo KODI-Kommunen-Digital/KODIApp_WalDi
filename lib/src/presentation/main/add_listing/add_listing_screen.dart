@@ -1,5 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:io';
+
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_product.dart';
@@ -89,6 +92,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
   String? selectedSubCategory;
   bool isImageChanged = false;
   bool isLoading = false;
+  List<File>? selectedImages = [];
+
 
   late int? currentCity;
 
@@ -170,7 +175,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
               ),
             ],
           ),
-
         ),
       ),
     );
@@ -217,7 +221,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
       final city = listCity
           .firstWhere((element) => element['id'] == widget.item?.cityId);
       selectedCity = city['name'];
-      if (selectedCategory?.toLowerCase() == "news" || selectedCategory == null) {
+      if (selectedCategory?.toLowerCase() == "News" ||
+          selectedCategory == null) {
         final subCategoryResponse = await context
             .read<AddListingCubit>()
             .loadSubCategory(selectedCategory);
@@ -269,7 +274,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       }
       if (!loadCategoryResponse?.data.isEmpty) {
         if (!mounted) return;
-        if (selectedCategory == "news" || selectedCategory == null) {
+        if (selectedCategory == "News" || selectedCategory == null) {
           final subCategoryResponse = await context
               .read<AddListingCubit>()
               .loadSubCategory(Translate.of(context).translate(
@@ -459,7 +464,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
             startDate: _startDate,
             endDate: _endDate,
             startTime: _startTime,
-            endTime: _endTime);
+            endTime: _endTime, imagesList: selectedImages);
         if (result) {
           await AppBloc.homeCubit.onLoad(false);
           setState(() {
@@ -633,11 +638,27 @@ class _AddListingScreenState extends State<AddListingScreen> {
                 profile: false,
                 forumGroup: false,
                 onChange: (result) {
+                  if (result.isNotEmpty) {
+                    setState(() {
+                      selectedImages?.clear();
+                      selectedImages?.addAll(result);
+                    });
+                  }
+                  else{
+                    setState(() {
+                      selectedImages?.clear();
+                    });
+
+                  }
                   isImageChanged = true;
                 },
               ),
             ),
             const SizedBox(height: 16),
+            Visibility(
+              visible: selectedImages!.length > 1,
+              child: _buildImageList(),
+            ),
             const SizedBox(height: 16),
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
               Text.rich(
@@ -761,7 +782,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
                                       },
                                     );
 
-                                    if (selectedCategory == "news" ||
+                                    if (selectedCategory == "News" ||
                                         selectedCategory == null) {
                                       selectSubCategory(selectedCategory);
                                     }
@@ -770,9 +791,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
                           )),
               ],
             ),
-            if (selectedCategory == "news" || selectedCategory == null)
+            if (selectedCategory == "News" || selectedCategory == null)
               const SizedBox(height: 8),
-            if (selectedCategory == "news" || selectedCategory == null)
+            if (selectedCategory == "News" || selectedCategory == null)
               Text.rich(
                 TextSpan(
                   text: Translate.of(context).translate('subCategory'),
@@ -794,7 +815,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
             const SizedBox(height: 8),
             Row(
               children: [
-                if (selectedCategory == "news")
+                if (selectedCategory == "News")
                   Expanded(
                       child: listSubCategory.isEmpty
                           ? const LinearProgressIndicator()
@@ -824,7 +845,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
                             )),
               ],
             ),
-            if (selectedCategory == "news" || selectedCategory == null)
+            if (selectedCategory == "News" || selectedCategory == null)
               const SizedBox(height: 8),
             const SizedBox(height: 8),
             Text.rich(
@@ -1190,6 +1211,56 @@ class _AddListingScreenState extends State<AddListingScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildImageList() {
+    return SizedBox(
+      height: 150,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: selectedImages!.length > 1 ? selectedImages!.length - 1 : 0, // Ensure itemCount is non-negative
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Stack(
+              children: [
+                DottedBorder(
+                  borderType: BorderType.RRect,
+                  radius: const Radius.circular(8),
+                  color: Theme.of(context).primaryColor,
+                  child: Container(
+                    width: 100,
+                    height: 100,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.rectangle,
+                    ),
+                    // alignment: Alignment.center,
+                    child: Image.file(selectedImages![index + 1],
+                        fit: BoxFit.cover),
+                  ),
+                ),
+                Positioned(
+                  top: -10,
+                  right: -10,
+                  child: IconButton(
+                    icon:  Icon(
+                      Icons.delete,
+                      color: Colors.red[900],
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        context.read<AddListingCubit>().removeAssets(index + 1);
+                        selectedImages?.remove(selectedImages?[index + 1]);
+                      });
+                    },
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

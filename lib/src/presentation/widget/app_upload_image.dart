@@ -4,15 +4,20 @@ import 'package:device_info/device_info.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:heidi/src/data/repository/forum_repository.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
+import 'package:heidi/src/presentation/main/add_listing/cubit/add_listing_cubit.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/multiple_gesture_detector.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:multiple_images_picker/multiple_images_picker.dart';
 import 'package:loggy/loggy.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 enum UploadImageType { circle, square }
@@ -20,7 +25,7 @@ enum UploadImageType { circle, square }
 class AppUploadImage extends StatefulWidget {
   final String? title;
   final String? image;
-  final Function(String) onChange;
+  final Function(List<File>) onChange;
   final UploadImageType type;
   final bool profile;
   final bool forumGroup;
@@ -47,6 +52,10 @@ class _AppUploadImageState extends State<AppUploadImage> {
   bool showAction = false;
   String title = '';
   bool isPermanentlyDenied = false;
+  List<File> images = [];
+  List<Asset> resultList = <Asset>[];
+  List<File> selectedFiles = [];
+  List<Asset> selectedAssets = [];
 
   @override
   void initState() {
@@ -56,6 +65,85 @@ class _AppUploadImageState extends State<AppUploadImage> {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    DecorationImage? decorationImage;
+    BorderType borderType = BorderType.RRect;
+    Widget circle = Container();
+
+    if (widget.image != null && !widget.image!.contains(".pdf")) {
+      decorationImage = DecorationImage(
+        image: NetworkImage("${Application.picturesURL}${widget.image!}"),
+        fit: BoxFit.cover,
+      );
+    }
+
+    if (_file != null && !_file!.path.contains(".pdf")) {
+      decorationImage = DecorationImage(
+        image: FileImage(
+          _file!,
+        ),
+        fit: BoxFit.cover,
+      );
+    }
+
+    BoxDecoration decoration = BoxDecoration(
+      borderRadius: BorderRadius.circular(8),
+      image: decorationImage,
+    );
+
+    if (widget.type == UploadImageType.circle) {
+      borderType = BorderType.Circle;
+      decoration = BoxDecoration(
+        shape: BoxShape.circle,
+        image: decorationImage,
+      );
+    }
+
+    return InkWell(
+      onTap: widget.profile
+          ? _uploadImage
+          : selectedAssets.length > 1
+              ? selectImages
+              : showChooseFileTypeDialog,
+      child: Stack(
+        children: [
+          DottedBorder(
+            borderType: borderType,
+            radius: const Radius.circular(8),
+            color: Theme.of(context).primaryColor,
+            child: Container(
+              decoration: decoration,
+              alignment: Alignment.center,
+              child: _buildContent(),
+            ),
+          ),
+          Visibility(
+            visible: selectedAssets.length > 1,
+            child: Positioned(
+              top: -10,
+              right: -10,
+              child: IconButton(
+                icon: Icon(
+                  Icons.delete,
+                  color: Colors.red[900],
+                ),
+                onPressed: () {
+                  setState(() {
+                    images.remove(images[0]);
+                    context.read<AddListingCubit>().removeAssets(0);
+                     _file = null;
+                  });
+                },
+              ),
+            ),
+          ),
+          Positioned.fill(child: circle),
+        ],
+      ),
+    );
   }
 
   Future<void> _uploadImage() async {
@@ -138,7 +226,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
         setState(() {
           isImageUploaded = false;
           _file = File(pickedFile.path);
-          widget.onChange('');
+          widget.onChange([]);
         });
         final profile = widget.profile;
         final forumGroup = widget.forumGroup;
@@ -203,12 +291,17 @@ class _AppUploadImageState extends State<AppUploadImage> {
                     allowedExtensions: ['pdf'],
                   );
                   if (result != null) {
-                    _file = File('');
-                    widget.onChange('pdf');
+                    widget.onChange([]);
                     setState(() {
+                      _file = null;
+                      images.clear();
                       _file = File(result.files.single.path!);
                       isImageUploaded = false;
+                      selectedAssets.clear();
                     });
+                    if(!mounted) return;
+                    context.read<AddListingCubit>().clearAssets();
+
                     final profile = widget.profile;
                     if (!profile) {
                       await ListRepository.uploadPdf(_file!);
@@ -227,19 +320,17 @@ class _AppUploadImageState extends State<AppUploadImage> {
                     if (await Permission.photos.isGranted ||
                         await Permission.photos.isLimited) {
                       status = PermissionStatus.granted;
-                      final pickedFile = await _picker.pickImage(
-                        source: ImageSource.gallery,
-                      );
-                      if (pickedFile == null) return;
-                      if (!mounted) return;
+
                       setState(() {
-                        isImageUploaded = false;
-                        _file = File(pickedFile.path);
+                        selectedAssets =
+                            context.read<AddListingCubit>().getSelectedAssets();
                       });
+                      await selectImages();
                       final profile = widget.profile;
                       if (!profile) {
-                        await ListRepository.uploadImage(_file!, profile);
-                        widget.onChange('image');
+                        if (_file != null) {
+                          await ListRepository.uploadImage(_file!, profile);
+                        }
                       } else {
                         final response =
                             await ListRepository.uploadImage(_file!, profile);
@@ -247,8 +338,6 @@ class _AppUploadImageState extends State<AppUploadImage> {
                           setState(() {
                             isImageUploaded = true;
                           });
-                          final item = response.data['data']?['image'];
-                          widget.onChange(item);
                         }
                       }
                     } else if (await Permission.photos.isDenied) {
@@ -271,7 +360,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
                       final profile = widget.profile;
                       if (!profile) {
                         await ListRepository.uploadImage(_file!, profile);
-                        widget.onChange('image');
+                        widget.onChange([]);
                       } else {
                         final response =
                             await ListRepository.uploadImage(_file!, profile);
@@ -312,9 +401,8 @@ class _AppUploadImageState extends State<AppUploadImage> {
                 AllowMultipleGestureRecognizer:
                     GestureRecognizerFactoryWithHandlers<
                         AllowMultipleGestureRecognizer>(
-                  () => AllowMultipleGestureRecognizer(), //constructor
+                  () => AllowMultipleGestureRecognizer(),
                   (AllowMultipleGestureRecognizer instance) {
-                    //initializer
                     instance.onTap = () => showChooseFileTypeDialog();
                   },
                 )
@@ -437,58 +525,62 @@ class _AppUploadImageState extends State<AppUploadImage> {
     return null;
   }
 
-  @override
-  Widget build(BuildContext context) {
-    DecorationImage? decorationImage;
-    BorderType borderType = BorderType.RRect;
-    Widget circle = Container();
-
-    if (widget.image != null && !widget.image!.contains(".pdf")) {
-      decorationImage = DecorationImage(
-        image: NetworkImage("${Application.picturesURL}${widget.image!}"),
-        fit: BoxFit.cover,
-      );
-    }
-
-    if (_file != null && !_file!.path.contains(".pdf")) {
-      decorationImage = DecorationImage(
-        image: FileImage(
-          _file!,
-        ),
-        fit: BoxFit.cover,
-      );
-    }
-
-    BoxDecoration decoration = BoxDecoration(
-      borderRadius: BorderRadius.circular(8),
-      image: decorationImage,
+  Future<void> multipleImagePicker() async {
+    final result = await FilePicker.platform.pickFiles(
+      allowMultiple: true,
+      type: FileType.image,
     );
 
-    if (widget.type == UploadImageType.circle) {
-      borderType = BorderType.Circle;
-      decoration = BoxDecoration(
-        shape: BoxShape.circle,
-        image: decorationImage,
-      );
+    if (result != null) {
+      setState(() {
+        _file = null;
+        images.addAll(result.paths.map((path) => File(path!)).toList());
+        isImageUploaded = false;
+        _file ??= File(images[0].path);
+      });
+      widget.onChange(images);
     }
+  }
 
-    return InkWell(
-      onTap: widget.profile ? _uploadImage : showChooseFileTypeDialog,
-      child: Stack(
-        children: [
-          DottedBorder(
-            borderType: borderType,
-            radius: const Radius.circular(8),
-            color: Theme.of(context).primaryColor,
-            child: Container(
-              decoration: decoration,
-              alignment: Alignment.center,
-              child: _buildContent(),
-            ),
-          ),
-          Positioned.fill(child: circle),
-        ],
-      ),
-    );
+  Future<void> selectImages() async {
+    try {
+      if (!mounted) return;
+      setState(() {
+        selectedAssets = context.read<AddListingCubit>().getSelectedAssets();
+      });
+      if (!mounted) return;
+      resultList = await MultipleImagesPicker.pickImages(
+        maxImages: 300,
+        selectedAssets: selectedAssets,
+      );
+      if (resultList.isNotEmpty) {
+        if (!mounted) return;
+        context.read<AddListingCubit>().clearAssets();
+        images.clear();
+        context.read<AddListingCubit>().saveAssets(resultList);
+
+        for (Asset asset in resultList) {
+          final ByteData byteData = await asset.getByteData();
+          final List<int> imageData = byteData.buffer.asUint8List();
+          final tempDir = await getTemporaryDirectory();
+          final filePath = '${tempDir.path}/${asset.name}';
+
+          final imageFile = File(filePath);
+          await imageFile.writeAsBytes(imageData);
+
+          setState(() {
+            _file = null;
+            images.add(imageFile);
+            _file ??= File(images[0].path);
+            widget.onChange(images);
+            context.read<AddListingCubit>().saveAssets(resultList);
+            selectedAssets =
+                context.read<AddListingCubit>().getSelectedAssets();
+          });
+        }
+      }
+     } on Exception catch (e) {
+      logError('Error Selecting Multiple Images', e);
+    }
   }
 }

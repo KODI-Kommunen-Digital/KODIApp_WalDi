@@ -306,6 +306,7 @@ class ListRepository {
     String? endDate,
     TimeOfDay? startTime,
     TimeOfDay? endTime,
+    List<File>? imagesList,
   ) async {
     final subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
@@ -464,7 +465,7 @@ class ListRepository {
     };
     final response =
         await Api.requestEditProduct(cityId, listingId, params, isImageChanged);
-    if(response.success){
+    if (response.success) {
       final prefs = await Preferences.openBox();
       FormData? pickedFile = prefs.getPickedFile();
       if (isImageChanged) {
@@ -537,7 +538,8 @@ class ListRepository {
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
     final response = await Api.requestSubmitSubCategory(categoryId: categoryId);
     var jsonCategory = response.data;
-    final item = jsonCategory.firstWhere((item) => item['name'] == value.toLowerCase());
+    final item =
+        jsonCategory.firstWhere((item) => item['name'] == value.toLowerCase());
     final itemId = item['id'];
     final subCategoryId = itemId;
     prefs.setKeyValue(Preferences.subCategoryId, subCategoryId);

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model.dart';
@@ -7,9 +9,11 @@ import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/presentation/main/add_listing/cubit/add_listing_state.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
+import 'package:multiple_images_picker/multiple_images_picker.dart';
 
 class AddListingCubit extends Cubit<AddListingState> {
   final ListRepository _repo;
+  List<Asset> selectedAssets = [];
 
   AddListingCubit(this._repo) : super(const AddListingState.loaded());
 
@@ -47,6 +51,7 @@ class AddListingCubit extends Cubit<AddListingState> {
     String? price,
     TimeOfDay? startTime,
     TimeOfDay? endTime,
+    List<File>? imagesList,
   }) async {
     try {
       final response = await _repo.saveProduct(
@@ -67,7 +72,8 @@ class AddListingCubit extends Cubit<AddListingState> {
           startDate,
           endDate,
           startTime,
-          endTime);
+          endTime,
+          imagesList);
       if (response.success) {
         return true;
       } else {
@@ -215,6 +221,22 @@ class AddListingCubit extends Cubit<AddListingState> {
     } catch (e) {
       logError('request subCategoryID Error', e);
     }
+  }
+
+  void saveAssets(assetList){
+    selectedAssets = assetList;
+  }
+
+  void removeAssets(index){
+    selectedAssets.removeAt(index);
+  }
+
+  void clearAssets(){
+    selectedAssets.clear();
+  }
+
+  List<Asset> getSelectedAssets(){
+    return selectedAssets;
   }
 
   Future<ResultApiModel?> loadSubCategory(value) async {
