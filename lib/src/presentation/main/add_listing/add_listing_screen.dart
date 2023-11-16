@@ -627,6 +627,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       8: "subcategory_club_news",
       9: "subcategory_road",
       10: "subcategory_official_notification",
+      11: "subcategory_timeless_news"
     };
     return subCategories[id];
   }
