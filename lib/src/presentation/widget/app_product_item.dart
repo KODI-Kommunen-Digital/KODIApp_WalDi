@@ -13,20 +13,22 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:path_provider/path_provider.dart';
 
 class AppProductItem extends StatelessWidget {
-  const AppProductItem({
-    Key? key,
-    this.item,
-    this.onPressed,
-    required this.type,
-    this.trailing,
-    required this.isRefreshLoader,
-  }) : super(key: key);
+  const AppProductItem(
+      {Key? key,
+      this.item,
+      this.onPressed,
+      required this.type,
+      this.trailing,
+      required this.isRefreshLoader,
+      this.cityName})
+      : super(key: key);
 
   final ProductModel? item;
   final ProductViewType type;
   final VoidCallback? onPressed;
   final Widget? trailing;
   final bool isRefreshLoader;
+  final String? cityName;
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +117,9 @@ class AppProductItem extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      item?.category ?? '',
+                      (cityName != null)
+                          ? "${item?.category ?? ''} - $cityName"
+                          : item?.category ?? '',
                       style: Theme.of(context)
                           .textTheme
                           .bodySmall!
@@ -360,36 +364,35 @@ class AppProductItem extends StatelessWidget {
                               .copyWith(fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 8),
-                        (item?.categoryId == 3)
-                            ? Container(
-                                padding: const EdgeInsets.all(3.5),
-                                decoration: BoxDecoration(
-                                  color: Colors.white30,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Text(
-                                  item?.categoryId == 3
-                                      ? "${item?.startDate} ${Translate.of(context).translate('to')} ${item?.endDate}"
-                                      : "",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodySmall!
-                                      .copyWith(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                ),
-                              )
-                            : Text(
-                                item?.categoryId == 3
-                                    ? "${item?.startDate} ${Translate.of(context).translate('to')} ${item?.endDate}"
-                                    : "",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall!
-                                    .copyWith(
+                        if (item?.categoryId == 3)
+                          Container(
+                            padding: const EdgeInsets.all(3.5),
+                            decoration: BoxDecoration(
+                              color: Colors.white30,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text(
+                              (item?.categoryId == 3)
+                                  ? "${item?.startDate} ${Translate.of(context).translate('to')} ${item?.endDate}"
+                                  : "",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall!
+                                  .copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                            ),
+                          ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 5),
+                          child: Text(
+                            cityName!,
+                            style:
+                                Theme.of(context).textTheme.bodySmall!.copyWith(
                                       fontWeight: FontWeight.bold,
                                     ),
-                              ),
+                          ),
+                        ),
                         Text(
                           item?.categoryId == 1 ? "${item?.createDate}" : "",
                           style:

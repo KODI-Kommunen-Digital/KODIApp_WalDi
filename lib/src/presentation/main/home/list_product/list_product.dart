@@ -210,13 +210,15 @@ class _ListProductScreenState extends State<ListProductScreen> {
           },
           builder: (context, state) => state.when(
             loading: () => const ListLoading(),
-            loaded: (list) => ListLoaded(
+            loaded: (list, listCity) => ListLoaded(
               list: list,
+              listCity: listCity,
               selectedId: widget.arguments['id'],
             ),
-            updated: (list) {
+            updated: (list, listCity) {
               return ListLoaded(
                 list: list,
+                listCity: listCity,
                 selectedId: widget.arguments['id'],
               );
             },
@@ -245,12 +247,14 @@ class ListLoading extends StatelessWidget {
 class ListLoaded extends StatefulWidget {
   final List<ProductModel> list;
   final int selectedId;
+  final List listCity;
 
-  const ListLoaded({
-    Key? key,
-    required this.list,
-    required this.selectedId,
-  }) : super(key: key);
+  const ListLoaded(
+      {Key? key,
+      required this.list,
+      required this.selectedId,
+      required this.listCity})
+      : super(key: key);
 
   @override
   State<ListLoaded> createState() => _ListLoadedState();
@@ -258,6 +262,7 @@ class ListLoaded extends StatefulWidget {
 
 class _ListLoadedState extends State<ListLoaded> {
   List<ProductModel> list = [];
+  List listCity = [];
   final _scrollController = ScrollController(initialScrollOffset: 0.0);
   bool isLoading = false;
   bool isLoadingMore = false;
@@ -268,6 +273,7 @@ class _ListLoadedState extends State<ListLoaded> {
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
     Factory(() => EagerGestureRecognizer())
   };
+
   @override
   void initState() {
     super.initState();
@@ -401,6 +407,9 @@ class _ListLoadedState extends State<ListLoaded> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: AppProductItem(
               isRefreshLoader: true,
+              cityName: context
+                  .read<ListCubit>()
+                  .getCityNameFromId(widget.listCity, item.cityId ?? 0),
               onPressed: () {
                 _onProductDetail(item);
               },

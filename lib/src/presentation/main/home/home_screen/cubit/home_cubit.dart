@@ -34,7 +34,7 @@ class HomeCubit extends Cubit<HomeState> {
     if (!calledExternally && !isRefreshLoader) {
       await AppBloc.discoveryCubit.onLoad();
     }
-    
+
     if (!isRefreshLoader) {
       emit(HomeState.categoryLoading(location));
     }
@@ -83,6 +83,15 @@ class HomeCubit extends Cubit<HomeState> {
 
     bool doesExist = await UserRepository.doesUserExist(userId);
     return doesExist;
+  }
+
+  String getCityName(List<CategoryModel>? cities, int cityId) {
+    if (cities != null) {
+      String name =
+          cities[cities.indexWhere((category) => category.id == cityId)].title;
+      return name;
+    }
+    return "";
   }
 
   Future<bool> categoryHasContent(int id, int? cityId) async {
