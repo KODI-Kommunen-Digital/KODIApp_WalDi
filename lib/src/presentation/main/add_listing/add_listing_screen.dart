@@ -94,7 +94,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
   bool isLoading = false;
   List<File>? selectedImages = [];
 
-
   late int? currentCity;
 
   @override
@@ -193,7 +192,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       listCity = loadCitiesResponse?.data;
       selectedCategory = Translate.of(context).translate(
           _getCategoryTranslation(loadCategoryResponse?.data.first['id']));
-      if (selectedCategory == "News" || selectedCategory == null) {
+      if (selectedCategory == "news" || selectedCategory == null) {
         selectSubCategory(selectedCategory);
       }
       _processing = true;
@@ -221,7 +220,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       final city = listCity
           .firstWhere((element) => element['id'] == widget.item?.cityId);
       selectedCity = city['name'];
-      if (selectedCategory?.toLowerCase() == "News" ||
+      if (selectedCategory?.toLowerCase() == "news" ||
           selectedCategory == null) {
         final subCategoryResponse = await context
             .read<AddListingCubit>()
@@ -274,7 +273,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       }
       if (!loadCategoryResponse?.data.isEmpty) {
         if (!mounted) return;
-        if (selectedCategory == "News" || selectedCategory == null) {
+        if (selectedCategory == "news" || selectedCategory == null) {
           final subCategoryResponse = await context
               .read<AddListingCubit>()
               .loadSubCategory(Translate.of(context).translate(
@@ -464,7 +463,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
             startDate: _startDate,
             endDate: _endDate,
             startTime: _startTime,
-            endTime: _endTime, imagesList: selectedImages);
+            endTime: _endTime,
+            imagesList: selectedImages);
         if (result) {
           await AppBloc.homeCubit.onLoad(false);
           setState(() {
@@ -643,12 +643,10 @@ class _AddListingScreenState extends State<AddListingScreen> {
                       selectedImages?.clear();
                       selectedImages?.addAll(result);
                     });
-                  }
-                  else{
+                  } else {
                     setState(() {
                       selectedImages?.clear();
                     });
-
                   }
                   isImageChanged = true;
                 },
@@ -782,7 +780,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
                                       },
                                     );
 
-                                    if (selectedCategory == "News" ||
+                                    if (selectedCategory == "news" ||
                                         selectedCategory == null) {
                                       selectSubCategory(selectedCategory);
                                     }
@@ -791,9 +789,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
                           )),
               ],
             ),
-            if (selectedCategory == "News" || selectedCategory == null)
+            if (selectedCategory == "news" || selectedCategory == null)
               const SizedBox(height: 8),
-            if (selectedCategory == "News" || selectedCategory == null)
+            if (selectedCategory == "news" || selectedCategory == null)
               Text.rich(
                 TextSpan(
                   text: Translate.of(context).translate('subCategory'),
@@ -815,7 +813,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
             const SizedBox(height: 8),
             Row(
               children: [
-                if (selectedCategory == "News")
+                if (selectedCategory == "news")
                   Expanded(
                       child: listSubCategory.isEmpty
                           ? const LinearProgressIndicator()
@@ -845,7 +843,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
                             )),
               ],
             ),
-            if (selectedCategory == "News" || selectedCategory == null)
+            if (selectedCategory == "news" || selectedCategory == null)
               const SizedBox(height: 8),
             const SizedBox(height: 8),
             Text.rich(
@@ -1220,7 +1218,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
       height: 150,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: selectedImages!.length > 1 ? selectedImages!.length - 1 : 0, // Ensure itemCount is non-negative
+        itemCount: selectedImages!.length > 1
+            ? selectedImages!.length - 1
+            : 0, // Ensure itemCount is non-negative
         itemBuilder: (context, index) {
           return Padding(
             padding: const EdgeInsets.all(8.0),
@@ -1245,7 +1245,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
                   top: -10,
                   right: -10,
                   child: IconButton(
-                    icon:  Icon(
+                    icon: Icon(
                       Icons.delete,
                       color: Colors.red[900],
                     ),

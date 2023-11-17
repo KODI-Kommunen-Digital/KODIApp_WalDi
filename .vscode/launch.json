@@ -5,19 +5,19 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Geseke App",
+            "name": "AUF App",
             "request": "launch",
             "type": "dart",
             "program": "lib/main_dev.dart"
         },
         {
-            "name": "Geseke App (profile mode)",
+            "name": "AUF App (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "Geseke App (release mode)",
+            "name": "AUF App (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"

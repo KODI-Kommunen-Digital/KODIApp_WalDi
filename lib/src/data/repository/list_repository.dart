@@ -356,7 +356,7 @@ class ListRepository {
       "website": website,
       "price": 100, //dummy data
       "discountPrice": 100, //dummy data
-      "logo": media,
+      "logo": imagesList,
       "statusId": 1, //dummy data
       "sourceId": 1, //dummy data
       "longitude": 245.65, //dummy data

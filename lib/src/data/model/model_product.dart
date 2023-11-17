@@ -205,7 +205,7 @@ class ProductModel {
       id: json['id'],
       userId: json['userId'] ?? 0,
       title: json['title'] ?? '',
-      image: json['logo'] ?? 'admin/News.jpeg',
+      image: json['logo']['logo'] ?? 'admin/News.jpeg',
       videoURL: videoURL,
       category: category ?? '',
       createDate: createDate,
