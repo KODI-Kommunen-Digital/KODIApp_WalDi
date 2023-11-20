@@ -13,20 +13,22 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:path_provider/path_provider.dart';
 
 class AppProductItem extends StatelessWidget {
-  const AppProductItem({
-    Key? key,
-    this.item,
-    this.onPressed,
-    required this.type,
-    this.trailing,
-    required this.isRefreshLoader,
-  }) : super(key: key);
+  const AppProductItem(
+      {Key? key,
+      this.item,
+      this.onPressed,
+      required this.type,
+      this.trailing,
+      required this.isRefreshLoader,
+      this.cityName})
+      : super(key: key);
 
   final ProductModel? item;
   final ProductViewType type;
   final VoidCallback? onPressed;
   final Widget? trailing;
   final bool isRefreshLoader;
+  final String? cityName;
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +117,9 @@ class AppProductItem extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      item?.category ?? '',
+                      (cityName != null)
+                          ? "${item?.category ?? ''} - $cityName"
+                          : item?.category ?? '',
                       style: Theme.of(context)
                           .textTheme
                           .bodySmall!

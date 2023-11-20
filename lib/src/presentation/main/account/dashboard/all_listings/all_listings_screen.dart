@@ -71,7 +71,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
   int pageNo = 1;
   List<ProductModel>? posts;
   bool isSwiped = false;
-  String selectedListingStatusValue = "pending";
+  String selectedListingStatusValue = "inactive";
 
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
     Factory(() => EagerGestureRecognizer())
@@ -95,8 +95,8 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
   Future<void> _openFilterDrawer(BuildContext context) async {
     List<String> statusNames = [
       Translate.of(context).translate("active"),
+      Translate.of(context).translate("inactive"),
       Translate.of(context).translate("under_review"),
-      Translate.of(context).translate("pending")
     ];
     int selectedStatus = await AppBloc.allListingsCubit.getCurrentStatus();
     await showModalBottomSheet(
@@ -557,7 +557,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                     .changeStatus(item, choice);
                                 selectedListingStatusValue =
                                     Translate.of(context)
-                                        .translate(chosen ?? "pending");
+                                        .translate(chosen ?? "inactive");
                                 Navigator.of(context).pop();
                                 _onRefresh();
                                 AppBloc.homeCubit.onLoad(true);
@@ -570,15 +570,15 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                         .translate('active'))),
                                 DropdownMenuItem<String>(
                                   value: Translate.of(context)
-                                      .translate('under_review'),
+                                      .translate('inactive'),
                                   child: Text(Translate.of(context)
-                                      .translate('under_review')),
+                                      .translate('inactive')),
                                 ),
                                 DropdownMenuItem<String>(
                                   value: Translate.of(context)
-                                      .translate('pending'),
+                                      .translate('under_review'),
                                   child: Text(Translate.of(context)
-                                      .translate('pending')),
+                                      .translate('under_review')),
                                 ),
                               ],
                             ),
@@ -665,17 +665,17 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
         case 1:
           return "active";
         case 2:
-          return "under_review";
+          return "inactive";
         case 3:
-          return "pending";
+          return "under_review";
       }
     } else if (statusName != null) {
       if (statusName == Translate.of(context).translate('active')) {
         return "1";
+      } else if (statusName == Translate.of(context).translate('inactive')) {
+        return "2";
       } else if (statusName ==
           Translate.of(context).translate('under_review')) {
-        return "2";
-      } else if (statusName == Translate.of(context).translate('pending')) {
         return "3";
       }
     }
