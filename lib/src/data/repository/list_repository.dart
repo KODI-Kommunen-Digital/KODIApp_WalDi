@@ -329,7 +329,7 @@ class ListRepository {
       }
     }
 
-    if (endDate != null) {
+    if (endDate != null && endDate != "") {
       String formattedTime;
       if (endTime!.hour < 10) {
         formattedTime =
@@ -340,6 +340,8 @@ class ListRepository {
             "${endTime.hour}:${endTime.minute.toString().padLeft(2, '0')}";
         combinedEndDateTime = "${endDate.trim()}T$formattedTime";
       }
+    } else {
+      combinedEndDateTime = "";
     }
 
     Map<String, dynamic> params = {
@@ -425,7 +427,7 @@ class ListRepository {
       }
     }
 
-    if (endDate != null) {
+    if (endDate != null && endDate != "") {
       String formattedTime;
       if (endTime!.hour < 10) {
         formattedTime =
@@ -464,7 +466,7 @@ class ListRepository {
     };
     final response =
         await Api.requestEditProduct(cityId, listingId, params, isImageChanged);
-    if(response.success){
+    if (response.success) {
       final prefs = await Preferences.openBox();
       FormData? pickedFile = prefs.getPickedFile();
       if (isImageChanged) {
@@ -537,7 +539,8 @@ class ListRepository {
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
     final response = await Api.requestSubmitSubCategory(categoryId: categoryId);
     var jsonCategory = response.data;
-    final item = jsonCategory.firstWhere((item) => item['name'] == value.toLowerCase());
+    final item =
+        jsonCategory.firstWhere((item) => item['name'] == value.toLowerCase());
     final itemId = item['id'];
     final subCategoryId = itemId;
     prefs.setKeyValue(Preferences.subCategoryId, subCategoryId);

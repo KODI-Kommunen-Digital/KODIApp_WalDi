@@ -128,7 +128,7 @@ class AppProductItem extends StatelessWidget {
                     const SizedBox(height: 2),
                     Visibility(
                       visible: item!.startDate.isNotEmpty &&
-                          item?.startDate != item?.endDate,
+                          item!.endDate.isNotEmpty,
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.white30,
@@ -146,9 +146,29 @@ class AppProductItem extends StatelessWidget {
                         ),
                       ),
                     ),
+                    // Visibility(
+                    //   visible: item!.startDate.isNotEmpty &&
+                    //       item?.startDate == item?.endDate,
+                    //   child: Container(
+                    //     decoration: BoxDecoration(
+                    //       color: Colors.white30,
+                    //       borderRadius: BorderRadius.circular(10),
+                    //     ),
+                    //     child: Padding(
+                    //       padding: const EdgeInsets.all(3.5),
+                    //       child: Text(
+                    //         "${item?.startDate} ${Translate.of(context).translate('to')} ${item?.endDate}",
+                    //         style: Theme.of(context)
+                    //             .textTheme
+                    //             .bodySmall!
+                    //             .copyWith(fontWeight: FontWeight.bold),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                     Visibility(
-                      visible: item!.startDate.isNotEmpty &&
-                          item?.startDate == item?.endDate,
+                      visible:
+                          item!.startDate.isNotEmpty && item!.endDate == "",
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.white30,
@@ -157,7 +177,26 @@ class AppProductItem extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(3.5),
                           child: Text(
-                            "${item?.startDate} ${Translate.of(context).translate('to')} ${item?.endDate}",
+                            "${item?.startDate}",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall!
+                                .copyWith(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Visibility(
+                      visible: item?.categoryId == 1,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white30,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(3.5),
+                          child: Text(
+                            "${item?.createDate}",
                             style: Theme.of(context)
                                 .textTheme
                                 .bodySmall!
@@ -372,9 +411,9 @@ class AppProductItem extends StatelessWidget {
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Text(
-                              (item?.categoryId == 3)
-                                  ? "${item?.startDate} ${Translate.of(context).translate('to')} ${item?.endDate}"
-                                  : "",
+                              item?.endDate == ""
+                                  ? "${item?.startDate}"
+                                  : "${item?.startDate} ${Translate.of(context).translate('to')} ${item?.endDate}",
                               style: Theme.of(context)
                                   .textTheme
                                   .bodySmall!
@@ -383,16 +422,6 @@ class AppProductItem extends StatelessWidget {
                                   ),
                             ),
                           ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 5),
-                          child: Text(
-                            cityName!,
-                            style:
-                                Theme.of(context).textTheme.bodySmall!.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                          ),
-                        ),
                         Text(
                           item?.categoryId == 1 ? "${item?.createDate}" : "",
                           style:

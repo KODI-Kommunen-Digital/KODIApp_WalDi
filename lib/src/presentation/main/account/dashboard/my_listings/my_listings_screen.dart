@@ -1,7 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:heidi/src/data/model/model_product.dart';
@@ -88,7 +86,6 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
 
   @override
   Widget build(BuildContext context) {
-    final memoryCacheManager = DefaultCacheManager();
     String uniqueKey = UniqueKey().toString();
     return Scaffold(
       appBar: AppBar(
@@ -183,89 +180,58 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                                                 Row(
                                                   children: <Widget>[
                                                     item.pdf == ''
-                                                        ? CachedNetworkImage(
-                                                            imageUrl: item
-                                                                        .sourceId ==
-                                                                    2
+                                                        ? Image.network(
+                                                            item.sourceId == 2
                                                                 ? item.image
-                                                                : item.image ==
-                                                                        'admin/News.jpeg'
-                                                                    ? "${Application.picturesURL}${item.image}"
-                                                                    : "${Application.picturesURL}${item.image}?cacheKey=$uniqueKey",
-                                                            cacheManager:
-                                                                memoryCacheManager,
-                                                            imageBuilder: (context,
-                                                                imageProvider) {
-                                                              return Container(
-                                                                width: 120,
-                                                                height: 140,
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                  image:
-                                                                      DecorationImage(
-                                                                    image:
-                                                                        imageProvider,
-                                                                    fit: BoxFit
-                                                                        .cover,
-                                                                  ),
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              11),
-                                                                ),
-                                                              );
-                                                            },
-                                                            placeholder:
-                                                                (context, url) {
+                                                                : "${Application.picturesURL}${item.image}",
+                                                            //: "${Application.picturesURL}${item.image}?cache=$uniqueKey",
+                                                            width: 120,
+                                                            height: 140,
+                                                            fit: BoxFit.cover,
+                                                            errorBuilder:
+                                                                (context, error,
+                                                                    stackTrace) {
+                                                              // Handle errors here
                                                               return AppPlaceholder(
                                                                 child:
                                                                     Container(
-                                                                  width: 120,
-                                                                  height: 140,
                                                                   decoration:
-                                                                      const BoxDecoration(
+                                                                      BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            12),
                                                                     color: Colors
                                                                         .white,
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .only(
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              8),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              8),
-                                                                    ),
                                                                   ),
-                                                                ),
-                                                              );
-                                                            },
-                                                            errorWidget:
-                                                                (context, url,
-                                                                    error) {
-                                                              return AppPlaceholder(
-                                                                child:
-                                                                    Container(
                                                                   width: 120,
                                                                   height: 140,
-                                                                  decoration:
-                                                                      const BoxDecoration(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .only(
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              8),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              8),
-                                                                    ),
-                                                                  ),
                                                                   child: const Icon(
                                                                       Icons
                                                                           .error),
+                                                                ),
+                                                              );
+                                                            },
+                                                            loadingBuilder:
+                                                                (context, child,
+                                                                    loadingProgress) {
+                                                              // Display the AppPlaceholder while the image is loading
+                                                              if (loadingProgress ==
+                                                                  null) {
+                                                                return child;
+                                                              }
+                                                              return AppPlaceholder(
+                                                                child:
+                                                                    Container(
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            12),
+                                                                    color: Colors
+                                                                        .white,
+                                                                  ),
+                                                                  width: 120,
+                                                                  height: 140,
                                                                 ),
                                                               );
                                                             },
@@ -336,9 +302,14 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                                                                             index]
                                                                         .categoryId ==
                                                                     3
-                                                                ? "${userListingsList[index].startDate} ${Translate.of(context).translate('to')} ${userListingsList[index].endDate}"
-                                                                : userListingsList[
-                                                                        index]
+                                                                ? (userListingsList[index]
+                                                                            .endDate !=
+                                                                        ""
+                                                                    ? "${userListingsList[index].startDate} ${Translate.of(context).translate('to')} ${userListingsList[index].endDate}"
+                                                                    : userListingsList[
+                                                                            index]
+                                                                        .startDate)
+                                                                : item
                                                                     .createDate,
                                                             style: Theme.of(
                                                                     context)

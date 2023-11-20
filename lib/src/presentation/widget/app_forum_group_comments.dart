@@ -244,11 +244,11 @@ class CommentWidgetState extends State<CommentWidget> {
                 children: [
                   if (!widget.isAddingReply)
                     TextButton(
-                      onPressed: () {
-                        setState(() async {
-                          final prefs = await Preferences.openBox();
-                          prefs.setKeyValue(
-                              Preferences.commentId, widget.comment.id);
+                      onPressed: () async {
+                        final prefs = await Preferences.openBox();
+                        prefs.setKeyValue(
+                            Preferences.commentId, widget.comment.id);
+                        setState(() {
                           widget.toggleAddingReply?.call();
                         });
                       },
