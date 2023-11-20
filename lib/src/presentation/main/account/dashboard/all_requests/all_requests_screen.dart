@@ -296,7 +296,9 @@ class _AllRequestsLoadedState extends State<AllRequestsLoaded> {
                                                 const SizedBox(height: 8),
                                                 Text(
                                                   item.categoryId == 3
-                                                      ? "${item.startDate} ${Translate.of(context).translate('to')} ${item.endDate}"
+                                                      ? (item.endDate != ""
+                                                          ? "${item.startDate} ${Translate.of(context).translate('to')} ${item.endDate}"
+                                                          : item.startDate)
                                                       : item.createDate,
                                                   style: Theme.of(context)
                                                       .textTheme
