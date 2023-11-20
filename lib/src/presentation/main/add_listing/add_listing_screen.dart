@@ -1102,15 +1102,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
                           .textTheme
                           .titleMedium!
                           .copyWith(fontWeight: FontWeight.bold),
-                      children: const <TextSpan>[
-                        TextSpan(
-                          text: ' *',
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -1135,15 +1126,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
                           .textTheme
                           .titleMedium!
                           .copyWith(fontWeight: FontWeight.bold),
-                      children: const <TextSpan>[
-                        TextSpan(
-                          text: ' *',
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
                     ),
                   ),
                   const SizedBox(height: 8),
