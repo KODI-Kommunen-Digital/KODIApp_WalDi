@@ -528,7 +528,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
     }
 
     logError('selectedCategory', selectedCategory);
-    if (selectedCategory == "Events") {
+    if (selectedCategory == "events") {
       if (_startDate == null || _startDate == "" || _startTime == null) {
         _errorSDate = "value_not_date_empty";
       } else {
@@ -561,8 +561,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
         _errorEmail != null ||
         _errorWebsite != null ||
         _errorStatus != null ||
-        _errorSDate != null ||
-        _errorEDate != null) {
+        _errorSDate != null) {
       String errorMessage = "";
       for (var element in errors) {
         if (element != null &&
@@ -1069,7 +1068,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
               ),
             ),
             Visibility(
-              visible: selectedCategory == "Events",
+              visible: selectedCategory == "events",
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
