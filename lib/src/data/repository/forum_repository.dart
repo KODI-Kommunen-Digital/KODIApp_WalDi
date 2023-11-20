@@ -463,7 +463,8 @@ class ForumRepository {
       final prefs = await Preferences.openBox();
       FormData? pickedFile = prefs.getPickedFile();
       if (pickedFile != null) {
-        await Api.requestPostImageUpload(cityId, forumId, postId, pickedFile);
+        await Api.requestPostImageUpload(
+            cityId == 0 ? cityIdPref : cityId, forumId, postId, pickedFile);
       }
       prefs.deleteKey('pickedFile');
     }
