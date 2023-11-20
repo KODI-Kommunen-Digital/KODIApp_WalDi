@@ -33,8 +33,7 @@ class AllListingsScreen extends StatelessWidget {
     return BlocBuilder<AllListingsCubit, AllListingsState>(
         builder: (context, state) => state.maybeWhen(
             loading: () => const AllListingsLoading(),
-            loaded: (posts, isRefreshLoader) => AllListingsLoaded(
-                user: user, posts: posts, isRefreshLoader: isRefreshLoader),
+            loaded: (posts) => AllListingsLoaded(user: user, posts: posts),
             orElse: () => ErrorWidget("Failed to load listings.")));
   }
 }
@@ -58,13 +57,8 @@ class AllListingsLoading extends StatelessWidget {
 class AllListingsLoaded extends StatefulWidget {
   final List<ProductModel>? posts;
   final UserModel user;
-  final bool isRefreshLoader;
 
-  const AllListingsLoaded(
-      {required this.user,
-      required this.isRefreshLoader,
-      this.posts,
-      super.key});
+  const AllListingsLoaded({required this.user, this.posts, super.key});
 
   @override
   State<AllListingsLoaded> createState() => _AllListingsLoadedState();
@@ -144,7 +138,6 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
 
   @override
   Widget build(BuildContext context) {
-    posts = widget.posts;
     String uniqueKey = UniqueKey().toString();
     return SafeArea(
         child: Scaffold(
@@ -246,12 +239,8 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                                   child: Image.network(
                                                     item.sourceId == 2
                                                         ? item.image
-                                                        : item.image ==
-                                                                'admin/News.jpeg'
-                                                            ? "${Application.picturesURL}${item.image}"
-                                                            : widget.isRefreshLoader
-                                                                ? "${Application.picturesURL}${item.image}"
-                                                                : "${Application.picturesURL}${item.image}?cache=$uniqueKey",
+                                                        : "${Application.picturesURL}${item.image}",
+                                                    //: "${Application.picturesURL}${item.image}?cache=$uniqueKey",
                                                     width: 120,
                                                     height: 140,
                                                     fit: BoxFit.cover,
@@ -612,7 +601,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
       if (_scrollController.position.pixels != 0) {
         setState(() {
           isLoadingMore = true;
-          previousScrollPosition = _scrollController.position.pixels;
+          //previousScrollPosition = _scrollController.position.pixels;
         });
         posts = await context.read<AllListingsCubit>().newListings(++pageNo);
         setState(() {
@@ -659,7 +648,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
   }
 
   Future _onRefresh() async {
-    await context.read<AllListingsCubit>().onLoad(true);
+    await context.read<AllListingsCubit>().onLoad();
   }
 
   void _onProductDetail(ProductModel item) {
