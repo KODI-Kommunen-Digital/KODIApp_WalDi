@@ -87,7 +87,7 @@
             "id": 13,
             "name": "Essen",
             "noOfSubcategories": 0,
-            "icon": "fas fa-mug-hot",
+            "icon": "fas fa-utensils",
             "color": "#58d68d",
             "categoryType" : "category"
         },

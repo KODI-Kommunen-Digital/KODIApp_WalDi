@@ -67,7 +67,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
   String? _errorWebsite;
   String? _errorStatus;
   String? _errorSDate;
-  String? _errorEDate;
   String? _errorCategory;
   String? selectedCity;
   int? cityId;
@@ -548,12 +547,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
       } else {
         _errorSDate = null;
       }
-
-      if (_endDate == null || _endDate == "" || _endTime == null) {
-        _errorEDate = "value_not_date_empty";
-      } else {
-        _errorEDate = null;
-      }
     }
 
     List<String?> errors = [
@@ -565,7 +558,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
       _errorWebsite,
       _errorStatus,
       _errorSDate,
-      _errorEDate,
     ];
 
     if (_errorTitle != null ||
@@ -575,8 +567,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
         _errorEmail != null ||
         _errorWebsite != null ||
         _errorStatus != null ||
-        _errorSDate != null ||
-        _errorEDate != null) {
+        _errorSDate != null) {
       String errorMessage = "";
       for (var element in errors) {
         if (element != null &&

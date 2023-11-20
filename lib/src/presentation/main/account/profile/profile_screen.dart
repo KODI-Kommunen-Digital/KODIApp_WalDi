@@ -359,10 +359,15 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                                                         userListingsList[index]
                                                                     .categoryId ==
                                                                 3
-                                                            ? "${userListingsList[index].startDate} ${Translate.of(context).translate('to')} ${userListingsList[index].endDate}"
-                                                            : userListingsList[
-                                                                    index]
-                                                                .createDate,
+                                                            ? (userListingsList[
+                                                                            index]
+                                                                        .endDate !=
+                                                                    ""
+                                                                ? "${userListingsList[index].startDate} ${Translate.of(context).translate('to')} ${userListingsList[index].endDate}"
+                                                                : userListingsList[
+                                                                        index]
+                                                                    .startDate)
+                                                            : item.createDate,
                                                         style: Theme.of(context)
                                                             .textTheme
                                                             .bodySmall!

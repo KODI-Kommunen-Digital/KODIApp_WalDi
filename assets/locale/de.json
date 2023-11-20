@@ -51,7 +51,7 @@
   "value_not_valid_phone": "Eingabe ungültiges Telefon",
   "value_not_valid_password": "Eingabe ungültiges Passwort",
   "value_not_valid_id": "Eingabe ungültige ID",
-  "value_not_date_empty": "Eingabe Datum leer. Bitte Start- und Enddatum eingeben",
+  "value_not_date_empty": "Eintrittsdatum leer. Bitte Startdatum eingeben",
   "edit_profile": "Profil bearbeiten",
   "New password should not be same as the old password": "Das neue Passwort sollte nicht identisch mit dem alten sein.",
   "username_does_not_exist": "Benutzername existiert nicht",
