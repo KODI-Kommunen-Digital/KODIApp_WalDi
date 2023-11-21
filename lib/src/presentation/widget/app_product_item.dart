@@ -386,6 +386,18 @@ class AppProductItem extends StatelessWidget {
                               .copyWith(fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 8),
+                        Text(
+                          (cityName != null)
+                              ? "${item?.category ?? ''} - $cityName"
+                              : item?.category ?? '',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall!
+                              .copyWith(fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(
+                          height: 4,
+                        ),
                         if (item?.categoryId == 3)
                           Container(
                             padding: const EdgeInsets.all(3.5),
