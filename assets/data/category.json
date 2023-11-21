@@ -88,15 +88,15 @@
             "name": "Angebote",
             "noOfSubcategories": 0,
             "icon": "fas fa-gift",
-            "color": "#58d68d",
+            "color": "#6B2213",
             "categoryType" : "category"
         },
         {
             "id": 13,
             "name": "Essen & Trinken",
             "noOfSubcategories": 0,
-            "icon": "fas fa-mug-hot",
-            "color": "#58d68d",
+            "icon": "fas fa-utensils",
+            "color": "#027148",
             "categoryType" : "category"
         }
     ]

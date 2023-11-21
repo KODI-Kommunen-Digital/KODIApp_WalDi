@@ -193,7 +193,6 @@ class _HomeScreenState extends State<HomeScreen> {
             }
           }
 
-
           return CustomScrollView(
             physics: const BouncingScrollPhysics(
               parent: AlwaysScrollableScrollPhysics(),
@@ -483,7 +482,7 @@ class _HomeScreenState extends State<HomeScreen> {
         "id": -1,
         "name": Translate.of(context).translate("more"),
         "icon": "fas fa-ellipsis",
-        "color": "#ff8a65",
+        "color": "#36454F",
       });
 
       if (category.length >= 7) {
