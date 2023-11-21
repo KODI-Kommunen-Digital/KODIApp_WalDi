@@ -80,7 +80,7 @@
             "name": "Angebote",
             "noOfSubcategories": 0,
             "icon": "fas fa-gift",
-            "color": "#58d68d",
+            "color": "#6B2213",
             "categoryType" : "category"
         },
         {
@@ -88,7 +88,7 @@
             "name": "Essen",
             "noOfSubcategories": 0,
             "icon": "fas fa-utensils",
-            "color": "#58d68d",
+            "color": "#027148",
             "categoryType" : "category"
         },
         {

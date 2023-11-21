@@ -86,7 +86,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-
   Future<void> _scrollListener() async {
     if (_scrollController.position.atEdge) {
       if (_scrollController.position.pixels != 0) {
@@ -467,7 +466,7 @@ class _HomeScreenState extends State<HomeScreen> {
         "id": -1,
         "name": Translate.of(context).translate("more"),
         "icon": "fas fa-ellipsis",
-        "color": "#ff8a65",
+        "color": "#36454F",
       });
 
       if (category.length >= 7) {
@@ -583,7 +582,8 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildRecent(List<ProductModel>? recent, int selectedCity, List<CategoryModel>? cities) {
+  Widget _buildRecent(List<ProductModel>? recent, int selectedCity,
+      List<CategoryModel>? cities) {
     Widget content = ListView.builder(
       padding: const EdgeInsets.all(0),
       shrinkWrap: true,
@@ -617,7 +617,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       item: item,
                       type: ProductViewType.small,
                       isRefreshLoader: isRefreshLoader,
-                      cityName: AppBloc.homeCubit.getCityName(cities, item.cityId ?? 0),
+                      cityName: AppBloc.homeCubit
+                          .getCityName(cities, item.cityId ?? 0),
                     ),
                   ),
                 )
@@ -630,7 +631,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     isRefreshLoader: isRefreshLoader,
                     item: item,
                     type: ProductViewType.small,
-                    cityName: AppBloc.homeCubit.getCityName(cities, item.cityId ?? 0),
+                    cityName:
+                        AppBloc.homeCubit.getCityName(cities, item.cityId ?? 0),
                   ),
                 );
         },
