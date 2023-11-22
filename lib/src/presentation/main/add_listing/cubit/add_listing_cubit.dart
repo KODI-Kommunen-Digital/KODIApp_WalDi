@@ -115,6 +115,7 @@ class AddListingCubit extends Cubit<AddListingState> {
     TimeOfDay? startTime,
     TimeOfDay? endTime,
     required bool isImageChanged,
+    List<File>? imagesList,
   }) async {
     try {
       final response = await _repo.editProduct(
@@ -140,7 +141,8 @@ class AddListingCubit extends Cubit<AddListingState> {
           price,
           isImageChanged,
           startTime,
-          endTime);
+          endTime,
+          imagesList);
       if (response.success) {
         return true;
       } else {

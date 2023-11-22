@@ -20,7 +20,8 @@ class ProfileCubit extends Cubit<ProfileState> {
     for (final list in result) {
       final product = await loadProduct(list.cityId, list.id);
       if (product != null) {
-        listDataList.add(ProductModel(
+        listDataList.add(
+          ProductModel(
             id: list.id,
             cityId: list.cityId,
             title: product.title,
@@ -38,20 +39,24 @@ class ProfileCubit extends Cubit<ProfileState> {
             website: product.website,
             description: product.description,
             userId: product.userId,
-            sourceId: product.sourceId));
+            sourceId: product.sourceId,
+            imageLists: product.imageLists,
+          ),
+        );
       }
     }
     emit(ProfileState.loaded(listDataList));
     return listDataList;
   }
 
-  Future<List<ProductModel>> newListings(userId, pageNo ) async {
+  Future<List<ProductModel>> newListings(userId, pageNo) async {
     List<ProductModel> listDataList = [];
     final result = await repo.loadUserListings(userId, pageNo);
     for (final list in result) {
       final product = await loadProduct(list.cityId, list.id);
       if (product != null) {
-        listDataList.add(ProductModel(
+        listDataList.add(
+          ProductModel(
             id: list.id,
             cityId: list.cityId,
             title: product.title,
@@ -69,7 +74,10 @@ class ProfileCubit extends Cubit<ProfileState> {
             website: product.website,
             description: product.description,
             userId: product.userId,
-            sourceId: product.sourceId));
+            sourceId: product.sourceId,
+            imageLists: product.imageLists,
+          ),
+        );
       }
     }
     return listDataList;

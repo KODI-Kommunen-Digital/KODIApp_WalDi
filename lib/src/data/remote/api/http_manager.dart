@@ -17,6 +17,8 @@ class HTTPManager {
     _baseUrl = !forum
         ? 'https://test.smartregion-auf.de/api/'
         : 'https://test.smartregion-auf.de/forumapi/';
+    // ? 'http://localhost:3001/'
+    //     : 'http://localhost:3002/';
 
     _dio = Dio(
       BaseOptions(

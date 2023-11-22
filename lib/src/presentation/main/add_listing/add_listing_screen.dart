@@ -12,12 +12,16 @@ import 'package:heidi/src/presentation/widget/app_picker_item.dart';
 import 'package:heidi/src/presentation/widget/app_text_input.dart';
 import 'package:heidi/src/presentation/widget/app_upload_image.dart';
 import 'package:heidi/src/utils/common.dart';
+import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/datetime.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:heidi/src/utils/validate.dart';
 import 'package:intl/intl.dart';
 import 'package:loggy/loggy.dart';
+import 'package:http/http.dart' as http;
+import 'package:multiple_images_picker/multiple_images_picker.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'cubit/add_listing_cubit.dart';
 
@@ -93,6 +97,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
   bool isImageChanged = false;
   bool isLoading = false;
   List<File>? selectedImages = [];
+  List<File> downloadedImages = [];
 
   late int? currentCity;
 
@@ -260,6 +265,16 @@ class _AddListingScreenState extends State<AddListingScreen> {
           }
         }
       }
+      List<File> images = await downloadImages(widget.item!.imageLists!);
+      setState(() {
+        selectedImages?.clear();
+        downloadedImages.clear();
+        downloadedImages.addAll(images);
+        selectedImages?.addAll(images);
+        if (downloadedImages.length > 1) {
+          // _featureImage = downloadedImages[0];
+        }
+      });
     } else {
       if (currentCity != null && currentCity != 0) {
         for (var cityData in loadCitiesResponse?.data) {
@@ -288,6 +303,32 @@ class _AddListingScreenState extends State<AddListingScreen> {
     setState(() {
       _processing = false;
     });
+  }
+
+  Future<List<File>> downloadImages(List<ImageListModel> imageUrls) async {
+    List<File> downloadedImages = [];
+    Directory appDocumentsDirectory = await getApplicationDocumentsDirectory();
+
+    for (final imageUrl in imageUrls) {
+      try {
+        var response = await http
+            .get(Uri.parse("${Application.picturesURL}${imageUrl.logo}"));
+        if (response.statusCode == 200) {
+          String savePath =
+              '${appDocumentsDirectory.path}/${imageUrl.logo?.replaceAll(RegExp(r'[^\w\s\.]'), '_')}';
+
+          File file = File(savePath);
+          await file.writeAsBytes(response.bodyBytes);
+          downloadedImages.add(file);
+          // return file;
+        } else {
+          throw Exception('Failed to download image');
+        }
+      } catch (e) {
+        print('Error downloading image: $e');
+      }
+    }
+    return downloadedImages;
   }
 
   void _onShowStartDatePicker(String? startDate) async {
@@ -640,6 +681,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
                   if (result.isNotEmpty) {
                     setState(() {
                       selectedImages?.clear();
+                      selectedImages?.addAll(downloadedImages);
                       selectedImages?.addAll(result);
                     });
                   } else {
@@ -760,7 +802,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
                             menuMaxHeight: 200,
                             hint: Text(Translate.of(context)
                                 .translate('input_category')),
-                            value: selectedCategory,
+                            value: selectedCategory?.toLowerCase(),
                             items: listCategory.map((category) {
                               return DropdownMenuItem(
                                   value: category['name'],
@@ -1250,7 +1292,15 @@ class _AddListingScreenState extends State<AddListingScreen> {
                     ),
                     onPressed: () {
                       setState(() {
-                        context.read<AddListingCubit>().removeAssets(index + 1);
+                        if (selectedImages?[index + 1] is Asset) {
+                          context
+                              .read<AddListingCubit>()
+                              .removeAssets(index + 1);
+                        }
+                        if (downloadedImages.isNotEmpty) {
+                          downloadedImages.remove(downloadedImages[index]);
+                        }
+
                         selectedImages?.remove(selectedImages?[index + 1]);
                       });
                     },

@@ -65,6 +65,7 @@ class ProductModel {
   final bool? bookingUse;
   final String? bookingStyle;
   final String? priceDisplay;
+  List<ImageListModel>? imageLists;
 
   ProductModel(
       {required this.id,
@@ -121,7 +122,8 @@ class ProductModel {
       this.cityId,
       this.villageId,
       this.statusId,
-      this.sourceId});
+      this.sourceId,
+      this.imageLists});
 
   factory ProductModel.fromJson(
     Map<String, dynamic> json, {
@@ -196,6 +198,10 @@ class ProductModel {
       return ProductModel.fromJson(item, setting: setting);
     }).toList();
 
+    final imagesList = List.from(json['otherlogos'] ?? []).map((item) {
+      return ImageListModel.fromJson(item);
+    }).toList();
+
     final bookingUse = json['booking_use'] == true;
     if (bookingUse) {
       priceDisplay = json['booking_price_display'];
@@ -205,7 +211,7 @@ class ProductModel {
       id: json['id'],
       userId: json['userId'] ?? 0,
       title: json['title'] ?? '',
-      image: json['logo']['logo'] ?? 'admin/News.jpeg',
+      image: json['logo'] ?? 'admin/News.jpeg',
       videoURL: videoURL,
       category: category ?? '',
       createDate: createDate,
@@ -256,6 +262,7 @@ class ProductModel {
       bookingUse: bookingUse,
       bookingStyle: json['booking_style'] ?? '',
       priceDisplay: priceDisplay,
+      imageLists: imagesList,
     );
   }
 
@@ -309,6 +316,7 @@ class ProductModel {
       bookingUse: false,
       bookingStyle: '',
       priceDisplay: '',
+      imageLists: json['otherlogos'],
     );
   }
 
@@ -322,5 +330,30 @@ class ProductModel {
         "thumb": {},
       },
     };
+  }
+}
+
+class ImageListModel {
+  int? id;
+  int? imageOrder;
+  int? listingId;
+  String? logo;
+
+  ImageListModel({this.id, this.imageOrder, this.listingId, this.logo});
+
+  ImageListModel.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    imageOrder = json['imageOrder'];
+    listingId = json['listingId'];
+    logo = json['logo'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['imageOrder'] = this.imageOrder;
+    data['listingId'] = this.listingId;
+    data['logo'] = this.logo;
+    return data;
   }
 }

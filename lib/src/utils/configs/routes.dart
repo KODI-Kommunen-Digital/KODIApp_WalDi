@@ -30,6 +30,7 @@ import 'package:heidi/src/presentation/main/home/forum/add_group_screen/cubit/ad
 import 'package:heidi/src/presentation/main/home/forum/list_groups/add_new_post/add_post_screen.dart';
 import 'package:heidi/src/presentation/main/home/forum/list_groups/add_new_post/cubit/add_post_cubit.dart';
 import 'package:heidi/src/presentation/main/home/forum/list_groups/cubit/cubit.dart';
+import 'package:heidi/src/presentation/main/home/forum/list_groups/forum_image_zoom/forum_image_zoom_screen.dart';
 import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details/cubit/group_details_cubit.dart';
 import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details/group_details_screen.dart';
 import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details/group_members/cubit/group_members_cubit.dart';
@@ -100,6 +101,7 @@ class Routes {
   static const String imprint = "/imprint";
   static const String privacy = "/privacy";
   static const String imageZoom = "/imageZoom";
+  static const String forumImageZoom = "/forumImageZoom";
   static const String profileSettings = "/profileSettings";
   static const String faq = "/faq";
   static const String allListings = "/allListings";
@@ -224,10 +226,24 @@ class Routes {
           },
           fullscreenDialog: true,
         );
+
       case imageZoom:
         return MaterialPageRoute(
           builder: (context) {
-            return ImageZoomScreen(imageUrl: settings.arguments as String);
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return ImageZoomScreen(
+              imageList: arguments['imageList']! as List<ImageListModel>?,
+              pdf: arguments['pdf'] ?? '',
+            );
+          },
+          fullscreenDialog: true,
+        );
+
+      case forumImageZoom:
+        return MaterialPageRoute(
+          builder: (context) {
+            return ForumImageZoomScreen(imageUrl: settings.arguments as String);
           },
           fullscreenDialog: true,
         );

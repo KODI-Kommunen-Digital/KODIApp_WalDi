@@ -102,7 +102,7 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                 onTap: () {
                   Navigator.pushNamed(
                     context,
-                    Routes.imageZoom,
+                    Routes.forumImageZoom,
                     arguments:
                         "${Application.picturesURL}${widget.groupModel.image}",
                   );
