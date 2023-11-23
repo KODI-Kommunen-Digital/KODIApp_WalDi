@@ -268,7 +268,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
       }
       if (!loadCategoryResponse?.data.isEmpty) {
         if (!mounted) return;
-        if (selectedCategory == "news" || selectedCategory == null) {
+        if (selectedCategory?.toLowerCase() == "news" ||
+            selectedCategory == null) {
           final subCategoryResponse = await context
               .read<AddListingCubit>()
               .loadSubCategory(Translate.of(context).translate(
@@ -522,7 +523,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
     }
 
     logError('selectedCategory', selectedCategory);
-    if (selectedCategory == "Events") {
+    if (selectedCategory?.toLowerCase() == "events") {
       if (_startDate == null || _startDate == "" || _startTime == null) {
         _errorSDate = "value_not_date_empty";
       } else {
@@ -755,16 +756,18 @@ class _AddListingScreenState extends State<AddListingScreen> {
                                 },
                               );
 
-                              if (selectedCategory == "news" ||
+                              if (selectedCategory?.toLowerCase() == "news" ||
                                   selectedCategory == null) {
                                 selectSubCategory(selectedCategory);
                               }
                             })),
               ],
             ),
-            if (selectedCategory == "news" || selectedCategory == null)
+            if (selectedCategory?.toLowerCase() == "news" ||
+                selectedCategory == null)
               const SizedBox(height: 8),
-            if (selectedCategory == "news" || selectedCategory == null)
+            if (selectedCategory?.toLowerCase() == "news" ||
+                selectedCategory == null)
               Text.rich(
                 TextSpan(
                   text: Translate.of(context).translate('subCategory'),
@@ -786,7 +789,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
             const SizedBox(height: 8),
             Row(
               children: [
-                if (selectedCategory == "news")
+                if (selectedCategory?.toLowerCase() == "news")
                   Expanded(
                       child: listSubCategory.isEmpty
                           ? const LinearProgressIndicator()
@@ -816,7 +819,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
                             )),
               ],
             ),
-            if (selectedCategory == "news" || selectedCategory == null)
+            if (selectedCategory?.toLowerCase() == "news" ||
+                selectedCategory == null)
               const SizedBox(height: 8),
             const SizedBox(height: 8),
             Text.rich(
@@ -1036,7 +1040,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
               ),
             ),
             Visibility(
-              visible: selectedCategory == "Events",
+              visible: selectedCategory?.toLowerCase() == "events",
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
