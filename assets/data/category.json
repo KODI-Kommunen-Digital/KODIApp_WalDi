@@ -93,10 +93,26 @@
         },
         {
             "id": 13,
-            "name": "Essen & Trinken",
+            "name": "Essen",
             "noOfSubcategories": 0,
             "icon": "fas fa-utensils",
             "color": "#027148",
+            "categoryType" : "category"
+        },
+        {
+            "id": 14,
+            "name": "Rathaus",
+            "noOfSubcategories": 0,
+            "icon": "fas fa-building",
+            "color": "#58d68d",
+            "categoryType" : "category"
+        },
+        {
+            "id": 15,
+            "name": "Mitteilungsblatt",
+            "noOfSubcategories": 0,
+            "icon": "fas fa-newspaper",
+            "color": "#58d68d",
             "categoryType" : "category"
         }
     ]
