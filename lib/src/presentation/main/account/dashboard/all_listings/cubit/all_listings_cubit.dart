@@ -13,13 +13,15 @@ enum StatusFilter {
 
 class AllListingsCubit extends Cubit<AllListingsState> {
   AllListingsCubit() : super(const AllListingsState.loading()) {
-    onLoad();
+    onLoad(false);
   }
 
   dynamic posts;
   StatusFilter? selectedStatusFilter;
 
-  Future<void> onLoad() async {
+  Future<void> onLoad(bool isRefreshLoader) async {
+    if (!isRefreshLoader) emit(const AllListingsState.loading());
+
     int status = await getCurrentStatus();
     final ResultApiModel listingsRequestResponse;
 

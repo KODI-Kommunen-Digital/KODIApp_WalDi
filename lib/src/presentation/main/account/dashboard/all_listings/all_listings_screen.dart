@@ -648,7 +648,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
   }
 
   Future _onRefresh() async {
-    await context.read<AllListingsCubit>().onLoad();
+    await context.read<AllListingsCubit>().onLoad(true);
   }
 
   void _onProductDetail(ProductModel item) {
