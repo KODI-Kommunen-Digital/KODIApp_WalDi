@@ -333,7 +333,7 @@ class Api {
   }
 
   ///Save Product
-  static Future<ResultApiModel> requestSaveProduct(cityId, params) async {
+  static Future<ResultApiModel> requestSaveProduct(cityId, params, isImageChanged) async {
     final filePath = '/cities/$cityId/listings';
     final result = await HTTPManager(forum: false).post(
       url: filePath,

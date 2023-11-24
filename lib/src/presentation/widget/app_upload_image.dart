@@ -26,6 +26,7 @@ class AppUploadImage extends StatefulWidget {
   final String? title;
   final String? image;
   final Function(List<File>) onChange;
+  final VoidCallback? onDelete;
   final UploadImageType type;
   final bool profile;
   final bool forumGroup;
@@ -38,6 +39,7 @@ class AppUploadImage extends StatefulWidget {
     this.type = UploadImageType.square,
     required this.profile,
     required this.forumGroup,
+    this.onDelete,
   }) : super(key: key);
 
   @override
@@ -56,9 +58,16 @@ class _AppUploadImageState extends State<AppUploadImage> {
   List<Asset> resultList = <Asset>[];
   List<File> selectedFiles = [];
   List<Asset> selectedAssets = [];
+  String? image;
 
   @override
   void initState() {
+    image = widget.image;
+    if (image != null) {
+      if (!image!.contains('Defaultimage')) {
+        _file = File(image!);
+      }
+    }
     super.initState();
   }
 
@@ -72,13 +81,6 @@ class _AppUploadImageState extends State<AppUploadImage> {
     DecorationImage? decorationImage;
     BorderType borderType = BorderType.RRect;
     Widget circle = Container();
-
-    if (widget.image != null && !widget.image!.contains(".pdf")) {
-      decorationImage = DecorationImage(
-        image: NetworkImage("${Application.picturesURL}${widget.image!}"),
-        fit: BoxFit.cover,
-      );
-    }
 
     if (_file != null && !_file!.path.contains(".pdf")) {
       decorationImage = DecorationImage(
@@ -131,9 +133,12 @@ class _AppUploadImageState extends State<AppUploadImage> {
                   color: Colors.red[900],
                 ),
                 onPressed: () {
+                  widget.onDelete!();
                   setState(() {
-                    images.remove(images[0]);
-                    context.read<AddListingCubit>().removeAssets(0);
+                    if (selectedAssets.length > 1) {
+                      images.remove(images[0]);
+                      context.read<AddListingCubit>().removeAssets(0);
+                    }
                     _file = null;
                   });
                 },
@@ -212,9 +217,6 @@ class _AppUploadImageState extends State<AppUploadImage> {
         } else if (await Permission.photos.isPermanentlyDenied) {
           statusImage = PermissionStatus.permanentlyDenied;
           await openAppSettings();
-        } else if (statusImage == PermissionStatus.permanentlyDenied) {
-          // statusImage = PermissionStatus.permanentlyDenied;
-          // await openAppSettings();
         }
       } else {
         statusImage = PermissionStatus.granted;
@@ -295,17 +297,18 @@ class _AppUploadImageState extends State<AppUploadImage> {
                     setState(() {
                       _file = null;
                       images.clear();
+                      widget.onChange(images);
                       _file = File(result.files.single.path!);
                       isImageUploaded = false;
                       selectedAssets.clear();
                     });
-                    if (!mounted) return;
-                    context.read<AddListingCubit>().clearAssets();
-
+                    widget.onChange(images);
                     final profile = widget.profile;
                     if (!profile) {
                       await ListRepository.uploadPdf(_file!);
                     }
+                    if (!mounted) return;
+                    context.read<AddListingCubit>().clearAssets();
                   }
                 },
                 child: const ListTile(
@@ -391,8 +394,8 @@ class _AppUploadImageState extends State<AppUploadImage> {
 
   Widget? _buildContent() {
     String uniqueKey = UniqueKey().toString();
-    if (widget.image != null && _file == null) {
-      if (widget.image!.contains(".pdf")) {
+    if (image != null && _file == null) {
+      if (image!.contains(".pdf")) {
         return SizedBox(
             width: double.infinity,
             height: 400,
@@ -408,7 +411,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
                 )
               },
               child: const PDF().cachedFromUrl(
-                "${Application.picturesURL}${widget.image!}?cacheKey=$uniqueKey",
+                "${Application.picturesURL}${image!}?cacheKey=$uniqueKey",
                 placeholder: (progress) => Center(child: Text('$progress %')),
                 errorWidget: (error) => Center(child: Text(error.toString())),
               ),
@@ -571,7 +574,15 @@ class _AppUploadImageState extends State<AppUploadImage> {
           setState(() {
             _file = null;
             images.add(imageFile);
-            _file ??= File(images[0].path);
+            if (image == null) {
+              _file ??= File(images[0].path);
+            } else {
+              if (!image!.contains('Defaultimage') && !image!.contains('pdf')) {
+                _file = File(image!);
+              } else {
+                _file ??= File(images[0].path);
+              }
+            }
             widget.onChange(images);
             context.read<AddListingCubit>().saveAssets(resultList);
             selectedAssets =

@@ -349,11 +349,11 @@ class ImageListModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['imageOrder'] = this.imageOrder;
-    data['listingId'] = this.listingId;
-    data['logo'] = this.logo;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['imageOrder'] = imageOrder;
+    data['listingId'] = listingId;
+    data['logo'] = logo;
     return data;
   }
 }

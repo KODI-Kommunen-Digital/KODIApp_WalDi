@@ -52,28 +52,31 @@ class AddListingCubit extends Cubit<AddListingState> {
     TimeOfDay? startTime,
     TimeOfDay? endTime,
     List<File>? imagesList,
+    isImageChanged,
   }) async {
     try {
       final response = await _repo.saveProduct(
-          title,
-          description,
-          place,
-          country,
-          state,
-          city,
-          statusId,
-          sourceId,
-          address,
-          zipcode,
-          phone,
-          email,
-          website,
-          status,
-          startDate,
-          endDate,
-          startTime,
-          endTime,
-          imagesList);
+        title,
+        description,
+        place,
+        country,
+        state,
+        city,
+        statusId,
+        sourceId,
+        address,
+        zipcode,
+        phone,
+        email,
+        website,
+        status,
+        startDate,
+        endDate,
+        startTime,
+        endTime,
+        imagesList,
+        isImageChanged,
+      );
       if (response.success) {
         return true;
       } else {
@@ -225,19 +228,19 @@ class AddListingCubit extends Cubit<AddListingState> {
     }
   }
 
-  void saveAssets(assetList){
+  void saveAssets(assetList) {
     selectedAssets = assetList;
   }
 
-  void removeAssets(index){
+  void removeAssets(index) {
     selectedAssets.removeAt(index);
   }
 
-  void clearAssets(){
+  void clearAssets() {
     selectedAssets.clear();
   }
 
-  List<Asset> getSelectedAssets(){
+  List<Asset> getSelectedAssets() {
     return selectedAssets;
   }
 

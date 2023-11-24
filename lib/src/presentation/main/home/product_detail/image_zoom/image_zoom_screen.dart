@@ -6,7 +6,6 @@ import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/utils/configs/application.dart';
-import 'package:photo_view/photo_view.dart';
 
 class ImageZoomScreen extends StatefulWidget {
   final List<ImageListModel>? imageList;

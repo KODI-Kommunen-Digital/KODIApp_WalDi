@@ -85,7 +85,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
   List listCategory = [];
   List listSubCategory = [];
 
-  String? _featureImage;
   String? _featurePdf;
   String? _startDate;
   String? _endDate;
@@ -155,6 +154,13 @@ class _AddListingScreenState extends State<AddListingScreen> {
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
+          leading: IconButton(
+            icon: const Icon(Icons.close),
+            onPressed: () {
+              context.read<AddListingCubit>().clearAssets();
+              Navigator.pop(context);
+            },
+          ),
           title: Text(textTitle),
           actions: [
             AppButton(
@@ -210,7 +216,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
 
     if (widget.item != null) {
       if (!mounted) return;
-      _featureImage = widget.item?.image;
       _featurePdf = widget.item?.pdf;
       statusId = widget.item?.statusId;
       _textTitleController.text = widget.item!.title;
@@ -265,16 +270,17 @@ class _AddListingScreenState extends State<AddListingScreen> {
           }
         }
       }
-      List<File> images = await downloadImages(widget.item!.imageLists!);
-      setState(() {
-        selectedImages?.clear();
-        downloadedImages.clear();
-        downloadedImages.addAll(images);
-        selectedImages?.addAll(images);
-        if (downloadedImages.length > 1) {
-          // _featureImage = downloadedImages[0];
-        }
-      });
+      if (widget.item?.pdf == '') {
+        List<File> images = await downloadImages(widget.item!.imageLists!);
+        setState(() {
+          selectedImages?.clear();
+          downloadedImages.clear();
+          if (!images[0].path.contains('Defaultimage')) {
+            selectedImages?.addAll(images);
+          }
+          downloadedImages.addAll(images);
+        });
+      }
     } else {
       if (currentCity != null && currentCity != 0) {
         for (var cityData in loadCitiesResponse?.data) {
@@ -309,6 +315,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
     List<File> downloadedImages = [];
     Directory appDocumentsDirectory = await getApplicationDocumentsDirectory();
 
+    imageUrls.sort((a, b) => a.imageOrder!.compareTo(b.imageOrder as num));
     for (final imageUrl in imageUrls) {
       try {
         var response = await http
@@ -325,7 +332,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
           throw Exception('Failed to download image');
         }
       } catch (e) {
-        print('Error downloading image: $e');
+        logError('Error downloading image: $e');
       }
     }
     return downloadedImages;
@@ -463,49 +470,55 @@ class _AddListingScreenState extends State<AddListingScreen> {
           isLoading = true;
         });
         final result = await context.read<AddListingCubit>().onEdit(
-            cityId: widget.item?.cityId,
-            categoryId: widget.item!.categoryId,
-            listingId: widget.item?.id,
-            title: _textTitleController.text,
-            place: _textPlaceController.text,
-            description: _textContentController.text,
-            address: _textAddressController.text,
-            email: _textEmailController.text,
-            phone: _textPhoneController.text,
-            website: _textWebsiteController.text,
-            price: _textPriceController.text,
-            startDate: _startDate,
-            endDate: _endDate,
-            startTime: _startTime,
-            endTime: _endTime,
-            isImageChanged: isImageChanged,
-            statusId: statusId);
+              cityId: widget.item?.cityId,
+              categoryId: widget.item!.categoryId,
+              listingId: widget.item?.id,
+              title: _textTitleController.text,
+              place: _textPlaceController.text,
+              description: _textContentController.text,
+              address: _textAddressController.text,
+              email: _textEmailController.text,
+              phone: _textPhoneController.text,
+              website: _textWebsiteController.text,
+              price: _textPriceController.text,
+              startDate: _startDate,
+              endDate: _endDate,
+              startTime: _startTime,
+              endTime: _endTime,
+              isImageChanged: isImageChanged,
+              statusId: statusId,
+              imagesList: selectedImages,
+            );
         if (result) {
           await AppBloc.homeCubit.onLoad(false);
           setState(() {
             isLoading = false;
           });
           _onSuccess();
+          if (!mounted) return;
+          context.read<AddListingCubit>().clearAssets();
         }
       } else {
         setState(() {
           isLoading = true;
         });
         final result = await context.read<AddListingCubit>().onSubmit(
-            cityId: cityId ?? 1,
-            title: _textTitleController.text,
-            city: selectedCity,
-            place: _textPlaceController.text,
-            description: _textContentController.text,
-            address: _textAddressController.text,
-            email: _textEmailController.text,
-            phone: _textPhoneController.text,
-            website: _textWebsiteController.text,
-            startDate: _startDate,
-            endDate: _endDate,
-            startTime: _startTime,
-            endTime: _endTime,
-            imagesList: selectedImages);
+              cityId: cityId ?? 1,
+              title: _textTitleController.text,
+              city: selectedCity,
+              place: _textPlaceController.text,
+              description: _textContentController.text,
+              address: _textAddressController.text,
+              email: _textEmailController.text,
+              phone: _textPhoneController.text,
+              website: _textWebsiteController.text,
+              startDate: _startDate,
+              endDate: _endDate,
+              startTime: _startTime,
+              endTime: _endTime,
+              imagesList: selectedImages,
+              isImageChanged: isImageChanged,
+            );
         if (result) {
           await AppBloc.homeCubit.onLoad(false);
           setState(() {
@@ -514,6 +527,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
           _onSuccess();
           if (!mounted) return;
           context.read<AddListingCubit>().clearImagePath();
+          if (!mounted) return;
+          context.read<AddListingCubit>().clearAssets();
         }
       }
     }
@@ -674,14 +689,28 @@ class _AddListingScreenState extends State<AddListingScreen> {
               child: AppUploadImage(
                 title:
                     Translate.of(context).translate('upload_feature_image_pdf'),
-                image: _featurePdf == '' ? _featureImage : _featurePdf,
+                image: _featurePdf == ''
+                    ?
+                    // downloadedImages == []
+                    //         ? _featureImage
+                    //         :
+                    downloadedImages[0].path
+                    : _featurePdf,
                 profile: false,
                 forumGroup: false,
+                onDelete: () {
+                  if (selectedImages!.length > 0) {
+                    selectedImages?.remove(selectedImages?[0]);
+                  }
+                },
                 onChange: (result) {
                   if (result.isNotEmpty) {
                     setState(() {
                       selectedImages?.clear();
-                      selectedImages?.addAll(downloadedImages);
+                      if (downloadedImages.length > 0 &&
+                          !downloadedImages[0].path.contains('Defaultimage')) {
+                        selectedImages?.addAll(downloadedImages);
+                      }
                       selectedImages?.addAll(result);
                     });
                   } else {
@@ -1255,61 +1284,71 @@ class _AddListingScreenState extends State<AddListingScreen> {
   }
 
   Widget _buildImageList() {
-    return SizedBox(
-      height: 150,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: selectedImages!.length > 1
-            ? selectedImages!.length - 1
-            : 0, // Ensure itemCount is non-negative
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Stack(
-              children: [
-                DottedBorder(
-                  borderType: BorderType.RRect,
-                  radius: const Radius.circular(8),
-                  color: Theme.of(context).primaryColor,
-                  child: Container(
-                    width: 100,
-                    height: 100,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.rectangle,
+    return Visibility(
+      visible: selectedImages!.length > 1 &&
+          !selectedImages!.contains('Defaultimage'),
+      child: SizedBox(
+        height: 150,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: selectedImages!.length > 1
+              ? selectedImages!.length - 1
+              : 0, // Ensure itemCount is non-negative
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Stack(
+                children: [
+                  DottedBorder(
+                    borderType: BorderType.RRect,
+                    radius: const Radius.circular(8),
+                    color: Theme.of(context).primaryColor,
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.rectangle,
+                      ),
+                      // alignment: Alignment.center,
+                      child: Image.file(selectedImages![index + 1],
+                          fit: BoxFit.cover),
                     ),
-                    // alignment: Alignment.center,
-                    child: Image.file(selectedImages![index + 1],
-                        fit: BoxFit.cover),
                   ),
-                ),
-                Positioned(
-                  top: -10,
-                  right: -10,
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.delete,
-                      color: Colors.red[900],
+                  Positioned(
+                    top: -10,
+                    right: -10,
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.delete,
+                        color: Colors.red[900],
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          isImageChanged = true;
+                          if (selectedImages!.isNotEmpty) {
+                            if (selectedImages?[index + 1] is Asset) {
+                              context
+                                  .read<AddListingCubit>()
+                                  .removeAssets(index + 1);
+                            }
+                          }
+                          if (downloadedImages.isNotEmpty) {
+                            if (downloadedImages.length > index + 1) {
+                              downloadedImages
+                                  .remove(downloadedImages[index + 1]);
+                              // selectedImages?.remove(selectedImages?[index + 1]);
+                            }
+                          }
+                          selectedImages?.remove(selectedImages?[index + 1]);
+                        });
+                      },
                     ),
-                    onPressed: () {
-                      setState(() {
-                        if (selectedImages?[index + 1] is Asset) {
-                          context
-                              .read<AddListingCubit>()
-                              .removeAssets(index + 1);
-                        }
-                        if (downloadedImages.isNotEmpty) {
-                          downloadedImages.remove(downloadedImages[index]);
-                        }
-
-                        selectedImages?.remove(selectedImages?[index + 1]);
-                      });
-                    },
                   ),
-                ),
-              ],
-            ),
-          );
-        },
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }

@@ -308,13 +308,13 @@ class ListRepository {
     TimeOfDay? startTime,
     TimeOfDay? endTime,
     List<File>? imagesList,
+    bool isImageChanged,
   ) async {
     final subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
     final villageId = prefs.getKeyValue(Preferences.villageId, null);
     final userId = prefs.getKeyValue(Preferences.userId, '');
     final cityId = await getCityId(city);
-    final media = prefs.getKeyValue(Preferences.path, null);
     String? combinedStartDateTime;
     String? combinedEndDateTime;
 
@@ -368,37 +368,40 @@ class ListRepository {
       "endDate": combinedEndDateTime,
       "subCategoryId": subCategoryId,
     };
-    final response = await Api.requestSaveProduct(cityId, params);
+    final response =
+        await Api.requestSaveProduct(cityId, params, isImageChanged);
     if (response.success) {
       final prefs = await Preferences.openBox();
       FormData? pickedFile = prefs.getPickedFile();
       final id = response.id;
       var formData = FormData();
 
-      if (imagesList != null) {
-        for (final image in imagesList) {
-          var file = image;
+      if (pickedFile != null && pickedFile.files.isNotEmpty) {
+        if (pickedFile.files[0].key == 'pdf') {
+          await Api.requestListingUploadMedia(id, cityId, pickedFile);
+        } else {
+          if (imagesList!.isNotEmpty) {
+            for (final image in imagesList) {
+              var file = image;
 
-          // Ensure the file extension matches the actual image type
-          var fileExtension = file.path.split('.').last.toLowerCase();
-          var fileName = '$image.$fileExtension';
+              // Ensure the file extension matches the actual image type
+              var fileExtension = file.path.split('.').last.toLowerCase();
+              var fileName = '$image.$fileExtension';
 
-          formData.files.add(MapEntry(
-            'image',
-            await MultipartFile.fromFile(
-              file.path,
-              filename: fileName,
-              contentType: MediaType(
-                  'image', fileExtension), // Set the correct content type
-            ),
-          ));
+              formData.files.add(MapEntry(
+                'image',
+                await MultipartFile.fromFile(
+                  file.path,
+                  filename: fileName,
+                  contentType: MediaType(
+                      'image', fileExtension), // Set the correct content type
+                ),
+              ));
+            }
+            await Api.requestListingUploadMedia(id, cityId, formData);
+          }
         }
-        await Api.requestListingUploadMedia(id, cityId, formData);
       }
-
-      // if (pickedFile != null) {
-      //   await Api.requestListingUploadMedia(id, cityId, pickedFile);
-      // }
       prefs.deleteKey('pickedFile');
     }
     return response;
@@ -478,14 +481,15 @@ class ListRepository {
       "price": 100, //dummy data
       "discountPrice": 100, //dummy data
       "logo": media,
+      "hasAttachment": isImageChanged ? true : false,
       "statusId": statusId ?? 1, //change 1 to 3 when done
       "sourceId": 1, //dummy data
       "longitude": 245.65, //dummy data
       "latitude": 22.456, //dummy data
       "villageId": villageId ?? 0,
       "cityId": cityId,
-      "startDate": '',
-      "endDate": '',
+      "startDate": combinedStartDateTime,
+      "endDate": combinedEndDateTime,
       "subCategoryId": subCategoryId,
     };
     final response =
@@ -493,32 +497,56 @@ class ListRepository {
     if (response.success) {
       final prefs = await Preferences.openBox();
       FormData? pickedFile = prefs.getPickedFile();
-      if (isImageChanged) {
-        // var formData = FormData();
-        //
-        // if (imagesList != null) {
-        //   for (final image in imagesList) {
-        //     var file = image;
-        //
-        //     // Ensure the file extension matches the actual image type
-        //     var fileExtension = file.path.split('.').last.toLowerCase();
-        //     var fileName = '$image.$fileExtension';
-        //
-        //     formData.files.add(MapEntry(
-        //       'image',
-        //       await MultipartFile.fromFile(
-        //         file.path,
-        //         filename: fileName,
-        //         contentType: MediaType(
-        //             'image', fileExtension), // Set the correct content type
-        //       ),
-        //     ));
-        //   }
-        //   await Api.requestListingUploadMedia(listingId, cityId, formData);
-        // }
-        // if (pickedFile!.files.isNotEmpty) {
-        //   await Api.requestListingUploadMedia(listingId, cityId, pickedFile);
-        // }
+      if (pickedFile != null) {
+        if (pickedFile.files[0].key == 'pdf') {
+          await Api.requestListingUploadMedia(listingId, cityId, pickedFile);
+        }
+        else {
+          if (isImageChanged) {
+            var formData = FormData();
+
+            if (imagesList != null) {
+              for (final image in imagesList) {
+                var file = image;
+
+                // Ensure the file extension matches the actual image type
+                if (file.path.contains('.')) {
+                  var fileExtension = file.path
+                      .split('.')
+                      .last
+                      .toLowerCase();
+                  var fileName = '$image.$fileExtension';
+                  formData.files.add(MapEntry(
+                    'image',
+                    await MultipartFile.fromFile(
+                      file.path,
+                      filename: fileName,
+                      contentType: MediaType(
+                          'image',
+                          fileExtension), // Set the correct content type
+                    ),
+                  ));
+                } else {
+                  // var fileExtension = file.path.split('.').last.toLowerCase();
+                  var fileName = '$image';
+                  formData.files.add(MapEntry(
+                    'image',
+                    await MultipartFile.fromFile(
+                      file.path,
+                      filename: fileName,
+                      contentType: MediaType(
+                          'image', 'png'), // Set the correct content type
+                    ),
+                  ));
+                }
+              }
+              await Api.requestListingUploadMedia(listingId, cityId, formData);
+            }
+            // if (pickedFile!.files.isNotEmpty) {
+            //   await Api.requestListingUploadMedia(listingId, cityId, pickedFile);
+            // }
+          }
+        }
       }
     }
     return response;
