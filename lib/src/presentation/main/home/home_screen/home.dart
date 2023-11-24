@@ -134,7 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedCityId = 0;
       });
     }
-    AppBloc.homeCubit.onLoad(true);
+    //AppBloc.homeCubit.onLoad(true);
   }
 
   @override
