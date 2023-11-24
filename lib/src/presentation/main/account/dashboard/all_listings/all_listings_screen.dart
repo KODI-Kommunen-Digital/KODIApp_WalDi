@@ -172,7 +172,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                   controller: _scrollController,
                   slivers: <Widget>[
                     CupertinoSliverRefreshControl(
-                      onRefresh: _onRefresh,
+                      onRefresh: _onRefreshLoader,
                     ),
                     SliverList(
                       delegate: SliverChildBuilderDelegate(
@@ -648,6 +648,10 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
   }
 
   Future _onRefresh() async {
+    await context.read<AllListingsCubit>().onLoad(false);
+  }
+
+  Future _onRefreshLoader() async {
     await context.read<AllListingsCubit>().onLoad(true);
   }
 
