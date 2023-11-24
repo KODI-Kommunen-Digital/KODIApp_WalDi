@@ -23,17 +23,29 @@ import 'package:heidi/src/utils/translate.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 // ignore: must_be_immutable
-class AllListingsScreen extends StatelessWidget {
+class AllListingsScreen extends StatefulWidget {
   final UserModel user;
 
   const AllListingsScreen({required this.user, super.key});
+
+  @override
+  State<AllListingsScreen> createState() => _AllListingsScreenState();
+}
+
+class _AllListingsScreenState extends State<AllListingsScreen> {
+  @override
+  void dispose() {
+    AppBloc.allListingsCubit.setCurrentStatus(0);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AllListingsCubit, AllListingsState>(
         builder: (context, state) => state.maybeWhen(
             loading: () => const AllListingsLoading(),
-            loaded: (posts) => AllListingsLoaded(user: user, posts: posts),
+            loaded: (posts) =>
+                AllListingsLoaded(user: widget.user, posts: posts),
             orElse: () => ErrorWidget("Failed to load listings.")));
   }
 }
@@ -86,7 +98,6 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
 
   @override
   void dispose() {
-    AppBloc.allListingsCubit.setCurrentStatus(0);
     _scrollController.removeListener(_scrollListener);
     _scrollController.dispose();
     super.dispose();
