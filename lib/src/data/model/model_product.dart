@@ -190,6 +190,12 @@ class ProductModel {
       category = "Angebote";
     } else if (json['categoryId'] == 13) {
       category = "Essen & Trinken";
+    } else if (json['categoryId'] == 14) {
+      category = "Rathaus";
+    } else if (json['categoryId'] == 15) {
+      category = "Mitteilungsblatt";
+    } else if (json['categoryId'] == 16) {
+      category = "Amtliche Mitteilungen";
     }
 
     final listRelated = List.from(json['related'] ?? []).map((item) {
