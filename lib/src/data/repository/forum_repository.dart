@@ -158,7 +158,9 @@ class ForumRepository {
   }
 
   Future<ResultApiModel?> deleteGroupPost(forumId, cityId, postId) async {
-    final response = await Api.deleteGroupPost(forumId, cityId, postId);
+    final cityIdPref = prefs.getKeyValue(Preferences.cityId, 0);
+    final response = await Api.deleteGroupPost(
+        forumId, cityId == 0 ? cityIdPref : cityId, postId);
     if (response.success) {
       return response;
     } else {
@@ -261,8 +263,8 @@ class ForumRepository {
   Future<bool> requestRemoveAdmin(forumId, memberId, cityId) async {
     final prefCityId = prefs.getKeyValue(Preferences.cityId, 0);
     final Map<String, dynamic> params = {"isAdmin": 0};
-    final response =
-        await Api.requestRemoveAdmin(cityId == 0 ? prefCityId : cityId, forumId, memberId, params);
+    final response = await Api.requestRemoveAdmin(
+        cityId == 0 ? prefCityId : cityId, forumId, memberId, params);
     if (response.success) {
       return true;
     } else {

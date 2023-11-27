@@ -571,21 +571,15 @@ class _AddListingScreenState extends State<AddListingScreen> {
   String? _getCategoryTranslation(int id) {
     Map<int, String> categories = {
       1: "category_news",
-      2: "category_traffic",
       3: "category_events",
       4: "category_clubs",
       5: "category_products",
       6: "category_offer_search",
-      7: "category_citizen_info",
-      8: "category_defect_report",
       9: "category_lost_found",
       10: "category_companies",
       11: "category_public_transport",
-      12: "category_offers",
       13: "category_food",
-      14: "category_rathaus",
-      15: "category_newsletter",
-      16: "category_official_notification"
+      17: "category_free"
     };
     return categories[id];
   }

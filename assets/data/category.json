@@ -2,7 +2,7 @@
     "status": "success",
     "data": [ 
         {
-           "id": 13,
+           "id": 14,
            "name": "Forum",
            "noOfSubcategories": 8,
            "icon": "fas fa-user-group",
@@ -51,15 +51,6 @@
             "categoryType" : "category"
         },
         {
-            "id": 7,
-            "name": "Freizeit",
-            "noOfSubcategories": 0,                
-            "icon": "fas fa-umbrella-beach",
-            "color": "#fdc60a",
-            "categoryType" : "category"
-        },
-        
-        {
             "id": 9,
             "name": "Fundbüro",
             "noOfSubcategories": 0,
@@ -84,7 +75,7 @@
             "categoryType" : "category"
         },
         {
-            "id": 12,
+            "id": 13,
             "name": "Essen & Trinken",
             "noOfSubcategories": 0,
             "icon": "fas fa-utensils",
@@ -92,19 +83,11 @@
             "categoryType" : "category"
         },
         {
-            "id": 15,
-            "name": "Rathaus",
-            "noOfSubcategories": 0,
-            "icon": "fas fa-building",
-            "color": "#58d68d",
-            "categoryType" : "category"
-        },
-        {
-            "id": 16,
-            "name": "Mitteilungsblatt",
-            "noOfSubcategories": 0,
-            "icon": "fas fa-newspaper",
-            "color": "#58d68d",
+            "id": 17,
+            "name": "Freizeit",
+            "noOfSubcategories": 0,                
+            "icon": "fas fa-umbrella-beach",
+            "color": "#fdc60a",
             "categoryType" : "category"
         }
     ]

@@ -355,7 +355,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     if (item.id != -1) {
-      if (item.id == 13) {
+      if (item.id == 14) {
         final cityId = await context.read<DiscoveryCubit>().getCitySelected();
         if (cityId != 0) {
           if (!mounted) return;
