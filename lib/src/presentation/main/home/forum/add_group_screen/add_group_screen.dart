@@ -102,7 +102,7 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
     if (!mounted) return;
     if (widget.item != null) {
       final selectedCityDetails = loadCitiesResponse!
-          .firstWhere((element) => element['id'] == currentCity);
+          .firstWhere((element) => element['id'] == widget.item?.cityId);
       if (!mounted) return;
       _textTitleController.text = widget.item!.forumName ?? '';
       _textContentController.text = widget.item!.description ?? '';
