@@ -14,6 +14,7 @@ enum ProductFilter {
 
 class ListCubit extends Cubit<ListState> {
   final ListRepository repo;
+
   ListCubit(this.repo) : super(const ListStateLoading()) {
     // final isEvent = categoryPreferencesCall();
   }
@@ -23,6 +24,7 @@ class ListCubit extends Cubit<ListState> {
   PaginationModel? pagination;
   List<ProductModel> listLoaded = [];
   List<ProductModel> filteredList = [];
+  List listCity = [];
 
   Future<void> onLoad(cityId) async {
     pageNo = 1;
@@ -32,6 +34,7 @@ class ListCubit extends Cubit<ListState> {
     if (type == 'location') {
       prefs.setKeyValue(Preferences.categoryId, '');
     }
+    listCity = await getCityList() ?? [];
     final result = await ListRepository.loadList(
       categoryId: categoryId,
       type: type,
@@ -42,9 +45,7 @@ class ListCubit extends Cubit<ListState> {
       list = result[0];
       pagination = result[1];
       listLoaded = list;
-      emit(ListStateLoaded(
-        list,
-      ));
+      emit(ListStateLoaded(list, listCity));
     }
   }
 
@@ -87,7 +88,7 @@ class ListCubit extends Cubit<ListState> {
         return false;
       }).toList();
 
-      emit(ListStateUpdated(filteredList));
+      emit(ListStateUpdated(filteredList, listCity));
     } else if (type == ProductFilter.week) {
       filteredList = loadedList.where((product) {
         final startDate = _parseDate(product.startDate);
@@ -99,9 +100,9 @@ class ListCubit extends Cubit<ListState> {
         return false;
       }).toList();
 
-      emit(ListStateUpdated(filteredList));
+      emit(ListStateUpdated(filteredList, listCity));
     } else {
-      emit(ListStateUpdated(loadedList));
+      emit(ListStateUpdated(loadedList, listCity));
     }
   }
 
@@ -122,6 +123,27 @@ class ListCubit extends Cubit<ListState> {
       logError("Error parsing date: $dateTimeString");
     }
     return null;
+  }
+
+  Future<List?> getCityList() async {
+    ResultApiModel? loadCitiesResponse;
+    try {
+      loadCitiesResponse = await repo.loadCities();
+    } catch (e) {
+      logError('load cities error', e.toString());
+      return null;
+    }
+
+    List listCity = loadCitiesResponse.data;
+    return listCity;
+  }
+
+  String getCityNameFromId(List listCity, int cityId) {
+    if (listCity.isNotEmpty) {
+      final city = listCity.firstWhere((cityData) => cityData["id"] == cityId);
+      return city["name"];
+    }
+    return "";
   }
 
   int _getWeekNumber(DateTime date) {

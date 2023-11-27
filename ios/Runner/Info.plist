@@ -5,7 +5,7 @@
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<string>GERMAN</string>
 	<key>CFBundleDisplayName</key>
 	<string>Geseke App</string>
 	<key>CFBundleExecutable</key>
@@ -40,6 +40,8 @@
 	<string>Need microphone access for uploading audio</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Wir benötigen Zugang zur Bildergalerie, sodass du Bilder hochladen kannst.</string>
+	<key>NSDownloadsFolderUsageDescription</key>
+	<string>We need access to the Downloads folder for file access.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

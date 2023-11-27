@@ -23,18 +23,29 @@ import 'package:heidi/src/utils/translate.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 // ignore: must_be_immutable
-class AllListingsScreen extends StatelessWidget {
+class AllListingsScreen extends StatefulWidget {
   final UserModel user;
 
   const AllListingsScreen({required this.user, super.key});
+
+  @override
+  State<AllListingsScreen> createState() => _AllListingsScreenState();
+}
+
+class _AllListingsScreenState extends State<AllListingsScreen> {
+  @override
+  void dispose() {
+    AppBloc.allListingsCubit.setCurrentStatus(0);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AllListingsCubit, AllListingsState>(
         builder: (context, state) => state.maybeWhen(
             loading: () => const AllListingsLoading(),
-            loaded: (posts, isRefreshLoader) => AllListingsLoaded(
-                user: user, posts: posts, isRefreshLoader: isRefreshLoader),
+            loaded: (posts) =>
+                AllListingsLoaded(user: widget.user, posts: posts),
             orElse: () => ErrorWidget("Failed to load listings.")));
   }
 }
@@ -58,13 +69,8 @@ class AllListingsLoading extends StatelessWidget {
 class AllListingsLoaded extends StatefulWidget {
   final List<ProductModel>? posts;
   final UserModel user;
-  final bool isRefreshLoader;
 
-  const AllListingsLoaded(
-      {required this.user,
-      required this.isRefreshLoader,
-      this.posts,
-      super.key});
+  const AllListingsLoaded({required this.user, this.posts, super.key});
 
   @override
   State<AllListingsLoaded> createState() => _AllListingsLoadedState();
@@ -77,7 +83,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
   int pageNo = 1;
   List<ProductModel>? posts;
   bool isSwiped = false;
-  String selectedListingStatusValue = "pending";
+  String selectedListingStatusValue = "inactive";
 
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
     Factory(() => EagerGestureRecognizer())
@@ -92,7 +98,6 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
 
   @override
   void dispose() {
-    AppBloc.allListingsCubit.setCurrentStatus(0);
     _scrollController.removeListener(_scrollListener);
     _scrollController.dispose();
     super.dispose();
@@ -101,8 +106,8 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
   Future<void> _openFilterDrawer(BuildContext context) async {
     List<String> statusNames = [
       Translate.of(context).translate("active"),
+      Translate.of(context).translate("inactive"),
       Translate.of(context).translate("under_review"),
-      Translate.of(context).translate("pending")
     ];
     int selectedStatus = await AppBloc.allListingsCubit.getCurrentStatus();
     await showModalBottomSheet(
@@ -144,7 +149,6 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
 
   @override
   Widget build(BuildContext context) {
-    posts = widget.posts;
     String uniqueKey = UniqueKey().toString();
     return SafeArea(
         child: Scaffold(
@@ -179,7 +183,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                   controller: _scrollController,
                   slivers: <Widget>[
                     CupertinoSliverRefreshControl(
-                      onRefresh: _onRefresh,
+                      onRefresh: _onRefreshLoader,
                     ),
                     SliverList(
                       delegate: SliverChildBuilderDelegate(
@@ -246,12 +250,8 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                                   child: Image.network(
                                                     item.sourceId == 2
                                                         ? item.image
-                                                        : item.image ==
-                                                                'admin/News.jpeg'
-                                                            ? "${Application.picturesURL}${item.image}"
-                                                            : widget.isRefreshLoader
-                                                                ? "${Application.picturesURL}${item.image}"
-                                                                : "${Application.picturesURL}${item.image}?cache=$uniqueKey",
+                                                        : "${Application.picturesURL}${item.image}",
+                                                    //: "${Application.picturesURL}${item.image}?cache=$uniqueKey",
                                                     width: 120,
                                                     height: 140,
                                                     fit: BoxFit.cover,
@@ -352,7 +352,9 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                                 const SizedBox(height: 8),
                                                 Text(
                                                   item.categoryId == 3
-                                                      ? "${item.startDate} ${Translate.of(context).translate('to')} ${item.endDate}"
+                                                      ? (item.endDate != ""
+                                                          ? "${item.startDate} ${Translate.of(context).translate('to')} ${item.endDate}"
+                                                          : item.startDate)
                                                       : item.createDate,
                                                   style: Theme.of(context)
                                                       .textTheme
@@ -566,7 +568,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                     .changeStatus(item, choice);
                                 selectedListingStatusValue =
                                     Translate.of(context)
-                                        .translate(chosen ?? "pending");
+                                        .translate(chosen ?? "inactive");
                                 Navigator.of(context).pop();
                                 _onRefresh();
                                 AppBloc.homeCubit.onLoad(true);
@@ -579,15 +581,15 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                         .translate('active'))),
                                 DropdownMenuItem<String>(
                                   value: Translate.of(context)
-                                      .translate('under_review'),
+                                      .translate('inactive'),
                                   child: Text(Translate.of(context)
-                                      .translate('under_review')),
+                                      .translate('inactive')),
                                 ),
                                 DropdownMenuItem<String>(
                                   value: Translate.of(context)
-                                      .translate('pending'),
+                                      .translate('under_review'),
                                   child: Text(Translate.of(context)
-                                      .translate('pending')),
+                                      .translate('under_review')),
                                 ),
                               ],
                             ),
@@ -610,7 +612,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
       if (_scrollController.position.pixels != 0) {
         setState(() {
           isLoadingMore = true;
-          previousScrollPosition = _scrollController.position.pixels;
+          //previousScrollPosition = _scrollController.position.pixels;
         });
         posts = await context.read<AllListingsCubit>().newListings(++pageNo);
         setState(() {
@@ -657,6 +659,10 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
   }
 
   Future _onRefresh() async {
+    await context.read<AllListingsCubit>().onLoad(false);
+  }
+
+  Future _onRefreshLoader() async {
     await context.read<AllListingsCubit>().onLoad(true);
   }
 
@@ -674,17 +680,17 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
         case 1:
           return "active";
         case 2:
-          return "under_review";
+          return "inactive";
         case 3:
-          return "pending";
+          return "under_review";
       }
     } else if (statusName != null) {
       if (statusName == Translate.of(context).translate('active')) {
         return "1";
+      } else if (statusName == Translate.of(context).translate('inactive')) {
+        return "2";
       } else if (statusName ==
           Translate.of(context).translate('under_review')) {
-        return "2";
-      } else if (statusName == Translate.of(context).translate('pending')) {
         return "3";
       }
     }

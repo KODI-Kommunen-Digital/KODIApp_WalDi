@@ -329,7 +329,7 @@ class ListRepository {
       }
     }
 
-    if (endDate != null) {
+    if (endDate != null && endDate != "") {
       String formattedTime;
       if (endTime!.hour < 10) {
         formattedTime =
@@ -340,6 +340,8 @@ class ListRepository {
             "${endTime.hour}:${endTime.minute.toString().padLeft(2, '0')}";
         combinedEndDateTime = "${endDate.trim()}T$formattedTime";
       }
+    } else {
+      combinedEndDateTime = "";
     }
 
     Map<String, dynamic> params = {
@@ -425,7 +427,7 @@ class ListRepository {
       }
     }
 
-    if (endDate != null) {
+    if (endDate != null && endDate != "") {
       String formattedTime;
       if (endTime!.hour < 10) {
         formattedTime =
@@ -464,7 +466,7 @@ class ListRepository {
     };
     final response =
         await Api.requestEditProduct(cityId, listingId, params, isImageChanged);
-    if(response.success){
+    if (response.success) {
       final prefs = await Preferences.openBox();
       FormData? pickedFile = prefs.getPickedFile();
       if (isImageChanged) {

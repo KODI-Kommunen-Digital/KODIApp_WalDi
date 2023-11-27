@@ -160,13 +160,17 @@ class ProductModel {
       category = "Veranstaltungen";
       final parsedDateTime = DateTime.parse(json['startDate']);
       startDate = DateFormat('dd.MM.yyyy HH:mm').format(parsedDateTime);
-      final parsedEDateTime = DateTime.parse(json['endDate']);
-      if (parsedDateTime.year == parsedEDateTime.year &&
-          parsedDateTime.month == parsedEDateTime.month &&
-          parsedDateTime.day == parsedEDateTime.day) {
-        endDate = DateFormat('HH:mm').format(parsedEDateTime);
+      if ((json['endDate']) != null) {
+        final parsedEDateTime = DateTime.parse(json['endDate']);
+        if (parsedDateTime.year == parsedEDateTime.year &&
+            parsedDateTime.month == parsedEDateTime.month &&
+            parsedDateTime.day == parsedEDateTime.day) {
+          endDate = DateFormat('HH:mm').format(parsedEDateTime);
+        } else {
+          endDate = DateFormat('dd.MM.yyyy HH:mm').format(parsedEDateTime);
+        }
       } else {
-        endDate = DateFormat('dd.MM.yyyy HH:mm').format(parsedEDateTime);
+        endDate = "";
       }
     } else if (json['categoryId'] == 4) {
       category = "Vereine";
@@ -186,6 +190,12 @@ class ProductModel {
       category = "Angebote";
     } else if (json['categoryId'] == 13) {
       category = "Essen & Trinken";
+    } else if (json['categoryId'] == 14) {
+      category = "Rathaus";
+    } else if (json['categoryId'] == 15) {
+      category = "Mitteilungsblatt";
+    } else if (json['categoryId'] == 16) {
+      category = "Amtliche Mitteilungen";
     }
 
     final listRelated = List.from(json['related'] ?? []).map((item) {
@@ -205,7 +215,9 @@ class ProductModel {
       id: json['id'],
       userId: json['userId'] ?? 0,
       title: json['title'] ?? '',
-      image: json['logo'] ?? 'admin/News.jpeg',
+      image: (json['logo'] != null && json['logo'] != "")
+          ? json['logo']
+          : 'admin/News.jpeg',
       videoURL: videoURL,
       category: category ?? '',
       createDate: createDate,

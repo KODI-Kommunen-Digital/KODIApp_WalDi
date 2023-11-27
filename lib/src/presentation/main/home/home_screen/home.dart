@@ -134,7 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedCityId = 0;
       });
     }
-    AppBloc.homeCubit.onLoad(true);
+    //AppBloc.homeCubit.onLoad(true);
   }
 
   @override
@@ -250,7 +250,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             : _buildCategory(AppBloc.homeCubit
                                 .getCategoriesWithoutHidden(category ?? [])),
                         _buildLocation(location),
-                        _buildRecent(recent, selectedCityId),
+                        _buildRecent(recent, selectedCityId, location),
                         if (isLoading)
                           const CircularProgressIndicator.adaptive(),
                         const SizedBox(height: 50),
@@ -482,7 +482,7 @@ class _HomeScreenState extends State<HomeScreen> {
         "id": -1,
         "name": Translate.of(context).translate("more"),
         "icon": "fas fa-ellipsis",
-        "color": "#ff8a65",
+        "color": "#36454F",
       });
 
       if (category.length >= 7) {
@@ -598,7 +598,8 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildRecent(List<ProductModel>? recent, int selectedCity) {
+  Widget _buildRecent(List<ProductModel>? recent, int selectedCity,
+      List<CategoryModel>? cities) {
     Widget content = ListView.builder(
       padding: const EdgeInsets.all(0),
       shrinkWrap: true,
@@ -626,25 +627,27 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Padding(
                     padding: const EdgeInsets.only(bottom: 16),
                     child: AppProductItem(
-                      onPressed: () {
-                        _onProductDetail(item);
-                      },
-                      item: item,
-                      type: ProductViewType.small,
-                      isRefreshLoader: isRefreshLoader,
-                    ),
+                        onPressed: () {
+                          _onProductDetail(item);
+                        },
+                        item: item,
+                        type: ProductViewType.small,
+                        isRefreshLoader: isRefreshLoader,
+                        cityName: AppBloc.homeCubit
+                            .getCityName(cities, item.cityId ?? 0)),
                   ),
                 )
               : Padding(
                   padding: const EdgeInsets.only(bottom: 16),
                   child: AppProductItem(
-                    onPressed: () {
-                      _onProductDetail(item);
-                    },
-                    isRefreshLoader: isRefreshLoader,
-                    item: item,
-                    type: ProductViewType.small,
-                  ),
+                      onPressed: () {
+                        _onProductDetail(item);
+                      },
+                      isRefreshLoader: isRefreshLoader,
+                      item: item,
+                      type: ProductViewType.small,
+                      cityName: AppBloc.homeCubit
+                          .getCityName(cities, item.cityId ?? 0)),
                 );
         },
         itemCount: recent.length,

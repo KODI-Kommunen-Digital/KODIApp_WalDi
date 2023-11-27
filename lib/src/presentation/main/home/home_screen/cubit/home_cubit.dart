@@ -84,6 +84,15 @@ class HomeCubit extends Cubit<HomeState> {
     return doesExist;
   }
 
+  String getCityName(List<CategoryModel>? cities, int cityId) {
+    if (cities != null) {
+      String name =
+          cities[cities.indexWhere((category) => category.id == cityId)].title;
+      return name;
+    }
+    return "";
+  }
+
   Future<bool> categoryHasContent(int id, int? cityId) async {
     final response =
         await Api.requestCategoryCount(cityId == 0 ? null : cityId);

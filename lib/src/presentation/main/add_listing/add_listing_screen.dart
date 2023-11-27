@@ -65,7 +65,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
   String? _errorWebsite;
   String? _errorStatus;
   String? _errorSDate;
-  String? _errorEDate;
   String? _errorCategory;
   String? selectedCity;
   int? cityId;
@@ -216,7 +215,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       final city = listCity
           .firstWhere((element) => element['id'] == widget.item?.cityId);
       selectedCity = city['name'];
-      if (selectedCategory?.toLowerCase() == "News" ||
+      if (selectedCategory?.toLowerCase() == "news" ||
           selectedCategory == null) {
         final subCategoryResponse = await context
             .read<AddListingCubit>()
@@ -269,7 +268,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
       }
       if (!loadCategoryResponse?.data.isEmpty) {
         if (!mounted) return;
-        if (selectedCategory == "News" || selectedCategory == null) {
+        if (selectedCategory?.toLowerCase() == "news" ||
+            selectedCategory == null) {
           final subCategoryResponse = await context
               .read<AddListingCubit>()
               .loadSubCategory(Translate.of(context).translate(
@@ -515,25 +515,19 @@ class _AddListingScreenState extends State<AddListingScreen> {
     _errorTitle =
         UtilValidator.validate(_textTitleController.text, allowEmpty: false);
 
-    if (_textContentController.text.length >= 10001) {
-      _errorContent = "Info should not exceed 1000 characters.";
+    if (_textContentController.text.length >= 65535) {
+      _errorContent = "value_desc_limit_exceeded";
     } else {
       _errorContent = UtilValidator.validate(_textContentController.text,
           allowEmpty: false);
     }
 
     logError('selectedCategory', selectedCategory);
-    if (selectedCategory == "Events") {
+    if (selectedCategory?.toLowerCase() == "events") {
       if (_startDate == null || _startDate == "" || _startTime == null) {
         _errorSDate = "value_not_date_empty";
       } else {
         _errorSDate = null;
-      }
-
-      if (_endDate == null || _endDate == "" || _endTime == null) {
-        _errorEDate = "value_not_date_empty";
-      } else {
-        _errorEDate = null;
       }
     }
 
@@ -546,7 +540,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
       _errorWebsite,
       _errorStatus,
       _errorSDate,
-      _errorEDate,
     ];
 
     if (_errorTitle != null ||
@@ -556,8 +549,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
         _errorEmail != null ||
         _errorWebsite != null ||
         _errorStatus != null ||
-        _errorSDate != null ||
-        _errorEDate != null) {
+        _errorSDate != null) {
       String errorMessage = "";
       for (var element in errors) {
         if (element != null &&
@@ -590,7 +582,10 @@ class _AddListingScreenState extends State<AddListingScreen> {
       10: "category_companies",
       11: "category_public_transport",
       12: "category_offers",
-      13: "category_food"
+      13: "category_food",
+      14: "category_rathaus",
+      15: "category_newsletter",
+      16: "category_official_notification"
     };
     return categories[id];
   }
@@ -605,6 +600,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       8: "subcategory_club_news",
       9: "subcategory_road",
       10: "subcategory_official_notification",
+      11: "subcategory_timeless_news"
     };
     return subCategories[id];
   }
@@ -750,29 +746,28 @@ class _AddListingScreenState extends State<AddListingScreen> {
                                       _getCategoryTranslation(
                                           category['id']))));
                             }).toList(),
-                            onChanged: widget.item == null
-                                ? (value) async {
-                                    setState(
-                                      () {
-                                        selectedCategory = value as String?;
-                                        context
-                                            .read<AddListingCubit>()
-                                            .setCategoryId(selectedCategory);
-                                      },
-                                    );
+                            onChanged: (value) async {
+                              setState(
+                                () {
+                                  selectedCategory = value as String?;
+                                  context
+                                      .read<AddListingCubit>()
+                                      .setCategoryId(selectedCategory);
+                                },
+                              );
 
-                                    if (selectedCategory == "News" ||
-                                        selectedCategory == null) {
-                                      selectSubCategory(selectedCategory);
-                                    }
-                                  }
-                                : null,
-                          )),
+                              if (selectedCategory?.toLowerCase() == "news" ||
+                                  selectedCategory == null) {
+                                selectSubCategory(selectedCategory);
+                              }
+                            })),
               ],
             ),
-            if (selectedCategory == "News" || selectedCategory == null)
+            if (selectedCategory?.toLowerCase() == "news" ||
+                selectedCategory == null)
               const SizedBox(height: 8),
-            if (selectedCategory == "News" || selectedCategory == null)
+            if (selectedCategory?.toLowerCase() == "news" ||
+                selectedCategory == null)
               Text.rich(
                 TextSpan(
                   text: Translate.of(context).translate('subCategory'),
@@ -794,7 +789,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
             const SizedBox(height: 8),
             Row(
               children: [
-                if (selectedCategory == "News")
+                if (selectedCategory?.toLowerCase() == "news")
                   Expanded(
                       child: listSubCategory.isEmpty
                           ? const LinearProgressIndicator()
@@ -824,7 +819,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
                             )),
               ],
             ),
-            if (selectedCategory == "News" || selectedCategory == null)
+            if (selectedCategory?.toLowerCase() == "news" ||
+                selectedCategory == null)
               const SizedBox(height: 8),
             const SizedBox(height: 8),
             Text.rich(
@@ -861,35 +857,29 @@ class _AddListingScreenState extends State<AddListingScreen> {
                             return DropdownMenuItem(
                                 value: city['name'], child: Text(city['name']));
                           }).toList(),
-                          onChanged: widget.item == null
-                              ? (value) async {
-                                  setState(() {
-                                    selectedCity = value as String?;
-                                    for (var element in listCity) {
-                                      if (element["name"] == value) {
-                                        cityId = element["id"];
-                                      }
-                                    }
-                                  });
-                                  selectedVillage = null;
-                                  context
-                                      .read<AddListingCubit>()
-                                      .clearVillage();
-                                  if (value != null) {
-                                    final loadVillageResponse = await context
-                                        .read<AddListingCubit>()
-                                        .loadVillages(value);
-                                    selectedVillage =
-                                        loadVillageResponse.data.first['name'];
-                                    villageId =
-                                        loadVillageResponse.data.first['id'];
-                                    setState(() {
-                                      listVillage = loadVillageResponse.data;
-                                    });
-                                  }
+                          onChanged: (value) async {
+                            setState(() {
+                              selectedCity = value as String?;
+                              for (var element in listCity) {
+                                if (element["name"] == value) {
+                                  cityId = element["id"];
                                 }
-                              : null,
-                        ),
+                              }
+                            });
+                            selectedVillage = null;
+                            context.read<AddListingCubit>().clearVillage();
+                            if (value != null) {
+                              final loadVillageResponse = await context
+                                  .read<AddListingCubit>()
+                                  .loadVillages(value);
+                              selectedVillage =
+                                  loadVillageResponse.data.first['name'];
+                              villageId = loadVillageResponse.data.first['id'];
+                              setState(() {
+                                listVillage = loadVillageResponse.data;
+                              });
+                            }
+                          }),
                 ),
               ],
             ),
@@ -1050,7 +1040,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
               ),
             ),
             Visibility(
-              visible: selectedCategory == "Events",
+              visible: selectedCategory?.toLowerCase() == "events",
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -1127,15 +1117,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
                           .textTheme
                           .titleMedium!
                           .copyWith(fontWeight: FontWeight.bold),
-                      children: const <TextSpan>[
-                        TextSpan(
-                          text: ' *',
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -1160,15 +1141,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
                           .textTheme
                           .titleMedium!
                           .copyWith(fontWeight: FontWeight.bold),
-                      children: const <TextSpan>[
-                        TextSpan(
-                          text: ' *',
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
                     ),
                   ),
                   const SizedBox(height: 8),

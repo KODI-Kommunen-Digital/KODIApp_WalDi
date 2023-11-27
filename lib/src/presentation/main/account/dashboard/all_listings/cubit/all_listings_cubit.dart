@@ -35,7 +35,7 @@ class AllListingsCubit extends Cubit<AllListingsState> {
       return ProductModel.fromJson(item);
     }).toList();
 
-    emit(AllListingsState.loaded(posts, isRefreshLoader));
+    emit(AllListingsState.loaded(posts));
   }
 
   Future<dynamic> newListings(int pageNo) async {
