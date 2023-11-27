@@ -118,12 +118,13 @@ class ForumRepository {
     }
   }
 
-  Future<ResultApiModel?> requestGroupDetails(forumId) async {
-    int cityId = prefs.getKeyValue(Preferences.cityId, 0);
-    if (cityId == 0) {
-      cityId = 1;
-    }
-    final response = await Api.requestGroupDetails(forumId, cityId);
+  Future<ResultApiModel?> requestGroupDetails(forumId, cityId) async {
+    int prefCityId = prefs.getKeyValue(Preferences.cityId, 0);
+    // if (cityId == 0) {
+    //   cityId = 1;
+    // }
+    final response = await Api.requestGroupDetails(
+        forumId, cityId != 0 ? cityId : prefCityId);
     if (response.success) {
       return response;
     } else {
@@ -170,8 +171,8 @@ class ForumRepository {
       forumId, postId, reason, cityId) async {
     final cityIdPref = prefs.getKeyValue(Preferences.cityId, 0);
     final Map<String, dynamic> params = {"Reason": reason};
-    final response =
-        await Api.reportGroupPosts(forumId, cityId == 0 ? cityIdPref : cityId, postId, params);
+    final response = await Api.reportGroupPosts(
+        forumId, cityId == 0 ? cityIdPref : cityId, postId, params);
     if (response.success) {
       return response;
     } else {
@@ -257,11 +258,11 @@ class ForumRepository {
     }
   }
 
-  Future<bool> requestRemoveAdmin(forumId, memberId) async {
-    final cityId = prefs.getKeyValue(Preferences.cityId, 0);
+  Future<bool> requestRemoveAdmin(forumId, memberId, cityId) async {
+    final prefCityId = prefs.getKeyValue(Preferences.cityId, 0);
     final Map<String, dynamic> params = {"isAdmin": 0};
     final response =
-        await Api.requestRemoveAdmin(cityId, forumId, memberId, params);
+        await Api.requestRemoveAdmin(cityId == 0 ? prefCityId : cityId, forumId, memberId, params);
     if (response.success) {
       return true;
     } else {
@@ -389,7 +390,8 @@ class ForumRepository {
     cityId,
   ) async {
     int cityIdPref = prefs.getKeyValue(Preferences.cityId, 0);
-    final response = await Api.requestDeleteForum(cityId == 0 ? cityIdPref : cityId, forumId);
+    final response = await Api.requestDeleteForum(
+        cityId == 0 ? cityIdPref : cityId, forumId);
     if (response.success) {
       return response;
     } else {
