@@ -206,7 +206,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
       selectedSubCategory = loadCategoryResponse?.data.first['name'];
       listCity = loadCitiesResponse.data;
       selectedCategory = selectedSubCategory;
-      if (selectedCategory == "news" || selectedCategory == null) {
+      if (selectedCategory?.toLowerCase() == "news" ||
+          selectedCategory == null) {
         selectSubCategory(selectedCategory);
       }
       _processing = true;
@@ -234,7 +235,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
       final city = listCity
           .firstWhere((element) => element['id'] == widget.item?.cityId);
       selectedCity = city['name'];
-      if (selectedCategory == "news" || selectedCategory == null) {
+      if (selectedCategory?.toLowerCase() == "news" ||
+          selectedCategory == null) {
         final subCategoryResponse = await context
             .read<AddListingCubit>()
             .loadSubCategory(selectedCategory);
@@ -286,7 +288,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
       }
       if (!loadCategoryResponse?.data.isEmpty) {
         if (!mounted) return;
-        if (selectedCategory == "news" || selectedCategory == null) {
+        if (selectedCategory?.toLowerCase() == "news" ||
+            selectedCategory == null) {
           final subCategoryResponse = await context
               .read<AddListingCubit>()
               .loadSubCategory(Translate.of(context)
@@ -541,7 +544,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
           allowEmpty: false);
     }
 
-    if (selectedCategory == "events") {
+    if (selectedCategory?.toLowerCase() == "events") {
       if (_startDate == null || _startDate == "" || _startTime == null) {
         _errorSDate = "value_not_date_empty";
       } else {
@@ -772,16 +775,18 @@ class _AddListingScreenState extends State<AddListingScreen> {
                                       .setCategoryId(selectedCategory);
                                 },
                               );
-                              if (selectedCategory == "News" ||
+                              if (selectedCategory?.toLowerCase() == "news" ||
                                   selectedCategory == null) {
                                 selectSubCategory(selectedCategory);
                               }
                             })),
               ],
             ),
-            if (selectedCategory == "news" || selectedCategory == null)
+            if (selectedCategory?.toLowerCase() == "news" ||
+                selectedCategory == null)
               const SizedBox(height: 8),
-            if (selectedCategory == "news" || selectedCategory == null)
+            if (selectedCategory?.toLowerCase() == "news" ||
+                selectedCategory == null)
               Text.rich(
                 TextSpan(
                   text: Translate.of(context).translate('subCategory'),
@@ -803,7 +808,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
             const SizedBox(height: 8),
             Row(
               children: [
-                if (selectedCategory == "news")
+                if (selectedCategory?.toLowerCase() == "news")
                   Expanded(
                       child: listSubCategory.isEmpty
                           ? const LinearProgressIndicator()
@@ -833,7 +838,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
                             )),
               ],
             ),
-            if (selectedCategory == "news" || selectedCategory == null)
+            if (selectedCategory?.toLowerCase() == "news" ||
+                selectedCategory == null)
               const SizedBox(height: 8),
             const SizedBox(height: 8),
             Text.rich(
@@ -1025,7 +1031,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
               ),
             ),
             Visibility(
-              visible: selectedCategory == "events",
+              visible: selectedCategory?.toLowerCase() == "events",
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
 import 'package:heidi/src/data/model/model.dart';
+import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/logger.dart';
@@ -15,7 +16,7 @@ class HTTPManager {
   HTTPManager() {
     _dio = Dio(
       BaseOptions(
-        baseUrl: 'https://waldi.app/api',
+        baseUrl: 'http://127.0.0.1:3004',
         connectTimeout: 30000,
         receiveTimeout: 30000,
         contentType: Headers.formUrlEncodedContentType,
@@ -77,8 +78,10 @@ class HTTPManager {
               logError('Refresh Token Response Failed', e);
               handler.reject(error);
             }
-          } else {
+          } else if (response.message ==
+              'Unauthorized! Refresh Token was expired!') {
             logError('Refresh Token Error', response.message);
+            AppBloc.loginCubit.onLogout();
           }
         } else {
           final response = Response(
@@ -279,7 +282,13 @@ class HTTPManager {
         break;
 
       default:
-        message = "Please make sure you are connected to the Internet";
+        if (error.response?.data['message'] ==
+            'Unauthorized! Refresh Token was expired!') {
+          AppBloc.loginCubit.onLogout();
+          message = "Your session has expired. Please log in again.";
+        } else {
+          message = "Please make sure you are connected to the Internet";
+        }
         break;
     }
 
