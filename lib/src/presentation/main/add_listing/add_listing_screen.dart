@@ -529,6 +529,11 @@ class _AddListingScreenState extends State<AddListingScreen> {
           if (!mounted) return;
           context.read<AddListingCubit>().clearAssets();
         }
+        else{
+          setState(() {
+            isLoading = false;
+          });
+        }
       }
     }
   }
