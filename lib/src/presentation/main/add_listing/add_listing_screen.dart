@@ -20,7 +20,6 @@ import 'package:heidi/src/utils/validate.dart';
 import 'package:intl/intl.dart';
 import 'package:loggy/loggy.dart';
 import 'package:http/http.dart' as http;
-import 'package:multiple_images_picker/multiple_images_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'cubit/add_listing_cubit.dart';
@@ -690,24 +689,27 @@ class _AddListingScreenState extends State<AddListingScreen> {
                 title:
                     Translate.of(context).translate('upload_feature_image_pdf'),
                 image: _featurePdf == ''
-                    ?
-                    // downloadedImages == []
-                    //         ? _featureImage
-                    //         :
-                    downloadedImages[0].path
+                    ? selectedImages!.isNotEmpty
+                        ? selectedImages![0].path
+                        : null
+                    // downloadedImages[0].path
                     : _featurePdf,
                 profile: false,
                 forumGroup: false,
                 onDelete: () {
-                  if (selectedImages!.length > 0) {
-                    selectedImages?.remove(selectedImages?[0]);
+                  if (selectedImages!.isNotEmpty) {
+                    setState(() {
+                      // downloadedImages.removeAt(0);
+                      selectedImages?.removeAt(0);
+                      isImageChanged = true;
+                    });
                   }
                 },
                 onChange: (result) {
                   if (result.isNotEmpty) {
                     setState(() {
                       selectedImages?.clear();
-                      if (downloadedImages.length > 0 &&
+                      if (downloadedImages.isNotEmpty &&
                           !downloadedImages[0].path.contains('Defaultimage')) {
                         selectedImages?.addAll(downloadedImages);
                       }
@@ -1285,8 +1287,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
 
   Widget _buildImageList() {
     return Visibility(
-      visible: selectedImages!.length > 1 &&
-          !selectedImages!.contains('Defaultimage'),
+      visible: selectedImages!.length > 1,
       child: SizedBox(
         height: 150,
         child: ListView.builder(
@@ -1325,12 +1326,12 @@ class _AddListingScreenState extends State<AddListingScreen> {
                       onPressed: () {
                         setState(() {
                           isImageChanged = true;
-                          if (selectedImages!.isNotEmpty) {
-                            if (selectedImages?[index + 1] is Asset) {
-                              context
-                                  .read<AddListingCubit>()
-                                  .removeAssets(index + 1);
-                            }
+                          if (selectedImages!.isNotEmpty &&
+                              selectedImages!.length > 2) {
+                            // if (selectedImages?[index + 1] is Asset) {
+                            //
+                            // }
+                            context.read<AddListingCubit>().removeAssets(index);
                           }
                           if (downloadedImages.isNotEmpty) {
                             if (downloadedImages.length > index + 1) {

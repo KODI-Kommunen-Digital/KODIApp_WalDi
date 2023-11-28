@@ -357,7 +357,7 @@ class ListRepository {
       "website": website,
       "price": 100, //dummy data
       "discountPrice": 100, //dummy data
-      "logo": '',
+      "logo": null,
       "statusId": 1, //dummy data
       "sourceId": 1, //dummy data
       "longitude": 245.65, //dummy data
@@ -500,8 +500,7 @@ class ListRepository {
       if (pickedFile != null) {
         if (pickedFile.files[0].key == 'pdf') {
           await Api.requestListingUploadMedia(listingId, cityId, pickedFile);
-        }
-        else {
+        } else {
           if (isImageChanged) {
             var formData = FormData();
 
@@ -511,18 +510,14 @@ class ListRepository {
 
                 // Ensure the file extension matches the actual image type
                 if (file.path.contains('.')) {
-                  var fileExtension = file.path
-                      .split('.')
-                      .last
-                      .toLowerCase();
+                  var fileExtension = file.path.split('.').last.toLowerCase();
                   var fileName = '$image.$fileExtension';
                   formData.files.add(MapEntry(
                     'image',
                     await MultipartFile.fromFile(
                       file.path,
                       filename: fileName,
-                      contentType: MediaType(
-                          'image',
+                      contentType: MediaType('image',
                           fileExtension), // Set the correct content type
                     ),
                   ));

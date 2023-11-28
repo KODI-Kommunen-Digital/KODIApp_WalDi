@@ -81,7 +81,12 @@ class _AppUploadImageState extends State<AppUploadImage> {
     DecorationImage? decorationImage;
     BorderType borderType = BorderType.RRect;
     Widget circle = Container();
-
+    if (widget.image != null) {
+      if (!widget.image!.contains('pdf')) {
+        image = widget.image;
+        _file = File(image!);
+      }
+    }
     if (_file != null && !_file!.path.contains(".pdf")) {
       decorationImage = DecorationImage(
         image: FileImage(
@@ -123,7 +128,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
             ),
           ),
           Visibility(
-            visible: selectedAssets.length > 1,
+            visible: _file != null,
             child: Positioned(
               top: -10,
               right: -10,
@@ -135,6 +140,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
                 onPressed: () {
                   widget.onDelete!();
                   setState(() {
+                    image = null;
                     if (selectedAssets.length > 1) {
                       images.remove(images[0]);
                       context.read<AddListingCubit>().removeAssets(0);
@@ -528,22 +534,22 @@ class _AppUploadImageState extends State<AppUploadImage> {
     return null;
   }
 
-  Future<void> multipleImagePicker() async {
-    final result = await FilePicker.platform.pickFiles(
-      allowMultiple: true,
-      type: FileType.image,
-    );
-
-    if (result != null) {
-      setState(() {
-        _file = null;
-        images.addAll(result.paths.map((path) => File(path!)).toList());
-        isImageUploaded = false;
-        _file ??= File(images[0].path);
-      });
-      widget.onChange(images);
-    }
-  }
+  // Future<void> multipleImagePicker() async {
+  //   final result = await FilePicker.platform.pickFiles(
+  //     allowMultiple: true,
+  //     type: FileType.image,
+  //   );
+  //
+  //   if (result != null) {
+  //     setState(() {
+  //       _file = null;
+  //       images.addAll(result.paths.map((path) => File(path!)).toList());
+  //       isImageUploaded = false;
+  //       _file ??= File(images[0].path);
+  //     });
+  //     widget.onChange(images);
+  //   }
+  // }
 
   Future<void> selectImages() async {
     try {

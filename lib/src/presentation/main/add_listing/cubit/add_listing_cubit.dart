@@ -233,7 +233,9 @@ class AddListingCubit extends Cubit<AddListingState> {
   }
 
   void removeAssets(index) {
-    selectedAssets.removeAt(index);
+    if (selectedAssets.isNotEmpty && index <= selectedAssets.length - 1) {
+      selectedAssets.removeAt(index);
+    }
   }
 
   void clearAssets() {
