@@ -3,6 +3,7 @@ import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/remote/api/http_manager.dart';
 import 'package:heidi/src/utils/asset.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
+import 'package:loggy/loggy.dart';
 
 class Api {
   static final httpManager = HTTPManager();
@@ -31,9 +32,16 @@ class Api {
   }
 
   static Future<ResultApiModel> requestFavorites(userId) async {
-    final result = await httpManager.get(
-        url: '/users/$userId/favorites?pageNo=1&pageSize=19');
-    return ResultApiModel.fromJson(result);
+    try {
+      final result = await httpManager.get(
+          url: '/users/$userId/favorites?pageNo=1&pageSize=19');
+      return ResultApiModel.fromJson(result);
+    } catch (e) {
+      logError('Load Favorite Error', e);
+      final result = await httpManager.get(
+          url: '/users/$userId/favorites?pageNo=1&pageSize=19');
+      return ResultApiModel.fromJson(result);
+    }
   }
 
   static Future<ResultApiModel> requestFavoritesDetailsList(

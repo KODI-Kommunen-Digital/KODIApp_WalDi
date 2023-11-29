@@ -552,8 +552,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         );
       }
 
-      if (product.categoryId == 3 &&
-          cityList.isNotEmpty &&
+      if (cityList.isNotEmpty &&
           widget.item.cityId != null &&
           widget.item.cityId != 0) {
         cityName = Text(
@@ -885,6 +884,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             ),
             createdDate,
             cityName,
+            const SizedBox(height: 8),
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
