@@ -1,6 +1,5 @@
 // ignore_for_file: depend_on_referenced_packages
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -190,8 +189,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     String uniqueKey = UniqueKey().toString();
     List<Widget> action = [];
     Widget actionGalleries = Container();
-    final memoryCacheManager = DefaultCacheManager();
-    // Widget actionMapView = Container();
     Widget banner = AppPlaceholder(
       child: Container(
         color: Colors.white,
@@ -426,11 +423,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 Navigator.pushNamed(context, Routes.imageZoom, arguments: {
                   'imageList': product.imageLists,
                   'pdf': null,
-                }
-                    // arguments: product.sourceId == 2
-                    //     ? product.image
-                    //     : "${Application.picturesURL}${product.image}",
-                    );
+                });
               },
               child: Column(
                 children: [
@@ -457,47 +450,24 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 margin:
                                     const EdgeInsets.symmetric(horizontal: 5.0),
                                 decoration: const BoxDecoration(
-                                  color: Colors.black,
+                                  color: Colors
+                                      .black, // Change the background color to black
                                 ),
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  margin: const EdgeInsets.symmetric(horizontal: 5.0),
-                                  decoration: const BoxDecoration(
-                                    color: Colors.black,  // Change the background color to black
-                                  ),
-                                  child: CachedNetworkImage(
-                                    imageUrl: product.sourceId == 2
-                                        ? imageUrl.logo!
-                                        : product.image == 'admin/News.jpeg'
-                                            ? "${Application.picturesURL}${imageUrl.logo!}"
-                                            : "${Application.picturesURL}${imageUrl.logo!}?cacheKey=$uniqueKey",
-                                    cacheManager: memoryCacheManager,
-                                    placeholder: (context, url) {
-                                      return AppPlaceholder(
-                                        child: Container(
-                                          decoration: const BoxDecoration(
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    imageBuilder: (context, imageProvider) {
-                                      return Container(
-                                        decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                            image: imageProvider,
-                                            fit: BoxFit.fitHeight,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    errorWidget: (context, url, error) {
+                                child: Image.network(
+                                  '${Application.picturesURL}${imageUrl.logo!}',
+                                  fit: BoxFit.fitHeight,
+                                  loadingBuilder: (BuildContext context,
+                                      Widget child,
+                                      ImageChunkEvent? loadingProgress) {
+                                    if (loadingProgress == null) {
+                                      return child; // Return the actual image if loading is complete.
+                                    } else {
                                       return AppPlaceholder(
                                         child: Container(
                                           width: 120,
                                           height: 140,
                                           decoration: const BoxDecoration(
-                                            color: Colors.white,
+                                            color: Colors.black,
                                             borderRadius: BorderRadius.only(
                                               topLeft: Radius.circular(8),
                                               bottomLeft: Radius.circular(8),
@@ -506,8 +476,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                           child: const Icon(Icons.error),
                                         ),
                                       );
-                                    },
-                                  ),
+                                    }
+                                  },
                                 ),
                               );
                             },

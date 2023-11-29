@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -27,7 +26,6 @@ class _ImageZoomScreenState extends State<ImageZoomScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String uniqueKey = UniqueKey().toString();
     final height = MediaQuery.of(context).size.height;
 
     return Scaffold(
@@ -56,14 +54,16 @@ class _ImageZoomScreenState extends State<ImageZoomScreen> {
                             width: MediaQuery.of(context).size.width,
                             margin: const EdgeInsets.symmetric(horizontal: 5.0),
                             decoration: const BoxDecoration(
-                              color: Colors.black,  // Change the background color to black
+                              color: Colors
+                                  .black, // Change the background color to black
                             ),
                             child: CarouselSlider(
                               options: CarouselOptions(
                                 height: 550.0,
                                 viewportFraction: 1.0,
                                 enlargeCenterPage: false,
-                                enableInfiniteScroll: widget.imageList!.length > 1,
+                                enableInfiniteScroll:
+                                    widget.imageList!.length > 1,
                                 onPageChanged: (index, reason) {
                                   setState(() {
                                     currentImageIndex = index;
@@ -81,49 +81,44 @@ class _ImageZoomScreenState extends State<ImageZoomScreen> {
                                         color: Colors.black,
                                       ),
                                       child: Container(
-                                        width: MediaQuery.of(context).size.width,
-                                        margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 5.0),
                                         decoration: const BoxDecoration(
-                                          color: Colors.black,  // Change the background color to black
+                                          color: Colors
+                                              .black, // Change the background color to black
                                         ),
-                                        child: CachedNetworkImage(
-                                          imageUrl:
-                                              "${Application.picturesURL}${imageUrl.logo!}?cacheKey=$uniqueKey",
-                                          cacheManager: memoryCacheManager,
-                                          placeholder: (context, url) {
-                                            return AppPlaceholder(
-                                              child: Container(
-                                                decoration: const BoxDecoration(
-                                                  color: Colors.black,
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                          imageBuilder: (context, imageProvider) {
-                                            return Container(
-                                              decoration: BoxDecoration(
-                                                image: DecorationImage(
-                                                  image: imageProvider,
-                                                  fit: BoxFit.fitHeight,
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                          errorWidget: (context, url, error) {
-                                            return AppPlaceholder(
-                                              child: Container(
-                                                width: 120,
-                                                height: 140,
-                                                decoration: const BoxDecoration(
-                                                  color: Colors.black,
-                                                  borderRadius: BorderRadius.only(
-                                                    topLeft: Radius.circular(8),
-                                                    bottomLeft: Radius.circular(8),
+                                        child: Image.network(
+                                          '${Application.picturesURL}${imageUrl.logo!}',
+                                          fit: BoxFit.fitHeight,
+                                          loadingBuilder: (BuildContext context,
+                                              Widget child,
+                                              ImageChunkEvent?
+                                                  loadingProgress) {
+                                            if (loadingProgress == null) {
+                                              return child; // Return the actual image if loading is complete.
+                                            } else {
+                                              return AppPlaceholder(
+                                                child: Container(
+                                                  width: 120,
+                                                  height: 140,
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                    color: Colors.black,
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(8),
+                                                      bottomLeft:
+                                                          Radius.circular(8),
+                                                    ),
                                                   ),
+                                                  child:
+                                                      const Icon(Icons.error),
                                                 ),
-                                                child: const Icon(Icons.error),
-                                              ),
-                                            );
+                                              );
+                                            }
                                           },
                                         ),
                                       ),
@@ -137,7 +132,9 @@ class _ImageZoomScreenState extends State<ImageZoomScreen> {
                               }).toList(),
                             ),
                           ),
-                          const SizedBox(height: 10.0,),
+                          const SizedBox(
+                            height: 10.0,
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: widget.imageList!.map((url) {
