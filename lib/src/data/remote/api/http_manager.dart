@@ -16,7 +16,7 @@ class HTTPManager {
   HTTPManager() {
     _dio = Dio(
       BaseOptions(
-        baseUrl: 'http://127.0.0.1:3004',
+        baseUrl: 'https://waldi.app/api',
         connectTimeout: 30000,
         receiveTimeout: 30000,
         contentType: Headers.formUrlEncodedContentType,

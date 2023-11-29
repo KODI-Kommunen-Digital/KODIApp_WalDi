@@ -766,7 +766,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
                                 ),
                               );
                             }).toList(),
-                        
                             onChanged: widget.item == null
                                 ? (value) async {
                                     setState(
@@ -777,7 +776,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
                                             .setCategoryId(selectedCategory);
                                       },
                                     );
-                                    if (selectedCategory?.toLowerCase() == "News" ||
+                                    if (selectedCategory?.toLowerCase() ==
+                                            "news" ||
                                         selectedCategory == null) {
                                       selectSubCategory(selectedCategory);
                                     }
