@@ -34,18 +34,37 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
         product = result;
         userDetail = await getUserDetails(item.userId, item.cityId);
         if (userId != 0) {
-          favoritesList = await UserRepository.loadFavorites(userId);
-          if (product != null) {
-            for (final fList in favoritesList) {
-              if (fList.listingsId == product?.id) {
-                product?.favorite = true;
-                isFavorite = product!.favorite;
+          try {
+            favoritesList = await UserRepository.loadFavorites(userId);
+            if (product != null) {
+              for (final fList in favoritesList) {
+                if (fList.listingsId == product?.id) {
+                  product?.favorite = true;
+                  isFavorite = product!.favorite;
+                }
               }
             }
+            if(favoritesList.isNotEmpty){
+              emit(ProductDetailLoaded(
+                  product!, favoritesList, userDetail, isLoggedIn, cityList));
+            }
+            else{
+              final int userId = await UserRepository.getLoggedUserId();
+              if (userId == 0) {
+                isLoggedIn = false;
+              } else {
+                isLoggedIn = true;
+              }
+              emit(ProductDetailLoaded(
+                  product!, null, userDetail, isLoggedIn, cityList));
+            }
+
           }
+        catch (e){
           emit(ProductDetailLoaded(
-              product!, favoritesList, userDetail, isLoggedIn, cityList));
-        } else {
+              product!, null, userDetail, isLoggedIn, cityList));
+          }
+          } else {
           emit(ProductDetailLoaded(
               product!, null, userDetail, isLoggedIn, cityList));
         }

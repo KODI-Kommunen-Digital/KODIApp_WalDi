@@ -82,6 +82,9 @@ class HTTPManager {
               'Unauthorized! Refresh Token was expired!') {
             logError('Refresh Token Error', response.message);
             AppBloc.loginCubit.onLogout();
+            final prefs = await Preferences.openBox();
+            prefs.deleteKey(Preferences.userId);
+            handler.next(error);
           }
         } else {
           final response = Response(
