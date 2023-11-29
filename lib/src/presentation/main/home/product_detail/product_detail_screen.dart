@@ -457,50 +457,57 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 margin:
                                     const EdgeInsets.symmetric(horizontal: 5.0),
                                 decoration: const BoxDecoration(
-                                  color: Colors.white,
+                                  color: Colors.black,
                                 ),
-                                child: CachedNetworkImage(
-                                  imageUrl: product.sourceId == 2
-                                      ? imageUrl.logo!
-                                      : product.image == 'admin/News.jpeg'
-                                          ? "${Application.picturesURL}${imageUrl.logo!}"
-                                          : "${Application.picturesURL}${imageUrl.logo!}?cacheKey=$uniqueKey",
-                                  cacheManager: memoryCacheManager,
-                                  placeholder: (context, url) {
-                                    return AppPlaceholder(
-                                      child: Container(
-                                        decoration: const BoxDecoration(
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  imageBuilder: (context, imageProvider) {
-                                    return Container(
-                                      decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                          image: imageProvider,
-                                          fit: BoxFit.fitHeight,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  errorWidget: (context, url, error) {
-                                    return AppPlaceholder(
-                                      child: Container(
-                                        width: 120,
-                                        height: 140,
-                                        decoration: const BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(8),
-                                            bottomLeft: Radius.circular(8),
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                                  decoration: const BoxDecoration(
+                                    color: Colors.black,  // Change the background color to black
+                                  ),
+                                  child: CachedNetworkImage(
+                                    imageUrl: product.sourceId == 2
+                                        ? imageUrl.logo!
+                                        : product.image == 'admin/News.jpeg'
+                                            ? "${Application.picturesURL}${imageUrl.logo!}"
+                                            : "${Application.picturesURL}${imageUrl.logo!}?cacheKey=$uniqueKey",
+                                    cacheManager: memoryCacheManager,
+                                    placeholder: (context, url) {
+                                      return AppPlaceholder(
+                                        child: Container(
+                                          decoration: const BoxDecoration(
+                                            color: Colors.white,
                                           ),
                                         ),
-                                        child: const Icon(Icons.error),
-                                      ),
-                                    );
-                                  },
+                                      );
+                                    },
+                                    imageBuilder: (context, imageProvider) {
+                                      return Container(
+                                        decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                            image: imageProvider,
+                                            fit: BoxFit.fitHeight,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    errorWidget: (context, url, error) {
+                                      return AppPlaceholder(
+                                        child: Container(
+                                          width: 120,
+                                          height: 140,
+                                          decoration: const BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(8),
+                                              bottomLeft: Radius.circular(8),
+                                            ),
+                                          ),
+                                          child: const Icon(Icons.error),
+                                        ),
+                                      );
+                                    },
+                                  ),
                                 ),
                               );
                             },

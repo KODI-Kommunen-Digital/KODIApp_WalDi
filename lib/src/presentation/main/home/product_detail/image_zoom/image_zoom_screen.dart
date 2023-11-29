@@ -52,76 +52,90 @@ class _ImageZoomScreenState extends State<ImageZoomScreen> {
                     : Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          CarouselSlider(
-                            options: CarouselOptions(
-                              height: 550.0,
-                              viewportFraction: 1.0,
-                              enlargeCenterPage: false,
-                              enableInfiniteScroll: widget.imageList!.length > 1,
-                              onPageChanged: (index, reason) {
-                                setState(() {
-                                  currentImageIndex = index;
-                                });
-                              },
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                            decoration: const BoxDecoration(
+                              color: Colors.black,  // Change the background color to black
                             ),
-                            items: widget.imageList?.map((imageUrl) {
-                              return Builder(
-                                builder: (BuildContext context) {
-                                  return Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    margin: const EdgeInsets.symmetric(
-                                        horizontal: 5.0),
-                                    decoration: const BoxDecoration(
-                                      color: Colors.white,
-                                    ),
-                                    child: CachedNetworkImage(
-                                      imageUrl:
-                                          "${Application.picturesURL}${imageUrl.logo!}?cacheKey=$uniqueKey",
-                                      cacheManager: memoryCacheManager,
-                                      placeholder: (context, url) {
-                                        return AppPlaceholder(
-                                          child: Container(
-                                            decoration: const BoxDecoration(
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      imageBuilder: (context, imageProvider) {
-                                        return Container(
-                                          decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                              image: imageProvider,
-                                              fit: BoxFit.fitHeight,
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      errorWidget: (context, url, error) {
-                                        return AppPlaceholder(
-                                          child: Container(
-                                            width: 120,
-                                            height: 140,
-                                            decoration: const BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(8),
-                                                bottomLeft: Radius.circular(8),
-                                              ),
-                                            ),
-                                            child: const Icon(Icons.error),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                    // child: Image.network(
-                                    //   '${Application.picturesURL}${imageUrl.logo!}',
-                                    //   fit: BoxFit.fitHeight,
-                                    // ),
-                                  );
+                            child: CarouselSlider(
+                              options: CarouselOptions(
+                                height: 550.0,
+                                viewportFraction: 1.0,
+                                enlargeCenterPage: false,
+                                enableInfiniteScroll: widget.imageList!.length > 1,
+                                onPageChanged: (index, reason) {
+                                  setState(() {
+                                    currentImageIndex = index;
+                                  });
                                 },
-                              );
-                            }).toList(),
+                              ),
+                              items: widget.imageList?.map((imageUrl) {
+                                return Builder(
+                                  builder: (BuildContext context) {
+                                    return Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 5.0),
+                                      decoration: const BoxDecoration(
+                                        color: Colors.black,
+                                      ),
+                                      child: Container(
+                                        width: MediaQuery.of(context).size.width,
+                                        margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                                        decoration: const BoxDecoration(
+                                          color: Colors.black,  // Change the background color to black
+                                        ),
+                                        child: CachedNetworkImage(
+                                          imageUrl:
+                                              "${Application.picturesURL}${imageUrl.logo!}?cacheKey=$uniqueKey",
+                                          cacheManager: memoryCacheManager,
+                                          placeholder: (context, url) {
+                                            return AppPlaceholder(
+                                              child: Container(
+                                                decoration: const BoxDecoration(
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                          imageBuilder: (context, imageProvider) {
+                                            return Container(
+                                              decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                  image: imageProvider,
+                                                  fit: BoxFit.fitHeight,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                          errorWidget: (context, url, error) {
+                                            return AppPlaceholder(
+                                              child: Container(
+                                                width: 120,
+                                                height: 140,
+                                                decoration: const BoxDecoration(
+                                                  color: Colors.black,
+                                                  borderRadius: BorderRadius.only(
+                                                    topLeft: Radius.circular(8),
+                                                    bottomLeft: Radius.circular(8),
+                                                  ),
+                                                ),
+                                                child: const Icon(Icons.error),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                      // child: Image.network(
+                                      //   '${Application.picturesURL}${imageUrl.logo!}',
+                                      //   fit: BoxFit.fitHeight,
+                                      // ),
+                                    );
+                                  },
+                                );
+                              }).toList(),
+                            ),
                           ),
                           const SizedBox(height: 10.0,),
                           Row(
