@@ -202,16 +202,21 @@ class UserRepository {
 
   static Future<List<FavoriteModel>> loadFavorites(userId) async {
     final favoriteList = <FavoriteModel>[];
-    final response = await Api.requestFavorites(userId);
-    if (response.success) {
-      final responseData = response.data;
-      for (final data in responseData) {
-        favoriteList.add(FavoriteModel(
-            data['id'], data['userId'], data['cityId'], data['listingId']));
-      }
+    try {
+      final response = await Api.requestFavorites(userId);
+      if (response.success) {
+        final responseData = response.data;
+        for (final data in responseData) {
+          favoriteList.add(FavoriteModel(
+              data['id'], data['userId'], data['cityId'], data['listingId']));
+        }
+        return favoriteList;
+      } else {}
       return favoriteList;
-    } else {}
-    return favoriteList;
+    } catch (e) {
+      logError('Load Favorite Error', e);
+      return [];
+    }
   }
 
   static Future<List<FavoriteDetailsModel>> loadFavoritesListDetail(
