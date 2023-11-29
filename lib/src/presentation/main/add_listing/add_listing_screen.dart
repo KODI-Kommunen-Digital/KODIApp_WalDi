@@ -187,7 +187,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
       listCity = loadCitiesResponse?.data;
       selectedCategory = Translate.of(context).translate(
           _getCategoryTranslation(loadCategoryResponse?.data.first['id']));
-      if (selectedCategory == "News" || selectedCategory == null) {
+      if (selectedCategory?.toLowerCase() == "news" ||
+          selectedCategory == null) {
         selectSubCategory(selectedCategory);
       }
       _processing = true;
