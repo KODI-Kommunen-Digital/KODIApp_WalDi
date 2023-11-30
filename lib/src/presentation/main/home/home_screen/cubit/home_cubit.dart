@@ -138,7 +138,8 @@ class HomeCubit extends Cubit<HomeState> {
   Future<List<CategoryModel>> formatCategoriesList(
       List<CategoryModel> categories,
       List<CategoryModel> categoryCount,
-      int? cityId) async {
+      int? cityId,
+      ) async {
     // Sort List
     Map<int, int?> idToCountMap = {};
     for (var obj in categoryCount) {
@@ -146,8 +147,8 @@ class HomeCubit extends Cubit<HomeState> {
     }
 
     categories.sort((a, b) {
-      if (a.id == 14) return -1;
-      if (b.id == 14) return 1;
+      if (a.id == 14) return 1; // Move category with id 14 to the last index
+      if (b.id == 14) return -1;
 
       return (idToCountMap[b.id] ?? 0).compareTo(idToCountMap[a.id] ?? 0);
     });
