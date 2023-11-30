@@ -222,7 +222,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
       if (cityId != 0) {
         if (!mounted) return;
         Navigator.pushNamed(context, Routes.listGroups,
-            arguments: {'id': service.arguments, 'title': 'Forum'});
+            arguments: {'id': service.arguments, 'title': 'forums'});
       } else {
         if (!mounted) return;
         _showCitySelectionPopup(context);

@@ -144,8 +144,8 @@ class HomeCubit extends Cubit<HomeState> {
       idToCountMap[obj.id] = obj.count;
     }
     categories.sort((a, b) {
-      if (a.id == 14) return -1;
-      if (b.id == 14) return 1;
+      if (a.id == 14) return 1;
+      if (b.id == 14) return -1;
 
       return (idToCountMap[b.id] ?? 0).compareTo(idToCountMap[a.id] ?? 0);
     });
