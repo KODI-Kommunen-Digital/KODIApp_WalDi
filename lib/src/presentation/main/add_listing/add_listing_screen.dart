@@ -15,6 +15,7 @@ import 'package:heidi/src/utils/common.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/datetime.dart';
+import 'package:heidi/src/utils/sentence_case.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:heidi/src/utils/validate.dart';
 import 'package:intl/intl.dart';
@@ -528,8 +529,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
           context.read<AddListingCubit>().clearImagePath();
           if (!mounted) return;
           context.read<AddListingCubit>().clearAssets();
-        }
-        else{
+        } else {
           setState(() {
             isLoading = false;
           });
@@ -838,7 +838,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
                             menuMaxHeight: 200,
                             hint: Text(Translate.of(context)
                                 .translate('input_category')),
-                            value: selectedCategory?.toLowerCase(),
+                            value: toCamelCase(selectedCategory),
                             items: listCategory.map((category) {
                               return DropdownMenuItem(
                                   value: category['name'],
@@ -1368,7 +1368,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
     if (!mounted) return;
     context.read<AddListingCubit>().setCategoryId(selectedCategory);
     setState(() {
-      selectedSubCategory = subCategoryResponse?.data.first['name'];
+      listSubCategory = subCategoryResponse!.data;
+
+      selectedSubCategory = subCategoryResponse.data.first['name'];
     });
   }
 }

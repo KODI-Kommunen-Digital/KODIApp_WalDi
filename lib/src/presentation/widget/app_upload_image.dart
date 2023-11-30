@@ -534,23 +534,6 @@ class _AppUploadImageState extends State<AppUploadImage> {
     return null;
   }
 
-  // Future<void> multipleImagePicker() async {
-  //   final result = await FilePicker.platform.pickFiles(
-  //     allowMultiple: true,
-  //     type: FileType.image,
-  //   );
-  //
-  //   if (result != null) {
-  //     setState(() {
-  //       _file = null;
-  //       images.addAll(result.paths.map((path) => File(path!)).toList());
-  //       isImageUploaded = false;
-  //       _file ??= File(images[0].path);
-  //     });
-  //     widget.onChange(images);
-  //   }
-  // }
-
   Future<void> selectImages() async {
     try {
       if (!mounted) return;
