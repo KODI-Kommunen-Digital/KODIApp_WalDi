@@ -86,7 +86,7 @@ class UtilValidator {
 
       case ValidateType.website:
         final websiteRegex = RegExp(
-            r"^(?:(?:https?|ftp):\/\/)?(?:www\.)?([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})(?:\/[^\s]*)?$");
+            r"^(https?|ftp):\/\/(?:www\.)?([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})(?:\/[^\s]*)?$");
         if (!websiteRegex.hasMatch(data)) {
           return errorWebsite;
         }
