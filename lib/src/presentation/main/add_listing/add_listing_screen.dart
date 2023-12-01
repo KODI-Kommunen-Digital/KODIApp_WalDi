@@ -15,7 +15,6 @@ import 'package:heidi/src/utils/common.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/datetime.dart';
-import 'package:heidi/src/utils/sentence_case.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:heidi/src/utils/validate.dart';
 import 'package:intl/intl.dart';
@@ -838,7 +837,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
                             menuMaxHeight: 200,
                             hint: Text(Translate.of(context)
                                 .translate('input_category')),
-                            value: toCamelCase(selectedCategory),
+                            value: selectedCategory == 'News'
+                                ? selectedCategory?.toLowerCase()
+                                : selectedCategory,
                             items: listCategory.map((category) {
                               return DropdownMenuItem(
                                   value: category['name'],
