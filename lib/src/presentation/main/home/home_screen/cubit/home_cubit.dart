@@ -206,6 +206,17 @@ class HomeCubit extends Cubit<HomeState> {
     return null;
   }
 
+  Future<void> saveIgnoreAppVersion(String version) async {
+    final prefs = await Preferences.openBox();
+    await prefs.setKeyValue(Preferences.ignoredAppVersion, version);
+  }
+
+  Future<String> getIgnoreAppVersion() async {
+    final prefs = await Preferences.openBox();
+    String ignoreVersion = await prefs.getKeyValue(Preferences.ignoredAppVersion, '');
+    return ignoreVersion;
+  }
+
   Future<dynamic> newListings(int pageNo) async {
     if (!await hasInternet()) {
       emit(const HomeState.error("no_internet"));
