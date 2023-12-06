@@ -1,6 +1,7 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers, depend_on_referenced_packages
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,6 +22,7 @@ import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:heidi/src/utils/translate.dart';
+import 'package:upgrader/upgrader.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import 'cubit/home_cubit.dart';
@@ -46,6 +48,8 @@ class _HomeScreenState extends State<HomeScreen> {
   List<CategoryModel>? category = [];
   List<CategoryModel>? location = [];
   List<ProductModel>? recent = [];
+  String latestAppStoreVersion = '';
+  String ignoreAppStoreVersion = '';
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
     Factory(() => EagerGestureRecognizer())
   };
@@ -59,7 +63,16 @@ class _HomeScreenState extends State<HomeScreen> {
     connectivityInternet();
     scrollUp();
     checkUserExist();
+    getIgnoreAppVersion();
   }
+
+  Future<void> getIgnoreAppVersion() async {
+    String ignoreVersion = await AppBloc.homeCubit.getIgnoreAppVersion();
+    setState(() {
+      ignoreAppStoreVersion = ignoreVersion;
+    });
+  }
+
 
   void connectivityInternet() {
     Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
@@ -193,73 +206,105 @@ class _HomeScreenState extends State<HomeScreen> {
             }
           }
 
-          return CustomScrollView(
-            physics: const BouncingScrollPhysics(
-              parent: AlwaysScrollableScrollPhysics(),
-            ),
-            controller: _scrollController,
-            slivers: <Widget>[
-              SliverPersistentHeader(
-                delegate: AppBarHomeSliver(
-                    cityTitlesList: cityTitles,
-                    hintText:
-                        Translate.of(context).translate('hselect_location'),
-                    selectedOption: (selectedCityId > 0)
-                        ? selectedCityTitle
-                        : Translate.of(context).translate('select_location'),
-                    expandedHeight: MediaQuery.of(context).size.height * 0.3,
-                    banners: banner,
-                    setLocationCallback: (data) async {
-                      for (final list in location!) {
-                        if (list.title == data) {
-                          _onUpdateCategory();
-                          setState(() {
-                            selectedCityTitle = data;
-                            selectedCityId = list.id;
-                          });
-                          await AppBloc.discoveryCubit
-                              .onLocationFilter(selectedCityId, false);
-                        } else if (data ==
-                            Translate.of(context)
-                                .translate('select_location')) {
-                          setState(() {
-                            selectedCityId = 0;
-                          });
-                          _onUpdateCategory();
-                          AppBloc.homeCubit.saveCityId(selectedCityId);
-                          await AppBloc.discoveryCubit
-                              .onLocationFilter(selectedCityId, false);
-                          break;
+          return UpgradeAlert(
+            upgrader:  Upgrader(
+                debugLogging: true,
+                debugDisplayAlways: true,
+                countryCode: 'DE',
+                showLater: false,
+                shouldPopScope: () => true,
+                canDismissDialog: true,
+                durationUntilAlertAgain: const Duration(days: 1),
+                dialogStyle: Platform.isIOS
+                    ? UpgradeDialogStyle.cupertino
+                    : UpgradeDialogStyle.material,
+                willDisplayUpgrade: (
+                    {String? appStoreVersion,
+                      bool? display,
+                      String? installedVersion,
+                      String? minAppVersion}) {
+                  if (display != null) {
+                    setState(() {
+                      latestAppStoreVersion = appStoreVersion ?? '';
+                    });
+                  }
+                },
+                onUpdate: () {
+                  return true;
+                },
+                onIgnore: () {
+                  AppBloc.homeCubit
+                      .saveIgnoreAppVersion(latestAppStoreVersion);
+                  return true;
+                }),
+            child: CustomScrollView(
+              physics: const BouncingScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics(),
+              ),
+              controller: _scrollController,
+              slivers: <Widget>[
+                SliverPersistentHeader(
+                  delegate: AppBarHomeSliver(
+                      cityTitlesList: cityTitles,
+                      hintText:
+                          Translate.of(context).translate('hselect_location'),
+                      selectedOption: (selectedCityId > 0)
+                          ? selectedCityTitle
+                          : Translate.of(context).translate('select_location'),
+                      expandedHeight: MediaQuery.of(context).size.height * 0.3,
+                      banners: banner,
+                      setLocationCallback: (data) async {
+                        for (final list in location!) {
+                          if (list.title == data) {
+                            _onUpdateCategory();
+                            setState(() {
+                              selectedCityTitle = data;
+                              selectedCityId = list.id;
+                            });
+                            await AppBloc.discoveryCubit
+                                .onLocationFilter(selectedCityId, false);
+                          } else if (data ==
+                              Translate.of(context)
+                                  .translate('select_location')) {
+                            setState(() {
+                              selectedCityId = 0;
+                            });
+                            _onUpdateCategory();
+                            AppBloc.homeCubit.saveCityId(selectedCityId);
+                            await AppBloc.discoveryCubit
+                                .onLocationFilter(selectedCityId, false);
+                            break;
+                          }
                         }
-                      }
-                    }),
-                pinned: true,
-              ),
-              CupertinoSliverRefreshControl(
-                onRefresh: _onRefresh,
-              ),
-              SliverList(
-                delegate: SliverChildListDelegate([
-                  SafeArea(
-                    top: false,
-                    bottom: false,
-                    child: Column(
-                      children: <Widget>[
-                        categoryLoading
-                            ? const CircularProgressIndicator.adaptive()
-                            : _buildCategory(AppBloc.homeCubit
-                                .getCategoriesWithoutHidden(category ?? [])),
-                        _buildLocation(location),
-                        _buildRecent(recent, selectedCityId, location),
-                        if (isLoading)
-                          const CircularProgressIndicator.adaptive(),
-                        const SizedBox(height: 50),
-                      ],
-                    ),
-                  )
-                ]),
-              )
-            ],
+                      }),
+                  pinned: true,
+                ),
+                CupertinoSliverRefreshControl(
+                  onRefresh: _onRefresh,
+                ),
+                SliverList(
+                  delegate: SliverChildListDelegate([
+                    SafeArea(
+                      top: false,
+                      bottom: false,
+                      child: Column(
+                        children: <Widget>[
+                          categoryLoading
+                              ? const CircularProgressIndicator.adaptive()
+                              : _buildCategory(AppBloc.homeCubit
+                                  .getCategoriesWithoutHidden(category ?? [])),
+                          _buildLocation(location),
+                          _buildRecent(recent, selectedCityId, location),
+                          if (isLoading)
+                            const CircularProgressIndicator.adaptive(),
+                          const SizedBox(height: 50),
+                        ],
+                      ),
+                    )
+                  ]),
+                )
+              ],
+            ),
           );
         },
       ),
