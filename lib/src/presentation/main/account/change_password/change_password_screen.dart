@@ -100,6 +100,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     'newPass',
                   ),
                   errorText: _errorPass,
+                  keyboardType: TextInputType.emailAddress,
                   onChanged: (text) {
                     setState(() {
                       _errorPass = UtilValidator.validate(
