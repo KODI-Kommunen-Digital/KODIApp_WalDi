@@ -9,5 +9,5 @@ class MyAppointmentsState with _$MyAppointmentsState {
   const factory MyAppointmentsState.loading() = MyAppointmentsStateLoading;
 
   const factory MyAppointmentsState.loaded(
-      List appointments, bool isRefreshLoader) = MyAppointmentsStateLoaded;
+      List<String> appointments, bool isRefreshLoader) = MyAppointmentsStateLoaded;
 }
