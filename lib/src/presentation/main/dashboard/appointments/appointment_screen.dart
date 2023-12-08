@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model_user.dart';
 import 'package:heidi/src/presentation/main/dashboard/dashboard_screen.dart';
+import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class AppointmentScreen extends StatelessWidget {
@@ -24,7 +25,10 @@ class AppointmentScreen extends StatelessWidget {
             GridItemButton(
               icon: Icons.calendar_today,
               title: Translate.of(context).translate("my_appointments"),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, Routes.myAppointments,
+                    arguments: {'user': user});
+              },
             ),
             GridItemButton(
               icon: Icons.question_answer,
