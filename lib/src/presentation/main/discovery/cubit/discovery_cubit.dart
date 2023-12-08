@@ -38,7 +38,7 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
       }
     }
 
-    services.removeWhere((element) => hiddenServices.contains(element));
+    //services.removeWhere((element) => hiddenServices.contains(element));
 
     emit(DiscoveryStateLoaded(
       services,
@@ -113,6 +113,42 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
           arguments: 4,
           categoryId: 1),
       CitizenServiceModel(
+          imageUrl: Images.service18,
+          imageLink: "18",),
+      CitizenServiceModel(
+          imageUrl: Images.service19,
+          imageLink: "19",),
+      CitizenServiceModel(
+          imageUrl: Images.service15,
+          imageLink: "15",),
+      CitizenServiceModel(
+          imageUrl: Images.service16,
+          imageLink: "16",),
+      CitizenServiceModel(
+          imageUrl: Images.service17,
+          imageLink: "17",),
+    ];
+  }
+
+  /*
+  Old list
+  List<CitizenServiceModel> initializeServices() {
+    return [
+      CitizenServiceModel(
+        imageUrl: Images.service2,
+        imageLink: "2",
+      ),
+      CitizenServiceModel(
+          imageUrl: Images.service3,
+          imageLink: "3",
+          categoryId: 16,
+          arguments: 4),
+      CitizenServiceModel(
+          imageUrl: Images.service4,
+          imageLink: "4",
+          arguments: 4,
+          categoryId: 1),
+      CitizenServiceModel(
           imageUrl: Images.service5,
           imageLink: "5",
           arguments: 5,
@@ -143,7 +179,7 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
         arguments: 10,
       ),
     ];
-  }
+  }*/
 
   Future<int?> getCitySelected() async {
     final prefs = await Preferences.openBox();
