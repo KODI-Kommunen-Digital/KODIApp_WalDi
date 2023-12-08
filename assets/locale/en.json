@@ -445,9 +445,11 @@
   "my_groups": "My Groups",
   "all_listings": "All Listings",
   "my_posts": "My Posts",
-  "requests": "Requests",  
+  "my_appointments": "My Appointments",
+  "requests": "Requests",
   "active": "Active",
   "inactive": "Inactive",
   "under_review": "Under Review",  
-  "all_requests":"All Requests"
+  "all_requests":"All Requests",
+  "appointments": "Appointments"
 }
