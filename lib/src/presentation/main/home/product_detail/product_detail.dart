@@ -204,213 +204,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     Widget attachments = Container();
     Widget createdDate = Container();
     Widget description = Container();
-    Widget info = AppPlaceholder(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              margin: const EdgeInsets.symmetric(vertical: 16),
-              height: 16,
-              width: 150,
-              color: Colors.white,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      height: 16,
-                      width: 100,
-                      color: Colors.white,
-                    ),
-                    const SizedBox(height: 4),
-                    Container(
-                      height: 20,
-                      width: 150,
-                      color: Colors.white,
-                    ),
-                  ],
-                ),
-                Container(
-                  height: 10,
-                  width: 100,
-                  color: Colors.white,
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: <Widget>[
-                Container(
-                  width: 32,
-                  height: 32,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      height: 10,
-                      width: 100,
-                      color: Colors.white,
-                    ),
-                    const SizedBox(height: 4),
-                    Container(
-                      height: 10,
-                      width: 200,
-                      color: Colors.white,
-                    ),
-                  ],
-                )
-              ],
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: <Widget>[
-                Container(
-                  width: 32,
-                  height: 32,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      height: 10,
-                      width: 100,
-                      color: Colors.white,
-                    ),
-                    const SizedBox(height: 4),
-                    Container(
-                      height: 10,
-                      width: 200,
-                      color: Colors.white,
-                    ),
-                  ],
-                )
-              ],
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: <Widget>[
-                Container(
-                  width: 32,
-                  height: 32,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      height: 10,
-                      width: 100,
-                      color: Colors.white,
-                    ),
-                    const SizedBox(height: 4),
-                    Container(
-                      height: 10,
-                      width: 200,
-                      color: Colors.white,
-                    ),
-                  ],
-                )
-              ],
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: <Widget>[
-                Container(
-                  width: 32,
-                  height: 32,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      height: 10,
-                      width: 100,
-                      color: Colors.white,
-                    ),
-                    const SizedBox(height: 4),
-                    Container(
-                      height: 10,
-                      width: 200,
-                      color: Colors.white,
-                    ),
-                  ],
-                )
-              ],
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: <Widget>[
-                Container(
-                  width: 32,
-                  height: 32,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      height: 10,
-                      width: 100,
-                      color: Colors.white,
-                    ),
-                    const SizedBox(height: 4),
-                    Container(
-                      height: 10,
-                      width: 200,
-                      color: Colors.white,
-                    ),
-                  ],
-                )
-              ],
-            ),
-            const SizedBox(height: 24),
-            Container(height: 10, color: Colors.white),
-            const SizedBox(height: 4),
-            Container(height: 10, color: Colors.white),
-            const SizedBox(height: 4),
-            Container(height: 10, color: Colors.white),
-            const SizedBox(height: 4),
-            Container(height: 10, color: Colors.white),
-            const SizedBox(height: 4),
-            Container(height: 10, color: Colors.white),
-            const SizedBox(height: 4),
-            Container(height: 10, color: Colors.white),
-          ],
-        ),
-      ),
-    );
+    Widget info = Container();
+    Widget booking = Container();
 
     if (product != null) {
-      ///Action
       action = [
         actionGalleries,
         const SizedBox(width: 8),
@@ -804,17 +601,35 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             } else {
               style = 'color: #ffffff;';
             }
-
             return {'style': style};
           },
-          // onTapUrl: (url) {
-          //   if (Uri.parse(url).hasAbsolutePath) {
-          //     _makeAction(url);
-          //   }
-          //   return false;
-          // },
         );
       }
+      booking = InkWell(
+        onTap: () {
+          Navigator.pushNamed(
+            context,
+            Routes.booking,
+            arguments: widget.item.title,
+          );
+        },
+        child: Container(
+          height: 40,
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
+          ),
+          child: Text(
+            Translate.of(context).translate('book_now'),
+            style: Theme.of(context)
+                .textTheme
+                .labelLarge!
+                .copyWith(color: Colors.white),
+          ),
+        ),
+      );
 
       info = Padding(
         padding: const EdgeInsets.only(left: 16, right: 16),
@@ -840,7 +655,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 // booking,
               ],
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: 10),
+            booking,
+            const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[

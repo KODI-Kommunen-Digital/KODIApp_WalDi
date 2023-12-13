@@ -22,6 +22,7 @@ import 'package:heidi/src/presentation/main/dashboard/dashboard_screen.dart';
 import 'package:heidi/src/presentation/main/dashboard/my_listings/my_listings_screen.dart';
 import 'package:heidi/src/presentation/main/discovery/mitreden_webview.dart';
 import 'package:heidi/src/presentation/main/home/list_product/list_product.dart';
+import 'package:heidi/src/presentation/main/home/product_detail/booking/booking_time/booking_time_screen.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/image_zoom/image_zoom_screen.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/product_detail.dart';
 import 'package:heidi/src/presentation/main/login/forgot_password/forgot_password_screen.dart';
@@ -210,6 +211,15 @@ class Routes {
                 user: arguments['user'] as UserModel,
                 isEditable: arguments['editable'] as bool,
               ),
+            );
+          },
+        );
+
+      case booking:
+        return MaterialPageRoute(
+          builder: (context) {
+            return BookingTimeScreen(
+              listingTitle: settings.arguments as String,
             );
           },
         );
