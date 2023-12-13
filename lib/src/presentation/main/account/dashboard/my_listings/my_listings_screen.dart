@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:heidi/src/data/model/model_product.dart';
@@ -87,6 +89,7 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
   @override
   Widget build(BuildContext context) {
     String uniqueKey = UniqueKey().toString();
+    final memoryCacheManager = DefaultCacheManager();
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -180,58 +183,72 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                                                 Row(
                                                   children: <Widget>[
                                                     item.pdf == ''
-                                                        ? Image.network(
-                                                            item.sourceId == 2
-                                                                ? item.image
-                                                                : "${Application.picturesURL}${item.image}",
-                                                            //: "${Application.picturesURL}${item.image}?cache=$uniqueKey",
-                                                            width: 120,
-                                                            height: 140,
-                                                            fit: BoxFit.cover,
-                                                            errorBuilder:
-                                                                (context, error,
-                                                                    stackTrace) {
-                                                              // Handle errors here
+                                                        ? CachedNetworkImage(
+                                                            imageUrl:
+                                                                item.sourceId ==
+                                                                        2
+                                                                    ? item.image
+                                                                    : "${Application.picturesURL}${item.image}",
+                                                            cacheManager:
+                                                                memoryCacheManager,
+                                                            placeholder:
+                                                                (context, url) {
                                                               return AppPlaceholder(
                                                                 child:
                                                                     Container(
+                                                                  width: 120,
+                                                                  height: 140,
                                                                   decoration:
-                                                                      BoxDecoration(
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            12),
+                                                                      const BoxDecoration(
                                                                     color: Colors
                                                                         .white,
                                                                   ),
-                                                                  width: 120,
-                                                                  height: 140,
-                                                                  child: const Icon(
-                                                                      Icons
-                                                                          .error),
                                                                 ),
                                                               );
                                                             },
-                                                            loadingBuilder:
-                                                                (context, child,
-                                                                    loadingProgress) {
-                                                              // Display the AppPlaceholder while the image is loading
-                                                              if (loadingProgress ==
-                                                                  null) {
-                                                                return child;
-                                                              }
+                                                            imageBuilder: (context,
+                                                                imageProvider) {
+                                                              return Container(
+                                                                width: 120,
+                                                                height: 140,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  image:
+                                                                      DecorationImage(
+                                                                    image:
+                                                                        imageProvider,
+                                                                    fit: BoxFit
+                                                                        .fitHeight,
+                                                                  ),
+                                                                ),
+                                                              );
+                                                            },
+                                                            errorWidget:
+                                                                (context, url,
+                                                                    error) {
                                                               return AppPlaceholder(
                                                                 child:
                                                                     Container(
-                                                                  decoration:
-                                                                      BoxDecoration(
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            12),
-                                                                    color: Colors
-                                                                        .white,
-                                                                  ),
                                                                   width: 120,
                                                                   height: 140,
+                                                                  decoration:
+                                                                      const BoxDecoration(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .only(
+                                                                      topLeft: Radius
+                                                                          .circular(
+                                                                              8),
+                                                                      bottomLeft:
+                                                                          Radius.circular(
+                                                                              8),
+                                                                    ),
+                                                                  ),
+                                                                  child: const Icon(
+                                                                      Icons
+                                                                          .error),
                                                                 ),
                                                               );
                                                             },

@@ -1,10 +1,12 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:heidi/src/data/model/model.dart';
@@ -150,6 +152,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
   @override
   Widget build(BuildContext context) {
     String uniqueKey = UniqueKey().toString();
+    final memoryCacheManager = DefaultCacheManager();
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(
@@ -247,54 +250,47 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                               ? ClipRRect(
                                                   borderRadius:
                                                       BorderRadius.circular(12),
-                                                  child: Image.network(
-                                                    item.sourceId == 2
+                                                  child: CachedNetworkImage(
+                                                    imageUrl: item.sourceId == 2
                                                         ? item.image
                                                         : "${Application.picturesURL}${item.image}",
-                                                    //: "${Application.picturesURL}${item.image}?cache=$uniqueKey",
-                                                    width: 120,
-                                                    height: 140,
-                                                    fit: BoxFit.cover,
-                                                    errorBuilder: (context,
-                                                        error, stackTrace) {
-                                                      // Handle errors here
+                                                    cacheManager: memoryCacheManager,
+                                                    placeholder: (context, url) {
                                                       return AppPlaceholder(
                                                         child: Container(
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        12),
-                                                            color: Colors.white,
-                                                          ),
                                                           width: 120,
                                                           height: 140,
-                                                          child: const Icon(
-                                                              Icons.error),
+                                                          decoration: const BoxDecoration(
+                                                            color: Colors.white,
+                                                          ),
                                                         ),
                                                       );
                                                     },
-                                                    loadingBuilder: (context,
-                                                        child,
-                                                        loadingProgress) {
-                                                      // Display the AppPlaceholder while the image is loading
-                                                      if (loadingProgress ==
-                                                          null) {
-                                                        return child;
-                                                      }
+                                                    imageBuilder: (context, imageProvider) {
+                                                      return Container(
+                                                        width: 120,
+                                                        height: 140,
+                                                        decoration: BoxDecoration(
+                                                          image: DecorationImage(
+                                                            image: imageProvider,
+                                                            fit: BoxFit.fitHeight,
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                    errorWidget: (context, url, error) {
                                                       return AppPlaceholder(
                                                         child: Container(
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        12),
-                                                            color: Colors.white,
-                                                          ),
                                                           width: 120,
                                                           height: 140,
+                                                          decoration: const BoxDecoration(
+                                                            color: Colors.white,
+                                                            borderRadius: BorderRadius.only(
+                                                              topLeft: Radius.circular(8),
+                                                              bottomLeft: Radius.circular(8),
+                                                            ),
+                                                          ),
+                                                          child: const Icon(Icons.error),
                                                         ),
                                                       );
                                                     },
