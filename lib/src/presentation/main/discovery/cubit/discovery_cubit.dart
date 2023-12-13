@@ -224,7 +224,7 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
       6: "https://tourmkr.com/F1P2Ti1VAp/34427036p&103.72h&86.75t",
       7: "https://tourmkr.com/F14t5AzQfp/38906996p&331.62h&73.64t",
       8: "https://tourmkr.com/F1iNyE4eSp/40686073p&260.81h&68.33t",
-      9: "https://ilzerland.bayern/interaktive-karte/",
+      9: "https://tourmkr.com/F1a9UlAwuh",
       10: "https://ilzerland.bayern/interaktive-karte/",
       11: "https://tourmkr.com/F1c50qnKc8/38390190p&350.66h&70.41t",
       12: "https://tourmkr.com/F1Hi8IDyo2/38390171p&231.46h&80.78t",
