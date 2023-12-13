@@ -445,9 +445,11 @@
   "dashboard": "Dashboard",
   "my_groups": "Meine Gruppen",
   "all_listings": "Alle Beiträge",
-  "my_posts": "Meine Posts", 
+  "my_posts": "Meine Posts",
+  "my_appointments": "Meine Termine",
   "requests": "Anfragen", "active": "Aktiv",  
   "inactive": "Inaktiv",
   "under_review": "In Prüfung",  
-  "all_requests":"Alle Anfragen"
+  "all_requests":"Alle Anfragen",
+  "appointments": "Termine"
 }

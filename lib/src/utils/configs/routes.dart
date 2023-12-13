@@ -18,6 +18,9 @@ import 'package:heidi/src/presentation/main/dashboard/all_listings/all_listings_
 import 'package:heidi/src/presentation/main/dashboard/all_listings/cubit/all_listings_cubit.dart';
 import 'package:heidi/src/presentation/main/dashboard/all_requests/all_requests_screen.dart';
 import 'package:heidi/src/presentation/main/dashboard/all_requests/cubit/all_requests_cubit.dart';
+import 'package:heidi/src/presentation/main/dashboard/appointments/appointment_screen.dart';
+import 'package:heidi/src/presentation/main/dashboard/appointments/my_appointments/cubit/my_appointments_cubit.dart';
+import 'package:heidi/src/presentation/main/dashboard/appointments/my_appointments/my_appointments_screen.dart';
 import 'package:heidi/src/presentation/main/dashboard/dashboard_screen.dart';
 import 'package:heidi/src/presentation/main/dashboard/my_listings/my_listings_screen.dart';
 import 'package:heidi/src/presentation/main/discovery/mitreden_webview.dart';
@@ -91,6 +94,8 @@ class Routes {
   static const String allRequests = "/allRequests";
   static const String dashboard = "/dashboard";
   static const String myListings = "/myListings";
+  static const String appointments = "/appointments";
+  static const String myAppointments = "/myAppointments";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -304,6 +309,30 @@ class Routes {
               child: DashboardScreen(
                 user: arguments['user'] as UserModel,
                 isEditable: arguments['editable'] as bool,
+              ),
+            );
+          },
+        );
+      case appointments:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return AppointmentScreen(
+              user: arguments['user'] as UserModel,
+            );
+          },
+        );
+
+      case myAppointments:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return BlocProvider(
+              create: (context) => MyAppointmentsCubit(),
+              child: MyAppointmentsScreen(
+                user: arguments['user'] as UserModel,
               ),
             );
           },
