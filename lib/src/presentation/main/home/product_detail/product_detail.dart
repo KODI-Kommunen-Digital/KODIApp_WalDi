@@ -16,6 +16,7 @@ import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/multiple_gesture_detector.dart';
 import 'package:heidi/src/utils/translate.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -101,9 +102,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     String cleanedPhone = phone.replaceAll(' ', '');
     try {
       await launchUrl(Uri.parse('tel:$cleanedPhone'));
-    } catch (e) {
+    } catch (e, stackTrace) {
       if (!mounted) return;
       _showMessage(Translate.of(context).translate('cannot_make_action'));
+      await Sentry.captureException(e, stackTrace: stackTrace);
+
     }
   }
 
@@ -112,8 +115,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     try {
       launchUrl(Uri.parse('mailto:$email'));
       // launch('mailto:$email');
-    } catch (e) {
+    } catch (e, stackTrace) {
       _showMessage(Translate.of(context).translate('cannot_make_action'));
+      await Sentry.captureException(e, stackTrace: stackTrace);
     }
   }
 

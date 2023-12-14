@@ -4,6 +4,7 @@ import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model_device.dart';
 import 'package:location/location.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class Utils {
   static fieldFocusChange(
@@ -40,7 +41,8 @@ class Utils {
           type: ios.utsname.machine,
         );
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
+      await Sentry.captureException(e, stackTrace: stackTrace);
       // UtilLogger.log("ERROR", e);
     }
     return null;

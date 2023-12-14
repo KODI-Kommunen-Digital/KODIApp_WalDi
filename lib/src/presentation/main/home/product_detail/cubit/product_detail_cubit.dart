@@ -9,6 +9,7 @@ import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/cubit/cubit.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:loggy/loggy.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class ProductDetailCubit extends Cubit<ProductDetailState> {
   ProductDetailCubit() : super(const ProductDetailLoading());
@@ -60,9 +61,11 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
             }
 
           }
-        catch (e){
-          emit(ProductDetailLoaded(
-              product!, null, userDetail, isLoggedIn, cityList));
+        catch (e, stackTrace){
+            emit(ProductDetailLoaded(
+                product!, null, userDetail, isLoggedIn, cityList));
+            await Sentry.captureException(e, stackTrace: stackTrace);
+
           }
           } else {
           emit(ProductDetailLoaded(
@@ -79,8 +82,10 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
     ResultApiModel? loadCitiesResponse;
     try {
       loadCitiesResponse = await loadCities();
-    } catch (e) {
+    } catch (e, stackTrace) {
       logError('load cities error', e.toString());
+      await Sentry.captureException(e, stackTrace: stackTrace);
+
       return null;
     }
 
