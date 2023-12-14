@@ -45,7 +45,7 @@ class _FaqScreenState extends State<FaqScreen> {
       }
     }
 
-    if (Platform.isAndroid) {
+    if (Platform.isAndroid && isPdf) {
       Navigator.push(
         context,
         MaterialPageRoute(
