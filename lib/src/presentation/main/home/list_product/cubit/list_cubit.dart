@@ -4,6 +4,7 @@ import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 import 'cubit.dart';
 
@@ -129,7 +130,8 @@ class ListCubit extends Cubit<ListState> {
     ResultApiModel? loadCitiesResponse;
     try {
       loadCitiesResponse = await repo.loadCities();
-    } catch (e) {
+    } catch (e, stackTrace) {
+      await Sentry.captureException(e, stackTrace: stackTrace);
       logError('load cities error', e.toString());
       return null;
     }

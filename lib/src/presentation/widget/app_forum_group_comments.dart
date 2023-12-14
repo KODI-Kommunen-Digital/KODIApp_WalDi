@@ -8,6 +8,7 @@ import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:loggy/loggy.dart';
 import 'package:provider/provider.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class CommentsBottomSheet extends StatefulWidget {
   final int? forumId;
@@ -89,7 +90,8 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
         comments.addAll(updatedComments);
         isLoading = false;
       });
-    } catch (e) {
+    } catch (e, stackTrace) {
+      await Sentry.captureException(e, stackTrace: stackTrace);
       logError('Failed to load next page of comments', e.toString());
       setState(() {
         isLoading = false;
@@ -201,7 +203,8 @@ class CommentWidgetState extends State<CommentWidget> {
           replies = fetchedReplies;
         });
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
+      await Sentry.captureException(e, stackTrace: stackTrace);
       logError('Failed to fetch comment replies', e.toString());
     }
   }

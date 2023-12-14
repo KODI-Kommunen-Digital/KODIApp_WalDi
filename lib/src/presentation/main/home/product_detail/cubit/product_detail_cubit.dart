@@ -7,6 +7,7 @@ import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/cubit/cubit.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class ProductDetailCubit extends Cubit<ProductDetailState> {
   ProductDetailCubit() : super(const ProductDetailLoading());
@@ -56,7 +57,8 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
                   product!, null, userDetail, isLoggedIn));
             }
           }
-          catch (e){
+          catch (e, stackTrace){
+            await Sentry.captureException(e, stackTrace: stackTrace);
             emit(ProductDetailLoaded(
                 product!, null, userDetail, isLoggedIn));
           }

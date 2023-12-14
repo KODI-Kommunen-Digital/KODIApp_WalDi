@@ -14,6 +14,7 @@ import 'package:heidi/src/utils/translate.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loggy/loggy.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 enum UploadImageType { circle, square }
 
@@ -161,7 +162,8 @@ class _AppUploadImageState extends State<AppUploadImage> {
           }
         }
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
+      await Sentry.captureException(e, stackTrace: stackTrace);
       logError('Image Upload Permission Error', e);
     }
   }
