@@ -163,8 +163,9 @@ class _AppUploadImageState extends State<AppUploadImage> {
         }
       }
     } catch (e, stackTrace) {
-      await Sentry.captureException(e, stackTrace: stackTrace);
       logError('Image Upload Permission Error', e);
+      await Sentry.captureException(e, stackTrace: stackTrace);
+
     }
   }
 

@@ -58,9 +58,9 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
             }
           }
           catch (e, stackTrace){
+            emit(ProductDetailLoaded(product!, null, userDetail, isLoggedIn));
             await Sentry.captureException(e, stackTrace: stackTrace);
-            emit(ProductDetailLoaded(
-                product!, null, userDetail, isLoggedIn));
+
           }
           emit(ProductDetailLoaded(
               product!, favoritesList, userDetail, isLoggedIn));

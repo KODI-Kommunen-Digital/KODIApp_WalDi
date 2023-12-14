@@ -131,8 +131,9 @@ class ListCubit extends Cubit<ListState> {
     try {
       loadCitiesResponse = await repo.loadCities();
     } catch (e, stackTrace) {
-      await Sentry.captureException(e, stackTrace: stackTrace);
       logError('load cities error', e.toString());
+      await Sentry.captureException(e, stackTrace: stackTrace);
+
       return null;
     }
 

@@ -91,11 +91,12 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
         isLoading = false;
       });
     } catch (e, stackTrace) {
-      await Sentry.captureException(e, stackTrace: stackTrace);
       logError('Failed to load next page of comments', e.toString());
       setState(() {
         isLoading = false;
       });
+      await Sentry.captureException(e, stackTrace: stackTrace);
+
     }
   }
 
@@ -204,8 +205,9 @@ class CommentWidgetState extends State<CommentWidget> {
         });
       }
     } catch (e, stackTrace) {
-      await Sentry.captureException(e, stackTrace: stackTrace);
       logError('Failed to fetch comment replies', e.toString());
+      await Sentry.captureException(e, stackTrace: stackTrace);
+
     }
   }
 

@@ -94,11 +94,12 @@ class _HomeScreenState extends State<HomeScreen> {
           });
         }).catchError(
           (error, stackTrace) async {
-            await Sentry.captureException(error, stackTrace: stackTrace);
             setState(() {
               isLoading = false;
             });
             logError('Error loading new listings: $error');
+            await Sentry.captureException(error, stackTrace: stackTrace);
+
           },
         );
       }

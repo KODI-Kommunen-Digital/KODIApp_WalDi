@@ -30,8 +30,9 @@ class AddPostCubit extends Cubit<AddPostState> {
         return false;
       }
     } catch (e, stackTrace) {
-      await Sentry.captureException(e, stackTrace: stackTrace);
       logError('Save Post Error', e);
+      await Sentry.captureException(e, stackTrace: stackTrace);
+
       return false;
     }
   }

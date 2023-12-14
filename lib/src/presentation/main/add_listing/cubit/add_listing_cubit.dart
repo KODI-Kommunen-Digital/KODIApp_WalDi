@@ -76,8 +76,9 @@ class AddListingCubit extends Cubit<AddListingState> {
         return false;
       }
     } catch (e, stackTrace) {
-      await Sentry.captureException(e, stackTrace: stackTrace);
       logError('save Product Error', e);
+      await Sentry.captureException(e, stackTrace: stackTrace);
+
       return false;
     }
   }
@@ -144,8 +145,9 @@ class AddListingCubit extends Cubit<AddListingState> {
         return false;
       }
     } catch (e, stackTrace) {
-      await Sentry.captureException(e, stackTrace: stackTrace);
       logError('edit Product Error', e);
+      await Sentry.captureException(e, stackTrace: stackTrace);
+
       return false;
     }
   }
@@ -165,8 +167,9 @@ class AddListingCubit extends Cubit<AddListingState> {
         return false;
       }
     } catch (e, stackTrace) {
-      await Sentry.captureException(e, stackTrace: stackTrace);
       logError('save Product Error', e);
+      await Sentry.captureException(e, stackTrace: stackTrace);
+
       return false;
     }
   }
@@ -199,9 +202,10 @@ class AddListingCubit extends Cubit<AddListingState> {
     try {
       return _repo.requestVillages(value);
     } catch (e, stackTrace) {
-      await Sentry.captureException(e, stackTrace: stackTrace);
       logError('request Village Error', e);
       emit(AddListingState.error(e.toString()));
+      await Sentry.captureException(e, stackTrace: stackTrace);
+
       return null;
     }
   }
@@ -210,8 +214,9 @@ class AddListingCubit extends Cubit<AddListingState> {
     try {
       _repo.setCategoryId(value);
     } catch (e, stackTrace) {
-      await Sentry.captureException(e, stackTrace: stackTrace);
       logError('request categoryID Error', e);
+      await Sentry.captureException(e, stackTrace: stackTrace);
+
     }
   }
 
@@ -219,8 +224,9 @@ class AddListingCubit extends Cubit<AddListingState> {
     try {
       _repo.getSubCategoryId(value);
     } catch (e, stackTrace) {
-      await Sentry.captureException(e, stackTrace: stackTrace);
       logError('request subCategoryID Error', e);
+      await Sentry.captureException(e, stackTrace: stackTrace);
+
     }
   }
 
@@ -232,8 +238,9 @@ class AddListingCubit extends Cubit<AddListingState> {
       }
       return null;
     } catch (e, stackTrace) {
-      await Sentry.captureException(e, stackTrace: stackTrace);
       logError('request subCategoryID Error', e);
+      await Sentry.captureException(e, stackTrace: stackTrace);
+
       return null;
     }
   }
@@ -247,8 +254,9 @@ class AddListingCubit extends Cubit<AddListingState> {
       final loadCitiesResponse = _repo.loadCities();
       return loadCitiesResponse;
     } catch (e, stackTrace) {
-      await Sentry.captureException(e, stackTrace: stackTrace);
       logError('load cities error', e.toString());
+      await Sentry.captureException(e, stackTrace: stackTrace);
+
       return null;
     }
   }
@@ -258,8 +266,9 @@ class AddListingCubit extends Cubit<AddListingState> {
       final loadCategoryResponse = _repo.loadCategory();
       return loadCategoryResponse;
     } catch (e, stackTrace) {
-      await Sentry.captureException(e, stackTrace: stackTrace);
       logError('load category error', e.toString());
+      await Sentry.captureException(e, stackTrace: stackTrace);
+
       return null;
     }
   }

@@ -48,8 +48,8 @@ class UserRepository {
         return response;
       }
     } catch (e, stackTrace) {
-      await Sentry.captureException(e, stackTrace: stackTrace);
       logError('request Login Response Error', e);
+      await Sentry.captureException(e, stackTrace: stackTrace);
     }
     return null;
   }
@@ -216,8 +216,9 @@ class UserRepository {
       } else {}
       return favoriteList;
     } catch (e, stackTrace) {
-      await Sentry.captureException(e, stackTrace: stackTrace);
       logError('Load Favorite Error', e);
+      await Sentry.captureException(e, stackTrace: stackTrace);
+
       return [];
     }
   }

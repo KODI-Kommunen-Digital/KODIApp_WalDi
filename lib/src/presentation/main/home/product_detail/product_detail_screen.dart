@@ -105,9 +105,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     try {
       await launchUrl(Uri.parse('tel:$cleanedPhone'));
     } catch (e, stackTrace) {
-      await Sentry.captureException(e, stackTrace: stackTrace);
       if (!mounted) return;
       _showMessage(Translate.of(context).translate('cannot_make_action'));
+      await Sentry.captureException(e, stackTrace: stackTrace);
+
     }
   }
 
@@ -117,9 +118,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       launchUrl(Uri.parse('mailto:$email'));
       // launch('mailto:$email');
     } catch (e, stackTrace) {
-      await Sentry.captureException(e, stackTrace: stackTrace);
-      // ignore: use_build_context_synchronously
       _showMessage(Translate.of(context).translate('cannot_make_action'));
+      await Sentry.captureException(e, stackTrace: stackTrace);
     }
   }
 

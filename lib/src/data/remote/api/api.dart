@@ -49,8 +49,9 @@ class Api {
           url: '/users/$userId/favorites?pageNo=1&pageSize=19');
       return ResultApiModel.fromJson(result);
     } catch (e, stackTrace) {
-      await Sentry.captureException(e, stackTrace: stackTrace);
       logError('Load Favorite Error', e);
+      await Sentry.captureException(e, stackTrace: stackTrace);
+
       final result = await HTTPManager(forum: false).get(
           url: '/users/$userId/favorites?pageNo=1&pageSize=19');
       return ResultApiModel.fromJson(result);

@@ -79,8 +79,9 @@ class HTTPManager {
               );
               handler.resolve(response);
             } catch (e, stackTrace) {
-              await Sentry.captureException(e, stackTrace: stackTrace);
               logError('Refresh Token Response Failed', e);
+              await Sentry.captureException(e, stackTrace: stackTrace);
+
               handler.reject(error);
             }
           } else if (response.message ==

@@ -54,8 +54,9 @@ class ApplicationCubit extends Cubit<ApplicationState> {
         return item == oldFont;
       });
     } catch (e, stackTrace) {
-      await Sentry.captureException(e, stackTrace: stackTrace);
       UtilLogger.log("ERROR", e);
+      await Sentry.captureException(e, stackTrace: stackTrace);
+
     }
 
     if (oldTheme != '') {
