@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:heidi/src/data/model/model_faq.dart';
 import 'package:heidi/src/presentation/main/account/faq/cubit/faq_cubit.dart';
 import 'package:heidi/src/presentation/widget/app_list_title.dart';
@@ -42,10 +45,23 @@ class _FaqScreenState extends State<FaqScreen> {
       }
     }
 
-    await launchUrl(
-      Uri.parse(link),
-      mode: LaunchMode.inAppWebView,
-    );
+    if (Platform.isAndroid && isPdf) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => SizedBox(
+                width: 120,
+                height: 140,
+                child: const PDF().fromUrl(
+                  link,
+                  placeholder: (progress) =>
+                  const Center(child: CircularProgressIndicator()),
+                  errorWidget: (error) => Center(child: Text(error.toString())),
+                ))),
+      );
+    } else {
+      await launchUrl(Uri.parse(link), mode: LaunchMode.inAppWebView);
+    }
   }
 
   @override
