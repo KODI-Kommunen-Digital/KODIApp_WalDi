@@ -10,19 +10,19 @@ import 'package:heidi/src/utils/translate.dart';
 import 'package:heidi/src/utils/validate.dart';
 import 'package:intl/intl.dart';
 
-class BookingTimeScreen extends StatefulWidget {
+class BookingScreen extends StatefulWidget {
   final String listingTitle;
 
-  const BookingTimeScreen({
+  const BookingScreen({
     super.key,
     required this.listingTitle,
   });
 
   @override
-  State<BookingTimeScreen> createState() => _BookingTimeScreenState();
+  State<BookingScreen> createState() => _BookingScreenState();
 }
 
-class _BookingTimeScreenState extends State<BookingTimeScreen> {
+class _BookingScreenState extends State<BookingScreen> {
   final List<TextEditingController> _textFistNameController = [];
   final List<TextEditingController> _textLastNameController = [];
   final List<TextEditingController> _textPhoneController = [];

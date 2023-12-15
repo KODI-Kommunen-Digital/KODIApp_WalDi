@@ -25,7 +25,7 @@ import 'package:heidi/src/presentation/main/dashboard/dashboard_screen.dart';
 import 'package:heidi/src/presentation/main/dashboard/my_listings/my_listings_screen.dart';
 import 'package:heidi/src/presentation/main/discovery/mitreden_webview.dart';
 import 'package:heidi/src/presentation/main/home/list_product/list_product.dart';
-import 'package:heidi/src/presentation/main/home/product_detail/booking/booking_time/booking_time_screen.dart';
+import 'package:heidi/src/presentation/main/home/product_detail/booking/booking_screen.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/image_zoom/image_zoom_screen.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/product_detail.dart';
 import 'package:heidi/src/presentation/main/login/forgot_password/forgot_password_screen.dart';
@@ -223,7 +223,7 @@ class Routes {
       case booking:
         return MaterialPageRoute(
           builder: (context) {
-            return BookingTimeScreen(
+            return BookingScreen(
               listingTitle: settings.arguments as String,
             );
           },
@@ -327,12 +327,9 @@ class Routes {
       case myAppointments:
         return MaterialPageRoute(
           builder: (context) {
-            final Map<String, dynamic> arguments =
-                settings.arguments as Map<String, dynamic>;
             return BlocProvider(
               create: (context) => MyAppointmentsCubit(),
-              child: MyAppointmentsScreen(
-                user: arguments['user'] as UserModel,
+              child: const MyAppointmentsScreen(
               ),
             );
           },

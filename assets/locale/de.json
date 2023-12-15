@@ -451,5 +451,8 @@
   "inactive": "Inaktiv",
   "under_review": "In Prüfung",  
   "all_requests":"Alle Anfragen",
-  "appointments": "Termine"
+  "appointments": "Termine",
+  "delete_appointments": "Termin löschen",
+  "edit_appointments": "Termin bearbeiten",
+  "Are you sure you want to delete appointment" :  "Bist du dir sicher, dass du die Buchung löschen möchtest ?"
 }

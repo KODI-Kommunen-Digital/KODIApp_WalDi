@@ -26,8 +26,10 @@ class AppointmentScreen extends StatelessWidget {
               icon: Icons.calendar_today,
               title: Translate.of(context).translate("my_appointments"),
               onPressed: () {
-                Navigator.pushNamed(context, Routes.myAppointments,
-                    arguments: {'user': user});
+                Navigator.pushNamed(
+                  context,
+                  Routes.myAppointments,
+                );
               },
             ),
             GridItemButton(

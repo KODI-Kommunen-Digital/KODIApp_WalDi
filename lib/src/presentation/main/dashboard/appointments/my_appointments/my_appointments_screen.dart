@@ -1,16 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/presentation/main/dashboard/appointments/my_appointments/cubit/my_appointments_cubit.dart';
 import 'package:heidi/src/presentation/main/dashboard/appointments/my_appointments/cubit/my_appointments_state.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
+import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class MyAppointmentsScreen extends StatelessWidget {
-  final UserModel user;
-
-  const MyAppointmentsScreen({required this.user, super.key});
+  const MyAppointmentsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +18,6 @@ class MyAppointmentsScreen extends StatelessWidget {
             loaded: (appointments, isRefreshLoader) => MyAppointmentsLoaded(
                   isRefreshLoader: isRefreshLoader,
                   appointments: appointments,
-                  user: user,
                 ),
             orElse: () => ErrorWidget("Failed to load appointments.")));
   }
@@ -43,15 +40,11 @@ class MyAppointmentsLoading extends StatelessWidget {
 }
 
 class MyAppointmentsLoaded extends StatefulWidget {
-  final List<String>? appointments;
-  final UserModel user;
+  final List<String> appointments;
   final bool isRefreshLoader;
 
   const MyAppointmentsLoaded(
-      {required this.isRefreshLoader,
-      required this.user,
-      this.appointments,
-      super.key});
+      {required this.isRefreshLoader, required this.appointments, super.key});
 
   @override
   State<MyAppointmentsLoaded> createState() => _MyAppointmentsLoadedState();
@@ -59,16 +52,16 @@ class MyAppointmentsLoaded extends StatefulWidget {
 
 class _MyAppointmentsLoadedState extends State<MyAppointmentsLoaded> {
   final _scrollController = ScrollController(initialScrollOffset: 0.0);
-  List<String>? appointments = [];
+  List<String> appointments = [];
 
   @override
   void initState() {
     super.initState();
-    appointments = widget.appointments;
+    appointments.addAll(widget.appointments);
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext buildContext) {
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(
@@ -78,7 +71,7 @@ class _MyAppointmentsLoadedState extends State<MyAppointmentsLoaded> {
         ),
       ),
       body: Stack(children: [
-        (appointments?.isNotEmpty ?? false)
+        (appointments.isNotEmpty)
             ? Padding(
                 padding: const EdgeInsets.fromLTRB(8, 8, 4, 0),
                 child: CustomScrollView(
@@ -93,7 +86,7 @@ class _MyAppointmentsLoadedState extends State<MyAppointmentsLoaded> {
                     SliverList(
                       delegate: SliverChildBuilderDelegate(
                         (BuildContext context, int index) {
-                          final item = appointments![index];
+                          final item = appointments[index];
                           return Padding(
                             padding: const EdgeInsets.only(top: 12),
                             child: InkWell(
@@ -107,7 +100,6 @@ class _MyAppointmentsLoadedState extends State<MyAppointmentsLoaded> {
                                   children: [
                                     Row(
                                       children: <Widget>[
-                                        //Check whether item is pdf
                                         ClipRRect(
                                           borderRadius:
                                               BorderRadius.circular(12),
@@ -136,7 +128,6 @@ class _MyAppointmentsLoadedState extends State<MyAppointmentsLoaded> {
                                             },
                                             loadingBuilder: (context, child,
                                                 loadingProgress) {
-                                              // Display the AppPlaceholder while the image is loading
                                               if (loadingProgress == null) {
                                                 return child;
                                               }
@@ -155,26 +146,6 @@ class _MyAppointmentsLoadedState extends State<MyAppointmentsLoaded> {
                                             },
                                           ),
                                         ),
-
-                                        /*: ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(11),
-                                                  child: SizedBox(
-                                                      width: 120,
-                                                      height: 140,
-                                                      child: const PDF()
-                                                          .cachedFromUrl(
-                                                        "${Application.picturesURL}${item.pdf}?cacheKey=$uniqueKey",
-                                                        placeholder: (progress) =>
-                                                            Center(
-                                                                child: Text(
-                                                                    '$progress %')),
-                                                        errorWidget: (error) =>
-                                                            Center(
-                                                                child: Text(error
-                                                                    .toString())),
-                                                      )),
-                                                ),*/
                                         const SizedBox(width: 8),
                                         Expanded(
                                           child: Column(
@@ -207,11 +178,52 @@ class _MyAppointmentsLoadedState extends State<MyAppointmentsLoaded> {
                                           ),
                                         ),
                                         const Spacer(),
-                                        IconButton(
-                                            onPressed: () {
-                                              //Manage Appointment
-                                            },
-                                            icon: const Icon(Icons.more_vert))
+                                        PopupMenuButton<String>(
+                                          icon: const Icon(
+                                            Icons
+                                                .more_vert, // Three vertical dots icon
+                                          ),
+                                          onSelected: (String choice) async {
+                                            if (choice ==
+                                                Translate.of(context).translate(
+                                                    'delete_appointments')) {
+                                              final response =
+                                                  await showRemoveAppointmentPopup(
+                                                      context);
+                                              if (response) {
+                                                setState(() {
+                                                  appointments.removeAt(index);
+                                                });
+                                              }
+                                            }
+
+                                            if (!mounted) return;
+
+                                            if (choice ==
+                                                Translate.of(context).translate(
+                                                    'edit_appointments')) {
+                                              if (!mounted) return;
+                                              Navigator.pushNamed(
+                                                context,
+                                                Routes.booking,
+                                                arguments: appointments[index],
+                                              );
+                                            }
+                                          },
+                                          itemBuilder: (BuildContext context) {
+                                            return {
+                                              Translate.of(context).translate(
+                                                  'delete_appointments'),
+                                              Translate.of(context).translate(
+                                                  'edit_appointments')
+                                            }.map((String choice) {
+                                              return PopupMenuItem<String>(
+                                                value: choice,
+                                                child: Text(choice),
+                                              );
+                                            }).toList();
+                                          },
+                                        )
                                       ],
                                     ),
                                   ],
@@ -220,7 +232,7 @@ class _MyAppointmentsLoadedState extends State<MyAppointmentsLoaded> {
                             ),
                           );
                         },
-                        childCount: appointments!.length,
+                        childCount: appointments.length,
                       ),
                     ),
                   ],
@@ -247,5 +259,46 @@ class _MyAppointmentsLoadedState extends State<MyAppointmentsLoaded> {
 
   Future<void> _onRefresh() async {
     context.read<MyAppointmentsCubit>().onLoad(true);
+  }
+
+  Future<bool> showRemoveAppointmentPopup(BuildContext context) async {
+    final result = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            Translate.of(context).translate('delete_appointment'),
+          ),
+          content: Text(
+            Translate.of(context)
+                .translate('Are you sure you want to delete appointment'),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(false); // Close the dialog
+              },
+              child: Text(
+                Translate.of(context).translate('no'),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              child: Text(
+                Translate.of(context).translate('yes'),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (result) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

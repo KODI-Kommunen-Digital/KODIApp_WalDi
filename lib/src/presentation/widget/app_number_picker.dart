@@ -56,7 +56,7 @@ class _AppNumberPickerState extends State<AppNumberPicker> {
                       children: [
                         InkWell(
                           onTap: () {
-                            if (_value != 0) {
+                            if (_value != 1) {
                               setState(() {
                                 _value -= 1;
                               });

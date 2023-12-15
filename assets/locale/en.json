@@ -451,5 +451,8 @@
   "inactive": "Inactive",
   "under_review": "Under Review",  
   "all_requests":"All Requests",
-  "appointments": "Appointments"
+  "appointments": "Appointments",
+  "delete_appointments": "Delete Appointment",
+  "edit_appointments": "Edit Appointment",
+  "Are you sure you want to delete appointment" :  "Are you sure you want to delete appointment?"
 }
