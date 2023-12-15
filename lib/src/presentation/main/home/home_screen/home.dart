@@ -57,7 +57,6 @@ class _HomeScreenState extends State<HomeScreen> {
     checkSavedCity = true;
     AppBloc.homeCubit.onLoad(false);
     connectivityInternet();
-    scrollUp();
     checkUserExist();
   }
 
