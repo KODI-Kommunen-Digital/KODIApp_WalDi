@@ -100,7 +100,7 @@
             "categoryType" : "category"
         },
         {
-            "id": 15,
+            "id": 14,
             "name": "Rathaus",
             "noOfSubcategories": 0,
             "icon": "fas fa-building",
@@ -108,7 +108,7 @@
             "categoryType" : "category"
         },
         {
-            "id": 16,
+            "id": 15,
             "name": "Mitteilungsblatt",
             "noOfSubcategories": 0,
             "icon": "fas fa-newspaper",

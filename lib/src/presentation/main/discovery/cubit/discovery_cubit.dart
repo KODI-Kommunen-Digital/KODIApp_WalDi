@@ -144,25 +144,15 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
         arguments: 10,
       ),
       CitizenServiceModel(
-        imageUrl: Images.service13,
-        imageLink: "13",
-      ),
+          imageUrl: Images.service13,
+          imageLink: "13",
+          categoryId: 15,
+          arguments: 0),
       CitizenServiceModel(
-        imageUrl: Images.service14,
-        imageLink: "14",
-      ),
-      CitizenServiceModel(
-        imageUrl: Images.service15,
-        imageLink: "15",
-      ),
-      CitizenServiceModel(
-        imageUrl: Images.service16,
-        imageLink: "16",
-      ),
-      CitizenServiceModel(
-        imageUrl: Images.service17,
-        imageLink: "17",
-      ),
+          imageUrl: Images.service14,
+          imageLink: "14",
+          categoryId: 14,
+          arguments: 0),
     ];
   }
 
