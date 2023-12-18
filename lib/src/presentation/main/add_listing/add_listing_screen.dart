@@ -316,7 +316,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
         initialDate: parsedDate,
         firstDate: DateTime(now.year),
         context: context,
-        lastDate: DateTime(now.year + 1),
+        lastDate: DateTime(now.year + 2, now.month, now.day),
       );
       if (picked != null) {
         setState(() {
@@ -328,7 +328,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
         initialDate: now,
         firstDate: DateTime(now.year),
         context: context,
-        lastDate: DateTime(now.year + 1),
+        lastDate: DateTime(now.year + 2, now.month, now.day),
       );
 
       if (picked != null) {
@@ -348,7 +348,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
         initialDate: parsedDate,
         firstDate: DateTime(now.year),
         context: context,
-        lastDate: DateTime(now.year + 1),
+        lastDate: DateTime(now.year + 2, now.month, now.day),
       );
       if (picked != null) {
         setState(() {
@@ -360,7 +360,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
         initialDate: now,
         firstDate: DateTime(now.year),
         context: context,
-        lastDate: DateTime(now.year + 1),
+        lastDate: DateTime(now.year + 2, now.month, now.day),
       );
 
       if (picked != null) {
