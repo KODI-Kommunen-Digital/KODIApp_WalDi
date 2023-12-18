@@ -170,13 +170,17 @@ class UserRepository {
     final response = await Api.requestChangeProfile(params, userId);
     if (response.success) {
       FormData? pickedFile = prefs.getPickedFile();
-      final responseImageUpload = await Api.requestUploadImage(pickedFile);
-      if(responseImageUpload.success){
-        return true;
+      if(pickedFile != null) {
+        final responseImageUpload = await Api.requestUploadImage(pickedFile);
+        if (responseImageUpload.success) {
+          return true;
+        }
+        else {
+          logError('Image Upload Error Response', response.message);
+        }
       }
       else{
-        logError('Image Upload Error Response', response.message);
-
+        return true;
       }
     }
     return false;
