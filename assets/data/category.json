@@ -114,6 +114,14 @@
             "icon": "fas fa-newspaper",
             "color": "#58d68d",
             "categoryType" : "category"
+        },
+        {
+            "id": 16,
+            "name": "Amtliche Mitteilungen",
+            "noOfSubcategories": 0,
+            "icon": "fas fa-newspaper",
+            "color": "#58d68d",
+            "categoryType" : "category"
         }
     ]
 }
