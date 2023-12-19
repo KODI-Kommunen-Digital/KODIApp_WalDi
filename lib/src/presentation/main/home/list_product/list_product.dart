@@ -70,7 +70,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
       context: context,
       builder: (context) {
         return Container(
-          color: Colors.grey[900],
+          color: Theme.of(context).dialogBackgroundColor,
           height: 150,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -81,9 +81,10 @@ class _ListProductScreenState extends State<ListProductScreen> {
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: Row(
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.calendar_today,
-                      color: Colors.white,
+                      color: Theme.of(context).textTheme.bodyLarge?.color ??
+                          Colors.white,
                     ),
                     const SizedBox(width: 8),
                     TextButton(
@@ -96,8 +97,12 @@ class _ListProductScreenState extends State<ListProductScreen> {
                         children: [
                           Text(
                             Translate.of(context).translate('this_week'),
-                            style: const TextStyle(
-                              color: Colors.white,
+                            style: TextStyle(
+                              color: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.color ??
+                                  Colors.white,
                             ),
                           ),
                           const SizedBox(width: 5),
@@ -108,8 +113,9 @@ class _ListProductScreenState extends State<ListProductScreen> {
                   ],
                 ),
               ),
-              const Divider(
-                color: Colors.white,
+              Divider(
+                color: Theme.of(context).textTheme.bodyLarge?.color ??
+                    Colors.white,
                 height: 1,
                 thickness: 1,
               ),
@@ -118,9 +124,10 @@ class _ListProductScreenState extends State<ListProductScreen> {
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: Row(
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.calendar_today,
-                      color: Colors.white,
+                      color: Theme.of(context).textTheme.bodyLarge?.color ??
+                          Colors.white,
                     ),
                     const SizedBox(width: 8),
                     TextButton(
@@ -133,8 +140,12 @@ class _ListProductScreenState extends State<ListProductScreen> {
                         children: [
                           Text(
                             Translate.of(context).translate('this_month'),
-                            style: const TextStyle(
-                              color: Colors.white,
+                            style: TextStyle(
+                              color: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.color ??
+                                  Colors.white,
                             ),
                           ),
                           const SizedBox(width: 5),
@@ -251,12 +262,12 @@ class ListLoaded extends StatefulWidget {
   final List listCity;
   final int selectedId;
 
-  const ListLoaded({
-    Key? key,
-    required this.list,
-    required this.selectedId,
-    required this.listCity
-  }) : super(key: key);
+  const ListLoaded(
+      {Key? key,
+      required this.list,
+      required this.selectedId,
+      required this.listCity})
+      : super(key: key);
 
   @override
   State<ListLoaded> createState() => _ListLoadedState();
@@ -409,7 +420,9 @@ class _ListLoadedState extends State<ListLoaded> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: AppProductItem(
               isRefreshLoader: true,
-              cityName: context.read<ListCubit>().getCityNameFromId(widget.listCity, item.cityId ?? 0),
+              cityName: context
+                  .read<ListCubit>()
+                  .getCityNameFromId(widget.listCity, item.cityId ?? 0),
               onPressed: () {
                 _onProductDetail(item);
               },
