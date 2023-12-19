@@ -278,7 +278,7 @@ class _ListLoadedState extends State<ListLoaded> {
   void initState() {
     super.initState();
     _scrollController.addListener(_scrollListener);
-    loadListingsList();
+    //loadListingsList();
   }
 
   @override
