@@ -114,13 +114,13 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
       context: context,
       builder: (context) {
         return Container(
-          color: Colors.grey[900],
+          color: Theme.of(context).dialogBackgroundColor,
           height: 200,
           child: ListView.separated(
             itemCount: 3,
-            separatorBuilder: (BuildContext context, int index) =>
-                const Divider(
-              color: Colors.white,
+            separatorBuilder: (BuildContext context, int index) => Divider(
+              color:
+                  Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white,
               height: 1,
               thickness: 1,
             ),
