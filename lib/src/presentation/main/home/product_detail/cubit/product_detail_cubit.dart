@@ -23,6 +23,7 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
     } else {
       isLoggedIn = true;
     }
+    bool darkModeEnabled = await isDarkMode();
 
     if (item.cityId != null) {
       final result = await ListRepository.loadProduct(item.cityId, item.id);
@@ -40,16 +41,24 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
               }
             }
           }
-          emit(ProductDetailLoaded(
-              product!, favoritesList, userDetail, isLoggedIn));
+          emit(ProductDetailLoaded(product!, favoritesList, userDetail,
+              isLoggedIn, darkModeEnabled));
         } else {
-          emit(ProductDetailLoaded(product!, null, userDetail, isLoggedIn));
+          emit(ProductDetailLoaded(
+              product!, null, userDetail, isLoggedIn, darkModeEnabled));
         }
       }
     } else {
       isFavorite = true;
-      emit(ProductDetailLoaded(item, null, userDetail, isLoggedIn));
+      emit(ProductDetailLoaded(
+          item, null, userDetail, isLoggedIn, darkModeEnabled));
     }
+  }
+
+  Future<bool> isDarkMode() async {
+    final prefBox = await Preferences.openBox();
+    String darkMode = await prefBox.getKeyValue(Preferences.darkOption, 'on');
+    return (darkMode == 'on');
   }
 
   bool getFavoriteIconValue() => isFavorite;
