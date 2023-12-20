@@ -25,7 +25,8 @@ mixin _$ProductDetailState {
             List<FavoriteModel>? favoritesList,
             UserModel? userDetail,
             bool isLoggedIn,
-            List<dynamic> cityList)
+            List<dynamic> cityList,
+            bool isDarkMode)
         loaded,
     required TResult Function(String error) error,
   }) =>
@@ -34,8 +35,13 @@ mixin _$ProductDetailState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(ProductModel product, List<FavoriteModel>? favoritesList,
-            UserModel? userDetail, bool isLoggedIn, List<dynamic> cityList)?
+    TResult? Function(
+            ProductModel product,
+            List<FavoriteModel>? favoritesList,
+            UserModel? userDetail,
+            bool isLoggedIn,
+            List<dynamic> cityList,
+            bool isDarkMode)?
         loaded,
     TResult? Function(String error)? error,
   }) =>
@@ -44,8 +50,13 @@ mixin _$ProductDetailState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(ProductModel product, List<FavoriteModel>? favoritesList,
-            UserModel? userDetail, bool isLoggedIn, List<dynamic> cityList)?
+    TResult Function(
+            ProductModel product,
+            List<FavoriteModel>? favoritesList,
+            UserModel? userDetail,
+            bool isLoggedIn,
+            List<dynamic> cityList,
+            bool isDarkMode)?
         loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
@@ -141,7 +152,8 @@ class _$ProductDetailInitial implements ProductDetailInitial {
             List<FavoriteModel>? favoritesList,
             UserModel? userDetail,
             bool isLoggedIn,
-            List<dynamic> cityList)
+            List<dynamic> cityList,
+            bool isDarkMode)
         loaded,
     required TResult Function(String error) error,
   }) {
@@ -153,8 +165,13 @@ class _$ProductDetailInitial implements ProductDetailInitial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(ProductModel product, List<FavoriteModel>? favoritesList,
-            UserModel? userDetail, bool isLoggedIn, List<dynamic> cityList)?
+    TResult? Function(
+            ProductModel product,
+            List<FavoriteModel>? favoritesList,
+            UserModel? userDetail,
+            bool isLoggedIn,
+            List<dynamic> cityList,
+            bool isDarkMode)?
         loaded,
     TResult? Function(String error)? error,
   }) {
@@ -166,8 +183,13 @@ class _$ProductDetailInitial implements ProductDetailInitial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(ProductModel product, List<FavoriteModel>? favoritesList,
-            UserModel? userDetail, bool isLoggedIn, List<dynamic> cityList)?
+    TResult Function(
+            ProductModel product,
+            List<FavoriteModel>? favoritesList,
+            UserModel? userDetail,
+            bool isLoggedIn,
+            List<dynamic> cityList,
+            bool isDarkMode)?
         loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
@@ -265,7 +287,8 @@ class _$ProductDetailLoading implements ProductDetailLoading {
             List<FavoriteModel>? favoritesList,
             UserModel? userDetail,
             bool isLoggedIn,
-            List<dynamic> cityList)
+            List<dynamic> cityList,
+            bool isDarkMode)
         loaded,
     required TResult Function(String error) error,
   }) {
@@ -277,8 +300,13 @@ class _$ProductDetailLoading implements ProductDetailLoading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(ProductModel product, List<FavoriteModel>? favoritesList,
-            UserModel? userDetail, bool isLoggedIn, List<dynamic> cityList)?
+    TResult? Function(
+            ProductModel product,
+            List<FavoriteModel>? favoritesList,
+            UserModel? userDetail,
+            bool isLoggedIn,
+            List<dynamic> cityList,
+            bool isDarkMode)?
         loaded,
     TResult? Function(String error)? error,
   }) {
@@ -290,8 +318,13 @@ class _$ProductDetailLoading implements ProductDetailLoading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(ProductModel product, List<FavoriteModel>? favoritesList,
-            UserModel? userDetail, bool isLoggedIn, List<dynamic> cityList)?
+    TResult Function(
+            ProductModel product,
+            List<FavoriteModel>? favoritesList,
+            UserModel? userDetail,
+            bool isLoggedIn,
+            List<dynamic> cityList,
+            bool isDarkMode)?
         loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
@@ -355,7 +388,8 @@ abstract class _$$ProductDetailLoadedCopyWith<$Res> {
       List<FavoriteModel>? favoritesList,
       UserModel? userDetail,
       bool isLoggedIn,
-      List<dynamic> cityList});
+      List<dynamic> cityList,
+      bool isDarkMode});
 }
 
 /// @nodoc
@@ -374,6 +408,7 @@ class __$$ProductDetailLoadedCopyWithImpl<$Res>
     Object? userDetail = freezed,
     Object? isLoggedIn = null,
     Object? cityList = null,
+    Object? isDarkMode = null,
   }) {
     return _then(_$ProductDetailLoaded(
       null == product
@@ -396,6 +431,10 @@ class __$$ProductDetailLoadedCopyWithImpl<$Res>
           ? _value._cityList
           : cityList // ignore: cast_nullable_to_non_nullable
               as List<dynamic>,
+      null == isDarkMode
+          ? _value.isDarkMode
+          : isDarkMode // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -408,7 +447,8 @@ class _$ProductDetailLoaded implements ProductDetailLoaded {
       final List<FavoriteModel>? favoritesList,
       this.userDetail,
       this.isLoggedIn,
-      final List<dynamic> cityList)
+      final List<dynamic> cityList,
+      this.isDarkMode)
       : _favoritesList = favoritesList,
         _cityList = cityList;
 
@@ -437,8 +477,11 @@ class _$ProductDetailLoaded implements ProductDetailLoaded {
   }
 
   @override
+  final bool isDarkMode;
+
+  @override
   String toString() {
-    return 'ProductDetailState.loaded(product: $product, favoritesList: $favoritesList, userDetail: $userDetail, isLoggedIn: $isLoggedIn, cityList: $cityList)';
+    return 'ProductDetailState.loaded(product: $product, favoritesList: $favoritesList, userDetail: $userDetail, isLoggedIn: $isLoggedIn, cityList: $cityList, isDarkMode: $isDarkMode)';
   }
 
   @override
@@ -453,7 +496,9 @@ class _$ProductDetailLoaded implements ProductDetailLoaded {
                 other.userDetail == userDetail) &&
             (identical(other.isLoggedIn, isLoggedIn) ||
                 other.isLoggedIn == isLoggedIn) &&
-            const DeepCollectionEquality().equals(other._cityList, _cityList));
+            const DeepCollectionEquality().equals(other._cityList, _cityList) &&
+            (identical(other.isDarkMode, isDarkMode) ||
+                other.isDarkMode == isDarkMode));
   }
 
   @override
@@ -463,7 +508,8 @@ class _$ProductDetailLoaded implements ProductDetailLoaded {
       const DeepCollectionEquality().hash(_favoritesList),
       userDetail,
       isLoggedIn,
-      const DeepCollectionEquality().hash(_cityList));
+      const DeepCollectionEquality().hash(_cityList),
+      isDarkMode);
 
   @JsonKey(ignore: true)
   @override
@@ -482,11 +528,13 @@ class _$ProductDetailLoaded implements ProductDetailLoaded {
             List<FavoriteModel>? favoritesList,
             UserModel? userDetail,
             bool isLoggedIn,
-            List<dynamic> cityList)
+            List<dynamic> cityList,
+            bool isDarkMode)
         loaded,
     required TResult Function(String error) error,
   }) {
-    return loaded(product, favoritesList, userDetail, isLoggedIn, cityList);
+    return loaded(
+        product, favoritesList, userDetail, isLoggedIn, cityList, isDarkMode);
   }
 
   @override
@@ -494,13 +542,18 @@ class _$ProductDetailLoaded implements ProductDetailLoaded {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(ProductModel product, List<FavoriteModel>? favoritesList,
-            UserModel? userDetail, bool isLoggedIn, List<dynamic> cityList)?
+    TResult? Function(
+            ProductModel product,
+            List<FavoriteModel>? favoritesList,
+            UserModel? userDetail,
+            bool isLoggedIn,
+            List<dynamic> cityList,
+            bool isDarkMode)?
         loaded,
     TResult? Function(String error)? error,
   }) {
     return loaded?.call(
-        product, favoritesList, userDetail, isLoggedIn, cityList);
+        product, favoritesList, userDetail, isLoggedIn, cityList, isDarkMode);
   }
 
   @override
@@ -508,14 +561,20 @@ class _$ProductDetailLoaded implements ProductDetailLoaded {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(ProductModel product, List<FavoriteModel>? favoritesList,
-            UserModel? userDetail, bool isLoggedIn, List<dynamic> cityList)?
+    TResult Function(
+            ProductModel product,
+            List<FavoriteModel>? favoritesList,
+            UserModel? userDetail,
+            bool isLoggedIn,
+            List<dynamic> cityList,
+            bool isDarkMode)?
         loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(product, favoritesList, userDetail, isLoggedIn, cityList);
+      return loaded(
+          product, favoritesList, userDetail, isLoggedIn, cityList, isDarkMode);
     }
     return orElse();
   }
@@ -564,13 +623,15 @@ abstract class ProductDetailLoaded implements ProductDetailState {
       final List<FavoriteModel>? favoritesList,
       final UserModel? userDetail,
       final bool isLoggedIn,
-      final List<dynamic> cityList) = _$ProductDetailLoaded;
+      final List<dynamic> cityList,
+      final bool isDarkMode) = _$ProductDetailLoaded;
 
   ProductModel get product;
   List<FavoriteModel>? get favoritesList;
   UserModel? get userDetail;
   bool get isLoggedIn;
   List<dynamic> get cityList;
+  bool get isDarkMode;
   @JsonKey(ignore: true)
   _$$ProductDetailLoadedCopyWith<_$ProductDetailLoaded> get copyWith =>
       throw _privateConstructorUsedError;
@@ -648,7 +709,8 @@ class _$ProductDetailError implements ProductDetailError {
             List<FavoriteModel>? favoritesList,
             UserModel? userDetail,
             bool isLoggedIn,
-            List<dynamic> cityList)
+            List<dynamic> cityList,
+            bool isDarkMode)
         loaded,
     required TResult Function(String error) error,
   }) {
@@ -660,8 +722,13 @@ class _$ProductDetailError implements ProductDetailError {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(ProductModel product, List<FavoriteModel>? favoritesList,
-            UserModel? userDetail, bool isLoggedIn, List<dynamic> cityList)?
+    TResult? Function(
+            ProductModel product,
+            List<FavoriteModel>? favoritesList,
+            UserModel? userDetail,
+            bool isLoggedIn,
+            List<dynamic> cityList,
+            bool isDarkMode)?
         loaded,
     TResult? Function(String error)? error,
   }) {
@@ -673,8 +740,13 @@ class _$ProductDetailError implements ProductDetailError {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(ProductModel product, List<FavoriteModel>? favoritesList,
-            UserModel? userDetail, bool isLoggedIn, List<dynamic> cityList)?
+    TResult Function(
+            ProductModel product,
+            List<FavoriteModel>? favoritesList,
+            UserModel? userDetail,
+            bool isLoggedIn,
+            List<dynamic> cityList,
+            bool isDarkMode)?
         loaded,
     TResult Function(String error)? error,
     required TResult orElse(),

@@ -183,7 +183,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   ///Build content UI
   Widget _buildContent(ProductModel? product, List<FavoriteModel>? favoriteList,
-      UserModel? userDetail, bool isLoggedIn, List cityList) {
+      UserModel? userDetail, bool isLoggedIn, List cityList, bool isDarkMode) {
     String uniqueKey = UniqueKey().toString();
     List<Widget> action = [];
     Widget actionGalleries = Container();
@@ -829,9 +829,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
       if (product.description.isNotEmpty) {
         String modifiedDescription = product.description;
+        String color = (isDarkMode) ? 'white' : 'black';
+        String hexColor = (isDarkMode) ? '#ffffff' : '#000000';
 
         modifiedDescription = modifiedDescription.replaceAll(
-            RegExp(r'color: [^;]+;'), "color: white");
+            RegExp(r'color: [^;]+;'), "color: $color");
 
         description = HtmlWidget(
           modifiedDescription,
@@ -844,14 +846,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             if (element.localName == 'img') {
               return {'max-width': '100%'};
             } else if (element.localName == '') {
-              return {'color': '#ffffff'};
+              return {'color': hexColor};
             }
             var style = element.attributes['style'];
             if (style != null) {
-              style =
-                  style.replaceAll(RegExp(r'color:[^;];?'), 'color: #ffffff;');
+              style = style.replaceAll(
+                  RegExp(r'color:[^;];?'), 'color: $hexColor;');
             } else {
-              style = 'color: #ffffff;';
+              style = 'color: $hexColor;';
             }
 
             return {'style': style};
@@ -1057,6 +1059,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             List<FavoriteModel>? favoriteList;
             UserModel? userDetail;
             bool isLoggedIn = false;
+            bool isDarkMode = true;
             List cityList = [];
             if (state is ProductDetailLoaded) {
               product = state.product;
@@ -1064,9 +1067,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               isLoggedIn = state.isLoggedIn;
               userDetail = state.userDetail;
               cityList = state.cityList;
+              isDarkMode = state.isDarkMode;
             }
-            return _buildContent(
-                product, favoriteList, userDetail, isLoggedIn, cityList);
+            return _buildContent(product, favoriteList, userDetail, isLoggedIn,
+                cityList, isDarkMode);
           },
         ),
       ),
