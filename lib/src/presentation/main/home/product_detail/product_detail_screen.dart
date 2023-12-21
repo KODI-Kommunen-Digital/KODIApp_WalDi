@@ -775,33 +775,44 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         modifiedDescription = modifiedDescription.replaceAll(
             RegExp(r'color: [^;]+;'), "color: white");
 
-        description = HtmlWidget(
-          modifiedDescription,
-          textStyle:
-              const TextStyle(fontSize: 16.0, color: Colors.white, height: 1.6),
-          customStylesBuilder: (element) {
-            if (element.localName == 'img') {
-              return {'max-width': '100%'};
-            } else if (element.localName == '') {
-              return {'color': '#ffffff'};
-            }
-            var style = element.attributes['style'];
-            if (style != null) {
-              style =
-                  style.replaceAll(RegExp(r'color:[^;];?'), 'color: #ffffff;');
-            } else {
-              style = 'color: #ffffff;';
-            }
+        RegExp exp = RegExp(
+          r'<a\s+[^>]*\bhref="([^"]+\.(?:jpg|png))"[^>]*>.*?<a>',
+          caseSensitive: false,
+        );
 
-            return {'style': style};
-          },
+        modifiedDescription =
+            modifiedDescription.replaceAllMapped(exp, (match) {
+          String href = match.group(1) ?? "";
+          return '<img src="$href">';
+        });
+
+        description = HtmlWidget(modifiedDescription,
+            textStyle: const TextStyle(
+                fontSize: 16.0,
+                color: Colors.white,
+                height: 1.6), customStylesBuilder: (element) {
+          if (element.localName == 'img') {
+            return {'max-width': '100%'};
+          } else if (element.localName == '') {
+            return {'color': '#ffffff'};
+          }
+
+          var style = element.attributes['style'];
+          if (style != null) {
+            style =
+                style.replaceAll(RegExp(r'color:[^;];?'), 'color: #ffffff;');
+          } else {
+            style = 'color: #ffffff;';
+          }
+
+          return {'style': style};
           // onTapUrl: (url) {
           //   if (Uri.parse(url).hasAbsolutePath) {
           //     _makeAction(url);
           //   }
           //   return false;
           // },
-        );
+        });
       }
 
       info = Padding(
