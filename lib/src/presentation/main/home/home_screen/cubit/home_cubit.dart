@@ -149,6 +149,15 @@ class HomeCubit extends Cubit<HomeState> {
 
       return (idToCountMap[b.id] ?? 0).compareTo(idToCountMap[a.id] ?? 0);
     });
+
+    //Forum always at index 6, before the more button
+    int forumIndex = categories.indexWhere((element) => element.id == 14);
+
+    if (forumIndex != -1) {
+      var forum = categories.removeAt(forumIndex);
+      categories.insert(6, forum);
+    }
+
     // Hide tag on empty categories
     for (var element in categories) {
       bool hasContent = await categoryHasContent(element.id, cityId);
