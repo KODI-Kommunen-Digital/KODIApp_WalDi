@@ -89,6 +89,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
   String? selectedSubCategory;
   bool isImageChanged = false;
   bool isLoading = false;
+  bool _createAppointment = false;
 
   int? currentCity;
   late List<dynamic> jsonCategory;
@@ -911,7 +912,26 @@ class _AddListingScreenState extends State<AddListingScreen> {
               ],
             ),
             const SizedBox(height: 16),
-            const SizedBox(height: 8),
+            Row(
+              children: <Widget>[
+                Checkbox(
+                  value: _createAppointment,
+                  onChanged: (value) {
+                    setState(() {
+                      _createAppointment = value!;
+                    });
+                    if (value == true) {
+                      Navigator.pushNamed(context, Routes.createAppointment);
+                    }
+                  },
+                  activeColor: Colors.blue,
+                  checkColor: Colors.white,
+                ),
+                const SizedBox(width: 8),
+                const Text('Do you want to add appointment?'),
+              ],
+            ),
+            const SizedBox(height: 16),
             AppTextInput(
               hintText: Translate.of(context).translate('input_address'),
               // errorText: _errorAddress,

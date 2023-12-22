@@ -14,6 +14,9 @@ import 'package:heidi/src/presentation/main/account/profile/profile_screen.dart'
 import 'package:heidi/src/presentation/main/account/setting/settings_screen.dart';
 import 'package:heidi/src/presentation/main/add_listing/add_listing_screen.dart';
 import 'package:heidi/src/presentation/main/add_listing/add_listing_success/add_listing_success.dart';
+import 'package:heidi/src/presentation/main/add_listing/create_appointment/create_appointment_screen.dart';
+import 'package:heidi/src/presentation/main/add_listing/create_appointment/cubit/create_appoitment_cubit.dart';
+import 'package:heidi/src/presentation/main/add_listing/create_appointment/open_time_slots/open_time_slots.dart';
 import 'package:heidi/src/presentation/main/dashboard/all_listings/all_listings_screen.dart';
 import 'package:heidi/src/presentation/main/dashboard/all_listings/cubit/all_listings_cubit.dart';
 import 'package:heidi/src/presentation/main/dashboard/all_requests/all_requests_screen.dart';
@@ -57,6 +60,7 @@ class Routes {
   static const String submit = "/submit";
   static const String editProfile = "/editProfile";
   static const String changePassword = "/changePassword";
+  static const String createAppointment = "/createAppointment";
   static const String changeLanguage = "/changeLanguage";
   static const String contactUs = "/contactUs";
   static const String aboutUs = "/aboutUs";
@@ -244,6 +248,27 @@ class Routes {
           },
         );
 
+      case createAppointment:
+        return MaterialPageRoute(
+          builder: (context) {
+
+            return BlocProvider(
+              create: (context) => CreateAppointmentCubit(
+                context.read(),
+              ),
+              child: const CreateAppointmentScreen(),
+            );
+          },
+        );
+
+        case openTime:
+        return MaterialPageRoute(
+          builder: (context) {
+
+            return const OpenTimeSlotsScreen();
+          },
+        );
+
       case legal:
         return MaterialPageRoute(
           builder: (context) {
@@ -329,8 +354,7 @@ class Routes {
           builder: (context) {
             return BlocProvider(
               create: (context) => MyAppointmentsCubit(),
-              child: const MyAppointmentsScreen(
-              ),
+              child: const MyAppointmentsScreen(),
             );
           },
         );

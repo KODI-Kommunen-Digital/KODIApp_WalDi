@@ -306,6 +306,7 @@
   "secondary_color": "Secondary color",
   "discovery": "Discovery",
   "services": "Services",
+  "select_services": "Select Services",
   "cust_services": "Customer Services",
   "see_more": "See More",
   "booking": "Booking",
@@ -451,7 +452,10 @@
   "inactive": "Inactive",
   "under_review": "Under Review",  
   "all_requests":"All Requests",
+  "employee": "Employees",
+  "time_slots": "Time slots",
   "appointments": "Appointments",
+  "create_appointment": "Create Appointment",
   "delete_appointments": "Delete Appointment",
   "edit_appointments": "Edit Appointment",
   "Are you sure you want to delete appointment" :  "Are you sure you want to delete appointment?"
