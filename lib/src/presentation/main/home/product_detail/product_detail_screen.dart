@@ -818,72 +818,48 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
       if (product.description.isNotEmpty) {
         String modifiedDescription = product.description;
+        print(modifiedDescription);
         String color = (isDarkMode) ? 'white' : 'black';
         String hexColor = (isDarkMode) ? '#ffffff' : '#000000';
 
         modifiedDescription = modifiedDescription.replaceAll(
             RegExp(r'color: [^;]+;'), "color: $color");
 
-
-        description = HtmlWidget(
-          modifiedDescription,
-          textStyle: TextStyle(
-              fontSize: 16.0,
-              color:
-                  Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white,
-              height: 1.6),
-          customStylesBuilder: (element) {
-            if (element.localName == 'img') {
-              return {'max-width': '100%'};
-            } else if (element.localName == '') {
-              return {'color': hexColor};
-            }
-            var style = element.attributes['style'];
-            if (style != null) {
-              style = style.replaceAll(
-                  RegExp(r'color:[^;];?'), 'color: $hexColor;');
-            } else {
-              style = 'color: $hexColor;';
-            }
-
-        RegExp exp = RegExp(
-          r'<a\s+[^>]*\bhref="([^"]+\.(?:jpg|png))"[^>]*>.*?<a>',
-          caseSensitive: false,
-        );
-
-
-        modifiedDescription =
-            modifiedDescription.replaceAllMapped(exp, (match) {
-          String href = match.group(1) ?? "";
-          return '<img src="$href">';
-        });
-
         description = HtmlWidget(modifiedDescription,
-            textStyle: const TextStyle(
+            textStyle: TextStyle(
                 fontSize: 16.0,
-                color: Colors.white,
+                color: Theme.of(context).textTheme.bodyLarge?.color ??
+                    Colors.white,
                 height: 1.6), customStylesBuilder: (element) {
           if (element.localName == 'img') {
             return {'max-width': '100%'};
           } else if (element.localName == '') {
-            return {'color': '#ffffff'};
+            return {'color': hexColor};
           }
-
           var style = element.attributes['style'];
           if (style != null) {
             style =
-                style.replaceAll(RegExp(r'color:[^;];?'), 'color: #ffffff;');
+                style.replaceAll(RegExp(r'color:[^;];?'), 'color: $hexColor;');
           } else {
-            style = 'color: #ffffff;';
+            style = 'color: $hexColor;';
           }
 
+          RegExp exp = RegExp(
+            r'<a\s+[^>]*\bhref="([^"]+\.(?:jpg|png))"[^>]*>.*?<a>',
+            caseSensitive: false,
+          );
+
+          modifiedDescription =
+              modifiedDescription.replaceAllMapped(exp, (match) {
+            String href = match.group(1) ?? "";
+            return '<img src="$href">';
+          });
           return {'style': style};
           // onTapUrl: (url) {
           //   if (Uri.parse(url).hasAbsolutePath) {
           //     _makeAction(url);
           //   }
           //   return false;
-          // },
         });
       }
 
