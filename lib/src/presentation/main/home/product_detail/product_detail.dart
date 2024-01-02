@@ -787,6 +787,17 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         modifiedDescription = modifiedDescription.replaceAll(
             RegExp(r'color: [^;]+;'), "color: white");
 
+        RegExp exp = RegExp(
+          r'<a\s+[^>]*\bhref="([^"]+\.(?:jpg|png))"[^>]*>.*?<a>',
+          caseSensitive: false,
+        );
+
+        modifiedDescription =
+            modifiedDescription.replaceAllMapped(exp, (match) {
+              String href = match.group(1) ?? "";
+              return '<img src="$href">';
+            });
+
         description = HtmlWidget(
           modifiedDescription,
           textStyle:
