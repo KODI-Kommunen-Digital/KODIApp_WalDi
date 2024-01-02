@@ -8,6 +8,7 @@ import 'package:heidi/src/data/model/model_favorites_detail_list.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class UserRepository {
   UserRepository();
@@ -46,8 +47,9 @@ class UserRepository {
         logError('Login Request Error', response.message);
         return response;
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
       logError('request Login Response Error', e);
+      await Sentry.captureException(e, stackTrace: stackTrace);
     }
     return null;
   }
@@ -217,8 +219,10 @@ class UserRepository {
         return favoriteList;
       } else {}
       return favoriteList;
-    } catch (e) {
+    } catch (e, stackTrace) {
       logError('Load Favorite Error', e);
+      await Sentry.captureException(e, stackTrace: stackTrace);
+
       return [];
     }
   }

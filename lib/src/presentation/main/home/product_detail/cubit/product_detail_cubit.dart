@@ -7,6 +7,7 @@ import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/cubit/cubit.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class ProductDetailCubit extends Cubit<ProductDetailState> {
   ProductDetailCubit() : super(const ProductDetailLoading());
@@ -56,9 +57,13 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
               emit(ProductDetailLoaded(
                   product!, null, userDetail, isLoggedIn, darkModeEnabled));
             }
-          } catch (e) {
-            emit(ProductDetailLoaded(
-                product!, null, userDetail, isLoggedIn, darkModeEnabled));
+
+          }
+          catch (e, stackTrace){
+            emit(ProductDetailLoaded(product!, null, userDetail, isLoggedIn,darkModeEnabled));
+            await Sentry.captureException(e, stackTrace: stackTrace);
+
+
           }
           emit(ProductDetailLoaded(product!, favoritesList, userDetail,
               isLoggedIn, darkModeEnabled));
