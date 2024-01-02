@@ -89,7 +89,7 @@ class _ListGroupScreenState extends State<ListGroupScreen> {
       context: context,
       builder: (context) {
         return Container(
-          color: Colors.grey[900],
+          color: Theme.of(context).dialogBackgroundColor,
           height: 150,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -100,9 +100,9 @@ class _ListGroupScreenState extends State<ListGroupScreen> {
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: Row(
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.person,
-                      color: Colors.white,
+                      color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white,
                     ),
                     const SizedBox(width: 8),
                     TextButton(
@@ -115,8 +115,8 @@ class _ListGroupScreenState extends State<ListGroupScreen> {
                         children: [
                           Text(
                             Translate.of(context).translate('my_groups'),
-                            style: const TextStyle(
-                              color: Colors.white,
+                            style: TextStyle(
+                              color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white,
                             ),
                           ),
                           const SizedBox(width: 5),
@@ -128,8 +128,8 @@ class _ListGroupScreenState extends State<ListGroupScreen> {
                   ],
                 ),
               ),
-              const Divider(
-                color: Colors.white,
+              Divider(
+                color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white,
                 height: 1,
                 thickness: 1,
               ),
@@ -138,9 +138,9 @@ class _ListGroupScreenState extends State<ListGroupScreen> {
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: Row(
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.groups,
-                      color: Colors.white,
+                      color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white,
                     ),
                     const SizedBox(width: 8),
                     TextButton(
@@ -153,8 +153,8 @@ class _ListGroupScreenState extends State<ListGroupScreen> {
                         children: [
                           Text(
                             Translate.of(context).translate('all_groups'),
-                            style: const TextStyle(
-                              color: Colors.white,
+                            style: TextStyle(
+                              color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white,
                             ),
                           ),
                           const SizedBox(width: 5),
@@ -193,9 +193,9 @@ class _ListGroupScreenState extends State<ListGroupScreen> {
                     .titleSmall!
                     .copyWith(fontWeight: FontWeight.bold),
               ),
-              icon: const Icon(
+              icon: Icon(
                 Icons.filter_list_rounded,
-                color: Colors.white,
+                color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white,
               ),
             ),
             Padding(
