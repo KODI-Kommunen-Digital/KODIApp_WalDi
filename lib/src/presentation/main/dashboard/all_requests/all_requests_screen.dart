@@ -104,8 +104,7 @@ class _AllRequestsLoadedState extends State<AllRequestsLoaded> {
   Widget build(BuildContext context) {
     posts = widget.posts;
     String uniqueKey = UniqueKey().toString();
-    return SafeArea(
-        child: Scaffold(
+    return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: Text(
@@ -395,7 +394,7 @@ class _AllRequestsLoadedState extends State<AllRequestsLoaded> {
                 ),
               ),
       ]),
-    ));
+    );
   }
 
   void _openListingStatusActionPopUp(ProductModel item) {
