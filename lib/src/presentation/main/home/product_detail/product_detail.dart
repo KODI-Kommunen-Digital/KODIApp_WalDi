@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -106,7 +108,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       if (!mounted) return;
       _showMessage(Translate.of(context).translate('cannot_make_action'));
       await Sentry.captureException(e, stackTrace: stackTrace);
-
     }
   }
 
@@ -846,9 +847,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
         modifiedDescription =
             modifiedDescription.replaceAllMapped(exp, (match) {
-              String href = match.group(1) ?? "";
-              return '<img src="$href">';
-            });
+          String href = match.group(1) ?? "";
+          return '<img src="$href">';
+        });
 
         description = HtmlWidget(
           modifiedDescription,
