@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages
+// ignore_for_file: depend_on_referenced_packages, use_build_context_synchronously
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
@@ -108,7 +108,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       if (!mounted) return;
       _showMessage(Translate.of(context).translate('cannot_make_action'));
       await Sentry.captureException(e, stackTrace: stackTrace);
-
     }
   }
 
@@ -822,7 +821,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
       if (product.description.isNotEmpty) {
         String modifiedDescription = product.description;
-        print(modifiedDescription);
         String color = (isDarkMode) ? 'white' : 'black';
         String hexColor = (isDarkMode) ? '#ffffff' : '#000000';
 
