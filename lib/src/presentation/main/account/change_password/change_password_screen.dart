@@ -8,7 +8,9 @@ import 'package:heidi/src/utils/translate.dart';
 import 'package:heidi/src/utils/validate.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
-  const ChangePasswordScreen({Key? key}) : super(key: key);
+  final String? link;
+
+  const ChangePasswordScreen({this.link, Key? key}) : super(key: key);
 
   @override
   State<ChangePasswordScreen> createState() => _ChangePasswordScreenState();
@@ -55,6 +57,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       final result = await AppBloc.changePasswordCubit.onChangePassword(
         _textPassController.text,
         _textNewPassController.text,
+        widget.link
       );
       if (!mounted) return;
       if (result) {

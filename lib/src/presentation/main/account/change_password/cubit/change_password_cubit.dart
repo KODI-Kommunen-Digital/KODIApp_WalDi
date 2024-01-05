@@ -6,8 +6,8 @@ class ChangePasswordCubit extends Cubit<ChangePasswordState> {
   ChangePasswordCubit() : super(const ChangePasswordState.loading());
 
   Future<bool> onChangePassword(
-      String currentPassword, String newPassword) async {
+      String currentPassword, String newPassword, String? link) async {
     return await UserRepository.changePassword(
-        currentPassword: currentPassword, password: newPassword);
+        currentPassword: currentPassword, password: newPassword, link: link);
   }
 }

@@ -449,5 +449,8 @@
   "active": "Active",
   "inactive": "Inactive",
   "under_review": "Under Review",  
-  "all_requests":"All Requests"
+  "all_requests":"All Requests",
+  "verify_email": "Verify Email",
+  "email_error_verified": "Your email could not be verified. Please try again later!",
+  "email_successfully_verified": "Your email was successfully verified, you will be redirected shortly!"
 }

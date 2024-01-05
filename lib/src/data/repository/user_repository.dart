@@ -34,7 +34,7 @@ class UserRepository {
         for (final cities in cityUsers) {
           cityIds.add(cities['cityId']);
         }
-          prefs.setKeyValue(Preferences.userId, userId);
+        prefs.setKeyValue(Preferences.userId, userId);
         prefs.setKeyValue(Preferences.token, response.data['accessToken']);
         prefs.setKeyValue(
             Preferences.refreshToken, response.data['refreshToken']);
@@ -46,7 +46,6 @@ class UserRepository {
     } catch (e, stackTrace) {
       logError('request Login Response Error', e);
       await Sentry.captureException(e, stackTrace: stackTrace);
-
     }
     return null;
   }
@@ -168,33 +167,47 @@ class UserRepository {
     final response = await Api.requestChangeProfile(params, userId);
     if (response.success) {
       FormData? pickedFile = prefs.getPickedFile();
-      if(pickedFile != null) {
+      if (pickedFile != null) {
         final responseImageUpload = await Api.requestUploadImage(pickedFile);
         if (responseImageUpload.success) {
           return true;
         } else {
           logError('Image Upload Error Response', response.message);
         }
-      }
-      else{
+      } else {
         return true;
       }
     }
     return false;
   }
 
-  static Future<bool> changePassword({
-    required String currentPassword,
-    required String password,
-  }) async {
-    final prefs = await Preferences.openBox();
-    final userId = prefs.getKeyValue(Preferences.userId, 0);
-    final Map<String, dynamic> params = {
-      "currentPassword": currentPassword,
-      "newPassword": password
+  static Future<bool> changePassword(
+      {required String currentPassword,
+      required String password,
+      required String? link}) async {
+    if (link == null) {
+      final prefs = await Preferences.openBox();
+      final userId = prefs.getKeyValue(Preferences.userId, 0);
+      final Map<String, dynamic> params = {
+        "currentPassword": currentPassword,
+        "newPassword": password
+      };
+      final response = await Api.requestChangeProfile(params, userId);
+      logError('Change Password Response', response.message);
+      if (response.success) {
+        return true;
+      }
+      return false;
+    }
+    Uri uri = Uri.parse(link);
+    Map<String, dynamic> params = {
+      "userId": uri.queryParameters["userId"],
+      "token": uri.queryParameters["token"],
+      "password": password
     };
-    final response = await Api.requestChangeProfile(params, userId);
+    final response = await Api.requestChangePassword(params);
     logError('Change Password Response', response.message);
+
     if (response.success) {
       return true;
     }

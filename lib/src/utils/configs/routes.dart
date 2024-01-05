@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_user.dart';
+import 'package:heidi/src/main_screen.dart';
 import 'package:heidi/src/presentation/main/account/change_password/change_password_screen.dart';
 import 'package:heidi/src/presentation/main/account/contact_us/contact_us_screen.dart';
 import 'package:heidi/src/presentation/main/account/contact_us/contact_us_success/contact_us_success.dart';
@@ -30,6 +31,7 @@ import 'package:heidi/src/presentation/main/login/signup/signup.dart';
 import 'package:heidi/src/presentation/main/account/profile_settings/profile_settings_screen.dart';
 import 'package:heidi/src/presentation/main/account/faq/cubit/faq_cubit.dart';
 import 'package:heidi/src/presentation/main/account/faq/faq_screen.dart';
+import 'package:heidi/src/presentation/main/login/verify_email/verify_email_screen.dart';
 
 class RouteArguments<T> {
   final T? item;
@@ -90,9 +92,16 @@ class Routes {
   static const String allRequests = "/allRequests";
   static const String dashboard = "/dashboard";
   static const String myListings = "/myListings";
+  static const String verifyEmail = "/verifyEmail";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
+      case home:
+        return MaterialPageRoute(builder: (context) {
+          return const MainScreen(
+            loadLink: false,
+          );
+        });
       case listProduct:
         final Map<String, dynamic> arguments =
             settings.arguments as Map<String, dynamic>;
@@ -114,6 +123,15 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) {
             return MitredenWebview(link: settings.arguments as String);
+          },
+        );
+
+      case verifyEmail:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+            settings.arguments as Map<String, dynamic>;
+            return VerifyEmailScreen(link: arguments["link"]);
           },
         );
 
@@ -225,6 +243,13 @@ class Routes {
       case changePassword:
         return MaterialPageRoute(
           builder: (context) {
+            if (settings.arguments != null) {
+              final Map<String, dynamic> arguments =
+              settings.arguments as Map<String, dynamic>;
+              return ChangePasswordScreen(
+                link: arguments["link"],
+              );
+            }
             return const ChangePasswordScreen();
           },
         );

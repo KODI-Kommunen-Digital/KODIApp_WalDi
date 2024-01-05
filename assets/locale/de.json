@@ -449,5 +449,8 @@
   "requests": "Anfragen", "active": "Aktiv",  
   "inactive": "Inaktiv",
   "under_review": "In Prüfung",  
-  "all_requests":"Alle Anfragen"
+  "all_requests":"Alle Anfragen",
+  "verify_email": "Bestätige Email",
+  "email_error_verified": "Ihre Email konnte nicht bestätigt werden. Versuchen Sie es später erneut!",
+  "email_successfully_verified": "Ihre Email wurde erfolgreich bestätigt, Sie werden in Kürze weitergeleitet!"
 }

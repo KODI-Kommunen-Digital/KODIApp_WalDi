@@ -13,6 +13,7 @@ class Api {
   static const String user = "/users/";
   static const String register = "/users/register";
   static const String forgotPassword = "/users/forgotPassword";
+  static const String verifyEmail = "/users/VerifyEmail";
   static const String changePassword = "/users/resetPassword";
   static const String categories = "/categories";
   static const String categoriesCount = "/categories/listingsCount";
@@ -62,6 +63,16 @@ class Api {
       loading: true,
     );
     result['message'] = result['status'] ?? result['msg'];
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> requestVerifyEmail(params) async {
+    Map<String, dynamic> result = await httpManager.post(
+      url: verifyEmail,
+      data: params,
+      loading: true,
+    );
+    result["message"] = result["status"] ?? result["msg"];
     return ResultApiModel.fromJson(result);
   }
 

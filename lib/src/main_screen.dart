@@ -1,3 +1,4 @@
+import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
@@ -10,24 +11,73 @@ import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({Key? key}) : super(key: key);
+  final bool loadLink;
+
+  const MainScreen({this.loadLink = true, Key? key}) : super(key: key);
 
   @override
   State<MainScreen> createState() => _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> {
+  final appLinks = AppLinks();
+  bool loadLink = true;
+  String link = "";
   String _selectedPage = Routes.home;
   late bool login;
 
   @override
   void initState() {
+    if (!widget.loadLink) loadLink = false;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    return (loadLink)
+        ? FutureBuilder(
+            future: appLinks.getInitialAppLinkString(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                return mainScreen(snapshot);
+              } else {
+                return Container();
+              }
+            })
+        : StreamBuilder(
+            stream: appLinks.allStringLinkStream,
+            builder: (context, snapshot) {
+              return mainScreen(snapshot);
+            });
+  }
+
+  Widget mainScreen(AsyncSnapshot<String?> snapshot) {
     const submitPosition = FloatingActionButtonLocation.centerDocked;
+    loadLink = false;
+    if (snapshot.data != null) {
+      if ((snapshot.data!.contains("https://www.waldi.app/VerifyEmail?") ||
+              snapshot.data!.contains("https://waldi.app/VerifyEmail?")) &&
+          snapshot.data! != link) {
+        link = snapshot.data!;
+        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+          Navigator.pushNamed(context, Routes.verifyEmail,
+              arguments: {"link": snapshot.data!});
+        });
+        //return VerifyEmail page
+      } else if ((snapshot.data!
+                  .contains("https://www.waldi.app/PasswordForgot?") ||
+              snapshot.data!.contains("https://waldi.app/PasswordForgot?")) &&
+          snapshot.data! != link) {
+        link = snapshot.data!;
+        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+          Navigator.pushNamed(context, Routes.changePassword,
+              arguments: {'link': snapshot.data!});
+        });
+        //return ChangePasswordScreen(
+        //  link: snapshot.data!,
+        //);
+      }
+    }
     return Scaffold(
       body: BlocListener<AuthenticationCubit, AuthenticationState>(
         listener: (context, authentication) async {
