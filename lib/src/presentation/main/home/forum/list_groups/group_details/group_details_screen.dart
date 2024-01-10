@@ -104,7 +104,9 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                     context,
                     Routes.imageZoom,
                     arguments:
-                        "${Application.picturesURL}${widget.groupModel.image}",
+                    (widget.groupModel.image != null)
+                        ? "${Application.picturesURL}${widget.groupModel.image}?cacheKey=$uniqueKey"
+                        : "${Application.picturesURL}admin/DefaultForum.jpeg?cacheKey=$uniqueKey",
                   );
                 },
                 child: Image.network(
