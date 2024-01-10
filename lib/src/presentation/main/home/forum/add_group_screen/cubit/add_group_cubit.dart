@@ -3,6 +3,7 @@ import 'package:heidi/src/data/repository/forum_repository.dart';
 import 'package:heidi/src/presentation/main/home/forum/add_group_screen/cubit/add_group_state.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class AddGroupCubit extends Cubit<AddGroupState> {
   final ForumRepository _repo;
@@ -27,8 +28,10 @@ class AddGroupCubit extends Cubit<AddGroupState> {
         logError('Save Forum Response Failed', response.message);
         return false;
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
       logError('Save Forum Error', e);
+      await Sentry.captureException(e, stackTrace: stackTrace);
+
       return false;
     }
   }
@@ -58,8 +61,10 @@ class AddGroupCubit extends Cubit<AddGroupState> {
         logError('Edit Forum Response Failed', response.message);
         return false;
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
       logError('Edit Forum Error', e);
+      await Sentry.captureException(e, stackTrace: stackTrace);
+
       return false;
     }
   }
@@ -87,8 +92,10 @@ class AddGroupCubit extends Cubit<AddGroupState> {
       if (loadForumCitiesResponse.success) {
         return loadForumCitiesResponse.data;
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
       logError('load cities error', e.toString());
+      await Sentry.captureException(e, stackTrace: stackTrace);
+
     }
     return null;
   }

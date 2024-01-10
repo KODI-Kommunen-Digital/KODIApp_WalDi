@@ -23,6 +23,7 @@ import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:upgrader/upgrader.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import 'cubit/home_cubit.dart';
@@ -61,7 +62,6 @@ class _HomeScreenState extends State<HomeScreen> {
     checkSavedCity = true;
     AppBloc.homeCubit.onLoad(false);
     connectivityInternet();
-    scrollUp();
     checkUserExist();
     getIgnoreAppVersion();
   }
@@ -104,11 +104,13 @@ class _HomeScreenState extends State<HomeScreen> {
             isLoading = false;
           });
         }).catchError(
-          (error) {
+          (error, stackTrace) async {
             setState(() {
               isLoading = false;
             });
             logError('Error loading new listings: $error');
+            await Sentry.captureException(error, stackTrace: stackTrace);
+
           },
         );
       }
