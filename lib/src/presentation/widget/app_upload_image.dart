@@ -128,7 +128,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
             ),
           ),
           Visibility(
-            visible: _file != null,
+            visible: _file != null && !_file!.path.contains('pdf'),
             child: Positioned(
               top: -10,
               right: -10,
@@ -142,10 +142,11 @@ class _AppUploadImageState extends State<AppUploadImage> {
                   setState(() {
                     image = null;
                     if (selectedAssets.length > 1) {
-                      images.remove(images[0]);
-                      context.read<AddListingCubit>().removeAssets(0);
+                      images.removeAt(0);
+                      context.read<AddListingCubit>().removeAssetsByIndex(0);
                     }
                     _file = null;
+                    _file ??= File(images[0].path);
                   });
                 },
               ),
@@ -542,7 +543,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
       });
       if (!mounted) return;
       resultList = await MultipleImagesPicker.pickImages(
-        maxImages: 300,
+        maxImages: 8,
         selectedAssets: selectedAssets,
       );
       if (resultList.isNotEmpty) {
@@ -550,8 +551,12 @@ class _AppUploadImageState extends State<AppUploadImage> {
         context.read<AddListingCubit>().clearAssets();
         images.clear();
         context.read<AddListingCubit>().saveAssets(resultList);
+        setState(() {
+          selectedAssets = context.read<AddListingCubit>().getSelectedAssets();
+        });
+        List<Asset> resultListCopy = List.from(resultList);
 
-        for (Asset asset in resultList) {
+        for (Asset asset in resultListCopy) {
           final ByteData byteData = await asset.getByteData();
           final List<int> imageData = byteData.buffer.asUint8List();
           final tempDir = await getTemporaryDirectory();
@@ -560,23 +565,60 @@ class _AppUploadImageState extends State<AppUploadImage> {
           final imageFile = File(filePath);
           await imageFile.writeAsBytes(imageData);
 
-          setState(() {
-            _file = null;
-            images.add(imageFile);
-            if (image == null) {
-              _file ??= File(images[0].path);
-            } else {
-              if (!image!.contains('Defaultimage') && !image!.contains('pdf')) {
-                _file = File(image!);
-              } else {
+          int imageSizeInBytes = imageData.length;
+          double imageSizeInMB = imageSizeInBytes / (1024 * 1024);
+          logError('ImageSize', imageSizeInMB);
+
+          if (imageSizeInMB > 10) {
+            setState(() {
+              images.remove(imageFile);
+              resultList.remove(asset);
+            });
+            if (!mounted) return;
+            context.read<AddListingCubit>().removeAssets(asset);
+
+            if (!mounted) return;
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: Text(
+                  Translate.of(context).translate(
+                    'image_size_exceed',
+                  ),
+                ),
+                content: Text(
+                  Translate.of(context).translate(
+                    'select_small_images',
+                  ),
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text('OK'),
+                  ),
+                ],
+              ),
+            );
+          } else {
+            setState(() {
+              _file = null;
+              images.add(imageFile);
+              if (image == null) {
                 _file ??= File(images[0].path);
+              } else {
+                if (!image!.contains('Defaultimage') &&
+                    !image!.contains('pdf')) {
+                  _file = File(image!);
+                } else {
+                  _file ??= File(images[0].path);
+                }
               }
-            }
-            widget.onChange(images);
-            context.read<AddListingCubit>().saveAssets(resultList);
-            selectedAssets =
-                context.read<AddListingCubit>().getSelectedAssets();
-          });
+              widget.onChange(images);
+              context.read<AddListingCubit>().saveAssets(resultList);
+              selectedAssets =
+                  context.read<AddListingCubit>().getSelectedAssets();
+            });
+          }
         }
       }
     } on Exception catch (e) {

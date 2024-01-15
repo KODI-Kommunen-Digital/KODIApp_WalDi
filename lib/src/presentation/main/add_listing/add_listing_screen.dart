@@ -1337,7 +1337,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
                             // if (selectedImages?[index + 1] is Asset) {
                             //
                             // }
-                            context.read<AddListingCubit>().removeAssets(index);
+                            context.read<AddListingCubit>().removeAssetsByIndex(index);
                           }
                           if (downloadedImages.isNotEmpty) {
                             if (downloadedImages.length > index + 1) {
