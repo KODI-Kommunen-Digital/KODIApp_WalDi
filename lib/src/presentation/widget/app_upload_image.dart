@@ -49,7 +49,6 @@ class AppUploadImage extends StatefulWidget {
 class _AppUploadImageState extends State<AppUploadImage> {
   final _picker = ImagePicker();
   File? _file;
-  double? _percent;
   bool isImageUploaded = false;
   bool showAction = false;
   String title = '';
@@ -517,17 +516,24 @@ class _AppUploadImageState extends State<AppUploadImage> {
                 ),
               );
             } else {
-              if (_percent != null && _percent! < 100) {
-                return Container(
-                  alignment: Alignment.bottomLeft,
-                  child: Container(
-                    clipBehavior: Clip.antiAlias,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(2),
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 24,
+                      height: 24,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      child: const Icon(
+                        Icons.add,
+                        size: 18,
+                        color: Colors.white,
+                      ),
                     ),
-                  ),
+                  ],
                 );
-              }
             }
           }
         }
