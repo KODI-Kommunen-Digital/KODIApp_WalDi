@@ -289,7 +289,13 @@ class HTTPManager {
         break;
 
       default:
-        message = "Please make sure you are connected to the Internet";
+        if (error.response?.data['message'] ==
+            'Unauthorized! Refresh Token was expired!') {
+          AppBloc.loginCubit.onLogout();
+          message = "Your session has expired. Please log in again.";
+        } else {
+          message = "Please make sure you are connected to the Internet";
+        }
         break;
     }
 

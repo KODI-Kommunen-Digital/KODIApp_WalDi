@@ -88,7 +88,8 @@ class UserRepository {
   static Future<UserModel?> getUserDetails(userId, cityId) async {
     final prefs = await Preferences.openBox();
     final cityIdPref = prefs.getKeyValue(Preferences.cityId, 0);
-    final response = await Api.getUserDetails(userId, cityId == 0 ? cityIdPref : cityId);
+    final response =
+        await Api.getUserDetails(userId, cityId == 0 ? cityIdPref : cityId);
     if (response.success) {
       return UserModel.fromJson(response.data);
     }
@@ -134,7 +135,8 @@ class UserRepository {
     return response;
   }
 
-  static Future<ResultApiModel> forgotPassword({required String username}) async {
+  static Future<ResultApiModel> forgotPassword(
+      {required String username}) async {
     final Map<String, dynamic> params = {"username": username};
     final response = await Api.requestForgotPassword(params);
     if (response.success) {
@@ -170,16 +172,14 @@ class UserRepository {
     final response = await Api.requestChangeProfile(params, userId);
     if (response.success) {
       FormData? pickedFile = prefs.getPickedFile();
-      if(pickedFile != null) {
+      if (pickedFile != null) {
         final responseImageUpload = await Api.requestUploadImage(pickedFile);
         if (responseImageUpload.success) {
           return true;
-        }
-        else {
+        } else {
           logError('Image Upload Error Response', response.message);
         }
-      }
-      else{
+      } else {
         return true;
       }
     }
@@ -206,16 +206,21 @@ class UserRepository {
 
   static Future<List<FavoriteModel>> loadFavorites(userId) async {
     final favoriteList = <FavoriteModel>[];
-    final response = await Api.requestFavorites(userId);
-    if (response.success) {
-      final responseData = response.data;
-      for (final data in responseData) {
-        favoriteList.add(FavoriteModel(
-            data['id'], data['userId'], data['cityId'], data['listingId']));
-      }
+    try {
+      final response = await Api.requestFavorites(userId);
+      if (response.success) {
+        final responseData = response.data;
+        for (final data in responseData) {
+          favoriteList.add(FavoriteModel(
+              data['id'], data['userId'], data['cityId'], data['listingId']));
+        }
+        return favoriteList;
+      } else {}
       return favoriteList;
-    } else {}
-    return favoriteList;
+    } catch (e) {
+      logError('Load Favorite Error', e);
+      return [];
+    }
   }
 
   static Future<List<FavoriteDetailsModel>> loadFavoritesListDetail(
