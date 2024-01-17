@@ -497,7 +497,7 @@ class ListRepository {
     if (response.success) {
       final prefs = await Preferences.openBox();
       FormData? pickedFile = prefs.getPickedFile();
-      if (pickedFile != null) {
+      if (pickedFile!.files.isNotEmpty) {
         if (pickedFile.files[0].key == 'pdf') {
           await Api.requestListingUploadMedia(listingId, cityId, pickedFile);
         } else {
