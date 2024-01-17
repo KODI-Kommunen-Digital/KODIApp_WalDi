@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
+import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/logger.dart';
@@ -81,8 +82,13 @@ class HTTPManager {
               logError('Refresh Token Response Failed', e);
               handler.reject(error);
             }
-          } else {
+          } else if (response.message ==
+              'Unauthorized! Refresh Token was expired!') {
             logError('Refresh Token Error', response.message);
+            AppBloc.loginCubit.onLogout();
+            final prefs = await Preferences.openBox();
+            prefs.deleteKey(Preferences.userId);
+            handler.next(error);
           }
         } else {
           final response = Response(
