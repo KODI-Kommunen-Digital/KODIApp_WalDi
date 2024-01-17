@@ -4,6 +4,7 @@ import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 import 'cubit.dart';
 
@@ -129,8 +130,10 @@ class ListCubit extends Cubit<ListState> {
     ResultApiModel? loadCitiesResponse;
     try {
       loadCitiesResponse = await repo.loadCities();
-    } catch (e) {
+    } catch (e, stackTrace) {
       logError('load cities error', e.toString());
+      await Sentry.captureException(e, stackTrace: stackTrace);
+
       return null;
     }
 
@@ -177,7 +180,10 @@ class ListCubit extends Cubit<ListState> {
       10: "category_companies",
       11: "category_public_transport",
       12: "category_offers",
-      13: "category_food"
+      13: "category_food",
+      14: "category_rathaus",
+      15: "category_newsletter",
+      16: "category_official_notification"
     };
     return categories[categoryId];
   }

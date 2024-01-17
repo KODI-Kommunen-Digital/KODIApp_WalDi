@@ -30,42 +30,39 @@ class _MyGroupsScreenState extends State<MyGroupsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text(
-            Translate.of(context).translate('my_groups'),
-          ),
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          Translate.of(context).translate('my_groups'),
         ),
-        body: BlocConsumer<MyGroupsCubit, MyGroupsState>(
+      ),
+      body: SafeArea(
+        child: BlocConsumer<MyGroupsCubit, MyGroupsState>(
           listener: (context, state) {
             state.maybeWhen(
-              error: (msg) =>
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(SnackBar(content: Text(msg))),
+              error: (msg) => ScaffoldMessenger.of(context)
+                  .showSnackBar(SnackBar(content: Text(msg))),
               orElse: () {},
             );
           },
-          builder: (context, state) =>
-              state.when(
-                loading: () => const ListLoading(),
-                loaded: (list, userId) =>
-                    ListLoaded(
-                      list: list,
-                      userId: userId,
-                    ),
-                updated: (list, userId) {
-                  return ListLoaded(
-                    list: list,
-                    userId: userId,
-                  );
-                },
-                error: (e) => ErrorWidget('Failed to load listings.'),
-                initial: () {
-                  return Container();
-                },
-              ),
+          builder: (context, state) => state.when(
+            loading: () => const ListLoading(),
+            loaded: (list, userId) => ListLoaded(
+              list: list,
+              userId: userId,
+            ),
+            updated: (list, userId) {
+              return ListLoaded(
+                list: list,
+                userId: userId,
+              );
+            },
+            error: (e) => ErrorWidget('Failed to load listings.'),
+            initial: () {
+              return Container();
+            },
+          ),
         ),
       ),
     );
@@ -121,54 +118,52 @@ class _ListLoadedState extends State<ListLoaded> {
         Expanded(
           child: widget.list.isNotEmpty
               ? SafeArea(
-            child: Stack(
-              children: [
-                CustomScrollView(
-                  slivers: <Widget>[
-                    SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                            (BuildContext context, int index) {
-                          final item = widget.list[index];
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 16),
-                            child: _buildItem(item: item, type: _listMode),
-                          );
-                        },
-                        childCount: widget.list.length,
+                  child: Stack(
+                    children: [
+                      CustomScrollView(
+                        slivers: <Widget>[
+                          SliverList(
+                            delegate: SliverChildBuilderDelegate(
+                              (BuildContext context, int index) {
+                                final item = widget.list[index];
+                                return Padding(
+                                  padding: const EdgeInsets.only(bottom: 16),
+                                  child:
+                                      _buildItem(item: item, type: _listMode),
+                                );
+                              },
+                              childCount: widget.list.length,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
-                if (isLoadingMore)
-                  const Positioned(
-                    bottom: 50,
-                    left: 0,
-                    right: 0,
-                    child: Center(
-                      child: CircularProgressIndicator.adaptive(),
-                    ),
+                      if (isLoadingMore)
+                        const Positioned(
+                          bottom: 50,
+                          left: 0,
+                          right: 0,
+                          child: Center(
+                            child: CircularProgressIndicator.adaptive(),
+                          ),
+                        ),
+                    ],
                   ),
-              ],
-            ),
-          )
+                )
               : Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                const Icon(Icons.sentiment_satisfied),
-                Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Text(
-                    Translate.of(context).translate('list_is_empty'),
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .bodyLarge,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      const Icon(Icons.sentiment_satisfied),
+                      Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Text(
+                          Translate.of(context).translate('list_is_empty'),
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-          ),
         )
       ],
     );

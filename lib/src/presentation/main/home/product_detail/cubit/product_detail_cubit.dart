@@ -7,6 +7,7 @@ import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/cubit/cubit.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class ProductDetailCubit extends Cubit<ProductDetailState> {
   ProductDetailCubit() : super(const ProductDetailLoading());
@@ -23,6 +24,8 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
     } else {
       isLoggedIn = true;
     }
+
+    bool darkModeEnabled = await isDarkMode();
 
     if (item.cityId != null) {
       final result = await ListRepository.loadProduct(item.cityId, item.id);
@@ -41,11 +44,10 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
                 }
               }
             }
-            if(favoritesList.isNotEmpty){
-              emit(ProductDetailLoaded(
-                  product!, favoritesList, userDetail, isLoggedIn));
-            }
-            else{
+            if (favoritesList.isNotEmpty) {
+              emit(ProductDetailLoaded(product!, favoritesList, userDetail,
+                  isLoggedIn, darkModeEnabled));
+            } else {
               final int userId = await UserRepository.getLoggedUserId();
               if (userId == 0) {
                 isLoggedIn = false;
@@ -53,23 +55,34 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
                 isLoggedIn = true;
               }
               emit(ProductDetailLoaded(
-                  product!, null, userDetail, isLoggedIn));
+                  product!, null, userDetail, isLoggedIn, darkModeEnabled));
             }
+
           }
-          catch (e){
-            emit(ProductDetailLoaded(
-                product!, null, userDetail, isLoggedIn));
+          catch (e, stackTrace){
+            emit(ProductDetailLoaded(product!, null, userDetail, isLoggedIn,darkModeEnabled));
+            await Sentry.captureException(e, stackTrace: stackTrace);
+
+
           }
-          emit(ProductDetailLoaded(
-              product!, favoritesList, userDetail, isLoggedIn));
+          emit(ProductDetailLoaded(product!, favoritesList, userDetail,
+              isLoggedIn, darkModeEnabled));
         } else {
-          emit(ProductDetailLoaded(product!, null, userDetail, isLoggedIn));
+          emit(ProductDetailLoaded(
+              product!, null, userDetail, isLoggedIn, darkModeEnabled));
         }
       }
     } else {
       isFavorite = true;
-      emit(ProductDetailLoaded(item, null, userDetail, isLoggedIn));
+      emit(ProductDetailLoaded(
+          item, null, userDetail, isLoggedIn, darkModeEnabled));
     }
+  }
+
+  Future<bool> isDarkMode() async {
+    final prefBox = await Preferences.openBox();
+    String darkMode = await prefBox.getKeyValue(Preferences.darkOption, 'on');
+    return (darkMode == 'on');
   }
 
   bool getFavoriteIconValue() => isFavorite;

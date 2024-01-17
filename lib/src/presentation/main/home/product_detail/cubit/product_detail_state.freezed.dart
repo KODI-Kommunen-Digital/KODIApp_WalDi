@@ -24,7 +24,8 @@ mixin _$ProductDetailState {
             ProductModel product,
             List<FavoriteModel>? favoritesList,
             UserModel? userDetail,
-            bool isLoggedIn)
+            bool isLoggedIn,
+            bool isDarkMode)
         loaded,
     required TResult Function(String error) error,
   }) =>
@@ -34,7 +35,7 @@ mixin _$ProductDetailState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(ProductModel product, List<FavoriteModel>? favoritesList,
-            UserModel? userDetail, bool isLoggedIn)?
+            UserModel? userDetail, bool isLoggedIn, bool isDarkMode)?
         loaded,
     TResult? Function(String error)? error,
   }) =>
@@ -44,7 +45,7 @@ mixin _$ProductDetailState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(ProductModel product, List<FavoriteModel>? favoritesList,
-            UserModel? userDetail, bool isLoggedIn)?
+            UserModel? userDetail, bool isLoggedIn, bool isDarkMode)?
         loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
@@ -139,7 +140,8 @@ class _$ProductDetailInitial implements ProductDetailInitial {
             ProductModel product,
             List<FavoriteModel>? favoritesList,
             UserModel? userDetail,
-            bool isLoggedIn)
+            bool isLoggedIn,
+            bool isDarkMode)
         loaded,
     required TResult Function(String error) error,
   }) {
@@ -152,7 +154,7 @@ class _$ProductDetailInitial implements ProductDetailInitial {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(ProductModel product, List<FavoriteModel>? favoritesList,
-            UserModel? userDetail, bool isLoggedIn)?
+            UserModel? userDetail, bool isLoggedIn, bool isDarkMode)?
         loaded,
     TResult? Function(String error)? error,
   }) {
@@ -165,7 +167,7 @@ class _$ProductDetailInitial implements ProductDetailInitial {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(ProductModel product, List<FavoriteModel>? favoritesList,
-            UserModel? userDetail, bool isLoggedIn)?
+            UserModel? userDetail, bool isLoggedIn, bool isDarkMode)?
         loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
@@ -262,7 +264,8 @@ class _$ProductDetailLoading implements ProductDetailLoading {
             ProductModel product,
             List<FavoriteModel>? favoritesList,
             UserModel? userDetail,
-            bool isLoggedIn)
+            bool isLoggedIn,
+            bool isDarkMode)
         loaded,
     required TResult Function(String error) error,
   }) {
@@ -275,7 +278,7 @@ class _$ProductDetailLoading implements ProductDetailLoading {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(ProductModel product, List<FavoriteModel>? favoritesList,
-            UserModel? userDetail, bool isLoggedIn)?
+            UserModel? userDetail, bool isLoggedIn, bool isDarkMode)?
         loaded,
     TResult? Function(String error)? error,
   }) {
@@ -288,7 +291,7 @@ class _$ProductDetailLoading implements ProductDetailLoading {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(ProductModel product, List<FavoriteModel>? favoritesList,
-            UserModel? userDetail, bool isLoggedIn)?
+            UserModel? userDetail, bool isLoggedIn, bool isDarkMode)?
         loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
@@ -351,7 +354,8 @@ abstract class _$$ProductDetailLoadedCopyWith<$Res> {
       {ProductModel product,
       List<FavoriteModel>? favoritesList,
       UserModel? userDetail,
-      bool isLoggedIn});
+      bool isLoggedIn,
+      bool isDarkMode});
 }
 
 /// @nodoc
@@ -369,6 +373,7 @@ class __$$ProductDetailLoadedCopyWithImpl<$Res>
     Object? favoritesList = freezed,
     Object? userDetail = freezed,
     Object? isLoggedIn = null,
+    Object? isDarkMode = null,
   }) {
     return _then(_$ProductDetailLoaded(
       null == product
@@ -387,6 +392,10 @@ class __$$ProductDetailLoadedCopyWithImpl<$Res>
           ? _value.isLoggedIn
           : isLoggedIn // ignore: cast_nullable_to_non_nullable
               as bool,
+      null == isDarkMode
+          ? _value.isDarkMode
+          : isDarkMode // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -398,7 +407,8 @@ class _$ProductDetailLoaded implements ProductDetailLoaded {
       this.product,
       final List<FavoriteModel>? favoritesList,
       this.userDetail,
-      this.isLoggedIn)
+      this.isLoggedIn,
+      this.isDarkMode)
       : _favoritesList = favoritesList;
 
   @override
@@ -417,10 +427,12 @@ class _$ProductDetailLoaded implements ProductDetailLoaded {
   final UserModel? userDetail;
   @override
   final bool isLoggedIn;
+  @override
+  final bool isDarkMode;
 
   @override
   String toString() {
-    return 'ProductDetailState.loaded(product: $product, favoritesList: $favoritesList, userDetail: $userDetail, isLoggedIn: $isLoggedIn)';
+    return 'ProductDetailState.loaded(product: $product, favoritesList: $favoritesList, userDetail: $userDetail, isLoggedIn: $isLoggedIn, isDarkMode: $isDarkMode)';
   }
 
   @override
@@ -434,7 +446,9 @@ class _$ProductDetailLoaded implements ProductDetailLoaded {
             (identical(other.userDetail, userDetail) ||
                 other.userDetail == userDetail) &&
             (identical(other.isLoggedIn, isLoggedIn) ||
-                other.isLoggedIn == isLoggedIn));
+                other.isLoggedIn == isLoggedIn) &&
+            (identical(other.isDarkMode, isDarkMode) ||
+                other.isDarkMode == isDarkMode));
   }
 
   @override
@@ -443,7 +457,8 @@ class _$ProductDetailLoaded implements ProductDetailLoaded {
       product,
       const DeepCollectionEquality().hash(_favoritesList),
       userDetail,
-      isLoggedIn);
+      isLoggedIn,
+      isDarkMode);
 
   @JsonKey(ignore: true)
   @override
@@ -461,11 +476,12 @@ class _$ProductDetailLoaded implements ProductDetailLoaded {
             ProductModel product,
             List<FavoriteModel>? favoritesList,
             UserModel? userDetail,
-            bool isLoggedIn)
+            bool isLoggedIn,
+            bool isDarkMode)
         loaded,
     required TResult Function(String error) error,
   }) {
-    return loaded(product, favoritesList, userDetail, isLoggedIn);
+    return loaded(product, favoritesList, userDetail, isLoggedIn, isDarkMode);
   }
 
   @override
@@ -474,11 +490,12 @@ class _$ProductDetailLoaded implements ProductDetailLoaded {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(ProductModel product, List<FavoriteModel>? favoritesList,
-            UserModel? userDetail, bool isLoggedIn)?
+            UserModel? userDetail, bool isLoggedIn, bool isDarkMode)?
         loaded,
     TResult? Function(String error)? error,
   }) {
-    return loaded?.call(product, favoritesList, userDetail, isLoggedIn);
+    return loaded?.call(
+        product, favoritesList, userDetail, isLoggedIn, isDarkMode);
   }
 
   @override
@@ -487,13 +504,13 @@ class _$ProductDetailLoaded implements ProductDetailLoaded {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(ProductModel product, List<FavoriteModel>? favoritesList,
-            UserModel? userDetail, bool isLoggedIn)?
+            UserModel? userDetail, bool isLoggedIn, bool isDarkMode)?
         loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(product, favoritesList, userDetail, isLoggedIn);
+      return loaded(product, favoritesList, userDetail, isLoggedIn, isDarkMode);
     }
     return orElse();
   }
@@ -541,12 +558,14 @@ abstract class ProductDetailLoaded implements ProductDetailState {
       final ProductModel product,
       final List<FavoriteModel>? favoritesList,
       final UserModel? userDetail,
-      final bool isLoggedIn) = _$ProductDetailLoaded;
+      final bool isLoggedIn,
+      final bool isDarkMode) = _$ProductDetailLoaded;
 
   ProductModel get product;
   List<FavoriteModel>? get favoritesList;
   UserModel? get userDetail;
   bool get isLoggedIn;
+  bool get isDarkMode;
   @JsonKey(ignore: true)
   _$$ProductDetailLoadedCopyWith<_$ProductDetailLoaded> get copyWith =>
       throw _privateConstructorUsedError;
@@ -623,7 +642,8 @@ class _$ProductDetailError implements ProductDetailError {
             ProductModel product,
             List<FavoriteModel>? favoritesList,
             UserModel? userDetail,
-            bool isLoggedIn)
+            bool isLoggedIn,
+            bool isDarkMode)
         loaded,
     required TResult Function(String error) error,
   }) {
@@ -636,7 +656,7 @@ class _$ProductDetailError implements ProductDetailError {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(ProductModel product, List<FavoriteModel>? favoritesList,
-            UserModel? userDetail, bool isLoggedIn)?
+            UserModel? userDetail, bool isLoggedIn, bool isDarkMode)?
         loaded,
     TResult? Function(String error)? error,
   }) {
@@ -649,7 +669,7 @@ class _$ProductDetailError implements ProductDetailError {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(ProductModel product, List<FavoriteModel>? favoritesList,
-            UserModel? userDetail, bool isLoggedIn)?
+            UserModel? userDetail, bool isLoggedIn, bool isDarkMode)?
         loaded,
     TResult Function(String error)? error,
     required TResult orElse(),

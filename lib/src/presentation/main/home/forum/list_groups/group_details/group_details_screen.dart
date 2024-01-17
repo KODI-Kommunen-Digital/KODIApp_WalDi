@@ -103,8 +103,9 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                   Navigator.pushNamed(
                     context,
                     Routes.imageZoom,
-                    arguments:
-                        "${Application.picturesURL}${widget.groupModel.image}",
+                    arguments: (widget.groupModel.image != null)
+                        ? "${Application.picturesURL}${widget.groupModel.image}?cacheKey=$uniqueKey"
+                        : "${Application.picturesURL}admin/DefaultForum.jpeg?cacheKey=$uniqueKey",
                   );
                 },
                 child: Image.network(
@@ -357,7 +358,8 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                 await buildContext
                     .read<GroupDetailsCubit>()
                     .removeGroupMember(
-                        widget.groupModel.id, widget.groupModel.cityId).then((isRemoved) {
+                        widget.groupModel.id, widget.groupModel.cityId)
+                    .then((isRemoved) {
                   if (isRemoved == RemoveUser.removed) {
                     if (!mounted) return;
                     Navigator.of(context).pop(true);
@@ -365,21 +367,20 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                     if (!mounted) return;
                     Navigator.of(context).pop(false);
                     final popUpTitle =
-                    Translate.of(context).translate('only_user');
+                        Translate.of(context).translate('only_user');
                     final content =
-                    Translate.of(context).translate('only_user_in_group');
+                        Translate.of(context).translate('only_user_in_group');
                     showAdminPopup(context, popUpTitle, content);
                   } else if (isRemoved == RemoveUser.onlyAdmin) {
                     if (!mounted) return;
                     final popUpTitle =
-                    Translate.of(context).translate('only_admin');
+                        Translate.of(context).translate('only_admin');
                     final content =
-                    Translate.of(context).translate('add_another_admin');
+                        Translate.of(context).translate('add_another_admin');
                     Navigator.of(context).pop(false);
                     showAdminPopup(context, popUpTitle, content);
                   }
                 });
-
               },
               child: Text(Translate.of(context).translate('yes')),
             ),

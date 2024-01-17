@@ -153,6 +153,14 @@ class HomeCubit extends Cubit<HomeState> {
       return (idToCountMap[b.id] ?? 0).compareTo(idToCountMap[a.id] ?? 0);
     });
 
+    //Forum always at index 6, before the more button
+    int forumIndex = categories.indexWhere((element) => element.id == 14);
+
+    if (forumIndex != -1) {
+      var forum = categories.removeAt(forumIndex);
+      categories.insert(6, forum);
+    }
+
     // Hide tag on empty categories
     for (var element in categories) {
       bool hasContent = await categoryHasContent(element.id, cityId);
@@ -204,6 +212,17 @@ class HomeCubit extends Cubit<HomeState> {
       return CategoryModel(id: cityId, title: cityName, image: "");
     }
     return null;
+  }
+
+  Future<void> saveIgnoreAppVersion(String version) async {
+    final prefs = await Preferences.openBox();
+    await prefs.setKeyValue(Preferences.ignoredAppVersion, version);
+  }
+
+  Future<String> getIgnoreAppVersion() async {
+    final prefs = await Preferences.openBox();
+    String ignoreVersion = await prefs.getKeyValue(Preferences.ignoredAppVersion, '');
+    return ignoreVersion;
   }
 
   Future<dynamic> newListings(int pageNo) async {
