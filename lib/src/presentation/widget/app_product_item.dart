@@ -61,42 +61,47 @@ class AppProductItem extends StatelessWidget {
                     )
                   : ClipRRect(
                       borderRadius: BorderRadius.circular(12),
-                      child: Image.network(
-                        item?.sourceId == 2
+                      child: CachedNetworkImage(
+                        imageUrl: item?.sourceId == 2
                             ? item!.image
-                            : item!.image == 'admin/News.jpeg'
-                                ? "${Application.picturesURL}${item!.image}"
-                                : isRefreshLoader
-                                    ? "${Application.picturesURL}${item!.image}"
-                                    : "${Application.picturesURL}${item!.image}?cache=$uniqueKey",
-                        width: 84,
-                        height: 84,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
+                            : "${Application.picturesURL}${item!.image}",
+                        cacheManager: memoryCacheManager,
+                        placeholder: (context, url) {
                           return AppPlaceholder(
                             child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
+                              height: 84,
+                              width: 84,
+                              decoration: const BoxDecoration(
                                 color: Colors.white,
                               ),
-                              width: 84,
-                              height: 84,
-                              child: const Icon(Icons.error),
                             ),
                           );
                         },
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) {
-                            return child;
-                          }
+                        imageBuilder: (context, imageProvider) {
+                          return Container(
+                            width: 84,
+                            height: 84,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.fitHeight,
+                              ),
+                            ),
+                          );
+                        },
+                        errorWidget: (context, url, error) {
                           return AppPlaceholder(
                             child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                color: Colors.white,
-                              ),
                               width: 84,
                               height: 84,
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(8),
+                                  bottomLeft: Radius.circular(8),
+                                ),
+                              ),
+                              child: const Icon(Icons.error),
                             ),
                           );
                         },
@@ -348,42 +353,47 @@ class AppProductItem extends StatelessWidget {
                         )
                       : ClipRRect(
                           borderRadius: BorderRadius.circular(12),
-                          child: Image.network(
-                            item?.sourceId == 2
+                          child: CachedNetworkImage(
+                            imageUrl: item?.sourceId == 2
                                 ? item!.image
-                                : item!.image == 'admin/News.jpeg'
-                                    ? "${Application.picturesURL}${item!.image}"
-                                    : isRefreshLoader
-                                        ? "${Application.picturesURL}${item!.image}"
-                                        : "${Application.picturesURL}${item!.image}?cache=$uniqueKey",
-                            width: 120,
-                            height: 140,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
+                                : "${Application.picturesURL}${item!.image}",
+                            cacheManager: memoryCacheManager,
+                            placeholder: (context, url) {
                               return AppPlaceholder(
                                 child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
-                                    color: Colors.white,
-                                  ),
                                   width: 120,
                                   height: 140,
-                                  child: const Icon(Icons.error),
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                  ),
                                 ),
                               );
                             },
-                            loadingBuilder: (context, child, loadingProgress) {
-                              if (loadingProgress == null) {
-                                return child;
-                              }
+                            imageBuilder: (context, imageProvider) {
+                              return Container(
+                                width: 120,
+                                height: 140,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: imageProvider,
+                                    fit: BoxFit.fitHeight,
+                                  ),
+                                ),
+                              );
+                            },
+                            errorWidget: (context, url, error) {
                               return AppPlaceholder(
                                 child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
-                                    color: Colors.white,
-                                  ),
                                   width: 120,
                                   height: 140,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(8),
+                                      bottomLeft: Radius.circular(8),
+                                    ),
+                                  ),
+                                  child: const Icon(Icons.error),
                                 ),
                               );
                             },
