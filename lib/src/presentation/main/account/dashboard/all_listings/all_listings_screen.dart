@@ -116,13 +116,13 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
       context: context,
       builder: (context) {
         return Container(
-          color: Colors.grey[900],
+          color: Theme.of(context).dialogBackgroundColor,
           height: 200,
           child: ListView.separated(
             itemCount: 3,
-            separatorBuilder: (BuildContext context, int index) =>
-                const Divider(
-              color: Colors.white,
+            separatorBuilder: (BuildContext context, int index) => Divider(
+              color:
+                  Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white,
               height: 1,
               thickness: 1,
             ),
@@ -254,43 +254,58 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                                     imageUrl: item.sourceId == 2
                                                         ? item.image
                                                         : "${Application.picturesURL}${item.image}",
-                                                    cacheManager: memoryCacheManager,
-                                                    placeholder: (context, url) {
+                                                    cacheManager:
+                                                        memoryCacheManager,
+                                                    placeholder:
+                                                        (context, url) {
                                                       return AppPlaceholder(
                                                         child: Container(
                                                           height: 140,
                                                           width: 120,
-                                                          decoration: const BoxDecoration(
+                                                          decoration:
+                                                              const BoxDecoration(
                                                             color: Colors.white,
                                                           ),
                                                         ),
                                                       );
                                                     },
-                                                    imageBuilder: (context, imageProvider) {
+                                                    imageBuilder: (context,
+                                                        imageProvider) {
                                                       return Container(
                                                         width: 120,
                                                         height: 140,
-                                                        decoration: BoxDecoration(
-                                                          image: DecorationImage(
-                                                            image: imageProvider,
-                                                            fit: BoxFit.fitHeight,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          image:
+                                                              DecorationImage(
+                                                            image:
+                                                                imageProvider,
+                                                            fit: BoxFit
+                                                                .fitHeight,
                                                           ),
                                                         ),
                                                       );
                                                     },
-                                                    errorWidget: (context, url, error) {
+                                                    errorWidget:
+                                                        (context, url, error) {
                                                       return AppPlaceholder(
                                                         child: Container(
                                                           width: 120,
                                                           height: 140,
-                                                          decoration: const BoxDecoration(
+                                                          decoration:
+                                                              const BoxDecoration(
                                                             color: Colors.white,
-                                                            borderRadius: BorderRadius.only(
-                                                              topLeft: Radius.circular(8),
-                                                              bottomLeft: Radius.circular(8),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .only(
+                                                              topLeft: Radius
+                                                                  .circular(8),
+                                                              bottomLeft: Radius
+                                                                  .circular(8),
                                                             ),
                                                           ),
-                                                          child: const Icon(Icons.error),
+                                                          child: const Icon(
+                                                              Icons.error),
                                                         ),
                                                       );
                                                     },
