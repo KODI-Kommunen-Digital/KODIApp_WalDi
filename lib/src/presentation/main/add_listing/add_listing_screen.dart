@@ -274,8 +274,10 @@ class _AddListingScreenState extends State<AddListingScreen> {
         setState(() {
           selectedImages?.clear();
           downloadedImages.clear();
-          if (!images[0].path.contains('Defaultimage')) {
-            selectedImages?.addAll(images);
+          if (images.isNotEmpty) {
+            if (!images[0].path.contains('Defaultimage')) {
+              selectedImages?.addAll(images);
+            }
           }
           downloadedImages.addAll(images);
         });
@@ -1337,7 +1339,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
                             // if (selectedImages?[index + 1] is Asset) {
                             //
                             // }
-                            context.read<AddListingCubit>().removeAssetsByIndex(index);
+                            context
+                                .read<AddListingCubit>()
+                                .removeAssetsByIndex(index);
                           }
                           if (downloadedImages.isNotEmpty) {
                             if (downloadedImages.length > index + 1) {
