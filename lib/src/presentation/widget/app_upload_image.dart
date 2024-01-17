@@ -127,7 +127,9 @@ class _AppUploadImageState extends State<AppUploadImage> {
             ),
           ),
           Visibility(
-            visible: _file != null && !_file!.path.contains('pdf'),
+            visible: _file != null &&
+                !_file!.path.contains('pdf') &&
+                selectedAssets.length != 1,
             child: Positioned(
               top: -10,
               right: -10,
@@ -145,7 +147,9 @@ class _AppUploadImageState extends State<AppUploadImage> {
                       context.read<AddListingCubit>().removeAssetsByIndex(0);
                     }
                     _file = null;
-                    _file ??= File(images[0].path);
+                    if (images.isNotEmpty) {
+                      _file ??= File(images[0].path);
+                    }
                   });
                 },
               ),
@@ -516,24 +520,24 @@ class _AppUploadImageState extends State<AppUploadImage> {
                 ),
               );
             } else {
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 24,
-                      height: 24,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                      child: const Icon(
-                        Icons.add,
-                        size: 18,
-                        color: Colors.white,
-                      ),
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 24,
+                    height: 24,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Theme.of(context).primaryColor,
                     ),
-                  ],
-                );
+                    child: const Icon(
+                      Icons.add,
+                      size: 18,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              );
             }
           }
         }
@@ -548,6 +552,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
         selectedAssets = context.read<AddListingCubit>().getSelectedAssets();
       });
       if (!mounted) return;
+
       resultList = await MultipleImagesPicker.pickImages(
         maxImages: 8,
         selectedAssets: selectedAssets,
@@ -575,7 +580,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
           double imageSizeInMB = imageSizeInBytes / (1024 * 1024);
           logError('ImageSize', imageSizeInMB);
 
-          if (imageSizeInMB > 10) {
+          if (imageSizeInMB > 20) {
             setState(() {
               images.remove(imageFile);
               resultList.remove(asset);
