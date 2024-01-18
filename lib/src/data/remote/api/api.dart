@@ -5,6 +5,7 @@ import 'package:heidi/src/data/remote/api/http_manager.dart';
 import 'package:heidi/src/utils/asset.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:loggy/loggy.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class Api {
   static const String login = "/users/login";
@@ -29,7 +30,8 @@ class Api {
           await HTTPManager(forum: false).post(url: login, data: params);
 
       return ResultApiModel.fromJson(result);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      await Sentry.captureException(e, stackTrace: stackTrace);
       return await HTTPManager(forum: false).post(url: login, data: params);
     }
   }
@@ -46,8 +48,9 @@ class Api {
       final result = await HTTPManager(forum: false)
           .get(url: '/users/$userId/favorites?pageNo=1&pageSize=19');
       return ResultApiModel.fromJson(result);
-    } catch (e) {
+    } catch (e, stackTrace) {
       logError('Load Favorite Error', e);
+      await Sentry.captureException(e, stackTrace: stackTrace);
       final result = await HTTPManager(forum: false)
           .get(url: '/users/$userId/favorites?pageNo=1&pageSize=19');
       return ResultApiModel.fromJson(result);

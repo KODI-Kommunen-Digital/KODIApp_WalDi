@@ -22,6 +22,7 @@ import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:heidi/src/utils/translate.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:upgrader/upgrader.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -73,7 +74,6 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-
   void connectivityInternet() {
     Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
       AppBloc.homeCubit.onLoad(false);
@@ -105,11 +105,12 @@ class _HomeScreenState extends State<HomeScreen> {
             isLoading = false;
           });
         }).catchError(
-          (error) {
+          (error, stackTrace) async {
             setState(() {
               isLoading = false;
             });
             logError('Error loading new listings: $error');
+            await Sentry.captureException(error, stackTrace: stackTrace);
           },
         );
       }
@@ -207,7 +208,7 @@ class _HomeScreenState extends State<HomeScreen> {
           }
 
           return UpgradeAlert(
-            upgrader:  Upgrader(
+            upgrader: Upgrader(
                 debugLogging: true,
                 debugDisplayAlways: true,
                 countryCode: 'DE',
@@ -220,9 +221,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     : UpgradeDialogStyle.material,
                 willDisplayUpgrade: (
                     {String? appStoreVersion,
-                      bool? display,
-                      String? installedVersion,
-                      String? minAppVersion}) {
+                    bool? display,
+                    String? installedVersion,
+                    String? minAppVersion}) {
                   if (display != null) {
                     setState(() {
                       latestAppStoreVersion = appStoreVersion ?? '';
@@ -233,8 +234,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   return true;
                 },
                 onIgnore: () {
-                  AppBloc.homeCubit
-                      .saveIgnoreAppVersion(latestAppStoreVersion);
+                  AppBloc.homeCubit.saveIgnoreAppVersion(latestAppStoreVersion);
                   return true;
                 }),
             child: CustomScrollView(

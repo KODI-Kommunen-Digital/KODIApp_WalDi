@@ -20,6 +20,7 @@ import 'package:heidi/src/utils/translate.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:loggy/loggy.dart';
 import 'package:provider/provider.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:upgrader/upgrader.dart';
 
 Future<void> main() async {
@@ -38,9 +39,14 @@ Future<void> main() async {
   await Hive.initFlutter();
   final prefBox = await Preferences.openBox();
 
-  runApp(HeidiApp(prefBox));
   Bloc.observer = HeidiBlocObserver();
   await Upgrader.clearSavedSettings();
+
+  await SentryFlutter.init((options) {
+    options.dsn =
+    'https://2fdb0f7775245ded02eb03e51bf3abeb@o4506393481510912.ingest.sentry.io/4506587728904192';
+    options.tracesSampleRate = 0.01;
+  }, appRunner: () => runApp(HeidiApp(prefBox)));
 }
 
 final globalNavKey = GlobalKey<NavigatorState>();

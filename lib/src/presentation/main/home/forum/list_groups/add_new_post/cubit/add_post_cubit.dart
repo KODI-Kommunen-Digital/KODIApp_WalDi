@@ -3,6 +3,7 @@ import 'package:heidi/src/data/repository/forum_repository.dart';
 import 'package:heidi/src/presentation/main/home/forum/list_groups/add_new_post/cubit/add_post_state.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class AddPostCubit extends Cubit<AddPostState> {
   final ForumRepository _repo;
@@ -28,8 +29,9 @@ class AddPostCubit extends Cubit<AddPostState> {
         logError('Save Post Response Failed', response.message);
         return false;
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
       logError('Save Post Error', e);
+      await Sentry.captureException(e, stackTrace: stackTrace);
       return false;
     }
   }
