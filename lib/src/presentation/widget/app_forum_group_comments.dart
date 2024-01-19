@@ -106,7 +106,7 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
         title: Text(
           Translate.of(context).translate('comments'),
         ),
-        backgroundColor: Colors.grey.shade900,
+        backgroundColor: Theme.of(context).dialogBackgroundColor,
       ),
       body: Column(
         children: [
