@@ -5,7 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_product.dart';
@@ -239,90 +238,60 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                       children: [
                                         Row(
                                           children: <Widget>[
-                                            item.pdf == ''
-                                                ? ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            12),
-                                                    child: Image.network(
-                                                      item.sourceId == 2
-                                                          ? item.image
-                                                          : item.image ==
-                                                                  'admin/News.jpeg'
-                                                              ? "${Application.picturesURL}${item.image}"
-                                                              : widget.isRefreshLoader
-                                                                  ? "${Application.picturesURL}${item.image}"
-                                                                  : "${Application.picturesURL}${item.image}?cache=$uniqueKey",
+                                            ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              child: Image.network(
+                                                item.sourceId == 2
+                                                    ? item.image
+                                                    : item.image ==
+                                                            'admin/News.jpeg'
+                                                        ? "${Application.picturesURL}${item.image}"
+                                                        : widget.isRefreshLoader
+                                                            ? "${Application.picturesURL}${item.image}"
+                                                            : "${Application.picturesURL}${item.image}?cache=$uniqueKey",
+                                                width: 120,
+                                                height: 140,
+                                                fit: BoxFit.cover,
+                                                errorBuilder: (context, error,
+                                                    stackTrace) {
+                                                  // Handle errors here
+                                                  return AppPlaceholder(
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(12),
+                                                        color: Colors.white,
+                                                      ),
                                                       width: 120,
                                                       height: 140,
-                                                      fit: BoxFit.cover,
-                                                      errorBuilder: (context,
-                                                          error, stackTrace) {
-                                                        // Handle errors here
-                                                        return AppPlaceholder(
-                                                          child: Container(
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          12),
-                                                              color:
-                                                                  Colors.white,
-                                                            ),
-                                                            width: 120,
-                                                            height: 140,
-                                                            child: const Icon(
-                                                                Icons.error),
-                                                          ),
-                                                        );
-                                                      },
-                                                      loadingBuilder: (context,
-                                                          child,
-                                                          loadingProgress) {
-                                                        // Display the AppPlaceholder while the image is loading
-                                                        if (loadingProgress ==
-                                                            null) {
-                                                          return child;
-                                                        }
-                                                        return AppPlaceholder(
-                                                          child: Container(
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          12),
-                                                              color:
-                                                                  Colors.white,
-                                                            ),
-                                                            width: 120,
-                                                            height: 140,
-                                                          ),
-                                                        );
-                                                      },
+                                                      child: const Icon(
+                                                          Icons.error),
                                                     ),
-                                                  )
-                                                : ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            11),
-                                                    child: SizedBox(
-                                                        width: 120,
-                                                        height: 140,
-                                                        child: const PDF()
-                                                            .cachedFromUrl(
-                                                          "${Application.picturesURL}${item.pdf}?cacheKey=$uniqueKey",
-                                                          placeholder:
-                                                              (progress) => Center(
-                                                                  child: Text(
-                                                                      '$progress %')),
-                                                          errorWidget:
-                                                              (error) => Center(
-                                                                  child: Text(error
-                                                                      .toString())),
-                                                        )),
-                                                  ),
+                                                  );
+                                                },
+                                                loadingBuilder: (context, child,
+                                                    loadingProgress) {
+                                                  // Display the AppPlaceholder while the image is loading
+                                                  if (loadingProgress == null) {
+                                                    return child;
+                                                  }
+                                                  return AppPlaceholder(
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(12),
+                                                        color: Colors.white,
+                                                      ),
+                                                      width: 120,
+                                                      height: 140,
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                            ),
                                             const SizedBox(width: 8),
                                             Expanded(
                                               child: Column(
