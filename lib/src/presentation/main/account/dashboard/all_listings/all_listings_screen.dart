@@ -476,8 +476,8 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                   return SimpleDialog(
                       title: Center(
                         child: Text(Translate.of(context).translate('options'),
-                            style: const TextStyle(
-                              color: Colors.white,
+                            style: TextStyle(
+                              color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white,
                               fontWeight: FontWeight.bold,
                             )),
                       ),

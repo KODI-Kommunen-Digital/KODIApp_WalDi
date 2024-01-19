@@ -432,8 +432,8 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
         return SimpleDialog(
           title: Center(
             child: Text(Translate.of(context).translate('options'),
-                style: const TextStyle(
-                  color: Colors.white,
+                style: TextStyle(
+                  color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white,
                   fontWeight: FontWeight.bold,
                 )),
           ),
