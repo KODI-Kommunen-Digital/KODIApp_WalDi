@@ -133,7 +133,7 @@ class _GroupMembersLoadedState extends State<GroupMembersLoaded> {
                               Text(
                                 isMemberAdmin
                                     ? ' [Admin]'
-                                    : Translate.of(context).translate('member'),
+                                    : ' [${Translate.of(context).translate('member')}] ',
                                 maxLines: 1,
                                 style: TextStyle(
                                     color: isMemberAdmin
