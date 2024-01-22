@@ -1,4 +1,4 @@
-package com.smartauf
+package com.gesekeapp
 
 import io.flutter.embedding.android.FlutterActivity
 
