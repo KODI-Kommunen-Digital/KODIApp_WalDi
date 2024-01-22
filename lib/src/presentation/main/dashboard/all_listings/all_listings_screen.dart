@@ -1,10 +1,13 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_product.dart';
@@ -144,6 +147,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
   @override
   Widget build(BuildContext context) {
     posts = widget.posts;
+    final memoryCacheManager = DefaultCacheManager();
     String uniqueKey = UniqueKey().toString();
     return Scaffold(
       appBar: AppBar(
@@ -175,207 +179,213 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                     physics: const BouncingScrollPhysics(
                       parent: AlwaysScrollableScrollPhysics(),
                     ),
-                    controller: _scrollController,
-                    slivers: <Widget>[
-                      CupertinoSliverRefreshControl(
-                        onRefresh: _onRefresh,
-                      ),
-                      SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                          (BuildContext context, int index) {
-                            if (index < posts!.length) {
-                              final item = posts![index];
-                              return Slidable(
-                                endActionPane: ActionPane(
-                                  motion: const ScrollMotion(),
-                                  children: [
-                                    SlidableAction(
-                                      onPressed: (aContext) {
-                                        Navigator.pushNamed(
-                                            context, Routes.submit, arguments: {
-                                          'item': item,
-                                          'isNewList': false,
-                                          'isAdmin': true
-                                        }).then((value) async {
-                                          await _onRefresh();
-                                        });
-                                      },
-                                      backgroundColor: Colors.blue,
-                                      foregroundColor: Colors.white,
-                                      icon: Icons.edit,
-                                      label: Translate.of(context)
-                                          .translate('edit'),
-                                    ),
-                                    SlidableAction(
-                                      onPressed: (aContext) async {
-                                        bool response =
-                                            await showDeleteConfirmation(
-                                                context, item);
-                                        if (response) {
-                                          await AppBloc.homeCubit
-                                              .onLoad(false)
-                                              .then((value) => _onRefresh());
-                                        }
-                                      },
-                                      backgroundColor: Colors.red,
-                                      foregroundColor: Colors.white,
-                                      icon: Icons.delete,
-                                      label: Translate.of(context)
-                                          .translate('delete'),
-                                    ),
-                                  ],
-                                ),
-                                key: Key(
-                                    item.id.toString() + isSwiped.toString()),
-                                child: InkWell(
-                                  onTap: () {
-                                    _onProductDetail(item);
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 4),
-                                    child: Stack(
-                                      children: [
-                                        Row(
-                                          children: <Widget>[
-                                            ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                              child: Image.network(
-                                                item.sourceId == 2
-                                                    ? item.image
-                                                    : item.image ==
-                                                            'admin/News.jpeg'
-                                                        ? "${Application.picturesURL}${item.image}"
-                                                        : widget.isRefreshLoader
-                                                            ? "${Application.picturesURL}${item.image}"
-                                                            : "${Application.picturesURL}${item.image}?cache=$uniqueKey",
-                                                width: 120,
-                                                height: 140,
-                                                fit: BoxFit.cover,
-                                                errorBuilder: (context, error,
-                                                    stackTrace) {
-                                                  // Handle errors here
-                                                  return AppPlaceholder(
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(12),
-                                                        color: Colors.white,
-                                                      ),
-                                                      width: 120,
-                                                      height: 140,
-                                                      child: const Icon(
-                                                          Icons.error),
-                                                    ),
-                                                  );
-                                                },
-                                                loadingBuilder: (context, child,
-                                                    loadingProgress) {
-                                                  // Display the AppPlaceholder while the image is loading
-                                                  if (loadingProgress == null) {
-                                                    return child;
-                                                  }
-                                                  return AppPlaceholder(
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(12),
-                                                        color: Colors.white,
-                                                      ),
-                                                      width: 120,
-                                                      height: 140,
-                                                    ),
-                                                  );
-                                                },
-                                              ),
-                                            ),
-                                            const SizedBox(width: 8),
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: <Widget>[
-                                                  const SizedBox(
-                                                    height: 24,
-                                                  ),
-                                                  Text(
-                                                    item.category ?? '',
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .bodySmall!
-                                                        .copyWith(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                  ),
-                                                  const SizedBox(height: 8),
-                                                  Text(
-                                                    item.title,
-                                                    maxLines: 2,
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .titleSmall!
-                                                        .copyWith(
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                  ),
-                                                  const SizedBox(height: 8),
-                                                  Text(
-                                                    item.categoryId == 3
-                                                        ? (item.endDate != ""
-                                                            ? "${item.startDate} ${Translate.of(context).translate('to')} ${item.endDate}"
-                                                            : item.startDate)
-                                                        : item.createDate,
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .bodySmall!
-                                                        .copyWith(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                  ),
-                                                  const SizedBox(height: 8),
-                                                  Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      children: [
-                                                        Container(
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10),
+                    SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (BuildContext context, int index) {
+                          if (index < posts!.length) {
+                            final item = posts![index];
+                            return Slidable(
+                              endActionPane: ActionPane(
+                                motion: const ScrollMotion(),
+                                children: [
+                                  SlidableAction(
+                                    onPressed: (aContext) {
+                                      Navigator.pushNamed(
+                                          context, Routes.submit, arguments: {
+                                        'item': item,
+                                        'isNewList': false,
+                                        'isAdmin': true
+                                      }).then((value) async {
+                                        await _onRefresh();
+                                      });
+                                    },
+                                    backgroundColor: Colors.blue,
+                                    foregroundColor: Colors.white,
+                                    icon: Icons.edit,
+                                    label:
+                                        Translate.of(context).translate('edit'),
+                                  ),
+                                  SlidableAction(
+                                    onPressed: (aContext) async {
+                                      bool response =
+                                          await showDeleteConfirmation(
+                                              context, item);
+                                      if (response) {
+                                        await AppBloc.homeCubit
+                                            .onLoad(false)
+                                            .then((value) => _onRefresh());
+                                      }
+                                    },
+                                    backgroundColor: Colors.red,
+                                    foregroundColor: Colors.white,
+                                    icon: Icons.delete,
+                                    label: Translate.of(context)
+                                        .translate('delete'),
+                                  ),
+                                ],
+                              ),
+                              key:
+                                  Key(item.id.toString() + isSwiped.toString()),
+                              child: InkWell(
+                                onTap: () {
+                                  _onProductDetail(item);
+                                },
+                                child: Container(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 4),
+                                  child: Stack(
+                                    children: [
+                                      Row(
+                                        children: <Widget>[
+                                          item.pdf == ''
+                                              ? ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                  child: CachedNetworkImage(
+                                                    imageUrl: item.sourceId == 2
+                                                        ? item.image
+                                                        : "${Application.picturesURL}${item.image}",
+                                                    cacheManager: memoryCacheManager,
+                                                    placeholder: (context, url) {
+                                                      return AppPlaceholder(
+                                                        child: Container(
+                                                          width: 120,
+                                                          height: 140,
+                                                          decoration: const BoxDecoration(
+                                                            color: Colors.white,
                                                           ),
-                                                          child: ElevatedButton(
-                                                            onPressed:
-                                                                () async {
-                                                              _openListingStatusActionPopUp(
-                                                                  item);
-                                                            },
-                                                            child: Text(
-                                                              Translate.of(
-                                                                      context)
-                                                                  .translate(
-                                                                      getStatusTanslation(
-                                                                          item.statusId ??
-                                                                              0,
-                                                                          null)),
-                                                              style: Theme.of(
-                                                                      context)
-                                                                  .textTheme
-                                                                  .bodySmall!
-                                                                  .copyWith(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                  ),
+                                                        ),
+                                                      );
+                                                    },
+                                                    imageBuilder: (context, imageProvider) {
+                                                      return Container(
+                                                        width: 120,
+                                                        height: 140,
+                                                        decoration: BoxDecoration(
+                                                          image: DecorationImage(
+                                                            image: imageProvider,
+                                                            fit: BoxFit.fitHeight,
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                    errorWidget: (context, url, error) {
+                                                      return AppPlaceholder(
+                                                        child: Container(
+                                                          width: 120,
+                                                          height: 140,
+                                                          decoration: const BoxDecoration(
+                                                            color: Colors.white,
+                                                            borderRadius: BorderRadius.only(
+                                                              topLeft: Radius.circular(8),
+                                                              bottomLeft: Radius.circular(8),
                                                             ),
+                                                          ),
+                                                          child: const Icon(Icons.error),
+                                                        ),
+                                                      );
+                                                    },
+                                                  ),
+                                                )
+                                              : ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(11),
+                                                  child: SizedBox(
+                                                      width: 120,
+                                                      height: 140,
+                                                      child: const PDF()
+                                                          .cachedFromUrl(
+                                                        "${Application.picturesURL}${item.pdf}?cacheKey=$uniqueKey",
+                                                        placeholder:
+                                                            (progress) => Center(
+                                                                child: Text(
+                                                                    '$progress %')),
+                                                        errorWidget: (error) =>
+                                                            Center(
+                                                                child: Text(error
+                                                                    .toString())),
+                                                      )),
+                                                ),
+                                          const SizedBox(width: 8),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                const SizedBox(
+                                                  height: 24,
+                                                ),
+                                                Text(
+                                                  item.category ?? '',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodySmall!
+                                                      .copyWith(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                ),
+                                                const SizedBox(height: 8),
+                                                Text(
+                                                  item.title,
+                                                  maxLines: 2,
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .titleSmall!
+                                                      .copyWith(
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                ),
+                                                const SizedBox(height: 8),
+                                                Text(
+                                                  item.categoryId == 3
+                                                      ? (item.endDate != ""
+                                                          ? "${item.startDate} ${Translate.of(context).translate('to')} ${item.endDate}"
+                                                          : item.startDate)
+                                                      : item.createDate,
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodySmall!
+                                                      .copyWith(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                ),
+                                                const SizedBox(height: 8),
+                                                Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Container(
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(10),
+                                                        ),
+                                                        child: ElevatedButton(
+                                                          onPressed: () async {
+                                                            _openListingStatusActionPopUp(
+                                                                item);
+                                                          },
+                                                          child: Text(
+                                                            Translate.of(
+                                                                    context)
+                                                                .translate(
+                                                                    getStatusTanslation(
+                                                                        item.statusId ??
+                                                                            0,
+                                                                        null)),
+                                                            style: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .bodySmall!
+                                                                .copyWith(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
                                                           ),
                                                         ),
                                                         IconButton(
