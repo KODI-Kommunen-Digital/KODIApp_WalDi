@@ -111,13 +111,13 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
       context: context,
       builder: (context) {
         return Container(
-          color: Colors.grey[900],
+          color: Theme.of(context).dialogBackgroundColor,
           height: 200,
           child: ListView.separated(
             itemCount: 3,
-            separatorBuilder: (BuildContext context, int index) =>
-                const Divider(
-              color: Colors.white,
+            separatorBuilder: (BuildContext context, int index) => Divider(
+              color:
+                  Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white,
               height: 1,
               thickness: 1,
             ),
@@ -149,8 +149,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
     posts = widget.posts;
     final memoryCacheManager = DefaultCacheManager();
     String uniqueKey = UniqueKey().toString();
-    return SafeArea(
-        child: Scaffold(
+    return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: Text(
@@ -171,18 +170,14 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
           ),
         ],
       ),
-      body: Stack(children: [
-        (posts?.isNotEmpty ?? false)
-            ? Padding(
-                padding: const EdgeInsets.fromLTRB(8, 8, 4, 0),
-                child: CustomScrollView(
-                  physics: const BouncingScrollPhysics(
-                    parent: AlwaysScrollableScrollPhysics(),
-                  ),
-                  controller: _scrollController,
-                  slivers: <Widget>[
-                    CupertinoSliverRefreshControl(
-                      onRefresh: _onRefresh,
+      body: SafeArea(
+        child: Stack(children: [
+          (posts?.isNotEmpty ?? false)
+              ? Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 8, 4, 0),
+                  child: CustomScrollView(
+                    physics: const BouncingScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics(),
                     ),
                     SliverList(
                       delegate: SliverChildBuilderDelegate(
@@ -393,65 +388,66 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                                                 ),
                                                           ),
                                                         ),
-                                                      ),
-                                                      IconButton(
-                                                          onPressed: () {
-                                                            _openListingActionPopUp(
-                                                                item);
-                                                          },
-                                                          icon: const Icon(
-                                                              Icons.more_vert))
-                                                    ]),
-                                                const SizedBox(height: 8),
-                                                const SizedBox(height: 4),
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ],
+                                                        IconButton(
+                                                            onPressed: () {
+                                                              _openListingActionPopUp(
+                                                                  item);
+                                                            },
+                                                            icon: const Icon(
+                                                                Icons
+                                                                    .more_vert))
+                                                      ]),
+                                                  const SizedBox(height: 8),
+                                                  const SizedBox(height: 4),
+                                                ],
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            );
-                          } else {
-                            isLoadingMore
-                                ? const Positioned(
-                                    bottom: 20,
-                                    left: 0,
-                                    right: 0,
-                                    child: Center(
-                                      child:
-                                          CircularProgressIndicator.adaptive(),
-                                    ),
-                                  )
-                                : Container();
-                          }
-                          return null;
-                        },
-                        childCount: posts!.length + 1,
+                              );
+                            } else {
+                              isLoadingMore
+                                  ? const Positioned(
+                                      bottom: 20,
+                                      left: 0,
+                                      right: 0,
+                                      child: Center(
+                                        child: CircularProgressIndicator
+                                            .adaptive(),
+                                      ),
+                                    )
+                                  : Container();
+                            }
+                            return null;
+                          },
+                          childCount: posts!.length + 1,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              )
-            : Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    const Icon(Icons.sentiment_satisfied),
-                    Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: Text(
-                        Translate.of(context).translate('list_is_empty'),
-                        style: Theme.of(context).textTheme.bodyLarge,
+                    ],
+                  ),
+                )
+              : Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      const Icon(Icons.sentiment_satisfied),
+                      Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Text(
+                          Translate.of(context).translate('list_is_empty'),
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-      ]),
-    ));
+        ]),
+      ),
+    );
   }
 
   Future _onListingAction(int? chosen, ProductModel item) async {
@@ -487,8 +483,12 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                   return SimpleDialog(
                       title: Center(
                         child: Text(Translate.of(context).translate('options'),
-                            style: const TextStyle(
-                              color: Colors.white,
+                            style: TextStyle(
+                              color: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.color ??
+                                  Colors.white,
                               fontWeight: FontWeight.bold,
                             )),
                       ),

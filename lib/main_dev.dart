@@ -19,6 +19,7 @@ import 'package:heidi/src/utils/translate.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:loggy/loggy.dart';
 import 'package:provider/provider.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 Future<void> main() async {
   await Hive.initFlutter();
@@ -35,8 +36,15 @@ Future<void> main() async {
   );
   await Hive.initFlutter();
   final prefBox = await Preferences.openBox();
+  await SentryFlutter.init(
+    (options) {
+      options.dsn =
+          'https://542f038b34b6392062f9392c877a58e1@o4506393481510912.ingest.sentry.io/4506394295336960';
+      options.tracesSampleRate = 0.01;
+    },
+    appRunner: () => runApp(HeidiApp(prefBox)),
+  );
 
-  runApp(HeidiApp(prefBox));
   Bloc.observer = HeidiBlocObserver();
 }
 
@@ -79,7 +87,7 @@ class _HeidiAppState extends State<HeidiApp> {
             return BlocBuilder<ThemeCubit, ThemeState>(
               builder: (context, theme) {
                 return ChangeNotifierProvider(
-                  create:  (_) => LanguageManager(),
+                  create: (_) => LanguageManager(),
                   child: MaterialApp(
                     debugShowCheckedModeBanner: false,
                     theme: theme.lightTheme,

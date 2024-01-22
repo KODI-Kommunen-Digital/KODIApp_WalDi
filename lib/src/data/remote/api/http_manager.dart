@@ -8,6 +8,7 @@ import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/logger.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class HTTPManager {
   final exceptionCode = ['jwt_auth_bad_iss', 'jwt_auth_invalid_token'];
@@ -74,8 +75,10 @@ class HTTPManager {
                 ),
               );
               handler.resolve(response);
-            } catch (e) {
+            } catch (e, stackTrace) {
+
               logError('Refresh Token Response Failed', e);
+              await Sentry.captureException(e, stackTrace: stackTrace);
               handler.reject(error);
             }
           } else if (response.message ==
@@ -121,7 +124,8 @@ class HTTPManager {
         },
       );
       return response.data;
-    } on DioError catch (error) {
+    } on DioError catch (error, stackTrace) {
+      await Sentry.captureException(error, stackTrace: stackTrace);
       return _errorHandle(error);
     } finally {
       if (loading == true) {
@@ -150,7 +154,8 @@ class HTTPManager {
         cancelToken: cancelToken,
       );
       return response.data;
-    } on DioError catch (error) {
+    } on DioError catch (error, stackTrace) {
+      await Sentry.captureException(error, stackTrace: stackTrace);
       return _errorHandle(error);
     } finally {
       if (loading == true) {
@@ -183,7 +188,8 @@ class HTTPManager {
         },
       );
       return response.data;
-    } on DioError catch (error) {
+    } on DioError catch (error, stackTrace) {
+      await Sentry.captureException(error, stackTrace: stackTrace);
       return _errorHandle(error);
     } finally {
       if (loading == true) {
@@ -209,7 +215,8 @@ class HTTPManager {
         options: options,
       );
       return response.data;
-    } on DioError catch (error) {
+    } on DioError catch (error, stackTrace) {
+      await Sentry.captureException(error, stackTrace: stackTrace);
       return _errorHandle(error);
     } finally {
       if (loading == true) {
@@ -253,7 +260,8 @@ class HTTPManager {
         "success": false,
         "message": 'download_fail',
       };
-    } on DioError catch (error) {
+    } on DioError catch (error, stackTrace) {
+      await Sentry.captureException(error, stackTrace: stackTrace);
       return _errorHandle(error);
     } finally {
       if (loading == true) {

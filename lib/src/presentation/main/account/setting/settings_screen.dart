@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/widget/app_list_title.dart';
 import 'package:heidi/src/utils/configs/language.dart';
+import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
+import 'package:heidi/src/utils/configs/theme.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -14,10 +17,31 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   bool _receiveNotification = true;
+  bool darkModeEnabled = true;
+
+  Future<void> switchTheme() async {
+    final prefBox = await Preferences.openBox();
+
+    DarkOption darkOption =
+    darkModeEnabled ? DarkOption.alwaysOn : DarkOption.alwaysOff;
+    String darkOptionValue = darkModeEnabled ? 'on' : 'off';
+
+    await prefBox.setKeyValue(Preferences.darkOption, darkOptionValue);
+    AppBloc.themeCubit.onChangeTheme(darkOption: darkOption);
+  }
+
+  Future<void> isDarkMode() async {
+    final prefBox = await Preferences.openBox();
+    String darkMode = await prefBox.getKeyValue(Preferences.darkOption, 'on');
+    setState(() {
+      darkModeEnabled = (darkMode == 'on');
+    });
+  }
 
   @override
   void initState() {
     super.initState();
+    isDarkMode();
   }
 
   @override
@@ -50,6 +74,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 onChanged: (value) {
                   setState(() {
                     _receiveNotification = value;
+                  });
+                },
+              ),
+            ),
+            AppListTitle(
+              title: "Dark Mode",
+              trailing: CupertinoSwitch(
+                activeColor: Theme.of(context).primaryColor,
+                value: darkModeEnabled,
+                onChanged: (value) {
+                  setState(() {
+                    darkModeEnabled = value;
+                    switchTheme();
                   });
                 },
               ),

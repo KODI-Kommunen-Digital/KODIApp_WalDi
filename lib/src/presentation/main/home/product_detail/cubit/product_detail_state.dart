@@ -16,7 +16,8 @@ class ProductDetailState with _$ProductDetailState {
       List<FavoriteModel>? favoritesList,
       UserModel? userDetail,
       bool isLoggedIn,
-      List cityList) = ProductDetailLoaded;
+      List cityList,
+      bool isDarkMode) = ProductDetailLoaded;
 
   const factory ProductDetailState.error(String error) = ProductDetailError;
 }

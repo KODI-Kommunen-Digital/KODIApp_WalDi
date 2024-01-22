@@ -387,7 +387,7 @@ class _AllRequestsLoadedState extends State<AllRequestsLoaded> {
                 ),
               ),
       ]),
-    ));
+    );
   }
 
   void _openListingStatusActionPopUp(ProductModel item) {

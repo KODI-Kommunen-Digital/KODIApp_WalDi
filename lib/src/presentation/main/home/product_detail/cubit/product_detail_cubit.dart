@@ -9,6 +9,7 @@ import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/cubit/cubit.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:loggy/loggy.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class ProductDetailCubit extends Cubit<ProductDetailState> {
   ProductDetailCubit() : super(const ProductDetailLoading());
@@ -26,6 +27,7 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
     } else {
       isLoggedIn = true;
     }
+    bool darkModeEnabled = await isDarkMode();
 
     if (item.cityId != null) {
       final result = await ListRepository.loadProduct(item.cityId, item.id);
@@ -44,43 +46,54 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
                 }
               }
             }
-            if(favoritesList.isNotEmpty){
-              emit(ProductDetailLoaded(
-                  product!, favoritesList, userDetail, isLoggedIn, cityList));
-            }
-            else{
+            if (favoritesList.isNotEmpty) {
+              emit(ProductDetailLoaded(product!, favoritesList, userDetail,
+                  isLoggedIn, cityList, darkModeEnabled));
+            } else {
               final int userId = await UserRepository.getLoggedUserId();
               if (userId == 0) {
                 isLoggedIn = false;
               } else {
                 isLoggedIn = true;
               }
-              emit(ProductDetailLoaded(
-                  product!, null, userDetail, isLoggedIn, cityList));
+              emit(ProductDetailLoaded(product!, null, userDetail, isLoggedIn,
+                  cityList, darkModeEnabled));
             }
 
           }
-        catch (e){
-          emit(ProductDetailLoaded(
-              product!, null, userDetail, isLoggedIn, cityList));
+        catch (e, stackTrace){
+            emit(ProductDetailLoaded(
+                product!, null, userDetail, isLoggedIn, cityList,darkModeEnabled));
+            await Sentry.captureException(e, stackTrace: stackTrace);
+
+
           }
-          } else {
-          emit(ProductDetailLoaded(
-              product!, null, userDetail, isLoggedIn, cityList));
+        } else {
+          emit(ProductDetailLoaded(product!, null, userDetail, isLoggedIn,
+              cityList, darkModeEnabled));
         }
       }
     } else {
       isFavorite = true;
-      emit(ProductDetailLoaded(item, null, userDetail, isLoggedIn, cityList));
+      emit(ProductDetailLoaded(
+          item, null, userDetail, isLoggedIn, cityList, darkModeEnabled));
     }
+  }
+
+  Future<bool> isDarkMode() async {
+    final prefBox = await Preferences.openBox();
+    String darkMode = await prefBox.getKeyValue(Preferences.darkOption, 'on');
+    return (darkMode == 'on');
   }
 
   Future<List?> getCityList() async {
     ResultApiModel? loadCitiesResponse;
     try {
       loadCitiesResponse = await loadCities();
-    } catch (e) {
+    } catch (e, stackTrace) {
       logError('load cities error', e.toString());
+      await Sentry.captureException(e, stackTrace: stackTrace);
+
       return null;
     }
 
