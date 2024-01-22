@@ -191,7 +191,9 @@ class _AllRequestsLoadedState extends State<AllRequestsLoaded> {
                                                   borderRadius:
                                                       BorderRadius.circular(12),
                                                   child: CachedNetworkImage(
-                                                    imageUrl: item.sourceId == 2
+                                                    imageUrl: item.sourceId ==
+                                                                2 ||
+                                                            item.sourceId == 3
                                                         ? item.image
                                                         : "${Application.picturesURL}${item.image}",
                                                     cacheManager:
@@ -534,8 +536,10 @@ class _AllRequestsLoadedState extends State<AllRequestsLoaded> {
   }
 
   void _onProductDetail(ProductModel item) {
-    if (item.sourceId == 2) {
+    if (item.sourceId == 2 || item.showExternal == true) {
       _makeAction(item.website);
+    } else if (item.showExternal == false) {
+      Navigator.pushNamed(context, Routes.productDetail, arguments: item);
     } else {
       Navigator.pushNamed(context, Routes.productDetail, arguments: item);
     }
