@@ -46,7 +46,7 @@
   "search": "Suche ...",
   "category_not_found": "Kategorie nicht gefunden",
   "password": "Passwort",
-  "New password should not be same as the old password": "Das neue Passwort sollte nicht identisch mit dem alten sein.",
+  "New password should not be same as the old password": "Das neue Passwort sollte nicht wie das alte sein.",
   "Password cannot contain spaces": "Das Passwort darf keine Leerzeichen enthalten.",
   "cur_password": "Aktuelles Passwort",
   "fname": "Vornamen",
