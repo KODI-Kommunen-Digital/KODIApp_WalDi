@@ -103,8 +103,7 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                   Navigator.pushNamed(
                     context,
                     Routes.imageZoom,
-                    arguments:
-                    (widget.groupModel.image != null)
+                    arguments: (widget.groupModel.image != null)
                         ? "${Application.picturesURL}${widget.groupModel.image}?cacheKey=$uniqueKey"
                         : "${Application.picturesURL}admin/DefaultForum.jpeg?cacheKey=$uniqueKey",
                   );
@@ -329,19 +328,41 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                                 );
                               },
                               errorWidget: (context, url, error) {
-                                return AppPlaceholder(
-                                  child: Container(
-                                    width: 84,
-                                    height: 84,
-                                    decoration: const BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(8),
-                                        bottomLeft: Radius.circular(8),
+                                return Image.network(
+                                  '${Application.picturesURL}admin/DefaultForum.jpeg',
+                                  width: 120,
+                                  height: 140,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    // Handle errors here
+                                    return Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        color: Theme.of(context).scaffoldBackgroundColor,
                                       ),
-                                    ),
-                                    child: const Icon(Icons.error),
-                                  ),
+                                      width: 120,
+                                      height: 140,
+                                      child: const Icon(Icons.error),
+                                    );
+                                  },
+                                  loadingBuilder:
+                                      (context, child, loadingProgress) {
+                                    // Display the AppPlaceholder while the image is loading
+                                    if (loadingProgress == null) {
+                                      return child;
+                                    }
+                                    return AppPlaceholder(
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          color: Colors.white,
+                                        ),
+                                        width: 120,
+                                        height: 140,
+                                      ),
+                                    );
+                                  },
                                 );
                               },
                             ),
@@ -392,7 +413,8 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                 await buildContext
                     .read<GroupDetailsCubit>()
                     .removeGroupMember(
-                        widget.groupModel.id, widget.groupModel.cityId).then((isRemoved) {
+                        widget.groupModel.id, widget.groupModel.cityId)
+                    .then((isRemoved) {
                   if (isRemoved == RemoveUser.removed) {
                     if (!mounted) return;
                     Navigator.of(context).pop(true);
@@ -400,21 +422,20 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                     if (!mounted) return;
                     Navigator.of(context).pop(false);
                     final popUpTitle =
-                    Translate.of(context).translate('only_user');
+                        Translate.of(context).translate('only_user');
                     final content =
-                    Translate.of(context).translate('only_user_in_group');
+                        Translate.of(context).translate('only_user_in_group');
                     showAdminPopup(context, popUpTitle, content);
                   } else if (isRemoved == RemoveUser.onlyAdmin) {
                     if (!mounted) return;
                     final popUpTitle =
-                    Translate.of(context).translate('only_admin');
+                        Translate.of(context).translate('only_admin');
                     final content =
-                    Translate.of(context).translate('add_another_admin');
+                        Translate.of(context).translate('add_another_admin');
                     Navigator.of(context).pop(false);
                     showAdminPopup(context, popUpTitle, content);
                   }
                 });
-
               },
               child: Text(Translate.of(context).translate('yes')),
             ),

@@ -17,8 +17,8 @@ class HTTPManager {
 
   HTTPManager({bool forum = false}) {
     _baseUrl = !forum
-        ? 'https://test.smartregion-auf.de/api/'
-        : 'https://test.smartregion-auf.de/forumapi/';
+        ? 'https://app.geseke.it/api/'
+        : 'https://app.geseke.it/forumapi/';
 
     _dio = Dio(
       BaseOptions(
