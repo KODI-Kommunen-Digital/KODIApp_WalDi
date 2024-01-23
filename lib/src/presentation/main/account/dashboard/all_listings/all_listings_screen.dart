@@ -248,7 +248,8 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                             borderRadius:
                                                 BorderRadius.circular(12),
                                             child: CachedNetworkImage(
-                                              imageUrl: item.sourceId == 2
+                                              imageUrl: item.sourceId == 2 ||
+                                                      item.sourceId == 3
                                                   ? item.image
                                                   : "${Application.picturesURL}${item.image}",
                                               cacheManager: memoryCacheManager,
@@ -477,7 +478,11 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                       title: Center(
                         child: Text(Translate.of(context).translate('options'),
                             style: TextStyle(
-                              color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white,
+                              color: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.color ??
+                                  Colors.white,
                               fontWeight: FontWeight.bold,
                             )),
                       ),
@@ -649,8 +654,10 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
   }
 
   void _onProductDetail(ProductModel item) {
-    if (item.sourceId == 2) {
+    if (item.sourceId == 2 || item.showExternal == true) {
       _makeAction(item.website);
+    } else if (item.showExternal == false) {
+      Navigator.pushNamed(context, Routes.productDetail, arguments: item);
     } else {
       Navigator.pushNamed(context, Routes.productDetail, arguments: item);
     }

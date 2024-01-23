@@ -49,8 +49,8 @@ class AppProductItem extends StatelessWidget {
                   ? ClipRRect(
                       borderRadius: BorderRadius.circular(12),
                       child: SizedBox(
-                          width: 84,
-                          height: 84,
+                          width: 100,
+                          height: 100,
                           child: const PDF().cachedFromUrl(
                             "${Application.picturesURL}${item?.pdf}?cacheKey=$uniqueKey",
                             placeholder: (progress) =>
@@ -62,15 +62,15 @@ class AppProductItem extends StatelessWidget {
                   : ClipRRect(
                       borderRadius: BorderRadius.circular(12),
                       child: CachedNetworkImage(
-                        imageUrl: item?.sourceId == 2
+                        imageUrl: item?.sourceId == 2 || item?.sourceId == 3
                             ? item!.image
                             : "${Application.picturesURL}${item!.image}",
                         cacheManager: memoryCacheManager,
                         placeholder: (context, url) {
                           return AppPlaceholder(
                             child: Container(
-                              height: 84,
-                              width: 84,
+                              height: 100,
+                              width: 100,
                               decoration: const BoxDecoration(
                                 color: Colors.white,
                               ),
@@ -79,8 +79,8 @@ class AppProductItem extends StatelessWidget {
                         },
                         imageBuilder: (context, imageProvider) {
                           return Container(
-                            width: 84,
-                            height: 84,
+                            width: 100,
+                            height: 100,
                             decoration: BoxDecoration(
                               image: DecorationImage(
                                 image: imageProvider,
@@ -151,26 +151,6 @@ class AppProductItem extends StatelessWidget {
                         ),
                       ),
                     ),
-                    // Visibility(
-                    //   visible: item!.startDate.isNotEmpty &&
-                    //       item?.startDate == item?.endDate,
-                    //   child: Container(
-                    //     decoration: BoxDecoration(
-                    //       color: Colors.white30,
-                    //       borderRadius: BorderRadius.circular(10),
-                    //     ),
-                    //     child: Padding(
-                    //       padding: const EdgeInsets.all(3.5),
-                    //       child: Text(
-                    //         "${item?.startDate} ${Translate.of(context).translate('to')} ${item?.endDate}",
-                    //         style: Theme.of(context)
-                    //             .textTheme
-                    //             .bodySmall!
-                    //             .copyWith(fontWeight: FontWeight.bold),
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
                     Visibility(
                       visible:
                           item!.startDate.isNotEmpty && item!.endDate == "",
@@ -211,6 +191,15 @@ class AppProductItem extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 4),
+                    if (item?.sourceId == 3)
+                      Text(
+                        "${Translate.of(context).translate('quelle')} ${item?.website ?? ''}",
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall!
+                            .copyWith(fontWeight: FontWeight.bold),
+                      ),
+                    const SizedBox(height: 2),
                   ],
                 ),
               ),
@@ -231,7 +220,7 @@ class AppProductItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               CachedNetworkImage(
-                imageUrl: item?.sourceId == 2
+                imageUrl: item?.sourceId == 2 || item?.sourceId == 3
                     ? item!.image
                     : "${Application.picturesURL}${item!.image}",
                 cacheManager: memoryCacheManager,
@@ -354,7 +343,7 @@ class AppProductItem extends StatelessWidget {
                       : ClipRRect(
                           borderRadius: BorderRadius.circular(12),
                           child: CachedNetworkImage(
-                            imageUrl: item?.sourceId == 2
+                            imageUrl: item?.sourceId == 2 || item?.sourceId == 3
                                 ? item!.image
                                 : "${Application.picturesURL}${item!.image}",
                             cacheManager: memoryCacheManager,

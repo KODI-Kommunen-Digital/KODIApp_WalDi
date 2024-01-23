@@ -504,5 +504,6 @@
   "hide_reply":"Hide Replies",
   "view_reply":"View Replies",
   "no_reply":"No Replies",
-  "report_post_hint":"Give reason"
+  "report_post_hint":"Give reason",
+  "quelle":"Source"
 }

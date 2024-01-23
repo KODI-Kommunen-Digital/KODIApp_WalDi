@@ -503,8 +503,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _onProductDetail(ProductModel item) {
-    if (item.sourceId == 2) {
+    if (item.sourceId == 2 || item.showExternal == true) {
       _makeAction(item.website);
+    } else if (item.showExternal == false) {
+      Navigator.pushNamed(context, Routes.productDetail, arguments: item);
     } else {
       Navigator.pushNamed(context, Routes.productDetail, arguments: item);
     }
