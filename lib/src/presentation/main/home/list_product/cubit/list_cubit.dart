@@ -66,10 +66,9 @@ class ListCubit extends Cubit<ListState> {
       cityId: cityId,
     );
 
-    final listUpdated = result?[0];
+    final listUpdated = result?[0] ?? [];
     if (listUpdated.isNotEmpty) {
       list.addAll(listUpdated);
-      return list;
     }
     return list;
   }
