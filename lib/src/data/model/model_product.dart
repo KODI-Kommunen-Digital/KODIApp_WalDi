@@ -7,6 +7,7 @@ import 'package:heidi/src/data/model/model_open_time.dart';
 import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:intl/intl.dart';
 import 'package:location/location.dart';
+import 'package:html/parser.dart';
 
 class ProductModel {
   final int id;
@@ -147,9 +148,15 @@ class ProductModel {
     String priceMin = '';
     String priceMax = '';
     String priceDisplay = '';
+    String description = '';
 
     if (json['author'] != null) {
       author = UserModel.fromJson(json['author']);
+    }
+
+    if (json['description'] != null) {
+      var document = parse(json['description']);
+      description = document.body!.text;
     }
 
     if (json['categoryId'] == 1) {
@@ -231,7 +238,7 @@ class ProductModel {
       fax: json['fax'] ?? '',
       email: json['email'] ?? '',
       website: json['website'] ?? '',
-      description: json['description'] ?? '',
+      description: description,
       color: json['color'] ?? '',
       categoryId: json['categoryId'] ?? 0,
       subcategoryId: json['subcategoryId'] ?? 0,
