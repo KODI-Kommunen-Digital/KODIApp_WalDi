@@ -109,11 +109,44 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                         : "${Application.picturesURL}admin/DefaultForum.jpeg?cacheKey=$uniqueKey",
                   );
                 },
-                child: Image.network(
-                  widget.groupModel.image != null
+                child: CachedNetworkImage(
+                  imageUrl: widget.groupModel.image != null
                       ? "${Application.picturesURL}${widget.groupModel.image}?cacheKey=$uniqueKey"
                       : "${Application.picturesURL}admin/DefaultForum.jpeg?cacheKey=$uniqueKey",
-                  fit: BoxFit.cover,
+                  cacheManager: memoryCacheManager,
+                  placeholder: (context, url) {
+                    return AppPlaceholder(
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                        ),
+                      ),
+                    );
+                  },
+                  imageBuilder: (context, imageProvider) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    );
+                  },
+                  errorWidget: (context, url, error) {
+                    return AppPlaceholder(
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(8),
+                            bottomLeft: Radius.circular(8),
+                          ),
+                        ),
+                        child: const Icon(Icons.error),
+                      ),
+                    );
+                  },
                 ),
               ),
             ),
