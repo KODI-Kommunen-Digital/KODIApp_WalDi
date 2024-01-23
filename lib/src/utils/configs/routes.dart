@@ -4,6 +4,7 @@ import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_forum_group.dart';
 import 'package:heidi/src/data/model/model_group_posts.dart';
 import 'package:heidi/src/data/model/model_product.dart';
+import 'package:heidi/src/main_screen.dart';
 import 'package:heidi/src/presentation/main/account/change_password/change_password_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/all_listings/all_listings_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/all_listings/cubit/all_listings_cubit.dart';
@@ -57,6 +58,7 @@ class RouteArguments<T> {
 
 class Routes {
   static const String home = "/home";
+  static const String main = "/home";
   static const String discovery = "/discovery";
   static const String wishList = "/wishList";
   static const String account = "/account";
@@ -117,6 +119,12 @@ class Routes {
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
+      case main:
+        return MaterialPageRoute(
+          builder: (context) {
+            return MainScreen();
+          },
+        );
       case listProduct:
         final Map<String, dynamic> arguments =
             settings.arguments as Map<String, dynamic>;
