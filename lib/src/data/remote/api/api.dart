@@ -402,7 +402,6 @@ class Api {
     final result = await HTTPManager(forum: false).patch(
       url: filePath,
       data: params,
-      loading: true,
     );
     return ResultApiModel.fromJson(result);
   }
