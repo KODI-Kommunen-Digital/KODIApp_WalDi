@@ -222,7 +222,6 @@ class Api {
     final result = await httpManager.patch(
       url: filePath,
       data: params,
-      loading: true,
     );
     return ResultApiModel.fromJson(result);
   }

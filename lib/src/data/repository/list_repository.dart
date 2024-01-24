@@ -332,6 +332,7 @@ class ListRepository {
     final media = prefs.getKeyValue(Preferences.path, null);
     String? combinedStartDateTime;
     String? combinedEndDateTime;
+    DateTime currentDate = DateTime.now();
 
     if (startDate != null) {
       String formattedTime;
@@ -362,28 +363,43 @@ class ListRepository {
     }
 
     Map<String, dynamic> params = {
+      "id": listingId,
       "userId": userId,
       "title": title,
       "place": place,
       "description": description,
-      "media": '',
+      "externalId": null,
       "categoryId": categoryId,
+      "subcategoryId": subCategoryId,
       "address": address,
       "email": email,
       "phone": phone,
       "website": website,
       "price": 100, //dummy data
       "discountPrice": 100, //dummy data
-      "logo": media,
-      "statusId": 1, //dummy data
+      "statusId": statusId ?? 1, //change 1 to 3 when done
       "sourceId": 1, //dummy data
       "longitude": 245.65, //dummy data
       "latitude": 22.456, //dummy data
       "villageId": villageId ?? 0,
-      "cityId": cityId,
-      "subCategoryId": subCategoryId,
       "startDate": combinedStartDateTime,
       "endDate": combinedEndDateTime,
+      "createdAt": "",
+      "pdf": null,
+      "expiryDate": null,
+      "updatedAt": currentDate.toString(),
+      "zipcode": null,
+      "appointmentId": null,
+      "logo": media,
+      "otherlogos": [
+        {
+          "id": null,
+          "imageOrder": null,
+          "listingId": null,
+          "logo": ""
+        }
+      ],
+      "cityId": cityId,
     };
     final response =
         await Api.requestEditProduct(cityId, listingId, params, isImageChanged);
