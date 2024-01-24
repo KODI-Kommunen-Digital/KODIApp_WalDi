@@ -98,19 +98,39 @@ class _ForumGroupItemState extends State<ForumGroupItem> {
                   );
                 },
                 errorWidget: (context, url, error) {
-                  return AppPlaceholder(
-                    child: Container(
-                      width: 120,
-                      height: 140,
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(8),
-                          bottomLeft: Radius.circular(8),
+                  return Image.network(
+                    '${Application.picturesURL}admin/DefaultForum.jpeg',
+                    width: 120,
+                    height: 140,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      // Handle errors here
+                      return Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: Theme.of(context).scaffoldBackgroundColor,
                         ),
-                      ),
-                      child: const Icon(Icons.error),
-                    ),
+                        width: 120,
+                        height: 140,
+                        child: const Icon(Icons.error),
+                      );
+                    },
+                    loadingBuilder: (context, child, loadingProgress) {
+                      // Display the AppPlaceholder while the image is loading
+                      if (loadingProgress == null) {
+                        return child;
+                      }
+                      return AppPlaceholder(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: Colors.white,
+                          ),
+                          width: 120,
+                          height: 140,
+                        ),
+                      );
+                    },
                   );
                 },
               ),
