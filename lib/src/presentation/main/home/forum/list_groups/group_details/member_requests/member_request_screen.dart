@@ -1,9 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:heidi/src/data/model/model_member_request.dart';
 import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details/group_members/cubit/group_members_cubit.dart';
 import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details/member_requests/cubit/member_request_cubit.dart';
 import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details/member_requests/cubit/member_request_state.dart';
+import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:intl/intl.dart';
@@ -63,6 +66,7 @@ class MemberRequestLoaded extends StatefulWidget {
 }
 
 class _MemberRequestLoadedState extends State<MemberRequestLoaded> {
+  final memoryCacheManager = DefaultCacheManager();
   int loggedUserId = 0;
   bool isMemberAdmin = false;
 
@@ -103,13 +107,48 @@ class _MemberRequestLoadedState extends State<MemberRequestLoaded> {
                       width: 80,
                       height: 80,
                       child: ClipOval(
-                        child: Image.network(
-                          widget.membersList?[index].image != null
+                        child: CachedNetworkImage(
+                          imageUrl: widget.membersList?[index].image != null
                               ? '${Application.picturesURL}${widget.membersList?[index].image}'
                               : '${Application.picturesURL}admin/News.jpeg',
-                          width: 100,
-                          height: 100,
-                          fit: BoxFit.cover,
+                          cacheManager: memoryCacheManager,
+                          placeholder: (context, url) {
+                            return AppPlaceholder(
+                              child: Container(
+                                height: 100,
+                                width: 100,
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            );
+                          },
+                          imageBuilder: (context, imageProvider) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: imageProvider,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            );
+                          },
+                          errorWidget: (context, url, error) {
+                            return AppPlaceholder(
+                              child: Container(
+                                height: 100,
+                                width: 100,
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(8),
+                                    bottomLeft: Radius.circular(8),
+                                  ),
+                                ),
+                                child: const Icon(Icons.error),
+                              ),
+                            );
+                          },
                         ),
                       ),
                     ),

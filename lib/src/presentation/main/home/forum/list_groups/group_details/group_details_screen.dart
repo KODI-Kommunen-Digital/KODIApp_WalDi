@@ -108,11 +108,44 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                         : "${Application.picturesURL}admin/DefaultForum.jpeg?cacheKey=$uniqueKey",
                   );
                 },
-                child: Image.network(
-                  widget.groupModel.image != null
+                child: CachedNetworkImage(
+                  imageUrl: widget.groupModel.image != null
                       ? "${Application.picturesURL}${widget.groupModel.image}?cacheKey=$uniqueKey"
                       : "${Application.picturesURL}admin/DefaultForum.jpeg?cacheKey=$uniqueKey",
-                  fit: BoxFit.cover,
+                  cacheManager: memoryCacheManager,
+                  placeholder: (context, url) {
+                    return AppPlaceholder(
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                        ),
+                      ),
+                    );
+                  },
+                  imageBuilder: (context, imageProvider) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    );
+                  },
+                  errorWidget: (context, url, error) {
+                    return AppPlaceholder(
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(8),
+                            bottomLeft: Radius.circular(8),
+                          ),
+                        ),
+                        child: const Icon(Icons.error),
+                      ),
+                    );
+                  },
                 ),
               ),
             ),
@@ -295,19 +328,42 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                                 );
                               },
                               errorWidget: (context, url, error) {
-                                return AppPlaceholder(
-                                  child: Container(
-                                    width: 84,
-                                    height: 84,
-                                    decoration: const BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(8),
-                                        bottomLeft: Radius.circular(8),
+                                return Image.network(
+                                  '${Application.picturesURL}admin/DefaultForum.jpeg',
+                                  width: 120,
+                                  height: 140,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    // Handle errors here
+                                    return Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        color: Theme.of(context)
+                                            .scaffoldBackgroundColor,
                                       ),
-                                    ),
-                                    child: const Icon(Icons.error),
-                                  ),
+                                      width: 120,
+                                      height: 140,
+                                      child: const Icon(Icons.error),
+                                    );
+                                  },
+                                  loadingBuilder:
+                                      (context, child, loadingProgress) {
+                                    // Display the AppPlaceholder while the image is loading
+                                    if (loadingProgress == null) {
+                                      return child;
+                                    }
+                                    return AppPlaceholder(
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          color: Colors.white,
+                                        ),
+                                        width: 120,
+                                        height: 140,
+                                      ),
+                                    );
+                                  },
                                 );
                               },
                             ),
