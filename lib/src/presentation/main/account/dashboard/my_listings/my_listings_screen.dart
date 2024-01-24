@@ -123,27 +123,7 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                                               children: [
                                                 SlidableAction(
                                                   onPressed: (aContext) {
-                                                    Navigator.pushNamed(
-                                                        context, Routes.submit,
-                                                        arguments: {
-                                                          'item':
-                                                              userListingsList[
-                                                                  index],
-                                                          'isNewList': false
-                                                        }).then((value) async {
-                                                      final response =
-                                                          await context
-                                                              .read<
-                                                                  ProfileCubit>()
-                                                              .loadUserListing(
-                                                                  widget
-                                                                      .user.id,
-                                                                  1);
-                                                      setState(() {
-                                                        userListingsList =
-                                                            response;
-                                                      });
-                                                    });
+                                                    updateListings(index);
                                                   },
                                                   backgroundColor: Colors.blue,
                                                   foregroundColor: Colors.white,
@@ -433,7 +413,8 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
           title: Center(
             child: Text(Translate.of(context).translate('options'),
                 style: TextStyle(
-                  color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white,
+                  color: Theme.of(context).textTheme.bodyLarge?.color ??
+                      Colors.white,
                   fontWeight: FontWeight.bold,
                 )),
           ),
@@ -441,17 +422,7 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
             SimpleDialogOption(
               onPressed: () {
                 Navigator.pop(context);
-                Navigator.pushNamed(context, Routes.submit, arguments: {
-                  'item': userListingsList[index],
-                  'isNewList': false
-                }).then((value) async {
-                  final response = await context
-                      .read<ProfileCubit>()
-                      .loadUserListing(widget.user.id, 1);
-                  setState(() {
-                    userListingsList = response;
-                  });
-                });
+                updateListings(index);
               },
               child: ListTile(
                 leading: const Icon(Icons.edit),
@@ -472,5 +443,17 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
         );
       },
     );
+  }
+
+  Future<void> updateListings(int index) async {
+    Navigator.pushNamed(context, Routes.submit,
+            arguments: {'item': userListingsList[index], 'isNewList': false})
+        .then((value) async {
+      final response =
+          await context.read<ProfileCubit>().loadUserListing(widget.user.id, 1);
+      setState(() {
+        userListingsList = response;
+      });
+    });
   }
 }
