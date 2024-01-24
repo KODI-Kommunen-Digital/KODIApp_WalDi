@@ -58,6 +58,7 @@ class AllListingsCubit extends Cubit<AllListingsState> {
             email: product.email,
             website: product.website,
             description: product.description,
+            statusId:  product.statusId,
             userId: product.userId,
             sourceId: product.sourceId,
             imageLists: product.imageLists,

@@ -368,33 +368,37 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                                       MainAxisAlignment
                                                           .spaceBetween,
                                                   children: [
-                                                    Container(
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10),
-                                                      ),
-                                                      child: ElevatedButton(
-                                                        onPressed: () async {
-                                                          _openListingStatusActionPopUp(
-                                                              item);
-                                                        },
-                                                        child: Text(
-                                                          Translate.of(context)
-                                                              .translate(
-                                                                  getStatusTanslation(
-                                                                      item.statusId ??
-                                                                          0,
-                                                                      null)),
-                                                          style:
-                                                              Theme.of(context)
-                                                                  .textTheme
-                                                                  .bodySmall!
-                                                                  .copyWith(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                  ),
+                                                    Expanded(
+                                                      child: Container(
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(10),
+                                                        ),
+                                                        child: ElevatedButton(
+                                                          onPressed: () async {
+                                                            _openListingStatusActionPopUp(
+                                                                item);
+                                                          },
+                                                          child: Text(
+                                                            Translate.of(
+                                                                    context)
+                                                                .translate(
+                                                                    getStatusTanslation(
+                                                                        item.statusId ??
+                                                                            0,
+                                                                        null)),
+                                                            style: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .bodySmall!
+                                                                .copyWith(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                          ),
                                                         ),
                                                       ),
                                                     ),
