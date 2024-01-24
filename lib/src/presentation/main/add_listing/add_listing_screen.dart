@@ -71,7 +71,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
   String? _errorWebsite;
   String? _errorStatus;
   String? _errorSDate;
-  String? _errorEDate;
   String? _errorCategory;
   String? selectedCity;
   int? cityId;
@@ -295,7 +294,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
       }
       if (!loadCategoryResponse?.data.isEmpty) {
         if (!mounted) return;
-        if (selectedCategory == "news" || selectedCategory == null) {
+        if (selectedCategory?.toLowerCase() == "news" ||
+            selectedCategory == null) {
           final subCategoryResponse = await context
               .read<AddListingCubit>()
               .loadSubCategory(Translate.of(context).translate(
@@ -348,7 +348,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
         initialDate: parsedDate,
         firstDate: DateTime(now.year),
         context: context,
-        lastDate: DateTime(now.year + 1),
+        lastDate: DateTime(now.year + 2, now.month, now.day),
       );
       if (picked != null) {
         setState(() {
@@ -360,7 +360,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
         initialDate: now,
         firstDate: DateTime(now.year),
         context: context,
-        lastDate: DateTime(now.year + 1),
+        lastDate: DateTime(now.year + 2, now.month, now.day),
       );
 
       if (picked != null) {
@@ -380,7 +380,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
         initialDate: parsedDate,
         firstDate: DateTime(now.year),
         context: context,
-        lastDate: DateTime(now.year + 1),
+        lastDate: DateTime(now.year + 2, now.month, now.day),
       );
       if (picked != null) {
         setState(() {
@@ -392,7 +392,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
         initialDate: now,
         firstDate: DateTime(now.year),
         context: context,
-        lastDate: DateTime(now.year + 1),
+        lastDate: DateTime(now.year + 2, now.month, now.day),
       );
 
       if (picked != null) {
@@ -581,25 +581,20 @@ class _AddListingScreenState extends State<AddListingScreen> {
     _errorTitle =
         UtilValidator.validate(_textTitleController.text, allowEmpty: false);
 
-    if (_textContentController.text.length >= 10001) {
-      _errorContent = "Info should not exceed 1000 characters.";
+    if (_textContentController.text.length >= 65535) {
+      _errorContent = "value_desc_limit_exceeded";
     } else {
       _errorContent = UtilValidator.validate(_textContentController.text,
           allowEmpty: false);
     }
 
     logError('selectedCategory', selectedCategory);
+
     if (selectedCategory == "events") {
       if (_startDate == null || _startDate == "" || _startTime == null) {
         _errorSDate = "value_not_date_empty";
       } else {
         _errorSDate = null;
-      }
-
-      if (_endDate == null || _endDate == "" || _endTime == null) {
-        _errorEDate = "value_not_date_empty";
-      } else {
-        _errorEDate = null;
       }
     }
 
@@ -612,7 +607,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
       _errorWebsite,
       _errorStatus,
       _errorSDate,
-      _errorEDate,
     ];
 
     if (_errorTitle != null ||
@@ -644,18 +638,15 @@ class _AddListingScreenState extends State<AddListingScreen> {
   String? _getCategoryTranslation(int id) {
     Map<int, String> categories = {
       1: "category_news",
-      2: "category_traffic",
       3: "category_events",
       4: "category_clubs",
       5: "category_products",
       6: "category_offer_search",
-      7: "category_citizen_info",
-      8: "category_defect_report",
       9: "category_lost_found",
       10: "category_companies",
       11: "category_public_transport",
-      12: "category_offers",
-      13: "category_food"
+      13: "category_food",
+      17: "category_free"
     };
     return categories[id];
   }
@@ -670,6 +661,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       8: "subcategory_club_news",
       9: "subcategory_road",
       10: "subcategory_official_notification",
+      11: "subcategory_timeless_news"
     };
     return subCategories[id];
   }
@@ -860,18 +852,20 @@ class _AddListingScreenState extends State<AddListingScreen> {
                                       },
                                     );
 
-                                    if (selectedCategory == "news" ||
+                                    if (selectedCategory?.toLowerCase() ==
+                                            "news" ||
                                         selectedCategory == null) {
                                       selectSubCategory(selectedCategory);
                                     }
                                   }
-                                : null,
-                          )),
+                                : null)),
               ],
             ),
-            if (selectedCategory == "news" || selectedCategory == null)
+            if (selectedCategory?.toLowerCase() == "news" ||
+                selectedCategory == null)
               const SizedBox(height: 8),
-            if (selectedCategory == "news" || selectedCategory == null)
+            if (selectedCategory?.toLowerCase() == "news" ||
+                selectedCategory == null)
               Text.rich(
                 TextSpan(
                   text: Translate.of(context).translate('subCategory'),
@@ -893,7 +887,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
             const SizedBox(height: 8),
             Row(
               children: [
-                if (selectedCategory == "news")
+                if (selectedCategory?.toLowerCase() == "news")
                   Expanded(
                       child: listSubCategory.isEmpty
                           ? const LinearProgressIndicator()
@@ -923,7 +917,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
                             )),
               ],
             ),
-            if (selectedCategory == "news" || selectedCategory == null)
+            if (selectedCategory?.toLowerCase() == "news" ||
+                selectedCategory == null)
               const SizedBox(height: 8),
             const SizedBox(height: 8),
             Text.rich(
@@ -987,8 +982,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
                                     });
                                   }
                                 }
-                              : null,
-                        ),
+                              : null),
                 ),
               ],
             ),
@@ -1226,15 +1220,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
                           .textTheme
                           .titleMedium!
                           .copyWith(fontWeight: FontWeight.bold),
-                      children: const <TextSpan>[
-                        TextSpan(
-                          text: ' *',
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -1259,15 +1244,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
                           .textTheme
                           .titleMedium!
                           .copyWith(fontWeight: FontWeight.bold),
-                      children: const <TextSpan>[
-                        TextSpan(
-                          text: ' *',
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
                     ),
                   ),
                   const SizedBox(height: 8),

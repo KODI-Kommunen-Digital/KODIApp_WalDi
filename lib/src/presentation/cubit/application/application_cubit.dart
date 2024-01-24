@@ -10,6 +10,7 @@ import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/theme.dart';
 import 'package:heidi/src/utils/logger.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class ApplicationCubit extends Cubit<ApplicationState> {
   ApplicationCubit() : super(const ApplicationLoading());
@@ -52,8 +53,9 @@ class ApplicationCubit extends Cubit<ApplicationState> {
       font = AppTheme.fontSupport.firstWhere((item) {
         return item == oldFont;
       });
-    } catch (e) {
+    } catch (e, stackTrace) {
       UtilLogger.log("ERROR", e);
+      await Sentry.captureException(e, stackTrace: stackTrace);
     }
 
     if (oldTheme != '') {

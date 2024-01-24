@@ -108,7 +108,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     });
                   },
                   controller: textUserNameController,
-                  keyboardType: TextInputType.name,
+                  keyboardType: TextInputType.emailAddress,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 16),

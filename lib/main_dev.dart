@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -22,6 +20,7 @@ import 'package:heidi/src/utils/translate.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:loggy/loggy.dart';
 import 'package:provider/provider.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:upgrader/upgrader.dart';
 
 Future<void> main() async {
@@ -40,9 +39,14 @@ Future<void> main() async {
   await Hive.initFlutter();
   final prefBox = await Preferences.openBox();
 
-  runApp(HeidiApp(prefBox));
   Bloc.observer = HeidiBlocObserver();
   await Upgrader.clearSavedSettings();
+
+  await SentryFlutter.init((options) {
+    options.dsn =
+    'https://2fdb0f7775245ded02eb03e51bf3abeb@o4506393481510912.ingest.sentry.io/4506587728904192';
+    options.tracesSampleRate = 0.01;
+  }, appRunner: () => runApp(HeidiApp(prefBox)));
 }
 
 final globalNavKey = GlobalKey<NavigatorState>();
@@ -88,50 +92,40 @@ class _HeidiAppState extends State<HeidiApp> {
               builder: (context, theme) {
                 return ChangeNotifierProvider(
                   create: (_) => LanguageManager(),
-                  child: UpgradeAlert(
-                    upgrader: Upgrader(
-                      shouldPopScope: () => true,
-                      canDismissDialog: true,
-                      durationUntilAlertAgain: const Duration(days: 1),
-                      dialogStyle: Platform.isIOS
-                          ? UpgradeDialogStyle.cupertino
-                          : UpgradeDialogStyle.material,
-                    ),
-                    child: MaterialApp(
-                      debugShowCheckedModeBanner: false,
-                      theme: theme.lightTheme,
-                      darkTheme: theme.darkTheme,
-                      onGenerateRoute: Routes.generateRoute,
-                      localizationsDelegates: const [
-                        Translate.delegate,
-                        GlobalMaterialLocalizations.delegate,
-                        GlobalWidgetsLocalizations.delegate,
-                        GlobalCupertinoLocalizations.delegate,
-                      ],
-                      supportedLocales: AppLanguage.supportLanguage,
-                      home: Scaffold(
-                        body: BlocBuilder<ApplicationCubit, ApplicationState>(
-                          builder: (context, state) {
-                            if (state == const ApplicationState.loaded()) {
-                              return const MainScreen();
-                            }
-                            if (state == const ApplicationState.loading()) {
-                              return const SplashScreen();
-                            }
+                  child: MaterialApp(
+                    debugShowCheckedModeBanner: false,
+                    theme: theme.lightTheme,
+                    darkTheme: theme.darkTheme,
+                    onGenerateRoute: Routes.generateRoute,
+                    localizationsDelegates: const [
+                      Translate.delegate,
+                      GlobalMaterialLocalizations.delegate,
+                      GlobalWidgetsLocalizations.delegate,
+                      GlobalCupertinoLocalizations.delegate,
+                    ],
+                    supportedLocales: AppLanguage.supportLanguage,
+                    home: Scaffold(
+                      body: BlocBuilder<ApplicationCubit, ApplicationState>(
+                        builder: (context, state) {
+                          if (state == const ApplicationState.loaded()) {
                             return const MainScreen();
-                          },
-                        ),
+                          }
+                          if (state == const ApplicationState.loading()) {
+                            return const SplashScreen();
+                          }
+                          return const MainScreen();
+                        },
                       ),
-                      builder: (context, child) {
-                        final data = MediaQuery.of(context).copyWith(
-                          textScaleFactor: theme.textScaleFactor,
-                        );
-                        return MediaQuery(
-                          data: data,
-                          child: child!,
-                        );
-                      },
                     ),
+                    builder: (context, child) {
+                      final data = MediaQuery.of(context).copyWith(
+                        textScaleFactor: theme.textScaleFactor,
+                      );
+                      return MediaQuery(
+                        data: data,
+                        child: child!,
+                      );
+                    },
                   ),
                 );
               },

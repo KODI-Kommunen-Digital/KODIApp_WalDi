@@ -331,7 +331,7 @@ class ListRepository {
       }
     }
 
-    if (endDate != null) {
+    if (endDate != null && endDate != "") {
       String formattedTime;
       if (endTime!.hour < 10) {
         formattedTime =
@@ -342,6 +342,8 @@ class ListRepository {
             "${endTime.hour}:${endTime.minute.toString().padLeft(2, '0')}";
         combinedEndDateTime = "${endDate.trim()}T$formattedTime";
       }
+    } else {
+      combinedEndDateTime = "";
     }
 
     Map<String, dynamic> params = {
@@ -440,6 +442,7 @@ class ListRepository {
 
     String? combinedStartDateTime;
     String? combinedEndDateTime;
+    DateTime currentDate = DateTime.now();
 
     if (startDate != null) {
       String formattedTime;
@@ -454,7 +457,7 @@ class ListRepository {
       }
     }
 
-    if (endDate != null) {
+    if (endDate != null && endDate != "") {
       String formattedTime;
       if (endTime!.hour < 10) {
         formattedTime =
@@ -468,12 +471,14 @@ class ListRepository {
     }
 
     Map<String, dynamic> params = {
+      "id": listingId,
       "userId": userId,
       "title": title,
       "place": place,
       "description": description,
-      "media": '',
+      "externalId": null,
       "categoryId": categoryId,
+      "subcategoryId": subCategoryId,
       "address": address,
       "email": email,
       "phone": phone,
@@ -487,11 +492,26 @@ class ListRepository {
       "longitude": 245.65, //dummy data
       "latitude": 22.456, //dummy data
       "villageId": villageId ?? 0,
-      "cityId": cityId,
       "startDate": combinedStartDateTime,
       "endDate": combinedEndDateTime,
-      "subCategoryId": subCategoryId,
+      "createdAt": "",
+      "pdf": null,
+      "expiryDate": null,
+      "updatedAt": currentDate.toString(),
+      "zipcode": null,
+      "appointmentId": null,
+      "logo": media,
+      "otherlogos": [
+        {
+          "id": null,
+          "imageOrder": null,
+          "listingId": null,
+          "logo": ""
+        }
+      ],
+      "cityId": cityId,
     };
+
     final response =
         await Api.requestEditProduct(cityId, listingId, params, isImageChanged);
     if (response.success) {

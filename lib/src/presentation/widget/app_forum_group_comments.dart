@@ -8,6 +8,7 @@ import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:loggy/loggy.dart';
 import 'package:provider/provider.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class CommentsBottomSheet extends StatefulWidget {
   final int? forumId;
@@ -89,11 +90,12 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
         comments.addAll(updatedComments);
         isLoading = false;
       });
-    } catch (e) {
+    } catch (e, stackTrace) {
       logError('Failed to load next page of comments', e.toString());
       setState(() {
         isLoading = false;
       });
+      await Sentry.captureException(e, stackTrace: stackTrace);
     }
   }
 
@@ -104,7 +106,7 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
         title: Text(
           Translate.of(context).translate('comments'),
         ),
-        backgroundColor: Colors.grey.shade900,
+        backgroundColor: Theme.of(context).dialogBackgroundColor,
       ),
       body: Column(
         children: [
@@ -201,8 +203,9 @@ class CommentWidgetState extends State<CommentWidget> {
           replies = fetchedReplies;
         });
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
       logError('Failed to fetch comment replies', e.toString());
+      await Sentry.captureException(e, stackTrace: stackTrace);
     }
   }
 
@@ -244,11 +247,11 @@ class CommentWidgetState extends State<CommentWidget> {
                 children: [
                   if (!widget.isAddingReply)
                     TextButton(
-                      onPressed: () {
-                        setState(() async {
-                          final prefs = await Preferences.openBox();
-                          prefs.setKeyValue(
-                              Preferences.commentId, widget.comment.id);
+                      onPressed: () async {
+                        final prefs = await Preferences.openBox();
+                        prefs.setKeyValue(
+                            Preferences.commentId, widget.comment.id);
+                        setState(() {
                           widget.toggleAddingReply?.call();
                         });
                       },

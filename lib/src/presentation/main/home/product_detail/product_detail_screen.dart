@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages
+// ignore_for_file: depend_on_referenced_packages, use_build_context_synchronously
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/foundation.dart';
@@ -18,6 +18,7 @@ import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/multiple_gesture_detector.dart';
 import 'package:heidi/src/utils/translate.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -57,7 +58,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   void _onScroll() {
     Color? color;
     if (_scrollController.position.extentBefore < 110) {
-      color = Colors.white;
+      color = Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white;
     }
     if (color != _iconColor) {
       setState(() {
@@ -104,9 +105,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     String cleanedPhone = phone.replaceAll(' ', '');
     try {
       await launchUrl(Uri.parse('tel:$cleanedPhone'));
-    } catch (e) {
+    } catch (e, stackTrace) {
       if (!mounted) return;
       _showMessage(Translate.of(context).translate('cannot_make_action'));
+      await Sentry.captureException(e, stackTrace: stackTrace);
     }
   }
 
@@ -115,8 +117,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     try {
       launchUrl(Uri.parse('mailto:$email'));
       // launch('mailto:$email');
-    } catch (e) {
+    } catch (e, stackTrace) {
       _showMessage(Translate.of(context).translate('cannot_make_action'));
+      await Sentry.captureException(e, stackTrace: stackTrace);
     }
   }
 
@@ -149,16 +152,18 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         link,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
-                        style: const TextStyle(
-                          color: Colors.white,
+                        style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyLarge?.color ??
+                              Colors.white,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                     IconButton(
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.close,
-                        color: Colors.white,
+                        color: Theme.of(context).textTheme.bodyLarge?.color ??
+                            Colors.white,
                       ),
                       onPressed: () {
                         Navigator.of(context).pop();
@@ -184,13 +189,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   ///Build content UI
   Widget _buildContent(ProductModel? product, List<FavoriteModel>? favoriteList,
-      UserModel? userDetail, bool isLoggedIn) {
+      UserModel? userDetail, bool isLoggedIn, bool isDarkMode) {
     String uniqueKey = UniqueKey().toString();
     List<Widget> action = [];
     Widget actionGalleries = Container();
     Widget banner = AppPlaceholder(
       child: Container(
-        color: Colors.white,
+        color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white,
       ),
     );
     Widget address = Container();
@@ -214,7 +219,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               margin: const EdgeInsets.symmetric(vertical: 16),
               height: 16,
               width: 150,
-              color: Colors.white,
+              color:
+                  Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -225,20 +231,23 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     Container(
                       height: 16,
                       width: 100,
-                      color: Colors.white,
+                      color: Theme.of(context).textTheme.bodyLarge?.color ??
+                          Colors.white,
                     ),
                     const SizedBox(height: 4),
                     Container(
                       height: 20,
                       width: 150,
-                      color: Colors.white,
+                      color: Theme.of(context).textTheme.bodyLarge?.color ??
+                          Colors.white,
                     ),
                   ],
                 ),
                 Container(
                   height: 10,
                   width: 100,
-                  color: Colors.white,
+                  color: Theme.of(context).textTheme.bodyLarge?.color ??
+                      Colors.white,
                 ),
               ],
             ),
@@ -248,9 +257,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 Container(
                   width: 32,
                   height: 32,
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.white,
+                    color: Theme.of(context).textTheme.bodyLarge?.color ??
+                        Colors.white,
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -260,13 +270,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     Container(
                       height: 10,
                       width: 100,
-                      color: Colors.white,
+                      color: Theme.of(context).textTheme.bodyLarge?.color ??
+                          Colors.white,
                     ),
                     const SizedBox(height: 4),
                     Container(
                       height: 10,
                       width: 200,
-                      color: Colors.white,
+                      color: Theme.of(context).textTheme.bodyLarge?.color ??
+                          Colors.white,
                     ),
                   ],
                 )
@@ -278,9 +290,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 Container(
                   width: 32,
                   height: 32,
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.white,
+                    color: Theme.of(context).textTheme.bodyLarge?.color ??
+                        Colors.white,
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -290,13 +303,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     Container(
                       height: 10,
                       width: 100,
-                      color: Colors.white,
+                      color: Theme.of(context).textTheme.bodyLarge?.color ??
+                          Colors.white,
                     ),
                     const SizedBox(height: 4),
                     Container(
                       height: 10,
                       width: 200,
-                      color: Colors.white,
+                      color: Theme.of(context).textTheme.bodyLarge?.color ??
+                          Colors.white,
                     ),
                   ],
                 )
@@ -308,9 +323,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 Container(
                   width: 32,
                   height: 32,
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.white,
+                    color: Theme.of(context).textTheme.bodyLarge?.color ??
+                        Colors.white,
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -320,13 +336,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     Container(
                       height: 10,
                       width: 100,
-                      color: Colors.white,
+                      color: Theme.of(context).textTheme.bodyLarge?.color ??
+                          Colors.white,
                     ),
                     const SizedBox(height: 4),
                     Container(
                       height: 10,
                       width: 200,
-                      color: Colors.white,
+                      color: Theme.of(context).textTheme.bodyLarge?.color ??
+                          Colors.white,
                     ),
                   ],
                 )
@@ -338,9 +356,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 Container(
                   width: 32,
                   height: 32,
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.white,
+                    color: Theme.of(context).textTheme.bodyLarge?.color ??
+                        Colors.white,
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -350,13 +369,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     Container(
                       height: 10,
                       width: 100,
-                      color: Colors.white,
+                      color: Theme.of(context).textTheme.bodyLarge?.color ??
+                          Colors.white,
                     ),
                     const SizedBox(height: 4),
                     Container(
                       height: 10,
                       width: 200,
-                      color: Colors.white,
+                      color: Theme.of(context).textTheme.bodyLarge?.color ??
+                          Colors.white,
                     ),
                   ],
                 )
@@ -368,9 +389,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 Container(
                   width: 32,
                   height: 32,
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.white,
+                    color: Theme.of(context).textTheme.bodyLarge?.color ??
+                        Colors.white,
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -380,30 +402,50 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     Container(
                       height: 10,
                       width: 100,
-                      color: Colors.white,
+                      color: Theme.of(context).textTheme.bodyLarge?.color ??
+                          Colors.white,
                     ),
                     const SizedBox(height: 4),
                     Container(
                       height: 10,
                       width: 200,
-                      color: Colors.white,
+                      color: Theme.of(context).textTheme.bodyLarge?.color ??
+                          Colors.white,
                     ),
                   ],
                 )
               ],
             ),
             const SizedBox(height: 24),
-            Container(height: 10, color: Colors.white),
+            Container(
+                height: 10,
+                color: Theme.of(context).textTheme.bodyLarge?.color ??
+                    Colors.white),
             const SizedBox(height: 4),
-            Container(height: 10, color: Colors.white),
+            Container(
+                height: 10,
+                color: Theme.of(context).textTheme.bodyLarge?.color ??
+                    Colors.white),
             const SizedBox(height: 4),
-            Container(height: 10, color: Colors.white),
+            Container(
+                height: 10,
+                color: Theme.of(context).textTheme.bodyLarge?.color ??
+                    Colors.white),
             const SizedBox(height: 4),
-            Container(height: 10, color: Colors.white),
+            Container(
+                height: 10,
+                color: Theme.of(context).textTheme.bodyLarge?.color ??
+                    Colors.white),
             const SizedBox(height: 4),
-            Container(height: 10, color: Colors.white),
+            Container(
+                height: 10,
+                color: Theme.of(context).textTheme.bodyLarge?.color ??
+                    Colors.white),
             const SizedBox(height: 4),
-            Container(height: 10, color: Colors.white),
+            Container(
+                height: 10,
+                color: Theme.of(context).textTheme.bodyLarge?.color ??
+                    Colors.white),
           ],
         ),
       ),
@@ -502,6 +544,52 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               ),
                             );
                           }).toList(),
+//                 Navigator.pushNamed(
+//                   context,
+//                   Routes.imageZoom,
+//                   arguments: product.sourceId == 2 || product.sourceId == 3
+//                       ? product.image
+//                       : "${Application.picturesURL}${product.image}",
+//                 );
+//               },
+//               child: CachedNetworkImage(
+//                 imageUrl: product.sourceId == 2 || product.sourceId == 3
+//                     ? product.image
+//                     : product.image == 'admin/News.jpeg'
+//                         ? "${Application.picturesURL}${product.image}"
+//                         : "${Application.picturesURL}${product.image}?cacheKey=$uniqueKey",
+//                 cacheManager: memoryCacheManager,
+//                 placeholder: (context, url) {
+//                   return AppPlaceholder(
+//                     child: Container(
+//                       decoration: BoxDecoration(
+//                         color: Theme.of(context).textTheme.bodyLarge?.color ??
+//                             Colors.white,
+//                       ),
+//                     ),
+//                   );
+//                 },
+//                 imageBuilder: (context, imageProvider) {
+//                   return Container(
+//                     decoration: BoxDecoration(
+//                       image: DecorationImage(
+//                         image: imageProvider,
+//                         fit: BoxFit.fitHeight,
+//                       ),
+//                     ),
+//                   );
+//                 },
+//                 errorWidget: (context, url, error) {
+//                   return AppPlaceholder(
+//                     child: Container(
+//                       width: 120,
+//                       height: 140,
+//                       decoration: BoxDecoration(
+//                         color: Theme.of(context).textTheme.bodyLarge?.color ??
+//                             Colors.white,
+//                         borderRadius: const BorderRadius.only(
+//                           topLeft: Radius.circular(8),
+//                           bottomLeft: Radius.circular(8),
                         ),
                       ),
                     ],
@@ -556,9 +644,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             shape: BoxShape.circle,
                             color: Theme.of(context).dividerColor,
                           ),
-                          child: const Icon(
+                          child: Icon(
                             Icons.location_on_outlined,
-                            color: Colors.white,
+                            color:
+                                Theme.of(context).textTheme.bodyLarge?.color ??
+                                    Colors.white,
                             size: 18,
                           ),
                         ),
@@ -611,9 +701,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       shape: BoxShape.circle,
                       color: Theme.of(context).dividerColor,
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.phone_outlined,
-                      color: Colors.white,
+                      color: Theme.of(context).textTheme.bodyLarge?.color ??
+                          Colors.white,
                       size: 18,
                     ),
                   ),
@@ -663,9 +754,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       shape: BoxShape.circle,
                       color: Theme.of(context).dividerColor,
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.email_outlined,
-                      color: Colors.white,
+                      color: Theme.of(context).textTheme.bodyLarge?.color ??
+                          Colors.white,
                       size: 18,
                     ),
                   ),
@@ -715,9 +807,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       shape: BoxShape.circle,
                       color: Theme.of(context).dividerColor,
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.language_outlined,
-                      color: Colors.white,
+                      color: Theme.of(context).textTheme.bodyLarge?.color ??
+                          Colors.white,
                       size: 18,
                     ),
                   ),
@@ -749,7 +842,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         );
       }
 
-      if (product.startDate.isNotEmpty) {
+      if (product.startDate.isNotEmpty || product.endDate != "") {
         startDate = Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -811,26 +904,42 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
       if (product.description.isNotEmpty) {
         String modifiedDescription = product.description;
+        String color = (isDarkMode) ? 'white' : 'black';
+        String hexColor = (isDarkMode) ? '#ffffff' : '#000000';
 
         modifiedDescription = modifiedDescription.replaceAll(
-            RegExp(r'color: [^;]+;'), "color: white");
+            RegExp(r'color: [^;]+;'), "color: $color");
+
+        RegExp exp = RegExp(
+          r'<a\s+[^>]*\bhref="([^"]+\.(?:jpg|png))"[^>]*>.*?<a>',
+          caseSensitive: false,
+        );
+
+        modifiedDescription =
+            modifiedDescription.replaceAllMapped(exp, (match) {
+          String href = match.group(1) ?? "";
+          return '<img src="$href">';
+        });
 
         description = HtmlWidget(
           modifiedDescription,
-          textStyle:
-              const TextStyle(fontSize: 16.0, color: Colors.white, height: 1.6),
+          textStyle: TextStyle(
+              fontSize: 16.0,
+              color:
+                  Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white,
+              height: 1.6),
           customStylesBuilder: (element) {
             if (element.localName == 'img') {
               return {'max-width': '100%'};
             } else if (element.localName == '') {
-              return {'color': '#ffffff'};
+              return {'color': hexColor};
             }
             var style = element.attributes['style'];
             if (style != null) {
-              style =
-                  style.replaceAll(RegExp(r'color:[^;];?'), 'color: #ffffff;');
+              style = style.replaceAll(
+                  RegExp(r'color:[^;];?'), 'color: $hexColor;');
             } else {
-              style = 'color: #ffffff;';
+              style = 'color: $hexColor;';
             }
 
             return {'style': style};
@@ -1034,13 +1143,16 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             List<FavoriteModel>? favoriteList;
             UserModel? userDetail;
             bool isLoggedIn = false;
+            bool isDarkMode = true;
             if (state is ProductDetailLoaded) {
               product = state.product;
               favoriteList = state.favoritesList;
               isLoggedIn = state.isLoggedIn;
               userDetail = state.userDetail;
+              isDarkMode = state.isDarkMode;
             }
-            return _buildContent(product, favoriteList, userDetail, isLoggedIn);
+            return _buildContent(
+                product, favoriteList, userDetail, isLoggedIn, isDarkMode);
           },
         ),
       ),

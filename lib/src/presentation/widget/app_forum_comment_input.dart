@@ -75,7 +75,7 @@ class CommentInputWidgetState extends State<CommentInputWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.black,
+      color: Theme.of(context).scaffoldBackgroundColor,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
         children: [
@@ -96,18 +96,18 @@ class CommentInputWidgetState extends State<CommentInputWidget> {
                 hintText: widget.isAddingReply
                     ? Translate.of(context).translate('add_reply')
                     : Translate.of(context).translate('add_comment'),
-                hintStyle: const TextStyle(color: Colors.white),
+                hintStyle: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white),
                 border: InputBorder.none,
               ),
             ),
           ),
           if (widget.isAddingReply)
             IconButton(
-              icon: const Icon(Icons.clear, color: Colors.white),
+              icon: Icon(Icons.clear, color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white),
               onPressed: resetInput,
             ),
           IconButton(
-            icon: const Icon(Icons.send, color: Colors.white),
+            icon: Icon(Icons.send, color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white),
             onPressed: () async {
               final value = widget.isAddingReply
                   ? widget.replyController!.text

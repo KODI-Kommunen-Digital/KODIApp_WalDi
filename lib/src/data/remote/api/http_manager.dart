@@ -3,10 +3,12 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
+import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/logger.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class HTTPManager {
   final exceptionCode = ['jwt_auth_bad_iss', 'jwt_auth_invalid_token'];
@@ -19,6 +21,8 @@ class HTTPManager {
         : 'https://test.smartregion-auf.de/forumapi/';
     // ? 'http://localhost:3001/'
     //     : 'http://localhost:3002/';
+        //? 'https://app.geseke.it/api/'
+        //: 'https://app.geseke.it/forumapi/';
 
     _dio = Dio(
       BaseOptions(
@@ -79,12 +83,18 @@ class HTTPManager {
                 ),
               );
               handler.resolve(response);
-            } catch (e) {
+            } catch (e, stackTrace) {
               logError('Refresh Token Response Failed', e);
+              await Sentry.captureException(e, stackTrace: stackTrace);
               handler.reject(error);
             }
-          } else {
+          } else if (response.message ==
+              'Unauthorized! Refresh Token was expired!') {
             logError('Refresh Token Error', response.message);
+            AppBloc.loginCubit.onLogout();
+            final prefs = await Preferences.openBox();
+            prefs.deleteKey(Preferences.userId);
+            handler.next(error);
           }
         } else {
           final response = Response(
@@ -121,7 +131,8 @@ class HTTPManager {
         },
       );
       return response.data;
-    } on DioError catch (error) {
+    } on DioError catch (error, stackTrace) {
+      await Sentry.captureException(error, stackTrace: stackTrace);
       return _errorHandle(error);
     } finally {
       if (loading == true) {
@@ -150,7 +161,8 @@ class HTTPManager {
         cancelToken: cancelToken,
       );
       return response.data;
-    } on DioError catch (error) {
+    } on DioError catch (error, stackTrace) {
+      await Sentry.captureException(error, stackTrace: stackTrace);
       return _errorHandle(error);
     } finally {
       if (loading == true) {
@@ -183,7 +195,8 @@ class HTTPManager {
         },
       );
       return response.data;
-    } on DioError catch (error) {
+    } on DioError catch (error, stackTrace) {
+      await Sentry.captureException(error, stackTrace: stackTrace);
       return _errorHandle(error);
     } finally {
       if (loading == true) {
@@ -209,7 +222,8 @@ class HTTPManager {
         options: options,
       );
       return response.data;
-    } on DioError catch (error) {
+    } on DioError catch (error, stackTrace) {
+      await Sentry.captureException(error, stackTrace: stackTrace);
       return _errorHandle(error);
     } finally {
       if (loading == true) {
@@ -253,7 +267,8 @@ class HTTPManager {
         "success": false,
         "message": 'download_fail',
       };
-    } on DioError catch (error) {
+    } on DioError catch (error, stackTrace) {
+      await Sentry.captureException(error, stackTrace: stackTrace);
       return _errorHandle(error);
     } finally {
       if (loading == true) {
@@ -285,7 +300,13 @@ class HTTPManager {
         break;
 
       default:
-        message = "Please make sure you are connected to the Internet";
+        if (error.response?.data['message'] ==
+            'Unauthorized! Refresh Token was expired!') {
+          AppBloc.loginCubit.onLogout();
+          message = "Your session has expired. Please log in again.";
+        } else {
+          message = "Please make sure you are connected to the Internet";
+        }
         break;
     }
 

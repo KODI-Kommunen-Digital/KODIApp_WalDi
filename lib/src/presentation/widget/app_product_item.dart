@@ -13,20 +13,22 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:path_provider/path_provider.dart';
 
 class AppProductItem extends StatelessWidget {
-  const AppProductItem({
-    Key? key,
-    this.item,
-    this.onPressed,
-    required this.type,
-    this.trailing,
-    required this.isRefreshLoader,
-  }) : super(key: key);
+  const AppProductItem(
+      {Key? key,
+      this.item,
+      this.onPressed,
+      required this.type,
+      this.trailing,
+      required this.isRefreshLoader,
+      this.cityName})
+      : super(key: key);
 
   final ProductModel? item;
   final ProductViewType type;
   final VoidCallback? onPressed;
   final Widget? trailing;
   final bool isRefreshLoader;
+  final String? cityName;
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +49,8 @@ class AppProductItem extends StatelessWidget {
                   ? ClipRRect(
                       borderRadius: BorderRadius.circular(12),
                       child: SizedBox(
-                          width: 84,
-                          height: 84,
+                          width: 100,
+                          height: 100,
                           child: const PDF().cachedFromUrl(
                             "${Application.picturesURL}${item?.pdf}?cacheKey=$uniqueKey",
                             placeholder: (progress) =>
@@ -59,42 +61,47 @@ class AppProductItem extends StatelessWidget {
                     )
                   : ClipRRect(
                       borderRadius: BorderRadius.circular(12),
-                      child: Image.network(
-                        item?.sourceId == 2
+                      child: CachedNetworkImage(
+                        imageUrl: item?.sourceId == 2 || item?.sourceId == 3
                             ? item!.image
-                            : item!.image == 'admin/News.jpeg'
-                                ? "${Application.picturesURL}${item!.image}"
-                                : isRefreshLoader
-                                    ? "${Application.picturesURL}${item!.image}"
-                                    : "${Application.picturesURL}${item!.image}?cache=$uniqueKey",
-                        width: 84,
-                        height: 84,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
+                            : "${Application.picturesURL}${item!.image}",
+                        cacheManager: memoryCacheManager,
+                        placeholder: (context, url) {
                           return AppPlaceholder(
                             child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
+                              height: 100,
+                              width: 100,
+                              decoration: const BoxDecoration(
                                 color: Colors.white,
                               ),
-                              width: 84,
-                              height: 84,
-                              child: const Icon(Icons.error),
                             ),
                           );
                         },
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) {
-                            return child;
-                          }
+                        imageBuilder: (context, imageProvider) {
+                          return Container(
+                            width: 100,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.fitHeight,
+                              ),
+                            ),
+                          );
+                        },
+                        errorWidget: (context, url, error) {
                           return AppPlaceholder(
                             child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                color: Colors.white,
-                              ),
                               width: 84,
                               height: 84,
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(8),
+                                  bottomLeft: Radius.circular(8),
+                                ),
+                              ),
+                              child: const Icon(Icons.error),
                             ),
                           );
                         },
@@ -115,7 +122,9 @@ class AppProductItem extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      item?.category ?? '',
+                      (cityName != null)
+                          ? "${item?.category ?? ''} - $cityName"
+                          : item?.category ?? '',
                       style: Theme.of(context)
                           .textTheme
                           .bodySmall!
@@ -124,7 +133,7 @@ class AppProductItem extends StatelessWidget {
                     const SizedBox(height: 2),
                     Visibility(
                       visible: item!.startDate.isNotEmpty &&
-                          item?.startDate != item?.endDate,
+                          item!.endDate.isNotEmpty,
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.white30,
@@ -143,8 +152,8 @@ class AppProductItem extends StatelessWidget {
                       ),
                     ),
                     Visibility(
-                      visible: item!.startDate.isNotEmpty &&
-                          item?.startDate == item?.endDate,
+                      visible:
+                          item!.startDate.isNotEmpty && item!.endDate == "",
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.white30,
@@ -153,7 +162,26 @@ class AppProductItem extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(3.5),
                           child: Text(
-                            "${item?.startDate} ${Translate.of(context).translate('to')} ${item?.endDate}",
+                            "${item?.startDate}",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall!
+                                .copyWith(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Visibility(
+                      visible: item?.categoryId == 1,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white30,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(3.5),
+                          child: Text(
+                            "${item?.createDate}",
                             style: Theme.of(context)
                                 .textTheme
                                 .bodySmall!
@@ -163,6 +191,15 @@ class AppProductItem extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 4),
+                    if (item?.sourceId == 3)
+                      Text(
+                        "${Translate.of(context).translate('quelle')} ${item?.website ?? ''}",
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall!
+                            .copyWith(fontWeight: FontWeight.bold),
+                      ),
+                    const SizedBox(height: 2),
                   ],
                 ),
               ),
@@ -183,7 +220,7 @@ class AppProductItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               CachedNetworkImage(
-                imageUrl: item?.sourceId == 2
+                imageUrl: item?.sourceId == 2 || item?.sourceId == 3
                     ? item!.image
                     : "${Application.picturesURL}${item!.image}",
                 cacheManager: memoryCacheManager,
@@ -293,8 +330,8 @@ class AppProductItem extends StatelessWidget {
                       ? ClipRRect(
                           borderRadius: BorderRadius.circular(12),
                           child: SizedBox(
-                              width: 84,
-                              height: 84,
+                              width: 120,
+                              height: 140,
                               child: const PDF().cachedFromUrl(
                                 "${Application.picturesURL}${item?.pdf}?cacheKey=$uniqueKey",
                                 placeholder: (progress) =>
@@ -305,42 +342,47 @@ class AppProductItem extends StatelessWidget {
                         )
                       : ClipRRect(
                           borderRadius: BorderRadius.circular(12),
-                          child: Image.network(
-                            item?.sourceId == 2
+                          child: CachedNetworkImage(
+                            imageUrl: item?.sourceId == 2 || item?.sourceId == 3
                                 ? item!.image
-                                : item!.image == 'admin/News.jpeg'
-                                    ? "${Application.picturesURL}${item!.image}"
-                                    : isRefreshLoader
-                                        ? "${Application.picturesURL}${item!.image}"
-                                        : "${Application.picturesURL}${item!.image}?cache=$uniqueKey",
-                            width: 120,
-                            height: 140,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
+                                : "${Application.picturesURL}${item!.image}",
+                            cacheManager: memoryCacheManager,
+                            placeholder: (context, url) {
                               return AppPlaceholder(
                                 child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
-                                    color: Colors.white,
-                                  ),
                                   width: 120,
                                   height: 140,
-                                  child: const Icon(Icons.error),
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                  ),
                                 ),
                               );
                             },
-                            loadingBuilder: (context, child, loadingProgress) {
-                              if (loadingProgress == null) {
-                                return child;
-                              }
+                            imageBuilder: (context, imageProvider) {
+                              return Container(
+                                width: 120,
+                                height: 140,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: imageProvider,
+                                    fit: BoxFit.fitHeight,
+                                  ),
+                                ),
+                              );
+                            },
+                            errorWidget: (context, url, error) {
                               return AppPlaceholder(
                                 child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
-                                    color: Colors.white,
-                                  ),
                                   width: 120,
                                   height: 140,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(8),
+                                      bottomLeft: Radius.circular(8),
+                                    ),
+                                  ),
+                                  child: const Icon(Icons.error),
                                 ),
                               );
                             },
@@ -359,37 +401,40 @@ class AppProductItem extends StatelessWidget {
                               .titleSmall!
                               .copyWith(fontWeight: FontWeight.bold),
                         ),
-                        const SizedBox(height: 8),
-                        (item?.categoryId == 3)
-                            ? Container(
-                                padding: const EdgeInsets.all(3.5),
-                                decoration: BoxDecoration(
-                                  color: Colors.white30,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Text(
-                                  item?.categoryId == 3
-                                      ? "${item?.startDate} ${Translate.of(context).translate('to')} ${item?.endDate}"
-                                      : "",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodySmall!
-                                      .copyWith(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                ),
-                              )
-                            : Text(
-                                item?.categoryId == 3
-                                    ? "${item?.startDate} ${Translate.of(context).translate('to')} ${item?.endDate}"
-                                    : "",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall!
-                                    .copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                              ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        Text(
+                          (cityName != null)
+                              ? "${item?.category ?? ''} - $cityName"
+                              : item?.category ?? '',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall!
+                              .copyWith(fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(
+                          height: 4,
+                        ),
+                        if (item?.categoryId == 3)
+                          Container(
+                            padding: const EdgeInsets.all(3.5),
+                            decoration: BoxDecoration(
+                              color: Colors.white30,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text(
+                              item?.endDate == ""
+                                  ? "${item?.startDate}"
+                                  : "${item?.startDate} ${Translate.of(context).translate('to')} ${item?.endDate}",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall!
+                                  .copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                            ),
+                          ),
                         Text(
                           item?.categoryId == 1 ? "${item?.createDate}" : "",
                           style:

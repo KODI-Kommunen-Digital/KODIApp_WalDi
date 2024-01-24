@@ -5,6 +5,7 @@ import 'package:heidi/src/data/model/model_comment.dart';
 import 'package:heidi/src/data/repository/forum_repository.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:loggy/loggy.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 import 'post_detail_state.dart';
 
@@ -47,8 +48,9 @@ class PostDetailCubit extends Cubit<PostDetailState> {
       final commentsWithUserDetails =
           await fetchUserDetailsForComments(comments);
       return commentsWithUserDetails;
-    } catch (e) {
+    } catch (e, stackTrace) {
       logError('Get Post Comments Failed', e.toString());
+      await Sentry.captureException(e, stackTrace: stackTrace);
       return [];
     }
   }
@@ -74,8 +76,9 @@ class PostDetailCubit extends Cubit<PostDetailState> {
           forumId!, postId!, parentId!, pageNo!, cityId);
       final repliesWithUserDetails = await fetchUserDetailsForComments(replies);
       return repliesWithUserDetails;
-    } catch (e) {
+    } catch (e, stackTrace) {
       logError('Get Comment Replies Failed', e.toString());
+      await Sentry.captureException(e, stackTrace: stackTrace);
       return [];
     }
   }

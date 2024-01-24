@@ -76,12 +76,33 @@ class HomeCubit extends Cubit<HomeState> {
     ));
   }
 
+  Future<void> saveIgnoreAppVersion(String version) async {
+    final prefs = await Preferences.openBox();
+    await prefs.setKeyValue(Preferences.ignoredAppVersion, version);
+  }
+
+  Future<String> getIgnoreAppVersion() async {
+    final prefs = await Preferences.openBox();
+    String ignoreVersion = await prefs.getKeyValue(Preferences.ignoredAppVersion, '');
+    return ignoreVersion;
+  }
+
+
   Future<bool> doesUserExist() async {
     final int userId = await UserRepository.getLoggedUserId();
     if (userId == 0) return true;
 
     bool doesExist = await UserRepository.doesUserExist(userId);
     return doesExist;
+  }
+
+  String getCityName(List<CategoryModel>? cities, int cityId) {
+    if (cities != null) {
+      String name =
+          cities[cities.indexWhere((category) => category.id == cityId)].title;
+      return name;
+    }
+    return "";
   }
 
   Future<bool> categoryHasContent(int id, int? cityId) async {
@@ -135,11 +156,19 @@ class HomeCubit extends Cubit<HomeState> {
       idToCountMap[obj.id] = obj.count;
     }
     categories.sort((a, b) {
-      if (a.id == 14) return -1;
-      if (b.id == 14) return 1;
+      if (a.id == 14) return 1;
+      if (b.id == 14) return -1;
 
       return (idToCountMap[b.id] ?? 0).compareTo(idToCountMap[a.id] ?? 0);
     });
+
+    //Forum always at index 6, before the more button
+    int forumIndex = categories.indexWhere((element) => element.id == 14);
+
+    if (forumIndex != -1) {
+      var forum = categories.removeAt(forumIndex);
+      categories.insert(6, forum);
+    }
     // Hide tag on empty categories
     for (var element in categories) {
       bool hasContent = await categoryHasContent(element.id, cityId);

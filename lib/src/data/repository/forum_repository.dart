@@ -118,12 +118,13 @@ class ForumRepository {
     }
   }
 
-  Future<ResultApiModel?> requestGroupDetails(forumId) async {
-    int cityId = prefs.getKeyValue(Preferences.cityId, 0);
-    if (cityId == 0) {
-      cityId = 1;
-    }
-    final response = await Api.requestGroupDetails(forumId, cityId);
+  Future<ResultApiModel?> requestGroupDetails(forumId, cityId) async {
+    int prefCityId = prefs.getKeyValue(Preferences.cityId, 0);
+    // if (cityId == 0) {
+    //   cityId = 1;
+    // }
+    final response = await Api.requestGroupDetails(
+        forumId, cityId != 0 ? cityId : prefCityId);
     if (response.success) {
       return response;
     } else {
@@ -157,7 +158,9 @@ class ForumRepository {
   }
 
   Future<ResultApiModel?> deleteGroupPost(forumId, cityId, postId) async {
-    final response = await Api.deleteGroupPost(forumId, cityId, postId);
+    final cityIdPref = prefs.getKeyValue(Preferences.cityId, 0);
+    final response = await Api.deleteGroupPost(
+        forumId, cityId == 0 ? cityIdPref : cityId, postId);
     if (response.success) {
       return response;
     } else {
@@ -170,8 +173,8 @@ class ForumRepository {
       forumId, postId, reason, cityId) async {
     final cityIdPref = prefs.getKeyValue(Preferences.cityId, 0);
     final Map<String, dynamic> params = {"Reason": reason};
-    final response =
-        await Api.reportGroupPosts(forumId, cityId == 0 ? cityIdPref : cityId, postId, params);
+    final response = await Api.reportGroupPosts(
+        forumId, cityId == 0 ? cityIdPref : cityId, postId, params);
     if (response.success) {
       return response;
     } else {
@@ -257,11 +260,11 @@ class ForumRepository {
     }
   }
 
-  Future<bool> requestRemoveAdmin(forumId, memberId) async {
-    final cityId = prefs.getKeyValue(Preferences.cityId, 0);
+  Future<bool> requestRemoveAdmin(forumId, memberId, cityId) async {
+    final prefCityId = prefs.getKeyValue(Preferences.cityId, 0);
     final Map<String, dynamic> params = {"isAdmin": 0};
-    final response =
-        await Api.requestRemoveAdmin(cityId, forumId, memberId, params);
+    final response = await Api.requestRemoveAdmin(
+        cityId == 0 ? prefCityId : cityId, forumId, memberId, params);
     if (response.success) {
       return true;
     } else {
@@ -389,7 +392,8 @@ class ForumRepository {
     cityId,
   ) async {
     int cityIdPref = prefs.getKeyValue(Preferences.cityId, 0);
-    final response = await Api.requestDeleteForum(cityId == 0 ? cityIdPref : cityId, forumId);
+    final response = await Api.requestDeleteForum(
+        cityId == 0 ? cityIdPref : cityId, forumId);
     if (response.success) {
       return response;
     } else {
@@ -462,7 +466,8 @@ class ForumRepository {
       final prefs = await Preferences.openBox();
       FormData? pickedFile = prefs.getPickedFile();
       if (pickedFile != null) {
-        await Api.requestPostImageUpload(cityId, forumId, postId, pickedFile);
+        await Api.requestPostImageUpload(
+            cityId == 0 ? cityIdPref : cityId, forumId, postId, pickedFile);
       }
       prefs.deleteKey('pickedFile');
     }
@@ -488,9 +493,9 @@ class ForumRepository {
 
   Future<List<CommentModel>> getPostComments(
       int forumId, int postId, page, cityId) async {
-    // int cityId = prefs.getKeyValue(Preferences.cityId, 0);
-    final response =
-        await Api.requestPostComments(cityId, forumId, postId, page);
+    int cityIdPref = prefs.getKeyValue(Preferences.cityId, 0);
+    final response = await Api.requestPostComments(
+        cityId != 0 ? cityId : cityIdPref, forumId, postId, page);
     if (response.success) {
       final List<CommentModel> comments = [];
       for (final jsonComment in response.data) {
@@ -506,11 +511,12 @@ class ForumRepository {
 
   Future<ResultApiModel> addPostComments(
       int forumId, int postId, String comment, cityId) async {
-    // int cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    int cityIdPref = prefs.getKeyValue(Preferences.cityId, 0);
     Map<String, dynamic> params = {
       "comment": comment,
     };
-    final response = await Api.addPostComments(cityId, forumId, postId, params);
+    final response = await Api.addPostComments(
+        cityId != 0 ? cityId : cityIdPref, forumId, postId, params);
     if (response.success) {
       return response;
     } else {
@@ -521,25 +527,26 @@ class ForumRepository {
 
   Future<ResultApiModel> addPostCommentsReply(
       int forumId, int postId, String comment, int parentId, cityId) async {
-    // int cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    int cityIdPref = prefs.getKeyValue(Preferences.cityId, 0);
     Map<String, dynamic> params = {
       "comment": comment,
       "parentId": parentId,
     };
-    final response = await Api.addPostComments(cityId, forumId, postId, params);
+    final response = await Api.addPostComments(
+        cityId != 0 ? cityId : cityIdPref, forumId, postId, params);
     if (response.success) {
       return response;
     } else {
-      logError('Get Post Comments Failed', response.message);
+      logError('Get Post Comments Reply Failed', response.message);
       return response;
     }
   }
 
   Future<List<CommentModel>> getPostCommentsReplies(
       int forumId, int postId, int parentId, int pageNo, cityId) async {
-    // int cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    int cityIdPref = prefs.getKeyValue(Preferences.cityId, 0);
     final response = await Api.requestPostCommentsReplies(
-        cityId, forumId, postId, parentId, pageNo);
+        cityId != 0 ? cityId : cityIdPref, forumId, postId, parentId, pageNo);
     if (response.success) {
       final List<CommentModel> replies = [];
       for (final jsonReply in response.data) {

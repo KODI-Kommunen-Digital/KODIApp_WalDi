@@ -99,6 +99,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   hintText: Translate.of(context).translate(
                     'newPass',
                   ),
+                  keyboardType: TextInputType.emailAddress,
                   errorText: _errorPass,
                   onChanged: (text) {
                     setState(() {

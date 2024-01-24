@@ -95,13 +95,12 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
       context: context,
       builder: (context) {
         return Container(
-          color: Colors.grey[900],
+          color: Theme.of(context).dialogBackgroundColor,
           height: 200,
           child: ListView.separated(
             itemCount: context.read<DiscoveryCubit>().location.length,
-            separatorBuilder: (BuildContext context, int index) =>
-                const Divider(
-              color: Colors.white,
+            separatorBuilder: (BuildContext context, int index) => Divider(
+              color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white,
               height: 1,
               thickness: 1,
             ),
@@ -222,7 +221,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
       if (cityId != 0) {
         if (!mounted) return;
         Navigator.pushNamed(context, Routes.listGroups,
-            arguments: {'id': service.arguments, 'title': 'Forum'});
+            arguments: {'id': service.arguments, 'title': 'forums'});
       } else {
         if (!mounted) return;
         _showCitySelectionPopup(context);

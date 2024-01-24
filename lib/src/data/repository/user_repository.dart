@@ -8,6 +8,7 @@ import 'package:heidi/src/data/model/model_favorites_detail_list.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class UserRepository {
   UserRepository();
@@ -46,8 +47,9 @@ class UserRepository {
         logError('Login Request Error', response.message);
         return response;
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
       logError('request Login Response Error', e);
+      await Sentry.captureException(e, stackTrace: stackTrace);
     }
     return null;
   }
@@ -88,7 +90,8 @@ class UserRepository {
   static Future<UserModel?> getUserDetails(userId, cityId) async {
     final prefs = await Preferences.openBox();
     final cityIdPref = prefs.getKeyValue(Preferences.cityId, 0);
-    final response = await Api.getUserDetails(userId, cityId == 0 ? cityIdPref : cityId);
+    final response =
+        await Api.getUserDetails(userId, cityId == 0 ? cityIdPref : cityId);
     if (response.success) {
       return UserModel.fromJson(response.data);
     }
@@ -134,7 +137,8 @@ class UserRepository {
     return response;
   }
 
-  static Future<ResultApiModel> forgotPassword({required String username}) async {
+  static Future<ResultApiModel> forgotPassword(
+      {required String username}) async {
     final Map<String, dynamic> params = {"username": username};
     final response = await Api.requestForgotPassword(params);
     if (response.success) {
@@ -170,13 +174,15 @@ class UserRepository {
     final response = await Api.requestChangeProfile(params, userId);
     if (response.success) {
       FormData? pickedFile = prefs.getPickedFile();
-      final responseImageUpload = await Api.requestUploadImage(pickedFile);
-      if(responseImageUpload.success){
+      if (pickedFile != null) {
+        final responseImageUpload = await Api.requestUploadImage(pickedFile);
+        if (responseImageUpload.success) {
+          return true;
+        } else {
+          logError('Image Upload Error Response', response.message);
+        }
+      } else {
         return true;
-      }
-      else{
-        logError('Image Upload Error Response', response.message);
-
       }
     }
     return false;
@@ -202,16 +208,22 @@ class UserRepository {
 
   static Future<List<FavoriteModel>> loadFavorites(userId) async {
     final favoriteList = <FavoriteModel>[];
-    final response = await Api.requestFavorites(userId);
-    if (response.success) {
-      final responseData = response.data;
-      for (final data in responseData) {
-        favoriteList.add(FavoriteModel(
-            data['id'], data['userId'], data['cityId'], data['listingId']));
-      }
+    try {
+      final response = await Api.requestFavorites(userId);
+      if (response.success) {
+        final responseData = response.data;
+        for (final data in responseData) {
+          favoriteList.add(FavoriteModel(
+              data['id'], data['userId'], data['cityId'], data['listingId']));
+        }
+        return favoriteList;
+      } else {}
       return favoriteList;
-    } else {}
-    return favoriteList;
+    } catch (e, stackTrace) {
+      logError('Load Favorite Error', e);
+      await Sentry.captureException(e, stackTrace: stackTrace);
+      return [];
+    }
   }
 
   static Future<List<FavoriteDetailsModel>> loadFavoritesListDetail(

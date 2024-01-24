@@ -1,8 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:heidi/src/data/model/model_group_members.dart';
 import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details/group_members/cubit/group_members_cubit.dart';
 import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details/group_members/cubit/group_members_state.dart';
+import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:intl/intl.dart';
@@ -67,6 +70,7 @@ class GroupMembersLoaded extends StatefulWidget {
 }
 
 class _GroupMembersLoadedState extends State<GroupMembersLoaded> {
+  final memoryCacheManager = DefaultCacheManager();
   int loggedUserId = 0;
   bool isMemberAdmin = false;
 
@@ -109,14 +113,49 @@ class _GroupMembersLoadedState extends State<GroupMembersLoaded> {
                       width: 80,
                       height: 80,
                       child: ClipOval(
-                          child: Image.network(
-                        widget.membersList?[index].image != null
-                            ? '${Application.picturesURL}${widget.membersList?[index].image}'
-                            : '${Application.picturesURL}admin/DefaultForum.jpeg',
-                        width: 100,
-                        height: 100,
-                        fit: BoxFit.cover,
-                      )),
+                          child: CachedNetworkImage(
+                            imageUrl: widget.membersList?[index].image != null
+                                ? '${Application.picturesURL}${widget.membersList?[index].image}'
+                                : '${Application.picturesURL}admin/DefaultForum.jpeg',
+                            cacheManager: memoryCacheManager,
+                            placeholder: (context, url) {
+                              return AppPlaceholder(
+                                child: Container(
+                                  height: 100,
+                                  width: 100,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              );
+                            },
+                            imageBuilder: (context, imageProvider) {
+                              return Container(
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: imageProvider,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              );
+                            },
+                            errorWidget: (context, url, error) {
+                              return AppPlaceholder(
+                                child: Container(
+                                  height: 100,
+                                  width: 100,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(8),
+                                      bottomLeft: Radius.circular(8),
+                                    ),
+                                  ),
+                                  child: const Icon(Icons.error),
+                                ),
+                              );
+                            },
+                          ),),
                     ),
                     const SizedBox(width: 8),
                     Expanded(
@@ -133,7 +172,7 @@ class _GroupMembersLoadedState extends State<GroupMembersLoaded> {
                               Text(
                                 isMemberAdmin
                                     ? ' [Admin]'
-                                    : Translate.of(context).translate('member'),
+                                    : ' [${Translate.of(context).translate('member')}] ',
                                 maxLines: 1,
                                 style: TextStyle(
                                     color: isMemberAdmin

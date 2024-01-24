@@ -68,7 +68,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
       context: context,
       builder: (context) {
         return Container(
-          color: Colors.grey[900],
+          color: Theme.of(context).dialogBackgroundColor,
           height: 150,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -79,9 +79,10 @@ class _ListProductScreenState extends State<ListProductScreen> {
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: Row(
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.calendar_today,
-                      color: Colors.white,
+                      color: Theme.of(context).textTheme.bodyLarge?.color ??
+                          Colors.white,
                     ),
                     const SizedBox(width: 8),
                     TextButton(
@@ -94,8 +95,12 @@ class _ListProductScreenState extends State<ListProductScreen> {
                         children: [
                           Text(
                             Translate.of(context).translate('this_week'),
-                            style: const TextStyle(
-                              color: Colors.white,
+                            style: TextStyle(
+                              color: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.color ??
+                                  Colors.white,
                             ),
                           ),
                           const SizedBox(width: 5),
@@ -106,8 +111,9 @@ class _ListProductScreenState extends State<ListProductScreen> {
                   ],
                 ),
               ),
-              const Divider(
-                color: Colors.white,
+              Divider(
+                color: Theme.of(context).textTheme.bodyLarge?.color ??
+                    Colors.white,
                 height: 1,
                 thickness: 1,
               ),
@@ -116,9 +122,10 @@ class _ListProductScreenState extends State<ListProductScreen> {
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: Row(
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.calendar_today,
-                      color: Colors.white,
+                      color: Theme.of(context).textTheme.bodyLarge?.color ??
+                          Colors.white,
                     ),
                     const SizedBox(width: 8),
                     TextButton(
@@ -131,8 +138,12 @@ class _ListProductScreenState extends State<ListProductScreen> {
                         children: [
                           Text(
                             Translate.of(context).translate('this_month'),
-                            style: const TextStyle(
-                              color: Colors.white,
+                            style: TextStyle(
+                              color: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.color ??
+                                  Colors.white,
                             ),
                           ),
                           const SizedBox(width: 5),
@@ -210,13 +221,15 @@ class _ListProductScreenState extends State<ListProductScreen> {
           },
           builder: (context, state) => state.when(
             loading: () => const ListLoading(),
-            loaded: (list) => ListLoaded(
+            loaded: (list, listCity) => ListLoaded(
               list: list,
+              listCity: listCity,
               selectedId: widget.arguments['id'],
             ),
-            updated: (list) {
+            updated: (list, listCity) {
               return ListLoaded(
                 list: list,
+                listCity: listCity,
                 selectedId: widget.arguments['id'],
               );
             },
@@ -245,12 +258,14 @@ class ListLoading extends StatelessWidget {
 class ListLoaded extends StatefulWidget {
   final List<ProductModel> list;
   final int selectedId;
+  final List listCity;
 
-  const ListLoaded({
-    Key? key,
-    required this.list,
-    required this.selectedId,
-  }) : super(key: key);
+  const ListLoaded(
+      {Key? key,
+      required this.list,
+      required this.selectedId,
+      required this.listCity})
+      : super(key: key);
 
   @override
   State<ListLoaded> createState() => _ListLoadedState();
@@ -258,6 +273,7 @@ class ListLoaded extends StatefulWidget {
 
 class _ListLoadedState extends State<ListLoaded> {
   List<ProductModel> list = [];
+  List listCity = [];
   final _scrollController = ScrollController(initialScrollOffset: 0.0);
   bool isLoading = false;
   bool isLoadingMore = false;
@@ -268,6 +284,7 @@ class _ListLoadedState extends State<ListLoaded> {
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
     Factory(() => EagerGestureRecognizer())
   };
+
   @override
   void initState() {
     super.initState();
@@ -383,8 +400,10 @@ class _ListLoadedState extends State<ListLoaded> {
   }
 
   void _onProductDetail(ProductModel item) {
-    if (item.sourceId == 2) {
+    if (item.sourceId == 2 || item.showExternal == true) {
       _makeAction(item.website);
+    } else if (item.showExternal == false) {
+      Navigator.pushNamed(context, Routes.productDetail, arguments: item);
     } else {
       Navigator.pushNamed(context, Routes.productDetail, arguments: item);
     }
@@ -401,6 +420,9 @@ class _ListLoadedState extends State<ListLoaded> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: AppProductItem(
               isRefreshLoader: true,
+              cityName: context
+                  .read<ListCubit>()
+                  .getCityNameFromId(widget.listCity, item.cityId ?? 0),
               onPressed: () {
                 _onProductDetail(item);
               },

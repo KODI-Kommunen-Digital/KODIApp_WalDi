@@ -1,11 +1,12 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_product.dart';
@@ -23,18 +24,29 @@ import 'package:heidi/src/utils/translate.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 // ignore: must_be_immutable
-class AllListingsScreen extends StatelessWidget {
+class AllListingsScreen extends StatefulWidget {
   final UserModel user;
 
   const AllListingsScreen({required this.user, super.key});
+
+  @override
+  State<AllListingsScreen> createState() => _AllListingsScreenState();
+}
+
+class _AllListingsScreenState extends State<AllListingsScreen> {
+  @override
+  void dispose() {
+    AppBloc.allListingsCubit.setCurrentStatus(0);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AllListingsCubit, AllListingsState>(
         builder: (context, state) => state.maybeWhen(
             loading: () => const AllListingsLoading(),
-            loaded: (posts, isRefreshLoader) => AllListingsLoaded(
-                user: user, posts: posts, isRefreshLoader: isRefreshLoader),
+            loaded: (posts) =>
+                AllListingsLoaded(user: widget.user, posts: posts),
             orElse: () => ErrorWidget("Failed to load listings.")));
   }
 }
@@ -58,13 +70,8 @@ class AllListingsLoading extends StatelessWidget {
 class AllListingsLoaded extends StatefulWidget {
   final List<ProductModel>? posts;
   final UserModel user;
-  final bool isRefreshLoader;
 
-  const AllListingsLoaded(
-      {required this.user,
-      required this.isRefreshLoader,
-      this.posts,
-      super.key});
+  const AllListingsLoaded({required this.user, this.posts, super.key});
 
   @override
   State<AllListingsLoaded> createState() => _AllListingsLoadedState();
@@ -77,7 +84,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
   int pageNo = 1;
   List<ProductModel>? posts;
   bool isSwiped = false;
-  String selectedListingStatusValue = "pending";
+  String selectedListingStatusValue = "inactive";
 
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
     Factory(() => EagerGestureRecognizer())
@@ -92,7 +99,6 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
 
   @override
   void dispose() {
-    AppBloc.allListingsCubit.setCurrentStatus(0);
     _scrollController.removeListener(_scrollListener);
     _scrollController.dispose();
     super.dispose();
@@ -101,21 +107,21 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
   Future<void> _openFilterDrawer(BuildContext context) async {
     List<String> statusNames = [
       Translate.of(context).translate("active"),
+      Translate.of(context).translate("inactive"),
       Translate.of(context).translate("under_review"),
-      Translate.of(context).translate("pending")
     ];
     int selectedStatus = await AppBloc.allListingsCubit.getCurrentStatus();
     await showModalBottomSheet(
       context: context,
       builder: (context) {
         return Container(
-          color: Colors.grey[900],
+          color: Theme.of(context).dialogBackgroundColor,
           height: 200,
           child: ListView.separated(
             itemCount: 3,
-            separatorBuilder: (BuildContext context, int index) =>
-                const Divider(
-              color: Colors.white,
+            separatorBuilder: (BuildContext context, int index) => Divider(
+              color:
+                  Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white,
               height: 1,
               thickness: 1,
             ),
@@ -144,8 +150,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
 
   @override
   Widget build(BuildContext context) {
-    posts = widget.posts;
-    String uniqueKey = UniqueKey().toString();
+    final memoryCacheManager = DefaultCacheManager();
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(
@@ -179,7 +184,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                   controller: _scrollController,
                   slivers: <Widget>[
                     CupertinoSliverRefreshControl(
-                      onRefresh: _onRefresh,
+                      onRefresh: _onRefreshLoader,
                     ),
                     SliverList(
                       delegate: SliverChildBuilderDelegate(
@@ -239,86 +244,64 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                     children: [
                                       Row(
                                         children: <Widget>[
-                                          item.pdf == ''
-                                              ? ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
-                                                  child: Image.network(
-                                                    item.sourceId == 2
-                                                        ? item.image
-                                                        : item.image ==
-                                                                'admin/News.jpeg'
-                                                            ? "${Application.picturesURL}${item.image}"
-                                                            : widget.isRefreshLoader
-                                                                ? "${Application.picturesURL}${item.image}"
-                                                                : "${Application.picturesURL}${item.image}?cache=$uniqueKey",
+                                          ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                            child: CachedNetworkImage(
+                                              imageUrl: item.sourceId == 2 ||
+                                                      item.sourceId == 3
+                                                  ? item.image
+                                                  : "${Application.picturesURL}${item.image}",
+                                              cacheManager: memoryCacheManager,
+                                              placeholder: (context, url) {
+                                                return AppPlaceholder(
+                                                  child: Container(
                                                     width: 120,
                                                     height: 140,
-                                                    fit: BoxFit.cover,
-                                                    errorBuilder: (context,
-                                                        error, stackTrace) {
-                                                      // Handle errors here
-                                                      return AppPlaceholder(
-                                                        child: Container(
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        12),
-                                                            color: Colors.white,
-                                                          ),
-                                                          width: 120,
-                                                          height: 140,
-                                                          child: const Icon(
-                                                              Icons.error),
-                                                        ),
-                                                      );
-                                                    },
-                                                    loadingBuilder: (context,
-                                                        child,
-                                                        loadingProgress) {
-                                                      // Display the AppPlaceholder while the image is loading
-                                                      if (loadingProgress ==
-                                                          null) {
-                                                        return child;
-                                                      }
-                                                      return AppPlaceholder(
-                                                        child: Container(
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        12),
-                                                            color: Colors.white,
-                                                          ),
-                                                          width: 120,
-                                                          height: 140,
-                                                        ),
-                                                      );
-                                                    },
+                                                    decoration:
+                                                        const BoxDecoration(
+                                                      color: Colors.white,
+                                                    ),
                                                   ),
-                                                )
-                                              : ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(11),
-                                                  child: SizedBox(
-                                                      width: 120,
-                                                      height: 140,
-                                                      child: const PDF()
-                                                          .cachedFromUrl(
-                                                        "${Application.picturesURL}${item.pdf}?cacheKey=$uniqueKey",
-                                                        placeholder:
-                                                            (progress) => Center(
-                                                                child: Text(
-                                                                    '$progress %')),
-                                                        errorWidget: (error) =>
-                                                            Center(
-                                                                child: Text(error
-                                                                    .toString())),
-                                                      )),
-                                                ),
+                                                );
+                                              },
+                                              imageBuilder:
+                                                  (context, imageProvider) {
+                                                return Container(
+                                                  width: 120,
+                                                  height: 140,
+                                                  decoration: BoxDecoration(
+                                                    image: DecorationImage(
+                                                      image: imageProvider,
+                                                      fit: BoxFit.fitHeight,
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                              errorWidget:
+                                                  (context, url, error) {
+                                                return AppPlaceholder(
+                                                  child: Container(
+                                                    width: 120,
+                                                    height: 140,
+                                                    decoration:
+                                                        const BoxDecoration(
+                                                      color: Colors.white,
+                                                      borderRadius:
+                                                          BorderRadius.only(
+                                                        topLeft:
+                                                            Radius.circular(8),
+                                                        bottomLeft:
+                                                            Radius.circular(8),
+                                                      ),
+                                                    ),
+                                                    child:
+                                                        const Icon(Icons.error),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          ),
                                           const SizedBox(width: 8),
                                           Expanded(
                                             child: Column(
@@ -352,7 +335,9 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                                 const SizedBox(height: 8),
                                                 Text(
                                                   item.categoryId == 3
-                                                      ? "${item.startDate} ${Translate.of(context).translate('to')} ${item.endDate}"
+                                                      ? (item.endDate != ""
+                                                          ? "${item.startDate} ${Translate.of(context).translate('to')} ${item.endDate}"
+                                                          : item.startDate)
                                                       : item.createDate,
                                                   style: Theme.of(context)
                                                       .textTheme
@@ -496,8 +481,12 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                   return SimpleDialog(
                       title: Center(
                         child: Text(Translate.of(context).translate('options'),
-                            style: const TextStyle(
-                              color: Colors.white,
+                            style: TextStyle(
+                              color: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.color ??
+                                  Colors.white,
                               fontWeight: FontWeight.bold,
                             )),
                       ),
@@ -570,7 +559,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                     .changeStatus(item, choice);
                                 selectedListingStatusValue =
                                     Translate.of(context)
-                                        .translate(chosen ?? "pending");
+                                        .translate(chosen ?? "inactive");
                                 Navigator.of(context).pop();
                                 _onRefresh();
                                 AppBloc.homeCubit.onLoad(true);
@@ -583,15 +572,15 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                         .translate('active'))),
                                 DropdownMenuItem<String>(
                                   value: Translate.of(context)
-                                      .translate('under_review'),
+                                      .translate('inactive'),
                                   child: Text(Translate.of(context)
-                                      .translate('under_review')),
+                                      .translate('inactive')),
                                 ),
                                 DropdownMenuItem<String>(
                                   value: Translate.of(context)
-                                      .translate('pending'),
+                                      .translate('under_review'),
                                   child: Text(Translate.of(context)
-                                      .translate('pending')),
+                                      .translate('under_review')),
                                 ),
                               ],
                             ),
@@ -614,7 +603,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
       if (_scrollController.position.pixels != 0) {
         setState(() {
           isLoadingMore = true;
-          previousScrollPosition = _scrollController.position.pixels;
+          //previousScrollPosition = _scrollController.position.pixels;
         });
         posts = await context.read<AllListingsCubit>().newListings(++pageNo);
         setState(() {
@@ -661,12 +650,18 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
   }
 
   Future _onRefresh() async {
+    await context.read<AllListingsCubit>().onLoad(false);
+  }
+
+  Future _onRefreshLoader() async {
     await context.read<AllListingsCubit>().onLoad(true);
   }
 
   void _onProductDetail(ProductModel item) {
-    if (item.sourceId == 2) {
+    if (item.sourceId == 2 || item.showExternal == true) {
       _makeAction(item.website);
+    } else if (item.showExternal == false) {
+      Navigator.pushNamed(context, Routes.productDetail, arguments: item);
     } else {
       Navigator.pushNamed(context, Routes.productDetail, arguments: item);
     }
@@ -678,17 +673,17 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
         case 1:
           return "active";
         case 2:
-          return "under_review";
+          return "inactive";
         case 3:
-          return "pending";
+          return "under_review";
       }
     } else if (statusName != null) {
       if (statusName == Translate.of(context).translate('active')) {
         return "1";
+      } else if (statusName == Translate.of(context).translate('inactive')) {
+        return "2";
       } else if (statusName ==
           Translate.of(context).translate('under_review')) {
-        return "2";
-      } else if (statusName == Translate.of(context).translate('pending')) {
         return "3";
       }
     }

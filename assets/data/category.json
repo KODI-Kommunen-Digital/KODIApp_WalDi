@@ -36,7 +36,7 @@
         },
         {
             "id": 5,
-            "name": "Produkte",
+            "name": "Regionale Produkte",
             "noOfSubcategories": 0,                
             "icon": "fas fa-cart-shopping",
             "color": "#4a90a4",
@@ -44,21 +44,12 @@
         },
         {
             "id": 6,
-            "name": "Biete/Suche",
+            "name": "Suche/Biete",
             "noOfSubcategories": 0,
             "icon": "fas fa-magnifying-glass",
             "color": "#58d68d",
             "categoryType" : "category"
         },
-        {
-            "id": 7,
-            "name": "Bürgerinfo",
-            "noOfSubcategories": 0,                
-            "icon": "fas fa-circle-info",
-            "color": "#fdc60a",
-            "categoryType" : "category"
-        },
-        
         {
             "id": 9,
             "name": "Fundbüro",
@@ -84,19 +75,19 @@
             "categoryType" : "category"
         },
         {
-            "id": 12,
-            "name": "Angebote",
-            "noOfSubcategories": 0,
-            "icon": "fas fa-gift",
-            "color": "#58d68d",
-            "categoryType" : "category"
-        },
-        {
             "id": 13,
             "name": "Essen & Trinken",
             "noOfSubcategories": 0,
-            "icon": "fas fa-mug-hot",
-            "color": "#58d68d",
+            "icon": "fas fa-utensils",
+            "color": "#027148",
+            "categoryType" : "category"
+        },
+        {
+            "id": 17,
+            "name": "Freizeit",
+            "noOfSubcategories": 0,                
+            "icon": "fas fa-umbrella-beach",
+            "color": "#fdc60a",
             "categoryType" : "category"
         }
     ]

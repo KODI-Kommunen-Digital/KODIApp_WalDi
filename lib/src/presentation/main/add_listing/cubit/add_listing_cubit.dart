@@ -10,6 +10,7 @@ import 'package:heidi/src/presentation/main/add_listing/cubit/add_listing_state.
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:multiple_images_picker/multiple_images_picker.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class AddListingCubit extends Cubit<AddListingState> {
   final ListRepository _repo;
@@ -83,8 +84,9 @@ class AddListingCubit extends Cubit<AddListingState> {
         logError('save Product Response Failed', response.message);
         return false;
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
       logError('save Product Error', e);
+      await Sentry.captureException(e, stackTrace: stackTrace);
       return false;
     }
   }
@@ -152,8 +154,9 @@ class AddListingCubit extends Cubit<AddListingState> {
         logError('edit Product Response Failed', response.message);
         return false;
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
       logError('edit Product Error', e);
+      await Sentry.captureException(e, stackTrace: stackTrace);
       return false;
     }
   }
@@ -172,8 +175,9 @@ class AddListingCubit extends Cubit<AddListingState> {
         logError('save Product Response Failed', response.message);
         return false;
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
       logError('save Product Error', e);
+      await Sentry.captureException(e, stackTrace: stackTrace);
       return false;
     }
   }
@@ -205,9 +209,10 @@ class AddListingCubit extends Cubit<AddListingState> {
   Future<ResultApiModel?> getVillageId(value) async {
     try {
       return _repo.requestVillages(value);
-    } catch (e) {
+    } catch (e, stackTrace) {
       logError('request Village Error', e);
       emit(AddListingState.error(e.toString()));
+      await Sentry.captureException(e, stackTrace: stackTrace);
       return null;
     }
   }
@@ -215,16 +220,18 @@ class AddListingCubit extends Cubit<AddListingState> {
   void setCategoryId(value) async {
     try {
       _repo.setCategoryId(value);
-    } catch (e) {
+    } catch (e, stackTrace) {
       logError('request categoryID Error', e);
+      await Sentry.captureException(e, stackTrace: stackTrace);
     }
   }
 
   void getSubCategoryId(value) async {
     try {
       _repo.getSubCategoryId(value);
-    } catch (e) {
+    } catch (e, stackTrace) {
       logError('request subCategoryID Error', e);
+      await Sentry.captureException(e, stackTrace: stackTrace);
     }
   }
 
