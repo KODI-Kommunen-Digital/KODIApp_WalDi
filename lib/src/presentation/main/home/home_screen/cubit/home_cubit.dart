@@ -136,10 +136,10 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   Future<List<CategoryModel>> formatCategoriesList(
-      List<CategoryModel> categories,
-      List<CategoryModel> categoryCount,
-      int? cityId,
-      ) async {
+    List<CategoryModel> categories,
+    List<CategoryModel> categoryCount,
+    int? cityId,
+  ) async {
     // Sort List
     Map<int, int?> idToCountMap = {};
     for (var obj in categoryCount) {
@@ -147,14 +147,14 @@ class HomeCubit extends Cubit<HomeState> {
     }
 
     categories.sort((a, b) {
-      if (a.id == 14) return 1; // Move category with id 14 to the last index
-      if (b.id == 14) return -1;
+      if (a.id == 17) return 1; // Move category with id 14 to the last index
+      if (b.id == 17) return -1;
 
       return (idToCountMap[b.id] ?? 0).compareTo(idToCountMap[a.id] ?? 0);
     });
 
     //Forum always at index 6, before the more button
-    int forumIndex = categories.indexWhere((element) => element.id == 14);
+    int forumIndex = categories.indexWhere((element) => element.id == 17);
 
     if (forumIndex != -1) {
       var forum = categories.removeAt(forumIndex);
@@ -167,7 +167,7 @@ class HomeCubit extends Cubit<HomeState> {
       if (!hasContent) {
         element.hide = true;
       }
-      if (element.id == 14) {
+      if (element.id == 17) {
         element.hide = false;
       }
     }
@@ -221,7 +221,8 @@ class HomeCubit extends Cubit<HomeState> {
 
   Future<String> getIgnoreAppVersion() async {
     final prefs = await Preferences.openBox();
-    String ignoreVersion = await prefs.getKeyValue(Preferences.ignoredAppVersion, '');
+    String ignoreVersion =
+        await prefs.getKeyValue(Preferences.ignoredAppVersion, '');
     return ignoreVersion;
   }
 

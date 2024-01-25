@@ -110,7 +110,6 @@ class _HomeScreenState extends State<HomeScreen> {
             });
             logError('Error loading new listings: $error');
             await Sentry.captureException(error, stackTrace: stackTrace);
-
           },
         );
       }
@@ -403,7 +402,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     if (item.id != -1) {
-      if (item.id == 14) {
+      if (item.id == 17) {
         final cityId = await context.read<DiscoveryCubit>().getCitySelected();
         if (cityId != 0) {
           if (!mounted) return;
