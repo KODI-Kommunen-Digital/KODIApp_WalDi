@@ -361,8 +361,8 @@ class AppProductItem extends StatelessWidget {
                             placeholder: (context, url) {
                               return AppPlaceholder(
                                 child: Container(
-                                  height: 120,
-                                  width: 140,
+                                  height: 140,
+                                  width: 120,
                                   decoration: const BoxDecoration(
                                     color: Colors.white,
                                   ),
