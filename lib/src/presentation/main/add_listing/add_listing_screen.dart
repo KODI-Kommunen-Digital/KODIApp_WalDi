@@ -14,6 +14,7 @@ import 'package:heidi/src/utils/datetime.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:heidi/src/utils/validate.dart';
 import 'package:intl/intl.dart';
+import 'package:html/parser.dart';
 
 import 'cubit/add_listing_cubit.dart';
 
@@ -104,6 +105,11 @@ class _AddListingScreenState extends State<AddListingScreen> {
     super.didChangeDependencies();
     currentCity = await context.read<AddListingCubit>().getCurrentCityId();
     _onProcess();
+  }
+
+  String clearedText(String text) {
+    var document = parse(text);
+    return document.body!.text;
   }
 
   @override
@@ -223,7 +229,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       _featureImage = widget.item?.image;
       _featurePdf = widget.item?.pdf;
       _textTitleController.text = widget.item!.title;
-      _textContentController.text = widget.item!.description;
+      _textContentController.text = clearedText(widget.item!.description);
       _textAddressController.text = widget.item!.address;
       _textZipCodeController.text = widget.item?.zipCode ?? '';
       _textPhoneController.text = widget.item?.phone ?? '';
