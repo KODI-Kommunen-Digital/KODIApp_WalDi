@@ -513,52 +513,52 @@ class ListRepository {
     if (response.success) {
       final prefs = await Preferences.openBox();
       FormData? pickedFile = prefs.getPickedFile();
-      if (pickedFile!.files.isNotEmpty) {
-        if (pickedFile.files[0].key == 'pdf') {
-          await Api.requestListingUploadMedia(listingId, cityId, pickedFile);
-        } else {
-          if (isImageChanged) {
-            var formData = FormData();
+      // if (pickedFile!.files.isNotEmpty) {
+      if (pickedFile?.files[0].key == 'pdf') {
+        await Api.requestListingUploadMedia(listingId, cityId, pickedFile);
+      } else {
+        if (isImageChanged) {
+          var formData = FormData();
 
-            if (imagesList != null) {
-              for (final image in imagesList) {
-                var file = image;
+          if (imagesList != null) {
+            for (final image in imagesList) {
+              var file = image;
 
-                // Ensure the file extension matches the actual image type
-                if (file.path.contains('.')) {
-                  var fileExtension = file.path.split('.').last.toLowerCase();
-                  var fileName = '$image.$fileExtension';
-                  formData.files.add(MapEntry(
-                    'image',
-                    await MultipartFile.fromFile(
-                      file.path,
-                      filename: fileName,
-                      contentType: MediaType('image',
-                          fileExtension), // Set the correct content type
-                    ),
-                  ));
-                } else {
-                  // var fileExtension = file.path.split('.').last.toLowerCase();
-                  var fileName = '$image';
-                  formData.files.add(MapEntry(
-                    'image',
-                    await MultipartFile.fromFile(
-                      file.path,
-                      filename: fileName,
-                      contentType: MediaType(
-                          'image', 'png'), // Set the correct content type
-                    ),
-                  ));
-                }
+              // Ensure the file extension matches the actual image type
+              if (file.path.contains('.')) {
+                var fileExtension = file.path.split('.').last.toLowerCase();
+                var fileName = '$image.$fileExtension';
+                formData.files.add(MapEntry(
+                  'image',
+                  await MultipartFile.fromFile(
+                    file.path,
+                    filename: fileName,
+                    contentType: MediaType(
+                        'image', fileExtension), // Set the correct content type
+                  ),
+                ));
+              } else {
+                // var fileExtension = file.path.split('.').last.toLowerCase();
+                var fileName = '$image';
+                formData.files.add(MapEntry(
+                  'image',
+                  await MultipartFile.fromFile(
+                    file.path,
+                    filename: fileName,
+                    contentType: MediaType(
+                        'image', 'png'), // Set the correct content type
+                  ),
+                ));
               }
-              await Api.requestListingUploadMedia(listingId, cityId, formData);
             }
-            // if (pickedFile!.files.isNotEmpty) {
-            //   await Api.requestListingUploadMedia(listingId, cityId, pickedFile);
-            // }
+            await Api.requestListingUploadMedia(listingId, cityId, formData);
           }
+          // if (pickedFile!.files.isNotEmpty) {
+          //   await Api.requestListingUploadMedia(listingId, cityId, pickedFile);
+          // }
         }
       }
+      // }
     }
     return response;
   }
