@@ -213,4 +213,16 @@ class HomeCubit extends Cubit<HomeState> {
     recent.addAll(newRecent);
     return recent;
   }
+
+  Future<void> saveIgnoreAppVersion(String version) async {
+    final prefs = await Preferences.openBox();
+    await prefs.setKeyValue(Preferences.ignoredAppVersion, version);
+  }
+
+  Future<String> getIgnoreAppVersion() async {
+    final prefs = await Preferences.openBox();
+    String ignoreVersion =
+        await prefs.getKeyValue(Preferences.ignoredAppVersion, '');
+    return ignoreVersion;
+  }
 }
