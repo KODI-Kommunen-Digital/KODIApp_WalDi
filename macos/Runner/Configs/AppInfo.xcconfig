@@ -8,7 +8,7 @@
 PRODUCT_NAME = heidi
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.gesekeapp
+PRODUCT_BUNDLE_IDENTIFIER = com.smartauf
 
 // The copyright displayed in application information
 PRODUCT_COPYRIGHT = Copyright © 2023. All rights reserved.

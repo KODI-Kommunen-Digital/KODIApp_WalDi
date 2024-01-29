@@ -45,7 +45,7 @@ class _LegalScreenState extends State<LegalScreen> {
             AppListTitle(
               title: Translate.of(context).translate('imprint'),
               onPressed: () {
-                _makeAction('https://app.geseke.it/ImprintPage');
+                _makeAction('https://app.smartregion-auf.de/ImprintPage');
               },
               trailing: Row(
                 children: <Widget>[
@@ -62,7 +62,7 @@ class _LegalScreenState extends State<LegalScreen> {
             AppListTitle(
               title: Translate.of(context).translate('privacy_policy'),
               onPressed: () {
-                _makeAction('https://app.geseke.it/PrivacyPolicy');
+                _makeAction('https://app.smartregion-auf.de/PrivacyPolicy');
               },
               trailing: Row(
                 children: <Widget>[
