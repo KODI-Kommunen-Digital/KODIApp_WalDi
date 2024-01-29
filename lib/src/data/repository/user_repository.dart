@@ -222,6 +222,7 @@ class UserRepository {
     } catch (e, stackTrace) {
       logError('Load Favorite Error', e);
       await Sentry.captureException(e, stackTrace: stackTrace);
+
       return [];
     }
   }

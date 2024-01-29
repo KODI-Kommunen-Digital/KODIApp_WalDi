@@ -38,6 +38,7 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
       }
     }
 
+    //Remove to see all services
     services.removeWhere((element) => hiddenServices.contains(element));
 
     emit(DiscoveryStateLoaded(
@@ -139,6 +140,16 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
         imageLink: "10",
         arguments: 10,
       ),
+      CitizenServiceModel(
+          imageUrl: Images.service13,
+          imageLink: "13",
+          categoryId: 15,
+          arguments: 0),
+      CitizenServiceModel(
+          imageUrl: Images.service14,
+          imageLink: "14",
+          categoryId: 14,
+          arguments: 0),
     ];
   }
 

@@ -266,8 +266,10 @@ class AddListingCubit extends Cubit<AddListingState> {
         return subCategoryResponse;
       }
       return null;
-    } catch (e) {
+    } catch (e, stackTrace) {
       logError('request subCategoryID Error', e);
+      await Sentry.captureException(e, stackTrace: stackTrace);
+
       return null;
     }
   }
@@ -280,8 +282,10 @@ class AddListingCubit extends Cubit<AddListingState> {
     try {
       final loadCitiesResponse = _repo.loadCities();
       return loadCitiesResponse;
-    } catch (e) {
+    } catch (e, stackTrace) {
       logError('load cities error', e.toString());
+      await Sentry.captureException(e, stackTrace: stackTrace);
+
       return null;
     }
   }
@@ -290,8 +294,10 @@ class AddListingCubit extends Cubit<AddListingState> {
     try {
       final loadCategoryResponse = _repo.loadCategory();
       return loadCategoryResponse;
-    } catch (e) {
+    } catch (e, stackTrace) {
       logError('load category error', e.toString());
+      await Sentry.captureException(e, stackTrace: stackTrace);
+
       return null;
     }
   }

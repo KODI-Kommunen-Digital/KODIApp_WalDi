@@ -96,18 +96,24 @@ class CommentInputWidgetState extends State<CommentInputWidget> {
                 hintText: widget.isAddingReply
                     ? Translate.of(context).translate('add_reply')
                     : Translate.of(context).translate('add_comment'),
-                hintStyle: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white),
+                hintStyle: TextStyle(
+                    color: Theme.of(context).textTheme.bodyLarge?.color ??
+                        Colors.white),
                 border: InputBorder.none,
               ),
             ),
           ),
           if (widget.isAddingReply)
             IconButton(
-              icon: Icon(Icons.clear, color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white),
+              icon: Icon(Icons.clear,
+                  color: Theme.of(context).textTheme.bodyLarge?.color ??
+                      Colors.white),
               onPressed: resetInput,
             ),
           IconButton(
-            icon: Icon(Icons.send, color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white),
+            icon: Icon(Icons.send,
+                color: Theme.of(context).textTheme.bodyLarge?.color ??
+                    Colors.white),
             onPressed: () async {
               final value = widget.isAddingReply
                   ? widget.replyController!.text

@@ -113,49 +113,50 @@ class _GroupMembersLoadedState extends State<GroupMembersLoaded> {
                       width: 80,
                       height: 80,
                       child: ClipOval(
-                          child: CachedNetworkImage(
-                            imageUrl: widget.membersList?[index].image != null
-                                ? '${Application.picturesURL}${widget.membersList?[index].image}'
-                                : '${Application.picturesURL}admin/DefaultForum.jpeg',
-                            cacheManager: memoryCacheManager,
-                            placeholder: (context, url) {
-                              return AppPlaceholder(
-                                child: Container(
-                                  height: 100,
-                                  width: 100,
-                                  decoration: const BoxDecoration(
-                                    color: Colors.white,
+                        child: CachedNetworkImage(
+                          imageUrl: widget.membersList?[index].image != null
+                              ? '${Application.picturesURL}${widget.membersList?[index].image}'
+                              : '${Application.picturesURL}admin/DefaultForum.jpeg',
+                          cacheManager: memoryCacheManager,
+                          placeholder: (context, url) {
+                            return AppPlaceholder(
+                              child: Container(
+                                height: 100,
+                                width: 100,
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            );
+                          },
+                          imageBuilder: (context, imageProvider) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: imageProvider,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            );
+                          },
+                          errorWidget: (context, url, error) {
+                            return AppPlaceholder(
+                              child: Container(
+                                height: 100,
+                                width: 100,
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(8),
+                                    bottomLeft: Radius.circular(8),
                                   ),
                                 ),
-                              );
-                            },
-                            imageBuilder: (context, imageProvider) {
-                              return Container(
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: imageProvider,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              );
-                            },
-                            errorWidget: (context, url, error) {
-                              return AppPlaceholder(
-                                child: Container(
-                                  height: 100,
-                                  width: 100,
-                                  decoration: const BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(8),
-                                      bottomLeft: Radius.circular(8),
-                                    ),
-                                  ),
-                                  child: const Icon(Icons.error),
-                                ),
-                              );
-                            },
-                          ),),
+                                child: const Icon(Icons.error),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
                     ),
                     const SizedBox(width: 8),
                     Expanded(

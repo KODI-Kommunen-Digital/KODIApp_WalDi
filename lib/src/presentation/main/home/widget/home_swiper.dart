@@ -21,52 +21,43 @@ class HomeSwipe extends StatelessWidget {
     if (images != null) {
       return Swiper(
           itemBuilder: (BuildContext context, int index) {
-            return Image.asset(images!, fit: BoxFit.fill,
-                errorBuilder: (context, error, stackTrace) {
-              return AppPlaceholder(
-                child: Container(
-                  color: Colors.white,
-                  child: const Icon(Icons.error),
-                ),
-              );
-            });
-//             return CachedNetworkImage(
-//               imageUrl: "${Application.picturesURL}admin/Homepage.jpg",
-//               cacheManager: memoryCacheManager,
-//               placeholder: (context, url) {
-//                 return AppPlaceholder(
-//                   child: Container(
-//                     decoration: const BoxDecoration(
-//                       color: Colors.white,
-//                     ),
-//                   ),
-//                 );
-//               },
-//               imageBuilder: (context, imageProvider) {
-//                 return Container(
-//                   decoration: BoxDecoration(
-//                     image: DecorationImage(
-//                       image: imageProvider,
-//                       fit: BoxFit.cover,
-//                     ),
-//                   ),
-//                 );
-//               },
-//               errorWidget: (context, url, error) {
-//                 return AppPlaceholder(
-//                   child: Container(
-//                     decoration: const BoxDecoration(
-//                       color: Colors.white,
-//                       borderRadius: BorderRadius.only(
-//                         topLeft: Radius.circular(8),
-//                         bottomLeft: Radius.circular(8),
-//                       ),
-//                     ),
-//                     child: const Icon(Icons.error),
-//                   ),
-//                 );
-//               },
-//             );
+            return CachedNetworkImage(
+              imageUrl: "${Application.picturesURL}admin/Homepage.jpg",
+              cacheManager: memoryCacheManager,
+              placeholder: (context, url) {
+                return AppPlaceholder(
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                    ),
+                  ),
+                );
+              },
+              imageBuilder: (context, imageProvider) {
+                return Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: imageProvider,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                );
+              },
+              errorWidget: (context, url, error) {
+                return AppPlaceholder(
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(8),
+                        bottomLeft: Radius.circular(8),
+                      ),
+                    ),
+                    child: const Icon(Icons.error),
+                  ),
+                );
+              },
+            );
           },
           autoplayDelay: 3000,
           autoplayDisableOnInteraction: false,

@@ -22,6 +22,7 @@ class Preferences {
   static const String refreshToken = 'refreshToken';
   static const String userId = 'userId';
   static const String cityId = 'cityId';
+  static const String ignoredAppVersion = 'version';
   static const sessionTokenKey = '_sessionTokenKey';
   static const _pickedFileKey = 'pickedFile';
   static const pdfPath = 'pdfPath';

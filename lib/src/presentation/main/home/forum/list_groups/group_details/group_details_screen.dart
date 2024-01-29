@@ -103,12 +103,9 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                   Navigator.pushNamed(
                     context,
                     Routes.forumImageZoom,
-                    arguments:
-                        "${Application.picturesURL}${widget.groupModel.image}",
-//                     Routes.imageZoom,
-//                     arguments: (widget.groupModel.image != null)
-//                         ? "${Application.picturesURL}${widget.groupModel.image}?cacheKey=$uniqueKey"
-//                         : "${Application.picturesURL}admin/DefaultForum.jpeg?cacheKey=$uniqueKey",
+                    arguments: (widget.groupModel.image != null)
+                        ? "${Application.picturesURL}${widget.groupModel.image}?cacheKey=$uniqueKey"
+                        : "${Application.picturesURL}admin/DefaultForum.jpeg?cacheKey=$uniqueKey",
                   );
                 },
                 child: CachedNetworkImage(
@@ -341,7 +338,8 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                                     return Container(
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(12),
-                                        color: Theme.of(context).scaffoldBackgroundColor,
+                                        color: Theme.of(context)
+                                            .scaffoldBackgroundColor,
                                       ),
                                       width: 120,
                                       height: 140,

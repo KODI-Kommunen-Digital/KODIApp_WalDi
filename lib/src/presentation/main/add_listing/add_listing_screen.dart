@@ -17,6 +17,7 @@ import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/datetime.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:heidi/src/utils/validate.dart';
+import 'package:html/parser.dart';
 import 'package:intl/intl.dart';
 import 'package:loggy/loggy.dart';
 import 'package:http/http.dart' as http;
@@ -111,6 +112,11 @@ class _AddListingScreenState extends State<AddListingScreen> {
     _onProcess();
   }
 
+  String clearedText(String text) {
+    var document = parse(text);
+    return document.body!.text;
+  }
+
   @override
   void dispose() {
     _textTitleController.dispose();
@@ -201,7 +207,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
       listCity = loadCitiesResponse?.data;
       selectedCategory = Translate.of(context).translate(
           _getCategoryTranslation(loadCategoryResponse?.data.first['id']));
-      if (selectedCategory == "news" || selectedCategory == null) {
+      if (selectedCategory?.toLowerCase() == "news" ||
+          selectedCategory == null) {
         selectSubCategory(selectedCategory);
       }
       _processing = true;
@@ -217,7 +224,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       _featurePdf = widget.item?.pdf;
       statusId = widget.item?.statusId;
       _textTitleController.text = widget.item!.title;
-      _textContentController.text = widget.item!.description;
+      _textContentController.text = clearedText(widget.item!.description);
       _textAddressController.text = widget.item!.address;
       _textZipCodeController.text = widget.item?.zipCode ?? '';
       _textPhoneController.text = widget.item?.phone ?? '';
@@ -988,34 +995,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
             ),
             const SizedBox(height: 16),
             const SizedBox(height: 8),
-            // Text(
-            //   Translate.of(context).translate('village'),
-            //   style: Theme.of(context)
-            //       .textTheme
-            //       .titleMedium!
-            //       .copyWith(fontWeight: FontWeight.bold),
-            // ),
-            // Row(
-            //   children: [
-            //     Expanded(
-            //         child: DropdownButton(
-            //       isExpanded: true,
-            //       menuMaxHeight: 200,
-            //       hint: Text(Translate.of(context).translate('input_village')),
-            //       value: selectedVillage,
-            //       items: listVillage.map((village) {
-            //         return DropdownMenuItem(
-            //             value: village['name'], child: Text(village['name']));
-            //       }).toList(),
-            //       onChanged: (value) {
-            //         setState(() {
-            //           selectedVillage = value as String?;
-            //         });
-            //       },
-            //     )),
-            //   ],
-            // ),
-            // const SizedBox(height: 16),
             AppTextInput(
               hintText: Translate.of(context).translate('input_address'),
               // errorText: _errorAddress,

@@ -143,7 +143,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(
-                color: Colors.black,
+                color: Theme.of(context).textTheme.bodyLarge?.color ??
+                    Colors.white,
                 padding: const EdgeInsets.fromLTRB(16, 32, 16, 0),
                 child: Row(
                   children: [
@@ -910,47 +911,42 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         modifiedDescription = modifiedDescription.replaceAll(
             RegExp(r'color: [^;]+;'), "color: $color");
 
-        RegExp exp = RegExp(
-          r'<a\s+[^>]*\bhref="([^"]+\.(?:jpg|png))"[^>]*>.*?<a>',
-          caseSensitive: false,
-        );
+        description = HtmlWidget(modifiedDescription,
+            textStyle: TextStyle(
+                fontSize: 16.0,
+                color: Theme.of(context).textTheme.bodyLarge?.color ??
+                    Colors.white,
+                height: 1.6), customStylesBuilder: (element) {
+          if (element.localName == 'img') {
+            return {'max-width': '100%'};
+          } else if (element.localName == '') {
+            return {'color': hexColor};
+          }
+          var style = element.attributes['style'];
+          if (style != null) {
+            style =
+                style.replaceAll(RegExp(r'color:[^;];?'), 'color: $hexColor;');
+          } else {
+            style = 'color: $hexColor;';
+          }
 
-        modifiedDescription =
-            modifiedDescription.replaceAllMapped(exp, (match) {
-          String href = match.group(1) ?? "";
-          return '<img src="$href">';
-        });
+          RegExp exp = RegExp(
+            r'<a\s+[^>]*\bhref="([^"]+\.(?:jpg|png))"[^>]*>.*?<a>',
+            caseSensitive: false,
+          );
 
-        description = HtmlWidget(
-          modifiedDescription,
-          textStyle: TextStyle(
-              fontSize: 16.0,
-              color:
-                  Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white,
-              height: 1.6),
-          customStylesBuilder: (element) {
-            if (element.localName == 'img') {
-              return {'max-width': '100%'};
-            } else if (element.localName == '') {
-              return {'color': hexColor};
-            }
-            var style = element.attributes['style'];
-            if (style != null) {
-              style = style.replaceAll(
-                  RegExp(r'color:[^;];?'), 'color: $hexColor;');
-            } else {
-              style = 'color: $hexColor;';
-            }
-
-            return {'style': style};
-          },
+          modifiedDescription =
+              modifiedDescription.replaceAllMapped(exp, (match) {
+            String href = match.group(1) ?? "";
+            return '<img src="$href">';
+          });
+          return {'style': style};
           // onTapUrl: (url) {
           //   if (Uri.parse(url).hasAbsolutePath) {
           //     _makeAction(url);
           //   }
           //   return false;
-          // },
-        );
+        });
       }
 
       info = Padding(
@@ -1101,6 +1097,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       controller: _scrollController,
       slivers: <Widget>[
         SliverAppBar(
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              color: Theme.of(context).iconTheme.color,
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
           expandedHeight: MediaQuery.of(context).size.height * 0.25,
           pinned: true,
           actions: action,
@@ -1142,8 +1147,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             ProductModel? product;
             List<FavoriteModel>? favoriteList;
             UserModel? userDetail;
-            bool isLoggedIn = false;
             bool isDarkMode = true;
+            bool isLoggedIn = false;
             if (state is ProductDetailLoaded) {
               product = state.product;
               favoriteList = state.favoritesList;

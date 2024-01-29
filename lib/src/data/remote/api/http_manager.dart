@@ -21,8 +21,8 @@ class HTTPManager {
         : 'https://test.smartregion-auf.de/forumapi/';
     // ? 'http://localhost:3001/'
     //     : 'http://localhost:3002/';
-        //? 'https://app.geseke.it/api/'
-        //: 'https://app.geseke.it/forumapi/';
+    //? 'https://app.geseke.it/api/'
+    //: 'https://app.geseke.it/forumapi/';
 
     _dio = Dio(
       BaseOptions(
@@ -57,7 +57,6 @@ class HTTPManager {
       }, onResponse: (response, handler) {
         handler.next(response);
       }, onError: (error, handler) async {
-        logError('Errors', error.response?.data);
         if (error.response?.data['message'] ==
             'Unauthorized! Token was expired!') {
           final prefs = await Preferences.openBox();

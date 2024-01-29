@@ -38,13 +38,12 @@ Future<void> main() async {
   );
   await Hive.initFlutter();
   final prefBox = await Preferences.openBox();
-
   Bloc.observer = HeidiBlocObserver();
   await Upgrader.clearSavedSettings();
 
   await SentryFlutter.init((options) {
     options.dsn =
-    'https://2fdb0f7775245ded02eb03e51bf3abeb@o4506393481510912.ingest.sentry.io/4506587728904192';
+        'https://a4fb5224118623425d802bf0acaf087b@o4506393481510912.ingest.sentry.io/4506393482493952';
     options.tracesSampleRate = 0.01;
   }, appRunner: () => runApp(HeidiApp(prefBox)));
 }

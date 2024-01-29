@@ -5,6 +5,7 @@ import 'package:heidi/src/data/remote/api/http_manager.dart';
 import 'package:heidi/src/utils/asset.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:loggy/loggy.dart';
+import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 class Api {
@@ -51,6 +52,7 @@ class Api {
     } catch (e, stackTrace) {
       logError('Load Favorite Error', e);
       await Sentry.captureException(e, stackTrace: stackTrace);
+
       final result = await HTTPManager(forum: false)
           .get(url: '/users/$userId/favorites?pageNo=1&pageSize=19');
       return ResultApiModel.fromJson(result);
@@ -532,7 +534,7 @@ class Api {
         filePath = '/cities/$cityId/listings/$listingId/imageUpload';
       }
 
-       await HTTPManager(forum: false).post(
+      await HTTPManager(forum: false).post(
         url: filePath,
         formData: pickedFile,
       );

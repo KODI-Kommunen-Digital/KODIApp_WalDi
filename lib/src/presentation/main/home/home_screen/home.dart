@@ -22,8 +22,8 @@ import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:heidi/src/utils/translate.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:upgrader/upgrader.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import 'cubit/home_cubit.dart';
@@ -62,7 +62,6 @@ class _HomeScreenState extends State<HomeScreen> {
     checkSavedCity = true;
     AppBloc.homeCubit.onLoad(false);
     connectivityInternet();
-    scrollUp();
     checkUserExist();
     getIgnoreAppVersion();
   }
@@ -208,35 +207,38 @@ class _HomeScreenState extends State<HomeScreen> {
           }
 
           return UpgradeAlert(
-            upgrader: Upgrader(
-                debugLogging: true,
-                debugDisplayAlways: true,
-                countryCode: 'DE',
-                showLater: false,
-                shouldPopScope: () => true,
-                canDismissDialog: true,
-                durationUntilAlertAgain: const Duration(days: 1),
-                dialogStyle: Platform.isIOS
-                    ? UpgradeDialogStyle.cupertino
-                    : UpgradeDialogStyle.material,
-                willDisplayUpgrade: (
-                    {String? appStoreVersion,
-                    bool? display,
-                    String? installedVersion,
-                    String? minAppVersion}) {
-                  if (display != null) {
-                    setState(() {
-                      latestAppStoreVersion = appStoreVersion ?? '';
-                    });
-                  }
-                },
-                onUpdate: () {
-                  return true;
-                },
-                onIgnore: () {
-                  AppBloc.homeCubit.saveIgnoreAppVersion(latestAppStoreVersion);
-                  return true;
-                }),
+            upgrader: ignoreAppStoreVersion == latestAppStoreVersion
+                ? null
+                : Upgrader(
+                    debugLogging: true,
+                    debugDisplayAlways: true,
+                    countryCode: 'DE',
+                    showLater: false,
+                    shouldPopScope: () => true,
+                    canDismissDialog: true,
+                    durationUntilAlertAgain: const Duration(seconds: 5),
+                    dialogStyle: Platform.isIOS
+                        ? UpgradeDialogStyle.cupertino
+                        : UpgradeDialogStyle.material,
+                    willDisplayUpgrade: (
+                        {String? appStoreVersion,
+                        bool? display,
+                        String? installedVersion,
+                        String? minAppVersion}) {
+                      if (display != null) {
+                        setState(() {
+                          latestAppStoreVersion = appStoreVersion ?? '2.1';
+                        });
+                      }
+                    },
+                    onUpdate: () {
+                      return true;
+                    },
+                    onIgnore: () {
+                      AppBloc.homeCubit
+                          .saveIgnoreAppVersion(latestAppStoreVersion);
+                      return true;
+                    }),
             child: CustomScrollView(
               physics: const BouncingScrollPhysics(
                 parent: AlwaysScrollableScrollPhysics(),
@@ -400,7 +402,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     if (item.id != -1) {
-      if (item.id == 14) {
+      if (item.id == 17) {
         final cityId = await context.read<DiscoveryCubit>().getCitySelected();
         if (cityId != 0) {
           if (!mounted) return;

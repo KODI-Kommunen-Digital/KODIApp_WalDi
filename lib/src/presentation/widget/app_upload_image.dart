@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable, unused_catch_stack
+
 import 'dart:io';
 
 import 'package:device_info/device_info.dart';
@@ -19,7 +21,6 @@ import 'package:multiple_images_picker/multiple_images_picker.dart';
 import 'package:loggy/loggy.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 
 enum UploadImageType { circle, square }
 
@@ -264,7 +265,6 @@ class _AppUploadImageState extends State<AppUploadImage> {
       }
     } catch (e, stackTrace) {
       logError('Image Upload Permission Error', e);
-      await Sentry.captureException(e, stackTrace: stackTrace);
     }
   }
 

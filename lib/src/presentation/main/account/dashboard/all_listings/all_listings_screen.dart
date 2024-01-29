@@ -256,8 +256,8 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                               placeholder: (context, url) {
                                                 return AppPlaceholder(
                                                   child: Container(
-                                                    width: 120,
                                                     height: 140,
+                                                    width: 120,
                                                     decoration:
                                                         const BoxDecoration(
                                                       color: Colors.white,

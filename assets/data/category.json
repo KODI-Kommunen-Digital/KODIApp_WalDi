@@ -2,13 +2,13 @@
     "status": "success",
     "data": [ 
         {
-        "id": 14,
-        "name": "Forum",
-        "noOfSubcategories": 8,
-        "icon": "fas fa-user-group",
-        "color": "#5A5A5A",
-        "categoryType" : "category"
-        },
+            "id": 17,
+            "name": "Forum",
+            "noOfSubcategories": 8,
+            "icon": "fas fa-user-group",
+            "color": "#5A5A5A",
+            "categoryType" : "category"
+            },
         {
             "id": 1,
             "name": "News",
@@ -83,11 +83,27 @@
             "categoryType" : "category"
         },
         {
-            "id": 17,
-            "name": "Freizeit",
-            "noOfSubcategories": 0,                
-            "icon": "fas fa-umbrella-beach",
-            "color": "#fdc60a",
+            "id": 14,
+            "name": "Rathaus",
+            "noOfSubcategories": 0,
+            "icon": "fas fa-building",
+            "color": "#58d68d",
+            "categoryType" : "category"
+        },
+        {
+            "id": 15,
+            "name": "Mitteilungsblatt",
+            "noOfSubcategories": 0,
+            "icon": "fas fa-newspaper",
+            "color": "#58d68d",
+            "categoryType" : "category"
+        },
+        {
+            "id": 16,
+            "name": "Amtliche Mitteilungen",
+            "noOfSubcategories": 0,
+            "icon": "fas fa-newspaper",
+            "color": "#58d68d",
             "categoryType" : "category"
         }
     ]

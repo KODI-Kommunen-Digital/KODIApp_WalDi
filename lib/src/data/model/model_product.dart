@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_category.dart';
@@ -125,7 +127,8 @@ class ProductModel {
       this.villageId,
       this.statusId,
       this.sourceId,
-      this.imageLists});
+      this.imageLists,
+      this.showExternal});
 
   factory ProductModel.fromJson(
     Map<String, dynamic> json, {
@@ -245,7 +248,7 @@ class ProductModel {
       fax: json['fax'] ?? '',
       email: json['email'] ?? '',
       website: json['website'] ?? '',
-      description: description,
+      description: json['description'],
       color: json['color'] ?? '',
       categoryId: json['categoryId'] ?? 0,
       subcategoryId: json['subcategoryId'] ?? 0,

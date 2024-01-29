@@ -485,7 +485,6 @@ class ListRepository {
       "website": website,
       "price": 100, //dummy data
       "discountPrice": 100, //dummy data
-      "logo": media,
       "hasAttachment": isImageChanged ? true : false,
       "statusId": statusId ?? 1, //change 1 to 3 when done
       "sourceId": 1, //dummy data
@@ -502,12 +501,7 @@ class ListRepository {
       "appointmentId": null,
       "logo": media,
       "otherlogos": [
-        {
-          "id": null,
-          "imageOrder": null,
-          "listingId": null,
-          "logo": ""
-        }
+        {"id": null, "imageOrder": null, "listingId": null, "logo": ""}
       ],
       "cityId": cityId,
     };
