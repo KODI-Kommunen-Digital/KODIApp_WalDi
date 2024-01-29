@@ -601,7 +601,8 @@ class ListRepository {
   void setCategoryId(value) async {
     final response = await Api.requestSubmitCategory();
     var jsonCategory = response.data;
-    final item = jsonCategory.firstWhere((item) => item['name'] == value);
+    final item = jsonCategory.firstWhere(
+        (item) => (item['name']?.toLowerCase() ?? '') == value.toLowerCase());
     final itemId = item['id'];
     final categoryId = itemId;
     prefs.setKeyValue(Preferences.categoryId, categoryId);
