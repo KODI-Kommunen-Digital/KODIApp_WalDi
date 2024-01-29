@@ -357,6 +357,7 @@ class ForumRepository {
     String? type,
   ) async {
     final cityId = await getCityId(city);
+    int cityIdPref = prefs.getKeyValue(Preferences.cityId, 0);
     final image = prefs.getKeyValue(Preferences.path, null);
     bool isPrivate = false;
     if (type == 'public') {
@@ -366,7 +367,7 @@ class ForumRepository {
     }
 
     Map<String, dynamic> params = {
-      "cityId": cityId,
+      "cityId": cityId == 0 ? cityIdPref : cityId,
       "description": description,
       "forumName": title,
       "image": image,
@@ -412,6 +413,7 @@ class ForumRepository {
     String createdDate,
   ) async {
     final cityId = await getCityId(city);
+    int cityIdPref = prefs.getKeyValue(Preferences.cityId, 0);
     final image = prefs.getKeyValue(Preferences.path, null);
     bool isPrivate = false;
     if (type == 'public') {
@@ -427,7 +429,7 @@ class ForumRepository {
       "description": description,
       "image": image,
       "isPrivate": isPrivate,
-      "cityId": cityId,
+      "cityId": cityId == 0 ? cityIdPref : cityId,
     };
     final response = await Api.requestEditForum(cityId, forumId, params);
 

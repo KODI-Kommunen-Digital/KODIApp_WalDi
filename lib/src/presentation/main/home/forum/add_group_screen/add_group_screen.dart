@@ -8,6 +8,7 @@ import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/presentation/widget/app_text_input.dart';
 import 'package:heidi/src/presentation/widget/app_upload_image.dart';
 import 'package:heidi/src/utils/common.dart';
+import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:heidi/src/utils/validate.dart';
 
@@ -100,9 +101,15 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
   void _onProcess() async {
     final loadCitiesResponse = await context.read<AddGroupCubit>().loadCities();
     if (!mounted) return;
+    final prefs = await Preferences.openBox();
+    final cityIdPref = prefs.getKeyValue(Preferences.cityId, 0);
+
     if (widget.item != null) {
-      final selectedCityDetails = loadCitiesResponse!
-          .firstWhere((element) => element['id'] == widget.item?.cityId);
+      final selectedCityDetails = loadCitiesResponse!.firstWhere(
+        (element) =>
+            element['id'] ==
+            (widget.item?.cityId == 0 ? cityIdPref : widget.item?.cityId),
+      );
       if (!mounted) return;
       _textTitleController.text = widget.item!.forumName ?? '';
       _textContentController.text = widget.item!.description ?? '';
