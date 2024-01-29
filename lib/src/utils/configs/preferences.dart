@@ -26,7 +26,6 @@ class Preferences {
   static const sessionTokenKey = '_sessionTokenKey';
   static const _pickedFileKey = 'pickedFile';
   static const pdfPath = 'pdfPath';
-  static const String ignoredAppVersion = 'version';
   static const String categoryId = 'categoryId';
   static const String villageId = 'villageId';
   static const String forumId = 'forumId';

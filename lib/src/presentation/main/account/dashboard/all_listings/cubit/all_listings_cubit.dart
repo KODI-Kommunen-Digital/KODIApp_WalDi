@@ -33,11 +33,12 @@ class AllListingsCubit extends Cubit<AllListingsState> {
       listingsRequestResponse = await Api.requestStatusListings(status, 1);
     }
 
-    List<ProductModel> productData = List.from(listingsRequestResponse.data ?? []).map((item) {
+    List<ProductModel> productData =
+        List.from(listingsRequestResponse.data ?? []).map((item) {
       return ProductModel.fromJson(item);
     }).toList();
 
-    for(final listing in productData) {
+    for (final listing in productData) {
       final product = await loadProduct(listing.cityId, listing.id);
       if (product != null) {
         listDataList.add(
@@ -58,7 +59,7 @@ class AllListingsCubit extends Cubit<AllListingsState> {
             email: product.email,
             website: product.website,
             description: product.description,
-            statusId:  product.statusId,
+            statusId: product.statusId,
             userId: product.userId,
             sourceId: product.sourceId,
             imageLists: product.imageLists,
@@ -69,7 +70,7 @@ class AllListingsCubit extends Cubit<AllListingsState> {
 
     posts = listDataList;
 
-    emit(AllListingsState.loaded(posts, isRefreshLoader));
+    emit(AllListingsState.loaded(posts));
   }
 
   Future<ProductModel?> loadProduct(cityId, id) async {
@@ -89,11 +90,12 @@ class AllListingsCubit extends Cubit<AllListingsState> {
       listingsRequestResponse = await Api.requestStatusListings(status, pageNo);
     }
 
-    final newProductData = List.from(listingsRequestResponse.data ?? []).map((item) {
+    final newProductData =
+        List.from(listingsRequestResponse.data ?? []).map((item) {
       return ProductModel.fromJson(item);
     }).toList();
 
-    for(final listing in newProductData) {
+    for (final listing in newProductData) {
       final product = await loadProduct(listing.cityId, listing.id);
       if (product != null) {
         listDataList.add(
