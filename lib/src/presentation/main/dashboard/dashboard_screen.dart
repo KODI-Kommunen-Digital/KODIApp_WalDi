@@ -79,7 +79,7 @@ class GridItemButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: Theme.of(context).highlightColor,
+        backgroundColor: const Color(0xFF3D3D3D),
         padding: const EdgeInsets.all(16.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12.0),
