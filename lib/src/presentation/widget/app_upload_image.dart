@@ -1,23 +1,26 @@
+// ignore_for_file: unused_local_variable
+
 import 'dart:io';
 
 import 'package:device_info/device_info.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
-import 'package:heidi/src/presentation/main/add_listing/cubit/add_listing_cubit.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
+import 'package:heidi/src/presentation/main/add_listing/cubit/add_listing_cubit.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/multiple_gesture_detector.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:multiple_images_picker/multiple_images_picker.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:multiple_images_picker/multiple_images_picker.dart';
 import 'package:loggy/loggy.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 enum UploadImageType { circle, square }
 
@@ -184,15 +187,11 @@ class _AppUploadImageState extends State<AppUploadImage> {
       });
       return;
     }
-
-    if (!mounted) return;
-
-    if (statusImage == PermissionStatus.granted) {
+    try {
       if (Platform.isIOS) {
-        final photoPermissionStatus = await Permission
-            .photos.status; // Check permission status separately
-        if (photoPermissionStatus.isGranted ||
-            photoPermissionStatus.isLimited) {
+        if (await Permission.photos.isGranted ||
+            await Permission.photos.isLimited) {
+          statusImage = PermissionStatus.granted;
           final pickedFile = await _picker.pickImage(
             source: ImageSource.gallery,
           );
@@ -207,7 +206,8 @@ class _AppUploadImageState extends State<AppUploadImage> {
 
           if (!profile) {
             await ListRepository.uploadImage(_file!, profile);
-          } else {
+          }
+          if (profile) {
             final response = await ListRepository.uploadImage(_file!, profile);
             if (response!.data['status'] == 'success') {
               setState(() {
@@ -215,15 +215,18 @@ class _AppUploadImageState extends State<AppUploadImage> {
               });
               final item = response.data['data']?['image'];
               widget.onChange(item);
+            } else {
+              logError('Image Upload Permission Error', response);
             }
           }
-        } else if (photoPermissionStatus.isDenied) {
+        } else if (await Permission.photos.isDenied) {
           await Permission.photos.request();
-        } else if (photoPermissionStatus.isPermanentlyDenied) {
+        } else if (await Permission.photos.isPermanentlyDenied) {
+          statusImage = PermissionStatus.permanentlyDenied;
           await openAppSettings();
         }
       } else {
-        // Platform is not iOS
+        statusImage = PermissionStatus.granted;
         final pickedFile = await _picker.pickImage(
           source: ImageSource.gallery,
         );
@@ -238,7 +241,8 @@ class _AppUploadImageState extends State<AppUploadImage> {
 
         if (!profile) {
           await ListRepository.uploadImage(_file!, profile);
-        } else {
+        }
+        if (profile) {
           final response = await ListRepository.uploadImage(_file!, profile);
           if (response!.data['status'] == 'success') {
             setState(() {
@@ -251,8 +255,9 @@ class _AppUploadImageState extends State<AppUploadImage> {
           }
         }
       }
-    } else if (statusImage.isPermanentlyDenied) {
-      await openAppSettings();
+    } catch (e, stackTrace) {
+      logError('Image Upload Permission Error', e);
+      await Sentry.captureException(e, stackTrace: stackTrace);
     }
   }
 
@@ -323,6 +328,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
                     if (await Permission.photos.isGranted ||
                         await Permission.photos.isLimited) {
                       status = PermissionStatus.granted;
+
                       setState(() {
                         selectedAssets =
                             context.read<AddListingCubit>().getSelectedAssets();
@@ -352,17 +358,23 @@ class _AppUploadImageState extends State<AppUploadImage> {
                     FilePickerResult? result =
                         await FilePicker.platform.pickFiles(
                       type: FileType.image,
+                      allowMultiple: true,
                     );
                     if (result != null) {
                       _file = File('');
                       setState(() {
-                        _file = File(result.files.single.path!);
+                        _file = File(result.files.first.path!);
                         isImageUploaded = false;
                       });
+                      images.clear();
+                      for (final selectedImages in result.files) {
+                        images.add(File(selectedImages.path!));
+                      }
+                      widget.onChange(images);
                       final profile = widget.profile;
                       if (!profile) {
                         await ListRepository.uploadImage(_file!, profile);
-                        widget.onChange([]);
+                        // widget.onChange([]);
                       } else {
                         final response =
                             await ListRepository.uploadImage(_file!, profile);
@@ -405,7 +417,6 @@ class _AppUploadImageState extends State<AppUploadImage> {
                         AllowMultipleGestureRecognizer>(
                   () => AllowMultipleGestureRecognizer(),
                   (AllowMultipleGestureRecognizer instance) {
-                    //initializer
                     instance.onTap = () => showChooseFileTypeDialog();
                   },
                 )

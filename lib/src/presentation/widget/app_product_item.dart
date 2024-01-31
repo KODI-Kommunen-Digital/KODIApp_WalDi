@@ -80,8 +80,8 @@ class AppProductItem extends StatelessWidget {
                         },
                         imageBuilder: (context, imageProvider) {
                           return Container(
-                            width: 84,
-                            height: 84,
+                            width: 120,
+                            height: 140,
                             decoration: BoxDecoration(
                               image: DecorationImage(
                                 image: imageProvider,
