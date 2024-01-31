@@ -497,7 +497,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 ),
                                 child: Image.network(
                                   '${Application.picturesURL}${imageUrl.logo!}',
-                                  fit: BoxFit.contain,
+                                  fit: BoxFit.fitHeight,
                                   loadingBuilder: (BuildContext context,
                                       Widget child,
                                       ImageChunkEvent? loadingProgress) {
@@ -1106,7 +1106,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               Navigator.of(context).pop();
             },
           ),
-          expandedHeight: MediaQuery.of(context).size.height * 0.25,
+          expandedHeight: MediaQuery.of(context).size.height * 0.27,
           pinned: true,
           actions: action,
           iconTheme: Theme.of(context).iconTheme.copyWith(color: _iconColor),

@@ -503,7 +503,12 @@ class ListRepository {
       "appointmentId": null,
       "logo": media,
       "otherlogos": [
-        {"id": '', "imageOrder": 1, "listingId": listingId, "logo": "admin/News/Defaultimage1.png"}
+        {
+          "id": '',
+          "imageOrder": 1,
+          "listingId": listingId,
+          "logo": "admin/News/Defaultimage1.png"
+        }
       ],
       "cityId": cityId,
     };
@@ -526,17 +531,30 @@ class ListRepository {
 
               // Ensure the file extension matches the actual image type
               if (file.path.contains('.')) {
-                var fileExtension = file.path.split('.').last.toLowerCase();
-                var fileName = '$image.$fileExtension';
-                formData.files.add(MapEntry(
-                  'image',
-                  await MultipartFile.fromFile(
-                    file.path,
-                    filename: fileName,
-                    contentType: MediaType(
-                        'image', fileExtension), // Set the correct content type
-                  ),
-                ));
+                if (file.path.contains('com.')) {
+                  var fileName = '$image';
+                  formData.files.add(MapEntry(
+                    'image',
+                    await MultipartFile.fromFile(
+                      file.path,
+                      filename: fileName,
+                      contentType: MediaType(
+                          'image', 'png'), // Set the correct content type
+                    ),
+                  ));
+                } else {
+                  var fileExtension = file.path.split('.').last.toLowerCase();
+                  var fileName = '$image.$fileExtension';
+                  formData.files.add(MapEntry(
+                    'image',
+                    await MultipartFile.fromFile(
+                      file.path,
+                      filename: fileName,
+                      contentType: MediaType('image',
+                          fileExtension), // Set the correct content type
+                    ),
+                  ));
+                }
               } else {
                 // var fileExtension = file.path.split('.').last.toLowerCase();
                 var fileName = '$image';
