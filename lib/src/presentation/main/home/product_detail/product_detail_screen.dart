@@ -474,7 +474,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     children: [
                       CarouselSlider(
                         options: CarouselOptions(
-                          height: 250.0,
+                          height: 230.0,
                           viewportFraction: 1.0,
                           enlargeCenterPage: false,
                           enableInfiniteScroll: product.imageLists!.length > 1,
@@ -1106,7 +1106,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               Navigator.of(context).pop();
             },
           ),
-          expandedHeight: MediaQuery.of(context).size.height * 0.25,
+          expandedHeight: MediaQuery.of(context).size.height * 0.27,
           pinned: true,
           actions: action,
           iconTheme: Theme.of(context).iconTheme.copyWith(color: _iconColor),
