@@ -431,6 +431,7 @@ class ListRepository {
     String? status,
     String? startDate,
     String? endDate,
+    String? createdAt,
     String? price,
     bool isImageChanged,
     TimeOfDay? startTime,
@@ -495,7 +496,7 @@ class ListRepository {
       "villageId": villageId ?? 0,
       "startDate": combinedStartDateTime,
       "endDate": combinedEndDateTime,
-      "createdAt": '2024-01-31T06:52:09.000Z',
+      "createdAt": createdAt,
       "pdf": null,
       "expiryDate": null,
       "updatedAt": currentDate.toString(),
@@ -504,10 +505,10 @@ class ListRepository {
       "logo": media,
       "otherlogos": [
         {
-          "id": '',
-          "imageOrder": 1,
-          "listingId": listingId,
-          "logo": "admin/News/Defaultimage1.png"
+          "id": null,
+          "imageOrder": null,
+          "listingId": null,
+          "logo": "",
         }
       ],
       "cityId": cityId,
