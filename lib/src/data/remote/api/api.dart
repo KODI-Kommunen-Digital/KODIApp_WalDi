@@ -533,13 +533,10 @@ class Api {
       } else if (firstFileEntry?.key == 'image') {
         filePath = '/cities/$cityId/listings/$listingId/imageUpload';
       }
-
-      final result = await HTTPManager(forum: false).post(
+      await HTTPManager(forum: false).post(
         url: filePath,
         formData: pickedFile,
       );
-
-      print(result);
     }
   }
 
