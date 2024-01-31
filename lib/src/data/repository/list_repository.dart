@@ -495,7 +495,7 @@ class ListRepository {
       "villageId": villageId ?? 0,
       "startDate": combinedStartDateTime,
       "endDate": combinedEndDateTime,
-      "createdAt": "",
+      "createdAt": '2024-01-31T06:52:09.000Z',
       "pdf": null,
       "expiryDate": null,
       "updatedAt": currentDate.toString(),
@@ -503,7 +503,7 @@ class ListRepository {
       "appointmentId": null,
       "logo": media,
       "otherlogos": [
-        {"id": null, "imageOrder": null, "listingId": null, "logo": ""}
+        {"id": '', "imageOrder": 1, "listingId": listingId, "logo": "admin/News/Defaultimage1.png"}
       ],
       "cityId": cityId,
     };

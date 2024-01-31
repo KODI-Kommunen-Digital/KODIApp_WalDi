@@ -474,7 +474,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     children: [
                       CarouselSlider(
                         options: CarouselOptions(
-                          height: 250.0,
+                          height: 230.0,
                           viewportFraction: 1.0,
                           enlargeCenterPage: false,
                           enableInfiniteScroll: product.imageLists!.length > 1,
@@ -497,7 +497,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 ),
                                 child: Image.network(
                                   '${Application.picturesURL}${imageUrl.logo!}',
-                                  fit: BoxFit.fitHeight,
+                                  fit: BoxFit.contain,
                                   loadingBuilder: (BuildContext context,
                                       Widget child,
                                       ImageChunkEvent? loadingProgress) {
