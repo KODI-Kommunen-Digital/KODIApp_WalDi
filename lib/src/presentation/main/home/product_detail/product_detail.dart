@@ -457,7 +457,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         actionGalleries,
         const SizedBox(width: 8),
       ];
-
+      double screenHeight = MediaQuery.of(context).size.height;
+      double safeAreaVertical = MediaQuery.of(context).padding.top +
+          MediaQuery.of(context).padding.bottom;
+      double targetHeightRatio = 0.35;
+      double carouselHeight =
+          (screenHeight - safeAreaVertical) * targetHeightRatio;
       banner = product.pdf == ''
           ? InkWell(
               onTap: () {
@@ -473,7 +478,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     children: [
                       CarouselSlider(
                         options: CarouselOptions(
-                          height: 230.0,
+                          height: carouselHeight,
                           viewportFraction: 1.0,
                           enlargeCenterPage: false,
                           enableInfiniteScroll: product.imageLists!.length > 1,
