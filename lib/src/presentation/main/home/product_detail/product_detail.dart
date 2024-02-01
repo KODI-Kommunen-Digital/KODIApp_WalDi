@@ -466,13 +466,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 Navigator.pushNamed(
                   context,
                   Routes.imageZoom,
-                  arguments: product.sourceId == 2
+                  arguments: product.sourceId == 2 || product.sourceId == 3
                       ? product.image
                       : "${Application.picturesURL}${product.image}",
                 );
               },
               child: CachedNetworkImage(
-                imageUrl: product.sourceId == 2
+                imageUrl: product.sourceId == 2 || product.sourceId == 3
                     ? product.image
                     : product.image == 'admin/News.jpeg'
                         ? "${Application.picturesURL}${product.image}"

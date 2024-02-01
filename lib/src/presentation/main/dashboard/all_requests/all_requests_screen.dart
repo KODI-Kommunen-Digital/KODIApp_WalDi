@@ -191,7 +191,9 @@ class _AllRequestsLoadedState extends State<AllRequestsLoaded> {
                                                   borderRadius:
                                                       BorderRadius.circular(12),
                                                   child: CachedNetworkImage(
-                                                    imageUrl: item.sourceId == 2
+                                                    imageUrl: item.sourceId ==
+                                                                2 ||
+                                                            item.sourceId == 3
                                                         ? item.image
                                                         : "${Application.picturesURL}${item.image}",
                                                     cacheManager:

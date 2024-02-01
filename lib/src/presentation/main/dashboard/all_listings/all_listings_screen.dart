@@ -249,7 +249,8 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                                             12),
                                                     child: CachedNetworkImage(
                                                       imageUrl: item.sourceId ==
-                                                              2
+                                                                  2 ||
+                                                              item.sourceId == 3
                                                           ? item.image
                                                           : "${Application.picturesURL}${item.image}",
                                                       cacheManager:
