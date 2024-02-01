@@ -402,8 +402,10 @@ class _ListLoadedState extends State<ListLoaded> {
   }
 
   void _onProductDetail(ProductModel item) {
-    if (item.sourceId == 2) {
+    if (item.sourceId == 2 || item.showExternal == 1) {
       _makeAction(item.website);
+    } else if (item.showExternal == 0) {
+      Navigator.pushNamed(context, Routes.productDetail, arguments: item);
     } else {
       Navigator.pushNamed(context, Routes.productDetail, arguments: item);
     }
