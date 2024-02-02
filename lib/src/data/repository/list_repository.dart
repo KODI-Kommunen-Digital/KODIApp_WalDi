@@ -304,6 +304,7 @@ class ListRepository {
   Future<ResultApiModel> editProduct(
     int? listingId,
     int? categoryId,
+    int? subCategoryId,
     cityId,
     String title,
     String description,
@@ -326,7 +327,7 @@ class ListRepository {
     TimeOfDay? startTime,
     TimeOfDay? endTime,
   ) async {
-    final subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
+    // final subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
     final villageId = prefs.getKeyValue(Preferences.villageId, null);
     final userId = prefs.getKeyValue(Preferences.userId, '');
     final media = prefs.getKeyValue(Preferences.path, null);
@@ -392,12 +393,7 @@ class ListRepository {
       "appointmentId": null,
       "logo": media,
       "otherlogos": [
-        {
-          "id": null,
-          "imageOrder": null,
-          "listingId": null,
-          "logo": ""
-        }
+        {"id": null, "imageOrder": null, "listingId": null, "logo": ""}
       ],
       "cityId": cityId,
     };

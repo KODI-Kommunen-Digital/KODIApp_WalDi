@@ -117,6 +117,7 @@ class AddListingCubit extends Cubit<AddListingState> {
       final response = await _repo.editProduct(
           listingId,
           categoryId,
+          subCategoryId,
           cityId,
           title,
           description,
@@ -190,7 +191,6 @@ class AddListingCubit extends Cubit<AddListingState> {
     } catch (e, stackTrace) {
       logError('request categoryID Error', e);
       await Sentry.captureException(e, stackTrace: stackTrace);
-
     }
   }
 
@@ -200,7 +200,6 @@ class AddListingCubit extends Cubit<AddListingState> {
     } catch (e, stackTrace) {
       logError('request subCategoryID Error', e);
       await Sentry.captureException(e, stackTrace: stackTrace);
-
     }
   }
 

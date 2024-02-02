@@ -754,41 +754,40 @@ class _AddListingScreenState extends State<AddListingScreen> {
             Row(
               children: [
                 Expanded(
-                    child: listCategory.isEmpty
-                        ? const LinearProgressIndicator()
-                        : DropdownButton(
-                            isExpanded: true,
-                            menuMaxHeight: 200,
-                            hint: Text(Translate.of(context)
-                                .translate('input_category')),
-                            value: selectedCategory,
-                            items: listCategory.map((category) {
-                              return DropdownMenuItem(
-                                value: category['name'],
-                                child: Text(
-                                  Translate.of(context).translate(
-                                    _getCategoryTranslation(category['id']),
-                                  ),
+                  child: listCategory.isEmpty
+                      ? const LinearProgressIndicator()
+                      : DropdownButton(
+                          isExpanded: true,
+                          menuMaxHeight: 200,
+                          hint: Text(Translate.of(context)
+                              .translate('input_category')),
+                          value: selectedCategory,
+                          items: listCategory.map((category) {
+                            return DropdownMenuItem(
+                              value: category['name'],
+                              child: Text(
+                                Translate.of(context).translate(
+                                  _getCategoryTranslation(category['id']),
                                 ),
-                              );
-                            }).toList(),
-                            onChanged: widget.item == null
-                                ? (value) async {
-                                    setState(
-                                      () {
-                                        selectedCategory = value as String?;
-                                        context
-                                            .read<AddListingCubit>()
-                                            .setCategoryId(selectedCategory);
-                                      },
-                                    );
-                                    if (selectedCategory?.toLowerCase() ==
-                                            "news" ||
-                                        selectedCategory == null) {
-                                      selectSubCategory(selectedCategory);
-                                    }
-                                  }
-                                : null)),
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (value) async {
+                            setState(
+                              () {
+                                selectedCategory = value as String?;
+                                context
+                                    .read<AddListingCubit>()
+                                    .setCategoryId(selectedCategory);
+                              },
+                            );
+                            if (selectedCategory?.toLowerCase() == "news" ||
+                                selectedCategory == null) {
+                              selectSubCategory(selectedCategory);
+                            }
+                          },
+                        ),
+                ),
               ],
             ),
             if (selectedCategory?.toLowerCase() == "news" ||
@@ -819,32 +818,30 @@ class _AddListingScreenState extends State<AddListingScreen> {
               children: [
                 if (selectedCategory?.toLowerCase() == "news")
                   Expanded(
-                      child: listSubCategory.isEmpty
-                          ? const LinearProgressIndicator()
-                          : DropdownButton(
-                              isExpanded: true,
-                              menuMaxHeight: 200,
-                              hint: Text(Translate.of(context)
-                                  .translate('input_subcategory')),
-                              value: selectedSubCategory,
-                              items: listSubCategory.map((subcategory) {
-                                return DropdownMenuItem(
-                                    value: subcategory['name'],
-                                    child: Text(Translate.of(context).translate(
-                                        _getSubCategoryTranslation(
-                                            subcategory['id']))));
-                              }).toList(),
-                              onChanged: widget.item == null
-                                  ? (value) {
-                                      context
-                                          .read<AddListingCubit>()
-                                          .getSubCategoryId(value);
-                                      setState(() {
-                                        selectedSubCategory = value as String?;
-                                      });
-                                    }
-                                  : null,
-                            )),
+                    child: listSubCategory.isEmpty
+                        ? const LinearProgressIndicator()
+                        : DropdownButton(
+                            isExpanded: true,
+                            menuMaxHeight: 200,
+                            hint: Text(Translate.of(context)
+                                .translate('input_subcategory')),
+                            value: selectedSubCategory,
+                            items: listSubCategory.map((subcategory) {
+                              return DropdownMenuItem(
+                                  value: subcategory['name'],
+                                  child: Text(Translate.of(context).translate(
+                                      _getSubCategoryTranslation(
+                                          subcategory['id']))));
+                            }).toList(),
+                            onChanged: (value) {
+                              context
+                                  .read<AddListingCubit>()
+                                  .getSubCategoryId(value);
+                              setState(() {
+                                selectedSubCategory = value as String?;
+                              });
+                            }),
+                  ),
               ],
             ),
             if (selectedCategory?.toLowerCase() == "news" ||
