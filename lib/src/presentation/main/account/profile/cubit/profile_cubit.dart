@@ -38,14 +38,15 @@ class ProfileCubit extends Cubit<ProfileState> {
             website: product.website,
             description: product.description,
             userId: product.userId,
-            sourceId: product.sourceId));
+            sourceId: product.sourceId,
+            expiryDate: product.expiryDate));
       }
     }
     emit(ProfileState.loaded(listDataList));
     return listDataList;
   }
 
-  Future<List<ProductModel>> newListings(userId, pageNo ) async {
+  Future<List<ProductModel>> newListings(userId, pageNo) async {
     List<ProductModel> listDataList = [];
     final result = await repo.loadUserListings(userId, pageNo);
     for (final list in result) {
@@ -69,7 +70,8 @@ class ProfileCubit extends Cubit<ProfileState> {
             website: product.website,
             description: product.description,
             userId: product.userId,
-            sourceId: product.sourceId));
+            sourceId: product.sourceId,
+            expiryDate: product.expiryDate));
       }
     }
     return listDataList;

@@ -43,6 +43,7 @@ class AddListingCubit extends Cubit<AddListingState> {
     String? email,
     String? website,
     String? status,
+    String? expiryDate,
     String? startDate,
     String? endDate,
     String? price,
@@ -65,6 +66,7 @@ class AddListingCubit extends Cubit<AddListingState> {
           email,
           website,
           status,
+          expiryDate,
           startDate,
           endDate,
           startTime,
@@ -106,6 +108,7 @@ class AddListingCubit extends Cubit<AddListingState> {
     String? email,
     String? website,
     String? status,
+    String? expiryDate,
     String? startDate,
     String? endDate,
     String? price,
@@ -132,6 +135,7 @@ class AddListingCubit extends Cubit<AddListingState> {
           email,
           website,
           status,
+          expiryDate,
           startDate,
           endDate,
           price,
@@ -216,7 +220,6 @@ class AddListingCubit extends Cubit<AddListingState> {
     } catch (e, stackTrace) {
       logError('request categoryID Error', e);
       await Sentry.captureException(e, stackTrace: stackTrace);
-
     }
   }
 
@@ -226,7 +229,6 @@ class AddListingCubit extends Cubit<AddListingState> {
     } catch (e, stackTrace) {
       logError('request subCategoryID Error', e);
       await Sentry.captureException(e, stackTrace: stackTrace);
-
     }
   }
 

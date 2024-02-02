@@ -285,6 +285,7 @@
   "choose_date": "Datum wählen",
   "choose_date_message": "Bitte Datum wählen",
   "start_date": "Startdatum",
+  "expiry_date": "Verfallsdatum",
   "end_date": "Endtermin",
   "to": "bis",
   "date": "Datum",

@@ -80,6 +80,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
 
   String? _featureImage;
   String? _featurePdf;
+  String? _expiryDate;
   String? _startDate;
   String? _endDate;
   TimeOfDay? _startTime;
@@ -293,6 +294,29 @@ class _AddListingScreenState extends State<AddListingScreen> {
     });
   }
 
+  void _onShowExpiryDatePicker() async {
+    final now = DateTime.now();
+    DateTime initialDate = _expiryDate != null
+        ? DateFormat('yyyy-MM-dd').parse(_expiryDate!)
+        : now.add(const Duration(days: 14));
+    final DateTime firstDate = DateTime(now.year);
+    final DateTime lastDate = DateTime(now.year + 2, now.month, now.day);
+
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: initialDate,
+      firstDate: firstDate,
+      lastDate: lastDate,
+    );
+
+    if (picked != null && mounted) {
+      setState(() {
+        // Directly update _expiryDate with the formatted string of the picked date
+        _expiryDate = DateFormat('yyyy-MM-dd').format(picked);
+      });
+    }
+  }
+
   void _onShowStartDatePicker(String? startDate) async {
     final now = DateTime.now();
     final dateFormat = DateFormat('yyyy-MM-dd');
@@ -436,6 +460,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
             phone: _textPhoneController.text,
             website: _textWebsiteController.text,
             price: _textPriceController.text,
+            expiryDate: _expiryDate,
             startDate: _startDate,
             endDate: _endDate,
             startTime: _startTime,
@@ -463,6 +488,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
             email: _textEmailController.text,
             phone: _textPhoneController.text,
             website: _textWebsiteController.text,
+            expiryDate: _expiryDate,
             startDate: _startDate,
             endDate: _endDate,
             startTime: _startTime,
@@ -898,7 +924,46 @@ class _AddListingScreenState extends State<AddListingScreen> {
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 6),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 10),
+                Text.rich(
+                  TextSpan(
+                    text: Translate.of(context).translate('expiry_date'),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium!
+                        .copyWith(fontWeight: FontWeight.bold),
+                    children: const <TextSpan>[
+                      TextSpan(
+                        text: ' *',
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 8),
+                AppPickerItem(
+                  leading: Icon(
+                    Icons.calendar_today_outlined,
+                    color: Theme.of(context).hintColor,
+                  ),
+                  value: _expiryDate,
+                  title: Translate.of(context).translate(
+                    'choose_date',
+                  ),
+                  onPressed: () async {
+                    _onShowExpiryDatePicker();
+                  },
+                ),
+                const SizedBox(height: 16),
+              ],
+            ),
             const SizedBox(height: 8),
             AppTextInput(
               hintText: Translate.of(context).translate('input_address'),

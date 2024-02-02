@@ -22,6 +22,7 @@ class ProductModel {
   final String? pdf;
   final String? videoURL;
   final String? category;
+  final String expiryDate;
   final String startDate;
   final String endDate;
   final String createDate;
@@ -73,6 +74,7 @@ class ProductModel {
       this.pdf,
       this.videoURL,
       this.category,
+      required this.expiryDate,
       required this.startDate,
       required this.endDate,
       required this.createDate,
@@ -141,6 +143,7 @@ class ProductModel {
     CategoryModel? city;
     String status = '';
     String videoURL = '';
+    String expiryDate = '';
     String startDate = '';
     String endDate = '';
     String createDate = '';
@@ -221,6 +224,7 @@ class ProductModel {
       videoURL: videoURL,
       category: category ?? '',
       createDate: createDate,
+      expiryDate: expiryDate,
       startDate: startDate,
       endDate: endDate,
       username: json['username'],
@@ -280,6 +284,7 @@ class ProductModel {
       // image: ImageModel.fromJson(json['image'] ?? {'full': {}, 'thumb': {}}),
       videoURL: '',
       createDate: '',
+      expiryDate: '',
       startDate: '',
       endDate: '',
       username: json['username'],
