@@ -17,8 +17,12 @@ class HTTPManager {
 
   HTTPManager({bool forum = false}) {
     _baseUrl = !forum
-        ? 'https://app.smartregion-auf.de/api'
+        ? 'https://app.smartregion-auf.de/api/'
         : 'https://app.smartregion-auf.de/forumapi/';
+    // ? 'http://localhost:3001/'
+    //     : 'http://localhost:3002/';
+    //? 'https://app.geseke.it/api/'
+    //: 'https://app.geseke.it/forumapi/';
 
     _dio = Dio(
       BaseOptions(
@@ -81,7 +85,6 @@ class HTTPManager {
             } catch (e, stackTrace) {
               logError('Refresh Token Response Failed', e);
               await Sentry.captureException(e, stackTrace: stackTrace);
-
               handler.reject(error);
             }
           } else if (response.message ==

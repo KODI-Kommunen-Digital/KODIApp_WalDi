@@ -1,11 +1,11 @@
 {
-    "name": "AUF App",
-    "short_name": "AUF App",
+    "name": "Auf App",
+    "short_name": "Auf App",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "Auf App",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

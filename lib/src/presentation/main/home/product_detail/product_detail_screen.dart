@@ -1,6 +1,6 @@
 // ignore_for_file: depend_on_referenced_packages, use_build_context_synchronously
 
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +21,6 @@ import 'package:heidi/src/utils/translate.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   const ProductDetailScreen({Key? key, required this.item}) : super(key: key);
@@ -36,6 +35,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   final _scrollController = ScrollController();
   final _productDetailCubit = ProductDetailCubit();
   Color? _iconColor = Colors.white;
+  int currentImageIndex = 0;
+
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
     Factory(() => EagerGestureRecognizer())
   };
@@ -193,8 +194,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     String uniqueKey = UniqueKey().toString();
     List<Widget> action = [];
     Widget actionGalleries = Container();
-    final memoryCacheManager = DefaultCacheManager();
-    // Widget actionMapView = Container();
     Widget banner = AppPlaceholder(
       child: Container(
         color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white,
@@ -459,62 +458,149 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         actionGalleries,
         const SizedBox(width: 8),
       ];
-
+      double screenHeight = MediaQuery.of(context).size.height;
+      double safeAreaVertical = MediaQuery.of(context).padding.top +
+          MediaQuery.of(context).padding.bottom;
+      double targetHeightRatio = 0.35;
+      double carouselHeight =
+          (screenHeight - safeAreaVertical) * targetHeightRatio;
       banner = product.pdf == ''
           ? InkWell(
               onTap: () {
-                Navigator.pushNamed(
-                  context,
-                  Routes.imageZoom,
-                  arguments: product.sourceId == 2
-                      ? product.image
-                      : "${Application.picturesURL}${product.image}",
-                );
+                Navigator.pushNamed(context, Routes.imageZoom, arguments: {
+                  'imageList': product.imageLists,
+                  'pdf': null,
+                });
               },
-              child: CachedNetworkImage(
-                imageUrl: product.sourceId == 2
-                    ? product.image
-                    : product.image == 'admin/News.jpeg'
-                        ? "${Application.picturesURL}${product.image}"
-                        : "${Application.picturesURL}${product.image}?cacheKey=$uniqueKey",
-                cacheManager: memoryCacheManager,
-                placeholder: (context, url) {
-                  return AppPlaceholder(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).textTheme.bodyLarge?.color ??
-                            Colors.white,
+              child: Column(
+                children: [
+                  Stack(
+                    alignment: Alignment.bottomCenter,
+                    children: [
+                      CarouselSlider(
+                        options: CarouselOptions(
+                          height: carouselHeight,
+                          viewportFraction: 1.0,
+                          enlargeCenterPage: false,
+                          enableInfiniteScroll: product.imageLists!.length > 1,
+                          onPageChanged: (index, reason) {
+                            setState(() {
+                              currentImageIndex = index;
+                            });
+                          },
+                        ),
+                        items: product.imageLists?.map((imageUrl) {
+                          return Builder(
+                            builder: (BuildContext context) {
+                              return Container(
+                                width: MediaQuery.of(context).size.width,
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 5.0),
+                                decoration: const BoxDecoration(
+                                  color: Colors
+                                      .black, // Change the background color to black
+                                ),
+                                child: Image.network(
+                                  '${Application.picturesURL}${imageUrl.logo!}',
+                                  fit: BoxFit.fitHeight,
+                                  loadingBuilder: (BuildContext context,
+                                      Widget child,
+                                      ImageChunkEvent? loadingProgress) {
+                                    if (loadingProgress == null) {
+                                      return child; // Return the actual image if loading is complete.
+                                    } else {
+                                      return AppPlaceholder(
+                                        child: Container(
+                                          width: 120,
+                                          height: 140,
+                                          decoration: const BoxDecoration(
+                                            color: Colors.black,
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(8),
+                                              bottomLeft: Radius.circular(8),
+                                            ),
+                                          ),
+                                          child: const Icon(Icons.error),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                ),
+                              );
+                            },
+                          );
+                        }).toList(),
                       ),
-                    ),
-                  );
-                },
-                imageBuilder: (context, imageProvider) {
-                  return Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: imageProvider,
-                        fit: BoxFit.fitHeight,
-                      ),
-                    ),
-                  );
-                },
-                errorWidget: (context, url, error) {
-                  return AppPlaceholder(
-                    child: Container(
-                      width: 120,
-                      height: 140,
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).textTheme.bodyLarge?.color ??
-                            Colors.white,
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(8),
-                          bottomLeft: Radius.circular(8),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: product.imageLists!.map((url) {
+                            int index = product.imageLists!.indexOf(url);
+                            return Container(
+                              width: 10.0,
+                              height: 10.0,
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 2.0),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: currentImageIndex == index
+                                    ? Colors.blueAccent
+                                    : Colors.grey,
+                              ),
+                            );
+                          }).toList(),
+//                 Navigator.pushNamed(
+//                   context,
+//                   Routes.imageZoom,
+//                   arguments: product.sourceId == 2 || product.sourceId == 3
+//                       ? product.image
+//                       : "${Application.picturesURL}${product.image}",
+//                 );
+//               },
+//               child: CachedNetworkImage(
+//                 imageUrl: product.sourceId == 2 || product.sourceId == 3
+//                     ? product.image
+//                     : product.image == 'admin/News.jpeg'
+//                         ? "${Application.picturesURL}${product.image}"
+//                         : "${Application.picturesURL}${product.image}?cacheKey=$uniqueKey",
+//                 cacheManager: memoryCacheManager,
+//                 placeholder: (context, url) {
+//                   return AppPlaceholder(
+//                     child: Container(
+//                       decoration: BoxDecoration(
+//                         color: Theme.of(context).textTheme.bodyLarge?.color ??
+//                             Colors.white,
+//                       ),
+//                     ),
+//                   );
+//                 },
+//                 imageBuilder: (context, imageProvider) {
+//                   return Container(
+//                     decoration: BoxDecoration(
+//                       image: DecorationImage(
+//                         image: imageProvider,
+//                         fit: BoxFit.fitHeight,
+//                       ),
+//                     ),
+//                   );
+//                 },
+//                 errorWidget: (context, url, error) {
+//                   return AppPlaceholder(
+//                     child: Container(
+//                       width: 120,
+//                       height: 140,
+//                       decoration: BoxDecoration(
+//                         color: Theme.of(context).textTheme.bodyLarge?.color ??
+//                             Colors.white,
+//                         borderRadius: const BorderRadius.only(
+//                           topLeft: Radius.circular(8),
+//                           bottomLeft: Radius.circular(8),
                         ),
                       ),
-                      child: const Icon(Icons.error),
-                    ),
-                  );
-                },
+                    ],
+                  ),
+                ],
               ),
             )
           : RawGestureDetector(
@@ -526,12 +612,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   (AllowMultipleGestureRecognizer instance) {
                     instance.onTap = () async {
                       if (!mounted) return;
-                      Navigator.pushNamed(
-                        context,
-                        Routes.imageZoom,
-                        arguments:
-                            "${Application.picturesURL}${product.pdf}?cacheKey=$uniqueKey",
-                      );
+                      Navigator.pushNamed(context, Routes.imageZoom,
+                          arguments: {
+                            'imageList': product.imageLists,
+                            'pdf':
+                                "${Application.picturesURL}${product.pdf}?cacheKey=$uniqueKey",
+                          }
+                          // arguments:
+                          //     "${Application.picturesURL}${product.pdf}?cacheKey=$uniqueKey",
+                          );
                     };
                   },
                 )
@@ -1022,7 +1111,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               Navigator.of(context).pop();
             },
           ),
-          expandedHeight: MediaQuery.of(context).size.height * 0.25,
+          expandedHeight: MediaQuery.of(context).size.height * 0.27,
           pinned: true,
           actions: action,
           iconTheme: Theme.of(context).iconTheme.copyWith(color: _iconColor),

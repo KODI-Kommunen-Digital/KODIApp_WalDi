@@ -43,7 +43,6 @@ class HomeCubit extends Cubit<HomeState> {
     category = List.from(categoryRequestResponse.data ?? []).map((item) {
       return CategoryModel.fromJson(item);
     }).toList();
-
     CategoryModel? savedCity = await checkSavedCity(location);
     if (savedCity != null) {
       final listingsRequestResponse = await Api.requestLocList(savedCity.id, 1);
@@ -75,6 +74,18 @@ class HomeCubit extends Cubit<HomeState> {
       recent,
       isRefreshLoader,
     ));
+  }
+
+  Future<void> saveIgnoreAppVersion(String version) async {
+    final prefs = await Preferences.openBox();
+    await prefs.setKeyValue(Preferences.ignoredAppVersion, version);
+  }
+
+  Future<String> getIgnoreAppVersion() async {
+    final prefs = await Preferences.openBox();
+    String ignoreVersion =
+        await prefs.getKeyValue(Preferences.ignoredAppVersion, '');
+    return ignoreVersion;
   }
 
   Future<bool> doesUserExist() async {
@@ -145,7 +156,6 @@ class HomeCubit extends Cubit<HomeState> {
     for (var obj in categoryCount) {
       idToCountMap[obj.id] = obj.count;
     }
-
     categories.sort((a, b) {
       if (a.id == 17) return 1; // Move category with id 14 to the last index
       if (b.id == 17) return -1;
@@ -160,7 +170,6 @@ class HomeCubit extends Cubit<HomeState> {
       var forum = categories.removeAt(forumIndex);
       categories.insert(6, forum);
     }
-
     // Hide tag on empty categories
     for (var element in categories) {
       bool hasContent = await categoryHasContent(element.id, cityId);
@@ -212,18 +221,6 @@ class HomeCubit extends Cubit<HomeState> {
       return CategoryModel(id: cityId, title: cityName, image: "");
     }
     return null;
-  }
-
-  Future<void> saveIgnoreAppVersion(String version) async {
-    final prefs = await Preferences.openBox();
-    await prefs.setKeyValue(Preferences.ignoredAppVersion, version);
-  }
-
-  Future<String> getIgnoreAppVersion() async {
-    final prefs = await Preferences.openBox();
-    String ignoreVersion =
-        await prefs.getKeyValue(Preferences.ignoredAppVersion, '');
-    return ignoreVersion;
   }
 
   Future<dynamic> newListings(int pageNo) async {

@@ -1,27 +1,34 @@
+// ignore_for_file: unused_local_variable, unused_catch_stack
+
 import 'dart:io';
 
 import 'package:device_info/device_info.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:heidi/src/data/repository/forum_repository.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
+import 'package:heidi/src/presentation/main/add_listing/cubit/add_listing_cubit.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/multiple_gesture_detector.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:multiple_images_picker/multiple_images_picker.dart';
 import 'package:loggy/loggy.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 
 enum UploadImageType { circle, square }
 
 class AppUploadImage extends StatefulWidget {
   final String? title;
   final String? image;
-  final Function(String) onChange;
+  final Function(List<File>) onChange;
+  final VoidCallback? onDelete;
   final UploadImageType type;
   final bool profile;
   final bool forumGroup;
@@ -34,6 +41,7 @@ class AppUploadImage extends StatefulWidget {
     this.type = UploadImageType.square,
     required this.profile,
     required this.forumGroup,
+    this.onDelete,
   }) : super(key: key);
 
   @override
@@ -43,20 +51,116 @@ class AppUploadImage extends StatefulWidget {
 class _AppUploadImageState extends State<AppUploadImage> {
   final _picker = ImagePicker();
   File? _file;
-  double? _percent;
   bool isImageUploaded = false;
   bool showAction = false;
   String title = '';
   bool isPermanentlyDenied = false;
+  List<File> images = [];
+  List<Asset> resultList = <Asset>[];
+  List<File> selectedFiles = [];
+  List<Asset> selectedAssets = [];
+  String? image;
 
   @override
   void initState() {
+    image = widget.image;
+    if (image != null) {
+      if (!image!.contains('Defaultimage')) {
+        _file = File(image!);
+      }
+    }
     super.initState();
   }
 
   @override
   void dispose() {
     super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    DecorationImage? decorationImage;
+    BorderType borderType = BorderType.RRect;
+    Widget circle = Container();
+    if (widget.image != null) {
+      if (!widget.image!.contains('pdf')) {
+        image = widget.image;
+        _file = File(image!);
+      }
+    }
+    if (_file != null && !_file!.path.contains(".pdf")) {
+      decorationImage = DecorationImage(
+        image: FileImage(
+          _file!,
+        ),
+        fit: BoxFit.cover,
+      );
+    }
+
+    BoxDecoration decoration = BoxDecoration(
+      borderRadius: BorderRadius.circular(8),
+      image: decorationImage,
+    );
+
+    if (widget.type == UploadImageType.circle) {
+      borderType = BorderType.Circle;
+      decoration = BoxDecoration(
+        shape: BoxShape.circle,
+        image: decorationImage,
+      );
+    }
+
+    return InkWell(
+      onTap: widget.profile
+          ? _uploadImage
+          : selectedAssets.length > 1
+              ? selectImages
+              : showChooseFileTypeDialog,
+      child: Stack(
+        children: [
+          DottedBorder(
+            borderType: borderType,
+            radius: const Radius.circular(8),
+            color: Theme.of(context).primaryColor,
+            child: Container(
+              decoration: decoration,
+              alignment: Alignment.center,
+              child: _buildContent(),
+            ),
+          ),
+          Visibility(
+            visible: _file != null &&
+                !_file!.path.contains('pdf') &&
+                selectedAssets.length != 1,
+            child: Positioned(
+              top: -10,
+              right: -10,
+              child: IconButton(
+                icon: Icon(
+                  Icons.delete,
+                  color: Colors.red[900],
+                ),
+                onPressed: () {
+                  widget.onDelete!();
+                  setState(() {
+                    image = null;
+                    // images.removeAt(0);
+                    if (selectedAssets.length > 1) {
+                      context.read<AddListingCubit>().removeAssetsByIndex(0);
+                    }
+                    _file = null;
+                    if (images.isNotEmpty) {
+                      _file ??= File(images[0].path);
+                    }
+                  });
+                },
+              ),
+            ),
+          ),
+          Positioned.fill(child: circle),
+        ],
+      ),
+    );
   }
 
   Future<void> _uploadImage() async {
@@ -98,7 +202,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
           setState(() {
             isImageUploaded = false;
             _file = File(pickedFile.path);
-            widget.onChange('');
+            widget.onChange([]);
           });
           final profile = widget.profile;
           final forumGroup = widget.forumGroup;
@@ -125,9 +229,6 @@ class _AppUploadImageState extends State<AppUploadImage> {
         } else if (await Permission.photos.isPermanentlyDenied) {
           statusImage = PermissionStatus.permanentlyDenied;
           await openAppSettings();
-        } else if (statusImage == PermissionStatus.permanentlyDenied) {
-          // statusImage = PermissionStatus.permanentlyDenied;
-          // await openAppSettings();
         }
       } else {
         statusImage = PermissionStatus.granted;
@@ -139,7 +240,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
         setState(() {
           isImageUploaded = false;
           _file = File(pickedFile.path);
-          widget.onChange('');
+          widget.onChange([]);
         });
         final profile = widget.profile;
         final forumGroup = widget.forumGroup;
@@ -164,8 +265,6 @@ class _AppUploadImageState extends State<AppUploadImage> {
       }
     } catch (e, stackTrace) {
       logError('Image Upload Permission Error', e);
-      await Sentry.captureException(e, stackTrace: stackTrace);
-
     }
   }
 
@@ -206,16 +305,22 @@ class _AppUploadImageState extends State<AppUploadImage> {
                     allowedExtensions: ['pdf'],
                   );
                   if (result != null) {
-                    _file = File('');
-                    widget.onChange('pdf');
+                    widget.onChange([]);
                     setState(() {
+                      _file = null;
+                      images.clear();
+                      widget.onChange(images);
                       _file = File(result.files.single.path!);
                       isImageUploaded = false;
+                      selectedAssets.clear();
                     });
+                    widget.onChange(images);
                     final profile = widget.profile;
                     if (!profile) {
                       await ListRepository.uploadPdf(_file!);
                     }
+                    if (!mounted) return;
+                    context.read<AddListingCubit>().clearAssets();
                   }
                 },
                 child: const ListTile(
@@ -230,19 +335,17 @@ class _AppUploadImageState extends State<AppUploadImage> {
                     if (await Permission.photos.isGranted ||
                         await Permission.photos.isLimited) {
                       status = PermissionStatus.granted;
-                      final pickedFile = await _picker.pickImage(
-                        source: ImageSource.gallery,
-                      );
-                      if (pickedFile == null) return;
-                      if (!mounted) return;
+
                       setState(() {
-                        isImageUploaded = false;
-                        _file = File(pickedFile.path);
+                        selectedAssets =
+                            context.read<AddListingCubit>().getSelectedAssets();
                       });
+                      await selectImages();
                       final profile = widget.profile;
                       if (!profile) {
-                        await ListRepository.uploadImage(_file!, profile);
-                        widget.onChange('image');
+                        if (_file != null) {
+                          await ListRepository.uploadImage(_file!, profile);
+                        }
                       } else {
                         final response =
                             await ListRepository.uploadImage(_file!, profile);
@@ -250,8 +353,6 @@ class _AppUploadImageState extends State<AppUploadImage> {
                           setState(() {
                             isImageUploaded = true;
                           });
-                          final item = response.data['data']?['image'];
-                          widget.onChange(item);
                         }
                       }
                     } else if (await Permission.photos.isDenied) {
@@ -264,17 +365,23 @@ class _AppUploadImageState extends State<AppUploadImage> {
                     FilePickerResult? result =
                         await FilePicker.platform.pickFiles(
                       type: FileType.image,
+                      allowMultiple: true,
                     );
                     if (result != null) {
                       _file = File('');
                       setState(() {
-                        _file = File(result.files.single.path!);
+                        _file = File(result.files.first.path!);
                         isImageUploaded = false;
                       });
+                      images.clear();
+                      for(final selectedImages in result.files){
+                        images.add(File(selectedImages.path!));
+                      }
+                      widget.onChange(images);
                       final profile = widget.profile;
                       if (!profile) {
                         await ListRepository.uploadImage(_file!, profile);
-                        widget.onChange('image');
+                        // widget.onChange([]);
                       } else {
                         final response =
                             await ListRepository.uploadImage(_file!, profile);
@@ -305,8 +412,8 @@ class _AppUploadImageState extends State<AppUploadImage> {
 
   Widget? _buildContent() {
     String uniqueKey = UniqueKey().toString();
-    if (widget.image != null && _file == null) {
-      if (widget.image!.contains(".pdf")) {
+    if (image != null && _file == null) {
+      if (image!.contains(".pdf")) {
         return SizedBox(
             width: double.infinity,
             height: 400,
@@ -315,15 +422,14 @@ class _AppUploadImageState extends State<AppUploadImage> {
                 AllowMultipleGestureRecognizer:
                     GestureRecognizerFactoryWithHandlers<
                         AllowMultipleGestureRecognizer>(
-                  () => AllowMultipleGestureRecognizer(), //constructor
+                  () => AllowMultipleGestureRecognizer(),
                   (AllowMultipleGestureRecognizer instance) {
-                    //initializer
                     instance.onTap = () => showChooseFileTypeDialog();
                   },
                 )
               },
               child: const PDF().cachedFromUrl(
-                "${Application.picturesURL}${widget.image!}?cacheKey=$uniqueKey",
+                "${Application.picturesURL}${image!}?cacheKey=$uniqueKey",
                 placeholder: (progress) => Center(child: Text('$progress %')),
                 errorWidget: (error) => Center(child: Text(error.toString())),
               ),
@@ -422,17 +528,24 @@ class _AppUploadImageState extends State<AppUploadImage> {
                 ),
               );
             } else {
-              if (_percent != null && _percent! < 100) {
-                return Container(
-                  alignment: Alignment.bottomLeft,
-                  child: Container(
-                    clipBehavior: Clip.antiAlias,
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 24,
+                    height: 24,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(2),
+                      shape: BoxShape.circle,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    child: const Icon(
+                      Icons.add,
+                      size: 18,
+                      color: Colors.white,
                     ),
                   ),
-                );
-              }
+                ],
+              );
             }
           }
         }
@@ -440,58 +553,95 @@ class _AppUploadImageState extends State<AppUploadImage> {
     return null;
   }
 
-  @override
-  Widget build(BuildContext context) {
-    DecorationImage? decorationImage;
-    BorderType borderType = BorderType.RRect;
-    Widget circle = Container();
+  Future<void> selectImages() async {
+    try {
+      if (!mounted) return;
+      setState(() {
+        selectedAssets = context.read<AddListingCubit>().getSelectedAssets();
+      });
+      if (!mounted) return;
 
-    if (widget.image != null && !widget.image!.contains(".pdf")) {
-      decorationImage = DecorationImage(
-        image: NetworkImage("${Application.picturesURL}${widget.image!}"),
-        fit: BoxFit.cover,
+      resultList = await MultipleImagesPicker.pickImages(
+        maxImages: 8,
+        selectedAssets: selectedAssets,
       );
+      if (resultList.isNotEmpty) {
+        if (!mounted) return;
+        context.read<AddListingCubit>().clearAssets();
+        images.clear();
+        context.read<AddListingCubit>().saveAssets(resultList);
+        setState(() {
+          selectedAssets = context.read<AddListingCubit>().getSelectedAssets();
+        });
+        List<Asset> resultListCopy = List.from(resultList);
+
+        for (Asset asset in resultListCopy) {
+          final ByteData byteData = await asset.getByteData();
+          final List<int> imageData = byteData.buffer.asUint8List();
+          final tempDir = await getTemporaryDirectory();
+          final filePath = '${tempDir.path}/${asset.name}';
+
+          final imageFile = File(filePath);
+          await imageFile.writeAsBytes(imageData);
+
+          int imageSizeInBytes = imageData.length;
+          double imageSizeInMB = imageSizeInBytes / (1024 * 1024);
+          logError('ImageSize', imageSizeInMB);
+
+          if (imageSizeInMB > 20) {
+            setState(() {
+              images.remove(imageFile);
+              resultList.remove(asset);
+            });
+            if (!mounted) return;
+            context.read<AddListingCubit>().removeAssets(asset);
+
+            if (!mounted) return;
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: Text(
+                  Translate.of(context).translate(
+                    'image_size_exceed',
+                  ),
+                ),
+                content: Text(
+                  Translate.of(context).translate(
+                    'select_small_images',
+                  ),
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text('OK'),
+                  ),
+                ],
+              ),
+            );
+          } else {
+            setState(() {
+              _file = null;
+              images.add(imageFile);
+              if (image == null) {
+                _file ??= File(images[0].path);
+              } else {
+                if (!image!.contains('Defaultimage') &&
+                    !image!.contains('pdf')) {
+                  _file = File(image!);
+                } else {
+                  _file ??= File(images[0].path);
+                }
+              }
+              widget.onChange(images);
+              context.read<AddListingCubit>().saveAssets(resultList);
+              selectedAssets =
+                  context.read<AddListingCubit>().getSelectedAssets();
+            });
+          }
+        }
+      }
+    } on Exception catch (e) {
+      logError('Error Selecting Multiple Images', e);
     }
-
-    if (_file != null && !_file!.path.contains(".pdf")) {
-      decorationImage = DecorationImage(
-        image: FileImage(
-          _file!,
-        ),
-        fit: BoxFit.cover,
-      );
-    }
-
-    BoxDecoration decoration = BoxDecoration(
-      borderRadius: BorderRadius.circular(8),
-      image: decorationImage,
-    );
-
-    if (widget.type == UploadImageType.circle) {
-      borderType = BorderType.Circle;
-      decoration = BoxDecoration(
-        shape: BoxShape.circle,
-        image: decorationImage,
-      );
-    }
-
-    return InkWell(
-      onTap: widget.profile ? _uploadImage : showChooseFileTypeDialog,
-      child: Stack(
-        children: [
-          DottedBorder(
-            borderType: borderType,
-            radius: const Radius.circular(8),
-            color: Theme.of(context).primaryColor,
-            child: Container(
-              decoration: decoration,
-              alignment: Alignment.center,
-              child: _buildContent(),
-            ),
-          ),
-          Positioned.fill(child: circle),
-        ],
-      ),
-    );
   }
 }

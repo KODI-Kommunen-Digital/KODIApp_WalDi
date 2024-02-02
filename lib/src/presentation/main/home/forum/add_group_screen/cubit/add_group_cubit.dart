@@ -31,7 +31,6 @@ class AddGroupCubit extends Cubit<AddGroupState> {
     } catch (e, stackTrace) {
       logError('Save Forum Error', e);
       await Sentry.captureException(e, stackTrace: stackTrace);
-
       return false;
     }
   }
@@ -64,7 +63,6 @@ class AddGroupCubit extends Cubit<AddGroupState> {
     } catch (e, stackTrace) {
       logError('Edit Forum Error', e);
       await Sentry.captureException(e, stackTrace: stackTrace);
-
       return false;
     }
   }
@@ -95,7 +93,6 @@ class AddGroupCubit extends Cubit<AddGroupState> {
     } catch (e, stackTrace) {
       logError('load cities error', e.toString());
       await Sentry.captureException(e, stackTrace: stackTrace);
-
     }
     return null;
   }

@@ -127,7 +127,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           image: _image,
                           onChange: (result) {
                             setState(() {
-                              _image = result;
+                              if(result.isNotEmpty){
+                                // _image = result[0];
+                              }
                             });
                           },
                         ),

@@ -191,43 +191,15 @@ class _AllRequestsLoadedState extends State<AllRequestsLoaded> {
                                                   borderRadius:
                                                       BorderRadius.circular(12),
                                                   child: CachedNetworkImage(
-                                                    imageUrl: item.sourceId == 2
+                                                    imageUrl: item.sourceId ==
+                                                                2 ||
+                                                            item.sourceId == 3
                                                         ? item.image
                                                         : "${Application.picturesURL}${item.image}",
                                                     cacheManager:
                                                         memoryCacheManager,
                                                     placeholder:
                                                         (context, url) {
-                                                      return AppPlaceholder(
-                                                        child: Container(
-                                                          height: 140,
-                                                          width: 120,
-                                                          decoration:
-                                                              const BoxDecoration(
-                                                            color: Colors.white,
-                                                          ),
-                                                        ),
-                                                      );
-                                                    },
-                                                    imageBuilder: (context,
-                                                        imageProvider) {
-                                                      return Container(
-                                                        width: 120,
-                                                        height: 140,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          image:
-                                                              DecorationImage(
-                                                            image:
-                                                                imageProvider,
-                                                            fit: BoxFit
-                                                                .fitHeight,
-                                                          ),
-                                                        ),
-                                                      );
-                                                    },
-                                                    errorWidget:
-                                                        (context, url, error) {
                                                       return AppPlaceholder(
                                                         child: Container(
                                                           width: 120,
@@ -533,8 +505,10 @@ class _AllRequestsLoadedState extends State<AllRequestsLoaded> {
   }
 
   void _onProductDetail(ProductModel item) {
-    if (item.sourceId == 2) {
+    if (item.sourceId == 2 || item.showExternal == true) {
       _makeAction(item.website);
+    } else if (item.showExternal == false) {
+      Navigator.pushNamed(context, Routes.productDetail, arguments: item);
     } else {
       Navigator.pushNamed(context, Routes.productDetail, arguments: item);
     }

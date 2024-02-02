@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_result_api.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
+import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/all_listings/cubit/all_listings_state.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:loggy/loggy.dart';
@@ -22,6 +23,7 @@ class AllListingsCubit extends Cubit<AllListingsState> {
   Future<void> onLoad(bool isRefreshLoader) async {
     if (!isRefreshLoader) emit(const AllListingsState.loading());
 
+    List<ProductModel> listDataList = [];
     int status = await getCurrentStatus();
     final ResultApiModel listingsRequestResponse;
 
@@ -31,17 +33,56 @@ class AllListingsCubit extends Cubit<AllListingsState> {
       listingsRequestResponse = await Api.requestStatusListings(status, 1);
     }
 
-    posts = List.from(listingsRequestResponse.data ?? []).map((item) {
+    List<ProductModel> productData =
+        List.from(listingsRequestResponse.data ?? []).map((item) {
       return ProductModel.fromJson(item);
     }).toList();
 
+    for (final listing in productData) {
+      final product = await loadProduct(listing.cityId, listing.id);
+      if (product != null) {
+        listDataList.add(
+          ProductModel(
+            id: listing.id,
+            cityId: listing.cityId,
+            title: product.title,
+            image: product.image,
+            pdf: product.pdf,
+            category: product.category,
+            categoryId: product.categoryId,
+            startDate: product.startDate,
+            endDate: product.endDate,
+            createDate: product.createDate,
+            favorite: product.favorite,
+            address: product.address,
+            phone: product.phone,
+            email: product.email,
+            website: product.website,
+            description: product.description,
+            statusId: product.statusId,
+            userId: product.userId,
+            sourceId: product.sourceId,
+            imageLists: product.imageLists,
+          ),
+        );
+      }
+    }
+
+    posts = listDataList;
+
     emit(AllListingsState.loaded(posts));
+  }
+
+  Future<ProductModel?> loadProduct(cityId, id) async {
+    final loadProductResponse = await ListRepository.loadProduct(cityId, id);
+    return loadProductResponse;
   }
 
   Future<dynamic> newListings(int pageNo) async {
     if (pageNo == 1) posts = [];
     final int status = await getCurrentStatus();
     final ResultApiModel listingsRequestResponse;
+    List<ProductModel> listDataList = [];
 
     if (status == 0) {
       listingsRequestResponse = await Api.requestAllListings(pageNo);
@@ -49,10 +90,40 @@ class AllListingsCubit extends Cubit<AllListingsState> {
       listingsRequestResponse = await Api.requestStatusListings(status, pageNo);
     }
 
-    final newRecent = List.from(listingsRequestResponse.data ?? []).map((item) {
+    final newProductData =
+        List.from(listingsRequestResponse.data ?? []).map((item) {
       return ProductModel.fromJson(item);
     }).toList();
-    posts.addAll(newRecent);
+
+    for (final listing in newProductData) {
+      final product = await loadProduct(listing.cityId, listing.id);
+      if (product != null) {
+        listDataList.add(
+          ProductModel(
+            id: listing.id,
+            cityId: listing.cityId,
+            title: product.title,
+            image: product.image,
+            pdf: product.pdf,
+            category: product.category,
+            categoryId: product.categoryId,
+            startDate: product.startDate,
+            endDate: product.endDate,
+            createDate: product.createDate,
+            favorite: product.favorite,
+            address: product.address,
+            phone: product.phone,
+            email: product.email,
+            website: product.website,
+            description: product.description,
+            userId: product.userId,
+            sourceId: product.sourceId,
+            imageLists: product.imageLists,
+          ),
+        );
+      }
+    }
+    posts.addAll(listDataList);
     return posts;
   }
 

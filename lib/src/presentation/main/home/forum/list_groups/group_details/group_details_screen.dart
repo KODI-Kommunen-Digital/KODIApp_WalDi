@@ -102,7 +102,7 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                 onTap: () {
                   Navigator.pushNamed(
                     context,
-                    Routes.imageZoom,
+                    Routes.forumImageZoom,
                     arguments: (widget.groupModel.image != null)
                         ? "${Application.picturesURL}${widget.groupModel.image}?cacheKey=$uniqueKey"
                         : "${Application.picturesURL}admin/DefaultForum.jpeg?cacheKey=$uniqueKey",
