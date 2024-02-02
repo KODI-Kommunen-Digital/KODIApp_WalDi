@@ -191,16 +191,24 @@ class ProductModel {
       category = "Regionale Produkte";
     } else if (json['categoryId'] == 6) {
       category = "Biete/Suche";
+    } else if (json['categoryId'] == 7) {
+      category = "Bürgerinfo";
     } else if (json['categoryId'] == 9) {
       category = "Verloren gefunden";
     } else if (json['categoryId'] == 10) {
       category = "Firmenporträts";
     } else if (json['categoryId'] == 11) {
       category = "Fahrgemeinschaften/Öffentliche Verkehrsmittel";
+    } else if (json['categoryId'] == 12) {
+      category = "Angebote";
     } else if (json['categoryId'] == 13) {
       category = "Essen & Trinken";
-    } else if (json['categoryId'] == 17) {
-      category = "Freizeit";
+    } else if (json['categoryId'] == 14) {
+      category = "Rathaus";
+    } else if (json['categoryId'] == 15) {
+      category = "Mitteilungsblatt";
+    } else if (json['categoryId'] == 16) {
+      category = "Amtliche Mitteilung";
     }
 
     final listRelated = List.from(json['related'] ?? []).map((item) {
