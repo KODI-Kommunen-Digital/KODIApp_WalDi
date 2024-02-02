@@ -492,22 +492,30 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         items: product.imageLists?.map((imageUrl) {
                           return Builder(
                             builder: (BuildContext context) {
+                              String imageUrlString;
+                              if ((product.sourceId == 2 ||
+                                      product.sourceId == 3) &&
+                                  imageUrl.logo != 'admin/News.jpeg') {
+                                imageUrlString = imageUrl.logo!;
+                              } else {
+                                imageUrlString =
+                                    "${Application.picturesURL}${imageUrl.logo}";
+                              }
                               return Container(
                                 width: MediaQuery.of(context).size.width,
                                 margin:
                                     const EdgeInsets.symmetric(horizontal: 5.0),
                                 decoration: const BoxDecoration(
-                                  color: Colors
-                                      .black, // Change the background color to black
+                                  color: Colors.black,
                                 ),
                                 child: Image.network(
-                                  '${Application.picturesURL}${imageUrl.logo!}',
+                                  imageUrlString,
                                   fit: BoxFit.fitHeight,
                                   loadingBuilder: (BuildContext context,
                                       Widget child,
                                       ImageChunkEvent? loadingProgress) {
                                     if (loadingProgress == null) {
-                                      return child; // Return the actual image if loading is complete.
+                                      return child;
                                     } else {
                                       return AppPlaceholder(
                                         child: Container(
