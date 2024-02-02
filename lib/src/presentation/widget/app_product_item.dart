@@ -49,8 +49,8 @@ class AppProductItem extends StatelessWidget {
                   ? ClipRRect(
                       borderRadius: BorderRadius.circular(12),
                       child: SizedBox(
-                        width: 84,
-                        height: 84,
+                        width: 120,
+                        height: 140,
                         child: const PDF().cachedFromUrl(
                           "${Application.picturesURL}${item?.pdf}?cacheKey=$uniqueKey",
                           placeholder: (progress) =>
@@ -70,8 +70,8 @@ class AppProductItem extends StatelessWidget {
                         placeholder: (context, url) {
                           return AppPlaceholder(
                             child: Container(
-                              height: 84,
-                              width: 84,
+                              width: 120,
+                              height: 140,
                               decoration: const BoxDecoration(
                                 color: Colors.white,
                               ),
@@ -93,8 +93,8 @@ class AppProductItem extends StatelessWidget {
                         errorWidget: (context, url, error) {
                           return AppPlaceholder(
                             child: Container(
-                              width: 84,
-                              height: 84,
+                              width: 120,
+                              height: 140,
                               decoration: const BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.only(
