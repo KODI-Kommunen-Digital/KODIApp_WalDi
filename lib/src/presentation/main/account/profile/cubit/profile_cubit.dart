@@ -20,11 +20,12 @@ class ProfileCubit extends Cubit<ProfileState> {
     for (final list in result) {
       final product = await loadProduct(list.cityId, list.id);
       if (product != null) {
-        listDataList.add(ProductModel(
+        listDataList.add(
+          ProductModel(
             id: list.id,
             cityId: list.cityId,
             title: product.title,
-            image: product.image,
+            image: list.logo!,
             pdf: product.pdf,
             category: product.category,
             categoryId: product.categoryId,
@@ -38,7 +39,10 @@ class ProfileCubit extends Cubit<ProfileState> {
             website: product.website,
             description: product.description,
             userId: product.userId,
-            sourceId: product.sourceId));
+            sourceId: product.sourceId,
+            imageLists: product.imageLists,
+          ),
+        );
       }
     }
     emit(ProfileState.loaded(listDataList));
@@ -51,7 +55,8 @@ class ProfileCubit extends Cubit<ProfileState> {
     for (final list in result) {
       final product = await loadProduct(list.cityId, list.id);
       if (product != null) {
-        listDataList.add(ProductModel(
+        listDataList.add(
+          ProductModel(
             id: list.id,
             cityId: list.cityId,
             title: product.title,
@@ -69,7 +74,10 @@ class ProfileCubit extends Cubit<ProfileState> {
             website: product.website,
             description: product.description,
             userId: product.userId,
-            sourceId: product.sourceId));
+            sourceId: product.sourceId,
+            imageLists: product.imageLists,
+          ),
+        );
       }
     }
     return listDataList;

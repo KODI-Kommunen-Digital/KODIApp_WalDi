@@ -178,7 +178,11 @@ class Routes {
       case imageZoom:
         return MaterialPageRoute(
           builder: (context) {
-            return ImageZoomScreen(imageUrl: settings.arguments as String);
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return ImageZoomScreen(
+                imageList: arguments['imageList']! as List<ImageListModel>?,
+                pdf: arguments['pdf'] ?? '');
           },
           fullscreenDialog: true,
         );

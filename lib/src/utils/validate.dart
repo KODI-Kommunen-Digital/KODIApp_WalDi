@@ -87,15 +87,14 @@ class UtilValidator {
         break;
       case ValidateType.website:
         final websiteRegex = RegExp(
-            r"^(?:(?:https?|ftp):\/\/)?(?:www\.)?([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})(?:\/[^\s]*)?$");
+            r"^(https?|ftp):\/\/(?:www\.)?([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})(?:\/[^\s]*)?$");
         if (!websiteRegex.hasMatch(data)) {
           return errorWebsite;
         }
         break;
 
       case ValidateType.userName:
-        final userNameRegex = RegExp(
-            r'^[a-z_]+$');
+        final userNameRegex = RegExp(r'^[a-z_]+$');
         if (!userNameRegex.hasMatch(data)) {
           return errorUsername;
         }

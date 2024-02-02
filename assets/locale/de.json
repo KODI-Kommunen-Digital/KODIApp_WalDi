@@ -278,7 +278,7 @@
   "gps_require": "GPS ist erforderlich",
   "icon_require": "Symbol ist erforderlich",
   "input_zipcode": "Postleitzahl",
-  "upload_feature_image": "Bild oder PDF hochladen",
+  "upload_feature_image": "Bild oder PDF hochladen,\nMehrfachauswahl möglich",
   "edit": "Bearbeiten",
   "add_new_listing": "Neuer Beitrag",
   "edit_listing": "Eintrag aktualisieren",
@@ -449,5 +449,7 @@
   "requests": "Anfragen", "active": "Aktiv",  
   "inactive": "Inaktiv",
   "under_review": "In Prüfung",  
-  "all_requests":"Alle Anfragen"
+  "all_requests":"Alle Anfragen",
+  "image_size_exceed":"Bildgröße wurde überschritten",
+  "select_small_images":"Bitte wählen Sie Bilder aus, die 10 MB oder weniger groß sind."
 }
