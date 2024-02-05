@@ -487,6 +487,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           ? InkWell(
               onTap: () {
                 Navigator.pushNamed(context, Routes.imageZoom, arguments: {
+                  'sourceId': product.sourceId,
                   'imageList': product.imageLists,
                   'pdf': null,
                 });
@@ -511,15 +512,16 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         items: product.imageLists?.map((imageUrl) {
                           return Builder(
                             builder: (BuildContext context) {
-                              String imageUrlString;
-                              if ((product.sourceId == 2 ||
-                                      product.sourceId == 3) &&
-                                  imageUrl.logo != 'admin/News.jpeg') {
-                                imageUrlString = imageUrl.logo!;
-                              } else {
-                                imageUrlString =
-                                    "${Application.picturesURL}${imageUrl.logo}";
-                              }
+                              String? imageUrlString = product.sourceId == 2 &&
+                                      imageUrl.logo != null &&
+                                      imageUrl.logo != 'admin/News.jpeg'
+                                  ? imageUrl.logo
+                                  : product.sourceId == 3 &&
+                                          imageUrl.logo != null &&
+                                          imageUrl.logo != 'admin/News.jpeg'
+                                      ? imageUrl.logo
+                                      : "${Application.picturesURL}${imageUrl.logo!.isNotEmpty ? imageUrl.logo : 'admin/News.jpeg'}";
+
                               return Container(
                                 width: MediaQuery.of(context).size.width,
                                 margin:
@@ -528,7 +530,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                   color: Colors.black,
                                 ),
                                 child: Image.network(
-                                  imageUrlString,
+                                  imageUrlString!,
                                   fit: BoxFit.fitHeight,
                                   loadingBuilder: (BuildContext context,
                                       Widget child,
@@ -558,73 +560,28 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           );
                         }).toList(),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 10.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: product.imageLists!.map((url) {
-                            int index = product.imageLists!.indexOf(url);
-                            return Container(
-                              width: 10.0,
-                              height: 10.0,
-                              margin:
-                                  const EdgeInsets.symmetric(horizontal: 2.0),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: currentImageIndex == index
-                                    ? Colors.blueAccent
-                                    : Colors.grey,
-                              ),
-                            );
-                          }).toList(),
-//                 Navigator.pushNamed(
-//                   context,
-//                   Routes.imageZoom,
-//                   arguments: product.sourceId == 2 || product.sourceId == 3
-//                       ? product.image
-//                       : "${Application.picturesURL}${product.image}",
-//                 );
-//               },
-//               child: CachedNetworkImage(
-//                 imageUrl: product.sourceId == 2 || product.sourceId == 3
-//                     ? product.image
-//                     : product.image == 'admin/News.jpeg'
-//                         ? "${Application.picturesURL}${product.image}"
-//                         : "${Application.picturesURL}${product.image}?cacheKey=$uniqueKey",
-//                 cacheManager: memoryCacheManager,
-//                 placeholder: (context, url) {
-//                   return AppPlaceholder(
-//                     child: Container(
-//                       decoration: BoxDecoration(
-//                         color: Theme.of(context).textTheme.bodyLarge?.color ??
-//                             Colors.white,
-//                       ),
-//                     ),
-//                   );
-//                 },
-//                 imageBuilder: (context, imageProvider) {
-//                   return Container(
-//                     decoration: BoxDecoration(
-//                       image: DecorationImage(
-//                         image: imageProvider,
-//                         fit: BoxFit.fitHeight,
-//                       ),
-//                     ),
-//                   );
-//                 },
-//                 errorWidget: (context, url, error) {
-//                   return AppPlaceholder(
-//                     child: Container(
-//                       width: 120,
-//                       height: 140,
-//                       decoration: BoxDecoration(
-//                         color: Theme.of(context).textTheme.bodyLarge?.color ??
-//                             Colors.white,
-//                         borderRadius: const BorderRadius.only(
-//                           topLeft: Radius.circular(8),
-//                           bottomLeft: Radius.circular(8),
+                      if (product.imageLists!.length > 1)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 10.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: product.imageLists!.map((url) {
+                              int index = product.imageLists!.indexOf(url);
+                              return Container(
+                                width: 10.0,
+                                height: 10.0,
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 2.0),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: currentImageIndex == index
+                                      ? Colors.blueAccent
+                                      : Colors.grey,
+                                ),
+                              );
+                            }).toList(),
+                          ),
                         ),
-                      ),
                     ],
                   ),
                 ],
@@ -639,15 +596,16 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   (AllowMultipleGestureRecognizer instance) {
                     instance.onTap = () async {
                       if (!mounted) return;
-                      Navigator.pushNamed(context, Routes.imageZoom,
-                          arguments: {
-                            'imageList': product.imageLists,
-                            'pdf':
-                                "${Application.picturesURL}${product.pdf}?cacheKey=$uniqueKey",
-                          }
-                          // arguments:
-                          //     "${Application.picturesURL}${product.pdf}?cacheKey=$uniqueKey",
-                          );
+                      Navigator.pushNamed(
+                        context,
+                        Routes.imageZoom,
+                        arguments: {
+                          'sourceId': product.sourceId,
+                          'imageList': product.imageLists,
+                          'pdf':
+                              "${Application.picturesURL}${product.pdf}?cacheKey=$uniqueKey",
+                        },
+                      );
                     };
                   },
                 )

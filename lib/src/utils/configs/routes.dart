@@ -181,6 +181,7 @@ class Routes {
             final Map<String, dynamic> arguments =
                 settings.arguments as Map<String, dynamic>;
             return ImageZoomScreen(
+                sourceId: arguments['sourceId'] as int,
                 imageList: arguments['imageList']! as List<ImageListModel>?,
                 pdf: arguments['pdf'] ?? '');
           },

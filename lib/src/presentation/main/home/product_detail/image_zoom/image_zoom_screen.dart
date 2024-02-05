@@ -9,12 +9,14 @@ import 'package:heidi/src/utils/configs/application.dart';
 class ImageZoomScreen extends StatefulWidget {
   final List<ImageListModel>? imageList;
   final String pdf;
+  final int sourceId;
 
-  const ImageZoomScreen({
-    Key? key,
-    required this.imageList,
-    required this.pdf,
-  }) : super(key: key);
+  const ImageZoomScreen(
+      {Key? key,
+      required this.imageList,
+      required this.pdf,
+      required this.sourceId})
+      : super(key: key);
 
   @override
   State<ImageZoomScreen> createState() => _ImageZoomScreenState();
@@ -29,7 +31,7 @@ class _ImageZoomScreenState extends State<ImageZoomScreen> {
     final height = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: Colors.black, // Set the background color to black
+      backgroundColor: Colors.black,
       body: SafeArea(
         child: Stack(
           children: [
@@ -54,8 +56,7 @@ class _ImageZoomScreenState extends State<ImageZoomScreen> {
                             width: MediaQuery.of(context).size.width,
                             margin: const EdgeInsets.symmetric(horizontal: 5.0),
                             decoration: const BoxDecoration(
-                              color: Colors
-                                  .black, // Change the background color to black
+                              color: Colors.black,
                             ),
                             child: CarouselSlider(
                               options: CarouselOptions(
@@ -70,9 +71,21 @@ class _ImageZoomScreenState extends State<ImageZoomScreen> {
                                   });
                                 },
                               ),
-                              items: widget.imageList?.map((imageUrl) {
+                              items: widget.imageList?.map((imageItem) {
                                 return Builder(
                                   builder: (BuildContext context) {
+                                    String imageUrlString = widget.sourceId ==
+                                                2 &&
+                                            imageItem.logo != null &&
+                                            imageItem.logo != 'admin/News.jpeg'
+                                        ? imageItem.logo!
+                                        : widget.sourceId == 3 &&
+                                                imageItem.logo != null &&
+                                                imageItem.logo != "" &&
+                                                imageItem.logo !=
+                                                    'admin/News.jpeg'
+                                            ? imageItem.logo!
+                                            : "${Application.picturesURL}${imageItem.logo!.isNotEmpty ? imageItem.logo : 'admin/News.jpeg'}";
                                     return Container(
                                       width: MediaQuery.of(context).size.width,
                                       margin: const EdgeInsets.symmetric(
@@ -80,52 +93,32 @@ class _ImageZoomScreenState extends State<ImageZoomScreen> {
                                       decoration: const BoxDecoration(
                                         color: Colors.black,
                                       ),
-                                      child: Container(
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                        margin: const EdgeInsets.symmetric(
-                                            horizontal: 5.0),
-                                        decoration: const BoxDecoration(
-                                          color: Colors
-                                              .black, // Change the background color to black
-                                        ),
-                                        child: Image.network(
-                                          '${Application.picturesURL}${imageUrl.logo!}',
-                                          fit: BoxFit.fitHeight,
-                                          loadingBuilder: (BuildContext context,
-                                              Widget child,
-                                              ImageChunkEvent?
-                                                  loadingProgress) {
-                                            if (loadingProgress == null) {
-                                              return child; // Return the actual image if loading is complete.
-                                            } else {
-                                              return AppPlaceholder(
-                                                child: Container(
-                                                  width: 120,
-                                                  height: 140,
-                                                  decoration:
-                                                      const BoxDecoration(
-                                                    color: Colors.black,
-                                                    borderRadius:
-                                                        BorderRadius.only(
-                                                      topLeft:
-                                                          Radius.circular(8),
-                                                      bottomLeft:
-                                                          Radius.circular(8),
-                                                    ),
-                                                  ),
-                                                  child:
-                                                      const Icon(Icons.error),
+                                      child: Image.network(
+                                        imageUrlString,
+                                        fit: BoxFit.contain,
+                                        loadingBuilder: (BuildContext context,
+                                            Widget child,
+                                            ImageChunkEvent? loadingProgress) {
+                                          if (loadingProgress == null) {
+                                            return child;
+                                          }
+                                          return AppPlaceholder(
+                                            child: Container(
+                                              width: 120,
+                                              height: 140,
+                                              decoration: const BoxDecoration(
+                                                color: Colors.black,
+                                                borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(8),
+                                                  bottomLeft:
+                                                      Radius.circular(8),
                                                 ),
-                                              );
-                                            }
-                                          },
-                                        ),
+                                              ),
+                                              child: const Icon(Icons.error),
+                                            ),
+                                          );
+                                        },
                                       ),
-                                      // child: Image.network(
-                                      //   '${Application.picturesURL}${imageUrl.logo!}',
-                                      //   fit: BoxFit.fitHeight,
-                                      // ),
                                     );
                                   },
                                 );
@@ -135,53 +128,37 @@ class _ImageZoomScreenState extends State<ImageZoomScreen> {
                           const SizedBox(
                             height: 10.0,
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: widget.imageList!.map((url) {
-                              int index = widget.imageList!.indexOf(url);
-                              return Container(
-                                width: 10.0,
-                                height: 10.0,
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 2.0),
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: currentImageIndex == index
-                                      ? Colors.blueAccent
-                                      : Colors.grey,
-                                ),
-                              );
-                            }).toList(),
-                          ),
+                          if (widget.imageList!.length > 1)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: widget.imageList!.map((url) {
+                                int index = widget.imageList!.indexOf(url);
+                                return Container(
+                                  width: 10.0,
+                                  height: 10.0,
+                                  margin: const EdgeInsets.symmetric(
+                                      horizontal: 2.0),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: currentImageIndex == index
+                                        ? Colors.blueAccent
+                                        : Colors.grey,
+                                  ),
+                                );
+                              }).toList(),
+                            ),
                         ],
                       ),
-                // PhotoView(
-                //         imageProvider: CachedNetworkImageProvider(
-                //             imageUrl.contains('admin/News.jpeg')
-                //                 ? imageUrl
-                //                 : imageUrl.contains('instagram')
-                //                     ? imageUrl
-                //                     : '$imageUrl?cacheKey=$uniqueKey'),
-                //         minScale: PhotoViewComputedScale.contained * 0.8,
-                //         maxScale: PhotoViewComputedScale.covered * 2.0,
-                //         initialScale: PhotoViewComputedScale.contained,
-                //       ),
               ),
-
-              // Image.network(
-              //   imageUrl,
-              //   width: double.infinity, // Set the image width to maximum
-              // ),
             ),
             Positioned(
-              top: 10, // Adjust the top position of the back button
-              left: 10, // Adjust the left position of the back button
+              top: 10,
+              left: 10,
               child: IconButton(
                 icon: const Icon(Icons.arrow_back),
                 color: Colors.white,
                 onPressed: () {
-                  Navigator.pop(
-                      context); // Navigate back when the button is pressed
+                  Navigator.pop(context);
                 },
               ),
             ),
