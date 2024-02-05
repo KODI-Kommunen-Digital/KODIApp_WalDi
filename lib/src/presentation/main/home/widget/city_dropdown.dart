@@ -9,10 +9,10 @@ class CitiesDropDown extends StatefulWidget {
 
   const CitiesDropDown(
       {Key? key,
-        required this.setLocationCallback,
-        required this.cityTitlesList,
-        this.hintText,
-        this.selectedOption})
+      required this.setLocationCallback,
+      required this.cityTitlesList,
+      this.hintText,
+      this.selectedOption})
       : super(key: key);
 
   @override
@@ -26,7 +26,7 @@ class _CitiesDropDownState extends State<CitiesDropDown> {
     if (widget.selectedOption != "") chosenOption = widget.selectedOption;
     return SafeArea(
       child: Container(
-        padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
+        padding: const EdgeInsets.only(left: 10, right: 16, bottom: 8),
         child: Card(
           margin: const EdgeInsets.all(10),
           shape: RoundedRectangleBorder(

@@ -22,7 +22,6 @@ class AppUserInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String uniqueKey = UniqueKey().toString();
 
     switch (type) {
       case UserViewType.information:
@@ -92,7 +91,7 @@ class AppUserInfo extends StatelessWidget {
               child: Image.network(
             user!.image == 'Keine Angabe' || user!.image == ""
                 ? Application.defaultPicturesURL
-                : "${Application.picturesURL}${user!.image}?cache=$uniqueKey",
+                : "${Application.picturesURL}${user!.image}",
             width: 100,
             height: 100,
             fit: BoxFit.cover,

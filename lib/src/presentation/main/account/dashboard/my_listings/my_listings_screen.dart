@@ -297,7 +297,7 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                                                             child: Padding(
                                                               padding:
                                                                   const EdgeInsets
-                                                                          .only(
+                                                                      .only(
                                                                       top: 8.0),
                                                               child: IconButton(
                                                                 icon: const Icon(

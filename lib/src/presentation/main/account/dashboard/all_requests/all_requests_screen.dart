@@ -202,36 +202,6 @@ class _AllRequestsLoadedState extends State<AllRequestsLoaded> {
                                                         (context, url) {
                                                       return AppPlaceholder(
                                                         child: Container(
-                                                          height: 140,
-                                                          width: 120,
-                                                          decoration:
-                                                              const BoxDecoration(
-                                                            color: Colors.white,
-                                                          ),
-                                                        ),
-                                                      );
-                                                    },
-                                                    imageBuilder: (context,
-                                                        imageProvider) {
-                                                      return Container(
-                                                        width: 120,
-                                                        height: 140,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          image:
-                                                              DecorationImage(
-                                                            image:
-                                                                imageProvider,
-                                                            fit: BoxFit
-                                                                .fitHeight,
-                                                          ),
-                                                        ),
-                                                      );
-                                                    },
-                                                    errorWidget:
-                                                        (context, url, error) {
-                                                      return AppPlaceholder(
-                                                        child: Container(
                                                           width: 120,
                                                           height: 140,
                                                           decoration:

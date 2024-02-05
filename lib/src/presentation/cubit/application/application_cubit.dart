@@ -56,7 +56,6 @@ class ApplicationCubit extends Cubit<ApplicationState> {
     } catch (e, stackTrace) {
       UtilLogger.log("ERROR", e);
       await Sentry.captureException(e, stackTrace: stackTrace);
-
     }
 
     if (oldTheme != '') {

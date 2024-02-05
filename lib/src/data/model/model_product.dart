@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_category.dart';
@@ -7,6 +9,7 @@ import 'package:heidi/src/data/model/model_open_time.dart';
 import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:intl/intl.dart';
 import 'package:location/location.dart';
+import 'package:html/parser.dart';
 
 class ProductModel {
   final int id;
@@ -66,6 +69,7 @@ class ProductModel {
   final bool? bookingUse;
   final String? bookingStyle;
   final String? priceDisplay;
+  List<ImageListModel>? imageLists;
 
   ProductModel(
       {required this.id,
@@ -123,6 +127,7 @@ class ProductModel {
       this.villageId,
       this.statusId,
       this.sourceId,
+      this.imageLists,
       this.showExternal});
 
   factory ProductModel.fromJson(
@@ -149,9 +154,15 @@ class ProductModel {
     String priceMin = '';
     String priceMax = '';
     String priceDisplay = '';
+    String description = '';
 
     if (json['author'] != null) {
       author = UserModel.fromJson(json['author']);
+    }
+
+    if (json['description'] != null) {
+      var document = parse(json['description']);
+      description = document.body!.text;
     }
 
     if (json['categoryId'] == 1) {
@@ -197,7 +208,7 @@ class ProductModel {
     } else if (json['categoryId'] == 15) {
       category = "Mitteilungsblatt";
     } else if (json['categoryId'] == 16) {
-      category = "Amtliche Mitteilungen";
+      category = "Amtliche Mitteilung";
     }
 
     final listRelated = List.from(json['related'] ?? []).map((item) {
@@ -206,6 +217,10 @@ class ProductModel {
 
     final listLatest = List.from(json['lastest'] ?? []).map((item) {
       return ProductModel.fromJson(item, setting: setting);
+    }).toList();
+
+    final imagesList = List.from(json['otherlogos'] ?? []).map((item) {
+      return ImageListModel.fromJson(item);
     }).toList();
 
     final bookingUse = json['booking_use'] == true;
@@ -271,6 +286,7 @@ class ProductModel {
       bookingUse: bookingUse,
       bookingStyle: json['booking_style'] ?? '',
       priceDisplay: priceDisplay,
+      imageLists: imagesList,
     );
   }
 
@@ -325,6 +341,7 @@ class ProductModel {
       bookingUse: false,
       bookingStyle: '',
       priceDisplay: '',
+      imageLists: json['otherlogos'],
     );
   }
 
@@ -338,5 +355,30 @@ class ProductModel {
         "thumb": {},
       },
     };
+  }
+}
+
+class ImageListModel {
+  int? id;
+  int? imageOrder;
+  int? listingId;
+  String? logo;
+
+  ImageListModel({this.id, this.imageOrder, this.listingId, this.logo});
+
+  ImageListModel.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    imageOrder = json['imageOrder'];
+    listingId = json['listingId'];
+    logo = json['logo'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['imageOrder'] = imageOrder;
+    data['listingId'] = listingId;
+    data['logo'] = logo;
+    return data;
   }
 }

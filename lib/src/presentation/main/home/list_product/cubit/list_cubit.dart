@@ -132,7 +132,6 @@ class ListCubit extends Cubit<ListState> {
     } catch (e, stackTrace) {
       logError('load cities error', e.toString());
       await Sentry.captureException(e, stackTrace: stackTrace);
-
       return null;
     }
 
@@ -173,7 +172,7 @@ class ListCubit extends Cubit<ListState> {
       4: "category_clubs",
       5: "category_products",
       6: "category_offer_search",
-      7: "category_citizen_info",
+      7: "category_free",
       8: "category_defect_report",
       9: "category_lost_found",
       10: "category_companies",

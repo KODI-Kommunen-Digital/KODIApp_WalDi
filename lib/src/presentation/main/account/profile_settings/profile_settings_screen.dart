@@ -141,9 +141,15 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
   }
 
   void _showSuccessSnackBar() {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content:
-            Text(Translate.of(context).translate("delete_account_success"))));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+          content: Text(
+            Translate.of(context).translate("delete_account_success"),
+          ),
+          duration: const Duration(milliseconds: 500)),
+    );
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil(Routes.home, (Route<dynamic> route) => false);
   }
 
   void _showErrorSnackBar() {

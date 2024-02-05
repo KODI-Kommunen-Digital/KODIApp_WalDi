@@ -13,7 +13,7 @@
     <application
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
-        android:label="AUF App"
+        android:label="Auf App"
         android:requestLegacyExternalStorage="true">
         <activity
             android:name=".MainActivity"
