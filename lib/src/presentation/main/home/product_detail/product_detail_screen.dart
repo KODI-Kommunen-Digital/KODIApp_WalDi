@@ -480,16 +480,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     }
     if (product != null) {
       ///Action
-      action = [
+       action = [
         actionGalleries,
         const SizedBox(width: 8),
       ];
-      double screenHeight = MediaQuery.of(context).size.height;
-      double safeAreaVertical = MediaQuery.of(context).padding.top +
-          MediaQuery.of(context).padding.bottom;
-      double targetHeightRatio = 0.35;
-      double carouselHeight =
-          (screenHeight - safeAreaVertical) * targetHeightRatio;
       banner = product.pdf == ''
           ? InkWell(
               onTap: () {
@@ -602,16 +596,16 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   (AllowMultipleGestureRecognizer instance) {
                     instance.onTap = () async {
                       if (!mounted) return;
-                      Navigator.pushNamed(
-                        context,
-                        Routes.imageZoom,
-                        arguments: {
-                          'sourceId': product.sourceId,
-                          'imageList': product.imageLists,
-                          'pdf':
-                              "${Application.picturesURL}${product.pdf}?cacheKey=$uniqueKey",
-                        },
-                      );
+                      Navigator.pushNamed(context, Routes.imageZoom,
+                          arguments: {
+                            'sourceId': product.sourceId,
+                            'imageList': product.imageLists,
+                            'pdf':
+                                "${Application.picturesURL}${product.pdf}?cacheKey=$uniqueKey",
+                          }
+                          // arguments:
+                          //     "${Application.picturesURL}${product.pdf}?cacheKey=$uniqueKey",
+                          );
                     };
                   },
                 )
