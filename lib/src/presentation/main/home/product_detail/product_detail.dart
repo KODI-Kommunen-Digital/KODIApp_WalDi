@@ -479,10 +479,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     }
     if (product != null) {
       ///Action
-      action = [
-        actionGalleries,
-        const SizedBox(width: 8),
-      ];
       banner = product.pdf == ''
           ? InkWell(
               onTap: () {
@@ -521,7 +517,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                           imageUrl.logo != 'admin/News.jpeg'
                                       ? imageUrl.logo
                                       : "${Application.picturesURL}${imageUrl.logo!.isNotEmpty ? imageUrl.logo : 'admin/News.jpeg'}";
-
                               return Container(
                                 width: MediaQuery.of(context).size.width,
                                 margin:

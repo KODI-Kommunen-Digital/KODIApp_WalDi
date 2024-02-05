@@ -20,6 +20,7 @@ class ProductModel {
   final String title;
   final String image;
   final String? pdf;
+  final int? showExternal;
   final String? videoURL;
   final String? category;
   final String startDate;
@@ -123,7 +124,8 @@ class ProductModel {
       this.villageId,
       this.imageLists,
       this.statusId,
-      this.sourceId});
+      this.sourceId,
+      this.showExternal});
 
   factory ProductModel.fromJson(
     Map<String, dynamic> json, {
@@ -253,6 +255,7 @@ class ProductModel {
       villageId: json['villageId'] ?? 0,
       statusId: json['statusId'] ?? 0,
       sourceId: json['sourceId'] ?? 1,
+      showExternal: json['showExternal'] ?? 0,
       icon: json['icon'] ?? '',
       tags: tags,
       price: json['booking_price'] ?? '',
@@ -299,6 +302,7 @@ class ProductModel {
       subcategoryId: 0,
       statusId: 0,
       sourceId: 0,
+      showExternal: 0,
       cityId: 0,
       villageId: 0,
       rateText: '',

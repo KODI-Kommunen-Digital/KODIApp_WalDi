@@ -247,7 +247,8 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                                             12),
                                                     child: CachedNetworkImage(
                                                       imageUrl: item.sourceId ==
-                                                              2
+                                                                  2 ||
+                                                              item.sourceId == 3
                                                           ? item.image
                                                           : "${Application.picturesURL}${item.image}",
                                                       cacheManager:
@@ -741,8 +742,10 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
   }
 
   void _onProductDetail(ProductModel item) {
-    if (item.sourceId == 2) {
+    if (item.sourceId == 2 || item.showExternal == 1) {
       _makeAction(item.website);
+    } else if (item.showExternal == 0) {
+      Navigator.pushNamed(context, Routes.productDetail, arguments: item);
     } else {
       Navigator.pushNamed(context, Routes.productDetail, arguments: item);
     }
