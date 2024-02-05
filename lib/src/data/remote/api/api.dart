@@ -39,7 +39,6 @@ class Api {
           url: '/users/$userId/favorites?pageNo=1&pageSize=19');
       return ResultApiModel.fromJson(result);
     } catch (e, stackTrace) {
-
       logError('Load Favorite Error', e);
       await Sentry.captureException(e, stackTrace: stackTrace);
       final result = await httpManager.get(
@@ -206,7 +205,8 @@ class Api {
   }
 
   ///Save Product
-  static Future<ResultApiModel> requestSaveProduct(cityId, params) async {
+  static Future<ResultApiModel> requestSaveProduct(
+      cityId, params, isImageChanged) async {
     final filePath = '/cities/$cityId/listings';
     final result = await httpManager.post(
       url: filePath,
@@ -316,21 +316,22 @@ class Api {
     return ResultApiModel.fromJson(convertResponse);
   }
 
-  static Future<ResultApiModel> requestListingUploadMedia(
+  static Future<void> requestListingUploadMedia(
       listingId, cityId, pickedFile) async {
     var filePath = '';
-    var firstFileEntry = pickedFile?.files[0];
-    if (firstFileEntry?.key == 'pdf') {
-      filePath = '/cities/$cityId/listings/$listingId/pdfUpload';
-    } else if (firstFileEntry?.key == 'image') {
-      filePath = '/cities/$cityId/listings/$listingId/imageUpload';
+    if (pickedFile?.files.length != 0) {
+      var firstFileEntry = pickedFile?.files[0];
+      if (firstFileEntry?.key == 'pdf') {
+        filePath = '/cities/$cityId/listings/$listingId/pdfUpload';
+      } else if (firstFileEntry?.key == 'image') {
+        filePath = '/cities/$cityId/listings/$listingId/imageUpload';
+      }
+
+      await httpManager.post(
+        url: filePath,
+        formData: pickedFile,
+      );
     }
-    var result = await httpManager.post(
-      url: filePath,
-      formData: pickedFile,
-    );
-    final convertResponse = {"success": result['id'] != null, "data": result};
-    return ResultApiModel.fromJson(convertResponse);
   }
 
   static Future<ResultApiModel> deleteUserAccount(userId) async {

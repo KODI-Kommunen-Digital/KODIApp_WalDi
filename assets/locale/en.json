@@ -277,7 +277,7 @@
   "gps_require": "Gps is required",
   "icon_require": "Icon is required",
   "input_zipcode": "Zipcode",
-  "upload_feature_image": "Upload feature image or PDF",
+  "upload_feature_image": "Upload feature image or PDF,\nMultiple possible",
   "edit": "Edit",
   "add_new_listing": "Add New Listing",
   "edit_listing": "Update Listing",
@@ -451,5 +451,7 @@
   "active": "Active",
   "inactive": "Inactive",
   "under_review": "Under Review",  
-  "all_requests":"All Requests"
+  "all_requests":"All Requests",
+  "image_size_exceed":"Image Size Exceeded",
+  "select_small_images":"Bitte wählen Sie Bilder aus, die 10 MB oder weniger groß sind."
 }
