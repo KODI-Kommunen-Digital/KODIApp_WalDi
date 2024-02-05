@@ -76,6 +76,23 @@ class _LegalScreenState extends State<LegalScreen> {
                 ],
               ),
             ),
+            AppListTitle(
+              title: Translate.of(context).translate('terms_of_use'),
+              onPressed: () {
+                _makeAction('https://app.smartregion-auf.de/TermsOfUse');
+              },
+              trailing: Row(
+                children: <Widget>[
+                  RotatedBox(
+                    quarterTurns: AppLanguage.isRTL() ? 2 : 0,
+                    child: const Icon(
+                      Icons.keyboard_arrow_right,
+                      textDirection: TextDirection.ltr,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
