@@ -1,4 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 import 'dart:math' as math;
 import 'package:carousel_slider/carousel_slider.dart';
@@ -478,7 +479,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       carouselHeight = (screenHeight - safeAreaVertical) * targetHeightRatio;
     }
     if (product != null) {
-      ///Action
+      action = [
+        actionGalleries,
+        const SizedBox(width: 8),
+      ];
       banner = product.pdf == ''
           ? InkWell(
               onTap: () {
@@ -591,16 +595,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   (AllowMultipleGestureRecognizer instance) {
                     instance.onTap = () async {
                       if (!mounted) return;
-                      Navigator.pushNamed(
-                        context,
-                        Routes.imageZoom,
-                        arguments: {
-                          'sourceId': product.sourceId,
-                          'imageList': product.imageLists,
-                          'pdf':
-                              "${Application.picturesURL}${product.pdf}?cacheKey=$uniqueKey",
-                        },
-                      );
+                      Navigator.pushNamed(context, Routes.imageZoom,
+                          arguments: {
+                            'sourceId': product.sourceId,
+                            'imageList': product.imageLists,
+                            'pdf':
+                                "${Application.picturesURL}${product.pdf}?cacheKey=$uniqueKey",
+                          });
                     };
                   },
                 )
