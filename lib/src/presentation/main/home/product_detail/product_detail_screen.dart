@@ -1,5 +1,6 @@
 // ignore_for_file: depend_on_referenced_packages, use_build_context_synchronously
-
+import 'dart:io';
+import 'dart:math' as math;
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -451,7 +452,32 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         ),
       ),
     );
-
+    double carouselHeight = 0;
+    if (Platform.isAndroid) {
+      double screenHeight = MediaQuery.of(context).size.height;
+      double screenWidth = MediaQuery.of(context).size.width;
+      double safeAreaVertical = MediaQuery.of(context).padding.top +
+          MediaQuery.of(context).padding.bottom +
+          kToolbarHeight;
+      double aspectRatio = screenWidth / screenHeight;
+      double maxCarouselHeight = 350;
+      double targetHeightRatioPortrait = 0.35;
+      double targetHeightRatioLandscape = 0.3;
+      if (aspectRatio > 1.0) {
+        carouselHeight =
+            screenHeight * targetHeightRatioLandscape - safeAreaVertical;
+      } else {
+        carouselHeight =
+            screenHeight * targetHeightRatioPortrait - safeAreaVertical;
+      }
+      carouselHeight = math.min(carouselHeight, maxCarouselHeight);
+    } else if (Platform.isIOS) {
+      double screenHeight = MediaQuery.of(context).size.height;
+      double safeAreaVertical = MediaQuery.of(context).padding.top +
+          MediaQuery.of(context).padding.bottom;
+      double targetHeightRatio = 0.35;
+      carouselHeight = (screenHeight - safeAreaVertical) * targetHeightRatio;
+    }
     if (product != null) {
       ///Action
       action = [
