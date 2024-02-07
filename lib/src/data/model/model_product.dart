@@ -130,10 +130,8 @@ class ProductModel {
       this.imageLists,
       this.showExternal});
 
-  factory ProductModel.fromJson(
-    Map<String, dynamic> json, {
-    SettingModel? setting,
-  }) {
+  factory ProductModel.fromJson(Map<String, dynamic> json,
+      {SettingModel? setting, int? cityId}) {
     List<ImageModel> galleries = [];
     List<CategoryModel> features = [];
     List<OpenTimeModel> openHours = [];
@@ -260,7 +258,7 @@ class ProductModel {
       color: json['color'] ?? '',
       categoryId: json['categoryId'] ?? 0,
       subcategoryId: json['subcategoryId'] ?? 0,
-      cityId: json['cityId'] ?? 0,
+      cityId: cityId ?? json['cityId'] ?? 0,
       villageId: json['villageId'] ?? 0,
       statusId: json['statusId'] ?? 0,
       sourceId: json['sourceId'] ?? 1,
