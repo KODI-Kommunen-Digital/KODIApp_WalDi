@@ -135,6 +135,15 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
+  static Future<ResultApiModel> uploadToken(userId, params) async {
+    final filePath = '/users/$userId/storeFirebaseUserToken';
+    final result = await httpManager.post(
+      url: filePath,
+      data: params,
+    );
+    return ResultApiModel.fromJson(result);
+  }
+
   static Future<ResultApiModel> requestSubmitSubCategory(
       {required categoryId}) async {
     final filePath = '/categories/$categoryId/subcategories';

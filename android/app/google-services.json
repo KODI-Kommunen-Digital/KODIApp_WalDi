@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "34821169594",
+    "project_id": "waldi-cb326",
+    "storage_bucket": "waldi-cb326.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:34821169594:android:0392c8d834795340d37d83",
+        "android_client_info": {
+          "package_name": "com.waldi"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBucMsRNzsFEijIz61NHgV7JupdDdTBYV8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -70,6 +70,10 @@ dependencies:
   flutter_slidable: ^3.0.0
   flutter_inappwebview: ^5.8.0
 
+  ### Firebase
+  firebase_core: ^2.24.2
+  firebase_messaging: ^14.7.10
+
   ### File Reading
   open_filex: 4.3.1
   image_picker: 0.8.6

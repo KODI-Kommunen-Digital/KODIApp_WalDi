@@ -3,6 +3,7 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  firebase_core
   permission_handler_windows
   sentry_flutter
   sqlite3_flutter_libs
