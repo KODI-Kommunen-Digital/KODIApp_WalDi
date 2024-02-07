@@ -170,7 +170,6 @@ class ListRepository {
     final response = await Api.requestProduct(cityId, id);
     if (response.success) {
       UtilLogger.log('ErrorReason', response.data);
-      print(response.data);
       return ProductModel.fromJson(response.data, setting: Application.setting, cityId: cityId);
     } else {
       logError('Product Request Response', response.message);
