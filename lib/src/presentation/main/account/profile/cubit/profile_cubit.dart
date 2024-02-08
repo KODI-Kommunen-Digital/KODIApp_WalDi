@@ -40,11 +40,10 @@ class ProfileCubit extends Cubit<ProfileState> {
             description: product.description,
             userId: product.userId,
             sourceId: product.sourceId,
-            expiryDate: product.expiryDate));
+            expiryDate: product.expiryDate,
             imageLists: product.imageLists,
           ),
         );
-
       }
     }
     emit(ProfileState.loaded(listDataList));
@@ -77,11 +76,10 @@ class ProfileCubit extends Cubit<ProfileState> {
             description: product.description,
             userId: product.userId,
             sourceId: product.sourceId,
-            expiryDate: product.expiryDate));
+            expiryDate: product.expiryDate,
             imageLists: product.imageLists,
           ),
         );
-
       }
     }
     return listDataList;
