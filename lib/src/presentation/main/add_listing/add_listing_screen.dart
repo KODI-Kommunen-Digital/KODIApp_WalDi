@@ -85,11 +85,14 @@ class _AddListingScreenState extends State<AddListingScreen> {
   List listSubCategory = [];
 
   String? _featurePdf;
+  String? _expiryDate;
   String? _startDate;
   String? _endDate;
+  TimeOfDay? _expiryTime;
   String? _createdAt;
   TimeOfDay? _startTime;
   TimeOfDay? _endTime;
+  bool _isExpiryDateEnabled = true;
   String? selectedVillage;
   String? selectedCategory;
   String? selectedSubCategory;
@@ -104,6 +107,28 @@ class _AddListingScreenState extends State<AddListingScreen> {
   void initState() {
     super.initState();
     _onProcess();
+    if (widget.item != null) {
+      if (widget.item?.expiryDate != null && widget.item?.expiryDate != "") {
+        _isExpiryDateEnabled = true;
+      } else if (widget.item?.expiryDate == null &&
+          widget.item?.expiryDate == "") {
+        _isExpiryDateEnabled = false;
+      }
+    } else if (widget.item == null) {
+      _setDefaultExpiryDate();
+      _isExpiryDateEnabled = true;
+    }
+  }
+
+  void _setDefaultExpiryDate() {
+    if (widget.item?.expiryDate == null) {
+      DateTime now = DateTime.now();
+      DateTime twoWeeksFromNow = now.add(const Duration(days: 14));
+      setState(() {
+        _expiryDate = DateFormat('yyyy-MM-dd').format(twoWeeksFromNow);
+        _expiryTime = const TimeOfDay(hour: 0, minute: 0);
+      });
+    }
   }
 
   @override
@@ -276,6 +301,16 @@ class _AddListingScreenState extends State<AddListingScreen> {
             _endTime = TimeOfDay(hour: endHour, minute: endMinute);
           }
         }
+        if (widget.item?.expiryDate != '') {
+          List<String> expiryDateTime = widget.item!.expiryDate.split(' ');
+          String dateString = expiryDateTime[0];
+          DateTime parsedDateTime = DateFormat('dd.MM.yyyy').parse(dateString);
+          _expiryDate = DateFormat('yyyy-MM-dd').format(parsedDateTime);
+          List<String> startTimeParts = expiryDateTime[1].split(':');
+          int startHour = int.parse(startTimeParts[0]);
+          int startMinute = int.parse(startTimeParts[1]);
+          _expiryTime = TimeOfDay(hour: startHour, minute: startMinute);
+        }
       }
       if (widget.item?.pdf == '') {
         List<File> images = await downloadImages(widget.item!.imageLists!);
@@ -322,6 +357,27 @@ class _AddListingScreenState extends State<AddListingScreen> {
     });
   }
 
+
+  void _onShowExpiryDatePicker() async {
+    final DateTime now = DateTime.now();
+    final DateTime initialDate = _expiryDate != null
+        ? DateFormat('yyyy-MM-dd').parse(_expiryDate!)
+        : now.add(const Duration(days: 14));
+    final DateTime firstDate = DateTime(now.year - 5);
+    final DateTime lastDate = DateTime(now.year + 5);
+
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: initialDate,
+      firstDate: firstDate,
+      lastDate: lastDate,
+    );
+    if (picked != null && mounted) {
+      setState(() {
+        _expiryDate = DateFormat('yyyy-MM-dd').format(picked);
+      });
+    }
+
   Future<List<File>> downloadImages(List<ImageListModel> imageUrls) async {
     List<File> downloadedImages = [];
     Directory appDocumentsDirectory = await getApplicationDocumentsDirectory();
@@ -347,6 +403,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       }
     }
     return downloadedImages;
+
   }
 
   void _onShowStartDatePicker(String? startDate) async {
@@ -410,6 +467,22 @@ class _AddListingScreenState extends State<AddListingScreen> {
           _endDate = picked.dateView;
         });
       }
+    }
+  }
+
+  Future<void> _onShowExpiryTimePicker() async {
+    final TimeOfDay initialTime =
+        _expiryTime ?? const TimeOfDay(hour: 0, minute: 0);
+
+    final TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: initialTime,
+    );
+
+    if (pickedTime != null && mounted) {
+      setState(() {
+        _expiryTime = pickedTime;
+      });
     }
   }
 
@@ -477,6 +550,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
               .read<AddListingCubit>()
               .deletePdf(widget.item?.cityId, widget.item?.id);
         }
+        String? submitExpiryDate = _isExpiryDateEnabled ? _expiryDate : null;
+        TimeOfDay? submitExpiryTime = _isExpiryDateEnabled ? _expiryTime : null;
+
         setState(() {
           isLoading = true;
         });
@@ -491,7 +567,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
               email: _textEmailController.text,
               phone: _textPhoneController.text,
               website: _textWebsiteController.text,
-              price: _textPriceController.text,
+              price: _textPriceController.text,            
+              expiryDate: submitExpiryDate,
+              expiryTime: submitExpiryTime,
               startDate: _startDate,
               endDate: _endDate,
               startTime: _startTime,
@@ -501,6 +579,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
               statusId: statusId,
               imagesList: selectedImages,
             );
+
         if (result) {
           await AppBloc.homeCubit.onLoad(false);
           setState(() {
@@ -511,26 +590,31 @@ class _AddListingScreenState extends State<AddListingScreen> {
           context.read<AddListingCubit>().clearAssets();
         }
       } else {
+        String? submitExpiryDate = _isExpiryDateEnabled ? _expiryDate : null;
+        TimeOfDay? submitExpiryTime = _isExpiryDateEnabled ? _expiryTime : null;
+
         setState(() {
           isLoading = true;
         });
         final result = await context.read<AddListingCubit>().onSubmit(
-              cityId: cityId ?? 1,
-              title: _textTitleController.text,
-              city: selectedCity,
-              place: _textPlaceController.text,
-              description: _textContentController.text,
-              address: _textAddressController.text,
-              email: _textEmailController.text,
-              phone: _textPhoneController.text,
-              website: _textWebsiteController.text,
-              startDate: _startDate,
-              endDate: _endDate,
-              startTime: _startTime,
-              endTime: _endTime,
-              imagesList: selectedImages,
-              isImageChanged: isImageChanged,
-            );
+            cityId: cityId ?? 1,
+            title: _textTitleController.text,
+            city: selectedCity,
+            place: _textPlaceController.text,
+            description: _textContentController.text,
+            address: _textAddressController.text,
+            email: _textEmailController.text,
+            phone: _textPhoneController.text,
+            website: _textWebsiteController.text,
+            expiryDate: submitExpiryDate,
+            startDate: _startDate,
+            endDate: _endDate,
+            expiryTime: submitExpiryTime,
+            timeless: _isExpiryDateEnabled ? 0 : 1,
+            startTime: _startTime,
+            endTime: _endTime,
+            imagesList: selectedImages,
+            isImageChanged: isImageChanged,);
         if (result) {
           await AppBloc.homeCubit.onLoad(false);
           setState(() {
@@ -837,6 +921,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
             Row(
               children: [
                 Expanded(
+
                     child: listCategory.isEmpty
                         ? const LinearProgressIndicator()
                         : DropdownButton(
@@ -852,8 +937,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
                                       _getCategoryTranslation(
                                           category['id']))));
                             }).toList(),
-                            onChanged: widget.item == null
-                                ? (value) async {
+                            onChanged: (value) async {
                                     setState(
                                       () {
                                         selectedCategory = value as String?;
@@ -871,7 +955,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
                                           selectedCategory!.toLowerCase());
                                     }
                                   }
-                                : null)),
+                                ),
               ],
             ),
             if (selectedCategory?.toLowerCase() == "news" ||
@@ -902,32 +986,31 @@ class _AddListingScreenState extends State<AddListingScreen> {
               children: [
                 if (selectedCategory?.toLowerCase() == "news")
                   Expanded(
-                      child: listSubCategory.isEmpty
-                          ? const LinearProgressIndicator()
-                          : DropdownButton(
-                              isExpanded: true,
-                              menuMaxHeight: 200,
-                              hint: Text(Translate.of(context)
-                                  .translate('input_subcategory')),
-                              value: selectedSubCategory,
-                              items: listSubCategory.map((subcategory) {
-                                return DropdownMenuItem(
-                                    value: subcategory['name'],
-                                    child: Text(Translate.of(context).translate(
-                                        _getSubCategoryTranslation(
-                                            subcategory['id']))));
-                              }).toList(),
-                              onChanged: widget.item == null
-                                  ? (value) {
-                                      context
-                                          .read<AddListingCubit>()
-                                          .getSubCategoryId(value);
-                                      setState(() {
-                                        selectedSubCategory = value as String?;
-                                      });
-                                    }
-                                  : null,
-                            )),
+                    child: listSubCategory.isEmpty
+                        ? const LinearProgressIndicator()
+                        : DropdownButton(
+                            isExpanded: true,
+                            menuMaxHeight: 200,
+                            hint: Text(Translate.of(context)
+                                .translate('input_subcategory')),
+                            value: selectedSubCategory,
+                            items: listSubCategory.map((subcategory) {
+                              return DropdownMenuItem(
+                                  value: subcategory['name'],
+                                  child: Text(Translate.of(context).translate(
+                                      _getSubCategoryTranslation(
+                                          subcategory['id']))));
+                            }).toList(),
+                            onChanged: (value) {
+                              context
+                                  .read<AddListingCubit>()
+                                  .getSubCategoryId(value);
+                              setState(() {
+                                selectedSubCategory = value as String?;
+                              });
+                            },
+                          ),
+                  ),
               ],
             ),
             if (selectedCategory?.toLowerCase() == "news" ||
@@ -999,8 +1082,100 @@ class _AddListingScreenState extends State<AddListingScreen> {
                 ),
               ],
             ),
-            const SizedBox(height: 16),
-            const SizedBox(height: 8),
+            const SizedBox(height: 6),
+            if (selectedCategory?.toLowerCase() == "news")
+              Padding(
+                padding: const EdgeInsets.only(left: 0),
+                child: Row(
+                  children: [
+                    Checkbox(
+                      value: _isExpiryDateEnabled,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          _isExpiryDateEnabled = value!;
+                          if (_isExpiryDateEnabled &&
+                              (_expiryDate == null || _expiryTime == null)) {
+                            DateTime now = DateTime.now();
+                            DateTime twoWeeksFromNow =
+                                now.add(const Duration(days: 14));
+                            _expiryDate ??= DateFormat('yyyy-MM-dd')
+                                .format(twoWeeksFromNow);
+                            _expiryTime ??= const TimeOfDay(hour: 0, minute: 0);
+                          }
+                        });
+                      },
+                      activeColor: Colors.blue,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _isExpiryDateEnabled = !_isExpiryDateEnabled;
+                        });
+                      },
+                      child: Text(Translate.of(context)
+                          .translate('enable_expiry_date')),
+                    ),
+                  ],
+                ),
+              ),
+            const SizedBox(height: 6),
+            Visibility(
+              visible: (selectedCategory?.toLowerCase() == "news") &&
+                  (_isExpiryDateEnabled || widget.item?.timeless == 0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 10),
+                  Text.rich(
+                    TextSpan(
+                      text: Translate.of(context).translate('expiry_date'),
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleMedium!
+                          .copyWith(fontWeight: FontWeight.bold),
+                      children: const <TextSpan>[
+                        TextSpan(
+                          text: ' *',
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  AppPickerItem(
+                    leading: Icon(
+                      Icons.calendar_today_outlined,
+                      color: Theme.of(context).hintColor,
+                    ),
+                    value: _expiryDate,
+                    title: Translate.of(context).translate(
+                      'choose_date',
+                    ),
+                    onPressed: () async {
+                      _onShowExpiryDatePicker();
+                    },
+                  ),
+                  const SizedBox(height: 8),
+                  AppPickerItem(
+                      leading: Icon(
+                        Icons.access_time,
+                        color: Theme.of(context).hintColor,
+                      ),
+                      value: _expiryTime?.format(context),
+                      title: Translate.of(context).translate(
+                        'choose_exptime',
+                      ),
+                      onPressed: () async {
+                        _onShowExpiryTimePicker();
+                      }),
+                  const SizedBox(height: 16),
+                ],
+              ),
+            ),
+            const SizedBox(height: 10),
             AppTextInput(
               hintText: Translate.of(context).translate('input_address'),
               // errorText: _errorAddress,

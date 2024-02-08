@@ -47,9 +47,12 @@ class AddListingCubit extends Cubit<AddListingState> {
     String? email,
     String? website,
     String? status,
+    String? expiryDate,
     String? startDate,
     String? endDate,
     String? price,
+    TimeOfDay? expiryTime,
+    int? timeless,
     TimeOfDay? startTime,
     TimeOfDay? endTime,
     List<File>? imagesList,
@@ -57,27 +60,30 @@ class AddListingCubit extends Cubit<AddListingState> {
   }) async {
     try {
       final response = await _repo.saveProduct(
-        title,
-        description,
-        place,
-        country,
-        state,
-        city,
-        statusId,
-        sourceId,
-        address,
-        zipcode,
-        phone,
-        email,
-        website,
-        status,
-        startDate,
-        endDate,
-        startTime,
-        endTime,
-        imagesList,
-        isImageChanged,
-      );
+          title,
+          description,
+          place,
+          country,
+          state,
+          city,
+          statusId,
+          sourceId,
+          address,
+          zipcode,
+          phone,
+          email,
+          website,
+          status,
+          expiryDate,
+          startDate,
+          endDate,
+          expiryTime,
+          timeless,
+          startTime,
+          endTime,
+          imagesList,
+          isImageChanged,);
+
       if (response.success) {
         return true;
       } else {
@@ -114,10 +120,13 @@ class AddListingCubit extends Cubit<AddListingState> {
     String? email,
     String? website,
     String? status,
+    String? expiryDate,
     String? startDate,
     String? endDate,
     String? createdAt,
     String? price,
+    TimeOfDay? expiryTime,
+    int? timeless,
     TimeOfDay? startTime,
     TimeOfDay? endTime,
     required bool isImageChanged,
@@ -142,11 +151,14 @@ class AddListingCubit extends Cubit<AddListingState> {
           email,
           website,
           status,
+          expiryDate,
           startDate,
           endDate,
           createdAt,
           price,
           isImageChanged,
+          expiryTime,
+          timeless,
           startTime,
           endTime,
           imagesList);
@@ -250,6 +262,7 @@ class AddListingCubit extends Cubit<AddListingState> {
   void removeAssets(assets) {
     if (selectedAssets.isNotEmpty) {
       selectedAssets.remove(assets);
+
     }
   }
 
