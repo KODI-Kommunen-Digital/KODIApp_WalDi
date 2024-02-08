@@ -81,7 +81,8 @@ class _ListProductScreenState extends State<ListProductScreen> {
                   children: [
                     Icon(
                       Icons.calendar_today,
-                      color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white,
+                      color: Theme.of(context).textTheme.bodyLarge?.color ??
+                          Colors.white,
                     ),
                     const SizedBox(width: 8),
                     TextButton(
@@ -95,7 +96,11 @@ class _ListProductScreenState extends State<ListProductScreen> {
                           Text(
                             Translate.of(context).translate('this_week'),
                             style: TextStyle(
-                              color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white,
+                              color: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.color ??
+                                  Colors.white,
                             ),
                           ),
                           const SizedBox(width: 5),
@@ -107,7 +112,8 @@ class _ListProductScreenState extends State<ListProductScreen> {
                 ),
               ),
               Divider(
-                color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white,
+                color: Theme.of(context).textTheme.bodyLarge?.color ??
+                    Colors.white,
                 height: 1,
                 thickness: 1,
               ),
@@ -118,7 +124,8 @@ class _ListProductScreenState extends State<ListProductScreen> {
                   children: [
                     Icon(
                       Icons.calendar_today,
-                      color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white,
+                      color: Theme.of(context).textTheme.bodyLarge?.color ??
+                          Colors.white,
                     ),
                     const SizedBox(width: 8),
                     TextButton(
@@ -132,7 +139,11 @@ class _ListProductScreenState extends State<ListProductScreen> {
                           Text(
                             Translate.of(context).translate('this_month'),
                             style: TextStyle(
-                              color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white,
+                              color: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.color ??
+                                  Colors.white,
                             ),
                           ),
                           const SizedBox(width: 5),
@@ -389,8 +400,10 @@ class _ListLoadedState extends State<ListLoaded> {
   }
 
   void _onProductDetail(ProductModel item) {
-    if (item.sourceId == 2) {
+    if (item.sourceId == 2 || item.showExternal == 1) {
       _makeAction(item.website);
+    } else if (item.showExternal == 0) {
+      Navigator.pushNamed(context, Routes.productDetail, arguments: item);
     } else {
       Navigator.pushNamed(context, Routes.productDetail, arguments: item);
     }

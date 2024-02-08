@@ -96,7 +96,6 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
         isLoading = false;
       });
       await Sentry.captureException(e, stackTrace: stackTrace);
-
     }
   }
 
@@ -207,7 +206,6 @@ class CommentWidgetState extends State<CommentWidget> {
     } catch (e, stackTrace) {
       logError('Failed to fetch comment replies', e.toString());
       await Sentry.captureException(e, stackTrace: stackTrace);
-
     }
   }
 

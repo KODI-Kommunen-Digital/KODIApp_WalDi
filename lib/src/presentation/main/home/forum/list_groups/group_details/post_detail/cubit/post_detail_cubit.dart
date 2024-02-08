@@ -51,7 +51,6 @@ class PostDetailCubit extends Cubit<PostDetailState> {
     } catch (e, stackTrace) {
       logError('Get Post Comments Failed', e.toString());
       await Sentry.captureException(e, stackTrace: stackTrace);
-
       return [];
     }
   }
@@ -80,7 +79,6 @@ class PostDetailCubit extends Cubit<PostDetailState> {
     } catch (e, stackTrace) {
       logError('Get Comment Replies Failed', e.toString());
       await Sentry.captureException(e, stackTrace: stackTrace);
-
       return [];
     }
   }

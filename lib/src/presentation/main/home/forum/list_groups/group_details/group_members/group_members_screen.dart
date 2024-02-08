@@ -155,7 +155,8 @@ class _GroupMembersLoadedState extends State<GroupMembersLoaded> {
                               ),
                             );
                           },
-                        ),),
+                        ),
+                      ),
                     ),
                     const SizedBox(width: 8),
                     Expanded(

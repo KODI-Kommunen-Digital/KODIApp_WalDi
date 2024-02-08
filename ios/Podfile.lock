@@ -1,6 +1,11 @@
 PODS:
   - audio_session (0.0.1):
     - Flutter
+  - BSGridCollectionViewLayout (1.2.5)
+  - BSImagePicker (2.10.3):
+    - BSGridCollectionViewLayout (= 1.2.5)
+    - BSImageView (= 1.0.3)
+  - BSImageView (1.0.3)
   - connectivity (0.0.1):
     - Flutter
     - Reachability
@@ -58,6 +63,9 @@ PODS:
   - just_audio (0.0.1):
     - Flutter
   - location (0.0.1):
+    - Flutter
+  - multiple_images_picker (1.0.00):
+    - BSImagePicker (~> 2.10.3)
     - Flutter
   - open_filex (0.0.2):
     - Flutter
@@ -122,6 +130,7 @@ DEPENDENCIES:
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - just_audio (from `.symlinks/plugins/just_audio/ios`)
   - location (from `.symlinks/plugins/location/ios`)
+  - multiple_images_picker (from `.symlinks/plugins/multiple_images_picker/ios`)
   - open_filex (from `.symlinks/plugins/open_filex/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
@@ -137,6 +146,9 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - BSGridCollectionViewLayout
+    - BSImagePicker
+    - BSImageView
     - DKImagePickerController
     - DKPhotoGallery
     - FMDB
@@ -170,6 +182,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/just_audio/ios"
   location:
     :path: ".symlinks/plugins/location/ios"
+  multiple_images_picker:
+    :path: ".symlinks/plugins/multiple_images_picker/ios"
   open_filex:
     :path: ".symlinks/plugins/open_filex/ios"
   package_info_plus:
@@ -197,12 +211,15 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   audio_session: 4f3e461722055d21515cf3261b64c973c062f345
+  BSGridCollectionViewLayout: 333dcb457a5a3bdd9212607ab5756553dcfe06cb
+  BSImagePicker: 07404254f2fcdaf5a2eb403c0f8c337267ce8738
+  BSImageView: a149459433a2687157d034c78e059d30ac7f2544
   connectivity: c4130b2985d4ef6fd26f9702e886bd5260681467
   device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
   device_info_plus: c6fb39579d0f423935b0c9ce7ee2f44b71b9fce6
   DKImagePickerController: b512c28220a2b8ac7419f21c491fc8534b7601ac
   DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
-  file_picker: ce3938a0df3cc1ef404671531facef740d03f920
+  file_picker: 15fd9539e4eb735dc54bae8c0534a7a9511a03de
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   flutter_pdfview: 25f53dd6097661e6395b17de506e6060585946bd
   flutter_svprogresshud: 821512698d752572c11a1c0ad11fd359c687054e
@@ -210,6 +227,7 @@ SPEC CHECKSUMS:
   image_picker_ios: 4a8aadfbb6dc30ad5141a2ce3832af9214a705b5
   just_audio: baa7252489dbcf47a4c7cc9ca663e9661c99aafa
   location: 3a2eed4dd2fab25e7b7baf2a9efefe82b512d740
+  multiple_images_picker: c57bdc05801e244c110040889e84851a56e140fd
   open_filex: 6e26e659846ec990262224a12ef1c528bb4edbe4
   package_info_plus: 115f4ad11e0698c8c1c5d8a689390df880f47e85
   path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943

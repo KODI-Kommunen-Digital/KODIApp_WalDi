@@ -275,7 +275,10 @@ class ListRepository {
   Future<ResultApiModel> loadSubCategory(value) async {
     final response = await Api.requestSubmitCategory();
     var jsonCategory = response.data;
-    final item = jsonCategory.firstWhere((item) => item['name'] == value);
+    final item = jsonCategory.firstWhere(
+      (item) => item['name'].toString().toLowerCase() == value.toLowerCase(),
+      orElse: () => null,
+    );
     final itemId = item['id'];
     final categoryId = itemId;
     final requestSubmitResponse =
@@ -310,13 +313,14 @@ class ListRepository {
     int? timeless,
     TimeOfDay? startTime,
     TimeOfDay? endTime,
+    List<File>? imagesList,
+    bool isImageChanged,
   ) async {
     final subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
     final villageId = prefs.getKeyValue(Preferences.villageId, null);
     final userId = prefs.getKeyValue(Preferences.userId, '');
     final cityId = await getCityId(city);
-    final media = prefs.getKeyValue(Preferences.path, null);
     String? combinedStartDateTime;
     String? combinedEndDateTime;
     String? combinedExpiryDateTime;
@@ -375,7 +379,7 @@ class ListRepository {
       "website": website,
       "price": 100, //dummy data
       "discountPrice": 100, //dummy data
-      "logo": media,
+      "logo": null,
       "statusId": 1, //dummy data
       "sourceId": 1, //dummy data
       "longitude": 245.65, //dummy data
@@ -388,13 +392,39 @@ class ListRepository {
       "subCategoryId": subCategoryId,
       "timeless": timeless
     };
-    final response = await Api.requestSaveProduct(cityId, params);
+    final response =
+        await Api.requestSaveProduct(cityId, params, isImageChanged);
     if (response.success) {
       final prefs = await Preferences.openBox();
       FormData? pickedFile = prefs.getPickedFile();
       final id = response.id;
-      if (pickedFile != null) {
-        await Api.requestListingUploadMedia(id, cityId, pickedFile);
+      var formData = FormData();
+
+      if (pickedFile != null && pickedFile.files.isNotEmpty) {
+        if (pickedFile.files[0].key == 'pdf') {
+          await Api.requestListingUploadMedia(id, cityId, pickedFile);
+        } else {
+          if (imagesList!.isNotEmpty) {
+            for (final image in imagesList) {
+              var file = image;
+
+              // Ensure the file extension matches the actual image type
+              var fileExtension = file.path.split('.').last.toLowerCase();
+              var fileName = '$image.$fileExtension';
+
+              formData.files.add(MapEntry(
+                'image',
+                await MultipartFile.fromFile(
+                  file.path,
+                  filename: fileName,
+                  contentType: MediaType(
+                      'image', fileExtension), // Set the correct content type
+                ),
+              ));
+            }
+            await Api.requestListingUploadMedia(id, cityId, formData);
+          }
+        }
       }
       prefs.deleteKey('pickedFile');
     }
@@ -422,12 +452,14 @@ class ListRepository {
     String? expiryDate,
     String? startDate,
     String? endDate,
+    String? createdAt,
     String? price,
     bool isImageChanged,
     TimeOfDay? expiryTime,
     int? timeless,
     TimeOfDay? startTime,
     TimeOfDay? endTime,
+    List<File>? imagesList,
   ) async {
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
     final subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
@@ -494,6 +526,7 @@ class ListRepository {
       "website": website,
       "price": 100, //dummy data
       "discountPrice": 100, //dummy data
+      "hasAttachment": isImageChanged ? true : false,
       "statusId": statusId ?? 1, //change 1 to 3 when done
       "sourceId": 1, //dummy data
       "longitude": 245.65, //dummy data
@@ -501,7 +534,7 @@ class ListRepository {
       "villageId": villageId ?? 0,
       "startDate": combinedStartDateTime,
       "endDate": combinedEndDateTime,
-      "createdAt": "",
+      "createdAt": createdAt,
       "pdf": null,
       "expiryDate": combinedExpiryDateTime,
       "timeless": timeless,
@@ -510,7 +543,12 @@ class ListRepository {
       "appointmentId": null,
       "logo": media,
       "otherlogos": [
-        {"id": null, "imageOrder": null, "listingId": null, "logo": ""}
+        {
+          "id": null,
+          "imageOrder": null,
+          "listingId": null,
+          "logo": "",
+        }
       ],
       "cityId": cityId,
     };
@@ -520,11 +558,65 @@ class ListRepository {
     if (response.success) {
       final prefs = await Preferences.openBox();
       FormData? pickedFile = prefs.getPickedFile();
-      if (isImageChanged) {
-        if (pickedFile!.files.isNotEmpty) {
-          await Api.requestListingUploadMedia(listingId, cityId, pickedFile);
+      // if (pickedFile!.files.isNotEmpty) {
+      if (pickedFile?.files[0].key == 'pdf') {
+        await Api.requestListingUploadMedia(listingId, cityId, pickedFile);
+      } else {
+        if (isImageChanged) {
+          var formData = FormData();
+
+          if (imagesList != null) {
+            for (final image in imagesList) {
+              var file = image;
+
+              // Ensure the file extension matches the actual image type
+              if (file.path.contains('.')) {
+                if (file.path.contains('com.')) {
+                  var fileName = '$image';
+                  formData.files.add(MapEntry(
+                    'image',
+                    await MultipartFile.fromFile(
+                      file.path,
+                      filename: fileName,
+                      contentType: MediaType(
+                          'image', 'png'), // Set the correct content type
+                    ),
+                  ));
+                } else {
+                  var fileExtension = file.path.split('.').last.toLowerCase();
+                  var fileName = '$image.$fileExtension';
+                  formData.files.add(MapEntry(
+                    'image',
+                    await MultipartFile.fromFile(
+                      file.path,
+                      filename: fileName,
+                      contentType: MediaType('image',
+                          fileExtension), // Set the correct content type
+                    ),
+                  ));
+                }
+              } else {
+                // var fileExtension = file.path.split('.').last.toLowerCase();
+                var fileName = '$image';
+                formData.files.add(MapEntry(
+                  'image',
+                  await MultipartFile.fromFile(
+                    file.path,
+                    filename: fileName,
+                    contentType: MediaType(
+                        'image', 'png'), // Set the correct content type
+                  ),
+                ));
+              }
+            }
+            await Api.requestListingUploadMedia(listingId, cityId, formData);
+          }
+          // if (pickedFile!.files.isNotEmpty) {
+          //   await Api.requestListingUploadMedia(listingId, cityId, pickedFile);
+          // }
         }
       }
+      // }
     }
     return response;
   }
@@ -567,7 +659,8 @@ class ListRepository {
   void setCategoryId(value) async {
     final response = await Api.requestSubmitCategory();
     var jsonCategory = response.data;
-    final item = jsonCategory.firstWhere((item) => item['name'] == value);
+    final item = jsonCategory.firstWhere(
+        (item) => (item['name']?.toLowerCase() ?? '') == value.toLowerCase());
     final itemId = item['id'];
     final categoryId = itemId;
     prefs.setKeyValue(Preferences.categoryId, categoryId);

@@ -24,7 +24,6 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
     } else {
       isLoggedIn = true;
     }
-
     bool darkModeEnabled = await isDarkMode();
 
     if (item.cityId != null) {
@@ -57,13 +56,10 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
               emit(ProductDetailLoaded(
                   product!, null, userDetail, isLoggedIn, darkModeEnabled));
             }
-
-          }
-          catch (e, stackTrace){
-            emit(ProductDetailLoaded(product!, null, userDetail, isLoggedIn,darkModeEnabled));
+          } catch (e, stackTrace) {
+            emit(ProductDetailLoaded(
+                product!, null, userDetail, isLoggedIn, darkModeEnabled));
             await Sentry.captureException(e, stackTrace: stackTrace);
-
-
           }
           emit(ProductDetailLoaded(product!, favoritesList, userDetail,
               isLoggedIn, darkModeEnabled));
