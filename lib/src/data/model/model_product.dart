@@ -67,6 +67,8 @@ class ProductModel {
   final String? bookingStyle;
   final String? priceDisplay;
 
+  int? timeless;
+
   ProductModel(
       {required this.id,
       required this.title,
@@ -123,6 +125,7 @@ class ProductModel {
       this.cityId,
       this.villageId,
       this.statusId,
+      this.timeless,
       this.sourceId});
 
   factory ProductModel.fromJson(
@@ -150,15 +153,26 @@ class ProductModel {
     String priceMin = '';
     String priceMax = '';
     String priceDisplay = '';
+    int? timeless;
 
     if (json['author'] != null) {
       author = UserModel.fromJson(json['author']);
+    }
+    if ((json['expiryDate']) != null) {
+      timeless = 0;
+    } else {
+      timeless = 1;
     }
 
     if (json['categoryId'] == 1) {
       category = "Nachricht";
       final parsedDateTime = DateTime.parse(json['createdAt']);
       createDate = DateFormat('dd.MM.yyyy').format(parsedDateTime);
+      if ((json['expiryDate']) != null) {
+        final parsedExpiryDateTime = DateTime.parse(json['expiryDate']);
+        expiryDate =
+            DateFormat('dd.MM.yyyy HH:mm').format(parsedExpiryDateTime);
+      }
     } else if (json['categoryId'] == 3) {
       category = "Veranstaltungen";
       final parsedDateTime = DateTime.parse(json['startDate']);
@@ -225,6 +239,7 @@ class ProductModel {
       category: category ?? '',
       createDate: createDate,
       expiryDate: expiryDate,
+      timeless: timeless,
       startDate: startDate,
       endDate: endDate,
       username: json['username'],

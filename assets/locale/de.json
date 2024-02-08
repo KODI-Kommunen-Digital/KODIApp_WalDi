@@ -478,6 +478,8 @@
   "delete_account_success": "Konto erfolgreich gelöscht",
   "delete_account_fail": "Das Löschen des Kontos ist fehlgeschlagen. Bitte versuch es später.",
   "hselect_location":"Ort auswählen",
+  "choose_exptime":"Ablaufzeit wählen",
+  "enable_expiry_date":"Ein Ablaufdatum hinzufügen",  
   "choose_stime":"Startzeit wählen",
   "choose_etime":"Endzeit wählen",
   "message_sent":"Nachricht gesendet",

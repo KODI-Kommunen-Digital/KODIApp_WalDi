@@ -213,6 +213,7 @@ class ListRepository {
             data['longitude'] ?? 0.0,
             data['latitude'] ?? 0.0,
             data['villageId'] ?? 0,
+            data['expiryDate'] ?? '',
             data['startDate'] ?? '',
             data['endDate'] ?? '',
             data['createdAt'] ?? '',
@@ -305,6 +306,8 @@ class ListRepository {
     String? expiryDate,
     String? startDate,
     String? endDate,
+    TimeOfDay? expiryTime,
+    int? timeless,
     TimeOfDay? startTime,
     TimeOfDay? endTime,
   ) async {
@@ -316,6 +319,20 @@ class ListRepository {
     final media = prefs.getKeyValue(Preferences.path, null);
     String? combinedStartDateTime;
     String? combinedEndDateTime;
+    String? combinedExpiryDateTime;
+
+    if (expiryDate != null) {
+      String formattedTime;
+      if (expiryTime!.hour < 10) {
+        formattedTime =
+            "${expiryTime.periodOffset}${expiryTime.hour}:${expiryTime.minute.toString().padLeft(2, '0')}";
+        combinedExpiryDateTime = "${expiryDate.trim()}T$formattedTime";
+      } else {
+        formattedTime =
+            "${expiryTime.hour}:${expiryTime.minute.toString().padLeft(2, '0')}";
+        combinedExpiryDateTime = "${expiryDate.trim()}T$formattedTime";
+      }
+    }
 
     if (startDate != null) {
       String formattedTime;
@@ -365,10 +382,11 @@ class ListRepository {
       "latitude": 22.456, //dummy data
       "villageId": villageId ?? 0,
       "cityId": cityId,
-      "expiryDate": expiryDate,
+      "expiryDate": combinedExpiryDateTime,
       "startDate": combinedStartDateTime,
       "endDate": combinedEndDateTime,
       "subCategoryId": subCategoryId,
+      "timeless": timeless
     };
     final response = await Api.requestSaveProduct(cityId, params);
     if (response.success) {
@@ -406,9 +424,12 @@ class ListRepository {
     String? endDate,
     String? price,
     bool isImageChanged,
+    TimeOfDay? expiryTime,
+    int? timeless,
     TimeOfDay? startTime,
     TimeOfDay? endTime,
   ) async {
+    final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
     final subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
     final villageId = prefs.getKeyValue(Preferences.villageId, null);
     final userId = prefs.getKeyValue(Preferences.userId, '');
@@ -417,6 +438,20 @@ class ListRepository {
     String? combinedStartDateTime;
     String? combinedEndDateTime;
     DateTime currentDate = DateTime.now();
+    String? combinedExpiryDateTime;
+
+    if (expiryDate != null) {
+      String formattedTime;
+      if (expiryTime!.hour < 10) {
+        formattedTime =
+            "${expiryTime.periodOffset}${expiryTime.hour}:${expiryTime.minute.toString().padLeft(2, '0')}";
+        combinedExpiryDateTime = "${expiryDate.trim()}T$formattedTime";
+      } else {
+        formattedTime =
+            "${expiryTime.hour}:${expiryTime.minute.toString().padLeft(2, '0')}";
+        combinedExpiryDateTime = "${expiryDate.trim()}T$formattedTime";
+      }
+    }
 
     if (startDate != null) {
       String formattedTime;
@@ -468,7 +503,8 @@ class ListRepository {
       "endDate": combinedEndDateTime,
       "createdAt": "",
       "pdf": null,
-      "expiryDate": expiryDate,
+      "expiryDate": combinedExpiryDateTime,
+      "timeless": timeless,
       "updatedAt": currentDate.toString(),
       "zipcode": null,
       "appointmentId": null,

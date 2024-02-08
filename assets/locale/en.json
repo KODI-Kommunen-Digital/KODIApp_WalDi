@@ -469,6 +469,8 @@
   "delete_Account_Confirmation": "Are you sure you want to delete your account?",
   "delete_account_success": "Account Deleted Successfully",
   "delete_account_fail": "Account Deletion failed. Please try later.",
+  "choose_exptime":"Choose Expiry Time",
+  "enable_expiry_date":"Add an expiry date",  
   "choose_stime":"Choose Start Time",
   "choose_etime":"Choose End Time",
   "message_sent":"Message Sent",

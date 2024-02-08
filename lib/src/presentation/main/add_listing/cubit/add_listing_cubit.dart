@@ -47,6 +47,8 @@ class AddListingCubit extends Cubit<AddListingState> {
     String? startDate,
     String? endDate,
     String? price,
+    TimeOfDay? expiryTime,
+    int? timeless,
     TimeOfDay? startTime,
     TimeOfDay? endTime,
   }) async {
@@ -69,6 +71,8 @@ class AddListingCubit extends Cubit<AddListingState> {
           expiryDate,
           startDate,
           endDate,
+          expiryTime,
+          timeless,
           startTime,
           endTime);
       if (response.success) {
@@ -112,6 +116,8 @@ class AddListingCubit extends Cubit<AddListingState> {
     String? startDate,
     String? endDate,
     String? price,
+    TimeOfDay? expiryTime,
+    int? timeless,
     TimeOfDay? startTime,
     TimeOfDay? endTime,
     required bool isImageChanged,
@@ -140,6 +146,8 @@ class AddListingCubit extends Cubit<AddListingState> {
           endDate,
           price,
           isImageChanged,
+          expiryTime,
+          timeless,
           startTime,
           endTime);
       if (response.success) {
