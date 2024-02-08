@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, no_leading_underscores_for_local_identifiers
 
 import 'dart:io';
 
@@ -357,7 +357,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
     });
   }
 
-
   void _onShowExpiryDatePicker() async {
     final DateTime now = DateTime.now();
     final DateTime initialDate = _expiryDate != null
@@ -377,6 +376,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
         _expiryDate = DateFormat('yyyy-MM-dd').format(picked);
       });
     }
+  }
 
   Future<List<File>> downloadImages(List<ImageListModel> imageUrls) async {
     List<File> downloadedImages = [];
@@ -403,7 +403,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
       }
     }
     return downloadedImages;
-
   }
 
   void _onShowStartDatePicker(String? startDate) async {
@@ -567,7 +566,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
               email: _textEmailController.text,
               phone: _textPhoneController.text,
               website: _textWebsiteController.text,
-              price: _textPriceController.text,            
+              price: _textPriceController.text,
               expiryDate: submitExpiryDate,
               expiryTime: submitExpiryTime,
               startDate: _startDate,
@@ -579,7 +578,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
               statusId: statusId,
               imagesList: selectedImages,
             );
-
         if (result) {
           await AppBloc.homeCubit.onLoad(false);
           setState(() {
@@ -597,24 +595,25 @@ class _AddListingScreenState extends State<AddListingScreen> {
           isLoading = true;
         });
         final result = await context.read<AddListingCubit>().onSubmit(
-            cityId: cityId ?? 1,
-            title: _textTitleController.text,
-            city: selectedCity,
-            place: _textPlaceController.text,
-            description: _textContentController.text,
-            address: _textAddressController.text,
-            email: _textEmailController.text,
-            phone: _textPhoneController.text,
-            website: _textWebsiteController.text,
-            expiryDate: submitExpiryDate,
-            startDate: _startDate,
-            endDate: _endDate,
-            expiryTime: submitExpiryTime,
-            timeless: _isExpiryDateEnabled ? 0 : 1,
-            startTime: _startTime,
-            endTime: _endTime,
-            imagesList: selectedImages,
-            isImageChanged: isImageChanged,);
+              cityId: cityId ?? 1,
+              title: _textTitleController.text,
+              city: selectedCity,
+              place: _textPlaceController.text,
+              description: _textContentController.text,
+              address: _textAddressController.text,
+              email: _textEmailController.text,
+              phone: _textPhoneController.text,
+              website: _textWebsiteController.text,
+              expiryDate: submitExpiryDate,
+              startDate: _startDate,
+              endDate: _endDate,
+              expiryTime: submitExpiryTime,
+              timeless: _isExpiryDateEnabled ? 0 : 1,
+              startTime: _startTime,
+              endTime: _endTime,
+              imagesList: selectedImages,
+              isImageChanged: isImageChanged,
+            );
         if (result) {
           await AppBloc.homeCubit.onLoad(false);
           setState(() {
@@ -921,41 +920,36 @@ class _AddListingScreenState extends State<AddListingScreen> {
             Row(
               children: [
                 Expanded(
+                  child: listCategory.isEmpty
+                      ? const LinearProgressIndicator()
+                      : DropdownButton(
+                          isExpanded: true,
+                          menuMaxHeight: 200,
+                          hint: Text(Translate.of(context)
+                              .translate('input_category')),
+                          value: selectedCategory,
+                          items: listCategory.map((category) {
+                            return DropdownMenuItem(
+                                value: category['name'],
+                                child: Text(Translate.of(context).translate(
+                                    _getCategoryTranslation(category['id']))));
+                          }).toList(),
+                          onChanged: (value) async {
+                            setState(
+                              () {
+                                selectedCategory = value as String?;
+                                context.read<AddListingCubit>().setCategoryId(
+                                    selectedCategory!.toLowerCase());
+                              },
+                            );
 
-                    child: listCategory.isEmpty
-                        ? const LinearProgressIndicator()
-                        : DropdownButton(
-                            isExpanded: true,
-                            menuMaxHeight: 200,
-                            hint: Text(Translate.of(context)
-                                .translate('input_category')),
-                            value: selectedCategory,
-                            items: listCategory.map((category) {
-                              return DropdownMenuItem(
-                                  value: category['name'],
-                                  child: Text(Translate.of(context).translate(
-                                      _getCategoryTranslation(
-                                          category['id']))));
-                            }).toList(),
-                            onChanged: (value) async {
-                                    setState(
-                                      () {
-                                        selectedCategory = value as String?;
-                                        context
-                                            .read<AddListingCubit>()
-                                            .setCategoryId(selectedCategory!
-                                                .toLowerCase());
-                                      },
-                                    );
-
-                                    if (selectedCategory?.toLowerCase() ==
-                                            "news" ||
-                                        selectedCategory == null) {
-                                      selectSubCategory(
-                                          selectedCategory!.toLowerCase());
-                                    }
-                                  }
-                                ),
+                            if (selectedCategory?.toLowerCase() == "news" ||
+                                selectedCategory == null) {
+                              selectSubCategory(
+                                  selectedCategory!.toLowerCase());
+                            }
+                          }),
+                )
               ],
             ),
             if (selectedCategory?.toLowerCase() == "news" ||
