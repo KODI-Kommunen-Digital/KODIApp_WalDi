@@ -1,10 +1,13 @@
-// ignore_for_file: use_build_context_synchronously, no_leading_underscores_for_local_identifiers
-
+// ignore_for_file: use_build_context_synchronously
 import 'dart:io';
 
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' as http;
+import 'package:loggy/loggy.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/widget/app_button.dart';
@@ -12,16 +15,12 @@ import 'package:heidi/src/presentation/widget/app_picker_item.dart';
 import 'package:heidi/src/presentation/widget/app_text_input.dart';
 import 'package:heidi/src/presentation/widget/app_upload_image.dart';
 import 'package:heidi/src/utils/common.dart';
-import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/datetime.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:heidi/src/utils/validate.dart';
 import 'package:html/parser.dart';
 import 'package:intl/intl.dart';
-import 'package:loggy/loggy.dart';
-import 'package:http/http.dart' as http;
-import 'package:path_provider/path_provider.dart';
 
 import 'cubit/add_listing_cubit.dart';
 
@@ -29,8 +28,11 @@ class AddListingScreen extends StatefulWidget {
   final ProductModel? item;
   final bool isNewList;
 
-  const AddListingScreen({Key? key, this.item, required this.isNewList})
-      : super(key: key);
+  const AddListingScreen({
+    Key? key,
+    this.item,
+    required this.isNewList,
+  }) : super(key: key);
 
   @override
   State<AddListingScreen> createState() => _AddListingScreenState();
@@ -75,10 +77,10 @@ class _AddListingScreenState extends State<AddListingScreen> {
   String? _errorCategory;
   String? selectedCity;
   int? cityId;
+  int? statusId;
   int? villageId;
   int? categoryId;
   int? subCategoryId;
-  int? statusId;
   List listCity = [];
   List listVillage = [];
   List listCategory = [];
@@ -102,6 +104,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
   List<File> downloadedImages = [];
 
   late int? currentCity;
+  late List<dynamic> jsonCategory;
 
   @override
   void initState() {
@@ -226,16 +229,33 @@ class _AddListingScreenState extends State<AddListingScreen> {
     if (!mounted) return;
     final loadCategoryResponse =
         await context.read<AddListingCubit>().loadCategory();
+    if (!loadCategoryResponse?.data.isEmpty) {
+      jsonCategory = loadCategoryResponse!.data;
+      final selectedCategory = jsonCategory.first['name'];
+      if (!mounted) return;
+      final subCategoryResponse = await context
+          .read<AddListingCubit>()
+          .loadSubCategory(selectedCategory);
+      listSubCategory = subCategoryResponse!.data;
+    }
     setState(() {
       listCategory = loadCategoryResponse?.data;
-      selectedSubCategory = Translate.of(context).translate(
-          _getSubCategoryTranslation(loadCategoryResponse?.data.first['id']));
-      listCity = loadCitiesResponse?.data;
-      selectedCategory = Translate.of(context).translate(
-          _getCategoryTranslation(loadCategoryResponse?.data.first['id']));
+      if (currentCity != null && currentCity != 0) {
+        for (var cityData in loadCitiesResponse!.data) {
+          if (cityData['id'] == currentCity) {
+            selectedCity = cityData['name'];
+            break; // Exit the loop once the desired city is found
+          }
+        }
+      } else {
+        selectedCity = loadCitiesResponse!.data.first['name'];
+      }
+      selectedSubCategory = loadCategoryResponse?.data.first['name'];
+      listCity = loadCitiesResponse.data;
+      selectedCategory = selectedSubCategory;
       if (selectedCategory?.toLowerCase() == "news" ||
           selectedCategory == null) {
-        selectSubCategory(selectedCategory!.toLowerCase());
+        selectSubCategory(selectedCategory?.toLowerCase());
       }
       _processing = true;
     });
@@ -257,8 +277,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
       _textEmailController.text = widget.item?.email ?? '';
       _textWebsiteController.text = widget.item?.website ?? '';
       _createdAt = widget.item?.createDate ?? '';
-      selectedCategory = Translate.of(context)
-          .translate(_getCategoryTranslation(widget.item!.categoryId!));
+      selectedCategory = jsonCategory.firstWhere(
+          (element) => element["id"] == widget.item!.categoryId)["name"];
+
       final city = listCity
           .firstWhere((element) => element['id'] == widget.item?.cityId);
       selectedCity = city['name'];
@@ -266,7 +287,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
           selectedCategory == null) {
         final subCategoryResponse = await context
             .read<AddListingCubit>()
-            .loadSubCategory(selectedCategory!.toLowerCase());
+            .loadSubCategory(selectedCategory?.toLowerCase());
         listSubCategory = subCategoryResponse!.data;
       }
       if (widget.item?.startDate != '') {
@@ -295,10 +316,10 @@ class _AddListingScreenState extends State<AddListingScreen> {
             DateTime parsedDateTime =
                 DateFormat('dd.MM.yyyy').parse(dateString);
             _endDate = DateFormat('yyyy-MM-dd').format(parsedDateTime);
-            List<String> endTimeParts = endDateTime[0].split(':');
-            int endHour = int.parse(endTimeParts[0]);
-            int endMinute = int.parse(endTimeParts[1]);
-            _endTime = TimeOfDay(hour: endHour, minute: endMinute);
+            // List<String> endTimeParts = endDateTime[0].split(':');
+            // int endHour = int.parse(endTimeParts[0]);
+            // int endMinute = int.parse(endTimeParts[1]);
+            _endTime = null;
           }
         }
         if (widget.item?.expiryDate != '') {
@@ -571,9 +592,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
               expiryTime: submitExpiryTime,
               startDate: _startDate,
               endDate: _endDate,
+              createdAt: _createdAt,
               startTime: _startTime,
               endTime: _endTime,
-              createdAt: _createdAt,
               isImageChanged: isImageChanged,
               statusId: statusId,
               imagesList: selectedImages,
@@ -635,6 +656,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
 
   void _onSuccess() {
     Navigator.pop(context);
+    // context.read<HomeCubit>().onLoad(false);
     if (widget.isNewList) {
       Navigator.pushNamed(context, Routes.submitSuccess);
     }
@@ -682,7 +704,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
           allowEmpty: false);
     }
 
-    if (selectedCategory!.toLowerCase() == "events") {
+    if (selectedCategory?.toLowerCase() == "events") {
       if (_startDate == null || _startDate == "" || _startTime == null) {
         _errorSDate = "value_not_date_empty";
       } else {
@@ -780,8 +802,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
             SizedBox(
               height: 180,
               child: AppUploadImage(
-                title:
-                    Translate.of(context).translate('upload_feature_image_pdf'),
+                title: Translate.of(context).translate('upload_feature_image'),
                 image: _featurePdf == ''
                     ? selectedImages!.isNotEmpty
                         ? selectedImages![0].path
@@ -939,14 +960,13 @@ class _AddListingScreenState extends State<AddListingScreen> {
                               () {
                                 selectedCategory = value as String?;
                                 context.read<AddListingCubit>().setCategoryId(
-                                    selectedCategory!.toLowerCase());
+                                    selectedCategory?.toLowerCase());
                               },
                             );
-
                             if (selectedCategory?.toLowerCase() == "news" ||
                                 selectedCategory == null) {
                               selectSubCategory(
-                                  selectedCategory!.toLowerCase());
+                                  selectedCategory?.toLowerCase());
                             }
                           }),
                 )

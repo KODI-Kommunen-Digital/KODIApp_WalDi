@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -499,15 +501,17 @@ class ListRepository {
     }
 
     if (endDate != null && endDate != "") {
-      String formattedTime;
-      if (endTime!.hour < 10) {
-        formattedTime =
-            "${endTime.periodOffset}${endTime.hour}:${endTime.minute.toString().padLeft(2, '0')}";
-        combinedEndDateTime = "${endDate.trim()}T$formattedTime";
-      } else {
-        formattedTime =
-            "${endTime.hour}:${endTime.minute.toString().padLeft(2, '0')}";
-        combinedEndDateTime = "${endDate.trim()}T$formattedTime";
+      String combinedEndDateTime = endDate.trim();
+      if (endTime != null) {
+        String formattedTime;
+        if (endTime.hour < 10) {
+          formattedTime =
+              "0${endTime.hour}:${endTime.minute.toString().padLeft(2, '0')}";
+        } else {
+          formattedTime =
+              "${endTime.hour}:${endTime.minute.toString().padLeft(2, '0')}";
+        }
+        combinedEndDateTime += "T$formattedTime";
       }
     }
 
