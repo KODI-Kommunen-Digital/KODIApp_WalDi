@@ -291,10 +291,10 @@ class _AddListingScreenState extends State<AddListingScreen> {
             DateTime parsedDateTime =
                 DateFormat('dd.MM.yyyy').parse(dateString);
             _endDate = DateFormat('yyyy-MM-dd').format(parsedDateTime);
-            List<String> endTimeParts = endDateTime[0].split(':');
-            int endHour = int.parse(endTimeParts[0]);
-            int endMinute = int.parse(endTimeParts[1]);
-            _endTime = TimeOfDay(hour: endHour, minute: endMinute);
+            // List<String> endTimeParts = endDateTime[0].split(':');
+            // int endHour = int.parse(endTimeParts[0]);
+            // int endMinute = int.parse(endTimeParts[1]);
+            _endTime = null;
           }
         }
       }
