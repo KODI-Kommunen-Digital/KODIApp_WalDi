@@ -499,6 +499,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     children: [
                       CarouselSlider(
                         options: CarouselOptions(
+                          aspectRatio:
+                              1 / MediaQuery.of(context).devicePixelRatio,
                           height: carouselHeight,
                           viewportFraction: 1.0,
                           enlargeCenterPage: false,
