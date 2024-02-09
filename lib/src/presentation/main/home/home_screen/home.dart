@@ -216,7 +216,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     showLater: false,
                     shouldPopScope: () => true,
                     canDismissDialog: true,
-                    durationUntilAlertAgain: const Duration(seconds: 5),
+                    durationUntilAlertAgain: const Duration(minutes: 30),
                     dialogStyle: Platform.isIOS
                         ? UpgradeDialogStyle.cupertino
                         : UpgradeDialogStyle.material,
@@ -227,7 +227,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         String? minAppVersion}) {
                       if (display != null) {
                         setState(() {
-                          latestAppStoreVersion = appStoreVersion ?? '2.1';
+                          latestAppStoreVersion = appStoreVersion ?? '1.11';
                         });
                       }
                     },
