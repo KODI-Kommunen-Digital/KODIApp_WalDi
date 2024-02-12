@@ -480,7 +480,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     }
     if (product != null) {
       ///Action
-       action = [
+      action = [
         actionGalleries,
         const SizedBox(width: 8),
       ];
@@ -498,67 +498,73 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   Stack(
                     alignment: Alignment.bottomCenter,
                     children: [
-                      CarouselSlider(
-                        options: CarouselOptions(
-                          height: carouselHeight,
-                          viewportFraction: 1.0,
-                          enlargeCenterPage: false,
-                          enableInfiniteScroll: product.imageLists!.length > 1,
-                          onPageChanged: (index, reason) {
-                            setState(() {
-                              currentImageIndex = index;
-                            });
-                          },
-                        ),
-                        items: product.imageLists?.map((imageUrl) {
-                          return Builder(
-                            builder: (BuildContext context) {
-                              String? imageUrlString = product.sourceId == 2 &&
-                                      imageUrl.logo != null &&
-                                      imageUrl.logo != 'admin/News.jpeg'
-                                  ? imageUrl.logo
-                                  : product.sourceId == 3 &&
-                                          imageUrl.logo != null &&
-                                          imageUrl.logo != 'admin/News.jpeg'
-                                      ? imageUrl.logo
-                                      : "${Application.picturesURL}${imageUrl.logo!.isNotEmpty ? imageUrl.logo : 'admin/News.jpeg'}";
-                              return Container(
-                                width: MediaQuery.of(context).size.width,
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 5.0),
-                                decoration: const BoxDecoration(
-                                  color: Colors.black,
-                                ),
-                                child: Image.network(
-                                  imageUrlString!,
-                                  fit: BoxFit.fitHeight,
-                                  loadingBuilder: (BuildContext context,
-                                      Widget child,
-                                      ImageChunkEvent? loadingProgress) {
-                                    if (loadingProgress == null) {
-                                      return child;
-                                    } else {
-                                      return AppPlaceholder(
-                                        child: Container(
-                                          width: 120,
-                                          height: 140,
-                                          decoration: const BoxDecoration(
-                                            color: Colors.black,
-                                            borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(8),
-                                              bottomLeft: Radius.circular(8),
-                                            ),
-                                          ),
-                                          child: const Icon(Icons.error),
-                                        ),
-                                      );
-                                    }
-                                  },
-                                ),
-                              );
+                      Expanded(
+                        child: CarouselSlider(
+                          options: CarouselOptions(
+                            aspectRatio:
+                                1 / MediaQuery.of(context).devicePixelRatio,
+                            height: carouselHeight,
+                            viewportFraction: 1.0,
+                            enlargeCenterPage: false,
+                            enableInfiniteScroll:
+                                product.imageLists!.length > 1,
+                            onPageChanged: (index, reason) {
+                              setState(() {
+                                currentImageIndex = index;
+                              });
                             },
-                          );
-                        }).toList(),
+                          ),
+                          items: product.imageLists?.map((imageUrl) {
+                            return Builder(
+                              builder: (BuildContext context) {
+                                String? imageUrlString = product.sourceId ==
+                                            2 &&
+                                        imageUrl.logo != null &&
+                                        imageUrl.logo != 'admin/News.jpeg'
+                                    ? imageUrl.logo
+                                    : product.sourceId == 3 &&
+                                            imageUrl.logo != null &&
+                                            imageUrl.logo != 'admin/News.jpeg'
+                                        ? imageUrl.logo
+                                        : "${Application.picturesURL}${imageUrl.logo!.isNotEmpty ? imageUrl.logo : 'admin/News.jpeg'}";
+                                return Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  margin: const EdgeInsets.symmetric(
+                                      horizontal: 5.0),
+                                  decoration: const BoxDecoration(
+                                    color: Colors.black,
+                                  ),
+                                  child: Image.network(
+                                    imageUrlString!,
+                                    fit: BoxFit.fitHeight,
+                                    loadingBuilder: (BuildContext context,
+                                        Widget child,
+                                        ImageChunkEvent? loadingProgress) {
+                                      if (loadingProgress == null) {
+                                        return child;
+                                      } else {
+                                        return AppPlaceholder(
+                                          child: Container(
+                                            width: 120,
+                                            height: 140,
+                                            decoration: const BoxDecoration(
+                                              color: Colors.black,
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(8),
+                                                bottomLeft: Radius.circular(8),
+                                              ),
+                                            ),
+                                            child: const Icon(Icons.error),
+                                          ),
+                                        );
+                                      }
+                                    },
+                                  ),
+                                );
+                              },
+                            );
+                          }).toList(),
+                        ),
                       ),
                       if (product.imageLists!.length > 1)
                         Padding(

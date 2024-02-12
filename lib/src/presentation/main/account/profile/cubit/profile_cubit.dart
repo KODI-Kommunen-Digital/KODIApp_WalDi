@@ -29,6 +29,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             pdf: product.pdf,
             category: product.category,
             categoryId: product.categoryId,
+            subcategoryId: product.subcategoryId,
             startDate: product.startDate,
             endDate: product.endDate,
             createDate: product.createDate,
@@ -40,6 +41,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             description: product.description,
             userId: product.userId,
             sourceId: product.sourceId,
+            expiryDate: product.expiryDate,
             imageLists: product.imageLists,
           ),
         );
@@ -75,6 +77,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             description: product.description,
             userId: product.userId,
             sourceId: product.sourceId,
+            expiryDate: product.expiryDate,
             imageLists: product.imageLists,
           ),
         );

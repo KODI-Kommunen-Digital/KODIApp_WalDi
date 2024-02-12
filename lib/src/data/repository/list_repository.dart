@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -213,6 +215,7 @@ class ListRepository {
             data['longitude'] ?? 0.0,
             data['latitude'] ?? 0.0,
             data['villageId'] ?? 0,
+            data['expiryDate'] ?? '',
             data['startDate'] ?? '',
             data['endDate'] ?? '',
             data['createdAt'] ?? '',
@@ -305,8 +308,11 @@ class ListRepository {
     String? email,
     String? website,
     String? status,
+    String? expiryDate,
     String? startDate,
     String? endDate,
+    TimeOfDay? expiryTime,
+    int? timeless,
     TimeOfDay? startTime,
     TimeOfDay? endTime,
     List<File>? imagesList,
@@ -319,6 +325,20 @@ class ListRepository {
     final cityId = await getCityId(city);
     String? combinedStartDateTime;
     String? combinedEndDateTime;
+    String? combinedExpiryDateTime;
+
+    if (expiryDate != null) {
+      String formattedTime;
+      if (expiryTime!.hour < 10) {
+        formattedTime =
+            "${expiryTime.periodOffset}${expiryTime.hour}:${expiryTime.minute.toString().padLeft(2, '0')}";
+        combinedExpiryDateTime = "${expiryDate.trim()}T$formattedTime";
+      } else {
+        formattedTime =
+            "${expiryTime.hour}:${expiryTime.minute.toString().padLeft(2, '0')}";
+        combinedExpiryDateTime = "${expiryDate.trim()}T$formattedTime";
+      }
+    }
 
     if (startDate != null) {
       String formattedTime;
@@ -368,9 +388,11 @@ class ListRepository {
       "latitude": 22.456, //dummy data
       "villageId": villageId ?? 0,
       "cityId": cityId,
+      "expiryDate": combinedExpiryDateTime,
       "startDate": combinedStartDateTime,
       "endDate": combinedEndDateTime,
-      "subCategoryId": subCategoryId,
+      "subcategoryId": subCategoryId,
+      "timeless": timeless
     };
     final response =
         await Api.requestSaveProduct(cityId, params, isImageChanged);
@@ -429,15 +451,19 @@ class ListRepository {
     String? email,
     String? website,
     String? status,
+    String? expiryDate,
     String? startDate,
     String? endDate,
     String? createdAt,
     String? price,
     bool isImageChanged,
+    TimeOfDay? expiryTime,
+    int? timeless,
     TimeOfDay? startTime,
     TimeOfDay? endTime,
     List<File>? imagesList,
   ) async {
+    final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
     final subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
     final villageId = prefs.getKeyValue(Preferences.villageId, null);
     final userId = prefs.getKeyValue(Preferences.userId, '');
@@ -446,6 +472,20 @@ class ListRepository {
     String? combinedStartDateTime;
     String? combinedEndDateTime;
     DateTime currentDate = DateTime.now();
+    String? combinedExpiryDateTime;
+
+    if (expiryDate != null) {
+      String formattedTime;
+      if (expiryTime!.hour < 10) {
+        formattedTime =
+            "${expiryTime.periodOffset}${expiryTime.hour}:${expiryTime.minute.toString().padLeft(2, '0')}";
+        combinedExpiryDateTime = "${expiryDate.trim()}T$formattedTime";
+      } else {
+        formattedTime =
+            "${expiryTime.hour}:${expiryTime.minute.toString().padLeft(2, '0')}";
+        combinedExpiryDateTime = "${expiryDate.trim()}T$formattedTime";
+      }
+    }
 
     if (startDate != null) {
       String formattedTime;
@@ -461,15 +501,17 @@ class ListRepository {
     }
 
     if (endDate != null && endDate != "") {
-      String formattedTime;
-      if (endTime!.hour < 10) {
-        formattedTime =
-            "${endTime.periodOffset}${endTime.hour}:${endTime.minute.toString().padLeft(2, '0')}";
-        combinedEndDateTime = "${endDate.trim()}T$formattedTime";
-      } else {
-        formattedTime =
-            "${endTime.hour}:${endTime.minute.toString().padLeft(2, '0')}";
-        combinedEndDateTime = "${endDate.trim()}T$formattedTime";
+      String combinedEndDateTime = endDate.trim();
+      if (endTime != null) {
+        String formattedTime;
+        if (endTime.hour < 10) {
+          formattedTime =
+              "0${endTime.hour}:${endTime.minute.toString().padLeft(2, '0')}";
+        } else {
+          formattedTime =
+              "${endTime.hour}:${endTime.minute.toString().padLeft(2, '0')}";
+        }
+        combinedEndDateTime += "T$formattedTime";
       }
     }
 
@@ -498,7 +540,8 @@ class ListRepository {
       "endDate": combinedEndDateTime,
       "createdAt": createdAt,
       "pdf": null,
-      "expiryDate": null,
+      "expiryDate": combinedExpiryDateTime,
+      "timeless": timeless,
       "updatedAt": currentDate.toString(),
       "zipcode": null,
       "appointmentId": null,

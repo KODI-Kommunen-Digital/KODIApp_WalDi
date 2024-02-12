@@ -26,6 +26,7 @@ class ProductModel {
   final String? pdf;
   final String? videoURL;
   final String? category;
+  final String expiryDate;
   final String startDate;
   final String endDate;
   final String createDate;
@@ -71,6 +72,8 @@ class ProductModel {
   final String? priceDisplay;
   List<ImageListModel>? imageLists;
 
+  int? timeless;
+
   ProductModel(
       {required this.id,
       required this.title,
@@ -78,6 +81,7 @@ class ProductModel {
       this.pdf,
       this.videoURL,
       this.category,
+      required this.expiryDate,
       required this.startDate,
       required this.endDate,
       required this.createDate,
@@ -126,12 +130,14 @@ class ProductModel {
       this.cityId,
       this.villageId,
       this.statusId,
+      this.timeless,
       this.sourceId,
       this.imageLists,
       this.showExternal});
 
   factory ProductModel.fromJson(Map<String, dynamic> json,
       {SettingModel? setting, int? cityId}) {
+
     List<ImageModel> galleries = [];
     List<CategoryModel> features = [];
     List<OpenTimeModel> openHours = [];
@@ -146,16 +152,24 @@ class ProductModel {
     CategoryModel? city;
     String status = '';
     String videoURL = '';
+    String expiryDate = '';
     String startDate = '';
     String endDate = '';
     String createDate = '';
     String priceMin = '';
     String priceMax = '';
     String priceDisplay = '';
+    int? timeless;
     String description = '';
+
 
     if (json['author'] != null) {
       author = UserModel.fromJson(json['author']);
+    }
+    if ((json['expiryDate']) != null) {
+      timeless = 0;
+    } else {
+      timeless = 1;
     }
 
     if (json['description'] != null) {
@@ -167,6 +181,11 @@ class ProductModel {
       category = "Nachricht";
       final parsedDateTime = DateTime.parse(json['createdAt']);
       createDate = DateFormat('dd.MM.yyyy').format(parsedDateTime);
+      if ((json['expiryDate']) != null) {
+        final parsedExpiryDateTime = DateTime.parse(json['expiryDate']);
+        expiryDate =
+            DateFormat('dd.MM.yyyy HH:mm').format(parsedExpiryDateTime);
+      }
     } else if (json['categoryId'] == 3) {
       category = "Veranstaltungen";
       final parsedDateTime = DateTime.parse(json['startDate']);
@@ -236,6 +255,8 @@ class ProductModel {
       videoURL: videoURL,
       category: category ?? '',
       createDate: createDate,
+      expiryDate: expiryDate,
+      timeless: timeless,
       startDate: startDate,
       endDate: endDate,
       username: json['username'],
@@ -297,6 +318,7 @@ class ProductModel {
       // image: ImageModel.fromJson(json['image'] ?? {'full': {}, 'thumb': {}}),
       videoURL: '',
       createDate: '',
+      expiryDate: '',
       startDate: '',
       endDate: '',
       username: json['username'],

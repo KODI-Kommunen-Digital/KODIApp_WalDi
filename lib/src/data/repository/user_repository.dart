@@ -273,6 +273,7 @@ class UserRepository {
             favoriteListResponse.data['longitude'],
             favoriteListResponse.data['latitude'],
             favoriteListResponse.data['villageId'],
+            favoriteListResponse.data['expiryDate'],
             favoriteListResponse.data['startDate'],
             favoriteListResponse.data['endDate'],
             favoriteListResponse.data['createdAt'],
