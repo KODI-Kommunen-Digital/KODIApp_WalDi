@@ -288,7 +288,7 @@ class ListRepository {
       "latitude": 22.456, //dummy data
       "villageId": villageId ?? 0,
       "cityId": cityId,
-      "subCategoryId": subCategoryId,
+      "subcategoryId": subCategoryId,
       "startDate": combinedStartDateTime,
       "endDate": combinedEndDateTime,
     };
