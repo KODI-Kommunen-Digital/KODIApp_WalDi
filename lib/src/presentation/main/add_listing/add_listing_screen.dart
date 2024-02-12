@@ -70,6 +70,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
   String? _errorContent;
   String? _errorZipCode;
   String? _errorPhone;
+
   // String? _errorEmail;
   String? _errorWebsite;
   String? _errorStatus;
@@ -228,12 +229,12 @@ class _AddListingScreenState extends State<AddListingScreen> {
       selectedSubCategory = loadCategoryResponse?.data.first['name'];
       listCity = loadCitiesResponse.data;
       selectedCategory = selectedSubCategory;
-      if (selectedCategory?.toLowerCase() == "news" ||
-          selectedCategory == null) {
-        selectSubCategory(selectedCategory?.toLowerCase());
-      }
       _processing = true;
     });
+
+    if (selectedCategory?.toLowerCase() == "news" || selectedCategory == null) {
+      await selectSubCategory(selectedCategory?.toLowerCase());
+    }
 
     Map<String, dynamic> params = {};
     if (widget.item != null) {
@@ -254,6 +255,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
       _createdAt = widget.item?.createDate ?? '';
       selectedCategory = jsonCategory.firstWhere(
           (element) => element["id"] == widget.item!.categoryId)["name"];
+      selectedSubCategory = listSubCategory.firstWhere(
+          (element) => element["id"] == widget.item!.subcategoryId)["name"];
 
       final city = listCity
           .firstWhere((element) => element['id'] == widget.item?.cityId);
@@ -1359,7 +1362,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
         .setCategoryId(selectedCategory.toLowerCase());
     setState(() {
       listSubCategory = subCategoryResponse!.data;
-
       selectedSubCategory = subCategoryResponse.data.first['name'];
     });
   }
