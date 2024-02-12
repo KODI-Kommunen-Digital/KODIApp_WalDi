@@ -391,7 +391,7 @@ class ListRepository {
       "expiryDate": combinedExpiryDateTime,
       "startDate": combinedStartDateTime,
       "endDate": combinedEndDateTime,
-      "subCategoryId": subCategoryId,
+      "subcategoryId": subCategoryId,
       "timeless": timeless
     };
     final response =
