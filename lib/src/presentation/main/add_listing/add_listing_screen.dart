@@ -959,26 +959,21 @@ class _AddListingScreenState extends State<AddListingScreen> {
                                 child: Text(Translate.of(context).translate(
                                     _getCategoryTranslation(category['id']))));
                           }).toList(),
-                          onChanged: widget.item == null
-                              ? (value) async {
-                                  setState(
-                                    () {
-                                      selectedCategory = value as String?;
-                                      context
-                                          .read<AddListingCubit>()
-                                          .setCategoryId(
-                                              selectedCategory?.toLowerCase());
-                                    },
-                                  );
-                                  if (selectedCategory?.toLowerCase() ==
-                                          "news" ||
-                                      selectedCategory == null) {
-                                    selectSubCategory(
-                                        selectedCategory?.toLowerCase());
-                                    _setDefaultExpiryDate();
-                                  }
-                                }
-                              : null,
+                          onChanged: (value) async {
+                            setState(
+                              () {
+                                selectedCategory = value as String?;
+                                context.read<AddListingCubit>().setCategoryId(
+                                    selectedCategory?.toLowerCase());
+                              },
+                            );
+                            if (selectedCategory?.toLowerCase() == "news" ||
+                                selectedCategory == null) {
+                              selectSubCategory(
+                                  selectedCategory?.toLowerCase());
+                              _setDefaultExpiryDate();
+                            }
+                          },
                         ),
                 )
               ],
@@ -1026,16 +1021,14 @@ class _AddListingScreenState extends State<AddListingScreen> {
                                       _getSubCategoryTranslation(
                                           subcategory['id']))));
                             }).toList(),
-                            onChanged: widget.item == null
-                                ? (value) {
-                                    context
-                                        .read<AddListingCubit>()
-                                        .getSubCategoryId(value);
-                                    setState(() {
-                                      selectedSubCategory = value as String?;
-                                    });
-                                  }
-                                : null,
+                            onChanged: (value) {
+                              context
+                                  .read<AddListingCubit>()
+                                  .getSubCategoryId(value);
+                              setState(() {
+                                selectedSubCategory = value as String?;
+                              });
+                            },
                           ),
                   ),
               ],
