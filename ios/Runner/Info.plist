@@ -37,9 +37,13 @@
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Need microphone access for uploading audio</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-            <string>Wir benötigen Zugang zur Bildergalerie, sodass du Bilder hochladen kannst.</string>
+	<string>Wir benötigen Zugang zur Bildergalerie, sodass du Bilder hochladen kannst.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
