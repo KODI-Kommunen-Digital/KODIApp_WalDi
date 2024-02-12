@@ -70,6 +70,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
   String? _errorContent;
   String? _errorZipCode;
   String? _errorPhone;
+
   // String? _errorEmail;
   String? _errorWebsite;
   String? _errorStatus;
@@ -231,8 +232,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       _processing = true;
     });
 
-    if (selectedCategory?.toLowerCase() == "news" ||
-        selectedCategory == null) {
+    if (selectedCategory?.toLowerCase() == "news" || selectedCategory == null) {
       await selectSubCategory(selectedCategory?.toLowerCase());
     }
 
