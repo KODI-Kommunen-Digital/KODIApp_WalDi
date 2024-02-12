@@ -124,7 +124,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
   }
 
   void _setDefaultExpiryDate() {
-    if (widget.item?.expiryDate == null) {
+    if (widget.item?.expiryDate == null || widget.item?.expiryDate == "") {
       DateTime now = DateTime.now();
       DateTime twoWeeksFromNow = now.add(const Duration(days: 14));
       setState(() {
@@ -322,16 +322,16 @@ class _AddListingScreenState extends State<AddListingScreen> {
             _endTime = null;
           }
         }
-        if (widget.item?.expiryDate != '') {
-          List<String> expiryDateTime = widget.item!.expiryDate.split(' ');
-          String dateString = expiryDateTime[0];
-          DateTime parsedDateTime = DateFormat('dd.MM.yyyy').parse(dateString);
-          _expiryDate = DateFormat('yyyy-MM-dd').format(parsedDateTime);
-          List<String> startTimeParts = expiryDateTime[1].split(':');
-          int startHour = int.parse(startTimeParts[0]);
-          int startMinute = int.parse(startTimeParts[1]);
-          _expiryTime = TimeOfDay(hour: startHour, minute: startMinute);
-        }
+      }
+      if (widget.item?.expiryDate != '') {
+        List<String> expiryDateTime = widget.item!.expiryDate.split(' ');
+        String dateString = expiryDateTime[0];
+        DateTime parsedDateTime = DateFormat('dd.MM.yyyy').parse(dateString);
+        _expiryDate = DateFormat('yyyy-MM-dd').format(parsedDateTime);
+        List<String> startTimeParts = expiryDateTime[1].split(':');
+        int startHour = int.parse(startTimeParts[0]);
+        int startMinute = int.parse(startTimeParts[1]);
+        _expiryTime = TimeOfDay(hour: startHour, minute: startMinute);
       }
       if (widget.item?.pdf == '') {
         List<File> images = await downloadImages(widget.item!.imageLists!);
@@ -595,6 +595,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
               createdAt: _createdAt,
               startTime: _startTime,
               endTime: _endTime,
+              timeless: _isExpiryDateEnabled ? 0 : 1,
               isImageChanged: isImageChanged,
               statusId: statusId,
               imagesList: selectedImages,
@@ -967,8 +968,10 @@ class _AddListingScreenState extends State<AddListingScreen> {
                                 selectedCategory == null) {
                               selectSubCategory(
                                   selectedCategory?.toLowerCase());
+                              _setDefaultExpiryDate();
                             }
-                          }),
+                          },
+                        ),
                 )
               ],
             ),
