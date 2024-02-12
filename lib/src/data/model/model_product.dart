@@ -23,6 +23,7 @@ class ProductModel {
   final int? showExternal;
   final String? videoURL;
   final String? category;
+  final String expiryDate;
   final String startDate;
   final String endDate;
   final String createDate;
@@ -67,6 +68,7 @@ class ProductModel {
   final String? bookingStyle;
   final String? priceDisplay;
   List<ImageListModel>? imageLists;
+  int? timeless;
 
   ProductModel(
       {required this.id,
@@ -75,6 +77,7 @@ class ProductModel {
       this.pdf,
       this.videoURL,
       this.category,
+      required this.expiryDate,
       required this.startDate,
       required this.endDate,
       required this.createDate,
@@ -124,6 +127,7 @@ class ProductModel {
       this.villageId,
       this.imageLists,
       this.statusId,
+      this.timeless,
       this.sourceId,
       this.showExternal});
 
@@ -145,21 +149,33 @@ class ProductModel {
     CategoryModel? city;
     String status = '';
     String videoURL = '';
+    String expiryDate = '';
     String startDate = '';
     String endDate = '';
     String createDate = '';
     String priceMin = '';
     String priceMax = '';
+    int? timeless;
     String priceDisplay = '';
 
     if (json['author'] != null) {
       author = UserModel.fromJson(json['author']);
+    }
+    if ((json['expiryDate']) != null) {
+      timeless = 0;
+    } else {
+      timeless = 1;
     }
 
     if (json['categoryId'] == 1) {
       category = "Nachricht";
       final parsedDateTime = DateTime.parse(json['createdAt']);
       createDate = DateFormat('dd.MM.yyyy').format(parsedDateTime);
+      if ((json['expiryDate']) != null) {
+        final parsedExpiryDateTime = DateTime.parse(json['expiryDate']);
+        expiryDate =
+            DateFormat('dd.MM.yyyy HH:mm').format(parsedExpiryDateTime);
+      }
     } else if (json['categoryId'] == 3) {
       category = "Veranstaltungen";
       final parsedDateTime = DateTime.parse(json['startDate']);
@@ -228,6 +244,8 @@ class ProductModel {
           : 'admin/News.jpeg',
       videoURL: videoURL,
       category: category ?? '',
+      expiryDate: expiryDate,
+      timeless: timeless,
       createDate: createDate,
       startDate: startDate,
       endDate: endDate,
@@ -289,6 +307,7 @@ class ProductModel {
       image: json['logo'],
       // image: ImageModel.fromJson(json['image'] ?? {'full': {}, 'thumb': {}}),
       videoURL: '',
+      expiryDate: '',
       createDate: '',
       startDate: '',
       endDate: '',

@@ -34,7 +34,7 @@ class UserRepository {
         for (final cities in cityUsers) {
           cityIds.add(cities['cityId']);
         }
-          prefs.setKeyValue(Preferences.userId, userId);
+        prefs.setKeyValue(Preferences.userId, userId);
         prefs.setKeyValue(Preferences.token, response.data['accessToken']);
         prefs.setKeyValue(
             Preferences.refreshToken, response.data['refreshToken']);
@@ -46,7 +46,6 @@ class UserRepository {
     } catch (e, stackTrace) {
       logError('request Login Response Error', e);
       await Sentry.captureException(e, stackTrace: stackTrace);
-
     }
     return null;
   }
@@ -168,15 +167,14 @@ class UserRepository {
     final response = await Api.requestChangeProfile(params, userId);
     if (response.success) {
       FormData? pickedFile = prefs.getPickedFile();
-      if(pickedFile != null) {
+      if (pickedFile != null) {
         final responseImageUpload = await Api.requestUploadImage(pickedFile);
         if (responseImageUpload.success) {
           return true;
         } else {
           logError('Image Upload Error Response', response.message);
         }
-      }
-      else{
+      } else {
         return true;
       }
     }
@@ -268,6 +266,7 @@ class UserRepository {
             favoriteListResponse.data['longitude'],
             favoriteListResponse.data['latitude'],
             favoriteListResponse.data['villageId'],
+            favoriteListResponse.data['expiryDate'],
             favoriteListResponse.data['startDate'],
             favoriteListResponse.data['endDate'],
             favoriteListResponse.data['createdAt'],

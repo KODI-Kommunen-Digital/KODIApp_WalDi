@@ -226,9 +226,12 @@ class ListRepository {
     String? email,
     String? website,
     String? status,
+    String? expiryDate,
     String? startDate,
     String? endDate,
-      TimeOfDay? startTime,
+    TimeOfDay? expiryTime,
+    int? timeless,
+    TimeOfDay? startTime,
     String? price,
     TimeOfDay? endTime,
     List<File>? imagesList,
@@ -241,6 +244,20 @@ class ListRepository {
     final cityId = await getCityId(city);
     String? combinedStartDateTime;
     String? combinedEndDateTime;
+    String? combinedExpiryDateTime;
+
+    if (expiryDate != null) {
+      String formattedTime;
+      if (expiryTime!.hour < 10) {
+        formattedTime =
+            "${expiryTime.periodOffset}${expiryTime.hour}:${expiryTime.minute.toString().padLeft(2, '0')}";
+        combinedExpiryDateTime = "${expiryDate.trim()}T$formattedTime";
+      } else {
+        formattedTime =
+            "${expiryTime.hour}:${expiryTime.minute.toString().padLeft(2, '0')}";
+        combinedExpiryDateTime = "${expiryDate.trim()}T$formattedTime";
+      }
+    }
 
     if (startDate != null) {
       String formattedTime;
@@ -289,11 +306,12 @@ class ListRepository {
       "villageId": villageId ?? 0,
       "cityId": cityId,
       "subcategoryId": subCategoryId,
+      "expiryDate": combinedExpiryDateTime,
       "startDate": combinedStartDateTime,
-      "endDate": combinedEndDateTime,
+      "endDate": combinedEndDateTime, "timeless": timeless
     };
     final response =
-    await Api.requestSaveProduct(cityId, params, isImageChanged);
+        await Api.requestSaveProduct(cityId, params, isImageChanged);
     if (response.success) {
       final prefs = await Preferences.openBox();
       FormData? pickedFile = prefs.getPickedFile();
@@ -349,14 +367,17 @@ class ListRepository {
     String? email,
     String? website,
     String? status,
+    String? expiryDate,
     String? startDate,
     String? endDate,
-      String? createdAt,
+    String? createdAt,
     String? price,
     bool isImageChanged,
+    TimeOfDay? expiryTime,
+    int? timeless,
     TimeOfDay? startTime,
     TimeOfDay? endTime,
-      List<File>? imagesList,
+    List<File>? imagesList,
   ) async {
     final subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
     final villageId = prefs.getKeyValue(Preferences.villageId, null);
@@ -365,6 +386,20 @@ class ListRepository {
     String? combinedStartDateTime;
     String? combinedEndDateTime;
     DateTime currentDate = DateTime.now();
+    String? combinedExpiryDateTime;
+
+    if (expiryDate != null) {
+      String formattedTime;
+      if (expiryTime!.hour < 10) {
+        formattedTime =
+            "${expiryTime.periodOffset}${expiryTime.hour}:${expiryTime.minute.toString().padLeft(2, '0')}";
+        combinedExpiryDateTime = "${expiryDate.trim()}T$formattedTime";
+      } else {
+        formattedTime =
+            "${expiryTime.hour}:${expiryTime.minute.toString().padLeft(2, '0')}";
+        combinedExpiryDateTime = "${expiryDate.trim()}T$formattedTime";
+      }
+    }
 
     if (startDate != null) {
       String formattedTime;
@@ -415,11 +450,12 @@ class ListRepository {
       "longitude": 245.65, //dummy data
       "latitude": 22.456, //dummy data
       "villageId": villageId ?? 0,
+      "expiryDate": combinedExpiryDateTime,
+      "timeless": timeless,
       "startDate": combinedStartDateTime,
       "endDate": combinedEndDateTime,
       "createdAt": createdAt,
       "pdf": null,
-      "expiryDate": null,
       "updatedAt": currentDate.toString(),
       "zipcode": null,
       "appointmentId": null,
@@ -532,7 +568,7 @@ class ListRepository {
     final response = await Api.requestSubmitCategory();
     var jsonCategory = response.data;
     final item = jsonCategory.firstWhere(
-            (item) => (item['name']?.toLowerCase() ?? '') == value.toLowerCase());
+        (item) => (item['name']?.toLowerCase() ?? '') == value.toLowerCase());
     final itemId = item['id'];
     final categoryId = itemId;
     prefs.setKeyValue(Preferences.categoryId, categoryId);
@@ -602,6 +638,7 @@ class ListRepository {
             data['longitude'] ?? 0.0,
             data['latitude'] ?? 0.0,
             data['villageId'] ?? 0,
+            data['expiryDate'] ?? '',
             data['startDate'] ?? '',
             data['endDate'] ?? '',
             data['createdAt'] ?? '',
