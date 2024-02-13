@@ -34,10 +34,10 @@
 	<string>We need your location to provide location-based services and enhance your experience.</string>
 	<key>NSLocationUsageDescription</key>
 	<string>Need location access for updating nearby friends</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
+	<key>NSLocationWhenInUseUsageDescription</key>	
+	<string>This app will use your location to show features near you.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Need microphone access for uploading audio</string>
-	<string>This app will use your location to show features near you.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Wir benötigen Zugang zur Bildergalerie, sodass du Bilder hochladen kannst.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
