@@ -279,6 +279,7 @@
   "icon_require": "Symbol ist erforderlich",
   "input_zipcode": "Postleitzahl",
   "upload_feature_image": "Bild oder PDF hochladen,\nMehrfachauswahl möglich",
+  "upload_feature_image_pdf": "Bild oder PDF hochladen,\nMehrfachauswahl möglich",
   "edit": "Bearbeiten",
   "add_new_listing": "Neuer Beitrag",
   "edit_listing": "Eintrag aktualisieren",
