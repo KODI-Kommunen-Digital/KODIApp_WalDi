@@ -66,6 +66,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             pdf: product.pdf,
             category: product.category,
             categoryId: product.categoryId,
+            subcategoryId: product.subcategoryId,
             startDate: product.startDate,
             endDate: product.endDate,
             createDate: product.createDate,
