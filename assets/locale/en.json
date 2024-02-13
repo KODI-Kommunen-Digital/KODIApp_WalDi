@@ -307,7 +307,7 @@
   "icon_require": "Icon is required",
   "input_zipcode": "Zipcode",
   "upload_feature_image": "Upload feature image",
-  "upload_feature_image_pdf": "Upload feature image or pdf",
+  "upload_feature_image_pdf": "Upload feature image or pdf\nMultiple possible",
   "edit": "Edit",
   "add_new_listing": "Add New Listing",  
   "edit_listing": "Update Listing",
