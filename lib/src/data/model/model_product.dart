@@ -137,7 +137,6 @@ class ProductModel {
 
   factory ProductModel.fromJson(Map<String, dynamic> json,
       {SettingModel? setting, int? cityId}) {
-
     List<ImageModel> galleries = [];
     List<CategoryModel> features = [];
     List<OpenTimeModel> openHours = [];
@@ -161,7 +160,6 @@ class ProductModel {
     String priceDisplay = '';
     int? timeless;
     String description = '';
-
 
     if (json['author'] != null) {
       author = UserModel.fromJson(json['author']);
@@ -277,8 +275,8 @@ class ProductModel {
       website: json['website'] ?? '',
       description: json['description'],
       color: json['color'] ?? '',
-      categoryId: json['categoryId'] ?? 0,
-      subcategoryId: json['subcategoryId'] ?? 0,
+      categoryId: json['categoryId'] ?? 1,
+      subcategoryId: json['subcategoryId'] ?? 1,
       cityId: cityId ?? json['cityId'] ?? 0,
       villageId: json['villageId'] ?? 0,
       statusId: json['statusId'] ?? 0,
