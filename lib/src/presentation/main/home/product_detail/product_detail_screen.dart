@@ -495,19 +495,17 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               },
               child: Column(
                 children: [
-                  Stack(
-                    alignment: Alignment.bottomCenter,
-                    children: [
-                      Expanded(
-                        child: CarouselSlider(
+                  Expanded(
+                    child: Stack(
+                      alignment: Alignment.bottomCenter,
+                      children: [
+                        CarouselSlider(
                           options: CarouselOptions(
-                            aspectRatio:
-                                1 / MediaQuery.of(context).devicePixelRatio,
+                            aspectRatio: 1 / MediaQuery.of(context).devicePixelRatio,
                             height: carouselHeight,
                             viewportFraction: 1.0,
                             enlargeCenterPage: false,
-                            enableInfiniteScroll:
-                                product.imageLists!.length > 1,
+                            enableInfiniteScroll: product.imageLists!.length > 1,
                             onPageChanged: (index, reason) {
                               setState(() {
                                 currentImageIndex = index;
@@ -517,28 +515,25 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           items: product.imageLists?.map((imageUrl) {
                             return Builder(
                               builder: (BuildContext context) {
-                                String? imageUrlString = product.sourceId ==
-                                            2 &&
-                                        imageUrl.logo != null &&
-                                        imageUrl.logo != 'admin/News.jpeg'
+                                String? imageUrlString = product.sourceId == 2 &&
+                                    imageUrl.logo != null &&
+                                    imageUrl.logo != 'admin/News.jpeg'
                                     ? imageUrl.logo
                                     : product.sourceId == 3 &&
-                                            imageUrl.logo != null &&
-                                            imageUrl.logo != 'admin/News.jpeg'
-                                        ? imageUrl.logo
-                                        : "${Application.picturesURL}${imageUrl.logo!.isNotEmpty ? imageUrl.logo : 'admin/News.jpeg'}";
+                                    imageUrl.logo != null &&
+                                    imageUrl.logo != 'admin/News.jpeg'
+                                    ? imageUrl.logo
+                                    : "${Application.picturesURL}${imageUrl.logo!.isNotEmpty ? imageUrl.logo : 'admin/News.jpeg'}";
                                 return Container(
                                   width: MediaQuery.of(context).size.width,
-                                  margin: const EdgeInsets.symmetric(
-                                      horizontal: 5.0),
+                                  margin: const EdgeInsets.symmetric(horizontal: 5.0),
                                   decoration: const BoxDecoration(
                                     color: Colors.black,
                                   ),
                                   child: Image.network(
                                     imageUrlString!,
                                     fit: BoxFit.fitHeight,
-                                    loadingBuilder: (BuildContext context,
-                                        Widget child,
+                                    loadingBuilder: (BuildContext context, Widget child,
                                         ImageChunkEvent? loadingProgress) {
                                       if (loadingProgress == null) {
                                         return child;
@@ -565,34 +560,34 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             );
                           }).toList(),
                         ),
-                      ),
-                      if (product.imageLists!.length > 1)
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 10.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: product.imageLists!.map((url) {
-                              int index = product.imageLists!.indexOf(url);
-                              return Container(
-                                width: 10.0,
-                                height: 10.0,
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 2.0),
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: currentImageIndex == index
-                                      ? Colors.blueAccent
-                                      : Colors.grey,
-                                ),
-                              );
-                            }).toList(),
+                        if (product.imageLists!.length > 1)
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 10.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: product.imageLists!.map((url) {
+                                int index = product.imageLists!.indexOf(url);
+                                return Container(
+                                  width: 10.0,
+                                  height: 10.0,
+                                  margin: const EdgeInsets.symmetric(horizontal: 2.0),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: currentImageIndex == index
+                                        ? Colors.blueAccent
+                                        : Colors.grey,
+                                  ),
+                                );
+                              }).toList(),
+                            ),
                           ),
-                        ),
-                    ],
+                      ],
+                    ),
                   ),
                 ],
               ),
-            )
+
+      )
           : RawGestureDetector(
               gestures: {
                 AllowMultipleGestureRecognizer:
