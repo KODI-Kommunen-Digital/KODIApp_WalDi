@@ -4,12 +4,15 @@ import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/widget/app_list_title.dart';
 import 'package:heidi/src/utils/configs/language.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
+import 'package:heidi/src/data/model/model_user.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/configs/theme.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({Key? key}) : super(key: key);
+  const SettingsScreen({Key? key, this.user}) : super(key: key);
+
+  final UserModel? user;
 
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
@@ -91,6 +94,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 },
               ),
             ),
+            if(widget.user != null)
             AppListTitle(
               title: Translate.of(context).translate('profile_settings'),
               onPressed: () {
