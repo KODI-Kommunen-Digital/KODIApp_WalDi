@@ -52,7 +52,7 @@ class ListCubit extends Cubit<ListState> {
 
   Future<List<ProductModel>> newListings(int pageNo, city) async {
     final prefs = await Preferences.openBox();
-    final cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    // final cityId = prefs.getKeyValue(Preferences.cityId, 0);
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
     final type = prefs.getKeyValue(Preferences.type, '');
     if (type == 'location') {
@@ -63,7 +63,7 @@ class ListCubit extends Cubit<ListState> {
       categoryId: categoryId,
       type: type,
       pageNo: pageNo,
-      cityId: cityId,
+      cityId: city,
     );
 
     final listUpdated = result?[0] ?? [];
