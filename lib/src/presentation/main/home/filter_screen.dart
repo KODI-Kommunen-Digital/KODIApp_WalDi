@@ -5,6 +5,7 @@ import 'package:heidi/src/presentation/main/home/list_product/cubit/list_cubit.d
 import 'package:heidi/src/utils/translate.dart';
 
 class FilterScreen extends StatefulWidget {
+  //IMPORTANT: Cant null check, as doesnt say thesere were selected
   final ProductFilter? currentListProductFilter; //ListGroup filter
   final GroupFilter? currentForumGroupFilter; //Forum group filter
   final int? currentListingStatus; //Listing status in All Listings
