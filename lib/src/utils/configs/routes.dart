@@ -28,6 +28,7 @@ import 'package:heidi/src/presentation/main/account/profile_settings/profile_set
 import 'package:heidi/src/presentation/main/account/setting/settings_screen.dart';
 import 'package:heidi/src/presentation/main/add_listing/add_listing_screen.dart';
 import 'package:heidi/src/presentation/main/add_listing/add_listing_success/add_listing_success.dart';
+import 'package:heidi/src/presentation/main/home/filter_screen.dart';
 import 'package:heidi/src/presentation/main/home/forum/add_group_screen/add_group_screen.dart';
 import 'package:heidi/src/presentation/main/home/forum/add_group_screen/cubit/add_group_cubit.dart';
 import 'package:heidi/src/presentation/main/home/forum/list_groups/add_new_post/add_post_screen.dart';
@@ -120,6 +121,7 @@ class Routes {
   static const String addGroups = "/addGroup";
   static const String addPosts = "/addPosts";
   static const String myListings = "/myListings";
+  static const String filterScreen = "/filterScreen";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -487,6 +489,21 @@ class Routes {
             );
           },
           fullscreenDialog: true,
+        );
+
+      case filterScreen:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return FilterScreen(
+              currentForumGroupFilter: arguments["currentForumGroupFilter"],
+              currentLocation: arguments["currentLocation"],
+              currentListingStatus: arguments["currentListingStatus"],
+              currentListProductFilter: arguments["currentListProductFilter"],
+              cities: arguments["cities"],
+            );
+          },
         );
 
       default:
