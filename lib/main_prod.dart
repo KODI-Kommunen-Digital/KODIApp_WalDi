@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -17,6 +19,9 @@ import 'package:heidi/src/utils/logging/drift_logger.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:loggy/loggy.dart';
+
+import 'package:js/js_util.dart' as js_util;
+import 'package:js/js.dart';
 
 Future<void> main() async {
   await Hive.initFlutter();
@@ -53,11 +58,34 @@ class HeidiApp extends StatefulWidget {
 }
 
 class _HeidiAppState extends State<HeidiApp> {
+
+
   @override
   void initState() {
     super.initState();
+
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      _initializePlatformSpecificLogic();
+    });
     AppBloc.applicationCubit.onSetup();
   }
+
+  void _initializePlatformSpecificLogic() {
+    if (Platform.isWindows) {
+      // Perform platform-specific initialization for Windows
+      final export = js_util.jsify(this);
+      js_util.setProperty(js_util.globalThis, '_appState', export);
+    } else if (Platform.isMacOS) {
+      // Perform platform-specific initialization for macOS
+      final export = js_util.jsify(this);
+      js_util.setProperty(js_util.globalThis, '_appState', export);
+    } else if (Platform.isLinux) {
+      // Perform platform-specific initialization for Linux
+      final export = js_util.jsify(this);
+      js_util.setProperty(js_util.globalThis, '_appState', export);
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {

@@ -1,59 +1,97 @@
+
 <!DOCTYPE html>
 <html>
 <head>
-  <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
+  <base href="/" />
 
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
-
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
-  <base href="$FLUTTER_BASE_HREF">
-
-  <meta charset="UTF-8">
-  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
+  <meta charset="UTF-8" />
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible" />
+  <meta name="description" content="A Flutter Web Element embedding demo." />
 
   <!-- iOS meta tags & icons -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="heidi">
-  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="apple-mobile-web-app-title" content="Flutter Element embedding" />
+  <link rel="apple-touch-icon" href="icons/Icon-192.png" />
+  <link rel="preload" as="image" href="icons/unsplash-x9WGMWwp1NM.png" />
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
+  <link rel="icon" type="image/png" href="icons/favicon.png" />
 
-  <title>heidi</title>
-  <link rel="manifest" href="manifest.json">
+  <title>KODIApp Waldi</title>
+  <link rel="manifest" href="manifest.json" />
 
-  <script>
-    // The value below is injected by flutter build, do not touch.
-    var serviceWorkerVersion = null;
-  </script>
   <!-- This script adds the flutter initialization JS code -->
   <script src="flutter.js" defer></script>
+
+  <link rel="stylesheet" type="text/css" href="./css/style.css" />
 </head>
 <body>
-  <script>
-    window.addEventListener('load', function(ev) {
-      // Download main.dart.js
-      _flutter.loader.loadEntrypoint({
-        serviceWorker: {
-          serviceWorkerVersion: serviceWorkerVersion,
-        },
-        onEntrypointLoaded: function(engineInitializer) {
-          engineInitializer.initializeEngine().then(function(appRunner) {
-            appRunner.runApp();
-          });
-        }
+<section class="contents">
+  <article>
+    <div id="flutter_target"></div>
+  </article>
+
+  <aside id="demo_controls">
+
+    <fieldset id="fx">
+<!--      <legend>Effects</legend>-->
+<!--      <div class="tight">-->
+<!--        <input value="Spin" data-fx="spin" type="button" class="fx" />-->
+<!--        <input type="range" value="0" min="-180" max="180" list="markers" id="rotation" class="tight" />-->
+<!--        <datalist id="markers">-->
+<!--          <option value="-180"></option>-->
+<!--          <option value="-135"></option>-->
+<!--          <option value="-45"></option>-->
+<!--          <option value="0"></option>-->
+<!--          <option value="45"></option>-->
+<!--          <option value="135"></option>-->
+<!--          <option value="180"></option>-->
+<!--        </datalist>-->
+<!--      </div>-->
+<!--      <input value="Device" data-fx="handheld" type="button" class="fx" />-->
+    </fieldset>
+
+<!--    <fieldset id="interop">-->
+<!--      <legend>JS Interop</legend>-->
+
+
+    </fieldset>
+  </aside>
+</section>
+
+
+<!--  <script>-->
+<!--    window.addEventListener('load', function(ev) {-->
+<!--      // Download main.dart.js-->
+<!--      _flutter.loader.loadEntrypoint({-->
+<!--        serviceWorker: {-->
+<!--          serviceWorkerVersion: serviceWorkerVersion,-->
+<!--        },-->
+<!--        onEntrypointLoaded: function(engineInitializer) {-->
+<!--          engineInitializer.initializeEngine().then(function(appRunner) {-->
+<!--            appRunner.runApp();-->
+<!--          });-->
+<!--        }-->
+<!--      });-->
+<!--    });-->
+<!--  </script>-->
+
+<script>
+      window.addEventListener("load", function (ev) {
+        // Embed flutter into div#flutter_target
+        let target = document.querySelector("#flutter_target");
+        _flutter.loader.loadEntrypoint({
+          onEntrypointLoaded: async function (engineInitializer) {
+            let appRunner = await engineInitializer.initializeEngine({
+              hostElement: target,
+            });
+            await appRunner.runApp();
+          },
+        });
       });
-    });
-  </script>
+    </script>
+<script src="js/demo-js-interop.js" defer></script>
+<script src="js/demo-css-fx.js" defer></script>
 </body>
 </html>

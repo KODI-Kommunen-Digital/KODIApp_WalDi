@@ -180,7 +180,7 @@ class _MainScreenState extends State<MainScreen> {
           Text(
             Translate.of(context).translate(title),
             style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                  fontSize: 10,
+                  fontSize: 8,
                   color: color,
                 ),
             maxLines: 2,
