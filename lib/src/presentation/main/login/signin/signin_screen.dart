@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -109,7 +110,7 @@ class _SignInLoadedState extends State<SignInLoaded> {
       listener: (context, state) async {},
       child: SafeArea(
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: kIsWeb ? 12 : 16),
           alignment: Alignment.center,
           child: SingleChildScrollView(
             child: Column(
@@ -181,10 +182,12 @@ class _SignInLoadedState extends State<SignInLoaded> {
                       onPressed: _forgotPassword,
                       type: ButtonType.text,
                     ),
-                    AppButton(
-                      Translate.of(context).translate('sign_up'),
-                      onPressed: _signUp,
-                      type: ButtonType.text,
+                    Expanded(
+                      child: AppButton(
+                        Translate.of(context).translate('sign_up'),
+                        onPressed: _signUp,
+                        type: ButtonType.text,
+                      ),
                     ),
                   ],
                 ),
