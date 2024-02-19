@@ -458,5 +458,7 @@
   "create_appointment": "Create Appointment",
   "delete_appointments": "Delete Appointment",
   "edit_appointments": "Edit Appointment",
+  "summary" : "Überblick",
+  "finish": "Finish",
   "Are you sure you want to delete appointment" :  "Are you sure you want to delete appointment?"
 }

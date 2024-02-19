@@ -287,6 +287,7 @@
   "add_new_listing": "Neuer Beitrag",
   "edit_listing": "Eintrag aktualisieren",
   "completed": "Abgeschlossen",
+  "finish": "Fertig",
   "add_more": "Mehr hinzufügen",
   "submit_success_message": "Vielen Dank für die Übermittlung der Daten, diese werden in Kürze überprüft und anschließend direkt hochgeladen.",
   "choose_hours": "Stunden auswählen",
@@ -459,5 +460,6 @@
   "create_appointment": "Termin erstellen",
   "delete_appointments": "Termin löschen",
   "edit_appointments": "Termin bearbeiten",
+  "summary" : "Überblick",
   "Are you sure you want to delete appointment" :  "Bist du dir sicher, dass du die Buchung löschen möchtest ?"
 }

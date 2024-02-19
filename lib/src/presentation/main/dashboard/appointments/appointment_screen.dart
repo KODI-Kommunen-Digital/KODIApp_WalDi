@@ -35,7 +35,12 @@ class AppointmentScreen extends StatelessWidget {
             GridItemButton(
               icon: Icons.question_answer,
               title: Translate.of(context).translate("requests"),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(
+                  context,
+                  Routes.appointmentRequests,
+                );
+              },
             ),
           ],
         ),

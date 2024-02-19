@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_step_item.dart';
+import 'package:heidi/src/presentation/main/home/product_detail/booking/cubit/booking_cubit.dart';
+import 'package:heidi/src/presentation/main/home/product_detail/booking/cubit/booking_state.dart';
+import 'package:heidi/src/presentation/widget/app_appointment_success.dart';
 import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/presentation/widget/app_number_picker.dart';
 import 'package:heidi/src/presentation/widget/app_picker_item.dart';
@@ -10,7 +14,7 @@ import 'package:heidi/src/utils/translate.dart';
 import 'package:heidi/src/utils/validate.dart';
 import 'package:intl/intl.dart';
 
-class BookingScreen extends StatefulWidget {
+class BookingScreen extends StatelessWidget {
   final String listingTitle;
 
   const BookingScreen({
@@ -19,10 +23,48 @@ class BookingScreen extends StatefulWidget {
   });
 
   @override
-  State<BookingScreen> createState() => _BookingScreenState();
+  Widget build(BuildContext context) {
+    return BlocConsumer<BookingCubit, BookingState>(
+      listener: (context, state) {},
+      builder: (context, state) => state.maybeWhen(
+        loading: () => const BookingDetailsLoading(),
+        loaded: (availableSlots, services) => BookingDetailsLoaded(
+          listingTitle: listingTitle,
+          availableSlots: availableSlots,
+          services: services,
+        ),
+        orElse: () => ErrorWidget('Failed to load Accounts.'),
+      ),
+    );
+  }
 }
 
-class _BookingScreenState extends State<BookingScreen> {
+class BookingDetailsLoading extends StatelessWidget {
+  const BookingDetailsLoading({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
+
+class BookingDetailsLoaded extends StatefulWidget {
+  final String listingTitle;
+  final Map<String, int> availableSlots;
+  final List<String> services;
+
+  const BookingDetailsLoaded({
+    super.key,
+    required this.listingTitle,
+    required this.availableSlots,
+    required this.services,
+  });
+
+  @override
+  State<BookingDetailsLoaded> createState() => _BookingScreenState();
+}
+
+class _BookingScreenState extends State<BookingDetailsLoaded> {
   final List<TextEditingController> _textFistNameController = [];
   final List<TextEditingController> _textLastNameController = [];
   final List<TextEditingController> _textPhoneController = [];
@@ -49,6 +91,19 @@ class _BookingScreenState extends State<BookingScreen> {
   String selectedDate = '';
   int adults = 1;
   String selectedTime = '';
+  String? _selectedService = '';
+  final List<String> _selectedTimeSlots = [];
+
+  final Map<String, int> _availableSlots = {};
+  final List<String> services = [];
+
+  @override
+  void initState() {
+    _selectedService = widget.services.first;
+    _availableSlots.addAll(widget.availableSlots);
+    services.addAll(widget.services);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +140,11 @@ class _BookingScreenState extends State<BookingScreen> {
         icon: Icons.contact_mail_outlined,
       ),
       StepModel(
-        title: Translate.of(context).translate('completed'),
+        title: Translate.of(context).translate('summary'),
+        icon: Icons.contact_mail_outlined,
+      ),
+      StepModel(
+        title: Translate.of(context).translate('finish'),
         icon: Icons.check,
       )
     ];
@@ -128,7 +187,9 @@ class _BookingScreenState extends State<BookingScreen> {
       case 1:
         return _buildContact();
       case 2:
-        return _buildCompleted();
+        return _buildSummary();
+      case 3:
+        return const AppointmentSuccess();
       default:
         return Container();
     }
@@ -188,21 +249,41 @@ class _BookingScreenState extends State<BookingScreen> {
             children: [
               Expanded(
                 child: AppButton(
-                  Translate.of(context).translate('back'),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
+                  Translate.of(context).translate('previous'),
+                  onPressed: _onPrevious,
                   mainAxisSize: MainAxisSize.max,
                 ),
               ),
               const SizedBox(width: 16),
               Expanded(
                 child: AppButton(
-                  Translate.of(context).translate('my_booking'),
-                  onPressed: () {},
+                  Translate.of(context).translate('next'),
+                  onPressed: () {
+                    _onNext(step: 2);
+                  },
                   mainAxisSize: MainAxisSize.max,
                 ),
               )
+            ],
+          ),
+        );
+      case 3:
+        return Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: 8,
+            horizontal: 16,
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: AppButton(
+                  Translate.of(context).translate('finish'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  mainAxisSize: MainAxisSize.max,
+                ),
+              ),
             ],
           ),
         );
@@ -229,12 +310,6 @@ class _BookingScreenState extends State<BookingScreen> {
             content: Text('Please choose Date'),
           ),
         );
-      } else if (selectedTime == '') {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Please choose Time'),
-          ),
-        );
       } else {
         setState(() {
           _active += 1;
@@ -259,7 +334,6 @@ class _BookingScreenState extends State<BookingScreen> {
         setState(() {
           if (_errorFirstName[i] == null &&
               _errorLastName[i] == null &&
-              _errorPhone[i] == null &&
               _errorEmail[i] == null) {
             isWrongEntry = true;
           } else {
@@ -267,38 +341,70 @@ class _BookingScreenState extends State<BookingScreen> {
           }
         });
       }
-
       if (isWrongEntry) {
         setState(() {
           _active += 1;
         });
       }
     } else if (step == 2) {
-      // _onOrder(form);
+      setState(() {
+        _active += 1;
+      });
     }
   }
 
   Widget _buildDetail() {
     return Column(
       children: [
-        AppPickerItem(
-          leading: Icon(
-            Icons.calendar_today_outlined,
-            color: Theme.of(context).hintColor,
+        Container(
+          width: MediaQuery.of(context).size.width * 0.9,
+          decoration: BoxDecoration(
+            color: Theme.of(context).dividerColor.withOpacity(.07),
+            borderRadius: BorderRadius.circular(10),
           ),
-          value: selectedDate,
-          title: Translate.of(context).translate('date'),
-          onPressed: _onDatePicker,
-        ),
-        const SizedBox(height: 20),
-        AppPickerItem(
-          leading: Icon(
-            Icons.more_time,
-            color: Theme.of(context).hintColor,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Padding(
+                padding: EdgeInsets.only(left: 12),
+                child: Icon(Icons.miscellaneous_services, color: Colors.white),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    value: _selectedService,
+                    hint: const Row(
+                      children: [
+                        Text('Select Service'),
+                      ],
+                    ),
+                    items: services.map((category) {
+                      return DropdownMenuItem(
+                        value: category,
+                        child: Text(
+                          overflow: TextOverflow.ellipsis,
+                          category,
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (String? value) {
+                      setState(() {
+                        _selectedService = value;
+                      });
+                    },
+                    elevation: 16,
+                    style: const TextStyle(color: Colors.white, fontSize: 18),
+                    icon: const Padding(
+                      padding: EdgeInsets.only(right: 8),
+                      child: Icon(Icons.arrow_drop_down, color: Colors.white),
+                    ),
+                    iconSize: 26,
+                  ),
+                ),
+              ),
+            ],
           ),
-          value: selectedTime,
-          title: Translate.of(context).translate('time'),
-          onPressed: _onTimePicker,
         ),
         const SizedBox(height: 20),
         AppPickerItem(
@@ -312,13 +418,123 @@ class _BookingScreenState extends State<BookingScreen> {
             _onPersonPicker(adults, (value) {
               setState(() {
                 adults = value;
+                _selectedTimeSlots.clear();
+                _availableSlots.clear();
+                _availableSlots.addAll(widget.availableSlots);
               });
             });
           },
         ),
-        const SizedBox(width: 16),
+        const SizedBox(height: 20),
+        AppPickerItem(
+          leading: Icon(
+            Icons.calendar_today_outlined,
+            color: Theme.of(context).hintColor,
+          ),
+          value: selectedDate,
+          title: Translate.of(context).translate('date'),
+          onPressed: _onDatePicker,
+        ),
+        const SizedBox(height: 20),
+        Container(
+          width: MediaQuery.of(context).size.width * 0.9,
+          decoration: BoxDecoration(
+            color: Theme.of(context).dividerColor.withOpacity(.07),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton<String>(
+              value: null,
+              items: _buildDropdownItems(),
+              onChanged: _onTimeSlotSelected,
+              elevation: 16,
+              style: const TextStyle(color: Colors.white, fontSize: 18),
+              hint: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 12),
+                child: Row(
+                  children: [
+                    Icon(Icons.access_time),
+                    SizedBox(width: 8),
+                    Text('Select Time Slot'),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 20),
+        Wrap(
+          spacing: 4.0,
+          children: _selectedTimeSlots
+              .map(
+                (timeSlot) => Chip(
+                  label: Text(timeSlot),
+                  deleteIcon: const Icon(Icons.close),
+                  onDeleted: () {
+                    setState(() {
+                      _selectedTimeSlots.remove(timeSlot);
+                      _availableSlots[timeSlot] =
+                          (_availableSlots[timeSlot] ?? 0) + 1;
+                    });
+                  },
+                ),
+              )
+              .toList(),
+        ),
       ],
     );
+  }
+
+  List<DropdownMenuItem<String>> _buildDropdownItems() {
+    return _availableSlots.keys.map((String timeSlot) {
+      return DropdownMenuItem<String>(
+        value: timeSlot,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(timeSlot),
+            _availableSlots[timeSlot] != null
+                ? Container(
+                    padding: const EdgeInsets.all(4),
+                    child: Text(
+                      'Available No. of Slots: ${_availableSlots[timeSlot]!.toString()}',
+                      style: const TextStyle(color: Colors.white, fontSize: 14),
+                    ),
+                  )
+                : const SizedBox(),
+          ],
+        ),
+      );
+    }).toList();
+  }
+
+  void _onTimeSlotSelected(String? value) {
+    if (value != null) {
+      setState(() {
+        if (_selectedTimeSlots.length < adults) {
+          if (_availableSlots[value] != null && _availableSlots[value]! > 0) {
+            _selectedTimeSlots.add(value);
+            _availableSlots[value] = (_availableSlots[value] ?? 0) - 1;
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content:
+                    Text("There are no more slots left for this time period"),
+                duration: Duration(seconds: 2),
+              ),
+            );
+          }
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                  "You can only select up to $adults time slots for $adults people"),
+              duration: const Duration(seconds: 2), // Optional duration
+            ),
+          );
+        }
+      });
+    }
   }
 
   Widget _buildContact() {
@@ -330,7 +546,12 @@ class _BookingScreenState extends State<BookingScreen> {
           itemCount: adults,
           itemBuilder: (BuildContext context, int index) {
             return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Text(
+                  'USER ${index + 1}:',
+                  style: const TextStyle(color: Colors.grey),
+                ),
                 const SizedBox(height: 16),
                 AppTextInput(
                   hintText: Translate.of(context).translate('input_first_name'),
@@ -375,29 +596,35 @@ class _BookingScreenState extends State<BookingScreen> {
                     );
                   },
                 ),
-                const SizedBox(height: 16),
-                AppTextInput(
-                  hintText: Translate.of(context).translate('input_phone'),
-                  errorText: _errorPhone[index],
-                  controller: _textPhoneController[index],
-                  focusNode: _focusPhone[index],
-                  textInputAction: TextInputAction.next,
-                  keyboardType: TextInputType.phone,
-                  onChanged: (text) {
-                    setState(() {
-                      _errorPhone[index] = UtilValidator.validate(
-                        _textPhoneController[index].text,
-                        type: ValidateType.phone,
+                Visibility(
+                  visible: index < 1,
+                  child: const SizedBox(height: 16),
+                ),
+                Visibility(
+                  visible: index < 1,
+                  child: AppTextInput(
+                    hintText: Translate.of(context).translate('input_phone'),
+                    errorText: _errorPhone[index],
+                    controller: _textPhoneController[index],
+                    focusNode: _focusPhone[index],
+                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.phone,
+                    onChanged: (text) {
+                      setState(() {
+                        _errorPhone[index] = UtilValidator.validate(
+                          _textPhoneController[index].text,
+                          type: ValidateType.phone,
+                        );
+                      });
+                    },
+                    onSubmitted: (text) {
+                      Utils.fieldFocusChange(
+                        context,
+                        _focusPhone[index],
+                        _focusEmail[index],
                       );
-                    });
-                  },
-                  onSubmitted: (text) {
-                    Utils.fieldFocusChange(
-                      context,
-                      _focusPhone[index],
-                      _focusEmail[index],
-                    );
-                  },
+                    },
+                  ),
                 ),
                 const SizedBox(height: 16),
                 AppTextInput(
@@ -422,35 +649,47 @@ class _BookingScreenState extends State<BookingScreen> {
                     );
                   },
                 ),
-                const SizedBox(height: 16),
-                AppTextInput(
-                  hintText: Translate.of(context).translate('input_address'),
-                  errorText: _errorAddress[index],
-                  controller: _textAddressController[index],
-                  focusNode: _focusAddress[index],
-                  textInputAction: TextInputAction.next,
-                  onChanged: (text) {
-                    setState(() {
-                      _errorAddress[index] = UtilValidator.validate(
-                        _textAddressController[index].text,
-                      );
-                    });
-                  },
-                  onSubmitted: (text) {
-                    Utils.fieldFocusChange(
-                      context,
-                      _focusAddress[index],
-                      _focusMessage[index],
-                    );
-                  },
+                Visibility(
+                  visible: index < 1,
+                  child: const SizedBox(height: 16),
                 ),
-                const SizedBox(height: 16),
-                AppTextInput(
-                  maxLines: 6,
-                  hintText: Translate.of(context).translate('input_content'),
-                  controller: _textMessageController[index],
-                  focusNode: _focusMessage[index],
-                  textInputAction: TextInputAction.done,
+                Visibility(
+                  visible: index < 1,
+                  child: AppTextInput(
+                    hintText: Translate.of(context).translate('input_address'),
+                    errorText: _errorAddress[index],
+                    controller: _textAddressController[index],
+                    focusNode: _focusAddress[index],
+                    textInputAction: TextInputAction.next,
+                    onChanged: (text) {
+                      setState(() {
+                        _errorAddress[index] = UtilValidator.validate(
+                          _textAddressController[index].text,
+                        );
+                      });
+                    },
+                    onSubmitted: (text) {
+                      Utils.fieldFocusChange(
+                        context,
+                        _focusAddress[index],
+                        _focusMessage[index],
+                      );
+                    },
+                  ),
+                ),
+                Visibility(
+                  visible: index < 1,
+                  child: const SizedBox(height: 16),
+                ),
+                Visibility(
+                  visible: index < 1,
+                  child: AppTextInput(
+                    maxLines: 6,
+                    hintText: Translate.of(context).translate('input_content'),
+                    controller: _textMessageController[index],
+                    focusNode: _focusMessage[index],
+                    textInputAction: TextInputAction.done,
+                  ),
                 ),
                 const SizedBox(height: 16),
                 const Divider(),
@@ -463,43 +702,35 @@ class _BookingScreenState extends State<BookingScreen> {
     );
   }
 
-  Widget _buildCompleted() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
-        children: [
-          const SizedBox(height: 32),
-          Container(
-            width: 64,
-            height: 64,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            child: const Icon(
-              Icons.check,
-              color: Colors.white,
-              size: 32,
-            ),
-          ),
-          const SizedBox(height: 8),
+  Widget _buildSummary() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          _selectedService!,
+          style: Theme.of(context).textTheme.headlineLarge,
+        ),
+        for (int i = 0; i < adults; i++)
           Text(
-            Translate.of(context).translate('booking_success_title'),
-            style: Theme.of(context)
-                .textTheme
-                .titleLarge!
-                .copyWith(fontWeight: FontWeight.bold),
+            'Client ${i + 1}:\n'
+            'Name: ${_textFistNameController[i].text} ${_textLastNameController[i].text} '
+            '${_textEmailController[i].text.isNotEmpty ? '\nEmail: ${_textEmailController[i].text}' : ''}  '
+            '${_textAddressController[i].text != '' ? '\nAddress: ${_textAddressController[i].text}' : ''} '
+            '${_textPhoneController[i].text != '' ? '\nTelephone: ${_textPhoneController[i].text}' : ''}'
+            '${_textMessageController[i].text != '' ? '\nDescription: ${_textMessageController[i].text}' : ''} \n',
+            style: const TextStyle(
+                fontWeight: FontWeight.bold), // Apply bold style
           ),
-          const SizedBox(height: 8),
+        Text(
+          'Appointment Date: $selectedDate',
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        for (final slots in _selectedTimeSlots)
           Text(
-            Translate.of(context).translate(
-              'booking_success_message',
-            ),
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodyMedium,
-          )
-        ],
-      ),
+            'Appointment Slots $slots,',
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+      ],
     );
   }
 
@@ -515,20 +746,6 @@ class _BookingScreenState extends State<BookingScreen> {
       setState(() {
         String formattedDate = DateFormat('dd.MM.yyyy').format(result);
         selectedDate = formattedDate;
-      });
-    }
-  }
-
-  void _onTimePicker() async {
-    final result = await showTimePicker(
-      initialTime: TimeOfDay.now(),
-      context: context,
-    );
-
-    if (result != null) {
-      setState(() {
-        selectedTime =
-            '${result.hour.toString().padLeft(2, '0')}:${result.minute.toString().padLeft(2, '0')}';
       });
     }
   }

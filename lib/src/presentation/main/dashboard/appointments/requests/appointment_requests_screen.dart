@@ -2,20 +2,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/presentation/main/dashboard/appointments/my_appointments/cubit/my_appointments_cubit.dart';
-import 'package:heidi/src/presentation/main/dashboard/appointments/my_appointments/cubit/my_appointments_state.dart';
+import 'package:heidi/src/presentation/main/dashboard/appointments/requests/cubit/appointment_requests_cubit.dart';
+import 'package:heidi/src/presentation/main/dashboard/appointments/requests/cubit/appointment_requests_state.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
-import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
-class MyAppointmentsScreen extends StatelessWidget {
-  const MyAppointmentsScreen({super.key});
+class AppointmentRequestsScreen extends StatelessWidget {
+  const AppointmentRequestsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MyAppointmentsCubit, MyAppointmentsState>(
+    return BlocBuilder<AppointmentRequestsCubit, AppointmentRequestsState>(
         builder: (context, state) => state.maybeWhen(
-            loading: () => const MyAppointmentsLoading(),
-            loaded: (appointments, isRefreshLoader) => MyAppointmentsLoaded(
+            loading: () => const AppointmentRequestsLoading(),
+            loaded: (appointments, isRefreshLoader) =>
+                AppointmentRequestsLoaded(
                   isRefreshLoader: isRefreshLoader,
                   appointments: appointments,
                 ),
@@ -23,8 +24,8 @@ class MyAppointmentsScreen extends StatelessWidget {
   }
 }
 
-class MyAppointmentsLoading extends StatelessWidget {
-  const MyAppointmentsLoading({super.key});
+class AppointmentRequestsLoading extends StatelessWidget {
+  const AppointmentRequestsLoading({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -39,18 +40,19 @@ class MyAppointmentsLoading extends StatelessWidget {
   }
 }
 
-class MyAppointmentsLoaded extends StatefulWidget {
+class AppointmentRequestsLoaded extends StatefulWidget {
   final List<String> appointments;
   final bool isRefreshLoader;
 
-  const MyAppointmentsLoaded(
+  const AppointmentRequestsLoaded(
       {required this.isRefreshLoader, required this.appointments, super.key});
 
   @override
-  State<MyAppointmentsLoaded> createState() => _MyAppointmentsLoadedState();
+  State<AppointmentRequestsLoaded> createState() =>
+      _MyAppointmentsLoadedState();
 }
 
-class _MyAppointmentsLoadedState extends State<MyAppointmentsLoaded> {
+class _MyAppointmentsLoadedState extends State<AppointmentRequestsLoaded> {
   final _scrollController = ScrollController(initialScrollOffset: 0.0);
   List<String> appointments = [];
 
@@ -91,8 +93,7 @@ class _MyAppointmentsLoadedState extends State<MyAppointmentsLoaded> {
                             padding: const EdgeInsets.only(top: 12),
                             child: InkWell(
                               onTap: () {
-                                Navigator.pushNamed(
-                                    context, Routes.appointmentDetails);
+                                //Go to appointment
                               },
                               child: Container(
                                 padding:
@@ -105,13 +106,12 @@ class _MyAppointmentsLoadedState extends State<MyAppointmentsLoaded> {
                                           borderRadius:
                                               BorderRadius.circular(12),
                                           child: Image.network(
-                                            "https://smrauf1heidi.obs.eu-de.otc.t-systems.com/admin/ProfilePicture.png",
+                                            "https://heimat-digital.com/wp-content/uploads/2023/02/1674120769077.jpeg",
                                             width: 120,
                                             height: 140,
                                             fit: BoxFit.cover,
                                             errorBuilder:
                                                 (context, error, stackTrace) {
-                                              // Handle errors here
                                               return AppPlaceholder(
                                                 child: Container(
                                                   decoration: BoxDecoration(
@@ -163,7 +163,7 @@ class _MyAppointmentsLoadedState extends State<MyAppointmentsLoaded> {
                                                           FontWeight.bold,
                                                     ),
                                               ),
-                                              Text("Haircut",
+                                              Text("category",
                                                   style: Theme.of(context)
                                                       .textTheme
                                                       .bodySmall!
@@ -171,7 +171,7 @@ class _MyAppointmentsLoadedState extends State<MyAppointmentsLoaded> {
                                                         fontWeight:
                                                             FontWeight.bold,
                                                       )),
-                                              Text("12.01.2024",
+                                              Text("date",
                                                   style: Theme.of(context)
                                                       .textTheme
                                                       .bodySmall!)
@@ -197,26 +197,12 @@ class _MyAppointmentsLoadedState extends State<MyAppointmentsLoaded> {
                                                 });
                                               }
                                             }
-
                                             if (!mounted) return;
-
-                                            if (choice ==
-                                                Translate.of(context).translate(
-                                                    'edit_appointments')) {
-                                              if (!mounted) return;
-                                              Navigator.pushNamed(
-                                                context,
-                                                Routes.booking,
-                                                arguments: appointments[index],
-                                              );
-                                            }
                                           },
                                           itemBuilder: (BuildContext context) {
                                             return {
                                               Translate.of(context).translate(
                                                   'delete_appointments'),
-                                              Translate.of(context).translate(
-                                                  'edit_appointments')
                                             }.map((String choice) {
                                               return PopupMenuItem<String>(
                                                 value: choice,
@@ -263,40 +249,71 @@ class _MyAppointmentsLoadedState extends State<MyAppointmentsLoaded> {
   }
 
   Future<bool> showRemoveAppointmentPopup(BuildContext context) async {
+    String deleteReason = '';
+    bool isButtonEnabled = false;
+
     final result = await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(
-            Translate.of(context).translate('delete_appointment'),
-          ),
-          content: Text(
-            Translate.of(context)
-                .translate('Are you sure you want to delete appointment'),
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(false); // Close the dialog
-              },
-              child: Text(
-                Translate.of(context).translate('no'),
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return AlertDialog(
+              title: Text(
+                Translate.of(context).translate('delete_appointments'),
               ),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
-              child: Text(
-                Translate.of(context).translate('yes'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    Translate.of(context).translate(
+                        'Are you sure you want to delete appointment'),
+                  ),
+                  const SizedBox(height: 20),
+                  TextField(
+                    onChanged: (value) {
+                      setState(() {
+                        deleteReason = value;
+                        isButtonEnabled = value.isNotEmpty;
+                      });
+                    },
+                    maxLines: 3,
+                    decoration: const InputDecoration(
+                      hintText: 'Enter reason for deletion...',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(false); // Close the dialog
+                  },
+                  child: Text(
+                    Translate.of(context).translate('no'),
+                  ),
+                ),
+                TextButton(
+                  onPressed: isButtonEnabled
+                      ? () {
+                          Navigator.of(context)
+                              .pop({'confirmed': true, 'reason': deleteReason});
+                        }
+                      : null,
+                  child: Text(
+                    Translate.of(context).translate('yes'),
+                  ),
+                ),
+              ],
+            );
+          },
         );
       },
     );
 
-    if (result) {
+    if (result != null && result['confirmed']) {
+      // print('Reason for deletion: ${result['reason']}');
       return true;
     } else {
       return false;

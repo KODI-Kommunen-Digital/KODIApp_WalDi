@@ -30,13 +30,13 @@ class _AppNumberPickerState extends State<AppNumberPicker> {
     return SafeArea(
       child: Container(
         constraints: BoxConstraints(
-          maxHeight: MediaQuery.of(context).size.height * 0.8,
+          maxHeight: MediaQuery.of(context).size.height * 0.5,
         ),
         child: IntrinsicHeight(
           child: Stack(
             children: [
               Container(
-                padding: const EdgeInsets.only(bottom: 8),
+                padding: const EdgeInsets.fromLTRB(20,20,20,20,),
                 child: Column(
                   children: [
                     Container(
@@ -50,7 +50,7 @@ class _AppNumberPickerState extends State<AppNumberPicker> {
                         color: Theme.of(context).dividerColor,
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 36),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -64,8 +64,8 @@ class _AppNumberPickerState extends State<AppNumberPicker> {
                           },
                           borderRadius: BorderRadius.circular(12),
                           child: Container(
-                            width: 24,
-                            height: 24,
+                            width: 40,
+                            height: 40,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               color: Theme.of(context).dividerColor,
@@ -73,6 +73,7 @@ class _AppNumberPickerState extends State<AppNumberPicker> {
                             child: const Icon(
                               Icons.remove_circle_outline,
                               color: Colors.white,
+                              size: 40,
                             ),
                           ),
                         ),
@@ -84,6 +85,7 @@ class _AppNumberPickerState extends State<AppNumberPicker> {
                               .headlineSmall
                               ?.copyWith(
                                 fontWeight: FontWeight.bold,
+                            fontSize: 30
                               ),
                         ),
                         const SizedBox(width: 16),
@@ -95,8 +97,8 @@ class _AppNumberPickerState extends State<AppNumberPicker> {
                           },
                           borderRadius: BorderRadius.circular(12),
                           child: Container(
-                            width: 24,
-                            height: 24,
+                            width: 40,
+                            height: 40,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               color: Theme.of(context).colorScheme.primary,
@@ -104,6 +106,7 @@ class _AppNumberPickerState extends State<AppNumberPicker> {
                             child: const Icon(
                               Icons.add_circle_outline,
                               color: Colors.white,
+                              size: 40,
                             ),
                           ),
                         ),

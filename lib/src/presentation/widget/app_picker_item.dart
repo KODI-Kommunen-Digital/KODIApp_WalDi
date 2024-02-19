@@ -55,7 +55,7 @@ class AppPickerItem extends StatelessWidget {
           width: 16,
           height: 16,
           child: CircularProgressIndicator.adaptive(
-            strokeWidth: 1.5,
+            strokeWidth: 1.0,
           ),
         ),
       );
@@ -79,7 +79,7 @@ class AppPickerItem extends StatelessWidget {
         height: 48,
         decoration: BoxDecoration(
           color: Theme.of(context).dividerColor.withOpacity(.07),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
           children: [

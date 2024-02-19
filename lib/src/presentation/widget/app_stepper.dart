@@ -67,7 +67,7 @@ class AppStepper extends StatelessWidget {
                         child: Icon(
                           item.icon,
                           color: iconColor,
-                          size: 14,
+                          size: 12,
                         ),
                       ),
                       Expanded(
