@@ -798,6 +798,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
       );
     }
 
+
+
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -826,6 +828,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
                   }
                 },
                 onChange: (result) {
+
+                  print('hello 0000');
                   if (result.isNotEmpty) {
                     setState(() {
                       selectedImages?.clear();

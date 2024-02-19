@@ -1,3 +1,6 @@
+import 'dart:html';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:heidi/src/utils/configs/image.dart';
 import 'package:heidi/src/utils/translate.dart';
@@ -24,10 +27,12 @@ class _MitredenWebviewState extends State<MitredenWebview> {
 
   @override
   Widget build(BuildContext context) {
+
     return SafeArea(
       child: Scaffold(
-        body: Stack(children: [
-          InAppWebView(
+        body: Stack(
+            children: [
+              InAppWebView(
             initialUrlRequest: URLRequest(url: Uri.parse(widget.link)),
             onWebViewCreated: (InAppWebViewController controller) {
               webViewController = controller;
@@ -35,6 +40,7 @@ class _MitredenWebviewState extends State<MitredenWebview> {
             onProgressChanged:
                 (InAppWebViewController controller, int progress) {
               if (progress == 100) {
+               
                 setState(() {
                   isLoading = false;
                 });

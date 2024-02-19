@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/foundation.dart';
 import 'dart:io';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_product.dart';
@@ -10,6 +11,8 @@ import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/utils/configs/image.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'home_state.dart';
+import 'dart:io' show InternetAddress;
+
 
 class HomeCubit extends Cubit<HomeState> {
   dynamic category;
@@ -190,14 +193,24 @@ class HomeCubit extends Cubit<HomeState> {
     prefs.setKeyValue(Preferences.cityId, cityId);
   }
 
+
   Future<bool> hasInternet() async {
-    try {
-      final result = await InternetAddress.lookup('dns.google');
-      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+    if (!kIsWeb) {
+      if (Platform.isAndroid || Platform.isIOS) {
+        try {
+          final result = await InternetAddress.lookup('dns.google');
+          if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+            return true;
+          }
+        } catch (_) {
+          return false;
+        }
+      }
+    } else {
+      if (kIsWeb) {
+        // For web platform, directly check if the browser is online
         return true;
       }
-    } on SocketException catch (_) {
-      return false;
     }
     return false;
   }

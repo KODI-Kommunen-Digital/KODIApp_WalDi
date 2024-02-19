@@ -1,10 +1,11 @@
 // ignore_for_file: unused_local_variable
 
 import 'dart:io';
-
+import 'dart:html' as html;
 import 'package:device_info/device_info.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -58,6 +59,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
   List<File> selectedFiles = [];
   List<Asset> selectedAssets = [];
   String? image;
+
 
   @override
   void initState() {
@@ -113,7 +115,8 @@ class _AppUploadImageState extends State<AppUploadImage> {
           ? _uploadImage
           : selectedAssets.length > 1
               ? selectImages
-              : showChooseFileTypeDialog,
+              : kIsWeb ? _uploadForWebImage :
+              showChooseFileTypeDialog,
       child: Stack(
         children: [
           DottedBorder(
@@ -161,6 +164,71 @@ class _AppUploadImageState extends State<AppUploadImage> {
     );
   }
 
+  Future<void> _uploadForWebImage() async {
+    if (showAction) {
+      setState(() {
+        showAction = false;
+      });
+      return;
+    }
+
+    try {
+      final html.FileUploadInputElement uploadInput = html.FileUploadInputElement();
+      uploadInput.click();
+
+      uploadInput.onChange.listen((e) async {
+        final files = uploadInput.files;
+        if (files != null && files.isNotEmpty) {
+          final file = files[0];
+
+          // Read the file as data URL
+          final reader = html.FileReader();
+          reader.readAsDataUrl(file);
+
+          await reader.onLoad.first; // Wait for the file to be read
+
+          // Get the data URL result
+          final dataUrl = reader.result as String?;
+
+          if (dataUrl != null) {
+            // Convert data URL to bytes
+            final byteData = html.Blob([dataUrl]).slice(0, dataUrl.length, 'image/png').slice(0);
+
+            // Create a file from the bytes
+            var _file = html.File([byteData], file.name);
+
+            setState(() {
+              isImageUploaded = false;
+              _file = _file;
+            });
+
+            final profile = widget.profile;
+
+            if (!profile) {
+              await ListRepository.uploadImage(_file as File, profile);
+            }
+            if (profile) {
+              final response = await ListRepository.uploadImage(_file as File, profile);
+              if (response != null && response.data['status'] == 'success') {
+                setState(() {
+                  isImageUploaded = true;
+                });
+                final item = response.data['data']?['image'];
+                widget.onChange(item);
+              } else {
+                logError('Image Upload Permission Error', response);
+              }
+            }
+          }
+        }
+      });
+    } catch (e, stackTrace) {
+      logError('Image Upload Permission Error', e);
+      await Sentry.captureException(e, stackTrace: stackTrace);
+    }
+  }
+
+
   Future<void> _uploadImage() async {
     PermissionStatus statusImage;
     if (await Permission.storage.isGranted) {
@@ -175,7 +243,9 @@ class _AppUploadImageState extends State<AppUploadImage> {
           statusImage = await Permission.photos.status;
           statusImage = await Permission.photos.request();
         }
-      } else {
+      }
+
+      else {
         statusImage = await Permission.photos.status;
         statusImage = await Permission.photos.request();
       }
@@ -404,34 +474,72 @@ class _AppUploadImageState extends State<AppUploadImage> {
   }
 
   Widget? _buildContent() {
-    String uniqueKey = UniqueKey().toString();
-    if (image != null && _file == null) {
+    if (image != null) {
       if (image!.contains(".pdf")) {
+        // If the image is a PDF, display it using PDFView
         return SizedBox(
-            width: double.infinity,
-            height: 400,
-            child: RawGestureDetector(
-              gestures: {
-                AllowMultipleGestureRecognizer:
-                    GestureRecognizerFactoryWithHandlers<
-                        AllowMultipleGestureRecognizer>(
+          width: double.infinity,
+          height: 400,
+          child: RawGestureDetector(
+            gestures: {
+              AllowMultipleGestureRecognizer:
+              GestureRecognizerFactoryWithHandlers<
+                  AllowMultipleGestureRecognizer>(
+                    () => AllowMultipleGestureRecognizer(),
+                    (AllowMultipleGestureRecognizer instance) {
+                  instance.onTap = () => showChooseFileTypeDialog();
+                },
+              )
+            },
+            child: const PDF().cachedFromUrl(
+              "${Application.picturesURL}${image!}",
+              placeholder: (progress) => Center(child: Text('$progress %')),
+              errorWidget: (error) => Center(child: Text(error.toString())),
+            ),
+          ),
+        );
+      } else {
+        // If the image is not a PDF, display it as an image
+        return Image.network(
+          "${Application.picturesURL}${image!}",
+          fit: BoxFit.cover,
+        );
+      }
+    } else if (_file != null) {
+      // If there's a file associated with the widget, display it
+      if (_file!.path.contains(".pdf")) {
+        // If the file is a PDF, display it using PDFView
+        return RawGestureDetector(
+          gestures: {
+            AllowMultipleGestureRecognizer:
+            GestureRecognizerFactoryWithHandlers<
+                AllowMultipleGestureRecognizer>(
                   () => AllowMultipleGestureRecognizer(),
                   (AllowMultipleGestureRecognizer instance) {
-                    instance.onTap = () => showChooseFileTypeDialog();
-                  },
-                )
+                instance.onTap = () => showChooseFileTypeDialog();
               },
-              child: const PDF().cachedFromUrl(
-                "${Application.picturesURL}${image!}?cacheKey=$uniqueKey",
-                placeholder: (progress) => Center(child: Text('$progress %')),
-                errorWidget: (error) => Center(child: Text(error.toString())),
-              ),
-            ));
+            )
+          },
+          child: PDFView(
+            key: UniqueKey(),
+            filePath: _file!.path,
+            fitPolicy: FitPolicy.WIDTH,
+            onPageChanged: (page, total) {
+              // Do something when the page changes (optional)
+            },
+          ),
+        );
+      } else {
+        // If the file is not a PDF, display it as an image
+        return Image.file(
+          _file!,
+          fit: BoxFit.cover,
+        );
       }
-    }
-    switch (widget.type) {
-      case UploadImageType.circle:
-        if (_file == null) {
+    } else {
+      // If no image or file is available, display an add icon or placeholder
+      switch (widget.type) {
+        case UploadImageType.circle:
           return Container(
             width: 24,
             height: 24,
@@ -445,33 +553,21 @@ class _AppUploadImageState extends State<AppUploadImage> {
               color: Colors.white,
             ),
           );
-        }
+        default:
+          Widget titleWidget = widget.title != null
+              ? Padding(
+            padding: const EdgeInsets.all(16),
+            child: Text(
+              widget.title!,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          )
+              : Container();
 
-        if (isImageUploaded) {
-          return Icon(
-            Icons.check_circle,
-            size: 18,
-            color: Theme.of(context).primaryColor,
-          );
-        }
-        return Container();
-
-      default:
-        if (_file == null) {
-          Widget title = Container();
-          if (widget.title != null) {
-            title = Padding(
-              padding: const EdgeInsets.all(16),
-              child: Text(
-                widget.title!,
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-            );
-          }
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              title,
+              titleWidget,
               Container(
                 width: 24,
                 height: 24,
@@ -487,64 +583,10 @@ class _AppUploadImageState extends State<AppUploadImage> {
               ),
             ],
           );
-        } else {
-          if (isImageUploaded) {
-            return Container(
-              alignment: Alignment.topRight,
-              child: Icon(
-                Icons.check_circle,
-                size: 18,
-                color: Theme.of(context).primaryColor,
-              ),
-            );
-          }
-          if (_file?.path != null) {
-            if (_file!.path.contains(".pdf")) {
-              return RawGestureDetector(
-                gestures: {
-                  AllowMultipleGestureRecognizer:
-                      GestureRecognizerFactoryWithHandlers<
-                          AllowMultipleGestureRecognizer>(
-                    () => AllowMultipleGestureRecognizer(), //constructor
-                    (AllowMultipleGestureRecognizer instance) {
-                      instance.onTap = () => showChooseFileTypeDialog();
-                    },
-                  )
-                },
-                child: PDFView(
-                  key: UniqueKey(),
-                  filePath: _file?.path,
-                  fitPolicy: FitPolicy.WIDTH,
-                  onPageChanged: (page, total) {
-                    // Do something when the page changes (optional)
-                  },
-                ),
-              );
-            } else {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 24,
-                    height: 24,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                    child: const Icon(
-                      Icons.add,
-                      size: 18,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              );
-            }
-          }
-        }
+      }
     }
-    return null;
   }
+
 
   Future<void> selectImages() async {
     try {

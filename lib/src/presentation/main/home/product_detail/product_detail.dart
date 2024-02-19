@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:html' as html;
 import 'dart:io';
 import 'dart:math' as math;
 import 'package:carousel_slider/carousel_slider.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
+import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_favorite.dart';
@@ -453,7 +455,25 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       ),
     );
     double carouselHeight = 0;
-    if (Platform.isAndroid) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double safeAreaVertical = MediaQuery.of(context).padding.top +
+        MediaQuery.of(context).padding.bottom +
+        kToolbarHeight;
+    double aspectRatio = screenWidth / screenHeight;
+    double maxCarouselHeight = 350;
+    double targetHeightRatioPortrait = 0.35;
+    double targetHeightRatioLandscape = 0.3;
+    if (aspectRatio > 1.0) {
+      carouselHeight =
+          screenHeight * targetHeightRatioLandscape - safeAreaVertical;
+    } else {
+      carouselHeight =
+          screenHeight * targetHeightRatioPortrait - safeAreaVertical;
+    }
+    carouselHeight = math.min(carouselHeight, maxCarouselHeight);
+
+    if (kIsWeb) {
       double screenHeight = MediaQuery.of(context).size.height;
       double screenWidth = MediaQuery.of(context).size.width;
       double safeAreaVertical = MediaQuery.of(context).padding.top +
@@ -471,13 +491,35 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             screenHeight * targetHeightRatioPortrait - safeAreaVertical;
       }
       carouselHeight = math.min(carouselHeight, maxCarouselHeight);
-    } else if (Platform.isIOS) {
+    } else if (Platform.isAndroid) {
+
+
+      double screenHeight = MediaQuery.of(context).size.height;
+      double screenWidth = MediaQuery.of(context).size.width;
+      double safeAreaVertical = MediaQuery.of(context).padding.top +
+          MediaQuery.of(context).padding.bottom +
+          kToolbarHeight;
+      double aspectRatio = screenWidth / screenHeight;
+      double maxCarouselHeight = 350;
+      double targetHeightRatioPortrait = 0.35;
+      double targetHeightRatioLandscape = 0.3;
+      if (aspectRatio > 1.0) {
+        carouselHeight =
+            screenHeight * targetHeightRatioLandscape - safeAreaVertical;
+      } else {
+        carouselHeight =
+            screenHeight * targetHeightRatioPortrait - safeAreaVertical;
+      }
+      carouselHeight = math.min(carouselHeight, maxCarouselHeight);
+    }
+    else if (Platform.isIOS) {
       double screenHeight = MediaQuery.of(context).size.height;
       double safeAreaVertical = MediaQuery.of(context).padding.top +
           MediaQuery.of(context).padding.bottom;
       double targetHeightRatio = 0.35;
       carouselHeight = (screenHeight - safeAreaVertical) * targetHeightRatio;
     }
+
     if (product != null) {
       action = [
         actionGalleries,
@@ -486,104 +528,107 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       banner = product.pdf == ''
           ? InkWell(
               onTap: () {
-                Navigator.pushNamed(context, Routes.imageZoom, arguments: {
-                  'sourceId': product.sourceId,
-                  'imageList': product.imageLists,
-                  'pdf': null,
-                });
+                  Navigator.pushNamed(context, Routes.imageZoom, arguments: {
+                    'sourceId': product.sourceId,
+                    'imageList': product.imageLists,
+                    'pdf': null,
+                  });
+
               },
               child: Column(
                 children: [
-                  Stack(
-                    alignment: Alignment.bottomCenter,
-                    children: [
-                      CarouselSlider(
-                        options: CarouselOptions(
-                          aspectRatio:
-                              1 / MediaQuery.of(context).devicePixelRatio,
-                          height: carouselHeight,
-                          viewportFraction: 1.0,
-                          enlargeCenterPage: false,
-                          enableInfiniteScroll: product.imageLists!.length > 1,
-                          onPageChanged: (index, reason) {
-                            setState(() {
-                              currentImageIndex = index;
-                            });
-                          },
-                        ),
-                        items: product.imageLists?.map((imageUrl) {
-                          return Builder(
-                            builder: (BuildContext context) {
-                              String? imageUrlString = product.sourceId == 2 &&
-                                      imageUrl.logo != null &&
-                                      imageUrl.logo != 'admin/News.jpeg'
-                                  ? imageUrl.logo
-                                  : product.sourceId == 3 &&
-                                          imageUrl.logo != null &&
-                                          imageUrl.logo != 'admin/News.jpeg'
-                                      ? imageUrl.logo
-                                      : "${Application.picturesURL}${imageUrl.logo!.isNotEmpty ? imageUrl.logo : 'admin/News.jpeg'}";
-                              return Container(
-                                width: MediaQuery.of(context).size.width,
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 5.0),
-                                decoration: const BoxDecoration(
-                                  color: Colors.black,
-                                ),
-                                child: Image.network(
-                                  imageUrlString!,
-                                  fit: BoxFit.fitHeight,
-                                  loadingBuilder: (BuildContext context,
-                                      Widget child,
-                                      ImageChunkEvent? loadingProgress) {
-                                    if (loadingProgress == null) {
-                                      return child;
-                                    } else {
-                                      return AppPlaceholder(
-                                        child: Container(
-                                          width: 120,
-                                          height: 140,
-                                          decoration: const BoxDecoration(
-                                            color: Colors.black,
-                                            borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(8),
-                                              bottomLeft: Radius.circular(8),
-                                            ),
-                                          ),
-                                          child: const Icon(Icons.error),
-                                        ),
-                                      );
-                                    }
-                                  },
-                                ),
-                              );
+                  Expanded(
+                    child: Stack(
+                      alignment: Alignment.bottomCenter,
+                      children: [
+                        CarouselSlider(
+                          options: CarouselOptions(
+                            aspectRatio:
+                                1 / MediaQuery.of(context).devicePixelRatio,
+                            height: carouselHeight,
+                            viewportFraction: 1.0,
+                            enlargeCenterPage: false,
+                            enableInfiniteScroll: product.imageLists!.length > 1,
+                            onPageChanged: (index, reason) {
+                              setState(() {
+                                currentImageIndex = index;
+                              });
                             },
-                          );
-                        }).toList(),
-                      ),
-                      if (product.imageLists!.length > 1)
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 10.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: product.imageLists!.map((url) {
-                              int index = product.imageLists!.indexOf(url);
-                              return Container(
-                                width: 10.0,
-                                height: 10.0,
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 2.0),
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: currentImageIndex == index
-                                      ? Colors.blueAccent
-                                      : Colors.grey,
-                                ),
-                              );
-                            }).toList(),
                           ),
+                          items: product.imageLists?.map((imageUrl) {
+                            return Builder(
+                              builder: (BuildContext context) {
+                                String? imageUrlString = product.sourceId == 2 &&
+                                        imageUrl.logo != null &&
+                                        imageUrl.logo != 'admin/News.jpeg'
+                                    ? imageUrl.logo
+                                    : product.sourceId == 3 &&
+                                            imageUrl.logo != null &&
+                                            imageUrl.logo != 'admin/News.jpeg'
+                                        ? imageUrl.logo
+                                        : "${Application.picturesURL}${imageUrl.logo!.isNotEmpty ? imageUrl.logo : 'admin/News.jpeg'}";
+                                return Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  margin:
+                                      const EdgeInsets.symmetric(horizontal: 5.0),
+                                  decoration: const BoxDecoration(
+                                    color: Colors.black,
+                                  ),
+                                  child: Image.network(
+                                    imageUrlString!,
+                                    fit: BoxFit.fitHeight,
+                                    loadingBuilder: (BuildContext context,
+                                        Widget child,
+                                        ImageChunkEvent? loadingProgress) {
+                                      if (loadingProgress == null) {
+                                        return child;
+                                      } else {
+                                        return AppPlaceholder(
+                                          child: Container(
+                                            width: 120,
+                                            height: 140,
+                                            decoration: const BoxDecoration(
+                                              color: Colors.black,
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(8),
+                                                bottomLeft: Radius.circular(8),
+                                              ),
+                                            ),
+                                            child: const Icon(Icons.error),
+                                          ),
+                                        );
+                                      }
+                                    },
+                                  ),
+                                );
+                              },
+                            );
+                          }).toList(),
                         ),
-                    ],
+                        if (product.imageLists!.length > 1)
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 10.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: product.imageLists!.map((url) {
+                                int index = product.imageLists!.indexOf(url);
+                                return Container(
+                                  width: 10.0,
+                                  height: 10.0,
+                                  margin:
+                                      const EdgeInsets.symmetric(horizontal: 2.0),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: currentImageIndex == index
+                                        ? Colors.blueAccent
+                                        : Colors.grey,
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -597,18 +642,29 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   (AllowMultipleGestureRecognizer instance) {
                     instance.onTap = () async {
                       if (!mounted) return;
-                      Navigator.pushNamed(context, Routes.imageZoom,
-                          arguments: {
-                            'sourceId': product.sourceId,
-                            'imageList': product.imageLists,
-                            'pdf':
-                                "${Application.picturesURL}${product.pdf}?cacheKey=$uniqueKey",
-                          });
+                      print('Is Web: $kIsWeb');
+
+                      if(!kIsWeb){
+                        Navigator.pushNamed(context, Routes.imageZoom,
+                            arguments: {
+                              'sourceId': product.sourceId,
+                              'imageList': product.imageLists,
+                              'pdf':
+                                  "${Application.picturesURL}${product.pdf}?cacheKey=$uniqueKey",
+                            });
+                      } else {
+                        html.window.open("${Application.picturesURL}${product.pdf}?cacheKey=$uniqueKey", "");
+                      }
+
+
                     };
                   },
                 )
               },
-              child: const PDF().cachedFromUrl(
+              child: kIsWeb ? Center(child: Text("Preview pdf")) :
+
+
+              const PDF().cachedFromUrl(
                 "${Application.picturesURL}${product.pdf}?cacheKey=$uniqueKey",
                 placeholder: (progress) => Center(child: Text('$progress %')),
                 errorWidget: (error) => Center(child: Text(error.toString())),

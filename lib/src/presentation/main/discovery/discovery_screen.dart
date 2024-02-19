@@ -1,6 +1,10 @@
 // ignore_for_file: use_build_context_synchronously, unused_element
 import 'dart:async';
+import 'dart:html';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_citizen_service.dart';
@@ -11,6 +15,9 @@ import 'package:heidi/src/utils/translate.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'cubit/cubit.dart';
+
+
+
 
 class DiscoveryScreen extends StatefulWidget {
   const DiscoveryScreen({Key? key}) : super(key: key);
@@ -221,7 +228,13 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
     final prefs = await Preferences.openBox();
     if (service.imageLink == "1") {
       String link = await AppBloc.discoveryCubit.getMitredenLink() ?? "";
-      Navigator.of(context).pushNamed(Routes.mitredenWebview, arguments: link);
+      if(kIsWeb){
+        window.open(link, "");
+      } else {
+        Navigator.of(context).pushNamed(Routes.mitredenWebview, arguments: link);
+      }
+
+
     } else if (service.imageLink == "2") {
       await launchUrl(
           Uri.parse(await AppBloc.discoveryCubit.getCityLink() ?? ""),
