@@ -53,6 +53,7 @@ class _MainScreenState extends State<MainScreen> {
     switch (route) {
       case Routes.home:
       case Routes.discovery:
+      case Routes.account:
         return false;
       default:
         return true;

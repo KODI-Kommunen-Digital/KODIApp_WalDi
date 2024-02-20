@@ -69,31 +69,38 @@ class AccountLoaded extends StatefulWidget {
 class _AccountLoadedState extends State<AccountLoaded> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          Translate.of(context).translate('my_account'),
+    return BlocBuilder<UserCubit, UserModel?>(builder: (context, user) {
+      if (user == null) {
+        UtilLogger.log('Null User');
+      }
+      return Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text(
+            Translate.of(context).translate('my_account'),
+          ),
+          actions: [
+            (user != null)
+                ? AppButton(
+                    Translate.of(context).translate('sign_out'),
+                    mainAxisSize: MainAxisSize.max,
+                    onPressed: _onLogout,
+                    type: ButtonType.text,
+                  )
+                : AppButton(
+                    Translate.of(context).translate('sign_in'),
+                    mainAxisSize: MainAxisSize.max,
+                    onPressed: _onLogin,
+                    type: ButtonType.text,
+                  )
+          ],
         ),
-        actions: [
-          AppButton(
-            Translate.of(context).translate('sign_out'),
-            mainAxisSize: MainAxisSize.max,
-            onPressed: _onLogout,
-            type: ButtonType.text,
-          )
-        ],
-      ),
-      body: SafeArea(
-        child: BlocBuilder<UserCubit, UserModel?>(
-          builder: (context, user) {
-            if (user == null) {
-              UtilLogger.log('Null User');
-            }
-            return SingleChildScrollView(
-              child: Column(
-                children: [
-                  const SizedBox(height: 16),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                const SizedBox(height: 16),
+                if (user != null)
                   Container(
                     padding: const EdgeInsets.all(8),
                     margin: const EdgeInsets.symmetric(horizontal: 8),
@@ -124,22 +131,26 @@ class _AccountLoadedState extends State<AccountLoaded> {
                       showDirectionIcon: true,
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  Column(
-                    children: <Widget>[
-                      AppListTitle(
-                        title: Translate.of(context).translate('setting'),
-                        onPressed: () {
-                          _onNavigate(Routes.setting);
-                        },
-                        trailing: RotatedBox(
-                          quarterTurns: AppLanguage.isRTL() ? 2 : 0,
-                          child: const Icon(
-                            Icons.keyboard_arrow_right,
-                            textDirection: TextDirection.ltr,
-                          ),
+                if (user != null) const SizedBox(height: 16),
+                Column(
+                  children: <Widget>[
+                    AppListTitle(
+                      title: Translate.of(context).translate('setting'),
+                      onPressed: () {
+                        Navigator.pushNamed(context, Routes.setting,
+                            arguments: {'user': user}).then((value) {
+                          setState(() {});
+                        });
+                      },
+                      trailing: RotatedBox(
+                        quarterTurns: AppLanguage.isRTL() ? 2 : 0,
+                        child: const Icon(
+                          Icons.keyboard_arrow_right,
+                          textDirection: TextDirection.ltr,
                         ),
                       ),
+                    ),
+                    if (user != null)
                       AppListTitle(
                         title: Translate.of(context).translate('my_listings'),
                         onPressed: () {
@@ -154,6 +165,7 @@ class _AccountLoadedState extends State<AccountLoaded> {
                           ),
                         ),
                       ),
+                    if (user != null)
                       AppListTitle(
                         title: Translate.of(context).translate('dashboard'),
                         onPressed: () {
@@ -168,6 +180,7 @@ class _AccountLoadedState extends State<AccountLoaded> {
                           ),
                         ),
                       ),
+                    if (user != null)
                       AppListTitle(
                         title: Translate.of(context).translate('contact'),
                         onPressed: () {
@@ -181,29 +194,28 @@ class _AccountLoadedState extends State<AccountLoaded> {
                           ),
                         ),
                       ),
-                      AppListTitle(
-                        title: Translate.of(context).translate('faq'),
-                        onPressed: () {
-                          _onNavigate(Routes.faq);
-                        },
-                        trailing: RotatedBox(
-                          quarterTurns: AppLanguage.isRTL() ? 2 : 0,
-                          child: const Icon(
-                            Icons.keyboard_arrow_right,
-                            textDirection: TextDirection.ltr,
-                          ),
+                    AppListTitle(
+                      title: Translate.of(context).translate('faq'),
+                      onPressed: () {
+                        _onNavigate(Routes.faq);
+                      },
+                      trailing: RotatedBox(
+                        quarterTurns: AppLanguage.isRTL() ? 2 : 0,
+                        child: const Icon(
+                          Icons.keyboard_arrow_right,
+                          textDirection: TextDirection.ltr,
                         ),
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: 4),
-                ],
-              ),
-            );
-          },
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+              ],
+            ),
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   @override
@@ -213,6 +225,10 @@ class _AccountLoadedState extends State<AccountLoaded> {
 
   void _onLogout() async {
     AppBloc.loginCubit.onLogout();
+  }
+
+  void _onLogin() async {
+    Navigator.pushNamed(context, Routes.signIn);
   }
 
   void _onNavigate(String route) {
