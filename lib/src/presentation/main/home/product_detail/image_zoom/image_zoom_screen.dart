@@ -53,15 +53,14 @@ class _ImageZoomScreenState extends State<ImageZoomScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           GestureDetector(
-                            onTap: () {
-                              // Handle tap gestures if needed
-                            },
+                            onTap: () {},
                             child: CarouselSlider(
                               options: CarouselOptions(
                                 height: 550.0,
                                 viewportFraction: 1.0,
                                 enlargeCenterPage: false,
-                                enableInfiniteScroll: widget.imageList!.length > 1,
+                                enableInfiniteScroll:
+                                    widget.imageList!.length > 1,
                                 onPageChanged: (index, reason) {
                                   setState(() {
                                     currentImageIndex = index;
@@ -69,43 +68,55 @@ class _ImageZoomScreenState extends State<ImageZoomScreen> {
                                 },
                               ),
                               items: widget.imageList?.map((imageItem) {
-                                return Builder(
-                                  builder: (BuildContext context) {
-                                    String imageUrlString = widget.sourceId == 2 &&
-                                        imageItem.logo != null &&
-                                        imageItem.logo != 'admin/News.jpeg'
-                                        ? imageItem.logo!
-                                        : widget.sourceId == 3 &&
-                                        imageItem.logo != null &&
-                                        imageItem.logo != "" &&
-                                        imageItem.logo != 'admin/News.jpeg'
-                                        ? imageItem.logo!
-                                        : "${Application.picturesURL}${imageItem.logo!.isNotEmpty ? imageItem.logo : 'admin/News.jpeg'}";
-                                    return Container(
-                                      width: MediaQuery.of(context).size.width,
-                                      margin: const EdgeInsets.symmetric(horizontal: 5.0),
-                                      decoration: const BoxDecoration(
-                                        color: Colors.black,
-                                      ),
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          // Handle tap gestures if needed
-                                        },
-                                        child: PhotoView(
-                                          imageProvider: NetworkImage(imageUrlString),
-                                          minScale: PhotoViewComputedScale.contained,
-                                          maxScale: PhotoViewComputedScale.covered * 2,
-                                          initialScale: PhotoViewComputedScale.contained,
-                                          heroAttributes: PhotoViewHeroAttributes(tag: imageUrlString),
-                                        ),
-                                      ),
+                                    return Builder(
+                                      builder: (BuildContext context) {
+                                        String imageUrlString = widget
+                                                        .sourceId ==
+                                                    2 &&
+                                                imageItem.logo != null &&
+                                                imageItem.logo !=
+                                                    'admin/News.jpeg'
+                                            ? imageItem.logo!
+                                            : widget.sourceId == 3 &&
+                                                    imageItem.logo != null &&
+                                                    imageItem.logo != "" &&
+                                                    imageItem.logo !=
+                                                        'admin/News.jpeg'
+                                                ? imageItem.logo!
+                                                : "${Application.picturesURL}${imageItem.logo!.isNotEmpty ? imageItem.logo : 'admin/News.jpeg'}";
+                                        return Container(
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          margin: const EdgeInsets.symmetric(
+                                              horizontal: 5.0),
+                                          decoration: const BoxDecoration(
+                                            color: Colors.black,
+                                          ),
+                                          child: GestureDetector(
+                                            onTap: () {},
+                                            child: PhotoView(
+                                              imageProvider:
+                                                  NetworkImage(imageUrlString),
+                                              minScale: PhotoViewComputedScale
+                                                  .contained,
+                                              maxScale: PhotoViewComputedScale
+                                                      .covered *
+                                                  2,
+                                              initialScale:
+                                                  PhotoViewComputedScale
+                                                      .contained,
+                                              heroAttributes:
+                                                  PhotoViewHeroAttributes(
+                                                      tag: imageUrlString),
+                                            ),
+                                          ),
+                                        );
+                                      },
                                     );
-                                  },
-                                );
-                              }).toList() ?? [],
+                                  }).toList() ??
+                                  [],
                             ),
                           ),
-
                           const SizedBox(
                             height: 10.0,
                           ),

@@ -501,11 +501,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       children: [
                         CarouselSlider(
                           options: CarouselOptions(
-                            aspectRatio: 1 / MediaQuery.of(context).devicePixelRatio,
+                            aspectRatio:
+                                1 / MediaQuery.of(context).devicePixelRatio,
                             height: carouselHeight,
                             viewportFraction: 1.0,
                             enlargeCenterPage: false,
-                            enableInfiniteScroll: product.imageLists!.length > 1,
+                            enableInfiniteScroll:
+                                product.imageLists!.length > 1,
                             onPageChanged: (index, reason) {
                               setState(() {
                                 currentImageIndex = index;
@@ -515,25 +517,33 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           items: product.imageLists?.map((imageUrl) {
                             return Builder(
                               builder: (BuildContext context) {
-                                String? imageUrlString = product.sourceId == 2 &&
-                                    imageUrl.logo != null &&
-                                    imageUrl.logo != 'admin/News.jpeg'
+                                String? imageUrlString = product.sourceId ==
+                                            2 &&
+                                        imageUrl.logo != null &&
+                                        imageUrl.logo != 'admin/News.jpeg'
                                     ? imageUrl.logo
                                     : product.sourceId == 3 &&
-                                    imageUrl.logo != null &&
-                                    imageUrl.logo != 'admin/News.jpeg'
-                                    ? imageUrl.logo
-                                    : "${Application.picturesURL}${imageUrl.logo!.isNotEmpty ? imageUrl.logo : 'admin/News.jpeg'}";
+                                            imageUrl.logo != null
+                                        ? (imageUrl.logo!.startsWith('admin')
+                                            ? "${Application.picturesURL}${imageUrl.logo}"
+                                            : imageUrl.logo)
+                                        : imageUrl.logo != null &&
+                                                imageUrl.logo!
+                                                    .startsWith('admin')
+                                            ? "${Application.picturesURL}${imageUrl.logo}"
+                                            : "${Application.picturesURL}${imageUrl.logo}";
                                 return Container(
                                   width: MediaQuery.of(context).size.width,
-                                  margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                                  margin: const EdgeInsets.symmetric(
+                                      horizontal: 5.0),
                                   decoration: const BoxDecoration(
                                     color: Colors.black,
                                   ),
                                   child: Image.network(
                                     imageUrlString!,
                                     fit: BoxFit.fitHeight,
-                                    loadingBuilder: (BuildContext context, Widget child,
+                                    loadingBuilder: (BuildContext context,
+                                        Widget child,
                                         ImageChunkEvent? loadingProgress) {
                                       if (loadingProgress == null) {
                                         return child;
@@ -570,7 +580,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 return Container(
                                   width: 10.0,
                                   height: 10.0,
-                                  margin: const EdgeInsets.symmetric(horizontal: 2.0),
+                                  margin: const EdgeInsets.symmetric(
+                                      horizontal: 2.0),
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     color: currentImageIndex == index
@@ -586,8 +597,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   ),
                 ],
               ),
-
-      )
+            )
           : RawGestureDetector(
               gestures: {
                 AllowMultipleGestureRecognizer:
@@ -1054,25 +1064,28 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   final productUserId = await context
                       .read<ProductDetailCubit>()
                       .getUserDetails(widget.item.userId, widget.item.cityId);
-
-                  if (productUserId?.id == loggedInUserId) {
-                    if (!mounted) return;
-                    Navigator.pushNamed(context, Routes.profile,
-                            arguments: {'user': userDetail, 'editable': true})
-                        .then((value) {
-                      setState(() {});
-                    });
-                  } else {
-                    if (!mounted) return;
-                    Navigator.pushNamed(context, Routes.profile,
-                            arguments: {'user': userDetail, 'editable': false})
-                        .then((value) {
-                      setState(() {});
-                    });
+                  if (product.sourceId != 2 && product.sourceId != 3) {
+                    if (productUserId?.id == loggedInUserId) {
+                      if (!mounted) return;
+                      Navigator.pushNamed(context, Routes.profile,
+                              arguments: {'user': userDetail, 'editable': true})
+                          .then((value) {
+                        setState(() {});
+                      });
+                    } else {
+                      if (!mounted) return;
+                      Navigator.pushNamed(context, Routes.profile, arguments: {
+                        'user': userDetail,
+                        'editable': false
+                      }).then((value) {
+                        setState(() {});
+                      });
+                    }
                   }
                 },
                 type: UserViewType.information,
-                showDirectionIcon: true,
+                showDirectionIcon:
+                    product.sourceId != 2 && product.sourceId != 3,
               ),
             ),
             const SizedBox(height: 16),
