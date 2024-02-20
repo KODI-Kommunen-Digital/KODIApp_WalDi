@@ -68,7 +68,9 @@ class _SettingsScreenState extends State<SettingsScreen>
             ),
             actions: <Widget>[
               TextButton(
-                child: const Text('Cancel'),
+                child: Text(
+                  Translate.of(context).translate('cancel'),
+                ),
                 onPressed: () => Navigator.of(context).pop(),
               ),
               TextButton(
