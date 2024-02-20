@@ -11,14 +11,14 @@ Future<void> handleBackgroundMessage(RemoteMessage? message) async {}
 class FirebaseApi {
   final _firebaseMessaging = FirebaseMessaging.instance;
   final GlobalKey<NavigatorState> navigatorKey;
+  final Preferences prefs;
 
-  FirebaseApi(this.navigatorKey);
+  FirebaseApi(this.navigatorKey, this.prefs);
 
-  Future<void> handleMessage(RemoteMessage? message) async {
+  Future<void> handleMessageOnUserInteraction(RemoteMessage? message) async {
     if (message != null) {
       final item = await ListRepository.loadProduct(
           int.parse(message.data["cityId"]), int.parse(message.data["id"]));
-      //Error, data not properly converted in routes
       if (item != null) {
         navigatorKey.currentState
             ?.pushNamed(Routes.productDetail, arguments: item);
@@ -26,43 +26,38 @@ class FirebaseApi {
     }
   }
 
-  /*
-  static Future<void> sendPushNotification(
-      String notificationTitle, String notificationBody) async {
-    try {
-      final body = {
-        "to": "/topics/warnings",
-        "notification": {
-          "title": notificationTitle, //our name should be send
-          "body": notificationBody,
-        },
-        /*
-        "data": {
-          "route":
-        }*/
-      };
-
-      var url = Uri.parse("https://fcm.googleapis.com/fcm/send");
-      var response = await post(url,
-          headers: {
-            HttpHeaders.contentTypeHeader: "application/json",
-            HttpHeaders.authorizationHeader:
-                "key=AAAAmbJzFR8:APA91bEck_SIniItJ8pj6giDIqKOS8v-qv0Q0V0tNSzo_-0j_j21u5lo-hLMAg2V5_I0CUvhaEQfXi8hZ9HTul04bvvg69PWs3NpwXi0JlY71NAIAhz9bBX31658TaL4YvSHEP0lC7Y8"
-          },
-          body: jsonEncode(body));
-
-      logError(response.statusCode);
-    } catch (e) {
-      logError("Failed to send notification");
-    }
+  Future<void> handleForegroundNotification(RemoteMessage message) async {
+    logInfo(
+        "Notification received in foreground: ${message.notification?.title}");
   }
-*/
 
   Future<void> initNotifications() async {
-    await _firebaseMessaging.requestPermission();
-    await _firebaseMessaging.subscribeToTopic("warnings");
-    int uId = await getLoggedUserId();
+    NotificationSettings settings = await _firebaseMessaging.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+      provisional: false,
+    );
 
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      prefs.setKeyValue(Preferences.pushNotificationsPermission, "authorized");
+    } else if (settings.authorizationStatus == AuthorizationStatus.denied) {
+      prefs.setKeyValue(Preferences.pushNotificationsPermission, "denied");
+    }
+
+    final pushNotificationsPermission =
+        await prefs.getKeyValue(Preferences.pushNotificationsPermission, "0");
+    final receiveNotification =
+        await prefs.getKeyValue(Preferences.receiveNotification, "true");
+
+    if (pushNotificationsPermission == "authorized" &&
+        receiveNotification == "true") {
+      await _firebaseMessaging.subscribeToTopic("warnings");
+    } else {
+      await _firebaseMessaging.unsubscribeFromTopic("warnings");
+    }
+
+    int uId = await getLoggedUserId();
     if (uId > 0) {
       String? token = await FirebaseMessaging.instance.getToken();
       if (token != null) uploadToken(uId, token);
@@ -72,9 +67,24 @@ class FirebaseApi {
         .setForegroundNotificationPresentationOptions(
             alert: true, badge: true, sound: true);
 
-    _firebaseMessaging.getInitialMessage().then(handleMessage);
-    FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
+    _firebaseMessaging.getInitialMessage().then(handleMessageOnUserInteraction);
+    FirebaseMessaging.onMessage.listen(handleForegroundNotification);
+    FirebaseMessaging.onMessageOpenedApp.listen(handleMessageOnUserInteraction);
     FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
+  }
+
+  Future<void> refreshNotifications() async {
+    final pushNotificationsPermission =
+        await prefs.getKeyValue(Preferences.pushNotificationsPermission, "0");
+    final receiveNotification =
+        await prefs.getKeyValue(Preferences.receiveNotification, "true");
+
+    if (pushNotificationsPermission == "authorized" &&
+        receiveNotification == "true") {
+      await _firebaseMessaging.subscribeToTopic("warnings");
+    } else {
+      await _firebaseMessaging.unsubscribeFromTopic("warnings");
+    }
   }
 
   Future<void> uploadToken(int userId, String token) async {

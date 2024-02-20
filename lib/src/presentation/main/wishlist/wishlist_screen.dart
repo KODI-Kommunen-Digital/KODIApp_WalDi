@@ -269,6 +269,7 @@ class _WishListLoadedState extends State<WishListLoaded> {
         address: favoritesList.address,
         phone: favoritesList.phone ?? '',
         website: favoritesList.website ?? '',
+        externalId: favoritesList.externalId ?? '',
         email: favoritesList.email ?? '',
         favorite: true,
         cityId: favoritesList.cityId ?? 0,

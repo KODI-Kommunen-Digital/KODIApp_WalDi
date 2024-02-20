@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, unnecessary_null_comparison
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -240,149 +240,81 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                       children: [
                                         Row(
                                           children: <Widget>[
-                                            item.pdf == ''
-                                                ? ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            12),
-                                                    child: CachedNetworkImage(
-                                                      imageUrl: item.sourceId ==
-                                                                  2 ||
-                                                              item.sourceId == 3
-                                                          ? item.image
-                                                          : "${Application.picturesURL}${item.image}",
-                                                      cacheManager:
-                                                          memoryCacheManager,
-                                                      placeholder:
-                                                          (context, url) {
-                                                        return AppPlaceholder(
-                                                          child: Container(
-                                                            width: 120,
-                                                            height: 140,
-                                                            decoration:
-                                                                const BoxDecoration(
-                                                              color:
-                                                                  Colors.white,
-                                                            ),
-                                                          ),
-                                                        );
-                                                      },
-                                                      imageBuilder: (context,
-                                                          imageProvider) {
-                                                        return Container(
-                                                          width: 120,
-                                                          height: 140,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            image:
-                                                                DecorationImage(
-                                                              image:
-                                                                  imageProvider,
-                                                              fit: BoxFit
-                                                                  .fitHeight,
-                                                            ),
-                                                          ),
-                                                        );
-                                                      },
-                                                      errorWidget: (context,
-                                                          url, error) {
-                                                        return AppPlaceholder(
-                                                          child: Container(
-                                                            width: 120,
-                                                            height: 140,
-                                                            decoration:
-                                                                const BoxDecoration(
-                                                              color:
-                                                                  Colors.white,
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .only(
-                                                                topLeft: Radius
-                                                                    .circular(
-                                                                        8),
-                                                                bottomLeft: Radius
-                                                                    .circular(
-                                                                        8),
-                                                              ),
-                                                            ),
-                                                            child: const Icon(
-                                                                Icons.error),
-                                                          ),
-                                                        );
-                                                      },
+                                            ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              child: CachedNetworkImage(
+                                                imageUrl: item.sourceId == 2 &&
+                                                        item.image != null &&
+                                                        item.image !=
+                                                            'admin/News.jpeg'
+                                                    ? item.image
+                                                    : item.sourceId == 3 &&
+                                                            item.image != null
+                                                        ? (item.image
+                                                                .startsWith(
+                                                                    'admin')
+                                                            ? "${Application.picturesURL}${item.image}"
+                                                            : item.image)
+                                                        : item.image != null &&
+                                                                item.image
+                                                                    .startsWith(
+                                                                        'admin')
+                                                            ? "${Application.picturesURL}${item.image}"
+                                                            : "${Application.picturesURL}${item.image}",
+                                                cacheManager:
+                                                    memoryCacheManager,
+                                                placeholder: (context, url) {
+                                                  return AppPlaceholder(
+                                                    child: Container(
+                                                      height: 140,
+                                                      width: 120,
+                                                      decoration:
+                                                          const BoxDecoration(
+                                                        color: Colors.white,
+                                                      ),
                                                     ),
-                                                  )
-                                                : ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            12),
-                                                    child: CachedNetworkImage(
-                                                      imageUrl: item.sourceId ==
-                                                                  2 ||
-                                                              item.sourceId == 3
-                                                          ? item.image
-                                                          : "${Application.picturesURL}${item.image}",
-                                                      cacheManager:
-                                                          memoryCacheManager,
-                                                      placeholder:
-                                                          (context, url) {
-                                                        return AppPlaceholder(
-                                                          child: Container(
-                                                            height: 140,
-                                                            width: 120,
-                                                            decoration:
-                                                                const BoxDecoration(
-                                                              color:
-                                                                  Colors.white,
-                                                            ),
-                                                          ),
-                                                        );
-                                                      },
-                                                      imageBuilder: (context,
-                                                          imageProvider) {
-                                                        return Container(
-                                                          width: 120,
-                                                          height: 140,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            image:
-                                                                DecorationImage(
-                                                              image:
-                                                                  imageProvider,
-                                                              fit: BoxFit
-                                                                  .fitHeight,
-                                                            ),
-                                                          ),
-                                                        );
-                                                      },
-                                                      errorWidget: (context,
-                                                          url, error) {
-                                                        return AppPlaceholder(
-                                                          child: Container(
-                                                            width: 120,
-                                                            height: 140,
-                                                            decoration:
-                                                                const BoxDecoration(
-                                                              color:
-                                                                  Colors.white,
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .only(
-                                                                topLeft: Radius
-                                                                    .circular(
-                                                                        8),
-                                                                bottomLeft: Radius
-                                                                    .circular(
-                                                                        8),
-                                                              ),
-                                                            ),
-                                                            child: const Icon(
-                                                                Icons.error),
-                                                          ),
-                                                        );
-                                                      },
+                                                  );
+                                                },
+                                                imageBuilder:
+                                                    (context, imageProvider) {
+                                                  return Container(
+                                                    width: 120,
+                                                    height: 140,
+                                                    decoration: BoxDecoration(
+                                                      image: DecorationImage(
+                                                        image: imageProvider,
+                                                        fit: BoxFit.fitHeight,
+                                                      ),
                                                     ),
-                                                  ),
+                                                  );
+                                                },
+                                                errorWidget:
+                                                    (context, url, error) {
+                                                  return AppPlaceholder(
+                                                    child: Container(
+                                                      width: 120,
+                                                      height: 140,
+                                                      decoration:
+                                                          const BoxDecoration(
+                                                        color: Colors.white,
+                                                        borderRadius:
+                                                            BorderRadius.only(
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  8),
+                                                          bottomLeft:
+                                                              Radius.circular(
+                                                                  8),
+                                                        ),
+                                                      ),
+                                                      child: const Icon(
+                                                          Icons.error),
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                            ),
                                             const SizedBox(width: 8),
                                             Expanded(
                                               child: Column(
@@ -414,7 +346,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                                                 FontWeight
                                                                     .bold),
                                                   ),
-                                                  const SizedBox(height: 8),
+                                                  const SizedBox(height: 4),
                                                   Text(
                                                     item.categoryId == 3
                                                         ? (item.endDate != ""
@@ -429,55 +361,64 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                                               FontWeight.bold,
                                                         ),
                                                   ),
-                                                  const SizedBox(height: 8),
+                                                  if (item.sourceId == 3)
+                                                    Text(
+                                                      "${Translate.of(context).translate('quelle')} ${item.externalId}",
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .bodySmall!
+                                                          .copyWith(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600),
+                                                      maxLines: 1,
+                                                    ),
                                                   Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      children: [
-                                                        Container(
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10),
-                                                          ),
-                                                          child: ElevatedButton(
-                                                            onPressed:
-                                                                () async {
-                                                              _openListingStatusActionPopUp(
-                                                                  item);
-                                                            },
-                                                            child: Text(
-                                                              Translate.of(
-                                                                      context)
-                                                                  .translate(
-                                                                      getStatusTanslation(
-                                                                          item.statusId ??
-                                                                              0,
-                                                                          null)),
-                                                              style: Theme.of(
-                                                                      context)
-                                                                  .textTheme
-                                                                  .bodySmall!
-                                                                  .copyWith(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                  ),
-                                                            ),
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Container(
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(10),
+                                                        ),
+                                                        child: ElevatedButton(
+                                                          onPressed: () async {
+                                                            _openListingStatusActionPopUp(
+                                                                item);
+                                                          },
+                                                          child: Text(
+                                                            Translate.of(
+                                                                    context)
+                                                                .translate(
+                                                                    getStatusTanslation(
+                                                                        item.statusId ??
+                                                                            0,
+                                                                        null)),
+                                                            style: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .bodySmall!
+                                                                .copyWith(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
                                                           ),
                                                         ),
-                                                        IconButton(
-                                                            onPressed: () {
-                                                              _openListingActionPopUp(
-                                                                  item);
-                                                            },
-                                                            icon: const Icon(
-                                                                Icons
-                                                                    .more_vert))
-                                                      ]),
+                                                      ),
+                                                      IconButton(
+                                                          onPressed: () {
+                                                            _openListingActionPopUp(
+                                                                item);
+                                                          },
+                                                          icon: const Icon(
+                                                              Icons.more_vert))
+                                                    ],
+                                                  ),
                                                   const SizedBox(height: 8),
                                                   const SizedBox(height: 4),
                                                 ],

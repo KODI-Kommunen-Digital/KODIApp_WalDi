@@ -32,6 +32,9 @@ class Preferences {
   static const String categoryCount = "categoryCount";
   static const String ignoredAppVersion = 'version';
   static const pdfPath = 'pdfPath';
+  static const String pushNotificationsPermission =
+      "pushNotificationsPermission";
+  static const String receiveNotification = "receiveNotification";
 
   Preferences._(this._box);
 
