@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, unnecessary_null_comparison
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -248,10 +248,23 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                             borderRadius:
                                                 BorderRadius.circular(12),
                                             child: CachedNetworkImage(
-                                              imageUrl: item.sourceId == 2 ||
-                                                      item.sourceId == 3
+                                              imageUrl: item.sourceId == 2 &&
+                                                      item.image != null &&
+                                                      item.image !=
+                                                          'admin/News.jpeg'
                                                   ? item.image
-                                                  : "${Application.picturesURL}${item.image}",
+                                                  : item.sourceId == 3 &&
+                                                          item.image != null
+                                                      ? (item.image.startsWith(
+                                                              'admin')
+                                                          ? "${Application.picturesURL}${item.image}"
+                                                          : item.image)
+                                                      : item.image != null &&
+                                                              item.image
+                                                                  .startsWith(
+                                                                      'admin')
+                                                          ? "${Application.picturesURL}${item.image}"
+                                                          : "${Application.picturesURL}${item.image}",
                                               cacheManager: memoryCacheManager,
                                               placeholder: (context, url) {
                                                 return AppPlaceholder(
@@ -332,7 +345,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                                           fontWeight:
                                                               FontWeight.bold),
                                                 ),
-                                                const SizedBox(height: 8),
+                                                const SizedBox(height: 4),
                                                 Text(
                                                   item.categoryId == 3
                                                       ? (item.endDate != ""
@@ -347,7 +360,18 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                                             FontWeight.bold,
                                                       ),
                                                 ),
-                                                const SizedBox(height: 8),
+                                                if (item.sourceId == 3)
+                                                  Text(
+                                                    "${Translate.of(context).translate('quelle')} ${item.externalId}",
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodySmall!
+                                                        .copyWith(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w600),
+                                                    maxLines: 1,
+                                                  ),
                                                 Row(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment

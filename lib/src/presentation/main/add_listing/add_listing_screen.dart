@@ -1125,16 +1125,22 @@ class _AddListingScreenState extends State<AddListingScreen> {
                           }
                         });
                       },
-                      activeColor: Colors.blue,
+                      activeColor: Theme.of(context).primaryColor,
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _isExpiryDateEnabled = !_isExpiryDateEnabled;
-                        });
-                      },
-                      child: Text(Translate.of(context)
-                          .translate('enable_expiry_date')),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _isExpiryDateEnabled = !_isExpiryDateEnabled;
+                          });
+                        },
+                        child: Text(
+                          Translate.of(context).translate('enable_expiry_date'),
+                          style: Theme.of(context).textTheme.bodyMedium,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
                     ),
                   ],
                 ),
