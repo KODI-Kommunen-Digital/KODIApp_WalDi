@@ -17,6 +17,7 @@ class FavoriteDetailsModel {
   String? email;
   String? phone;
   String? website;
+  String? externalId;
   int? price;
   int? discountPrice;
   String? logo;

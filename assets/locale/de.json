@@ -452,7 +452,11 @@
   "under_review": "In Prüfung",  
   "all_requests":"Alle Anfragen",
   "image_size_exceed":"Bildgröße wurde überschritten",
-  "select_small_images":"Bitte wählen Sie Bilder aus, die 10 MB oder weniger groß sind.",  
+  "select_small_images":"Bitte wählen Sie Bilder aus, die 20 MB oder weniger groß sind.",  
   "enable_expiry_date":"Ein Ablaufdatum hinzufügen, an dem der Beitrag gelöscht wird",
-  "expiry_date": "Ablaufdatum"
+  "expiry_date": "Ablaufdatum",
+  "quelle":"Quelle:",
+  "notificationPermission" : "Benachrichtigungen sind für diese App deaktivert. Um sie zu aktiveren öffne bitte die App-Einstellungen und erteile Erlaubnis.",
+  "openSettings" : "Einstellungen öffnen",
+  "enableNotification": "Benachrichtigungen aktivieren"
 }

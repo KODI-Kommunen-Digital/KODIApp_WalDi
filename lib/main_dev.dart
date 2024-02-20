@@ -52,7 +52,7 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  await FirebaseApi(globalNavKey).initNotifications();
+  await FirebaseApi(globalNavKey, prefBox).initNotifications();
 
   Bloc.observer = HeidiBlocObserver();
 }

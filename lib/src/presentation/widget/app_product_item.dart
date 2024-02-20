@@ -63,9 +63,18 @@ class AppProductItem extends StatelessWidget {
                   : ClipRRect(
                       borderRadius: BorderRadius.circular(12),
                       child: CachedNetworkImage(
-                        imageUrl: item?.sourceId == 2 || item?.sourceId == 3
+                        imageUrl: item?.sourceId == 2 &&
+                                item?.image != null &&
+                                item?.image != 'admin/News.jpeg'
                             ? item!.image
-                            : "${Application.picturesURL}${item!.image}",
+                            : item?.sourceId == 3 && item?.image != null
+                                ? (item!.image.startsWith('admin')
+                                    ? "${Application.picturesURL}${item!.image}"
+                                    : item!.image)
+                                : item?.image != null &&
+                                        item!.image.startsWith('admin')
+                                    ? "${Application.picturesURL}${item!.image}"
+                                    : "${Application.picturesURL}${item?.image ?? 'admin/News.jpeg'}",
                         cacheManager: memoryCacheManager,
                         placeholder: (context, url) {
                           return AppPlaceholder(
@@ -191,7 +200,16 @@ class AppProductItem extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    if (item?.sourceId == 3)
+                      Text(
+                        "${Translate.of(context).translate('quelle')} ${item?.externalId ?? ''}",
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall!
+                            .copyWith(fontWeight: FontWeight.w600),
+                        maxLines: 1,
+                      ),
+                    const SizedBox(height: 2),
                   ],
                 ),
               ),
@@ -212,9 +230,17 @@ class AppProductItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               CachedNetworkImage(
-                imageUrl: item?.sourceId == 2 || item?.sourceId == 3
+                imageUrl: item?.sourceId == 2 &&
+                        item?.image != null &&
+                        item?.image != 'admin/News.jpeg'
                     ? item!.image
-                    : "${Application.picturesURL}${item!.image}",
+                    : item?.sourceId == 3 && item?.image != null
+                        ? (item!.image.startsWith('admin')
+                            ? "${Application.picturesURL}${item!.image}"
+                            : item!.image)
+                        : item?.image != null && item!.image.startsWith('admin')
+                            ? "${Application.picturesURL}${item!.image}"
+                            : "${Application.picturesURL}${item?.image ?? 'admin/News.jpeg'}",
                 cacheManager: memoryCacheManager,
                 imageBuilder: (context, imageProvider) {
                   return Container(
@@ -301,6 +327,15 @@ class AppProductItem extends StatelessWidget {
                 maxLines: 1,
                 style: Theme.of(context).textTheme.bodySmall,
               ),
+              if (item?.sourceId == 3)
+                Text(
+                  "${Translate.of(context).translate('quelle')} ${item?.externalId ?? ''}",
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodySmall!
+                      .copyWith(fontWeight: FontWeight.w600),
+                  maxLines: 2,
+                ),
             ],
           ),
         );
@@ -335,9 +370,18 @@ class AppProductItem extends StatelessWidget {
                       : ClipRRect(
                           borderRadius: BorderRadius.circular(12),
                           child: CachedNetworkImage(
-                            imageUrl: item?.sourceId == 2 || item?.sourceId == 3
+                            imageUrl: item?.sourceId == 2 &&
+                                    item?.image != null &&
+                                    item?.image != 'admin/News.jpeg'
                                 ? item!.image
-                                : "${Application.picturesURL}${item!.image}",
+                                : item?.sourceId == 3 && item?.image != null
+                                    ? (item!.image.startsWith('admin')
+                                        ? "${Application.picturesURL}${item!.image}"
+                                        : item!.image)
+                                    : item?.image != null &&
+                                            item!.image.startsWith('admin')
+                                        ? "${Application.picturesURL}${item!.image}"
+                                        : "${Application.picturesURL}${item?.image ?? 'admin/News.jpeg'}",
                             cacheManager: memoryCacheManager,
                             placeholder: (context, url) {
                               return AppPlaceholder(
@@ -432,6 +476,15 @@ class AppProductItem extends StatelessWidget {
                                     fontWeight: FontWeight.bold,
                                   ),
                         ),
+                        if (item?.sourceId == 3)
+                          Text(
+                            "${Translate.of(context).translate('quelle')} ${item?.externalId ?? ''}",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall!
+                                .copyWith(fontWeight: FontWeight.w600),
+                            maxLines: 2,
+                          ),
                         const SizedBox(height: 4),
                         const SizedBox(height: 8),
                         const Row(

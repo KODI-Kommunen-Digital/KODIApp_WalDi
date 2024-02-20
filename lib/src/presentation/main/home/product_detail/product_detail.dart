@@ -519,10 +519,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                       imageUrl.logo != 'admin/News.jpeg'
                                   ? imageUrl.logo
                                   : product.sourceId == 3 &&
-                                          imageUrl.logo != null &&
-                                          imageUrl.logo != 'admin/News.jpeg'
-                                      ? imageUrl.logo
-                                      : "${Application.picturesURL}${imageUrl.logo!.isNotEmpty ? imageUrl.logo : 'admin/News.jpeg'}";
+                                          imageUrl.logo != null
+                                      ? (imageUrl.logo!.startsWith('admin')
+                                          ? "${Application.picturesURL}${imageUrl.logo}"
+                                          : imageUrl.logo)
+                                      : imageUrl.logo != null &&
+                                              imageUrl.logo!.startsWith('admin')
+                                          ? "${Application.picturesURL}${imageUrl.logo}"
+                                          : "${Application.picturesURL}${imageUrl.logo}";
                               return Container(
                                 width: MediaQuery.of(context).size.width,
                                 margin:
@@ -1071,25 +1075,28 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   final productUserId = await context
                       .read<ProductDetailCubit>()
                       .getUserDetails(widget.item.userId, widget.item.cityId);
-
-                  if (productUserId?.id == loggedInUserId) {
-                    if (!mounted) return;
-                    Navigator.pushNamed(context, Routes.profile,
-                            arguments: {'user': userDetail, 'editable': true})
-                        .then((value) {
-                      setState(() {});
-                    });
-                  } else {
-                    if (!mounted) return;
-                    Navigator.pushNamed(context, Routes.profile,
-                            arguments: {'user': userDetail, 'editable': false})
-                        .then((value) {
-                      setState(() {});
-                    });
+                  if (product.sourceId != 2 && product.sourceId != 3) {
+                    if (productUserId?.id == loggedInUserId) {
+                      if (!mounted) return;
+                      Navigator.pushNamed(context, Routes.profile,
+                              arguments: {'user': userDetail, 'editable': true})
+                          .then((value) {
+                        setState(() {});
+                      });
+                    } else {
+                      if (!mounted) return;
+                      Navigator.pushNamed(context, Routes.profile, arguments: {
+                        'user': userDetail,
+                        'editable': false
+                      }).then((value) {
+                        setState(() {});
+                      });
+                    }
                   }
                 },
                 type: UserViewType.information,
-                showDirectionIcon: true,
+                showDirectionIcon:
+                    product.sourceId != 2 && product.sourceId != 3,
               ),
             ),
             const SizedBox(height: 16),

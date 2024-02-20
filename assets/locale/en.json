@@ -454,5 +454,11 @@
   "under_review": "Under Review",  
   "all_requests":"All Requests",
   "image_size_exceed":"Image Size Exceeded",
-  "select_small_images":"Bitte wählen Sie Bilder aus, die 10 MB oder weniger groß sind."
+  "select_small_images":"Bitte wählen Sie Bilder aus, die 20 MB oder weniger groß sind.",  
+  "quelle":"Source:",
+  "notificationPermission" : "Notifications are disabled for this app. To enable them, please open the app settings and grant permission",
+  "openSettings" : "Open Settings",
+  "enableNotification": "Enable Notifications",  
+  "expiry_date": "Ablaufdatum",
+  "enable_expiry_date":"Ein Ablaufdatum hinzufügen, an dem der Beitrag gelöscht wird"
 }
