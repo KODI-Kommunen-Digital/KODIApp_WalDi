@@ -171,7 +171,11 @@ class Routes {
       case setting:
         return MaterialPageRoute(
           builder: (context) {
-            return const SettingsScreen();
+            final Map<String, dynamic> arguments =
+            settings.arguments as Map<String, dynamic>;
+            return SettingsScreen(
+              user: arguments['user'] as UserModel?,
+            );
           },
         );
 
