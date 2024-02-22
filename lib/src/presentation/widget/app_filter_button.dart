@@ -4,8 +4,10 @@ import 'package:heidi/src/utils/configs/routes.dart';
 
 class AppFilterButton extends StatelessWidget {
   final MultiFilter multiFilter;
+  final Function(MultiFilter filter) filterCallBack;
 
-  const AppFilterButton({super.key, required this.multiFilter});
+  const AppFilterButton(
+      {super.key, required this.multiFilter, required this.filterCallBack});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +16,7 @@ class AppFilterButton extends StatelessWidget {
         Navigator.pushNamed(context, Routes.filterScreen, arguments: {
           "multifilter": multiFilter
         }).then((filter) => {
-              //Do filter logic here
+              if (filter != null) {filterCallBack(filter as MultiFilter)}
             });
       },
       style: TextButton.styleFrom(

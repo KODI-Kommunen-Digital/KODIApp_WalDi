@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_citizen_service.dart';
+import 'package:heidi/src/data/model/model_multifilter.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/home/list_product/cubit/list_cubit.dart';
+import 'package:heidi/src/presentation/widget/app_filter_button.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
@@ -47,18 +49,26 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
         centerTitle: true,
         title: Text(Translate.of(context).translate('cust_services')),
         actions: [
-          TextButton(
-            onPressed: () async {
-              await _openFilterDrawer(context);
-            },
-            style: TextButton.styleFrom(
-              textStyle: Theme.of(context)
-                  .textTheme
-                  .titleSmall!
-                  .copyWith(fontWeight: FontWeight.bold),
-            ),
-            child: const Text("Filter"),
-          ),
+          BlocConsumer<DiscoveryCubit, DiscoveryState>(
+            listener: (context, state) {},
+            builder: (context, state) => state.maybeWhen(
+                loaded: (list) => AppFilterButton(
+                      multiFilter: MultiFilter(
+                        hasLocationFilter: true,
+                        currentLocation:
+                            context.read<DiscoveryCubit>().currentCity ?? 0,
+                        cities: context.read<DiscoveryCubit>().location,
+                      ),
+                      filterCallBack: (filter) async {
+                        if (filter.currentLocation != null) {
+                          context
+                              .read<DiscoveryCubit>()
+                              .onLocationFilter(filter.currentLocation!, true);
+                        }
+                      },
+                    ),
+                orElse: () => Container()),
+          )
         ],
       ),
       body: BlocConsumer<DiscoveryCubit, DiscoveryState>(
@@ -85,51 +95,6 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
           },
         ),
       ),
-    );
-  }
-
-  Future<void> _openFilterDrawer(BuildContext context) async {
-    await loadSelectedLocation();
-    if (!mounted) return;
-    await showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return Container(
-          color: Theme.of(context).dialogBackgroundColor,
-          height: 200,
-          child: ListView.separated(
-            itemCount: context.read<DiscoveryCubit>().location.length,
-            separatorBuilder: (BuildContext context, int index) => Divider(
-              color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white,
-              height: 1,
-              thickness: 1,
-            ),
-            itemBuilder: (context, index) {
-              final location = context.read<DiscoveryCubit>().location[index];
-              final isSelected = selectedLocationId == location.id;
-              return ListTile(
-                title: Text(location.title),
-                trailing: isSelected
-                    ? const Icon(Icons.check, color: Colors.white)
-                    : null,
-                onTap: () {
-                  setState(() {
-                    if (isSelected) {
-                      selectedLocationId = 0;
-                    } else {
-                      selectedLocationId = location.id;
-                    }
-                  });
-                  context
-                      .read<DiscoveryCubit>()
-                      .onLocationFilter(selectedLocationId!, true);
-                  Navigator.pop(context);
-                },
-              );
-            },
-          ),
-        );
-      },
     );
   }
 }

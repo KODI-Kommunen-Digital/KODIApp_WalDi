@@ -18,6 +18,7 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
   final List<CitizenServiceModel> hiddenServices = [];
   late List<CitizenServiceModel> services;
   bool doesScroll = false;
+  int? currentCity;
 
   Future<void> onLoad() async {
     emit(const DiscoveryState.loading());
@@ -40,6 +41,8 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
 
     //Remove to see all services
     services.removeWhere((element) => hiddenServices.contains(element));
+
+    await getCitySelected();
 
     emit(DiscoveryStateLoaded(
       services,
@@ -156,6 +159,7 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
   Future<int?> getCitySelected() async {
     final prefs = await Preferences.openBox();
     int cityId = await prefs.getKeyValue(Preferences.cityId, 0);
+    currentCity = cityId;
     return cityId;
   }
 }

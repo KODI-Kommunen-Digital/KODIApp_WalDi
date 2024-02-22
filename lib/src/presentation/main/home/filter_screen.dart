@@ -12,6 +12,14 @@ class FilterScreen extends StatefulWidget {
 }
 
 class _FilterScreenState extends State<FilterScreen> {
+  int? currentCity;
+
+  @override
+  void initState() {
+    super.initState();
+    currentCity = widget.multiFilter.currentLocation;
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -21,48 +29,59 @@ class _FilterScreenState extends State<FilterScreen> {
         title: const Text("Filter"),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            if (widget.multiFilter.hasLocationFilter == true)
-              _buildLocationFilter(),
-            if (widget.multiFilter.hasListProductFilter == true)
-              _buildListProductFilter(),
-            if (widget.multiFilter.hasListingStatusFilter == true)
-              _buildListingStatusFilter(),
-            if (widget.multiFilter.hasForumGroupFilter == true)
-              _buildForumGroupFilter(),
-          ],
+        child: WillPopScope(
+          onWillPop: () async {
+            Navigator.pop(context, MultiFilter(currentLocation: currentCity));
+            return false;
+          },
+          child: Column(
+            children: [
+              if (widget.multiFilter.hasLocationFilter == true)
+                ..._buildLocationFilter(),
+              if (widget.multiFilter.hasListProductFilter == true)
+                _buildListProductFilter(),
+              if (widget.multiFilter.hasListingStatusFilter == true)
+                _buildListingStatusFilter(),
+              if (widget.multiFilter.hasForumGroupFilter == true)
+                _buildForumGroupFilter(),
+            ],
+          ),
         ),
       ),
     ));
   }
 
-  Widget _buildLocationFilter() {
-    return Expanded(
-      child: Column(
-        children: [
-          Text(Translate.of(context).translate('choose_city')),
-          const SizedBox(
-            height: 8,
-          ),
-          Container(
-            padding: const EdgeInsets.all(8.0),
-            child: Wrap(
-              spacing: 8.0,
-              children: widget.multiFilter.cities!.map((city) {
-                return ChoiceChip(
-                  label: Text(city.title),
-                  selected: city.id == widget.multiFilter.currentLocation!,
-                  onSelected: (selected) {
-                    //Handle selected city
-                  },
-                );
-              }).toList(),
-            ),
-          )
-        ],
+  List<Widget> _buildLocationFilter() {
+    return [
+      const SizedBox(
+        height: 8,
       ),
-    );
+      Center(
+          child: Text(
+        Translate.of(context).translate('choose_city'),
+        style: Theme.of(context)
+            .textTheme
+            .titleMedium!
+            .copyWith(fontWeight: FontWeight.bold),
+      )),
+      Container(
+        padding: const EdgeInsets.all(8.0),
+        child: Wrap(
+          spacing: 8.0,
+          children: widget.multiFilter.cities!.map((city) {
+            return ChoiceChip(
+              label: Text(city.title),
+              selected: city.id == currentCity,
+              onSelected: (selected) {
+                setState(() {
+                  currentCity = city.id;
+                });
+              },
+            );
+          }).toList(),
+        ),
+      )
+    ];
   }
 
   Widget _buildListingStatusFilter() {
