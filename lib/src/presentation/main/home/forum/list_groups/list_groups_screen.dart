@@ -2,8 +2,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_forum_group.dart';
+import 'package:heidi/src/data/model/model_multifilter.dart';
 import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:heidi/src/presentation/main/home/list_product/cubit/cubit.dart';
+import 'package:heidi/src/presentation/widget/app_filter_button.dart';
 import 'package:heidi/src/presentation/widget/app_forum_group_item.dart';
 import 'package:heidi/src/presentation/widget/app_navbar.dart';
 import 'package:heidi/src/presentation/widget/app_product_item.dart';
@@ -63,125 +65,9 @@ class _ListGroupScreenState extends State<ListGroupScreen> {
   void _updateSelectedFilter(GroupFilter? filter) {
     final loadedList = context.read<ListGroupsCubit>().getLoadedList();
     setState(() {
-      if (selectedFilter == filter) {
-        selectedFilter = null;
-        context.read<ListGroupsCubit>().onGroupFilter(null, loadedList);
-      } else {
-        selectedFilter = filter;
-        context.read<ListGroupsCubit>().onGroupFilter(filter, loadedList);
-      }
+      selectedFilter = filter;
+      context.read<ListGroupsCubit>().onGroupFilter(filter, loadedList);
     });
-  }
-
-  Widget _buildTickIcon(bool isSelected) {
-    return isSelected
-        ? const Icon(
-            Icons.done,
-            color: Colors.white,
-            size: 20,
-            weight: 900,
-          )
-        : const SizedBox(width: 20);
-  }
-
-  Future<void> _openFilterDrawer(BuildContext context) async {
-    await showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return Container(
-          color: Theme.of(context).dialogBackgroundColor,
-          height: 150,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.person,
-                      color: Theme.of(context).textTheme.bodyLarge?.color ??
-                          Colors.white,
-                    ),
-                    const SizedBox(width: 8),
-                    TextButton(
-                      style: TextButton.styleFrom(),
-                      onPressed: () {
-                        _updateSelectedFilter(GroupFilter.myGroups);
-                        Navigator.pop(context);
-                      },
-                      child: Row(
-                        children: [
-                          Text(
-                            Translate.of(context).translate('my_groups'),
-                            style: TextStyle(
-                              color: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge
-                                      ?.color ??
-                                  Colors.white,
-                            ),
-                          ),
-                          const SizedBox(width: 5),
-                          _buildTickIcon(
-                              selectedFilter == GroupFilter.myGroups),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Divider(
-                color: Theme.of(context).textTheme.bodyLarge?.color ??
-                    Colors.white,
-                height: 1,
-                thickness: 1,
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.groups,
-                      color: Theme.of(context).textTheme.bodyLarge?.color ??
-                          Colors.white,
-                    ),
-                    const SizedBox(width: 8),
-                    TextButton(
-                      style: TextButton.styleFrom(),
-                      onPressed: () {
-                        _updateSelectedFilter(GroupFilter.allGroups);
-                        Navigator.pop(context);
-                      },
-                      child: Row(
-                        children: [
-                          Text(
-                            Translate.of(context).translate('all_groups'),
-                            style: TextStyle(
-                              color: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge
-                                      ?.color ??
-                                  Colors.white,
-                            ),
-                          ),
-                          const SizedBox(width: 5),
-                          _buildTickIcon(
-                              selectedFilter == GroupFilter.allGroups),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
   }
 
   @override
@@ -194,22 +80,13 @@ class _ListGroupScreenState extends State<ListGroupScreen> {
             Translate.of(context).translate(widget.arguments['title']),
           ),
           actions: [
-            IconButton(
-              onPressed: () async {
-                await _openFilterDrawer(context);
-              },
-              style: TextButton.styleFrom(
-                textStyle: Theme.of(context)
-                    .textTheme
-                    .titleSmall!
-                    .copyWith(fontWeight: FontWeight.bold),
-              ),
-              icon: Icon(
-                Icons.filter_list_rounded,
-                color: Theme.of(context).textTheme.bodyLarge?.color ??
-                    Colors.white,
-              ),
-            ),
+            AppFilterButton(
+                multiFilter: MultiFilter(
+                    hasForumGroupFilter: true,
+                    currentForumGroupFilter: selectedFilter),
+                filterCallBack: (filter) {
+                  _updateSelectedFilter(filter.currentForumGroupFilter);
+                }),
             Padding(
               padding: const EdgeInsets.only(right: 8.0),
               child: Container(

@@ -1,6 +1,7 @@
 import 'package:heidi/src/data/model/model_category.dart';
-import 'package:heidi/src/presentation/main/account/dashboard/my_groups/cubit/my_groups_cubit.dart';
 import 'package:heidi/src/presentation/main/home/list_product/cubit/cubit.dart';
+
+import '../../presentation/main/home/forum/list_groups/cubit/list_groups_cubit.dart';
 
 class MultiFilter {
   final ProductFilter? currentProductEventFilter; //ListProduct filter
