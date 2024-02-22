@@ -1,25 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:heidi/src/data/model/model_category.dart';
-import 'package:heidi/src/presentation/main/account/dashboard/my_groups/cubit/my_groups_cubit.dart';
-import 'package:heidi/src/presentation/main/home/list_product/cubit/list_cubit.dart';
+import 'package:heidi/src/data/model/model_multifilter.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class FilterScreen extends StatefulWidget {
-  //IMPORTANT: Cant null check, as doesnt say thesere were selected
-  final ProductFilter? currentListProductFilter; //ListGroup filter
-  final GroupFilter? currentForumGroupFilter; //Forum group filter
-  final int? currentListingStatus; //Listing status in All Listings
+  final MultiFilter multiFilter;
 
-  final List<CategoryModel>? cities; //All cities
-  final int? currentLocation; //Location IDs
-
-  const FilterScreen(
-      {super.key,
-      this.currentLocation,
-      this.currentListingStatus,
-      this.currentForumGroupFilter,
-      this.currentListProductFilter,
-      this.cities});
+  const FilterScreen({super.key, required this.multiFilter});
 
   @override
   State<FilterScreen> createState() => _FilterScreenState();
@@ -37,12 +23,13 @@ class _FilterScreenState extends State<FilterScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            if (widget.currentLocation != null) _buildLocationFilter(),
-            if (widget.currentListProductFilter != null)
+            if (widget.multiFilter.hasLocationFilter == true)
+              _buildLocationFilter(),
+            if (widget.multiFilter.hasListProductFilter == true)
               _buildListProductFilter(),
-            if (widget.currentListingStatus != null)
+            if (widget.multiFilter.hasListingStatusFilter == true)
               _buildListingStatusFilter(),
-            if (widget.currentForumGroupFilter != null)
+            if (widget.multiFilter.hasForumGroupFilter == true)
               _buildForumGroupFilter(),
           ],
         ),
@@ -62,10 +49,10 @@ class _FilterScreenState extends State<FilterScreen> {
             padding: const EdgeInsets.all(8.0),
             child: Wrap(
               spacing: 8.0,
-              children: widget.cities!.map((city) {
+              children: widget.multiFilter.cities!.map((city) {
                 return ChoiceChip(
                   label: Text(city.title),
-                  selected: city.id == widget.currentLocation!,
+                  selected: city.id == widget.multiFilter.currentLocation!,
                   onSelected: (selected) {
                     //Handle selected city
                   },

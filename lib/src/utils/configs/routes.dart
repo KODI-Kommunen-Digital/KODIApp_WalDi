@@ -497,11 +497,7 @@ class Routes {
             final Map<String, dynamic> arguments =
                 settings.arguments as Map<String, dynamic>;
             return FilterScreen(
-              currentForumGroupFilter: arguments["currentForumGroupFilter"],
-              currentLocation: arguments["currentLocation"],
-              currentListingStatus: arguments["currentListingStatus"],
-              currentListProductFilter: arguments["currentListProductFilter"],
-              cities: arguments["cities"],
+              multiFilter: arguments["multifilter"]
             );
           },
         );
