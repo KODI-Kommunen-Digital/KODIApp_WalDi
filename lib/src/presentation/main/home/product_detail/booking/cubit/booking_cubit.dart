@@ -1,3 +1,5 @@
+// ignore_for_file: unused_field
+
 import 'package:bloc/bloc.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/booking/cubit/booking_state.dart';
