@@ -14,6 +14,7 @@ class FilterScreen extends StatefulWidget {
 
 class _FilterScreenState extends State<FilterScreen> {
   int? currentCity;
+  int? currentListingStatus;
   ProductFilter? currentProductEventFilter;
 
   @override
@@ -21,6 +22,7 @@ class _FilterScreenState extends State<FilterScreen> {
     super.initState();
     currentCity = widget.multiFilter.currentLocation;
     currentProductEventFilter = widget.multiFilter.currentProductEventFilter;
+    currentListingStatus = widget.multiFilter.currentListingStatus;
   }
 
   @override
@@ -38,7 +40,8 @@ class _FilterScreenState extends State<FilterScreen> {
                 context,
                 MultiFilter(
                     currentLocation: currentCity,
-                    currentProductEventFilter: currentProductEventFilter));
+                    currentProductEventFilter: currentProductEventFilter,
+                    currentListingStatus: currentListingStatus));
             return false;
           },
           child: Column(
@@ -48,7 +51,7 @@ class _FilterScreenState extends State<FilterScreen> {
               if (widget.multiFilter.hasProductEventFilter == true)
                 ..._buildProductEventFilter(),
               if (widget.multiFilter.hasListingStatusFilter == true)
-                _buildListingStatusFilter(),
+                ..._buildListingStatusFilter(),
               if (widget.multiFilter.hasForumGroupFilter == true)
                 _buildForumGroupFilter(),
             ],
@@ -99,8 +102,61 @@ class _FilterScreenState extends State<FilterScreen> {
     ];
   }
 
-  Widget _buildListingStatusFilter() {
-    return Container();
+  List<Widget> _buildListingStatusFilter() {
+    return [
+      const SizedBox(
+        height: 8,
+      ),
+      Center(
+          child: Text(
+        Translate.of(context).translate('choose_listing_status'),
+        style: Theme.of(context)
+            .textTheme
+            .titleMedium!
+            .copyWith(fontWeight: FontWeight.bold),
+      )),
+      Container(
+        padding: const EdgeInsets.all(8.0),
+        child: Wrap(spacing: 8.0, children: [
+          ChoiceChip(
+            label: Text(Translate.of(context).translate('all')),
+            selected: currentListingStatus == 0,
+            onSelected: (selected) {
+              setState(() {
+                currentListingStatus = 0;
+              });
+            },
+          ),
+          ChoiceChip(
+            label: Text(Translate.of(context).translate('active')),
+            selected: currentListingStatus == 1,
+            onSelected: (selected) {
+              setState(() {
+                currentListingStatus = 1;
+              });
+            },
+          ),
+          ChoiceChip(
+            label: Text(Translate.of(context).translate('inactive')),
+            selected: currentListingStatus == 2,
+            onSelected: (selected) {
+              setState(() {
+                currentListingStatus = 2;
+              });
+            },
+          ),
+          ChoiceChip(
+            label: Text(Translate.of(context).translate('under_review')),
+            selected: currentListingStatus == 3,
+            onSelected: (selected) {
+              setState(() {
+                currentListingStatus = 3;
+              });
+            },
+          ),
+        ]),
+      )
+    ];
   }
 
   Widget _buildForumGroupFilter() {
