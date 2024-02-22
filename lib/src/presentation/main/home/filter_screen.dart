@@ -73,9 +73,17 @@ class _FilterScreenState extends State<FilterScreen> {
       )),
       Container(
         padding: const EdgeInsets.all(8.0),
-        child: Wrap(
-          spacing: 8.0,
-          children: widget.multiFilter.cities!.map((city) {
+        child: Wrap(spacing: 8.0, children: [
+          ChoiceChip(
+            label: Text(Translate.of(context).translate('select_location')),
+            selected: 0 == currentCity,
+            onSelected: (selected) {
+              setState(() {
+                currentCity = 0;
+              });
+            },
+          ),
+          ...widget.multiFilter.cities!.map((city) {
             return ChoiceChip(
               label: Text(city.title),
               selected: city.id == currentCity,
@@ -86,7 +94,7 @@ class _FilterScreenState extends State<FilterScreen> {
               },
             );
           }).toList(),
-        ),
+        ]),
       )
     ];
   }
