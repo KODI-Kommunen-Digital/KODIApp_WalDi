@@ -3,7 +3,7 @@ import 'package:heidi/src/presentation/main/account/dashboard/my_groups/cubit/my
 import 'package:heidi/src/presentation/main/home/list_product/cubit/cubit.dart';
 
 class MultiFilter {
-  final ProductFilter? currentListProductFilter; //ListGroup filter
+  final ProductFilter? currentProductEventFilter; //ListProduct filter
   final GroupFilter? currentForumGroupFilter; //Forum group filter
   final int? currentListingStatus; //Listing status in All Listings
 
@@ -12,7 +12,7 @@ class MultiFilter {
 
   final bool hasListingStatusFilter;
   final bool hasForumGroupFilter;
-  final bool hasListProductFilter;
+  final bool hasProductEventFilter;
   final bool hasLocationFilter;
 
   MultiFilter(
@@ -20,9 +20,9 @@ class MultiFilter {
       this.cities,
       this.currentForumGroupFilter,
       this.currentListingStatus,
-      this.currentListProductFilter,
+      this.currentProductEventFilter,
       this.hasListingStatusFilter = false,
       this.hasForumGroupFilter = false,
-      this.hasListProductFilter = false,
+      this.hasProductEventFilter = false,
       this.hasLocationFilter = false});
 }

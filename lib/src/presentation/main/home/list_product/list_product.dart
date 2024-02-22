@@ -4,8 +4,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:heidi/src/data/model/model_multifilter.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_setting.dart';
+import 'package:heidi/src/presentation/widget/app_filter_button.dart';
 import 'package:heidi/src/presentation/widget/app_navbar.dart';
 import 'package:heidi/src/presentation/widget/app_product_item.dart';
 import 'package:heidi/src/utils/configs/application.dart';
@@ -40,126 +42,11 @@ class _ListProductScreenState extends State<ListProductScreen> {
   }
 
   void _updateSelectedFilter(ProductFilter? filter) {
+    selectedFilter = filter;
     final loadedList = context.read<ListCubit>().getLoadedList();
     setState(() {
-      if (selectedFilter == filter) {
-        selectedFilter = null;
-        context.read<ListCubit>().onProductFilter(null, loadedList);
-      } else {
-        selectedFilter = filter;
-        context.read<ListCubit>().onProductFilter(filter, loadedList);
-      }
+      context.read<ListCubit>().onProductFilter(filter, loadedList);
     });
-  }
-
-  Widget _buildTickIcon(bool isSelected) {
-    return isSelected
-        ? const Icon(
-            Icons.done,
-            color: Colors.white,
-            size: 20,
-            weight: 900,
-          )
-        : const SizedBox(width: 20);
-  }
-
-  Future<void> _openFilterDrawer(BuildContext context) async {
-    await showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return Container(
-          color: Theme.of(context).dialogBackgroundColor,
-          height: 150,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.calendar_today,
-                      color: Theme.of(context).textTheme.bodyLarge?.color ??
-                          Colors.white,
-                    ),
-                    const SizedBox(width: 8),
-                    TextButton(
-                      style: TextButton.styleFrom(),
-                      onPressed: () {
-                        _updateSelectedFilter(ProductFilter.week);
-                        Navigator.pop(context);
-                      },
-                      child: Row(
-                        children: [
-                          Text(
-                            Translate.of(context).translate('this_week'),
-                            style: TextStyle(
-                              color: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge
-                                      ?.color ??
-                                  Colors.white,
-                            ),
-                          ),
-                          const SizedBox(width: 5),
-                          _buildTickIcon(selectedFilter == ProductFilter.week),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Divider(
-                color: Theme.of(context).textTheme.bodyLarge?.color ??
-                    Colors.white,
-                height: 1,
-                thickness: 1,
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.calendar_today,
-                      color: Theme.of(context).textTheme.bodyLarge?.color ??
-                          Colors.white,
-                    ),
-                    const SizedBox(width: 8),
-                    TextButton(
-                      style: TextButton.styleFrom(),
-                      onPressed: () {
-                        _updateSelectedFilter(ProductFilter.month);
-                        Navigator.pop(context);
-                      },
-                      child: Row(
-                        children: [
-                          Text(
-                            Translate.of(context).translate('this_month'),
-                            style: TextStyle(
-                              color: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge
-                                      ?.color ??
-                                  Colors.white,
-                            ),
-                          ),
-                          const SizedBox(width: 5),
-                          _buildTickIcon(selectedFilter == ProductFilter.month),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-    // await loadListingsList();
   }
 
   @override
@@ -193,18 +80,14 @@ class _ListProductScreenState extends State<ListProductScreen> {
                 } else {
                   bool isEvent = snapshot.data!;
                   return isEvent
-                      ? TextButton(
-                          onPressed: () async {
-                            await _openFilterDrawer(context);
-                          },
-                          style: TextButton.styleFrom(
-                            textStyle: Theme.of(context)
-                                .textTheme
-                                .titleSmall!
-                                .copyWith(fontWeight: FontWeight.bold),
-                          ),
-                          child: const Text("Filter"),
-                        )
+                      ? AppFilterButton(
+                          multiFilter: MultiFilter(
+                              hasProductEventFilter: true,
+                              currentProductEventFilter: selectedFilter),
+                          filterCallBack: (filter) {
+                            _updateSelectedFilter(
+                                filter.currentProductEventFilter);
+                          })
                       : Container();
                 }
               },

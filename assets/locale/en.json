@@ -511,5 +511,7 @@
   "report_post_hint":"Give reason",
   "image_size_exceed":"Image Size Exceeded",
   "select_small_images":"Bitte wählen Sie Bilder aus, die 10 MB oder weniger groß sind.",
-  "quelle":"Source"
+  "quelle":"Source",
+  "choose_time_period": "Choose time period",
+  "all": "All"
 }
