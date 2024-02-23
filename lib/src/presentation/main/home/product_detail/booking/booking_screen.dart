@@ -153,7 +153,7 @@ class _BookingScreenState extends State<BookingDetailsLoaded> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.listingTitle),
+        title: Text(Translate.of(context).translate('bookAppointment')),
       ),
       body: SafeArea(
         child: Column(

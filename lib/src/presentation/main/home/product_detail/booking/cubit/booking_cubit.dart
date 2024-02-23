@@ -15,9 +15,9 @@ class BookingCubit extends Cubit<BookingState> {
   };
 
   final List<String> _services = [
-    'Haircut',
-    'Manicure',
-    'Pedicure',
+    'Haarschnitt',
+    'Maniküre',
+    'Pediküre',
     'Massage',
   ];
 
