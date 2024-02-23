@@ -38,7 +38,6 @@ class SignUpCubit extends Cubit<SignUpState> {
       return 'Password cannot contain spaces';
     }
 
-
     // if (!RegExp(r'[A-Z]').hasMatch(password)) {
     //   return "Password must contain at least one uppercase letter.";
     // }
@@ -80,7 +79,7 @@ class SignUpCubit extends Cubit<SignUpState> {
     }
 
     if (!RegExp(r'^[a-z_]+$').hasMatch(username)) {
-      return "Username can only contain lowercase letters and underscores.";
+      return "Großbuchstaben sind nicht möglich";
     }
 
     return null; // Username is valid.
