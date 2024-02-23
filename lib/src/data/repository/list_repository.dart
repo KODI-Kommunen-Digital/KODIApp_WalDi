@@ -142,7 +142,8 @@ class ListRepository {
     final response = await Api.requestProduct(cityId, id);
     if (response.success) {
       UtilLogger.log('ErrorReason', response.data);
-      return ProductModel.fromJson(response.data, setting: Application.setting, cityId: cityId);
+      return ProductModel.fromJson(response.data,
+          setting: Application.setting, cityId: cityId);
     } else {
       logError('Product Request Response', response.message);
     }
@@ -237,7 +238,7 @@ class ListRepository {
     List<File>? imagesList,
     bool isImageChanged,
   ) async {
-    final subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
+    int? subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
     final villageId = prefs.getKeyValue(Preferences.villageId, null);
     final userId = prefs.getKeyValue(Preferences.userId, '');
@@ -283,6 +284,12 @@ class ListRepository {
             "${endTime.hour}:${endTime.minute.toString().padLeft(2, '0')}";
         combinedEndDateTime = "${endDate.trim()}T$formattedTime";
       }
+    }
+
+    if (categoryId == 1) {
+      subCategoryId = subCategoryId;
+    } else {
+      subCategoryId = null;
     }
 
     Map<String, dynamic> params = {
@@ -379,7 +386,8 @@ class ListRepository {
     TimeOfDay? endTime,
     List<File>? imagesList,
   ) async {
-    final subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
+    final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
+    int? subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
     final villageId = prefs.getKeyValue(Preferences.villageId, null);
     final userId = prefs.getKeyValue(Preferences.userId, '');
     final media = prefs.getKeyValue(Preferences.path, null);
@@ -427,6 +435,12 @@ class ListRepository {
       }
     } else {
       combinedEndDateTime = "";
+    }
+
+    if (categoryId == 1) {
+      subCategoryId = subCategoryId;
+    } else {
+      subCategoryId = null;
     }
 
     Map<String, dynamic> params = {
