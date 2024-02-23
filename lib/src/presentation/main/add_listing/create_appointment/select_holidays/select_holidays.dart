@@ -1,6 +1,7 @@
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
 import 'package:heidi/src/presentation/widget/app_button.dart';
+import 'package:heidi/src/utils/translate.dart';
 import 'package:intl/intl.dart';
 
 class SelectHolidaysScreen extends StatefulWidget {
@@ -18,9 +19,7 @@ class _SelectHolidaysScreenState extends State<SelectHolidaysScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text(
-          'Select Holidays',
-        ),
+        title: Text(Translate.of(context).translate('selectHolidays')),
         actions: [
           AppButton(
             'Done',
@@ -37,7 +36,7 @@ class _SelectHolidaysScreenState extends State<SelectHolidaysScreen> {
           children: [
             const SizedBox(height: 10),
             CalendarDatePicker2(
-               config: config,
+              config: config,
               value: _multiDatePickerValueWithDefaultValue,
               onValueChanged: (dates) =>
                   setState(() => _multiDatePickerValueWithDefaultValue = dates),

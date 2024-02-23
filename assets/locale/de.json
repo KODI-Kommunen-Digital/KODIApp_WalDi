@@ -462,5 +462,20 @@
   "employee": "Mitarbeiter",
   "time_slots": "Zeitfenster",
   "finish": "Beenden",
-  "deleteAppointmentConfirmation": "Sind Sie sicher, dass Sie den Termin löschen möchten?"
+  "deleteAppointmentConfirmation": "Sind Sie sicher, dass Sie den Termin löschen möchten?",
+  "providedTimeSlot": "Gewählten Zeitraum wählen: ",
+  "addServiceName": "Dienstleistung hinzufügen",
+  "addMoreServices": "Weitere Dienstleistungen hinzufügen",
+  "appointmentNote": "Terminnotiz",
+  "appointmentSchedule": "Terminplan",
+  "appointmentDate": "Termin Datum",
+  "appointmentSlot": "Terminzeit",
+  "chooseDate": "Bitte Datum wählen",
+  "selectService": "Dienstleistung auswählen",
+  "selectTimeSlot": "Zeitfenster auswählen",
+  "availableSlots": "Anzahl verfügbarer Plätze: ",
+  "noAvailableSlots": "Für diesen Zeitraum sind keine Plätze mehr verfügbar",
+  "noOfAvailableSlots": "Sie können nur bis zu {0} Zeitfenster für {1} Personen auswählen.",
+  "selectHolidays": "Select Holidays"
+
 }

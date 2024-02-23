@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model_open_time.dart';
 import 'package:heidi/src/data/model/model_schedule.dart';
@@ -119,7 +121,7 @@ class _OpenTimeSlotsScreenState extends State<OpenTimeSlotsScreen> {
         child: Column(
           children: [
             Expanded(
-               child: ListView.separated(
+              child: ListView.separated(
                 padding: const EdgeInsets.all(16),
                 itemBuilder: (context, index) {
                   final item = _time[index];
@@ -234,13 +236,14 @@ class _OpenTimeSlotsScreenState extends State<OpenTimeSlotsScreen> {
                       onPressed: () {
                         Navigator.pushNamed(context, Routes.selectHolidays);
                       },
-                      child: const Row(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Select Holidays',
+                            Translate.of(context).translate('selectHolidays'),
                             style: TextStyle(
-                              color: Colors.white, // Change color to blue for hyperlink style
+                              color: Colors
+                                  .white, // Change color to blue for hyperlink style
                               // Remove TextDecoration.underline
                               fontSize: 16,
                             ),
@@ -250,7 +253,8 @@ class _OpenTimeSlotsScreenState extends State<OpenTimeSlotsScreen> {
                           ),
                           Icon(
                             Icons.arrow_forward,
-                            color: Colors.blue, // Match icon color with text color
+                            color:
+                                Colors.blue, // Match icon color with text color
                           ),
                         ],
                       ),
