@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_step_item.dart';
@@ -306,8 +308,10 @@ class _BookingScreenState extends State<BookingDetailsLoaded> {
     if (step == 0) {
       if (selectedDate == '') {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Please choose Date'),
+          SnackBar(
+            content: Text(
+              Translate.of(context).translate('chooseDate'),
+            ),
           ),
         );
       } else {
@@ -374,9 +378,11 @@ class _BookingScreenState extends State<BookingDetailsLoaded> {
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<String>(
                     value: _selectedService,
-                    hint: const Row(
+                    hint: Row(
                       children: [
-                        Text('Select Service'),
+                        Text(
+                          Translate.of(context).translate('selectService'),
+                        ),
                       ],
                     ),
                     items: services.map((category) {
@@ -449,13 +455,15 @@ class _BookingScreenState extends State<BookingDetailsLoaded> {
               onChanged: _onTimeSlotSelected,
               elevation: 16,
               style: const TextStyle(color: Colors.white, fontSize: 18),
-              hint: const Padding(
+              hint: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 12),
                 child: Row(
                   children: [
                     Icon(Icons.access_time),
                     SizedBox(width: 8),
-                    Text('Select Time Slot'),
+                    Text(
+                      Translate.of(context).translate('selectTimeSlot'),
+                    ),
                   ],
                 ),
               ),
@@ -497,7 +505,7 @@ class _BookingScreenState extends State<BookingDetailsLoaded> {
                 ? Container(
                     padding: const EdgeInsets.all(4),
                     child: Text(
-                      'Available No. of Slots: ${_availableSlots[timeSlot]!.toString()}',
+                      "${Translate.of(context).translate('availableSlots')} ${_availableSlots[timeSlot]!.toString()}",
                       style: const TextStyle(color: Colors.white, fontSize: 14),
                     ),
                   )
@@ -517,9 +525,10 @@ class _BookingScreenState extends State<BookingDetailsLoaded> {
             _availableSlots[value] = (_availableSlots[value] ?? 0) - 1;
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content:
-                    Text("There are no more slots left for this time period"),
+              SnackBar(
+                content: Text(
+                  Translate.of(context).translate('noAvailableSlots'),
+                ),
                 duration: Duration(seconds: 2),
               ),
             );
@@ -528,8 +537,13 @@ class _BookingScreenState extends State<BookingDetailsLoaded> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
-                  "You can only select up to $adults time slots for $adults people"),
-              duration: const Duration(seconds: 2), // Optional duration
+                Translate.of(context)
+                    .translate('noAvailableSlots')
+                    .replaceFirst("{0}", "$adults")
+                    .replaceFirst("{1}", "$adults"),
+                style: const TextStyle(color: Colors.white, fontSize: 14),
+              ),
+              duration: const Duration(seconds: 2),
             ),
           );
         }

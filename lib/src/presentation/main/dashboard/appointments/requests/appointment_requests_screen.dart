@@ -266,8 +266,8 @@ class _MyAppointmentsLoadedState extends State<AppointmentRequestsLoaded> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    Translate.of(context).translate(
-                        'Are you sure you want to delete appointment'),
+                    Translate.of(context)
+                        .translate('deleteAppointmentConfirmation'),
                   ),
                   const SizedBox(height: 20),
                   TextField(

@@ -271,8 +271,7 @@ class _MyAppointmentsLoadedState extends State<MyAppointmentsLoaded> {
             Translate.of(context).translate('delete_appointment'),
           ),
           content: Text(
-            Translate.of(context)
-                .translate('Are you sure you want to delete appointment'),
+            Translate.of(context).translate('deleteAppointmentConfirmation'),
           ),
           actions: <Widget>[
             TextButton(

@@ -122,10 +122,10 @@ class _CreateAppointmentLoadedState extends State<CreateAppointmentLoaded> {
                     Expanded(
                       child: TextField(
                         controller: serviceEntries[index].controller,
-                        decoration: const InputDecoration(
-                          labelText: 'Add Service Name',
-                          border:
-                              OutlineInputBorder(), // Add this line for border
+                        decoration: InputDecoration(
+                          labelText:
+                              Translate.of(context).translate('addServiceName'),
+                          border: const OutlineInputBorder(),
                         ),
                       ),
                     ),
@@ -173,7 +173,7 @@ class _CreateAppointmentLoadedState extends State<CreateAppointmentLoaded> {
                 const SizedBox(height: 16),
                 Row(
                   children: <Widget>[
-                    const Text('Use provided time slot:'),
+                    Text(Translate.of(context).translate('providedTimeSlot')),
                     Checkbox(
                       value: serviceEntries[index].providedTimeSlots,
                       activeColor: Colors.blue,
@@ -228,7 +228,7 @@ class _CreateAppointmentLoadedState extends State<CreateAppointmentLoaded> {
                 },
               ),
               const SizedBox(width: 8),
-              const Text('Add More Services'),
+              Text(Translate.of(context).translate('addMoreServices')),
             ],
           ),
         ],

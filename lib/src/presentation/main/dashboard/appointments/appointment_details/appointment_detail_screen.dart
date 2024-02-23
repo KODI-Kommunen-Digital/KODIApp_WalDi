@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/presentation/main/dashboard/appointments/appointment_details/cubit/appointment_details_cubit.dart';
@@ -91,7 +93,8 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
                   Navigator.pushNamed(
                     context,
                     Routes.imageZoom,
-                    arguments: "https://smrauf1heidi.obs.eu-de.otc.t-systems.com/admin/ProfilePicture.png",
+                    arguments:
+                        "https://smrauf1heidi.obs.eu-de.otc.t-systems.com/admin/ProfilePicture.png",
                   );
                 },
                 child: Image.network(
@@ -158,69 +161,81 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
                             labelText: 'Name',
                             border: OutlineInputBorder(),
                           ),
-                          controller: TextEditingController(text: 'Saud Bin Afaq'),
+                          controller:
+                              TextEditingController(text: 'Saud Bin Afaq'),
                           enabled: false, // Make text unchangeable
-                          style: const TextStyle(color: Colors.white), // Set text color to white
+                          style: const TextStyle(
+                              color: Colors.white), // Set text color to white
                         ),
                         const SizedBox(height: 16),
                         TextField(
-                          decoration: const InputDecoration(
-                            labelText: 'Email',
-                            border: OutlineInputBorder(),
+                          decoration: InputDecoration(
+                            labelText: Translate.of(context).translate('email'),
+                            border: const OutlineInputBorder(),
                           ),
                           controller: TextEditingController(
                               text: 'Saud.afaq123@gmail.com'),
                           enabled: false, // Make text unchangeable
-                          style: const TextStyle(color: Colors.white), // Set text color to white
+                          style: const TextStyle(
+                              color: Colors.white), // Set text color to white
                         ),
                         const SizedBox(height: 16),
                         TextField(
-                          decoration: const InputDecoration(
-                            labelText: 'Address',
+                          decoration: InputDecoration(
+                            labelText:
+                                Translate.of(context).translate('address'),
+                            border: const OutlineInputBorder(),
+                          ),
+                          controller:
+                              TextEditingController(text: 'Peter Hille Weg 13'),
+                          enabled: false, // Make text unchangeable
+                          style: const TextStyle(
+                              color: Colors.white), // Set text color to white
+                        ),
+                        const SizedBox(height: 16),
+                        TextField(
+                          decoration: InputDecoration(
+                            labelText: Translate.of(context).translate('phone'),
                             border: OutlineInputBorder(),
                           ),
-                          controller: TextEditingController(text: 'Peter Hille Weg 13'),
+                          controller:
+                              TextEditingController(text: '015785104060'),
                           enabled: false, // Make text unchangeable
-                          style: const TextStyle(color: Colors.white), // Set text color to white
+                          style: const TextStyle(
+                              color: Colors.white), // Set text color to white
                         ),
                         const SizedBox(height: 16),
                         TextField(
-                          decoration: const InputDecoration(
-                            labelText: 'Phone',
-                            border: OutlineInputBorder(),
-                          ),
-                          controller: TextEditingController(text: '015785104060'),
-                          enabled: false, // Make text unchangeable
-                          style: const TextStyle(color: Colors.white), // Set text color to white
-                        ),
-                        const SizedBox(height: 16),
-                        TextField(
-                          decoration: const InputDecoration(
-                            labelText: 'Appointment Note',
+                          decoration: InputDecoration(
+                            labelText: Translate.of(context)
+                                .translate('appointmentNote'),
                             border: OutlineInputBorder(),
                           ),
                           controller: TextEditingController(
                               text: 'I want to book another appointment'),
                           enabled: false, // Make text unchangeable
-                          style: const TextStyle(color: Colors.white), // Set text color to white
+                          style: const TextStyle(
+                              color: Colors.white), // Set text color to white
                         ),
                         const SizedBox(height: 16),
                       ],
                     ),
                   const SizedBox(height: 16),
-                  const Text(
-                    '\nAppointment Schedule:',
+                  Text(
+                    Translate.of(context).translate('appointmentSchedule'),
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 16),
                   TextField(
-                    decoration: const InputDecoration(
-                      labelText: 'Appointment Date',
+                    decoration: InputDecoration(
+                      labelText:
+                          Translate.of(context).translate('appointmentDate'),
                       border: OutlineInputBorder(),
                     ),
                     controller: TextEditingController(text: '12.01.2024'),
                     enabled: false, // Make text unchangeable
-                    style: const TextStyle(color: Colors.white), // Set text color to white
+                    style: const TextStyle(
+                        color: Colors.white), // Set text color to white
                   ),
                   const SizedBox(height: 16),
                   const SizedBox(height: 16),
@@ -228,13 +243,15 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
                     Column(
                       children: [
                         TextField(
-                          decoration: const InputDecoration(
-                            labelText: 'Appointment Slot',
+                          decoration: InputDecoration(
+                            labelText: Translate.of(context)
+                                .translate('appointmentSlot'),
                             border: OutlineInputBorder(),
                           ),
                           controller: TextEditingController(text: slots),
                           enabled: false, // Make text unchangeable
-                          style: const TextStyle(color: Colors.white), // Set text color to white
+                          style: const TextStyle(
+                              color: Colors.white), // Set text color to white
                         ),
                         const SizedBox(height: 16),
                       ],
@@ -242,8 +259,6 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
                 ],
               ),
             ),
-
-
           )
         ],
       ),

@@ -925,23 +925,23 @@ class _AddListingScreenState extends State<AddListingScreen> {
                       onPressed: () {
                         Navigator.pushNamed(context, Routes.createAppointment);
                       },
-                      child: const Row(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Appointment Details',
-                            style: TextStyle(
-                              color: Colors.white, // Change color to blue for hyperlink style
-                              // Remove TextDecoration.underline
+                            Translate.of(context)
+                                .translate('appointmentDetails'),
+                            style: const TextStyle(
+                              color: Colors.white,
                               fontSize: 16,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 4,
                           ),
-                          Icon(
+                          const Icon(
                             Icons.arrow_forward,
-                            color: Colors.blue, // Match icon color with text color
+                            color: Colors.blue,
                           ),
                         ],
                       ),
@@ -950,7 +950,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
                 ),
               ],
             ),
-
             const SizedBox(height: 16),
             AppTextInput(
               hintText: Translate.of(context).translate('input_address'),
