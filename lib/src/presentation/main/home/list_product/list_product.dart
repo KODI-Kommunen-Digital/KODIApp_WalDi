@@ -10,6 +10,7 @@ import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:heidi/src/presentation/widget/app_filter_button.dart';
 import 'package:heidi/src/presentation/widget/app_navbar.dart';
 import 'package:heidi/src/presentation/widget/app_product_item.dart';
+import 'package:heidi/src/presentation/widget/app_text_input.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
@@ -28,6 +29,7 @@ class ListProductScreen extends StatefulWidget {
 }
 
 class _ListProductScreenState extends State<ListProductScreen> {
+  final TextEditingController _searchController = TextEditingController();
   ProductFilter? selectedFilter;
   int pageNo = 1;
 
@@ -80,14 +82,27 @@ class _ListProductScreenState extends State<ListProductScreen> {
                 } else {
                   bool isEvent = snapshot.data!;
                   return isEvent
-                      ? AppFilterButton(
-                          multiFilter: MultiFilter(
-                              hasProductEventFilter: true,
-                              currentProductEventFilter: selectedFilter),
-                          filterCallBack: (filter) {
-                            _updateSelectedFilter(
-                                filter.currentProductEventFilter);
-                          })
+                      ? Row(
+                          children: [
+                            AppFilterButton(
+                                multiFilter: MultiFilter(
+                                    hasProductEventFilter: true,
+                                    currentProductEventFilter: selectedFilter),
+                                filterCallBack: (filter) {
+                                  _updateSelectedFilter(
+                                      filter.currentProductEventFilter);
+                                }),
+                            IconButton(
+                                onPressed: () async {
+                                  openSearchDialog().then((result) {
+                                    if ((result ?? "").trim() != "") {
+                                      //Do Search Logic here
+                                    }
+                                  });
+                                },
+                                icon: const Icon(Icons.search))
+                          ],
+                        )
                       : Container();
                 }
               },
@@ -124,6 +139,53 @@ class _ListProductScreenState extends State<ListProductScreen> {
         ),
       ),
     );
+  }
+
+  Future<String?> openSearchDialog() async {
+    String? searchRequest = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+            title: Center(
+                child: Text(Translate.of(context).translate('search_title'))),
+            contentPadding: const EdgeInsets.all(24.0),
+            children: [
+              AppTextInput(
+                hintText: Translate.of(context).translate('search_title'),
+                keyboardType: TextInputType.text,
+                trailing: const Icon(Icons.search),
+                hasDelete: false,
+                controller: _searchController,
+                //focusNode: _focusPass,
+              ),
+              const SizedBox(height: 8.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      _searchController.clear();
+                      Navigator.pop(context);
+                    },
+                    child: Text(Translate.of(context).translate('cancel')),
+                  ),
+                  const SizedBox(width: 8.0),
+                  TextButton(
+                    onPressed: () {
+                      String content = _searchController.text;
+                      _searchController.clear();
+                      Navigator.pop(context, content);
+                    },
+                    child: Text(
+                      Translate.of(context).translate('search_title'),
+                    ),
+                  ),
+                ],
+              ),
+            ]);
+      },
+    );
+    return searchRequest;
   }
 }
 

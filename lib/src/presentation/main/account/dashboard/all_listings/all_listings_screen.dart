@@ -18,6 +18,7 @@ import 'package:heidi/src/presentation/main/add_listing/cubit/add_listing_cubit.
 import 'package:heidi/src/presentation/main/add_listing/cubit/add_listing_state.dart';
 import 'package:heidi/src/presentation/widget/app_filter_button.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
+import 'package:heidi/src/presentation/widget/app_text_input.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
@@ -86,6 +87,7 @@ class AllListingsLoaded extends StatefulWidget {
 
 class _AllListingsLoadedState extends State<AllListingsLoaded> {
   final _scrollController = ScrollController(initialScrollOffset: 0.0);
+  final TextEditingController _searchController = TextEditingController();
   double previousScrollPosition = 0;
   bool isLoadingMore = false;
   int pageNo = 1;
@@ -124,15 +126,28 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
           Translate.of(context).translate('all_listings'),
         ),
         actions: [
-          AppFilterButton(
-              multiFilter: MultiFilter(
-                  hasListingStatusFilter: true,
-                  currentListingStatus: currentFilter),
-              filterCallBack: (filter) async {
-                await AppBloc.allListingsCubit
-                    .setCurrentStatus(filter.currentListingStatus!);
-                await _onRefresh();
-              }),
+          Row(
+            children: [
+              AppFilterButton(
+                  multiFilter: MultiFilter(
+                      hasListingStatusFilter: true,
+                      currentListingStatus: currentFilter),
+                  filterCallBack: (filter) async {
+                    await AppBloc.allListingsCubit
+                        .setCurrentStatus(filter.currentListingStatus!);
+                    await _onRefresh();
+                  }),
+              IconButton(
+                  onPressed: () async {
+                    openSearchDialog().then((result) {
+                      if ((result ?? "").trim() != "") {
+                        //Do Search Logic here
+                      }
+                    });
+                  },
+                  icon: const Icon(Icons.search))
+            ],
+          ),
         ],
       ),
       body: Stack(children: [
@@ -404,6 +419,53 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
               ),
       ]),
     ));
+  }
+
+  Future<String?> openSearchDialog() async {
+    String? searchRequest = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+            title: Center(
+                child: Text(Translate.of(context).translate('search_title'))),
+            contentPadding: const EdgeInsets.all(24.0),
+            children: [
+              AppTextInput(
+                hintText: Translate.of(context).translate('search_title'),
+                keyboardType: TextInputType.text,
+                trailing: const Icon(Icons.search),
+                hasDelete: false,
+                controller: _searchController,
+                //focusNode: _focusPass,
+              ),
+              const SizedBox(height: 8.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      _searchController.clear();
+                      Navigator.pop(context);
+                    },
+                    child: Text(Translate.of(context).translate('cancel')),
+                  ),
+                  const SizedBox(width: 8.0),
+                  TextButton(
+                    onPressed: () {
+                      String content = _searchController.text;
+                      _searchController.clear();
+                      Navigator.pop(context, content);
+                    },
+                    child: Text(
+                      Translate.of(context).translate('search_title'),
+                    ),
+                  ),
+                ],
+              ),
+            ]);
+      },
+    );
+    return searchRequest;
   }
 
   Future _onListingAction(int? chosen, ProductModel item) async {
