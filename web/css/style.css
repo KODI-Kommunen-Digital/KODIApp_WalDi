@@ -13,8 +13,8 @@
 
 /** Reset */
 * {
-  box-sizing: border-box;
-  font-family: "DM Sans", sans-serif;
+    /* box-sizing: border-box; */
+    font-family: "DM Sans", sans-serif;
 }
 html, body {
   margin: 0;
@@ -37,6 +37,9 @@ body {
     radial-gradient(ellipse at 5% 340%, transparent 80%, #ddd 0); */
   background-repeat: no-repeat;
   color: #000;
+}
+body::-webkit-scrollbar {
+    display: none;
 }
 
 /** Layout **/
@@ -245,17 +248,18 @@ h1 {
 
 #flutter_target.handheld {
     /* position: absolute; */
-    margin-left: -41px;
-    margin-top: 17px;
-    /* transform-origin: 0px 0px 0px; */
+    margin-left: -35px;
+    margin-top: 14px;
+    transform-origin: 0px 0px 0px;
     /* transform: rotate(-0.1deg) scale(0.80) translate(-539px, -45px); */
-    width: 306px;
-    height: 642px;
-    border-radius: 34px;
-    border: 1px solid #000;
+    width: 294px;
+    height: 619px;
+    border-radius: 36px;
+    border: 1mm solid #000;
     overflow: hidden;
     align-self: initial;
 }
+
 
 .imageAttribution {
   position: absolute;
@@ -268,9 +272,10 @@ h1 {
 body {
 
 }
+
 article {
-    width: 375px;
-    height: 671px;
+    width: 362px;
+    height: 721px;
     background-image: url(../icons/bg-mob.png);
     background-repeat: no-repeat;
     background-size: 90% auto;

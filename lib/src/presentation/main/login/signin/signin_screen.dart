@@ -200,99 +200,101 @@ class _SignInLoadedState extends State<SignInLoaded> {
                           context: context,
                           builder: (BuildContext context) {
                             return Dialog(
-                              child: Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const Text(
-                                      'Anleitung',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 22,
+                              child: SingleChildScrollView(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Text(
+                                        'Anleitung',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 22,
+                                        ),
                                       ),
-                                    ),
-                                    const SizedBox(height: 12),
-                                    const Text(
-                                      'Registrieren in der App',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
+                                      const SizedBox(height: 12),
+                                      const Text(
+                                        'Registrieren in der App',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                        ),
                                       ),
-                                    ),
-                                    const SizedBox(height: 16),
-                                    RichText(
-                                      text: TextSpan(
-                                        style:
-                                            DefaultTextStyle.of(context).style,
-                                        children: const <TextSpan>[
-                                          TextSpan(
-                                            text: 'Schritt 1:',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18,
+                                      const SizedBox(height: 16),
+                                      RichText(
+                                        text: TextSpan(
+                                          style:
+                                              DefaultTextStyle.of(context).style,
+                                          children: const <TextSpan>[
+                                            TextSpan(
+                                              text: 'Schritt 1:',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18,
+                                              ),
                                             ),
-                                          ),
-                                          TextSpan(
-                                            text:
-                                                ' Nutzername und Passwort festlegen,\n\n',
-                                            style: TextStyle(
-                                              fontSize: 16,
+                                            TextSpan(
+                                              text:
+                                                  ' Nutzername und Passwort festlegen,\n\n',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                              ),
                                             ),
-                                          ),
-                                          TextSpan(
-                                            text: 'Schritt 2:',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18,
+                                            TextSpan(
+                                              text: 'Schritt 2:',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18,
+                                              ),
                                             ),
-                                          ),
-                                          TextSpan(
-                                            text:
-                                                ' Es wird Ihnen eine E-Mail gesendet an die Mail, die Sie eingegeben haben,\n\n',
-                                            style: TextStyle(
-                                              fontSize: 16,
+                                            TextSpan(
+                                              text:
+                                                  ' Es wird Ihnen eine E-Mail gesendet an die Mail, die Sie eingegeben haben,\n\n',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                              ),
                                             ),
-                                          ),
-                                          TextSpan(
-                                            text: 'Schritt 3:',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18,
+                                            TextSpan(
+                                              text: 'Schritt 3:',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18,
+                                              ),
                                             ),
-                                          ),
-                                          TextSpan(
-                                            text:
-                                                ' Bitte verifizieren Sie die Mail, indem Sie in Ihr Postfach gehen und den Bestätigungslink drücken,\n\n',
-                                            style: TextStyle(
-                                              fontSize: 16,
+                                            TextSpan(
+                                              text:
+                                                  ' Bitte verifizieren Sie die Mail, indem Sie in Ihr Postfach gehen und den Bestätigungslink drücken,\n\n',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                              ),
                                             ),
-                                          ),
-                                          TextSpan(
-                                            text: 'Schritt 4:',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18,
+                                            TextSpan(
+                                              text: 'Schritt 4:',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18,
+                                              ),
                                             ),
-                                          ),
-                                          TextSpan(
-                                            text:
-                                                ' Ihr Account ist verifiziert und Sie können sich mit Ihren Login-Daten einloggen\n\nWir wünschen Ihnen viel Spaß beim Benutzen der App!\n\nDanke!!',
-                                            style: TextStyle(
-                                              fontSize: 16,
+                                            TextSpan(
+                                              text:
+                                                  ' Ihr Account ist verifiziert und Sie können sich mit Ihren Login-Daten einloggen\n\nWir wünschen Ihnen viel Spaß beim Benutzen der App!\n\nDanke!!',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                              ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                    const SizedBox(height: 16),
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: const Text('OK'),
-                                    ),
-                                  ],
+                                      const SizedBox(height: 16),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text('OK'),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             );

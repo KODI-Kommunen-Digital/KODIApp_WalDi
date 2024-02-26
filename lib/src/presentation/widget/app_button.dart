@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 enum ButtonType { normal, outline, text }
@@ -109,12 +110,21 @@ class AppButton extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(
-                text,
-                style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                    color: Theme.of(context).primaryColor,
-                    fontWeight: FontWeight.bold),
-              ),
+              if (kIsWeb)
+                Text(
+                  text,
+                  style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                      color: Theme.of(context).primaryColor,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold),
+                )
+              else
+                Text(
+                  text,
+                  style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                      color: Theme.of(context).primaryColor,
+                      fontWeight: FontWeight.bold),
+                ),
             ],
           ),
         );
