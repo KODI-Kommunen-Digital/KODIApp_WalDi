@@ -75,7 +75,7 @@ class ListCubit extends Cubit<ListState> {
 
   List<ProductModel> getLoadedList() => listLoaded;
 
-  void onProductFilter(ProductFilter? type, List<ProductModel> loadedList) {
+  void onDateProductFilter(ProductFilter? type, List<ProductModel> loadedList) {
     final currentDate = DateTime.now();
     if (type == ProductFilter.month) {
       filteredList = loadedList.where((product) {

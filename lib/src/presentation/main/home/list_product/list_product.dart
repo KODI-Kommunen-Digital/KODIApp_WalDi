@@ -30,7 +30,9 @@ class ListProductScreen extends StatefulWidget {
 
 class _ListProductScreenState extends State<ListProductScreen> {
   final TextEditingController _searchController = TextEditingController();
-  ProductFilter? selectedFilter;
+
+  //ProductFilter? selectedFilter;
+  MultiFilter? selectedFilter;
   int pageNo = 1;
 
   @override
@@ -43,11 +45,17 @@ class _ListProductScreenState extends State<ListProductScreen> {
     await context.read<ListCubit>().onLoad(widget.arguments['id']);
   }
 
-  void _updateSelectedFilter(ProductFilter? filter) {
+  void _updateSelectedFilter(MultiFilter? filter) {
     selectedFilter = filter;
     final loadedList = context.read<ListCubit>().getLoadedList();
     setState(() {
-      context.read<ListCubit>().onProductFilter(filter, loadedList);
+      if (filter?.hasProductEventFilter ?? false) {
+
+        context
+            .read<ListCubit>()
+            .onDateProductFilter(filter?.currentProductEventFilter, loadedList);
+      }
+
     });
   }
 
@@ -87,10 +95,10 @@ class _ListProductScreenState extends State<ListProductScreen> {
                             AppFilterButton(
                                 multiFilter: MultiFilter(
                                     hasProductEventFilter: true,
-                                    currentProductEventFilter: selectedFilter),
+                                    currentProductEventFilter: selectedFilter
+                                        ?.currentProductEventFilter),
                                 filterCallBack: (filter) {
-                                  _updateSelectedFilter(
-                                      filter.currentProductEventFilter);
+                                  _updateSelectedFilter(filter);
                                 }),
                             IconButton(
                                 onPressed: () async {

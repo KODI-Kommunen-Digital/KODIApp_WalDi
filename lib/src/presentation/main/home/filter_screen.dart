@@ -42,10 +42,17 @@ class _FilterScreenState extends State<FilterScreen> {
             Navigator.pop(
                 context,
                 MultiFilter(
-                    currentLocation: currentCity,
-                    currentProductEventFilter: currentProductEventFilter,
-                    currentListingStatus: currentListingStatus,
-                    currentForumGroupFilter: currentForumGroupFilter));
+                  currentLocation: currentCity,
+                  currentProductEventFilter: currentProductEventFilter,
+                  currentListingStatus: currentListingStatus,
+                  currentForumGroupFilter: currentForumGroupFilter,
+                  hasForumGroupFilter: widget.multiFilter.hasForumGroupFilter,
+                  hasProductEventFilter:
+                      widget.multiFilter.hasProductEventFilter,
+                  hasLocationFilter: widget.multiFilter.hasLocationFilter,
+                  hasListingStatusFilter:
+                      widget.multiFilter.hasListingStatusFilter,
+                ));
             return false;
           },
           child: Column(
