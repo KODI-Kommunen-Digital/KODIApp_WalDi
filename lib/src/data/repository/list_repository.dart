@@ -29,7 +29,7 @@ class ListRepository {
     final prefs = await Preferences.openBox();
     int selectedCityId = prefs.getKeyValue(Preferences.cityId, 0);
 
-    if (type == "category") {
+    if (type == "category" || (type == "location" && categoryId != "")) {
       int params = categoryId;
       final response = await Api.requestCatList(params, cityId, pageNo);
       if (response.success) {

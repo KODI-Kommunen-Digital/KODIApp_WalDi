@@ -15,6 +15,7 @@ class FilterScreen extends StatefulWidget {
 
 class _FilterScreenState extends State<FilterScreen> {
   int? currentCity;
+  int? currentCategory;
   int? currentListingStatus;
   ProductFilter? currentProductEventFilter;
   GroupFilter? currentForumGroupFilter;
@@ -23,6 +24,7 @@ class _FilterScreenState extends State<FilterScreen> {
   void initState() {
     super.initState();
     currentCity = widget.multiFilter.currentLocation;
+    currentCategory = widget.multiFilter.currentCategory;
     currentProductEventFilter = widget.multiFilter.currentProductEventFilter;
     currentListingStatus = widget.multiFilter.currentListingStatus;
     currentForumGroupFilter = widget.multiFilter.currentForumGroupFilter;
@@ -46,12 +48,14 @@ class _FilterScreenState extends State<FilterScreen> {
                   currentProductEventFilter: currentProductEventFilter,
                   currentListingStatus: currentListingStatus,
                   currentForumGroupFilter: currentForumGroupFilter,
+                  currentCategory: currentCategory,
                   hasForumGroupFilter: widget.multiFilter.hasForumGroupFilter,
                   hasProductEventFilter:
                       widget.multiFilter.hasProductEventFilter,
                   hasLocationFilter: widget.multiFilter.hasLocationFilter,
                   hasListingStatusFilter:
                       widget.multiFilter.hasListingStatusFilter,
+                  hasCategoryFilter: widget.multiFilter.hasCategoryFilter
                 ));
             return false;
           },
@@ -65,6 +69,8 @@ class _FilterScreenState extends State<FilterScreen> {
                 ..._buildListingStatusFilter(),
               if (widget.multiFilter.hasForumGroupFilter == true)
                 ..._buildForumGroupFilter(),
+              if (widget.multiFilter.hasCategoryFilter == true)
+                ..._buildCategoryFilter(),
             ],
           ),
         ),
@@ -305,6 +311,47 @@ class _FilterScreenState extends State<FilterScreen> {
               });
             },
           ),
+        ]),
+      )
+    ];
+  }
+
+  List<Widget> _buildCategoryFilter() {
+    return [
+      const SizedBox(
+        height: 8,
+      ),
+      Center(
+          child: Text(
+            Translate.of(context).translate('input_category'),
+            style: Theme.of(context)
+                .textTheme
+                .titleMedium!
+                .copyWith(fontWeight: FontWeight.bold),
+          )),
+      Container(
+        padding: const EdgeInsets.all(8.0),
+        child: Wrap(spacing: 8.0, children: [
+          ChoiceChip(
+            label: Text(Translate.of(context).translate('all_Categories')),
+            selected: 0 == currentCategory,
+            onSelected: (selected) {
+              setState(() {
+                currentCategory = 0;
+              });
+            },
+          ),
+          ...widget.multiFilter.categories!.map((category) {
+            return ChoiceChip(
+              label: Text(category.title),
+              selected: category.id == currentCategory,
+              onSelected: (selected) {
+                setState(() {
+                  currentCategory = category.id;
+                });
+              },
+            );
+          }).toList(),
         ]),
       )
     ];

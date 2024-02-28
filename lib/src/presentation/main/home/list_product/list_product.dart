@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages
+// ignore_for_file: depend_on_referenced_packages, use_build_context_synchronously
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_multifilter.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_setting.dart';
+import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/widget/app_filter_button.dart';
 import 'package:heidi/src/presentation/widget/app_navbar.dart';
 import 'package:heidi/src/presentation/widget/app_product_item.dart';
@@ -30,6 +31,7 @@ class ListProductScreen extends StatefulWidget {
 
 class _ListProductScreenState extends State<ListProductScreen> {
   final TextEditingController _searchController = TextEditingController();
+  late bool isCity;
 
   //ProductFilter? selectedFilter;
   MultiFilter? selectedFilter;
@@ -38,11 +40,38 @@ class _ListProductScreenState extends State<ListProductScreen> {
   @override
   void initState() {
     super.initState();
+    isCity = widget.arguments['id'] != 0;
     loadListingsList();
   }
 
   Future<void> loadListingsList() async {
-    await context.read<ListCubit>().onLoad(widget.arguments['id']);
+    if (widget.arguments['id'] != 0 && isCity) {
+      await context.read<ListCubit>().setCategoryFilter(0, null);
+    }
+    await context
+        .read<ListCubit>()
+        .onLoad(selectedFilter?.currentLocation ?? widget.arguments['id']);
+  }
+
+  MultiFilter whatCanFilter(bool isEvent) {
+    if (isCity) {
+      return MultiFilter(
+          hasCategoryFilter: true,
+          categories: AppBloc.homeCubit.category,
+          currentCategory: selectedFilter?.currentCategory ?? 0);
+    }
+
+    if (isEvent) {
+      return MultiFilter(
+          hasProductEventFilter: true,
+          currentProductEventFilter: selectedFilter?.currentProductEventFilter);
+    } else {
+      return MultiFilter(
+          hasLocationFilter: true,
+          currentLocation:
+              selectedFilter?.currentLocation ?? widget.arguments['id'],
+          cities: AppBloc.discoveryCubit.location);
+    }
   }
 
   void _updateSelectedFilter(MultiFilter? filter) {
@@ -50,12 +79,18 @@ class _ListProductScreenState extends State<ListProductScreen> {
     final loadedList = context.read<ListCubit>().getLoadedList();
     setState(() {
       if (filter?.hasProductEventFilter ?? false) {
-
         context
             .read<ListCubit>()
             .onDateProductFilter(filter?.currentProductEventFilter, loadedList);
       }
-
+      if (filter?.hasLocationFilter ?? false) {
+        loadListingsList();
+      }
+      if (filter?.hasCategoryFilter ?? false) {
+        context.read<ListCubit>().setCategoryFilter(
+            filter?.currentCategory ?? 0,
+            selectedFilter?.currentLocation ?? widget.arguments['id']);
+      }
     });
   }
 
@@ -85,33 +120,28 @@ class _ListProductScreenState extends State<ListProductScreen> {
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const CircularProgressIndicator.adaptive();
-                } else if (snapshot.hasError || !snapshot.hasData) {
+                } else if (snapshot.hasError) {
                   return Container();
                 } else {
-                  bool isEvent = snapshot.data!;
-                  return isEvent
-                      ? Row(
-                          children: [
-                            AppFilterButton(
-                                multiFilter: MultiFilter(
-                                    hasProductEventFilter: true,
-                                    currentProductEventFilter: selectedFilter
-                                        ?.currentProductEventFilter),
-                                filterCallBack: (filter) {
-                                  _updateSelectedFilter(filter);
-                                }),
-                            IconButton(
-                                onPressed: () async {
-                                  openSearchDialog().then((result) {
-                                    if ((result ?? "").trim() != "") {
-                                      //Do Search Logic here
-                                    }
-                                  });
-                                },
-                                icon: const Icon(Icons.search))
-                          ],
-                        )
-                      : Container();
+                  bool isEvent = snapshot.data ?? false;
+                  return Row(
+                    children: [
+                      AppFilterButton(
+                          multiFilter: whatCanFilter(isEvent),
+                          filterCallBack: (filter) {
+                            _updateSelectedFilter(filter);
+                          }),
+                      IconButton(
+                          onPressed: () async {
+                            openSearchDialog().then((result) {
+                              if ((result ?? "").trim() != "") {
+                                //Do Search Logic here
+                              }
+                            });
+                          },
+                          icon: const Icon(Icons.search))
+                    ],
+                  );
                 }
               },
             ),
@@ -130,13 +160,15 @@ class _ListProductScreenState extends State<ListProductScreen> {
             loaded: (list, listCity) => ListLoaded(
               list: list,
               listCity: listCity,
-              selectedId: widget.arguments['id'],
+              selectedId:
+                  selectedFilter?.currentLocation ?? widget.arguments['id'],
             ),
             updated: (list, listCity) {
               return ListLoaded(
                 list: list,
                 listCity: listCity,
-                selectedId: widget.arguments['id'],
+                selectedId:
+                    selectedFilter?.currentLocation ?? widget.arguments['id'],
               );
             },
             error: (e) => ErrorWidget('Failed to load listings.'),
