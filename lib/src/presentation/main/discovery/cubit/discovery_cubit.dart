@@ -106,7 +106,7 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
       8: "https://www.ilztal.de",
       9: "https://www.ilztal.de",
       10: "https://www.ilztal.de",
-      11: "https://www.ilztal.de",
+      11: "https://tourmkr.com/F14GDqSiQS/40669119p&26.93h&72.5t",
       12: "https://www.ilztal.de"
     };
 
