@@ -6,11 +6,11 @@ import 'package:photo_view/photo_view.dart';
 class ForumImageZoomScreen extends StatelessWidget {
   final String imageUrl;
 
-  const ForumImageZoomScreen({Key? key, required this.imageUrl}) : super(key: key);
+  const ForumImageZoomScreen({Key? key, required this.imageUrl})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    String uniqueKey = UniqueKey().toString();
     final height = MediaQuery.of(context).size.height;
 
     return Scaffold(
@@ -23,26 +23,26 @@ class ForumImageZoomScreen extends StatelessWidget {
                 height: height * 0.8,
                 child: imageUrl.contains('.pdf')
                     ? const PDF().cachedFromUrl(
-                  imageUrl,
-                  placeholder: (progress) =>
-                      Center(child: Text('$progress %')),
-                  errorWidget: (error) => Center(
-                    child: Text(
-                      error.toString(),
-                    ),
-                  ),
-                )
+                        imageUrl,
+                        placeholder: (progress) =>
+                            Center(child: Text('$progress %')),
+                        errorWidget: (error) => Center(
+                          child: Text(
+                            error.toString(),
+                          ),
+                        ),
+                      )
                     : PhotoView(
-                  imageProvider: CachedNetworkImageProvider(
-                      imageUrl.contains('admin/News.jpeg')
-                          ? imageUrl
-                          : imageUrl.contains('instagram')
-                          ? imageUrl
-                          : '$imageUrl?cacheKey=$uniqueKey'),
-                  minScale: PhotoViewComputedScale.contained * 0.8,
-                  maxScale: PhotoViewComputedScale.covered * 2.0,
-                  initialScale: PhotoViewComputedScale.contained,
-                ),
+                        imageProvider: CachedNetworkImageProvider(
+                            imageUrl.contains('admin/News.jpeg')
+                                ? imageUrl
+                                : imageUrl.contains('instagram')
+                                    ? imageUrl
+                                    : imageUrl),
+                        minScale: PhotoViewComputedScale.contained * 0.8,
+                        maxScale: PhotoViewComputedScale.covered * 2.0,
+                        initialScale: PhotoViewComputedScale.contained,
+                      ),
               ),
             ),
             Positioned(

@@ -104,47 +104,35 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                     context,
                     Routes.forumImageZoom,
                     arguments: (widget.groupModel.image != null)
-                        ? "${Application.picturesURL}${widget.groupModel.image}?cacheKey=$uniqueKey"
-                        : "${Application.picturesURL}admin/DefaultForum.jpeg?cacheKey=$uniqueKey",
+                        ? "${Application.picturesURL}${widget.groupModel.image}"
+                        : "${Application.picturesURL}admin/DefaultForum.jpeg",
                   );
                 },
-                child: CachedNetworkImage(
-                  imageUrl: widget.groupModel.image != null
-                      ? "${Application.picturesURL}${widget.groupModel.image}?cacheKey=$uniqueKey"
-                      : "${Application.picturesURL}admin/DefaultForum.jpeg?cacheKey=$uniqueKey",
-                  cacheManager: memoryCacheManager,
-                  placeholder: (context, url) {
-                    return AppPlaceholder(
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                        ),
-                      ),
-                    );
-                  },
-                  imageBuilder: (context, imageProvider) {
-                    return Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: imageProvider,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    );
-                  },
-                  errorWidget: (context, url, error) {
-                    return AppPlaceholder(
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(8),
-                            bottomLeft: Radius.circular(8),
+                child: Image.network(
+                  widget.groupModel.image != null
+                      ? "${Application.picturesURL}${widget.groupModel.image}"
+                      : "${Application.picturesURL}admin/DefaultForum.jpeg",
+                  fit: BoxFit.fitHeight,
+                  loadingBuilder: (BuildContext context, Widget child,
+                      ImageChunkEvent? loadingProgress) {
+                    if (loadingProgress == null) {
+                      return child;
+                    } else {
+                      return AppPlaceholder(
+                        child: Container(
+                          width: 120,
+                          height: 140,
+                          decoration: const BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(8),
+                              bottomLeft: Radius.circular(8),
+                            ),
                           ),
+                          child: const Icon(Icons.error),
                         ),
-                        child: const Icon(Icons.error),
-                      ),
-                    );
+                      );
+                    }
                   },
                 ),
               ),
