@@ -516,6 +516,8 @@
   "quelle":"Quelle:",
   "notificationPermission" : "Benachrichtigungen sind für diese App deaktivert. Um sie zu aktiveren öffne bitte die App-Einstellungen und erteile Erlaubnis.",
   "openSettings" : "Einstellungen öffnen",
-  "enableNotification": "Benachrichtigungen aktivieren"
+  "enableNotification": "Benachrichtigungen aktivieren",
+  "welcomeForumTitle": "Willkommen bei der Gruppenfunktion!",
+  "welcomeForum": "Hier können über das blaue Plusicon neue Gruppen von dir erstellt werden. Du kannst private und öffentliche Gruppen erstellen. Mitglieder können jederzeit bei öffentlichen Gruppen beitreten und bei privaten Gruppen eine Anfrage stellen. Viel Spaß!"
 }
 
