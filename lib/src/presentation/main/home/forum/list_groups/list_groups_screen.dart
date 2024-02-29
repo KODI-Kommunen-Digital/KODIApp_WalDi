@@ -8,6 +8,7 @@ import 'package:heidi/src/presentation/widget/app_forum_group_item.dart';
 import 'package:heidi/src/presentation/widget/app_navbar.dart';
 import 'package:heidi/src/presentation/widget/app_product_item.dart';
 import 'package:heidi/src/utils/configs/application.dart';
+import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
@@ -29,7 +30,50 @@ class _ListGroupScreenState extends State<ListGroupScreen> {
   @override
   void initState() {
     super.initState();
+    _checkFirstTime().then((isFirstTime) {
+      if (isFirstTime) {
+        _showForumPopup(context);
+      }
+    });
     loadListingsList();
+  }
+
+  Future<bool> _checkFirstTime() async {
+    final prefs = await Preferences.openBox();
+    final hasOpenedForumsBefore =
+        prefs.getBool('hasOpenedForumsBefore', defaultValue: false);
+
+    if (!hasOpenedForumsBefore) {
+      await prefs.setBool('hasOpenedForumsBefore', true);
+      return true;
+    }
+    return false;
+  }
+
+  void _showForumPopup(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(Translate.of(context).translate('welcomeForumTitle')),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(Translate.of(context).translate('welcomeForum')),
+              const SizedBox(height: 16),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Future<void> loadListingsList() async {
