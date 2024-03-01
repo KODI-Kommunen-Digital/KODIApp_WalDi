@@ -35,6 +35,7 @@ class Preferences {
   static const String categoryCount = "categoryCount";
   static const String listingStatusFilter = "listingStatusFilter";
   static const String commentId = "categoryCount";
+  static const String allListingCityFilter = "allListingCityFilter";
 
   Preferences._(this._box);
 

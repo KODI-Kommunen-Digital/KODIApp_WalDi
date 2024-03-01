@@ -26,11 +26,17 @@ class AllListingsCubit extends Cubit<AllListingsState> {
     List<ProductModel> listDataList = [];
     int status = await getCurrentStatus();
     final ResultApiModel listingsRequestResponse;
+    int currentCityFilter = await getCurrentCityFilter();
 
-    if (status == 0) {
+    if (status == 0 && currentCityFilter == 0) {
       listingsRequestResponse = await Api.requestAllListings(1);
-    } else {
+    } else if (status != 0 && currentCityFilter == 0) {
       listingsRequestResponse = await Api.requestStatusListings(status, 1);
+    } else if (status != 0 && currentCityFilter != 0) {
+      listingsRequestResponse =
+          await Api.requestStatusLocList(currentCityFilter, 1, status);
+    } else {
+      listingsRequestResponse = await Api.requestLocList(currentCityFilter, 1);
     }
 
     List<ProductModel> productData =
@@ -72,8 +78,9 @@ class AllListingsCubit extends Cubit<AllListingsState> {
 
     posts = listDataList;
 
-    int currentFilter = await getCurrentStatus();
-    emit(AllListingsState.loaded(posts, currentFilter));
+    int currentListingFilter = await getCurrentStatus();
+    emit(AllListingsState.loaded(
+        posts, currentListingFilter, currentCityFilter));
   }
 
   Future<ProductModel?> loadProduct(cityId, id) async {
@@ -86,11 +93,18 @@ class AllListingsCubit extends Cubit<AllListingsState> {
     final int status = await getCurrentStatus();
     final ResultApiModel listingsRequestResponse;
     List<ProductModel> listDataList = [];
+    int currentCityFilter = await getCurrentCityFilter();
 
-    if (status == 0) {
+    if (status == 0 || currentCityFilter == 0) {
       listingsRequestResponse = await Api.requestAllListings(pageNo);
-    } else {
+    } else if (status != 0 && currentCityFilter == 0) {
       listingsRequestResponse = await Api.requestStatusListings(status, pageNo);
+    } else if (status != 0 && currentCityFilter != 0) {
+      listingsRequestResponse =
+          await Api.requestStatusLocList(currentCityFilter, pageNo, status);
+    } else {
+      listingsRequestResponse =
+          await Api.requestLocList(currentCityFilter, pageNo);
     }
 
     final newProductData =
@@ -152,5 +166,16 @@ class AllListingsCubit extends Cubit<AllListingsState> {
   Future<void> setCurrentStatus(int status) async {
     final prefs = await Preferences.openBox();
     prefs.setKeyValue(Preferences.listingStatusFilter, status);
+  }
+
+  Future<void> setCurrentCityFilter(int filter) async {
+    final prefs = await Preferences.openBox();
+    prefs.setKeyValue(Preferences.allListingCityFilter, filter);
+  }
+
+  Future<int> getCurrentCityFilter() async {
+    final prefs = await Preferences.openBox();
+    int filter = prefs.getKeyValue(Preferences.allListingCityFilter, 0);
+    return filter;
   }
 }

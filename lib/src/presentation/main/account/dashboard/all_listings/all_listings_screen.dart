@@ -48,11 +48,12 @@ class _AllListingsScreenState extends State<AllListingsScreen> {
     return BlocBuilder<AllListingsCubit, AllListingsState>(
         builder: (context, state) => state.maybeWhen(
             loading: () => const AllListingsLoading(),
-            loaded: (posts, currentFilter) => AllListingsLoaded(
-                  user: widget.user,
-                  posts: posts,
-                  currentFilter: currentFilter,
-                ),
+            loaded: (posts, currentListingFilter, currentCityFilter) =>
+                AllListingsLoaded(
+                    user: widget.user,
+                    posts: posts,
+                    currentListingFilter: currentListingFilter,
+                    currentCityFilter: currentCityFilter),
             orElse: () => ErrorWidget("Failed to load listings.")));
   }
 }
@@ -76,10 +77,15 @@ class AllListingsLoading extends StatelessWidget {
 class AllListingsLoaded extends StatefulWidget {
   final List<ProductModel>? posts;
   final UserModel user;
-  final int currentFilter;
+  final int currentListingFilter;
+  final int currentCityFilter;
 
   const AllListingsLoaded(
-      {required this.user, this.posts, super.key, required this.currentFilter});
+      {required this.user,
+      this.posts,
+      super.key,
+      required this.currentListingFilter,
+      required this.currentCityFilter});
 
   @override
   State<AllListingsLoaded> createState() => _AllListingsLoadedState();
@@ -94,7 +100,8 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
   List<ProductModel>? posts;
   bool isSwiped = false;
   String selectedListingStatusValue = "inactive";
-  late int currentFilter;
+  late int currentListingFilter;
+  late int currentCityFilter;
 
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
     Factory(() => EagerGestureRecognizer())
@@ -105,7 +112,8 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
     super.initState();
     _scrollController.addListener(_scrollListener);
     posts = widget.posts;
-    currentFilter = widget.currentFilter;
+    currentListingFilter = widget.currentListingFilter;
+    currentCityFilter = widget.currentCityFilter;
   }
 
   @override
@@ -131,10 +139,15 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
               AppFilterButton(
                   multiFilter: MultiFilter(
                       hasListingStatusFilter: true,
-                      currentListingStatus: currentFilter),
+                      hasLocationFilter: true,
+                      currentListingStatus: currentListingFilter,
+                      cities: AppBloc.homeCubit.location,
+                      currentLocation: currentCityFilter),
                   filterCallBack: (filter) async {
                     await AppBloc.allListingsCubit
-                        .setCurrentStatus(filter.currentListingStatus!);
+                        .setCurrentCityFilter(filter.currentLocation ?? 0);
+                    await AppBloc.allListingsCubit
+                        .setCurrentStatus(filter.currentListingStatus ?? 0);
                     await _onRefresh();
                   }),
               IconButton(
