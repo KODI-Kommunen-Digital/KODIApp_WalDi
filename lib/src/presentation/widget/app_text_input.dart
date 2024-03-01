@@ -6,6 +6,7 @@ class AppTextInput extends StatefulWidget {
   final String? hintText;
   final TextEditingController? controller;
   final FocusNode? focusNode;
+  final Iterable<String>? autofillHint;
   final GestureTapCallback? onTap;
   final ValueChanged<String>? onChanged;
   final ValueChanged<String>? onSubmitted;
@@ -39,7 +40,8 @@ class AppTextInput extends StatefulWidget {
       this.autofocus = false,
       this.maxLength,
       this.readOnly = false,
-      this.hasDelete = true})
+      this.hasDelete = true,
+      this.autofillHint})
       : super(key: key);
 
   @override
@@ -157,6 +159,7 @@ class _AppTextInputState extends State<AppTextInput> {
                   textInputAction: widget.textInputAction,
                   maxLines: widget.maxLines,
                   maxLength: widget.maxLength,
+                  autofillHints: widget.autofillHint,
                   decoration: InputDecoration(
                     counterText: "",
                     hintText: widget.hintText,
