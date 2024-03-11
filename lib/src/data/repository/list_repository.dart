@@ -75,7 +75,7 @@ class ListRepository {
     return null;
   }
 
-  static Future<List?> searchListing({required content}) async {
+  static Future<List<List<ProductModel>>?> searchListing({required content}) async {
     final response = await Api.requestSearchListing(content);
     if (response.success) {
       final list = List.from(response.data ?? []).map((item) {

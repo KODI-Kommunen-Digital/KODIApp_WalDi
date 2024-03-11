@@ -151,10 +151,8 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                     await _onRefresh();
                   }),
               IconButton(
-                  onPressed: () async {
-                    openSearchDialog().then((result) {
-                      if ((result ?? "").trim() != "") {}
-                    });
+                  onPressed: () {
+                    _searchListings();
                   },
                   icon: const Icon(Icons.search))
             ],
@@ -644,6 +642,13 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
           isLoadingMore = false;
         });
       }
+    }
+  }
+
+  Future _searchListings() async {
+    String? searchResult = await openSearchDialog();
+    if ((searchResult ?? "").trim() != "") {
+      context.read<AllListingsCubit>().searchListing(searchResult!.trim());
     }
   }
 

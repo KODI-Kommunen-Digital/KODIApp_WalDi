@@ -82,10 +82,12 @@ class ListCubit extends Cubit<ListState> {
 
   List<ProductModel> getLoadedList() => listLoaded;
 
-  void searchListing(content) async {
+  Future<void> searchListing(content) async {
+    emit(const ListStateLoading());
     final result = await ListRepository.searchListing(content: content);
-    final listUpdated = result?[0] ?? [];
+    final List<ProductModel> listUpdated = result?[0] ?? [];
     if (listUpdated.isNotEmpty) {
+      list = [];
       list.addAll(listUpdated);
     }
     emit(ListStateUpdated(filteredList, listCity));

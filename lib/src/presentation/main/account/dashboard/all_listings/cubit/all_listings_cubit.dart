@@ -88,13 +88,19 @@ class AllListingsCubit extends Cubit<AllListingsState> {
     return loadProductResponse;
   }
 
-  Future<dynamic> searchListing(content) async {
+  Future<void> searchListing(content) async {
+    emit(const AllListingsState.loading());
     final result = await ListRepository.searchListing(content: content);
-    final listUpdated = result?[0] ?? [];
+    final List<ProductModel> listUpdated = result?[0] ?? [];
     if (listUpdated.isNotEmpty) {
+      posts = [];
       posts.addAll(listUpdated);
     }
-    return posts;
+
+    int currentListingFilter = await getCurrentStatus();
+    int currentCityFilter = await getCurrentCityFilter();
+    emit(AllListingsState.loaded(
+        listUpdated, currentListingFilter, currentCityFilter));
   }
 
   Future<dynamic> newListings(int pageNo) async {
