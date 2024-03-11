@@ -31,11 +31,11 @@ class ListCubit extends Cubit<ListState> {
   Future<void> onLoad(cityId) async {
     pageNo = 1;
     final prefs = await Preferences.openBox();
-    final categoryId = await prefs.getKeyValue(Preferences.categoryId, '');
+    final categoryId = prefs.getKeyValue(Preferences.categoryId, 0);
     final type = prefs.getKeyValue(Preferences.type, '');
     listCity = await getCityList() ?? [];
     final result = await ListRepository.loadList(
-      categoryId: categoryId,
+      categoryId: (categoryId == 0) ? "" : categoryId,
       type: type,
       pageNo: pageNo,
       cityId: cityId,
@@ -52,7 +52,7 @@ class ListCubit extends Cubit<ListState> {
     final prefs = await Preferences.openBox();
 
     if (filter == 0) {
-      prefs.setKeyValue(Preferences.categoryId, '');
+      prefs.setKeyValue(Preferences.categoryId, 0);
     } else {
       prefs.setKeyValue(Preferences.categoryId, filter);
     }
@@ -64,11 +64,11 @@ class ListCubit extends Cubit<ListState> {
   Future<List<ProductModel>> newListings(int pageNo, city) async {
     final prefs = await Preferences.openBox();
     // final cityId = prefs.getKeyValue(Preferences.cityId, 0);
-    final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
+    final categoryId = prefs.getKeyValue(Preferences.categoryId, 0);
     final type = prefs.getKeyValue(Preferences.type, '');
 
     final result = await ListRepository.loadList(
-      categoryId: categoryId,
+      categoryId: (categoryId == 0) ? "" : categoryId,
       type: type,
       pageNo: pageNo,
       cityId: city,
