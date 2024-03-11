@@ -102,7 +102,7 @@ class ListCubit extends Cubit<ListState> {
       list = [];
       list.addAll(listUpdated);
     }
-    emit(ListStateUpdated(filteredList, listCity));
+    emit(ListStateUpdated(listUpdated, listCity));
   }
 
   void onDateProductFilter(ProductFilter? type, List<ProductModel> loadedList) {
