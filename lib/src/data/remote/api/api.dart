@@ -334,8 +334,10 @@ class Api {
   }
 
   ///Get Listings by status and location
-  static Future<ResultApiModel> requestStatusLocList(params, pageNo, status) async {
-    var list = '/listings?cityId=$params&statusId=$status&pageNo=$pageNo&pageSize=19';
+  static Future<ResultApiModel> requestStatusLocList(
+      params, pageNo, status) async {
+    var list =
+        '/listings?cityId=$params&statusId=$status&pageNo=$pageNo&pageSize=19';
     final result = await HTTPManager(forum: false).get(url: list);
     return ResultApiModel.fromJson(result);
   }
@@ -624,6 +626,12 @@ class Api {
 
   static Future<ResultApiModel> moreInfo() async {
     final result = await HTTPManager(forum: false).get(url: faq);
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> requestSearchListing(content) async {
+    var list = 'listings/search?searchQuery=$content';
+    final result = await HTTPManager(forum: false).get(url: list);
     return ResultApiModel.fromJson(result);
   }
 

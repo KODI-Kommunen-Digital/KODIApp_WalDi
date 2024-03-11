@@ -50,15 +50,14 @@ class ListCubit extends Cubit<ListState> {
   Future<void> setCategoryFilter(int filter, int? cityId) async {
     final prefs = await Preferences.openBox();
 
-    if(filter == 0) {
+    if (filter == 0) {
       prefs.setKeyValue(Preferences.categoryId, '');
     } else {
       prefs.setKeyValue(Preferences.categoryId, filter);
     }
-    if(cityId != null) {
+    if (cityId != null) {
       onLoad(cityId);
     }
-
   }
 
   Future<List<ProductModel>> newListings(int pageNo, city) async {
@@ -82,6 +81,15 @@ class ListCubit extends Cubit<ListState> {
   }
 
   List<ProductModel> getLoadedList() => listLoaded;
+
+  void searchListing(content) async {
+    final result = await ListRepository.searchListing(content: content);
+    final listUpdated = result?[0] ?? [];
+    if (listUpdated.isNotEmpty) {
+      list.addAll(listUpdated);
+    }
+    emit(ListStateUpdated(filteredList, listCity));
+  }
 
   void onDateProductFilter(ProductFilter? type, List<ProductModel> loadedList) {
     final currentDate = DateTime.now();

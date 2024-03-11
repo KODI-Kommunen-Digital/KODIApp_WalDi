@@ -75,6 +75,17 @@ class ListRepository {
     return null;
   }
 
+  static Future<List?> searchListing({required content}) async {
+    final response = await Api.requestSearchListing(content);
+    if (response.success) {
+      final list = List.from(response.data ?? []).map((item) {
+        return ProductModel.fromJson(item, setting: Application.setting);
+      }).toList();
+      return [list];
+    }
+    return null;
+  }
+
   ///load wish list
   // static Future<List?> loadWishList({
   //   int? page,
@@ -172,7 +183,8 @@ class ListRepository {
     final response = await Api.requestProduct(cityId, id);
     if (response.success) {
       UtilLogger.log('ErrorReason', response.data);
-      return ProductModel.fromJson(response.data, setting: Application.setting, cityId: cityId);
+      return ProductModel.fromJson(response.data,
+          setting: Application.setting, cityId: cityId);
     } else {
       logError('Product Request Response', response.message);
     }

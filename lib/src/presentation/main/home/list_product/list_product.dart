@@ -134,8 +134,10 @@ class _ListProductScreenState extends State<ListProductScreen> {
                       IconButton(
                           onPressed: () async {
                             openSearchDialog().then((result) {
-                              if ((result ?? "").trim() != "") {
-                                //Do Search Logic here
+                              if (result != null && result.trim().isNotEmpty) {
+                                context
+                                    .read<ListCubit>()
+                                    .searchListing(result.trim());
                               }
                             });
                           },
@@ -214,6 +216,9 @@ class _ListProductScreenState extends State<ListProductScreen> {
                     onPressed: () {
                       String content = _searchController.text;
                       _searchController.clear();
+                      setState(() {
+                        context.read<ListCubit>().searchListing(content);
+                      });
                       Navigator.pop(context, content);
                     },
                     child: Text(

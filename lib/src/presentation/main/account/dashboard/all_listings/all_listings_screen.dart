@@ -153,9 +153,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
               IconButton(
                   onPressed: () async {
                     openSearchDialog().then((result) {
-                      if ((result ?? "").trim() != "") {
-                        //Do Search Logic here
-                      }
+                      if ((result ?? "").trim() != "") {}
                     });
                   },
                   icon: const Icon(Icons.search))
@@ -464,14 +462,17 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                   ),
                   const SizedBox(width: 8.0),
                   TextButton(
-                    onPressed: () {
-                      String content = _searchController.text;
-                      _searchController.clear();
-                      Navigator.pop(context, content);
-                    },
                     child: Text(
                       Translate.of(context).translate('search_title'),
                     ),
+                    onPressed: () {
+                      String content = _searchController.text;
+                      setState(() {
+                        AppBloc.allListingsCubit.searchListing(content);
+                      });
+                      _searchController.clear();
+                      Navigator.pop(context, content);
+                    },
                   ),
                 ],
               ),
