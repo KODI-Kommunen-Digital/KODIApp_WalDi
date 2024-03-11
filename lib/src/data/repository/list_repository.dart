@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_favorites_detail_list.dart';
+import 'package:heidi/src/data/model/model_multifilter.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
 import 'package:heidi/src/utils/configs/application.dart';
@@ -75,8 +76,22 @@ class ListRepository {
     return null;
   }
 
-  static Future<List<List<ProductModel>>?> searchListing({required content}) async {
-    final response = await Api.requestSearchListing(content);
+  static Future<List<List<ProductModel>>?> searchListing(
+      {required content, required MultiFilter multiFilter}) async {
+    String linkFilter = "";
+    if (multiFilter.hasListingStatusFilter &&
+        (multiFilter.currentListingStatus ?? 0) != 0) {
+      linkFilter = "$linkFilter&statusId=${multiFilter.currentListingStatus}";
+    }
+    if (multiFilter.hasLocationFilter &&
+        (multiFilter.currentLocation ?? 0) != 0) {
+      linkFilter = "$linkFilter&cityId=${multiFilter.currentLocation}";
+    }
+    if (multiFilter.hasCategoryFilter &&
+        (multiFilter.currentCategory ?? 0) != 0) {
+      linkFilter = "$linkFilter&categoryId=${multiFilter.currentCategory}";
+    }
+    final response = await Api.requestSearchListing(content, linkFilter);
     if (response.success) {
       final list = List.from(response.data ?? []).map((item) {
         return ProductModel.fromJson(item, setting: Application.setting);

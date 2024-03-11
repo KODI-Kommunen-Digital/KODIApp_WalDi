@@ -629,11 +629,12 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
-  static Future<ResultApiModel> requestSearchListing(content) async {
-    var list = 'listings/search?searchQuery=$content';
+  static Future<ResultApiModel> requestSearchListing(content, filter) async {
+    var list = 'listings/search?searchQuery=$content$filter';
     final result = await HTTPManager(forum: false).get(url: list);
     return ResultApiModel.fromJson(result);
   }
+
 
   ///Singleton factory
   static final Api _instance = Api._internal();

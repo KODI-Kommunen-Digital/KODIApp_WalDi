@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:heidi/src/data/model/model.dart';
+import 'package:heidi/src/data/model/model_multifilter.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
@@ -84,7 +85,18 @@ class ListCubit extends Cubit<ListState> {
 
   Future<void> searchListing(content) async {
     emit(const ListStateLoading());
-    final result = await ListRepository.searchListing(content: content);
+    final prefs = await Preferences.openBox();
+
+    final categoryId = prefs.getKeyValue(Preferences.categoryId, 0);
+    final cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    MultiFilter multiFilter = MultiFilter(
+        hasCategoryFilter: true,
+        hasLocationFilter: true,
+        currentLocation: cityId,
+        currentCategory: categoryId);
+
+    final result = await ListRepository.searchListing(
+        content: content, multiFilter: multiFilter);
     final List<ProductModel> listUpdated = result?[0] ?? [];
     if (listUpdated.isNotEmpty) {
       list = [];
