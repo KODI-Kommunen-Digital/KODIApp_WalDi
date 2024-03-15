@@ -84,7 +84,7 @@ class AllListingsCubit extends Cubit<AllListingsState> {
         posts, currentListingFilter, currentCityFilter));
   }
 
-  Future<dynamic> loadProduct(cityId, id) async {
+  Future<ProductModel?> loadProduct(cityId, id) async {
     final loadProductResponse = await ListRepository.loadProduct(cityId, id);
     return loadProductResponse;
   }
