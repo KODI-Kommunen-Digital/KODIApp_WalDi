@@ -36,6 +36,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
   //ProductFilter? selectedFilter;
   MultiFilter? selectedFilter;
   int pageNo = 1;
+  bool isSearching = false;
 
   @override
   void initState() {
@@ -181,7 +182,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
   Future _searchListings() async {
     String? searchResult = await openSearchDialog();
     if ((searchResult ?? "").trim() != "") {
-      context.read<ListCubit>().searchListing(searchResult!.trim());
+      context.read<ListCubit>().searchListing(searchResult!.trim(), true);
     }
   }
 
@@ -218,9 +219,6 @@ class _ListProductScreenState extends State<ListProductScreen> {
                     onPressed: () {
                       String content = _searchController.text;
                       _searchController.clear();
-                      setState(() {
-                        context.read<ListCubit>().searchListing(content);
-                      });
                       Navigator.pop(context, content);
                     },
                     child: Text(
@@ -300,9 +298,15 @@ class _ListLoadedState extends State<ListLoaded> {
           isLoadingMore = true;
           // previousScrollPosition = _scrollController.position.pixels;
         });
-        list = await context
-            .read<ListCubit>()
-            .newListings(++pageNo, widget.selectedId);
+        if (context.read<ListCubit>().isSearching) {
+          context
+              .read<ListCubit>()
+              .searchListing(context.read<ListCubit>().searchTerm, false);
+        } else {
+          list = await context
+              .read<ListCubit>()
+              .newListings(++pageNo, widget.selectedId);
+        }
         setState(() {
           isLoadingMore = false;
         });

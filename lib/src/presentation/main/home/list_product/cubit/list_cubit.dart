@@ -27,6 +27,8 @@ class ListCubit extends Cubit<ListState> {
   List<ProductModel> listLoaded = [];
   List<ProductModel> filteredList = [];
   List listCity = [];
+  bool isSearching = false;
+  String? searchTerm;
 
   Future<void> onLoad(cityId) async {
     pageNo = 1;
@@ -83,12 +85,18 @@ class ListCubit extends Cubit<ListState> {
 
   List<ProductModel> getLoadedList() => listLoaded;
 
-  Future<void> searchListing(content) async {
-    emit(const ListStateLoading());
+  Future<void> searchListing(content, bool newSearch) async {
+    if (newSearch) {
+      emit(const ListState.loading());
+      pageNo = 1;
+    }
+    isSearching = true;
+    searchTerm = content.toString();
     final prefs = await Preferences.openBox();
 
     final categoryId = prefs.getKeyValue(Preferences.categoryId, 0);
     final cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    List<ProductModel>? listDataList = [];
     MultiFilter multiFilter = MultiFilter(
         hasCategoryFilter: true,
         hasLocationFilter: true,
@@ -96,13 +104,44 @@ class ListCubit extends Cubit<ListState> {
         currentCategory: categoryId);
 
     final result = await ListRepository.searchListing(
-        content: content, multiFilter: multiFilter);
-    final List<ProductModel> listUpdated = result?[0] ?? [];
-    if (listUpdated.isNotEmpty) {
-      list = [];
+        content: content, multiFilter: multiFilter, pageNo: pageNo++);
+    final List<ProductModel>? listUpdated = result?[0];
+    if (listUpdated != null) {
+      if (newSearch) {
+        list = [];
+      }
       list.addAll(listUpdated);
     }
-    emit(ListStateUpdated(listUpdated, listCity));
+    for (final product in list) {
+      listDataList.add(
+        ProductModel(
+          id: product.id,
+          cityId: product.cityId,
+          title: product.title,
+          image: product.image,
+          pdf: product.pdf,
+          category: product.category,
+          categoryId: product.categoryId,
+          subcategoryId: product.subcategoryId,
+          startDate: product.startDate,
+          endDate: product.endDate,
+          createDate: product.createDate,
+          favorite: product.favorite,
+          address: product.address,
+          phone: product.phone,
+          email: product.email,
+          website: product.website,
+          description: product.description,
+          statusId: product.statusId,
+          userId: product.userId,
+          sourceId: product.sourceId,
+          imageLists: product.imageLists,
+          expiryDate: product.expiryDate,
+        ),
+      );
+    }
+
+    emit(ListStateUpdated(listDataList, listCity));
   }
 
   void onDateProductFilter(ProductFilter? type, List<ProductModel> loadedList) {

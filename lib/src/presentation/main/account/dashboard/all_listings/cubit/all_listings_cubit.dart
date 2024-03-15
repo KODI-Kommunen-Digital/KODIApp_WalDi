@@ -104,7 +104,7 @@ class AllListingsCubit extends Cubit<AllListingsState> {
     final List<ProductModel>? listUpdated = result?[0];
 
     if (listUpdated != null) {
-      if (listUpdated.isNotEmpty && pageNo == 1) {
+      if (pageNo == 1) {
         posts = [];
       }
       posts.addAll(listUpdated);
