@@ -84,30 +84,64 @@ class AllListingsCubit extends Cubit<AllListingsState> {
         posts, currentListingFilter, currentCityFilter));
   }
 
-  Future<ProductModel?> loadProduct(cityId, id) async {
+  Future<dynamic> loadProduct(cityId, id) async {
     final loadProductResponse = await ListRepository.loadProduct(cityId, id);
     return loadProductResponse;
   }
 
-  Future<void> searchListing(content) async {
-    emit(const AllListingsState.loading());
-
+  Future<List<ProductModel>?> searchListing(content, int pageNo) async {
     int currentListingFilter = await getCurrentStatus();
     int currentCityFilter = await getCurrentCityFilter();
+    List<ProductModel>? listDataList = [];
     MultiFilter multiFilter = MultiFilter(
         hasLocationFilter: true,
         hasListingStatusFilter: true,
         currentListingStatus: currentListingFilter,
         currentLocation: currentCityFilter);
 
-    final result = await ListRepository.searchListing(content: content, multiFilter: multiFilter);
-    final List<ProductModel> listUpdated = result?[0] ?? [];
-    if (listUpdated.isNotEmpty) {
-      posts = [];
+    final result = await ListRepository.searchListing(
+        content: content, multiFilter: multiFilter, pageNo: pageNo);
+    final List<ProductModel>? listUpdated = result?[0];
+
+    if (listUpdated != null) {
+      if (listUpdated.isNotEmpty && pageNo == 1) {
+        posts = [];
+      }
       posts.addAll(listUpdated);
     }
-    emit(AllListingsState.loaded(
-        listUpdated, currentListingFilter, currentCityFilter));
+
+    for (final product in posts) {
+      if (product != null) {
+        listDataList.add(
+          ProductModel(
+            id: product.id,
+            cityId: product.cityId,
+            title: product.title,
+            image: product.image,
+            pdf: product.pdf,
+            category: product.category,
+            categoryId: product.categoryId,
+            subcategoryId: product.subcategoryId,
+            startDate: product.startDate,
+            endDate: product.endDate,
+            createDate: product.createDate,
+            favorite: product.favorite,
+            address: product.address,
+            phone: product.phone,
+            email: product.email,
+            website: product.website,
+            description: product.description,
+            statusId: product.statusId,
+            userId: product.userId,
+            sourceId: product.sourceId,
+            imageLists: product.imageLists,
+            expiryDate: product.expiryDate,
+          ),
+        );
+      }
+    }
+
+    return listDataList;
   }
 
   Future<dynamic> newListings(int pageNo) async {
