@@ -35,6 +35,7 @@ class Preferences {
   static const String pushNotificationsPermission =
       "pushNotificationsPermission";
   static const String receiveNotification = "receiveNotification";
+  static const String allListingCityFilter = "allListingCityFilter";
 
   Preferences._(this._box);
 

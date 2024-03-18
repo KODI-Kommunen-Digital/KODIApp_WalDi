@@ -9,13 +9,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:heidi/src/data/model/model.dart';
+import 'package:heidi/src/data/model/model_multifilter.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/add_listing/cubit/add_listing_cubit.dart';
 import 'package:heidi/src/presentation/main/add_listing/cubit/add_listing_state.dart';
 import 'package:heidi/src/presentation/main/dashboard/all_listings/cubit/all_listings_cubit.dart';
 import 'package:heidi/src/presentation/main/dashboard/all_listings/cubit/all_listings_state.dart';
+import 'package:heidi/src/presentation/main/home/widget/app_filter_button.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
+import 'package:heidi/src/presentation/widget/app_text_input.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
@@ -34,8 +37,14 @@ class AllListingsScreen extends StatelessWidget {
     return BlocBuilder<AllListingsCubit, AllListingsState>(
         builder: (context, state) => state.maybeWhen(
             loading: () => const AllListingsLoading(),
-            loaded: (posts, isRefreshLoader) => AllListingsLoaded(
-                user: user, posts: posts, isRefreshLoader: isRefreshLoader),
+            loaded: (posts, isRefreshLoader, currentListingFilter,
+                    currentCityFilter) =>
+                AllListingsLoaded(
+                    user: user,
+                    isRefreshLoader: isRefreshLoader,
+                    posts: posts,
+                    currentListingFilter: currentListingFilter,
+                    currentCityFilter: currentCityFilter),
             orElse: () => ErrorWidget("Failed to load listings.")));
   }
 }
@@ -60,11 +69,15 @@ class AllListingsLoaded extends StatefulWidget {
   final List<ProductModel>? posts;
   final UserModel user;
   final bool isRefreshLoader;
+  final int currentListingFilter;
+  final int currentCityFilter;
 
   const AllListingsLoaded(
       {required this.user,
       required this.isRefreshLoader,
       this.posts,
+      required this.currentListingFilter,
+      required this.currentCityFilter,
       super.key});
 
   @override
@@ -73,12 +86,17 @@ class AllListingsLoaded extends StatefulWidget {
 
 class _AllListingsLoadedState extends State<AllListingsLoaded> {
   final _scrollController = ScrollController(initialScrollOffset: 0.0);
+  final TextEditingController _searchController = TextEditingController();
   double previousScrollPosition = 0;
   bool isLoadingMore = false;
   int pageNo = 1;
+  bool isSearching = false;
+  String? searchTerm;
   List<ProductModel>? posts;
   bool isSwiped = false;
   String selectedListingStatusValue = "inactive";
+  late int currentListingFilter;
+  late int currentCityFilter;
 
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
     Factory(() => EagerGestureRecognizer())
@@ -89,6 +107,8 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
     super.initState();
     _scrollController.addListener(_scrollListener);
     posts = widget.posts;
+    currentListingFilter = widget.currentListingFilter;
+    currentCityFilter = widget.currentCityFilter;
   }
 
   @override
@@ -99,53 +119,8 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
     super.dispose();
   }
 
-  Future<void> _openFilterDrawer(BuildContext context) async {
-    List<String> statusNames = [
-      Translate.of(context).translate("active"),
-      Translate.of(context).translate("inactive"),
-      Translate.of(context).translate("under_review"),
-    ];
-    int selectedStatus = await AppBloc.allListingsCubit.getCurrentStatus();
-    await showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return Container(
-          color: Theme.of(context).dialogBackgroundColor,
-          height: 200,
-          child: ListView.separated(
-            itemCount: 3,
-            separatorBuilder: (BuildContext context, int index) => Divider(
-              color:
-                  Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white,
-              height: 1,
-              thickness: 1,
-            ),
-            itemBuilder: (context, index) {
-              return ListTile(
-                title: Text(statusNames[index]),
-                trailing: (selectedStatus == index + 1)
-                    ? const Icon(Icons.check, color: Colors.white)
-                    : null,
-                onTap: () async {
-                  if (selectedStatus != index + 1) {
-                    await AppBloc.allListingsCubit.setCurrentStatus(index + 1);
-                  } else {
-                    await AppBloc.allListingsCubit.setCurrentStatus(0);
-                  }
-                  Navigator.of(context).pop();
-                  await _onRefresh();
-                },
-              );
-            },
-          ),
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    posts = widget.posts;
     final memoryCacheManager = DefaultCacheManager();
     return Scaffold(
       appBar: AppBar(
@@ -154,17 +129,28 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
           Translate.of(context).translate('all_listings'),
         ),
         actions: [
-          TextButton(
-            onPressed: () async {
-              _openFilterDrawer(context);
-            },
-            style: TextButton.styleFrom(
-              textStyle: Theme.of(context)
-                  .textTheme
-                  .titleSmall!
-                  .copyWith(fontWeight: FontWeight.bold),
-            ),
-            child: const Text("Filter"),
+          Row(
+            children: [
+              AppFilterButton(
+                  multiFilter: MultiFilter(
+                      hasListingStatusFilter: true,
+                      hasLocationFilter: true,
+                      currentListingStatus: currentListingFilter,
+                      cities: AppBloc.homeCubit.location,
+                      currentLocation: currentCityFilter),
+                  filterCallBack: (filter) async {
+                    await AppBloc.allListingsCubit
+                        .setCurrentCityFilter(filter.currentLocation ?? 0);
+                    await AppBloc.allListingsCubit
+                        .setCurrentStatus(filter.currentListingStatus ?? 0);
+                    await _onRefresh();
+                  }),
+              IconButton(
+                  onPressed: () {
+                    _searchListings();
+                  },
+                  icon: const Icon(Icons.search))
+            ],
           ),
         ],
       ),
@@ -472,6 +458,72 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
     );
   }
 
+  Future<String?> openSearchDialog() async {
+    String? searchRequest = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+            title: Center(
+                child: Text(Translate.of(context).translate('search_title'))),
+            contentPadding: const EdgeInsets.all(24.0),
+            children: [
+              AppTextInput(
+                hintText: Translate.of(context).translate('search_title'),
+                keyboardType: TextInputType.text,
+                trailing: const Icon(Icons.search),
+                hasDelete: false,
+                controller: _searchController,
+                //focusNode: _focusPass,
+              ),
+              const SizedBox(height: 8.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      _searchController.clear();
+                      Navigator.pop(context);
+                    },
+                    child: Text(Translate.of(context).translate('cancel')),
+                  ),
+                  const SizedBox(width: 8.0),
+                  TextButton(
+                    child: Text(
+                      Translate.of(context).translate('search_title'),
+                    ),
+                    onPressed: () {
+                      String content = _searchController.text;
+                      _searchController.clear();
+                      Navigator.pop(context, content);
+                    },
+                  ),
+                ],
+              ),
+            ]);
+      },
+    );
+    return searchRequest;
+  }
+
+  Future _searchListings() async {
+    String? searchResult = await openSearchDialog();
+    if ((searchResult ?? "").trim() != "") {
+      pageNo = 1;
+      isSearching = true;
+      searchTerm = searchResult!.trim();
+      setState(() {
+        posts = [];
+        isLoadingMore = true;
+      });
+      posts = await context
+          .read<AllListingsCubit>()
+          .searchListing(searchTerm, pageNo);
+      setState(() {
+        isLoadingMore = false;
+      });
+    }
+  }
+
   Future _onListingAction(int? chosen, ProductModel item) async {
     if (chosen == null) return;
 
@@ -634,7 +686,13 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
           isLoadingMore = true;
           previousScrollPosition = _scrollController.position.pixels;
         });
-        posts = await context.read<AllListingsCubit>().newListings(++pageNo);
+        if (!isSearching) {
+          posts = await context.read<AllListingsCubit>().newListings(++pageNo);
+        } else {
+          posts = await context
+              .read<AllListingsCubit>()
+              .searchListing(searchTerm, ++pageNo);
+        }
         setState(() {
           isLoadingMore = false;
         });
