@@ -47,6 +47,7 @@ class ProductModel {
   final String? fax;
   final String email;
   final String website;
+  final String externalId;
   final String description;
   final String? color;
   final String? icon;
@@ -101,6 +102,7 @@ class ProductModel {
       this.fax,
       required this.email,
       required this.website,
+      required this.externalId,
       required this.description,
       this.color,
       this.icon,
@@ -145,6 +147,7 @@ class ProductModel {
     Map<String, dynamic> socials = {};
     UserModel? author;
     String? category;
+    String? externalId;
     LocationData? location;
     CategoryModel? country;
     CategoryModel? state;
@@ -226,6 +229,13 @@ class ProductModel {
       category = "Amtliche Mitteilung";
     }
 
+    if (json['sourceId'] == 3 && json['externalId'] != null) {
+      Uri uri = Uri.parse(json['externalId']);
+      externalId = uri.authority;
+    } else {
+      externalId = json['externalId'];
+    }
+
     final listRelated = List.from(json['related'] ?? []).map((item) {
       return ProductModel.fromJson(item, setting: setting);
     }).toList();
@@ -273,6 +283,7 @@ class ProductModel {
       fax: json['fax'] ?? '',
       email: json['email'] ?? '',
       website: json['website'] ?? '',
+      externalId: externalId ?? '',
       description: json['description'],
       color: json['color'] ?? '',
       categoryId: json['categoryId'] ?? 1,
@@ -341,6 +352,7 @@ class ProductModel {
       fax: '',
       email: '',
       website: '',
+      externalId: '',
       description: '',
       color: '',
       icon: '',

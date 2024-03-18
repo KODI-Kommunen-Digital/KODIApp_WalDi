@@ -515,5 +515,11 @@
   "choose_time_period": "Choose time period",
   "choose_listing_status": "Choose listing status",
   "choose_forum": "Choose forum",
-  "all": "All"
+  "all": "All",
+  "quelle":"Source:",
+  "notificationPermission" : "Notifications are disabled for this app. To enable them, please open the app settings and grant permission",
+  "openSettings" : "Open Settings",
+  "enableNotification": "Enable Notifications",
+  "welcomeForumTitle": "Welcome to the group function!",
+  "welcomeForum": "Here you can create new groups using the blue plus icon. You can create private and public groups. Members can join public groups at any time and make a request for private groups. Have fun!"
 }

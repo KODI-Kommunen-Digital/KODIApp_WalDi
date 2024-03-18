@@ -285,7 +285,7 @@
   "choose_date": "Datum wählen",
   "choose_date_message": "Bitte Datum wählen",
   "start_date": "Startdatum",
-  "expiry_date": "Verfallsdatum",
+  "expiry_date": "Ablaufdatum",
   "end_date": "Endtermin",
   "to": "bis",
   "date": "Datum",
@@ -481,7 +481,7 @@
   "delete_account_fail": "Das Löschen des Kontos ist fehlgeschlagen. Bitte versuch es später.",
   "hselect_location":"Ort auswählen",
   "choose_exptime":"Ablaufzeit wählen",
-  "enable_expiry_date":"Ein Ablaufdatum hinzufügen",  
+  "enable_expiry_date":"Ein Ablaufdatum hinzufügen, an dem der Beitrag gelöscht wird",  
   "choose_stime":"Startzeit wählen",
   "choose_etime":"Endzeit wählen",
   "message_sent":"Nachricht gesendet",
@@ -517,6 +517,11 @@
   "choose_time_period": "Zeitraum auswählen",
   "choose_listing_status": "Beitragsstatus auswählen",
   "choose_forum": "Forum auswählen",
-  "all": "Alle"
+  "all": "Alle",
+  "notificationPermission" : "Benachrichtigungen sind für diese App deaktivert. Um sie zu aktiveren öffne bitte die App-Einstellungen und erteile Erlaubnis.",
+  "openSettings" : "Einstellungen öffnen",
+  "enableNotification": "Benachrichtigungen aktivieren",
+  "welcomeForumTitle": "Willkommen bei der Gruppenfunktion!",
+  "welcomeForum": "Hier können über das blaue Plusicon neue Gruppen von dir erstellt werden. Du kannst private und öffentliche Gruppen erstellen. Mitglieder können jederzeit bei öffentlichen Gruppen beitreten und bei privaten Gruppen eine Anfrage stellen. Viel Spaß!"
 }
 

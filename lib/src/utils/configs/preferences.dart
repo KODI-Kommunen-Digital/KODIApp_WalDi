@@ -36,6 +36,10 @@ class Preferences {
   static const String listingStatusFilter = "listingStatusFilter";
   static const String commentId = "categoryCount";
   static const String allListingCityFilter = "allListingCityFilter";
+  static const String pushNotificationsPermission =
+      "pushNotificationsPermission";
+  static const String receiveNotification = "receiveNotification";
+  static const bool hasOpenedForumsBefore = false;
 
   Preferences._(this._box);
 
@@ -72,4 +76,9 @@ class Preferences {
       );
 
   bool getRestoredPurchasedProductsHistory() => _getValue('isRestored', false);
+
+  bool getBool(String key, {bool defaultValue = false}) =>
+      _getValue<bool>(key, defaultValue);
+
+  Future<void> setBool(String key, bool value) => _setValue<bool>(key, value);
 }

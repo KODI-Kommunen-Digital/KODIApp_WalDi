@@ -31,7 +31,7 @@ class GroupDetailsCubit extends Cubit<GroupDetailsState> {
     final group = ForumGroupModel(
       id: response['id'],
       forumName: response['forumName'],
-      description: response['description'],
+      description: formatDescription(response['description']),
       cityId: arguments.cityId,
       image: response['image'],
       isRequested: arguments.isRequested,
@@ -60,30 +60,45 @@ class GroupDetailsCubit extends Cubit<GroupDetailsState> {
 
     final userId = await UserRepository.getLoggedUserId();
     final requestGroupMembersResponse =
-          await repo.getGroupMembers(group.id, group.cityId);
-      if (requestGroupMembersResponse?.data != null) {
-        for (final member in requestGroupMembersResponse!.data) {
-          groupMembersList.add(GroupMembersModel(
-            userId: member['userId'],
-            username: member['username'],
-            memberId: member['memberId'],
-            firstname: member['firstname'],
-            lastname: member['lastname'],
-            image: member['image'],
-            isAdmin: member['isAdmin'],
-            joinedAt: member['joinedAt'],
-          ));
-        }
-        GroupMembersModel groupMember =
-        groupMembersList.firstWhere((element) => element.userId == userId);
-        isAdmin = groupMember.isAdmin == 1 ? true : false;
+        await repo.getGroupMembers(group.id, group.cityId);
+    if (requestGroupMembersResponse?.data != null) {
+      for (final member in requestGroupMembersResponse!.data) {
+        groupMembersList.add(GroupMembersModel(
+          userId: member['userId'],
+          username: member['username'],
+          memberId: member['memberId'],
+          firstname: member['firstname'],
+          lastname: member['lastname'],
+          image: member['image'],
+          isAdmin: member['isAdmin'],
+          joinedAt: member['joinedAt'],
+        ));
       }
-      emit(GroupDetailsState.loaded(groupPostsList, group, isAdmin, userId));
-
+      GroupMembersModel groupMember =
+          groupMembersList.firstWhere((element) => element.userId == userId);
+      isAdmin = groupMember.isAdmin == 1 ? true : false;
+    }
+    emit(GroupDetailsState.loaded(groupPostsList, group, isAdmin, userId));
   }
 
   Future<void> requestDeleteGroup(forumId, cityId) async {
     await repo.requestDeleteForum(forumId, cityId);
+  }
+
+  String formatDescription(String text) {
+    RegExp expTags = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: true);
+    String stringWithoutTags = text.replaceAll(expTags, '');
+
+    Map<String, String> htmlEntities = {
+      "&nbsp;": " ",
+      "&amp;": "&",
+    };
+
+    htmlEntities.forEach((key, value) {
+      stringWithoutTags = stringWithoutTags.replaceAll(key, value);
+    });
+
+    return stringWithoutTags;
   }
 
   Future<RemoveUser> removeGroupMember(groupId, cityId) async {

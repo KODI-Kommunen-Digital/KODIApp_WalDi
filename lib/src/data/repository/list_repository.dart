@@ -350,7 +350,7 @@ class ListRepository {
     List<File>? imagesList,
     bool isImageChanged,
   ) async {
-    final subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
+    int? subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
     final villageId = prefs.getKeyValue(Preferences.villageId, null);
     final userId = prefs.getKeyValue(Preferences.userId, '');
@@ -398,6 +398,12 @@ class ListRepository {
       }
     } else {
       combinedEndDateTime = "";
+    }
+
+    if (categoryId == 1) {
+      subCategoryId = subCategoryId;
+    } else {
+      subCategoryId = null;
     }
 
     Map<String, dynamic> params = {
@@ -496,7 +502,7 @@ class ListRepository {
     List<File>? imagesList,
   ) async {
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
-    final subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
+    int? subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
     final villageId = prefs.getKeyValue(Preferences.villageId, null);
     final userId = prefs.getKeyValue(Preferences.userId, '');
     final media = prefs.getKeyValue(Preferences.path, null);
@@ -545,6 +551,12 @@ class ListRepository {
         }
         combinedEndDateTime += "T$formattedTime";
       }
+    }
+
+    if (categoryId == 1) {
+      subCategoryId = subCategoryId;
+    } else {
+      subCategoryId = null;
     }
 
     Map<String, dynamic> params = {

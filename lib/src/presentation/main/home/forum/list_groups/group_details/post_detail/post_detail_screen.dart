@@ -6,6 +6,7 @@ import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_comment.dart';
 import 'package:heidi/src/data/model/model_group_posts.dart';
 import 'package:heidi/src/presentation/widget/app_forum_group_comments.dart';
+import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/presentation/widget/app_user_info.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
@@ -97,7 +98,9 @@ class _PostDetailsLoadedState extends State<PostDetailsLoaded> {
                   Navigator.pushNamed(
                     context,
                     Routes.forumImageZoom,
-                    arguments: "${Application.picturesURL}${widget.post.image}",
+                    arguments: (widget.post.image != null)
+                        ? "${Application.picturesURL}${widget.post.image}"
+                        : "${Application.picturesURL}admin/DefaultForum.jpeg",
                   );
                 },
                 child: Image.network(
@@ -105,6 +108,27 @@ class _PostDetailsLoadedState extends State<PostDetailsLoaded> {
                       ? "${Application.picturesURL}${widget.post.image}?cacheKey=$uniqueKey"
                       : "${Application.picturesURL}admin/DefaultForum.jpeg",
                   fit: BoxFit.cover,
+                  loadingBuilder: (BuildContext context, Widget child,
+                      ImageChunkEvent? loadingProgress) {
+                    if (loadingProgress == null) {
+                      return child;
+                    } else {
+                      return AppPlaceholder(
+                        child: Container(
+                          width: 120,
+                          height: 140,
+                          decoration: const BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(8),
+                              bottomLeft: Radius.circular(8),
+                            ),
+                          ),
+                          child: const Icon(Icons.error),
+                        ),
+                      );
+                    }
+                  },
                 ),
               ),
             ),

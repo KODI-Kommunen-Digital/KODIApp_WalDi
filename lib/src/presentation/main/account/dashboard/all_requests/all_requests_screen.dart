@@ -105,8 +105,8 @@ class _AllRequestsLoadedState extends State<AllRequestsLoaded> {
   @override
   Widget build(BuildContext context) {
     posts = widget.posts;
-    final memoryCacheManager = DefaultCacheManager();
     String uniqueKey = UniqueKey().toString();
+    final memoryCacheManager = DefaultCacheManager();
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(
@@ -207,6 +207,36 @@ class _AllRequestsLoadedState extends State<AllRequestsLoaded> {
                                                           decoration:
                                                               const BoxDecoration(
                                                             color: Colors.white,
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                    imageBuilder: (context,
+                                                        imageProvider) {
+                                                      return Container(
+                                                        width: 120,
+                                                        height: 140,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          image:
+                                                              DecorationImage(
+                                                            image:
+                                                                imageProvider,
+                                                            fit: BoxFit
+                                                                .fitHeight,
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                    errorWidget:
+                                                        (context, url, error) {
+                                                      return AppPlaceholder(
+                                                        child: Container(
+                                                          width: 120,
+                                                          height: 140,
+                                                          decoration:
+                                                              const BoxDecoration(
+                                                            color: Colors.white,
                                                             borderRadius:
                                                                 BorderRadius
                                                                     .only(
@@ -221,7 +251,8 @@ class _AllRequestsLoadedState extends State<AllRequestsLoaded> {
                                                         ),
                                                       );
                                                     },
-                                                  ))
+                                                  ),
+                                                )
                                               : ClipRRect(
                                                   borderRadius:
                                                       BorderRadius.circular(11),
