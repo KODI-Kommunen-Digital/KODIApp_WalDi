@@ -3,7 +3,7 @@
     "data": [ 
         {
             "id": 17,
-            "name": "Forum",
+            "name": "Gruppen",
             "noOfSubcategories": 8,
             "icon": "fas fa-user-group",
             "color": "#5A5A5A",

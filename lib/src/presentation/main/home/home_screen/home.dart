@@ -407,7 +407,7 @@ class _HomeScreenState extends State<HomeScreen> {
         if (cityId != 0) {
           if (!mounted) return;
           Navigator.pushNamed(context, Routes.listGroups,
-              arguments: {'id': item.id, 'title': 'Forum'});
+              arguments: {'id': item.id, 'title': 'Gruppen'});
         } else {
           if (!mounted) return;
           _showCitySelectionPopup(context);
