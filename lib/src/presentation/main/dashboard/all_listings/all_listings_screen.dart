@@ -143,7 +143,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                         .setCurrentCityFilter(filter.currentLocation ?? 0);
                     await AppBloc.allListingsCubit
                         .setCurrentStatus(filter.currentListingStatus ?? 0);
-                    await _onRefresh();
+                    await context.read<AllListingsCubit>().onLoad(false);
                   }),
               IconButton(
                   onPressed: () {
