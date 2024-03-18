@@ -338,6 +338,15 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
+  ///Get Listings by status and location
+  static Future<ResultApiModel> requestStatusLocList(
+      params, pageNo, status) async {
+    var list =
+        '/listings?cityId=$params&statusId=$status&pageNo=$pageNo&pageSize=19';
+    final result = await HTTPManager(forum: false).get(url: list);
+    return ResultApiModel.fromJson(result);
+  }
+
   ///Get Home Slider Images
   static Future<ResultApiModel> requestSliderImages() async {
     final result = await UtilAsset.loadJson("assets/data/sliders.json");
@@ -625,6 +634,13 @@ class Api {
     final result = await HTTPManager(forum: false).get(url: faq);
     return ResultApiModel.fromJson(result);
   }
+
+  static Future<ResultApiModel> requestSearchListing(content, filter, pageNo) async {
+    var list = 'listings/search?searchQuery=$content$filter&pageNo=$pageNo&pageSize=10';
+    final result = await HTTPManager(forum: false).get(url: list);
+    return ResultApiModel.fromJson(result);
+  }
+
 
   ///Singleton factory
   static final Api _instance = Api._internal();

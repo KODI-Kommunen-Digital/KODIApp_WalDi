@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_favorites_detail_list.dart';
+import 'package:heidi/src/data/model/model_multifilter.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
 import 'package:heidi/src/utils/configs/application.dart';
@@ -29,7 +30,7 @@ class ListRepository {
     final prefs = await Preferences.openBox();
     int selectedCityId = prefs.getKeyValue(Preferences.cityId, 0);
 
-    if (type == "category") {
+    if (type == "category" || (type == "location" && categoryId != "")) {
       int params = categoryId;
       final response = await Api.requestCatList(params, cityId, pageNo);
       if (response.success) {
@@ -71,6 +72,36 @@ class ListRepository {
         }).toList();
         return [list, response.pagination];
       }
+    }
+    return null;
+  }
+
+  static Future<List<List<ProductModel>>?> searchListing(
+      {required content,
+      required MultiFilter multiFilter,
+      int pageNo = 1}) async {
+    String linkFilter = "";
+    if (multiFilter.hasListingStatusFilter &&
+        (multiFilter.currentListingStatus ?? 0) != 0) {
+      linkFilter = "$linkFilter&statusId=${multiFilter.currentListingStatus}";
+    }
+    if (multiFilter.hasLocationFilter &&
+        (multiFilter.currentLocation ?? 0) != 0) {
+      linkFilter = "$linkFilter&cityId=${multiFilter.currentLocation}";
+    }
+    if (multiFilter.hasCategoryFilter &&
+        (multiFilter.currentCategory ?? 0) != 0) {
+      linkFilter = "$linkFilter&categoryId=${multiFilter.currentCategory}";
+    }
+
+    final response =
+        await Api.requestSearchListing(content, linkFilter, pageNo);
+    if (response.success) {
+      final list =
+          List<Map<String, dynamic>>.from(response.data ?? []).map((item) {
+        return ProductModel.fromJson(item, setting: Application.setting);
+      }).toList();
+      return [list];
     }
     return null;
   }
