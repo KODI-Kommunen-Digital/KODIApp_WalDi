@@ -459,5 +459,8 @@
   "quelle":"Quelle:",
   "notificationPermission" : "Benachrichtigungen sind für diese App deaktivert. Um sie zu aktiveren öffne bitte die App-Einstellungen und erteile Erlaubnis.",
   "openSettings" : "Einstellungen öffnen",
-  "enableNotification": "Benachrichtigungen aktivieren"
+  "enableNotification": "Benachrichtigungen aktivieren",
+  "choose_time_period": "Zeitraum auswählen",
+  "choose_listing_status": "Beitragsstatus auswählen",
+  "all": "Alle"
 }

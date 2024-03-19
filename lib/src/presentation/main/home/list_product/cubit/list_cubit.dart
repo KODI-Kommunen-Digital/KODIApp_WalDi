@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:heidi/src/data/model/model.dart';
+import 'package:heidi/src/data/model/model_multifilter.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
@@ -25,18 +26,17 @@ class ListCubit extends Cubit<ListState> {
   PaginationModel? pagination;
   List<ProductModel> listLoaded = [];
   List<ProductModel> filteredList = [];
+  bool isSearching = false;
+  String? searchTerm;
 
   Future<void> onLoad(cityId) async {
     pageNo = 1;
     final prefs = await Preferences.openBox();
-    final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
-    final type = prefs.getKeyValue(Preferences.type, '');
-    if (type == 'location') {
-      prefs.setKeyValue(Preferences.categoryId, '');
-    }
+    final categoryId = prefs.getKeyValue(Preferences.categoryId, 0);
+    final type = await prefs.getKeyValue(Preferences.type, '');
     listCity = await getCityList() ?? [];
     final result = await ListRepository.loadList(
-      categoryId: categoryId,
+      categoryId: (categoryId == 0) ? "" : categoryId,
       type: type,
       pageNo: pageNo,
       cityId: cityId,
@@ -49,16 +49,26 @@ class ListCubit extends Cubit<ListState> {
     }
   }
 
+  Future<void> setCategoryFilter(int filter, int? cityId) async {
+    final prefs = await Preferences.openBox();
+
+    if (filter == 0) {
+      prefs.setKeyValue(Preferences.categoryId, 0);
+    } else {
+      prefs.setKeyValue(Preferences.categoryId, filter);
+    }
+    if (cityId != null) {
+      onLoad(cityId);
+    }
+  }
+
   Future<List<ProductModel>> newListings(int pageNo, cityId) async {
     final prefs = await Preferences.openBox();
-    final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
+    final categoryId = prefs.getKeyValue(Preferences.categoryId, 0);
     final type = prefs.getKeyValue(Preferences.type, '');
-    if (type == 'location') {
-      prefs.setKeyValue(Preferences.categoryId, '');
-    }
 
     final result = await ListRepository.loadList(
-      categoryId: categoryId,
+      categoryId: (categoryId == 0) ? "" : categoryId,
       type: type,
       pageNo: pageNo,
       cityId: cityId,
@@ -74,7 +84,67 @@ class ListCubit extends Cubit<ListState> {
 
   List<ProductModel> getLoadedList() => listLoaded;
 
-  void onProductFilter(ProductFilter? type, List<ProductModel> loadedList) {
+  Future<void> searchListing(content, bool newSearch) async {
+    if (newSearch) {
+      emit(const ListState.loading());
+      pageNo = 1;
+    }
+    isSearching = true;
+    searchTerm = content.toString();
+    final prefs = await Preferences.openBox();
+
+    final categoryId = prefs.getKeyValue(Preferences.categoryId, 0);
+    final cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    List<ProductModel>? listDataList = [];
+    MultiFilter multiFilter = MultiFilter(
+        hasCategoryFilter: true,
+        hasLocationFilter: true,
+        currentLocation: cityId,
+        currentCategory: categoryId);
+
+    final result = await ListRepository.searchListing(
+        content: content, multiFilter: multiFilter, pageNo: pageNo++);
+    final List<ProductModel>? listUpdated = result?[0];
+    if (listUpdated != null) {
+      if (newSearch) {
+        list = [];
+      }
+      list.addAll(listUpdated);
+    }
+    for (final product in list) {
+      listDataList.add(
+        ProductModel(
+          id: product.id,
+          cityId: product.cityId,
+          title: product.title,
+          image: product.image,
+          pdf: product.pdf,
+          category: product.category,
+          categoryId: product.categoryId,
+          subcategoryId: product.subcategoryId,
+          startDate: product.startDate,
+          endDate: product.endDate,
+          createDate: product.createDate,
+          favorite: product.favorite,
+          address: product.address,
+          phone: product.phone,
+          email: product.email,
+          website: product.website,
+          description: product.description,
+          statusId: product.statusId,
+          userId: product.userId,
+          sourceId: product.sourceId,
+          imageLists: product.imageLists,
+          externalId: product.externalId,
+          expiryDate: product.expiryDate,
+        ),
+      );
+    }
+
+    emit(ListStateUpdated(listDataList, listCity));
+  }
+
+  void onDateProductFilter(ProductFilter? type, List<ProductModel> loadedList) {
     final currentDate = DateTime.now();
     if (type == ProductFilter.month) {
       filteredList = loadedList.where((product) {

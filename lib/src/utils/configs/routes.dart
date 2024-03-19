@@ -21,6 +21,7 @@ import 'package:heidi/src/presentation/main/dashboard/all_requests/cubit/all_req
 import 'package:heidi/src/presentation/main/dashboard/dashboard_screen.dart';
 import 'package:heidi/src/presentation/main/dashboard/my_listings/my_listings_screen.dart';
 import 'package:heidi/src/presentation/main/discovery/mitreden_webview.dart';
+import 'package:heidi/src/presentation/main/home/filter_screen.dart';
 import 'package:heidi/src/presentation/main/home/list_product/list_product.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/image_zoom/image_zoom_screen.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/product_detail.dart';
@@ -90,6 +91,7 @@ class Routes {
   static const String allRequests = "/allRequests";
   static const String dashboard = "/dashboard";
   static const String myListings = "/myListings";
+  static const String filterScreen = "/filterScreen";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -156,7 +158,14 @@ class Routes {
             );
           },
         );
-
+      case filterScreen:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return FilterScreen(multiFilter: arguments["multifilter"]);
+          },
+        );
       case allRequests:
         return MaterialPageRoute(
           builder: (context) {
@@ -172,7 +181,7 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) {
             final Map<String, dynamic> arguments =
-            settings.arguments as Map<String, dynamic>;
+                settings.arguments as Map<String, dynamic>;
             return SettingsScreen(
               user: arguments['user'] as UserModel?,
             );

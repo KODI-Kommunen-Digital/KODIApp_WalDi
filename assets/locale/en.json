@@ -458,7 +458,10 @@
   "quelle":"Source:",
   "notificationPermission" : "Notifications are disabled for this app. To enable them, please open the app settings and grant permission",
   "openSettings" : "Open Settings",
-  "enableNotification": "Enable Notifications",  
+  "enableNotification": "Enable Notifications",
+  "choose_time_period": "Choose time period",
+  "choose_listing_status": "Choose listing status",
+  "all": "All",
   "expiry_date": "Ablaufdatum",
   "enable_expiry_date":"Ein Ablaufdatum hinzufügen, an dem der Beitrag gelöscht wird"
 }

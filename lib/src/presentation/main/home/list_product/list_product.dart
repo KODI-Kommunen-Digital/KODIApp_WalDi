@@ -6,10 +6,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:heidi/src/data/model/model_multifilter.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_setting.dart';
+import 'package:heidi/src/presentation/cubit/app_bloc.dart';
+import 'package:heidi/src/presentation/main/home/widget/app_filter_button.dart';
 import 'package:heidi/src/presentation/widget/app_navbar.dart';
 import 'package:heidi/src/presentation/widget/app_product_item.dart';
+import 'package:heidi/src/presentation/widget/app_text_input.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
@@ -28,140 +32,69 @@ class ListProductScreen extends StatefulWidget {
 }
 
 class _ListProductScreenState extends State<ListProductScreen> {
-  ProductFilter? selectedFilter;
   int pageNo = 1;
+  final TextEditingController _searchController = TextEditingController();
+  late bool isCity;
+
+  MultiFilter? selectedFilter;
+  bool isSearching = false;
 
   @override
   void initState() {
     super.initState();
+    isCity = widget.arguments['title'] != '';
     loadListingsList();
   }
 
   Future<void> loadListingsList() async {
-    await context.read<ListCubit>().onLoad(widget.arguments['id']);
+    if (isCity) {
+      await context.read<ListCubit>().setCategoryFilter(0, null);
+    }
+    // ignore: use_build_context_synchronously
+    await context
+        .read<ListCubit>()
+        .onLoad(selectedFilter?.currentLocation ?? widget.arguments['id']);
   }
 
-  void _updateSelectedFilter(ProductFilter? filter) {
+  MultiFilter whatCanFilter(bool isEvent) {
+    if (isCity) {
+      return MultiFilter(
+          hasCategoryFilter: true,
+          categories: AppBloc.homeCubit.category,
+          currentCategory: selectedFilter?.currentCategory ?? 0);
+    }
+
+    if (isEvent) {
+      return MultiFilter(
+          hasProductEventFilter: true,
+          currentProductEventFilter: selectedFilter?.currentProductEventFilter);
+    } else {
+      return MultiFilter(
+          hasLocationFilter: true,
+          currentLocation:
+              selectedFilter?.currentLocation ?? widget.arguments['id'],
+          cities: AppBloc.discoveryCubit.location);
+    }
+  }
+
+  void _updateSelectedFilter(MultiFilter? filter) {
+    selectedFilter = filter;
     final loadedList = context.read<ListCubit>().getLoadedList();
     setState(() {
-      if (selectedFilter == filter) {
-        selectedFilter = null;
-        context.read<ListCubit>().onProductFilter(null, loadedList);
-      } else {
-        selectedFilter = filter;
-        context.read<ListCubit>().onProductFilter(filter, loadedList);
+      if (filter?.hasProductEventFilter ?? false) {
+        context
+            .read<ListCubit>()
+            .onDateProductFilter(filter?.currentProductEventFilter, loadedList);
+      }
+      if (filter?.hasLocationFilter ?? false) {
+        loadListingsList();
+      }
+      if (filter?.hasCategoryFilter ?? false) {
+        context.read<ListCubit>().setCategoryFilter(
+            filter?.currentCategory ?? 0,
+            selectedFilter?.currentLocation ?? widget.arguments['id']);
       }
     });
-  }
-
-  Widget _buildTickIcon(bool isSelected) {
-    return isSelected
-        ? const Icon(
-            Icons.done,
-            color: Colors.white,
-            size: 20,
-            weight: 900,
-          )
-        : const SizedBox(width: 20);
-  }
-
-  Future<void> _openFilterDrawer(BuildContext context) async {
-    await showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return Container(
-          color: Theme.of(context).dialogBackgroundColor,
-          height: 150,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.calendar_today,
-                      color: Theme.of(context).textTheme.bodyLarge?.color ??
-                          Colors.white,
-                    ),
-                    const SizedBox(width: 8),
-                    TextButton(
-                      style: TextButton.styleFrom(),
-                      onPressed: () {
-                        _updateSelectedFilter(ProductFilter.week);
-                        Navigator.pop(context);
-                      },
-                      child: Row(
-                        children: [
-                          Text(
-                            Translate.of(context).translate('this_week'),
-                            style: TextStyle(
-                              color: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge
-                                      ?.color ??
-                                  Colors.white,
-                            ),
-                          ),
-                          const SizedBox(width: 5),
-                          _buildTickIcon(selectedFilter == ProductFilter.week),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Divider(
-                color: Theme.of(context).textTheme.bodyLarge?.color ??
-                    Colors.white,
-                height: 1,
-                thickness: 1,
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.calendar_today,
-                      color: Theme.of(context).textTheme.bodyLarge?.color ??
-                          Colors.white,
-                    ),
-                    const SizedBox(width: 8),
-                    TextButton(
-                      style: TextButton.styleFrom(),
-                      onPressed: () {
-                        _updateSelectedFilter(ProductFilter.month);
-                        Navigator.pop(context);
-                      },
-                      child: Row(
-                        children: [
-                          Text(
-                            Translate.of(context).translate('this_month'),
-                            style: TextStyle(
-                              color: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge
-                                      ?.color ??
-                                  Colors.white,
-                            ),
-                          ),
-                          const SizedBox(width: 5),
-                          _buildTickIcon(selectedFilter == ProductFilter.month),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-    // await loadListingsList();
   }
 
   @override
@@ -190,24 +123,24 @@ class _ListProductScreenState extends State<ListProductScreen> {
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const CircularProgressIndicator.adaptive();
-                } else if (snapshot.hasError || !snapshot.hasData) {
+                } else if (snapshot.hasError) {
                   return Container();
                 } else {
-                  bool isEvent = snapshot.data!;
-                  return isEvent
-                      ? TextButton(
-                          onPressed: () async {
-                            await _openFilterDrawer(context);
+                  bool isEvent = snapshot.data ?? false;
+                  return Row(
+                    children: [
+                      AppFilterButton(
+                          multiFilter: whatCanFilter(isEvent),
+                          filterCallBack: (filter) {
+                            _updateSelectedFilter(filter);
+                          }),
+                      IconButton(
+                          onPressed: () {
+                            _searchListings();
                           },
-                          style: TextButton.styleFrom(
-                            textStyle: Theme.of(context)
-                                .textTheme
-                                .titleSmall!
-                                .copyWith(fontWeight: FontWeight.bold),
-                          ),
-                          child: const Text("Filter"),
-                        )
-                      : Container();
+                          icon: const Icon(Icons.search))
+                    ],
+                  );
                 }
               },
             ),
@@ -226,14 +159,16 @@ class _ListProductScreenState extends State<ListProductScreen> {
             loaded: (list, listCity) => ListLoaded(
               list: list,
               listCity: listCity,
-              selectedId: widget.arguments['id'],
+              selectedId:
+                  selectedFilter?.currentLocation ?? widget.arguments['id'],
             ),
             updated: (list, listCity) {
               return ListLoaded(
-                list: list,
-                listCity: listCity,
-                selectedId: widget.arguments['id'],
-              );
+                  list: list,
+                  listCity: listCity,
+                  selectedId:
+                      selectedFilter?.currentLocation ?? widget.arguments['id'],
+                  updated: true);
             },
             error: (e) => ErrorWidget('Failed to load listings.'),
             initial: () {
@@ -243,6 +178,61 @@ class _ListProductScreenState extends State<ListProductScreen> {
         ),
       ),
     );
+  }
+
+  Future _searchListings() async {
+    String? searchResult = await openSearchDialog();
+    if ((searchResult ?? "").trim() != "") {
+      // ignore: use_build_context_synchronously
+      context.read<ListCubit>().searchListing(searchResult!.trim(), true);
+    }
+  }
+
+  Future<String?> openSearchDialog() async {
+    String? searchRequest = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+            title: Center(
+                child: Text(Translate.of(context).translate('search_title'))),
+            contentPadding: const EdgeInsets.all(24.0),
+            children: [
+              AppTextInput(
+                hintText: Translate.of(context).translate('search_title'),
+                keyboardType: TextInputType.text,
+                trailing: const Icon(Icons.search),
+                hasDelete: false,
+                controller: _searchController,
+                //focusNode: _focusPass,
+              ),
+              const SizedBox(height: 8.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      _searchController.clear();
+                      Navigator.pop(context);
+                    },
+                    child: Text(Translate.of(context).translate('cancel')),
+                  ),
+                  const SizedBox(width: 8.0),
+                  TextButton(
+                    onPressed: () {
+                      String content = _searchController.text;
+                      _searchController.clear();
+                      Navigator.pop(context, content);
+                    },
+                    child: Text(
+                      Translate.of(context).translate('search_title'),
+                    ),
+                  ),
+                ],
+              ),
+            ]);
+      },
+    );
+    return searchRequest;
   }
 }
 
@@ -261,12 +251,14 @@ class ListLoaded extends StatefulWidget {
   final List<ProductModel> list;
   final List listCity;
   final int selectedId;
+  final bool updated;
 
   const ListLoaded(
       {Key? key,
       required this.list,
       required this.selectedId,
-      required this.listCity})
+      required this.listCity,
+      this.updated = false})
       : super(key: key);
 
   @override
@@ -291,7 +283,7 @@ class _ListLoadedState extends State<ListLoaded> {
   void initState() {
     super.initState();
     _scrollController.addListener(_scrollListener);
-    //loadListingsList();
+    if (!widget.updated) loadListingsList();
   }
 
   @override
@@ -308,9 +300,15 @@ class _ListLoadedState extends State<ListLoaded> {
           isLoadingMore = true;
           //previousScrollPosition = _scrollController.position.pixels;
         });
-        list = await context
-            .read<ListCubit>()
-            .newListings(++pageNo, widget.selectedId);
+        if (context.read<ListCubit>().isSearching) {
+          context
+              .read<ListCubit>()
+              .searchListing(context.read<ListCubit>().searchTerm, false);
+        } else {
+          list = await context
+              .read<ListCubit>()
+              .newListings(++pageNo, widget.selectedId);
+        }
         setState(() {
           isLoadingMore = false;
         });
