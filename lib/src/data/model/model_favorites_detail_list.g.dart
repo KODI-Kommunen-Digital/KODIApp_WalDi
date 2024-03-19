@@ -36,7 +36,7 @@ FavoriteDetailsModel _$FavoriteDetailsModelFromJson(
       json['createdAt'] as String,
       json['pdf'] as String?,
       json['cityId'] as int?,
-    );
+    )..externalId = json['externalId'] as String?;
 
 Map<String, dynamic> _$FavoriteDetailsModelToJson(
         FavoriteDetailsModel instance) =>
@@ -54,6 +54,7 @@ Map<String, dynamic> _$FavoriteDetailsModelToJson(
       'email': instance.email,
       'phone': instance.phone,
       'website': instance.website,
+      'externalId': instance.externalId,
       'price': instance.price,
       'discountPrice': instance.discountPrice,
       'logo': instance.logo,
