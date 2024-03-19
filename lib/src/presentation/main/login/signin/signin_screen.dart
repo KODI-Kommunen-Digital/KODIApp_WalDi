@@ -112,199 +112,203 @@ class _SignInLoadedState extends State<SignInLoaded> {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           alignment: Alignment.center,
           child: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                AppTextInput(
-                  hintText: Translate.of(context).translate('accountOrEmail'),
-                  errorText: _errorID,
-                  controller: _textIDController,
-                  focusNode: _focusID,
-                  textInputAction: TextInputAction.next,
-                  onChanged: (text) {
-                    setState(() {
-                      _errorID = UtilValidator.validate(
-                        _textIDController.text,
-                      );
-                    });
-                  },
-                  onSubmitted: (text) {
-                    Utils.fieldFocusChange(context, _focusID, _focusPass);
-                  },
-                ),
-                const SizedBox(height: 8),
-                AppTextInput(
-                  hintText: Translate.of(context).translate('password'),
-                  errorText: _errorPass,
-                  textInputAction: TextInputAction.done,
-                  onChanged: (text) {
-                    setState(() {
-                      _errorPass = UtilValidator.validate(
-                        _textPassController.text,
-                      );
-                    });
-                  },
-                  onSubmitted: (text) {
-                    _login();
-                  },
-                  trailing: GestureDetector(
-                    dragStartBehavior: DragStartBehavior.down,
-                    onTap: () {
+            child: AutofillGroup(
+              child: Column(
+                children: <Widget>[
+                  AppTextInput(
+                    hintText: Translate.of(context).translate('accountOrEmail'),
+                    errorText: _errorID,
+                    controller: _textIDController,
+                    focusNode: _focusID,
+                    autofillHint: const [AutofillHints.username],
+                    textInputAction: TextInputAction.next,
+                    onChanged: (text) {
                       setState(() {
-                        _showPassword = !_showPassword;
+                        _errorID = UtilValidator.validate(
+                          _textIDController.text,
+                        );
                       });
                     },
-                    child: Icon(_showPassword
-                        ? Icons.visibility
-                        : Icons.visibility_off),
+                    onSubmitted: (text) {
+                      Utils.fieldFocusChange(context, _focusID, _focusPass);
+                    },
                   ),
-                  obscureText: !_showPassword,
-                  controller: _textPassController,
-                  focusNode: _focusPass,
-                ),
-                const SizedBox(height: 16),
-                BlocBuilder<LoginCubit, LoginState>(
-                  builder: (context, state) {
-                    return AppButton(
-                      Translate.of(context).translate('sign_in'),
-                      mainAxisSize: MainAxisSize.max,
-                      onPressed: _login,
-                      loading: state == const LoginState.loading(),
-                    );
-                  },
-                ),
-                const SizedBox(height: 4),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    AppButton(
-                      Translate.of(context).translate('forgot_password'),
-                      onPressed: _forgotPassword,
-                      type: ButtonType.text,
-                    ),
-                    AppButton(
-                      Translate.of(context).translate('sign_up'),
-                      onPressed: _signUp,
-                      type: ButtonType.text,
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    TextButton(
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return Dialog(
-                              child: Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const Text(
-                                      'Anleitung',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 22,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 12),
-                                    const Text(
-                                      'Registrieren in der App',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 16),
-                                    RichText(
-                                      text: TextSpan(
-                                        style:
-                                            DefaultTextStyle.of(context).style,
-                                        children: const <TextSpan>[
-                                          TextSpan(
-                                            text: 'Schritt 1:',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18,
-                                            ),
-                                          ),
-                                          TextSpan(
-                                            text:
-                                                ' Nutzername und Passwort festlegen,\n\n',
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                            ),
-                                          ),
-                                          TextSpan(
-                                            text: 'Schritt 2:',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18,
-                                            ),
-                                          ),
-                                          TextSpan(
-                                            text:
-                                                ' Es wird Ihnen eine E-Mail gesendet an die Mail, die Sie eingegeben haben,\n\n',
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                            ),
-                                          ),
-                                          TextSpan(
-                                            text: 'Schritt 3:',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18,
-                                            ),
-                                          ),
-                                          TextSpan(
-                                            text:
-                                                ' Bitte verifizieren Sie die Mail, indem Sie in Ihr Postfach gehen und den Bestätigungslink drücken,\n\n',
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                            ),
-                                          ),
-                                          TextSpan(
-                                            text: 'Schritt 4:',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18,
-                                            ),
-                                          ),
-                                          TextSpan(
-                                            text:
-                                                ' Ihr Account ist verifiziert und Sie können sich mit Ihren Login-Daten einloggen\n\nWir wünschen Ihnen viel Spaß beim Benutzen der App!\n\nDanke!!',
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    const SizedBox(height: 16),
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: const Text('OK'),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
+                  const SizedBox(height: 8),
+                  AppTextInput(
+                    hintText: Translate.of(context).translate('password'),
+                    errorText: _errorPass,
+                    autofillHint: const [AutofillHints.password],
+                    textInputAction: TextInputAction.done,
+                    onChanged: (text) {
+                      setState(() {
+                        _errorPass = UtilValidator.validate(
+                          _textPassController.text,
                         );
+                      });
+                    },
+                    onSubmitted: (text) {
+                      _login();
+                    },
+                    trailing: GestureDetector(
+                      dragStartBehavior: DragStartBehavior.down,
+                      onTap: () {
+                        setState(() {
+                          _showPassword = !_showPassword;
+                        });
                       },
-                      child: Text(
-                        Translate.of(context).translate('info'),
-                        style: const TextStyle(
-                            color: Colors.blue, fontWeight: FontWeight.bold),
-                      ),
+                      child: Icon(_showPassword
+                          ? Icons.visibility
+                          : Icons.visibility_off),
                     ),
-                  ],
-                ),
-              ],
+                    obscureText: !_showPassword,
+                    controller: _textPassController,
+                    focusNode: _focusPass,
+                  ),
+                  const SizedBox(height: 16),
+                  BlocBuilder<LoginCubit, LoginState>(
+                    builder: (context, state) {
+                      return AppButton(
+                        Translate.of(context).translate('sign_in'),
+                        mainAxisSize: MainAxisSize.max,
+                        onPressed: _login,
+                        loading: state == const LoginState.loading(),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      AppButton(
+                        Translate.of(context).translate('forgot_password'),
+                        onPressed: _forgotPassword,
+                        type: ButtonType.text,
+                      ),
+                      AppButton(
+                        Translate.of(context).translate('sign_up'),
+                        onPressed: _signUp,
+                        type: ButtonType.text,
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      TextButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Dialog(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Text(
+                                        'Anleitung',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 22,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 12),
+                                      const Text(
+                                        'Registrieren in der App',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 16),
+                                      RichText(
+                                        text: TextSpan(
+                                          style: DefaultTextStyle.of(context)
+                                              .style,
+                                          children: const <TextSpan>[
+                                            TextSpan(
+                                              text: 'Schritt 1:',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18,
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text:
+                                                  ' Nutzername und Passwort festlegen,\n\n',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: 'Schritt 2:',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18,
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text:
+                                                  ' Es wird Ihnen eine E-Mail gesendet an die Mail, die Sie eingegeben haben,\n\n',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: 'Schritt 3:',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18,
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text:
+                                                  ' Bitte verifizieren Sie die Mail, indem Sie in Ihr Postfach gehen und den Bestätigungslink drücken,\n\n',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: 'Schritt 4:',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18,
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text:
+                                                  ' Ihr Account ist verifiziert und Sie können sich mit Ihren Login-Daten einloggen\n\nWir wünschen Ihnen viel Spaß beim Benutzen der App!\n\nDanke!!',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(height: 16),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text('OK'),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        child: Text(
+                          Translate.of(context).translate('info'),
+                          style: const TextStyle(
+                              color: Colors.blue, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
