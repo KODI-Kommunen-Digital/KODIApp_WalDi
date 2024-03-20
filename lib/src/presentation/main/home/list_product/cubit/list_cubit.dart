@@ -144,6 +144,13 @@ class ListCubit extends Cubit<ListState> {
     emit(ListStateUpdated(listDataList, listCity));
   }
 
+  Future<void> cancelSearch(int cityId) async {
+    isSearching = true;
+    searchTerm = "";
+    pageNo = 0;
+    onLoad(cityId);
+  }
+
   void onDateProductFilter(ProductFilter? type, List<ProductModel> loadedList) {
     final currentDate = DateTime.now();
     if (type == ProductFilter.month) {

@@ -36,7 +36,6 @@ class _ListProductScreenState extends State<ListProductScreen> {
   //ProductFilter? selectedFilter;
   MultiFilter? selectedFilter;
   int pageNo = 1;
-  bool isSearching = false;
 
   @override
   void initState() {
@@ -181,8 +180,12 @@ class _ListProductScreenState extends State<ListProductScreen> {
 
   Future _searchListings() async {
     String? searchResult = await openSearchDialog();
-    if ((searchResult ?? "").trim() != "") {
-      context.read<ListCubit>().searchListing(searchResult!.trim(), true);
+    if (searchResult is String && searchResult.trim() != "") {
+      context.read<ListCubit>().searchListing(searchResult.trim(), true);
+    } else if ((searchResult == null || searchResult.trim() == "") &&
+        context.read<ListCubit>().isSearching) {
+      context.read<ListCubit>().cancelSearch(
+          selectedFilter?.currentLocation ?? widget.arguments['id']);
     }
   }
 
@@ -190,44 +193,47 @@ class _ListProductScreenState extends State<ListProductScreen> {
     String? searchRequest = await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return SimpleDialog(
-            title: Center(
-                child: Text(Translate.of(context).translate('search_title'))),
-            contentPadding: const EdgeInsets.all(24.0),
-            children: [
-              AppTextInput(
-                hintText: Translate.of(context).translate('search_title'),
-                keyboardType: TextInputType.text,
-                trailing: const Icon(Icons.search),
-                hasDelete: false,
-                controller: _searchController,
-                //focusNode: _focusPass,
-              ),
-              const SizedBox(height: 8.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      _searchController.clear();
-                      Navigator.pop(context);
-                    },
-                    child: Text(Translate.of(context).translate('cancel')),
-                  ),
-                  const SizedBox(width: 8.0),
-                  TextButton(
-                    onPressed: () {
-                      String content = _searchController.text;
-                      _searchController.clear();
-                      Navigator.pop(context, content);
-                    },
-                    child: Text(
-                      Translate.of(context).translate('search_title'),
+        return WillPopScope(
+          onWillPop: () async {
+            Navigator.pop(context, context.read<ListCubit>().searchTerm);
+            return false;
+          },
+          child: SimpleDialog(
+              title: Center(
+                  child: Text(Translate.of(context).translate('search_title'))),
+              contentPadding: const EdgeInsets.all(24.0),
+              children: [
+                AppTextInput(
+                  hintText: Translate.of(context).translate('search_title'),
+                  keyboardType: TextInputType.text,
+                  controller: _searchController,
+                  //focusNode: _focusPass,
+                ),
+                const SizedBox(height: 8.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        _searchController.clear();
+                        Navigator.pop(context, null);
+                      },
+                      child: Text(Translate.of(context).translate('cancel')),
                     ),
-                  ),
-                ],
-              ),
-            ]);
+                    const SizedBox(width: 8.0),
+                    TextButton(
+                      onPressed: () {
+                        String content = _searchController.text;
+                        Navigator.pop(context, content);
+                      },
+                      child: Text(
+                        Translate.of(context).translate('search_title'),
+                      ),
+                    ),
+                  ],
+                ),
+              ]),
+        );
       },
     );
     return searchRequest;
