@@ -462,44 +462,47 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
     String? searchRequest = await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return SimpleDialog(
-            title: Center(
-                child: Text(Translate.of(context).translate('search_title'))),
-            contentPadding: const EdgeInsets.all(24.0),
-            children: [
-              AppTextInput(
-                hintText: Translate.of(context).translate('search_title'),
-                keyboardType: TextInputType.text,
-                trailing: const Icon(Icons.search),
-                hasDelete: false,
-                controller: _searchController,
-                //focusNode: _focusPass,
-              ),
-              const SizedBox(height: 8.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      _searchController.clear();
-                      Navigator.pop(context);
-                    },
-                    child: Text(Translate.of(context).translate('cancel')),
-                  ),
-                  const SizedBox(width: 8.0),
-                  TextButton(
-                    child: Text(
-                      Translate.of(context).translate('search_title'),
+        return WillPopScope(
+          onWillPop: () async {
+            Navigator.pop(context, searchTerm);
+            return false;
+          },
+          child: SimpleDialog(
+              title: Center(
+                  child: Text(Translate.of(context).translate('search_title'))),
+              contentPadding: const EdgeInsets.all(24.0),
+              children: [
+                AppTextInput(
+                  hintText: Translate.of(context).translate('search_title'),
+                  keyboardType: TextInputType.text,
+                  controller: _searchController,
+                  //focusNode: _focusPass,
+                ),
+                const SizedBox(height: 8.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        _searchController.clear();
+                        Navigator.pop(context, null);
+                      },
+                      child: Text(Translate.of(context).translate('cancel')),
                     ),
-                    onPressed: () {
-                      String content = _searchController.text;
-                      _searchController.clear();
-                      Navigator.pop(context, content);
-                    },
-                  ),
-                ],
-              ),
-            ]);
+                    const SizedBox(width: 8.0),
+                    TextButton(
+                      child: Text(
+                        Translate.of(context).translate('search_title'),
+                      ),
+                      onPressed: () {
+                        String content = _searchController.text;
+                        Navigator.pop(context, content);
+                      },
+                    ),
+                  ],
+                ),
+              ]),
+        );
       },
     );
     return searchRequest;
@@ -507,10 +510,10 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
 
   Future _searchListings() async {
     String? searchResult = await openSearchDialog();
-    if ((searchResult ?? "").trim() != "") {
+    if (searchResult is String && searchResult.trim() != "") {
       pageNo = 1;
       isSearching = true;
-      searchTerm = searchResult!.trim();
+      searchTerm = searchResult.trim();
       setState(() {
         posts = [];
         isLoadingMore = true;
@@ -521,6 +524,12 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
       setState(() {
         isLoadingMore = false;
       });
+    } else if ((searchResult == null || searchResult.trim() == "") &&
+        isSearching) {
+      pageNo = 1;
+      isSearching = false;
+      searchTerm = "";
+      await context.read<AllListingsCubit>().onLoad(false);
     }
   }
 
