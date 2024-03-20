@@ -468,8 +468,6 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
               AppTextInput(
                 hintText: Translate.of(context).translate('search_title'),
                 keyboardType: TextInputType.text,
-                trailing: const Icon(Icons.search),
-                hasDelete: false,
                 controller: _searchController,
                 //focusNode: _focusPass,
               ),
@@ -480,7 +478,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                   TextButton(
                     onPressed: () {
                       _searchController.clear();
-                      Navigator.pop(context);
+                      Navigator.pop(context, null);
                     },
                     child: Text(Translate.of(context).translate('cancel')),
                   ),
@@ -491,7 +489,6 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                     ),
                     onPressed: () {
                       String content = _searchController.text;
-                      _searchController.clear();
                       Navigator.pop(context, content);
                     },
                   ),
@@ -676,21 +673,27 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
   }
 
   Future _searchListings() async {
-    String? searchResult = await openSearchDialog();
-    if ((searchResult ?? "").trim() != "") {
+    dynamic searchResult = await openSearchDialog();
+
+    if (searchResult is String && searchResult.trim() != "") {
+        pageNo = 1;
+        isSearching = true;
+        searchTerm = searchResult.trim();
+        setState(() {
+          posts = [];
+          isLoadingMore = true;
+        });
+        posts = await context
+            .read<AllListingsCubit>()
+            .searchListing(searchTerm, pageNo);
+        setState(() {
+          isLoadingMore = false;
+        });
+    } else if ((searchResult == null || searchResult.trim() == "") && isSearching) {
       pageNo = 1;
-      isSearching = true;
-      searchTerm = searchResult!.trim();
-      setState(() {
-        posts = [];
-        isLoadingMore = true;
-      });
-      posts = await context
-          .read<AllListingsCubit>()
-          .searchListing(searchTerm, pageNo);
-      setState(() {
-        isLoadingMore = false;
-      });
+      isSearching = false;
+      searchTerm = "";
+      _onRefresh();
     }
   }
 

@@ -180,9 +180,13 @@ class _ListProductScreenState extends State<ListProductScreen> {
   }
 
   Future _searchListings() async {
-    String? searchResult = await openSearchDialog();
-    if ((searchResult ?? "").trim() != "") {
-      context.read<ListCubit>().searchListing(searchResult!.trim(), true);
+    dynamic searchResult = await openSearchDialog();
+    if (searchResult is String && searchResult.trim() != "") {
+      context.read<ListCubit>().searchListing(searchResult.trim(), true);
+    } else if ((searchResult == null || searchResult.trim() == "") &&
+        isSearching) {
+      context.read<ListCubit>().cancelSearch(
+          selectedFilter?.currentLocation ?? widget.arguments['id']);
     }
   }
 
@@ -198,8 +202,6 @@ class _ListProductScreenState extends State<ListProductScreen> {
               AppTextInput(
                 hintText: Translate.of(context).translate('search_title'),
                 keyboardType: TextInputType.text,
-                trailing: const Icon(Icons.search),
-                hasDelete: false,
                 controller: _searchController,
                 //focusNode: _focusPass,
               ),
@@ -210,7 +212,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
                   TextButton(
                     onPressed: () {
                       _searchController.clear();
-                      Navigator.pop(context);
+                      Navigator.pop(context, null);
                     },
                     child: Text(Translate.of(context).translate('cancel')),
                   ),
@@ -218,7 +220,6 @@ class _ListProductScreenState extends State<ListProductScreen> {
                   TextButton(
                     onPressed: () {
                       String content = _searchController.text;
-                      _searchController.clear();
                       Navigator.pop(context, content);
                     },
                     child: Text(
