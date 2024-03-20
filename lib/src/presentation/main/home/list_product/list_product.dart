@@ -36,7 +36,6 @@ class _ListProductScreenState extends State<ListProductScreen> {
   //ProductFilter? selectedFilter;
   MultiFilter? selectedFilter;
   int pageNo = 1;
-  bool isSearching = false;
 
   @override
   void initState() {
@@ -184,7 +183,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
     if (searchResult is String && searchResult.trim() != "") {
       context.read<ListCubit>().searchListing(searchResult.trim(), true);
     } else if ((searchResult == null || searchResult.trim() == "") &&
-        isSearching) {
+        context.read<ListCubit>().isSearching) {
       context.read<ListCubit>().cancelSearch(
           selectedFilter?.currentLocation ?? widget.arguments['id']);
     }
