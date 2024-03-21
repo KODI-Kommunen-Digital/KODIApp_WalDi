@@ -76,8 +76,8 @@ class ListRepository {
 
   static Future<List<List<ProductModel>>?> searchListing(
       {required content,
-        required MultiFilter multiFilter,
-        int pageNo = 1}) async {
+      required MultiFilter multiFilter,
+      int pageNo = 1}) async {
     String linkFilter = "";
     if (multiFilter.hasListingStatusFilter &&
         (multiFilter.currentListingStatus ?? 0) != 0) {
@@ -92,10 +92,10 @@ class ListRepository {
       linkFilter = "$linkFilter&categoryId=${multiFilter.currentCategory}";
     }
     final response =
-    await Api.requestSearchListing(content, linkFilter, pageNo);
+        await Api.requestSearchListing(content, linkFilter, pageNo);
     if (response.success) {
       final list =
-      List<Map<String, dynamic>>.from(response.data ?? []).map((item) {
+          List<Map<String, dynamic>>.from(response.data ?? []).map((item) {
         return ProductModel.fromJson(item, setting: Application.setting);
       }).toList();
       return [list];
@@ -236,7 +236,7 @@ class ListRepository {
         await Api.requestSubmitSubCategory(categoryId: categoryId);
     final jsonSubCategory = requestSubmitResponse.data;
     if (!jsonSubCategory.isEmpty) {
-      final subCategoryId = jsonSubCategory.first['id'];
+      final subCategoryId = jsonSubCategory.last['id'];
       prefs.setKeyValue(Preferences.subCategoryId, subCategoryId as int);
     }
     return requestSubmitResponse;
@@ -627,6 +627,16 @@ class ListRepository {
     final response = await Api.requestSubmitSubCategory(categoryId: categoryId);
     var jsonCategory = response.data;
     final item = jsonCategory.firstWhere((item) => item['name'] == value);
+    final itemId = item['id'];
+    final subCategoryId = itemId;
+    prefs.setKeyValue(Preferences.subCategoryId, subCategoryId);
+  }
+
+  void setSubCategoryId(value) async {
+    final response = await Api.requestSubmitSubCategory(categoryId: 1);
+    var jsonSubCategory = response.data;
+    final item = jsonSubCategory.firstWhere(
+        (item) => (item['name']?.toLowerCase() ?? '') == value.toLowerCase());
     final itemId = item['id'];
     final subCategoryId = itemId;
     prefs.setKeyValue(Preferences.subCategoryId, subCategoryId);
