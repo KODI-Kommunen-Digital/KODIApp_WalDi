@@ -319,7 +319,7 @@ class ListRepository {
         await Api.requestSubmitSubCategory(categoryId: categoryId);
     final jsonSubCategory = requestSubmitResponse.data;
     if (!jsonSubCategory.isEmpty) {
-      final subCategoryId = jsonSubCategory.first['id'];
+      final subCategoryId = jsonSubCategory.last['id'];
       prefs.setKeyValue(Preferences.subCategoryId, subCategoryId as int);
     }
     return requestSubmitResponse;
@@ -733,6 +733,16 @@ class ListRepository {
     var jsonCategory = response.data;
     final item =
         jsonCategory.firstWhere((item) => item['name'] == value.toLowerCase());
+    final itemId = item['id'];
+    final subCategoryId = itemId;
+    prefs.setKeyValue(Preferences.subCategoryId, subCategoryId);
+  }
+
+  void setSubCategoryId(value) async {
+    final response = await Api.requestSubmitSubCategory(categoryId: 1);
+    var jsonSubCategory = response.data;
+    final item = jsonSubCategory.firstWhere(
+        (item) => (item['name']?.toLowerCase() ?? '') == value.toLowerCase());
     final itemId = item['id'];
     final subCategoryId = itemId;
     prefs.setKeyValue(Preferences.subCategoryId, subCategoryId);
