@@ -649,6 +649,12 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
+  static Future<ResultApiModel> requestAppointmentServices({cityId, listingId, appointmentId}) async {
+    var list = '/cities/$cityId/listings/$listingId/appointments/$appointmentId/services';
+    final result = await HTTPManager(forum: false).get(url: list);
+    return ResultApiModel.fromJson(result);
+  }
+
   ///Singleton factory
   static final Api _instance = Api._internal();
 
