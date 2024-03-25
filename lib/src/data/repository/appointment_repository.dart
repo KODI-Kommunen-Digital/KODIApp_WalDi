@@ -1,8 +1,10 @@
 import 'package:heidi/src/data/model/model_appointment.dart';
 import 'package:heidi/src/data/model/model_appointment_service.dart';
+import 'package:heidi/src/data/model/model_appointment_slot.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
+import 'package:intl/intl.dart';
 
 class AppointmentRepository {
   final Preferences prefs;
@@ -45,6 +47,34 @@ class AppointmentRepository {
       return responseData;
     } else {
       logError('Load Appointment Services Error', response.message);
+    }
+    return null;
+  }
+
+  Future<List<AppointmentSlotModel>?> loadAppointmentSlots(
+      int cityId,
+      int listingId,
+      int appointmentId,
+      String date,
+      List<String> serviceId) async {
+    final DateTime parsedDate = DateTime.parse(date);
+    date = DateFormat('yyyy-MM-dd').format(parsedDate);
+
+    final response = await Api.requestAppointmentSlots(
+        cityId: cityId,
+        listingId: listingId,
+        appointmentId: appointmentId,
+        date: date,
+        serviceId: serviceId);
+    if (response.success) {
+      final responseData =
+          List<Map<String, dynamic>>.from(response.data ?? []).map((item) {
+        return AppointmentSlotModel.fromJson(item);
+      }).toList();
+
+      return responseData;
+    } else {
+      logError('Load Appointment Slots Error', response.message);
     }
     return null;
   }
