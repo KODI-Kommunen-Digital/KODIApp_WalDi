@@ -151,7 +151,8 @@ class ListCubit extends Cubit<ListState> {
     onLoad(cityId);
   }
 
-  void onDateProductFilter(ProductFilter? type, List<ProductModel> loadedList) {
+  void onDateProductFilter(ProductFilter? type, List<ProductModel> loadedList,
+      bool filterLocation, int? currentCity) {
     final currentDate = DateTime.now();
     if (type == ProductFilter.month) {
       filteredList = loadedList.where((product) {
@@ -159,7 +160,12 @@ class ListCubit extends Cubit<ListState> {
         if (startDate != null) {
           final startMonth = startDate.month;
           final currentMonth = currentDate.month;
-          return startMonth == currentMonth;
+          if (filterLocation && (currentCity ?? 0) != 0) {
+            return (startMonth == currentMonth) &&
+                (product.cityId == currentCity);
+          } else {
+            return startMonth == currentMonth;
+          }
         }
         return false;
       }).toList();
@@ -170,9 +176,19 @@ class ListCubit extends Cubit<ListState> {
         if (startDate != null) {
           final startWeek = _getWeekNumber(startDate);
           final currentWeek = _getWeekNumber(currentDate);
-          return startWeek == currentWeek;
+          if (filterLocation && (currentCity ?? 0) != 0) {
+            return (startWeek == currentWeek) &&
+                (product.cityId == currentCity);
+          } else {
+            return startWeek == currentWeek;
+          }
         }
         return false;
+      }).toList();
+      emit(ListStateUpdated(filteredList, listCity));
+    } else if (type == null && filterLocation && (currentCity ?? 0) != 0) {
+      filteredList = loadedList.where((product) {
+        return product.cityId == currentCity;
       }).toList();
 
       emit(ListStateUpdated(filteredList, listCity));

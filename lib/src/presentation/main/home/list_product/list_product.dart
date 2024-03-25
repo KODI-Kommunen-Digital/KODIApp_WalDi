@@ -65,7 +65,11 @@ class _ListProductScreenState extends State<ListProductScreen> {
     if (isEvent) {
       return MultiFilter(
           hasProductEventFilter: true,
-          currentProductEventFilter: selectedFilter?.currentProductEventFilter);
+          currentProductEventFilter: selectedFilter?.currentProductEventFilter,
+          hasLocationFilter: true,
+          currentLocation:
+              selectedFilter?.currentLocation ?? widget.arguments['id'],
+          cities: AppBloc.discoveryCubit.location);
     } else {
       return MultiFilter(
           hasLocationFilter: true,
@@ -80,11 +84,12 @@ class _ListProductScreenState extends State<ListProductScreen> {
     final loadedList = context.read<ListCubit>().getLoadedList();
     setState(() {
       if (filter?.hasProductEventFilter ?? false) {
-        context
-            .read<ListCubit>()
-            .onDateProductFilter(filter?.currentProductEventFilter, loadedList);
-      }
-      if (filter?.hasLocationFilter ?? false) {
+        context.read<ListCubit>().onDateProductFilter(
+            filter?.currentProductEventFilter,
+            loadedList,
+            filter?.hasLocationFilter ?? false,
+            filter?.currentLocation);
+      } else if (filter?.hasLocationFilter ?? false) {
         loadListingsList();
       }
       if (filter?.hasCategoryFilter ?? false) {
