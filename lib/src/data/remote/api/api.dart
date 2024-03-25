@@ -643,6 +643,12 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
+  static Future<ResultApiModel> requestUserAppointments(userId, pageNo) async {
+    var list = '/users/$userId/appointments?pageNumber=$pageNo&pageSize=10';
+    final result = await HTTPManager(forum: false).get(url: list);
+    return ResultApiModel.fromJson(result);
+  }
+
   ///Singleton factory
   static final Api _instance = Api._internal();
 
