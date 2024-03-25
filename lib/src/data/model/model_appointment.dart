@@ -10,8 +10,8 @@ class AppointmentModel {
   final int? cityId;
   final String title;
   final String description;
-  final String startDate;
-  final String endDate;
+  final String? startDate;
+  final String? endDate;
   final int? maxBookingPerSlot;
   final List<OpenTimeModel?>? openHours;
   final List<HolidayModel>? holidays;
@@ -22,17 +22,24 @@ class AppointmentModel {
       this.cityId,
       required this.title,
       required this.description,
-      required this.startDate,
-      required this.endDate,
+      this.startDate,
+      this.endDate,
       this.maxBookingPerSlot,
       this.openHours,
       this.holidays});
 
   factory AppointmentModel.fromJson(Map<String, dynamic> json, {int? cityId}) {
-    final DateTime parsedStartDate = DateTime.parse(json['startDate']);
-    final DateTime parsedEndDate = DateTime.parse(json['endDate']);
-    String startDate = DateFormat('dd.MM.yyyy HH:mm').format(parsedStartDate);
-    String endDate = DateFormat('dd.MM.yyyy HH:mm').format(parsedEndDate);
+    final DateTime? parsedStartDate = DateTime.tryParse(json['startDate']);
+    final DateTime? parsedEndDate = DateTime.tryParse(json['endDate']);
+    String? startDate;
+    String? endDate;
+
+    if (parsedStartDate != null) {
+      startDate = DateFormat('dd.MM.yyyy HH:mm').format(parsedStartDate);
+    }
+    if (parsedEndDate != null) {
+      endDate = DateFormat('dd.MM.yyyy HH:mm').format(parsedEndDate);
+    }
 
     final List<dynamic>? jsonHolidays = json['metaData']['Holidays'];
     List<HolidayModel>? parsedHolidays = [];
