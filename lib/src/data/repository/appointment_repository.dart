@@ -259,6 +259,19 @@ class AppointmentRepository {
     return null;
   }
 
+  Future<bool> deleteBooking(
+      int cityId, int listingId, int appointmentId, int bookingId) async {
+    final response = await Api.requestDeleteBooking(
+        cityId, listingId, appointmentId, bookingId);
+
+    if (response.success) {
+      return true;
+    } else {
+      logError('Delete Booking error', response.message);
+      return false;
+    }
+  }
+
   Future<int> getCityId(cityName) async {
     final response = await Api.requestSubmitCities();
     var jsonCategory = response.data;
