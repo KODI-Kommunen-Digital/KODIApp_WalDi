@@ -138,6 +138,62 @@ class AppointmentRepository {
     return response;
   }
 
+  Future<ResultApiModel> editAppointment(
+      {required int listingId,
+      required int appointmentId,
+      String? title,
+      String? description,
+      String? startDate,
+      String? endDate,
+      int? maxBookingPerSlot,
+      List<OpenTimeModel>? openHours,
+      List<HolidayModel>? holidays,
+      List<AppointmentServiceModel>? services}) async {
+    final cityId = prefs.getKeyValue(Preferences.cityId, 0);
+
+    final DateTime? parsedStartDate = DateTime.tryParse(startDate ?? '');
+    final DateTime? parsedEndDate = DateTime.tryParse(endDate ?? '');
+
+    if (parsedStartDate != null) {
+      startDate = DateFormat('yyyy-MM-dd HH:mm').format(parsedStartDate);
+    }
+    if (parsedEndDate != null) {
+      endDate = DateFormat('yyyy-MM-dd HH:mm').format(parsedEndDate);
+    }
+
+    List<Map<String, String>>? parsedHolidays = parseHolidays(holidays);
+    Map<String, List<Map<String, String>>>? parsedOpenHours =
+        parseOpenHours(openHours);
+    List<Map<String, dynamic>>? parsedServicesParams;
+
+    if (services != null) {
+      parsedServicesParams = AppointmentServiceModel.parseToParams(services);
+    }
+
+    Map<String, dynamic> metaData = {
+      'Holidays': parsedHolidays,
+      'maxBookingPerSlot': maxBookingPerSlot,
+      'OpeningDates': parsedOpenHours
+    };
+
+    Map<String, dynamic> params = {
+      'title': title,
+      'description': description,
+      'startDate': startDate,
+      'endDate': endDate,
+      'metadata': metaData,
+      'services': parsedServicesParams
+    };
+
+    final response = await Api.requestEditAppointment(
+        cityId, listingId, appointmentId, params);
+
+    if (!response.success) {
+      logError('Edit Appointment Error', response.message);
+    }
+    return response;
+  }
+
   Future<int> getCityId(cityName) async {
     final response = await Api.requestSubmitCities();
     var jsonCategory = response.data;
