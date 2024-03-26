@@ -2,6 +2,7 @@ import 'package:heidi/src/data/model/model_appointment.dart';
 import 'package:heidi/src/data/model/model_appointment_service.dart';
 import 'package:heidi/src/data/model/model_appointment_slot.dart';
 import 'package:heidi/src/data/model/model_booking.dart';
+import 'package:heidi/src/data/model/model_bookingGuest.dart';
 import 'package:heidi/src/data/model/model_holiday.dart';
 import 'package:heidi/src/data/model/model_open_time.dart';
 import 'package:heidi/src/data/model/model_result_api.dart';
@@ -257,6 +258,53 @@ class AppointmentRepository {
       logError('Load User Bookings Error', response.message);
     }
     return null;
+  }
+
+  Future<ResultApiModel> saveBooking(
+      {required BookingGuestModel guestDetails,
+      required String date,
+      String? startTime,
+      String? endTime,
+      List<BookingGuestModel>? friends,
+      required int cityId,
+      required int listingId,
+      required int appointmentId}) async {
+    date = DateFormat('yyyy-MM-dd').format(DateTime.parse(date));
+    List<Map<String, String>>? friendDetails = [];
+
+    if (friends != null) {
+      for (BookingGuestModel friend in friends) {
+        friendDetails.add({
+          'fistname': friend.firstname,
+          'lastName': friend.lastname,
+          'description': friend.description,
+          'emailId': friend.emailId
+        });
+      }
+    } else {
+      friends = null;
+    }
+
+    Map<String, dynamic> params = {
+      'guestDetails': {
+        'fistname': guestDetails.firstname,
+        'lastName': guestDetails.lastname,
+        'description': guestDetails.description,
+        'emailId': guestDetails.emailId
+      },
+      'date': date,
+      'startTime': startTime,
+      'endTime': endTime,
+      'friends': friendDetails
+    };
+
+    final response =
+        await Api.requestSaveBooking(cityId, listingId, appointmentId, params);
+
+    if (!response.success) {
+      logError('Save Booking Error', response.message);
+    }
+    return response;
   }
 
   Future<bool> deleteBooking(
