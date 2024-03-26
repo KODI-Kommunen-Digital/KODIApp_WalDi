@@ -5,8 +5,8 @@ import 'package:heidi/src/data/model/model_schedule.dart';
 import 'package:intl/intl.dart';
 
 class AppointmentModel {
-  final int id;
-  final int userId;
+  final int? id;
+  final int? userId;
   final int? cityId;
   final String title;
   final String description;
@@ -17,8 +17,8 @@ class AppointmentModel {
   final List<HolidayModel>? holidays;
 
   AppointmentModel(
-      {required this.id,
-      required this.userId,
+      {this.id,
+      this.userId,
       this.cityId,
       required this.title,
       required this.description,
@@ -29,16 +29,17 @@ class AppointmentModel {
       this.holidays});
 
   factory AppointmentModel.fromJson(Map<String, dynamic> json, {int? cityId}) {
-    final DateTime? parsedStartDate = DateTime.tryParse(json['startDate']);
-    final DateTime? parsedEndDate = DateTime.tryParse(json['endDate']);
+    final DateTime? parsedStartDate =
+        DateTime.tryParse(json['startDate'] ?? '');
+    final DateTime? parsedEndDate = DateTime.tryParse(json['endDate'] ?? '');
     String? startDate;
     String? endDate;
 
     if (parsedStartDate != null) {
-      startDate = DateFormat('dd.MM.yyyy HH:mm').format(parsedStartDate);
+      startDate = DateFormat('yyyy-MM-dd HH:mm').format(parsedStartDate);
     }
     if (parsedEndDate != null) {
-      endDate = DateFormat('dd.MM.yyyy HH:mm').format(parsedEndDate);
+      endDate = DateFormat('yyyy-MM-dd HH:mm').format(parsedEndDate);
     }
 
     final List<dynamic>? jsonHolidays = json['metaData']['Holidays'];
@@ -47,7 +48,7 @@ class AppointmentModel {
     if (jsonHolidays != null) {
       for (var holiday in jsonHolidays) {
         final DateTime parsedDate = DateTime.parse(holiday['date']);
-        String date = DateFormat('dd.MM.yyyy').format(parsedDate);
+        String date = DateFormat('dd-MM-yyyy').format(parsedDate);
         parsedHolidays.add(HolidayModel(date: date, title: holiday['title']));
       }
     } else {
@@ -89,25 +90,32 @@ class AppointmentModel {
     }
 
     return AppointmentModel(
-        id: json["id"],
-        userId: json["userId"] ?? 0,
-        title: json["title"] ?? "",
-        cityId: cityId ?? json["cityId"] ?? 0,
-        description: json["description"] ?? "",
-        maxBookingPerSlot: json['metaData']['maxBookingPerSlot'],
-        startDate: startDate,
-        endDate: endDate,
-        holidays: parsedHolidays,
-        openHours: parsedOpenHours);
+      id: json['id'],
+      userId: json['userId'],
+      title: json['title'] ?? '',
+      cityId: cityId ?? json['cityId'],
+      description: json['description'] ?? '',
+      maxBookingPerSlot: json['metaData']['maxBookingPerSlot'],
+      startDate: startDate,
+      endDate: endDate,
+      holidays: parsedHolidays,
+      openHours: parsedOpenHours,
+    );
   }
 
   static TimeOfDay timeOfDayFromString(String time) {
-    List<String> timeParts = time.split(":");
+    List<String> timeParts = time.split(':');
     int hours = int.parse(timeParts[0]);
     int minutes = int.parse(timeParts[1]);
 
     TimeOfDay timeOfDay = TimeOfDay(hour: hours, minute: minutes);
 
     return timeOfDay;
+  }
+
+  static String stringFromTimeOfDay(TimeOfDay time) {
+    final String hour = time.hour.toString().padLeft(2, '0');
+    final String minute = time.minute.toString().padLeft(2, '0');
+    return '$hour:$minute';
   }
 }

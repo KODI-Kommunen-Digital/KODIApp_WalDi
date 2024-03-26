@@ -649,15 +649,27 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
-  static Future<ResultApiModel> requestAppointmentServices({cityId, listingId, appointmentId}) async {
-    var list = '/cities/$cityId/listings/$listingId/appointments/$appointmentId/services';
+  static Future<ResultApiModel> requestAppointmentServices(
+      {cityId, listingId, appointmentId}) async {
+    var list =
+        '/cities/$cityId/listings/$listingId/appointments/$appointmentId/services';
     final result = await HTTPManager(forum: false).get(url: list);
     return ResultApiModel.fromJson(result);
   }
 
-  static Future<ResultApiModel> requestAppointmentSlots({cityId, listingId, appointmentId, date, serviceId}) async {
-    var list = '/cities/$cityId/listings/$listingId/appointments/$appointmentId/slots?date=$date&serviceId[]=$serviceId';
+  static Future<ResultApiModel> requestAppointmentSlots(
+      {cityId, listingId, appointmentId, date, serviceId}) async {
+    var list =
+        '/cities/$cityId/listings/$listingId/appointments/$appointmentId/slots?date=$date&serviceId[]=$serviceId';
     final result = await HTTPManager(forum: false).get(url: list);
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> requestSaveAppointment(
+      cityId, listingId, params) async {
+    var list = '/cities/$cityId/listings/$listingId/appointments/';
+    final result =
+        await HTTPManager(forum: false).post(url: list, data: params);
     return ResultApiModel.fromJson(result);
   }
 

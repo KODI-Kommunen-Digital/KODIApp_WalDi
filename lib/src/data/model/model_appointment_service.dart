@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model_holiday.dart';
 import 'package:heidi/src/data/model/model_open_time.dart';
 import 'package:heidi/src/data/model/model_schedule.dart';
+import 'package:heidi/src/data/repository/appointment_repository.dart';
 import 'package:intl/intl.dart';
 
 class AppointmentServiceModel {
@@ -12,7 +13,7 @@ class AppointmentServiceModel {
   final int duration;
   final bool slotSameAsAppointment;
   final int? maxBookingPerSlot;
-  final List<OpenTimeModel?>? openHours;
+  final List<OpenTimeModel>? openHours;
   final List<HolidayModel>? holidays;
 
   AppointmentServiceModel(
@@ -84,6 +85,33 @@ class AppointmentServiceModel {
         maxBookingPerSlot: json['MetaData']['maxBookingPerSlot'],
         openHours: parsedOpenHours,
         holidays: parsedHolidays);
+  }
+
+  static List<Map<String, dynamic>> parseToParams(
+      List<AppointmentServiceModel> services) {
+    List<Map<String, dynamic>> parsedServices = [];
+    for (AppointmentServiceModel service in services) {
+      List<Map<String, String>>? parsedHolidays =
+          AppointmentRepository.parseHolidays(service.holidays);
+      Map<String, List<Map<String, String>>>? parsedOpenHours =
+          AppointmentRepository.parseOpenHours(service.openHours);
+
+      Map<String, dynamic> metaData = {
+        'holidays': parsedHolidays,
+        'maxBookingPerSlot': service.maxBookingPerSlot,
+        'openingDates': parsedOpenHours
+      };
+
+      Map<String, dynamic> params = {
+        'name': service.name,
+        'duration': service.duration,
+        'slotSameAsAppointment': service.slotSameAsAppointment,
+        'metadata': metaData
+      };
+
+      parsedServices.add(params);
+    }
+    return parsedServices;
   }
 
   static TimeOfDay timeOfDayFromString(String time) {
