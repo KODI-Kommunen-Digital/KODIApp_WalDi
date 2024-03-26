@@ -675,9 +675,18 @@ class Api {
 
   static Future<ResultApiModel> requestEditAppointment(
       cityId, listingId, appointmentId, params) async {
-    var list = '/cities/$cityId/listings/$listingId/appointments/$appointmentId';
+    var list =
+        '/cities/$cityId/listings/$listingId/appointments/$appointmentId';
     final result =
-    await HTTPManager(forum: false).patch(url: list, data: params);
+        await HTTPManager(forum: false).patch(url: list, data: params);
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> requestDeleteAppointment(
+      cityId, listingId, appointmentId) async {
+    var list =
+        '/cities/$cityId/listings/$listingId/appointments/$appointmentId';
+    final result = await HTTPManager(forum: false).delete(url: list);
     return ResultApiModel.fromJson(result);
   }
 

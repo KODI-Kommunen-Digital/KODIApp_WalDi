@@ -194,6 +194,18 @@ class AppointmentRepository {
     return response;
   }
 
+  Future<bool> deleteAppointment(
+      int cityId, int listingId, int appointmentId) async {
+    final response =
+        await Api.requestDeleteAppointment(cityId, listingId, appointmentId);
+    if (response.success) {
+      return true;
+    } else {
+      logError('Remove Appointment Failed', response.message);
+      return false;
+    }
+  }
+
   Future<int> getCityId(cityName) async {
     final response = await Api.requestSubmitCities();
     var jsonCategory = response.data;
