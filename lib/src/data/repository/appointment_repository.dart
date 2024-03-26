@@ -1,6 +1,7 @@
 import 'package:heidi/src/data/model/model_appointment.dart';
 import 'package:heidi/src/data/model/model_appointment_service.dart';
 import 'package:heidi/src/data/model/model_appointment_slot.dart';
+import 'package:heidi/src/data/model/model_booking.dart';
 import 'package:heidi/src/data/model/model_holiday.dart';
 import 'package:heidi/src/data/model/model_open_time.dart';
 import 'package:heidi/src/data/model/model_result_api.dart';
@@ -204,6 +205,58 @@ class AppointmentRepository {
       logError('Remove Appointment Failed', response.message);
       return false;
     }
+  }
+
+  Future<List<BookingModel>?> loadOwnerBookings(
+      int id, int pageNo, int appointmentId,
+      {String? startDate}) async {
+    int userId;
+    if (id == 0) {
+      userId = prefs.getKeyValue('userId', 0);
+    } else {
+      userId = id;
+    }
+    if (startDate != null) {
+      startDate =
+          "&${DateFormat('yyyy-MM-dd').format(DateTime.parse(startDate))}";
+    }
+    final response = await Api.requestOwnerBookings(
+        userId, appointmentId, pageNo, startDate);
+
+    if (response.success) {
+      final responseData =
+          List<Map<String, dynamic>>.from(response.data ?? []).map((item) {
+        return BookingModel.fromJson(item);
+      }).toList();
+
+      return responseData;
+    } else {
+      logError('Load Owner Bookings Error', response.message);
+    }
+    return null;
+  }
+
+  Future<List<BookingModel>?> loadUserBookings(int id) async {
+    int userId;
+    if (id == 0) {
+      userId = prefs.getKeyValue('userId', 0);
+    } else {
+      userId = id;
+    }
+
+    final response = await Api.requestUserBookings(userId);
+
+    if (response.success) {
+      final responseData =
+          List<Map<String, dynamic>>.from(response.data ?? []).map((item) {
+        return BookingModel.fromJson(item);
+      }).toList();
+
+      return responseData;
+    } else {
+      logError('Load User Bookings Error', response.message);
+    }
+    return null;
   }
 
   Future<int> getCityId(cityName) async {

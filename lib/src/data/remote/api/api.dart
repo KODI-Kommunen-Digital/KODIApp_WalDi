@@ -690,6 +690,20 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
+  static Future<ResultApiModel> requestOwnerBookings(
+      userId, appointmentId, pageNo, startDate) async {
+    var list =
+        '/users/$userId/owner/bookings?$pageNo&pageSize=10&appointmentId=$appointmentId$startDate';
+    final result = await HTTPManager(forum: false).get(url: list);
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> requestUserBookings(userId) async {
+    var list = '/users/$userId/bookings';
+    final result = await HTTPManager(forum: false).get(url: list);
+    return ResultApiModel.fromJson(result);
+  }
+
   ///Singleton factory
   static final Api _instance = Api._internal();
 
