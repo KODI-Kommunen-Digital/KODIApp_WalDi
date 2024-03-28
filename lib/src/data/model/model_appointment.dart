@@ -31,11 +31,11 @@ class AppointmentModel {
   factory AppointmentModel.fromJson(Map<String, dynamic> json, {int? cityId}) {
     final DateTime parsedStartDate = DateTime.parse(json['startDate']);
     final DateTime? parsedEndDate = DateTime.tryParse(json['endDate'] ?? '');
-    String startDate = DateFormat('yyyy-MM-dd HH:mm').format(parsedStartDate);
+    String startDate = DateFormat('yyyy-MM-ddHH:mm').format(parsedStartDate);
     String? endDate;
 
     if (parsedEndDate != null) {
-      endDate = DateFormat('yyyy-MM-dd HH:mm').format(parsedEndDate);
+      endDate = DateFormat('yyyy-MM-ddHH:mm').format(parsedEndDate);
     }
 
     final List<dynamic>? jsonHolidays = json['metaData']['Holidays'];
