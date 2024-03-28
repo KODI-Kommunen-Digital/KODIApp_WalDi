@@ -10,10 +10,10 @@ class AppointmentModel {
   final int? cityId;
   final String title;
   final String description;
-  final String? startDate;
+  final String startDate;
   final String? endDate;
   final int? maxBookingPerSlot;
-  final List<OpenTimeModel?>? openHours;
+  final List<OpenTimeModel?> openHours;
   final List<HolidayModel>? holidays;
 
   AppointmentModel(
@@ -22,22 +22,18 @@ class AppointmentModel {
       this.cityId,
       required this.title,
       required this.description,
-      this.startDate,
+      required this.startDate,
       this.endDate,
       this.maxBookingPerSlot,
-      this.openHours,
+      required this.openHours,
       this.holidays});
 
   factory AppointmentModel.fromJson(Map<String, dynamic> json, {int? cityId}) {
-    final DateTime? parsedStartDate =
-        DateTime.tryParse(json['startDate'] ?? '');
+    final DateTime parsedStartDate = DateTime.parse(json['startDate']);
     final DateTime? parsedEndDate = DateTime.tryParse(json['endDate'] ?? '');
-    String? startDate;
+    String startDate = DateFormat('yyyy-MM-dd HH:mm').format(parsedStartDate);
     String? endDate;
 
-    if (parsedStartDate != null) {
-      startDate = DateFormat('yyyy-MM-dd HH:mm').format(parsedStartDate);
-    }
     if (parsedEndDate != null) {
       endDate = DateFormat('yyyy-MM-dd HH:mm').format(parsedEndDate);
     }
@@ -55,45 +51,42 @@ class AppointmentModel {
       parsedHolidays = null;
     }
 
-    final Map<String, dynamic>? openHours = json['metaData']['OpeningDates'];
-    List<OpenTimeModel>? parsedOpenHours = [];
+    final Map<String, dynamic> openHours =
+        json['metaData']['OpeningDates'] ?? {};
+    List<OpenTimeModel> parsedOpenHours = [];
 
-    if (openHours != null) {
-      const daysOfWeek = [
-        'Monday',
-        'Tuesday',
-        'Wednesday',
-        'Thursday',
-        'Friday',
-        'Saturday',
-        'Sunday'
-      ];
+    const daysOfWeek = [
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+      'Sunday'
+    ];
 
-      for (int i = 0; i < daysOfWeek.length; i++) {
-        String day = daysOfWeek[i];
+    for (int i = 0; i < daysOfWeek.length; i++) {
+      String day = daysOfWeek[i];
 
-        if (openHours[day] != null) {
-          TimeOfDay startTime =
-              timeOfDayFromString(openHours[day]['startTime']);
-          TimeOfDay endTime = timeOfDayFromString(openHours[day]['endTime']);
-          ScheduleModel schedule =
-              ScheduleModel(start: startTime, end: endTime);
+      if (openHours[day] != null) {
+        TimeOfDay startTime = timeOfDayFromString(openHours[day]['startTime']);
+        TimeOfDay endTime = timeOfDayFromString(openHours[day]['endTime']);
+        ScheduleModel schedule = ScheduleModel(start: startTime, end: endTime);
 
-          parsedOpenHours.add(OpenTimeModel(
-              dayOfWeek: i + 1,
-              key: day.substring(0, 3).toLowerCase(),
-              schedule: [schedule]));
-        }
+        parsedOpenHours.add(OpenTimeModel(
+            dayOfWeek: i + 1,
+            key: day.substring(0, 3).toLowerCase(),
+            schedule: [schedule]));
+      } else {
+        openHours[day] = null;
       }
-    } else {
-      parsedOpenHours = null;
     }
 
     return AppointmentModel(
       id: json['id'],
       userId: json['userId'],
       title: json['title'] ?? '',
-      cityId: cityId ?? json['cityId'],
+      cityId: cityId ?? json['cityId'] ?? 0,
       description: json['description'] ?? '',
       maxBookingPerSlot: json['metaData']['maxBookingPerSlot'],
       startDate: startDate,
