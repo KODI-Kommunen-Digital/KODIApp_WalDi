@@ -118,6 +118,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
           widget.item?.expiryDate == "") {
         _isExpiryDateEnabled = false;
       }
+      context
+          .read<AddListingCubit>()
+          .setCategoryId(selectedCategory?.toLowerCase());
     } else if (widget.item == null) {
       _setDefaultExpiryDate();
       _isExpiryDateEnabled = true;
