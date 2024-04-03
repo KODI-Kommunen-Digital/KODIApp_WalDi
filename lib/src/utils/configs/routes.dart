@@ -325,7 +325,6 @@ class Routes {
                 arguments['user'] as UserModel,
               ),
               child: DashboardScreen(
-                user: arguments['user'] as UserModel,
                 isEditable: arguments['editable'] as bool,
               ),
             );
