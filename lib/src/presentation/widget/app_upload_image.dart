@@ -91,7 +91,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
         image: FileImage(
           _file!,
         ),
-        fit: BoxFit.cover,
+        fit: BoxFit.contain,
       );
     }
 

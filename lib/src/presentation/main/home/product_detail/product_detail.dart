@@ -536,7 +536,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 ),
                                 child: Image.network(
                                   imageUrlString!,
-                                  fit: BoxFit.fitHeight,
+                                  fit: BoxFit.contain,
                                   loadingBuilder: (BuildContext context,
                                       Widget child,
                                       ImageChunkEvent? loadingProgress) {
