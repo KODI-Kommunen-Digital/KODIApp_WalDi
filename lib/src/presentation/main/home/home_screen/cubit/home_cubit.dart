@@ -1,8 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'dart:io';
 import 'package:heidi/src/data/model/model_category.dart';
+import 'package:heidi/src/data/model/model_multifilter.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
+import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
 
@@ -224,5 +226,64 @@ class HomeCubit extends Cubit<HomeState> {
     String ignoreVersion =
         await prefs.getKeyValue(Preferences.ignoredAppVersion, '');
     return ignoreVersion;
+  }
+
+  Future<List<ProductModel>> searchListing(content, int pageNo) async {
+    int currentCityFilter = await getCurrentCityFilter();
+    List<ProductModel>? listDataList = [];
+    MultiFilter multiFilter = MultiFilter(
+        hasLocationFilter: true,
+        currentLocation: currentCityFilter);
+
+    final result = await ListRepository.searchListing(
+        content: content, multiFilter: multiFilter, pageNo: pageNo);
+    final List<ProductModel>? listUpdated = result?[0];
+
+    if (listUpdated != null) {
+      if (pageNo == 1) {
+        recent = [];
+      }
+      recent.addAll(listUpdated);
+    }
+
+    for (final product in recent) {
+      if (product != null) {
+        listDataList.add(
+          ProductModel(
+            id: product.id,
+            cityId: product.cityId,
+            title: product.title,
+            image: product.image,
+            pdf: product.pdf,
+            category: product.category,
+            categoryId: product.categoryId,
+            subcategoryId: product.subcategoryId,
+            startDate: product.startDate,
+            endDate: product.endDate,
+            createDate: product.createDate,
+            favorite: product.favorite,
+            address: product.address,
+            phone: product.phone,
+            email: product.email,
+            website: product.website,
+            description: product.description,
+            statusId: product.statusId,
+            userId: product.userId,
+            sourceId: product.sourceId,
+            imageLists: product.imageLists,
+            externalId: product.externalId,
+            expiryDate: product.expiryDate,
+          ),
+        );
+      }
+    }
+
+    return listDataList;
+  }
+
+  Future<int> getCurrentCityFilter() async {
+    final prefs = await Preferences.openBox();
+    int filter = prefs.getKeyValue(Preferences.allListingCityFilter, 0);
+    return filter;
   }
 }

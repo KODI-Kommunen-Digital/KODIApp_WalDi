@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages
+// ignore_for_file: depend_on_referenced_packages, use_build_context_synchronously
 import 'dart:async';
 import 'dart:io';
 import 'package:connectivity/connectivity.dart';
@@ -15,6 +15,7 @@ import 'package:heidi/src/presentation/main/home/widget/home_category_item.dart'
 import 'package:heidi/src/presentation/main/home/widget/home_sliver_app_bar.dart';
 import 'package:heidi/src/presentation/widget/app_category_item.dart';
 import 'package:heidi/src/presentation/widget/app_product_item.dart';
+import 'package:heidi/src/presentation/widget/app_text_input.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
@@ -36,8 +37,11 @@ class _HomeScreenState extends State<HomeScreen> {
   String selectedCityTitle = '';
   int selectedCityId = 0;
   int pageNo = 1;
+  bool isSearching = false;
+  String searchTerm = "";
   late bool checkSavedCity;
   final _scrollController = ScrollController();
+  final _searchController = TextEditingController();
   bool isLoading = false;
   bool categoryLoading = false;
   bool isRefreshLoader = false;
@@ -101,19 +105,28 @@ class _HomeScreenState extends State<HomeScreen> {
         setState(() {
           isLoading = true;
         });
-        recent = await AppBloc.homeCubit.newListings(++pageNo).then((_) {
-          setState(() {
-            isLoading = false;
-          });
-        }).catchError(
-          (error, stackTrace) async {
+        if (!isSearching) {
+          recent = await AppBloc.homeCubit.newListings(++pageNo).then((_) {
             setState(() {
               isLoading = false;
             });
-            logError('Error loading new listings: $error');
-            await Sentry.captureException(error, stackTrace: stackTrace);
-          },
-        );
+          }).catchError(
+            (error, stackTrace) async {
+              setState(() {
+                isLoading = false;
+              });
+              logError('Error loading new listings: $error');
+              await Sentry.captureException(error, stackTrace: stackTrace);
+            },
+          );
+        } else {
+          recent = await context
+              .read<HomeCubit>()
+              .searchListing(searchTerm, ++pageNo);
+          setState(() {
+            isLoading = false;
+          });
+        }
       }
     }
   }
@@ -150,6 +163,18 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        actions: [
+          IconButton(
+              onPressed: () {
+                _searchListings();
+              },
+              icon: const Icon(Icons.search))
+        ],
+      ),
+      extendBodyBehindAppBar: true,
       body: BlocConsumer<HomeCubit, HomeState>(
         listener: (context, state) {
           state.maybeWhen(
@@ -182,7 +207,7 @@ class _HomeScreenState extends State<HomeScreen> {
             banner = state.banner;
             category = state.category;
             location = state.location;
-            recent = state.recent;
+            if (!isSearching) recent = state.recent;
             categoryLoading = false;
             isRefreshLoader = true;
 
@@ -479,6 +504,77 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  Future _searchListings() async {
+    String? searchResult = await openSearchDialog();
+    if (searchResult is String && searchResult.trim() != "") {
+      pageNo = 1;
+      isSearching = true;
+      searchTerm = searchResult.trim();
+      setState(() {
+        recent = [];
+      });
+      recent =
+          await context.read<HomeCubit>().searchListing(searchTerm, pageNo);
+      setState(() {});
+    } else if ((searchResult == null || searchResult.trim() == "") &&
+        isSearching) {
+      pageNo = 1;
+      isSearching = false;
+      searchTerm = "";
+      await context.read<HomeCubit>().onLoad(false);
+    }
+  }
+
+  Future<String?> openSearchDialog() async {
+    String? searchRequest = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return WillPopScope(
+          onWillPop: () async {
+            Navigator.pop(context, searchTerm);
+            return false;
+          },
+          child: SimpleDialog(
+              title: Center(
+                  child: Text(Translate.of(context).translate('search_title'))),
+              contentPadding: const EdgeInsets.all(24.0),
+              children: [
+                AppTextInput(
+                  hintText: Translate.of(context).translate('search_title'),
+                  keyboardType: TextInputType.text,
+                  controller: _searchController,
+                  //focusNode: _focusPass,
+                ),
+                const SizedBox(height: 8.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        _searchController.clear();
+                        Navigator.pop(context, null);
+                      },
+                      child: Text(Translate.of(context).translate('cancel')),
+                    ),
+                    const SizedBox(width: 8.0),
+                    TextButton(
+                      child: Text(
+                        Translate.of(context).translate('search_title'),
+                      ),
+                      onPressed: () {
+                        String content = _searchController.text;
+                        Navigator.pop(context, content);
+                      },
+                    ),
+                  ],
+                ),
+              ]),
+        );
+      },
+    );
+    return searchRequest;
+  }
+
   void _onProductDetail(ProductModel item) {
     if (item.sourceId == 2 || item.showExternal == 1) {
       _makeAction(item.website);
@@ -637,7 +733,6 @@ class _HomeScreenState extends State<HomeScreen> {
       },
       itemCount: 8,
     );
-
     if (recent != null) {
       content = ListView.builder(
         shrinkWrap: true,
