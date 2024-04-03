@@ -133,7 +133,7 @@
   "review_rating": "Review Rating",
   "delete": "Delete",
   "phone": "Phone",
-  "value_desc_limit_exceeded":"Description should not exceed 65535 characters.",  
+  "value_desc_limit_exceeded":"Description should not exceed 65535 characters.",
   "value_user_desc_limit_exceeded":"Description should not exceed 255 characters.",
   "date_established": "Date Established",
   "featured": "Featured",
@@ -448,13 +448,13 @@
   "my_groups": "My Groups",
   "all_listings": "All Listings",
   "my_posts": "My Posts",
-  "requests": "Requests",  
+  "requests": "Requests",
   "active": "Active",
   "inactive": "Inactive",
-  "under_review": "Under Review",  
+  "under_review": "Under Review",
   "all_requests":"All Requests",
   "image_size_exceed":"Image Size Exceeded",
-  "select_small_images":"Bitte wählen Sie Bilder aus, die 20 MB oder weniger groß sind.",  
+  "select_small_images":"Bitte wählen Sie Bilder aus, die 20 MB oder weniger groß sind.",
   "quelle":"Source:",
   "notificationPermission" : "Notifications are disabled for this app. To enable them, please open the app settings and grant permission",
   "openSettings" : "Open Settings",
@@ -463,5 +463,6 @@
   "choose_listing_status": "Choose listing status",
   "all": "All",
   "expiry_date": "Ablaufdatum",
-  "enable_expiry_date":"Ein Ablaufdatum hinzufügen, an dem der Beitrag gelöscht wird"
+  "enable_expiry_date":"Ein Ablaufdatum hinzufügen, an dem der Beitrag gelöscht wird",
+  "error_message": "An error occured, please try again later."
 }
