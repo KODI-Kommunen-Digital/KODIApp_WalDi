@@ -16,6 +16,7 @@ import 'package:heidi/src/presentation/main/account/dashboard/dashboard_screen.d
 import 'package:heidi/src/presentation/main/account/dashboard/my_groups/cubit/my_groups_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/my_groups/my_groups_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/my_listings/my_listings_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/test/test.dart';
 import 'package:heidi/src/presentation/main/account/edit_profile/edit_profile_screen.dart';
 import 'package:heidi/src/presentation/main/account/faq/cubit/faq_cubit.dart';
 import 'package:heidi/src/presentation/main/account/faq/faq_screen.dart';
@@ -122,6 +123,7 @@ class Routes {
   static const String addPosts = "/addPosts";
   static const String myListings = "/myListings";
   static const String filterScreen = "/filterScreen";
+  static const String test = "/testScreeb";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -137,6 +139,13 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) {
             return ListProductScreen(arguments: arguments);
+          },
+        );
+
+      case test:
+        return MaterialPageRoute(
+          builder: (context) {
+            return TestScreen();
           },
         );
 

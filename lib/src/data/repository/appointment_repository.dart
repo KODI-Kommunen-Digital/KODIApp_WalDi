@@ -89,7 +89,7 @@ class AppointmentRepository {
       {required int listingId,
       required String title,
       required String description,
-      String? startDate,
+      required String startDate,
       String? endDate,
       int? maxBookingPerSlot,
       List<OpenTimeModel>? openHours,
@@ -97,42 +97,50 @@ class AppointmentRepository {
       List<AppointmentServiceModel>? services}) async {
     final cityId = prefs.getKeyValue(Preferences.cityId, 0);
 
-    final DateTime? parsedStartDate = DateTime.tryParse(startDate ?? '');
+    final DateTime parsedStartDate = DateTime.parse(startDate);
     final DateTime? parsedEndDate = DateTime.tryParse(endDate ?? '');
 
-    if (parsedStartDate != null) {
-      startDate = DateFormat('yyyy-MM-dd HH:mm').format(parsedStartDate);
-    }
+    startDate = DateFormat('yyyy-MM-ddTHH:mm').format(parsedStartDate);
     if (parsedEndDate != null) {
-      endDate = DateFormat('yyyy-MM-dd HH:mm').format(parsedEndDate);
+      endDate = DateFormat('yyyy-MM-ddTHH:mm').format(parsedEndDate);
     }
 
     List<Map<String, String>>? parsedHolidays = parseHolidays(holidays);
-    Map<String, List<Map<String, String>>>? parsedOpenHours =
-        parseOpenHours(openHours);
+    Map<String, List<Map<String, String>>?>? parsedOpenHours;
     List<Map<String, dynamic>>? parsedServicesParams;
+
+    if(openHours != null) {
+      parsedOpenHours = parseOpenHours(openHours);
+    }
 
     if (services != null) {
       parsedServicesParams = AppointmentServiceModel.parseToParams(services);
     }
 
-    Map<String, dynamic> metaData = {
-      'Holidays': parsedHolidays,
-      'maxBookingPerSlot': maxBookingPerSlot,
-      'OpeningDates': parsedOpenHours
-    };
+    Map<String, dynamic> metaData = {};
+    if (parsedHolidays != null) {
+      metaData['Holidays'] = parsedHolidays;
+    }
+    if (maxBookingPerSlot != null) {
+      metaData['maxBookingPerSlot'] = maxBookingPerSlot;
+    }
+    if (parsedOpenHours != null && parsedOpenHours.isNotEmpty) {
+      metaData['OpeningDates'] = parsedOpenHours;
+    }
 
     Map<String, dynamic> params = {
       'title': title,
       'description': description,
       'startDate': startDate,
-      'endDate': endDate,
       'metadata': metaData,
-      'services': parsedServicesParams
+      'services': parsedServicesParams ?? []
     };
 
-    final response =
-        await Api.requestSaveAppointment(cityId, listingId, params);
+    if (endDate != null) {
+      params['endDate'] = endDate;
+    }
+
+    final response = await Api.requestSaveAppointment(1, listingId, params);
 
     if (!response.success) {
       logError('Save Appointment Error', response.message);
@@ -157,16 +165,19 @@ class AppointmentRepository {
     final DateTime? parsedEndDate = DateTime.tryParse(endDate ?? '');
 
     if (parsedStartDate != null) {
-      startDate = DateFormat('yyyy-MM-dd HH:mm').format(parsedStartDate);
+      startDate = DateFormat('yyyy-MM-ddHH:mm').format(parsedStartDate);
     }
     if (parsedEndDate != null) {
-      endDate = DateFormat('yyyy-MM-dd HH:mm').format(parsedEndDate);
+      endDate = DateFormat('yyyy-MM-ddHH:mm').format(parsedEndDate);
     }
 
     List<Map<String, String>>? parsedHolidays = parseHolidays(holidays);
-    Map<String, List<Map<String, String>>>? parsedOpenHours =
-        parseOpenHours(openHours);
+    Map<String, List<Map<String, String>>?>? parsedOpenHours;
     List<Map<String, dynamic>>? parsedServicesParams;
+
+    if (openHours != null) {
+      parsedOpenHours = parseOpenHours(openHours);
+    }
 
     if (services != null) {
       parsedServicesParams = AppointmentServiceModel.parseToParams(services);
@@ -344,31 +355,29 @@ class AppointmentRepository {
     return parsedHolidays;
   }
 
-  static Map<String, List<Map<String, String>>>? parseOpenHours(
-      List<OpenTimeModel>? openHours) {
-    Map<String, List<Map<String, String>>>? parsedOpenHours = {};
-    if (openHours != null) {
-      const daysOfWeek = [
-        'Monday',
-        'Tuesday',
-        'Wednesday',
-        'Thursday',
-        'Friday',
-        'Saturday',
-        'Sunday'
-      ];
-      for (OpenTimeModel day in openHours) {
-        List<Map<String, String>> hours = [];
-        for (ScheduleModel schedule in day.schedule) {
-          String startTime =
-              AppointmentModel.stringFromTimeOfDay(schedule.start);
-          String endTime = AppointmentModel.stringFromTimeOfDay(schedule.end);
-          hours.add({'startTime': startTime, 'endTime': endTime});
-        }
-        parsedOpenHours[daysOfWeek[day.dayOfWeek - 1]] = hours;
+  static Map<String, List<Map<String, String>>?> parseOpenHours(
+      List<OpenTimeModel> openHours) {
+    const daysOfWeek = [
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+      'Sunday'
+    ];
+
+    Map<String, List<Map<String, String>>?> parsedOpenHours = {};
+    for (int i = 0; i < 7; i++) {
+      OpenTimeModel day =
+          openHours.firstWhere((element) => element.dayOfWeek == i + 1);
+      List<Map<String, String>> hours = [];
+      for (ScheduleModel schedule in day.schedule) {
+        String startTime = AppointmentModel.stringFromTimeOfDay(schedule.start);
+        String endTime = AppointmentModel.stringFromTimeOfDay(schedule.end);
+        hours.add({'startTime': startTime, 'endTime': endTime});
       }
-    } else {
-      parsedOpenHours = null;
+      parsedOpenHours[daysOfWeek[day.dayOfWeek - 1]] = hours;
     }
     return parsedOpenHours;
   }

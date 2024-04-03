@@ -93,8 +93,12 @@ class AppointmentServiceModel {
     for (AppointmentServiceModel service in services) {
       List<Map<String, String>>? parsedHolidays =
           AppointmentRepository.parseHolidays(service.holidays);
-      Map<String, List<Map<String, String>>>? parsedOpenHours =
-          AppointmentRepository.parseOpenHours(service.openHours);
+      Map<String, List<Map<String, String>>?>? parsedOpenHours;
+
+      if (service.openHours != null) {
+        parsedOpenHours =
+            AppointmentRepository.parseOpenHours(service.openHours!);
+      }
 
       Map<String, dynamic> metaData = {
         'holidays': parsedHolidays,

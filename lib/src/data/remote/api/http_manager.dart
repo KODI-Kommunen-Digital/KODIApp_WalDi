@@ -17,10 +17,10 @@ class HTTPManager {
 
   HTTPManager({bool forum = false}) {
     _baseUrl = !forum
-        ? 'https://app.smartregion-auf.de/api/'
-        : 'https://app.smartregion-auf.de/forumapi/';
-    // ? 'http://localhost:3001/'
-    //     : 'http://localhost:3002/';
+      //  ? 'https://app.smartregion-auf.de/api/'
+       // : 'https://app.smartregion-auf.de/forumapi/';
+     ? 'http://192.168.178.126:8002/'
+         : 'http://192.168.178.126:8003/v1/';
     //? 'https://app.geseke.it/api/'
     //: 'https://app.geseke.it/forumapi/';
 

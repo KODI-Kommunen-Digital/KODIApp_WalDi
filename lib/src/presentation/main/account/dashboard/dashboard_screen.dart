@@ -67,6 +67,19 @@ class DashboardScreen extends StatelessWidget {
                 // Add your action here
               },
             ),
+
+            GridItemButton(
+              icon: Icons.pool,
+              title: "Cool",
+              onPressed: () {
+                Navigator.pushNamed(
+                  context,
+                  Routes.test,
+                );
+                // Add your action here
+              },
+            ),
+
           ],
         ),
       ),
