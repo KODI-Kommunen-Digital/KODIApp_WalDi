@@ -122,8 +122,11 @@ class Routes {
   static const String addGroups = "/addGroup";
   static const String addPosts = "/addPosts";
   static const String myListings = "/myListings";
-  static const String filterScreen = "/filterScreen";
-  static const String test = "/testScreeb";
+  static const String mitredenWebview = "/mitredenWebview";
+  static const String appointments = "/appointments";
+  static const String myAppointments = "/myAppointments";
+  static const String appointmentDetails = "/appointmentDetails";
+  static const String appointmentRequests = "/appointmentRequests";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
