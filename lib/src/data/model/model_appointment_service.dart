@@ -15,6 +15,10 @@ class AppointmentServiceModel {
   final int? maxBookingPerSlot;
   final List<OpenTimeModel>? openHours;
   final List<HolidayModel>? holidays;
+  TextEditingController controller = TextEditingController();
+  int selectedMinutes = 15;
+  List<OpenTimeModel> employeeTimeSlots = [];
+  bool providedTimeSlots = true;
 
   AppointmentServiceModel(
       {required this.id,
