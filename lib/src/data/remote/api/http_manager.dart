@@ -10,19 +10,25 @@ import 'package:heidi/src/utils/logger.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
+enum APIType { defaultAPI, forum, appointment }
+
 class HTTPManager {
   final exceptionCode = ['jwt_auth_bad_iss', 'jwt_auth_invalid_token'];
   late final Dio _dio;
   late String _baseUrl;
 
-  HTTPManager({bool forum = false}) {
-    _baseUrl = !forum
-      //  ? 'https://app.smartregion-auf.de/api/'
-       // : 'https://app.smartregion-auf.de/forumapi/';
-     ? 'http://192.168.178.126:8002/'
-         : 'http://192.168.178.126:8003/v1/';
-    //? 'https://app.geseke.it/api/'
-    //: 'https://app.geseke.it/forumapi/';
+  HTTPManager({APIType apiType = APIType.defaultAPI}) {
+    switch (apiType) {
+      case APIType.defaultAPI:
+        _baseUrl = 'https://test.smartregion-auf.de/api/';
+        break;
+      case APIType.forum:
+        _baseUrl = 'https://test.smartregion-auf.de/forumapi/';
+        break;
+      case APIType.appointment:
+        _baseUrl = 'https://test.smartregion-auf.de/appointmentapi/';
+        break;
+    }
 
     _dio = Dio(
       BaseOptions(
