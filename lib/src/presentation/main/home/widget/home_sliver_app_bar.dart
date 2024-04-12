@@ -12,33 +12,44 @@ class AppBarHomeSliver extends SliverPersistentHeaderDelegate {
 
   AppBarHomeSliver(
       {required this.expandedHeight,
-      required this.setLocationCallback,
-      required this.cityTitlesList,
+      this.setLocationCallback,
+      this.cityTitlesList,
       this.banners,
       this.hintText,
       this.selectedOption});
 
   @override
-  Widget build(context, shrinkOffset, overlapsContent) {
-    return Stack(
-      alignment: Alignment.bottomCenter,
-      children: [
-        HomeSwipe(
-          images: banners,
-          height: expandedHeight,
-        ),
-        Container(
-          height: 32,
-          color: Theme.of(context).colorScheme.background,
-        ),
-        CitiesDropDown(
-          hintText: hintText,
-          cityTitlesList: cityTitlesList,
-          setLocationCallback: setLocationCallback,
-          selectedOption: selectedOption,
-          // onScan: onScan,
-        ),
-      ],
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        // Debugging output
+        return Stack(
+          alignment: Alignment.bottomCenter,
+          children: [
+            HomeSwipe(
+              images: banners,
+              height:
+                  expandedHeight - shrinkOffset, // Adjust based on shrinkOffset
+            ),
+            Container(
+              height: 42,
+              color: Theme.of(context).colorScheme.background,
+            ),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: CitiesDropDown(
+                hintText: hintText,
+                cityTitlesList: cityTitlesList,
+                setLocationCallback: setLocationCallback,
+                selectedOption: selectedOption,
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 
