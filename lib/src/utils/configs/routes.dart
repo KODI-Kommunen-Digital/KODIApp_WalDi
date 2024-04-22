@@ -23,7 +23,7 @@ import 'package:heidi/src/presentation/main/account/dashboard/dashboard_screen.d
 import 'package:heidi/src/presentation/main/account/dashboard/my_groups/cubit/my_groups_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/my_groups/my_groups_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/my_listings/my_listings_screen.dart';
-import 'package:heidi/src/presentation/main/account/dashboard/test/test.dart';
+// import 'package:heidi/src/presentation/main/account/dashboard/test/test.dart';
 import 'package:heidi/src/presentation/main/account/edit_profile/edit_profile_screen.dart';
 import 'package:heidi/src/presentation/main/account/faq/cubit/faq_cubit.dart';
 import 'package:heidi/src/presentation/main/account/faq/faq_screen.dart';
@@ -160,12 +160,12 @@ class Routes {
             return ListProductScreen(arguments: arguments);
           },
         );
-      case test:
-        return MaterialPageRoute(
-          builder: (context) {
-            return TestScreen();
-          },
-        );
+      // case test:
+      //   return MaterialPageRoute(
+      //     builder: (context) {
+      //       return TestScreen();
+      //     },
+      //   );
       case productDetail:
         return MaterialPageRoute(
           builder: (context) {
@@ -323,9 +323,7 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) {
             return BlocProvider(
-              create: (context) => CreateAppointmentCubit(
-                context.read(),
-              ),
+              create: (context) => CreateAppointmentCubit(),
               child: const CreateAppointmentScreen(),
             );
           },
@@ -335,10 +333,10 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) {
             return BlocProvider(
-              create: (context) => CreateAppointmentCubit(
-                context.read(),
+              create: (context) => CreateAppointmentCubit(),
+              child: const SelectHolidaysScreen(
+                selectedDates: [],
               ),
-              child: const SelectHolidaysScreen(),
             );
           },
         );
@@ -427,7 +425,7 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) {
             return BlocProvider(
-              create: (context) => AppointmentDetailsCubit(),
+              create: (context) => AppointmentDetailsCubit(context.read()),
               child: const AppointmentDetailsScreen(),
             );
           },

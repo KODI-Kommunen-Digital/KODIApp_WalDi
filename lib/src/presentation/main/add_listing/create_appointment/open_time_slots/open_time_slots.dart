@@ -5,7 +5,7 @@ import 'package:heidi/src/data/model/model_open_time.dart';
 import 'package:heidi/src/data/model/model_schedule.dart';
 import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/presentation/widget/app_picker_item.dart';
-import 'package:heidi/src/utils/configs/routes.dart';
+// import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/datetime.dart';
 import 'package:heidi/src/utils/translate.dart';
 
@@ -24,7 +24,7 @@ class _OpenTimeSlotsScreenState extends State<OpenTimeSlotsScreen> {
   final _defaultStartTime = const TimeOfDay(hour: 0, minute: 0);
   final _defaultEndTime = const TimeOfDay(hour: 0, minute: 0);
   List<OpenTimeModel> _time = [];
-  List<DateTime> selectedDates = [];
+  List<DateTime?> selectedDates = [];
 
   @override
   void initState() {
@@ -35,44 +35,44 @@ class _OpenTimeSlotsScreenState extends State<OpenTimeSlotsScreen> {
       _time = [
         OpenTimeModel(dayOfWeek: 1, key: 'mon', schedule: [
           ScheduleModel(
-            start: _defaultStartTime,
-            end: _defaultEndTime,
+            startTime: _defaultStartTime,
+            endTime: _defaultEndTime,
           ),
         ]),
         OpenTimeModel(dayOfWeek: 2, key: 'tue', schedule: [
           ScheduleModel(
-            start: _defaultStartTime,
-            end: _defaultEndTime,
+            startTime: _defaultStartTime,
+            endTime: _defaultEndTime,
           ),
         ]),
         OpenTimeModel(dayOfWeek: 3, key: 'wed', schedule: [
           ScheduleModel(
-            start: _defaultStartTime,
-            end: _defaultEndTime,
+            startTime: _defaultStartTime,
+            endTime: _defaultEndTime,
           ),
         ]),
         OpenTimeModel(dayOfWeek: 4, key: 'thu', schedule: [
           ScheduleModel(
-            start: _defaultStartTime,
-            end: _defaultEndTime,
+            startTime: _defaultStartTime,
+            endTime: _defaultEndTime,
           ),
         ]),
         OpenTimeModel(dayOfWeek: 5, key: 'fri', schedule: [
           ScheduleModel(
-            start: _defaultStartTime,
-            end: _defaultEndTime,
+            startTime: _defaultStartTime,
+            endTime: _defaultEndTime,
           ),
         ]),
         OpenTimeModel(dayOfWeek: 6, key: 'sat', schedule: [
           ScheduleModel(
-            start: _defaultStartTime,
-            end: _defaultEndTime,
+            startTime: _defaultStartTime,
+            endTime: _defaultEndTime,
           ),
         ]),
         OpenTimeModel(dayOfWeek: 7, key: 'sun', schedule: [
           ScheduleModel(
-            start: _defaultStartTime,
-            end: _defaultEndTime,
+            startTime: _defaultStartTime,
+            endTime: _defaultEndTime,
           ),
         ]),
       ];
@@ -83,6 +83,19 @@ class _OpenTimeSlotsScreenState extends State<OpenTimeSlotsScreen> {
   void dispose() {
     super.dispose();
   }
+
+  // Future<void> _navigateAndDisplayHolidays(BuildContext context) async {
+  //   final result =
+  //       await Navigator.pushNamed(context, Routes.selectHolidays, arguments: {
+  //     'selectedDates': selectedDates,
+  //   });
+
+  //   // if (result != null) {
+  //   //   setState(() {
+  //   //     selectedDates = result as List<DateTime?>;
+  //   //   });
+  //   // }
+  // }
 
   ///Show Time Time
   void _onTimePicker(TimeOfDay time, Function(TimeOfDay) callback) async {
@@ -98,7 +111,7 @@ class _OpenTimeSlotsScreenState extends State<OpenTimeSlotsScreen> {
 
   ///On Save
   void _onSave() {
-    Navigator.pop(context, _time);
+    Navigator.pop(context, [_time, selectedDates]);
   }
 
   @override
@@ -146,14 +159,14 @@ class _OpenTimeSlotsScreenState extends State<OpenTimeSlotsScreen> {
                             children: [
                               Expanded(
                                 child: AppPickerItem(
-                                  value: element.start.viewTime,
+                                  value: element.startTime.viewTime,
                                   title: Translate.of(context).translate(
                                     'choose_hours',
                                   ),
                                   onPressed: () {
-                                    _onTimePicker(element.start, (time) {
+                                    _onTimePicker(element.startTime, (time) {
                                       setState(() {
-                                        element.start = time;
+                                        element.startTime = time;
                                       });
                                     });
                                   },
@@ -162,14 +175,14 @@ class _OpenTimeSlotsScreenState extends State<OpenTimeSlotsScreen> {
                               const SizedBox(width: 16),
                               Expanded(
                                 child: AppPickerItem(
-                                  value: element.end.viewTime,
+                                  value: element.endTime.viewTime,
                                   title: Translate.of(context).translate(
                                     'choose_hours',
                                   ),
                                   onPressed: () {
-                                    _onTimePicker(element.end, (time) {
+                                    _onTimePicker(element.endTime, (time) {
                                       setState(() {
-                                        element.end = time;
+                                        element.endTime = time;
                                       });
                                     });
                                   },
@@ -181,8 +194,8 @@ class _OpenTimeSlotsScreenState extends State<OpenTimeSlotsScreen> {
                                   if (addAction) {
                                     item.schedule.add(
                                       ScheduleModel(
-                                        start: _defaultStartTime,
-                                        end: _defaultEndTime,
+                                        startTime: _defaultStartTime,
+                                        endTime: _defaultEndTime,
                                       ),
                                     );
                                   } else {
@@ -232,33 +245,33 @@ class _OpenTimeSlotsScreenState extends State<OpenTimeSlotsScreen> {
                       // color: Theme.of(context).dividerColor.withOpacity(.07),
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, Routes.selectHolidays);
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            Translate.of(context).translate('selectHolidays'),
-                            style: TextStyle(
-                              color: Colors
-                                  .white, // Change color to blue for hyperlink style
-                              // Remove TextDecoration.underline
-                              fontSize: 16,
-                            ),
-                          ),
-                          SizedBox(
-                            width: 4,
-                          ),
-                          Icon(
-                            Icons.arrow_forward,
-                            color:
-                                Colors.blue, // Match icon color with text color
-                          ),
-                        ],
-                      ),
-                    ),
+                    // child: TextButton(
+                    //   onPressed: () {
+                    //     _navigateAndDisplayHolidays(context);
+                    //   },
+                    //   child: Row(
+                    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //     children: [
+                    //       Text(
+                    //         Translate.of(context).translate('selectHolidays'),
+                    //         style: TextStyle(
+                    //           color: Colors
+                    //               .white, // Change color to blue for hyperlink style
+                    //           // Remove TextDecoration.underline
+                    //           fontSize: 16,
+                    //         ),
+                    //       ),
+                    //       SizedBox(
+                    //         width: 4,
+                    //       ),
+                    //       Icon(
+                    //         Icons.arrow_forward,
+                    //         color:
+                    //             Colors.blue, // Match icon color with text color
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
                   ),
                 ),
               ],

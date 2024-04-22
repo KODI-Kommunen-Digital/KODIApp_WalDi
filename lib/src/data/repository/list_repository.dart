@@ -325,6 +325,12 @@ class ListRepository {
     return requestSubmitResponse;
   }
 
+  Future<void> setListingsdetails(id, title, description) async {
+    prefs.setKeyValue(Preferences.listingTitle, title);
+    await prefs.setKeyValue(Preferences.listingId, id);
+    await prefs.setKeyValue(Preferences.listingDesc, description);
+  }
+
   Future<ResultApiModel> saveProduct(
     String title,
     String description,
@@ -439,7 +445,7 @@ class ListRepository {
       FormData? pickedFile = prefs.getPickedFile();
       final id = response.id;
       var formData = FormData();
-
+      setListingsdetails(id, title, description);
       if (pickedFile != null && pickedFile.files.isNotEmpty) {
         if (pickedFile.files[0].key == 'pdf') {
           await Api.requestListingUploadMedia(id, cityId, pickedFile);
@@ -605,6 +611,7 @@ class ListRepository {
         await Api.requestEditProduct(cityId, listingId, params, isImageChanged);
     if (response.success) {
       final prefs = await Preferences.openBox();
+      setListingsdetails(listingId, title, description);
       FormData? pickedFile = prefs.getPickedFile();
       // if (pickedFile!.files.isNotEmpty) {
       if (pickedFile?.files[0].key == 'pdf') {

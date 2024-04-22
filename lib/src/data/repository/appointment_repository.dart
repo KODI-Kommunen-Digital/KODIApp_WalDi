@@ -95,8 +95,6 @@ class AppointmentRepository {
       List<OpenTimeModel>? openHours,
       List<HolidayModel>? holidays,
       List<AppointmentServiceModel>? services}) async {
-    final cityId = prefs.getKeyValue(Preferences.cityId, 0);
-
     final DateTime parsedStartDate = DateTime.parse(startDate);
     final DateTime? parsedEndDate = DateTime.tryParse(endDate ?? '');
 
@@ -109,7 +107,7 @@ class AppointmentRepository {
     Map<String, List<Map<String, String>>?>? parsedOpenHours;
     List<Map<String, dynamic>>? parsedServicesParams;
 
-    if(openHours != null) {
+    if (openHours != null) {
       parsedOpenHours = parseOpenHours(openHours);
     }
 
@@ -119,13 +117,15 @@ class AppointmentRepository {
 
     Map<String, dynamic> metaData = {};
     if (parsedHolidays != null) {
-      metaData['Holidays'] = parsedHolidays;
+      metaData['holidays'] = parsedHolidays;
+    } else {
+      metaData['holidays'] = [];
     }
     if (maxBookingPerSlot != null) {
       metaData['maxBookingPerSlot'] = maxBookingPerSlot;
     }
     if (parsedOpenHours != null && parsedOpenHours.isNotEmpty) {
-      metaData['OpeningDates'] = parsedOpenHours;
+      metaData['openingDates'] = parsedOpenHours;
     }
 
     Map<String, dynamic> params = {
@@ -141,7 +141,6 @@ class AppointmentRepository {
     }
 
     final response = await Api.requestSaveAppointment(1, listingId, params);
-
     if (!response.success) {
       logError('Save Appointment Error', response.message);
     }
@@ -184,9 +183,9 @@ class AppointmentRepository {
     }
 
     Map<String, dynamic> metaData = {
-      'Holidays': parsedHolidays,
-      'maxBookingPerSlot': maxBookingPerSlot,
-      'OpeningDates': parsedOpenHours
+      'holidays': parsedHolidays,
+      'maxBookingPerSlot': maxBookingPerSlot ?? 8,
+      'openingDates': parsedOpenHours
     };
 
     Map<String, dynamic> params = {
@@ -373,8 +372,9 @@ class AppointmentRepository {
           openHours.firstWhere((element) => element.dayOfWeek == i + 1);
       List<Map<String, String>> hours = [];
       for (ScheduleModel schedule in day.schedule) {
-        String startTime = AppointmentModel.stringFromTimeOfDay(schedule.start);
-        String endTime = AppointmentModel.stringFromTimeOfDay(schedule.end);
+        String startTime =
+            AppointmentModel.stringFromTimeOfDay(schedule.startTime);
+        String endTime = AppointmentModel.stringFromTimeOfDay(schedule.endTime);
         hours.add({'startTime': startTime, 'endTime': endTime});
       }
       parsedOpenHours[daysOfWeek[day.dayOfWeek - 1]] = hours;

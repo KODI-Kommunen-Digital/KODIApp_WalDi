@@ -7,7 +7,6 @@ import 'package:heidi/src/presentation/main/add_listing/create_appointment/cubit
 import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
-import 'package:loggy/loggy.dart';
 
 class CreateAppointmentScreen extends StatelessWidget {
   const CreateAppointmentScreen({super.key});
@@ -54,6 +53,17 @@ class _CreateAppointmentLoadedState extends State<CreateAppointmentLoaded> {
         duration: 1,
         slotSameAsAppointment: true)
   ];
+  List<OpenTimeModel> timeSlots = [];
+  List<DateTime?> selectedDates = [];
+
+  Future<void> _navigateAndDisplayTimeSlots(BuildContext context) async {
+    final result = await Navigator.pushNamed(context, Routes.openTime);
+
+    if (result != null) {
+      timeSlots = (result as List)[0] as List<OpenTimeModel>;
+      selectedDates = [];
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,14 +77,7 @@ class _CreateAppointmentLoadedState extends State<CreateAppointmentLoaded> {
               size: 32,
             ),
             onPressed: () {
-              List<OpenTimeModel> timeSlots = [];
-              Navigator.pushNamed(context, Routes.openTime).then((value) {
-                if (value != null) {
-                  timeSlots.addAll(value as List<OpenTimeModel>);
-                  logError('OpenTime', timeSlots.length);
-                }
-                return true;
-              });
+              _navigateAndDisplayTimeSlots(context);
             },
           ),
         ],
@@ -110,7 +113,7 @@ class _CreateAppointmentLoadedState extends State<CreateAppointmentLoaded> {
       child: AppButton(
         Translate.of(context).translate('create_appointment'),
         onPressed: () {
-          Navigator.pop(context);
+          Navigator.pop(context, [serviceEntries, timeSlots]);
         },
         mainAxisSize: MainAxisSize.max,
       ),
@@ -135,6 +138,11 @@ class _CreateAppointmentLoadedState extends State<CreateAppointmentLoaded> {
                               Translate.of(context).translate('addServiceName'),
                           border: const OutlineInputBorder(),
                         ),
+                        onChanged: (value) {
+                          setState(() {
+                            serviceEntries[index].name = value;
+                          });
+                        },
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -146,18 +154,7 @@ class _CreateAppointmentLoadedState extends State<CreateAppointmentLoaded> {
                           size: 32,
                         ),
                         onPressed: () {
-                          List<OpenTimeModel> timeSlots = [];
-                          Navigator.pushNamed(context, Routes.openTime)
-                              .then((value) {
-                            if (value != null) {
-                              serviceEntries[index]
-                                  .employeeTimeSlots
-                                  .addAll(value as List<OpenTimeModel>);
-                              logError('OpenTIme', timeSlots.length);
-                              // widget.selectedTimeSlots!(timeSlots);
-                            }
-                            return true;
-                          });
+                          _navigateAndDisplayTimeSlots(context);
                         },
                       ),
                     ),
@@ -179,21 +176,21 @@ class _CreateAppointmentLoadedState extends State<CreateAppointmentLoaded> {
                   ],
                 ),
                 const SizedBox(height: 16),
-                Row(
-                  children: <Widget>[
-                    Text(Translate.of(context).translate('providedTimeSlot')),
-                    Checkbox(
-                      value: serviceEntries[index].providedTimeSlots,
-                      activeColor: Colors.blue,
-                      checkColor: Colors.white,
-                      onChanged: (value) {
-                        setState(() {
-                          serviceEntries[index].providedTimeSlots = value!;
-                        });
-                      },
-                    ),
-                  ],
-                ),
+                // Row(
+                //   children: <Widget>[
+                //     Text(Translate.of(context).translate('providedTimeSlot')),
+                //     Checkbox(
+                //       value: serviceEntries[index].providedTimeSlots,
+                //       activeColor: Colors.blue,
+                //       checkColor: Colors.white,
+                //       onChanged: (value) {
+                //         setState(() {
+                //           serviceEntries[index].providedTimeSlots = value!;
+                //         });
+                //       },
+                //     ),
+                //   ],
+                // ),
                 // const SizedBox(height: 16),
                 Row(
                   children: <Widget>[

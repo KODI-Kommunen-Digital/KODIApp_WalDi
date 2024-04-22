@@ -40,6 +40,9 @@ class Preferences {
       "pushNotificationsPermission";
   static const String receiveNotification = "receiveNotification";
   static const bool hasOpenedForumsBefore = false;
+  static const String listingTitle = "allListingCityFilter";
+  static const String listingId = "listingId";
+  static const String listingDesc = "listingDesc";
 
   Preferences._(this._box);
 

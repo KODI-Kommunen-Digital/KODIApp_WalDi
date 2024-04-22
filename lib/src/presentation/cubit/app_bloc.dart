@@ -6,8 +6,10 @@ import 'package:heidi/src/presentation/main/account/change_password/cubit/change
 import 'package:heidi/src/presentation/main/account/contact_us/cubit/contact_us_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/all_listings/cubit/all_listings_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/all_requests/cubit/all_requests_cubit.dart';
-import 'package:heidi/src/presentation/main/account/dashboard/test/cubit/test_cubit.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/appointments/appointment_details/cubit/appointment_details_cubit.dart';
+// import 'package:heidi/src/presentation/main/account/dashboard/test/cubit/test_cubit.dart';
 import 'package:heidi/src/presentation/main/account/edit_profile/cubit/edit_profile_cubit.dart';
+import 'package:heidi/src/presentation/main/add_listing/create_appointment/cubit/create_appoitment_cubit.dart';
 import 'package:heidi/src/presentation/main/add_listing/cubit/add_listing_cubit.dart';
 import 'package:heidi/src/presentation/main/discovery/cubit/discovery_cubit.dart';
 import 'package:heidi/src/presentation/main/home/home_screen/cubit/home_cubit.dart';
@@ -44,15 +46,15 @@ class AppBloc {
   static final contactUsCubit = ContactUsCubit();
   static final allListingsCubit = AllListingsCubit();
   static final allRequestsCubit = AllRequestsCubit();
-  static final testCubit = TestCubit();
+  // static final testCubit = TestCubit();
 
   static final List<BlocProvider> providers = [
     BlocProvider<ApplicationCubit>(
       create: (context) => applicationCubit,
     ),
-    BlocProvider<TestCubit>(
-      create: (context) => testCubit,
-    ),
+    // BlocProvider<TestCubit>(
+    //   create: (context) => testCubit,
+    // ),
     BlocProvider<UserCubit>(
       create: (context) => userCubit,
     ),
@@ -112,6 +114,12 @@ class AppBloc {
     // ),
     BlocProvider<AddListingCubit>(
       create: (context) => AddListingCubit(context.read()),
+    ),
+    BlocProvider<CreateAppointmentCubit>(
+      create: (context) => CreateAppointmentCubit(),
+    ),
+    BlocProvider<AppointmentDetailsCubit>(
+      create: (context) => AppointmentDetailsCubit(context.read()),
     ),
     BlocProvider<ContactUsCubit>(
       create: (context) => contactUsCubit,

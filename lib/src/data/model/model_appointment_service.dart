@@ -8,16 +8,15 @@ import 'package:intl/intl.dart';
 class AppointmentServiceModel {
   final int id;
   final int appointmentId;
-  final String name;
+  String name;
   final int userId;
   final int duration;
   final bool slotSameAsAppointment;
   final int? maxBookingPerSlot;
-  final List<OpenTimeModel>? openHours;
+  final Set? openingDates;
   final List<HolidayModel>? holidays;
   TextEditingController controller = TextEditingController();
   int selectedMinutes = 15;
-  List<OpenTimeModel> employeeTimeSlots = [];
   bool providedTimeSlots = true;
 
   AppointmentServiceModel(
@@ -28,11 +27,11 @@ class AppointmentServiceModel {
       required this.duration,
       required this.slotSameAsAppointment,
       this.maxBookingPerSlot,
-      this.openHours,
+      this.openingDates,
       this.holidays});
 
   factory AppointmentServiceModel.fromJson(Map<String, dynamic> json) {
-    final List<dynamic>? jsonHolidays = json['MetaData']['Holidays'];
+    final List<dynamic>? jsonHolidays = json['MetaData']['holidays'];
     List<HolidayModel>? parsedHolidays = [];
 
     if (jsonHolidays != null) {
@@ -42,11 +41,11 @@ class AppointmentServiceModel {
         parsedHolidays.add(HolidayModel(date: date, title: holiday['title']));
       }
     } else {
-      parsedHolidays = null;
+      parsedHolidays = [];
     }
 
-    final Map<String, dynamic>? openHours = json['MetaData']['OpeningDates'];
-    List<OpenTimeModel>? parsedOpenHours = [];
+    final Map<String, dynamic>? openHours = json['MetaData']['openingDates'];
+    Set parsedOpenHours = {};
 
     if (openHours != null) {
       const daysOfWeek = [
@@ -67,7 +66,7 @@ class AppointmentServiceModel {
               timeOfDayFromString(openHours[day]['startTime']);
           TimeOfDay endTime = timeOfDayFromString(openHours[day]['endTime']);
           ScheduleModel schedule =
-              ScheduleModel(start: startTime, end: endTime);
+              ScheduleModel(startTime: startTime, endTime: endTime);
 
           parsedOpenHours.add(OpenTimeModel(
               dayOfWeek: i + 1,
@@ -76,7 +75,7 @@ class AppointmentServiceModel {
         }
       }
     } else {
-      parsedOpenHours = null;
+      parsedOpenHours = {};
     }
 
     return AppointmentServiceModel(
@@ -86,8 +85,8 @@ class AppointmentServiceModel {
         userId: json['userId'] ?? 0,
         duration: json['duration'],
         slotSameAsAppointment: ((json['slotSameAsAppointment'] ?? 0) == 1),
-        maxBookingPerSlot: json['MetaData']['maxBookingPerSlot'],
-        openHours: parsedOpenHours,
+        maxBookingPerSlot: json['MetaData']['maxBookingPerSlot'] ?? 8,
+        openingDates: parsedOpenHours,
         holidays: parsedHolidays);
   }
 
@@ -99,14 +98,16 @@ class AppointmentServiceModel {
           AppointmentRepository.parseHolidays(service.holidays);
       Map<String, List<Map<String, String>>?>? parsedOpenHours;
 
-      if (service.openHours != null) {
+      if (service.openingDates != null) {
+        // Cast the Set<dynamic> to Set<OpenTimeModel> and then convert it to a List<OpenTimeModel>
+        List<OpenTimeModel> openingDatesList =
+            service.openingDates!.cast<OpenTimeModel>().toList();
         parsedOpenHours =
-            AppointmentRepository.parseOpenHours(service.openHours!);
+            AppointmentRepository.parseOpenHours(openingDatesList);
       }
-
       Map<String, dynamic> metaData = {
-        'holidays': parsedHolidays,
-        'maxBookingPerSlot': service.maxBookingPerSlot,
+        'holidays': parsedHolidays ?? [],
+        'maxBookingPerSlot': service.maxBookingPerSlot ?? 8,
         'openingDates': parsedOpenHours
       };
 

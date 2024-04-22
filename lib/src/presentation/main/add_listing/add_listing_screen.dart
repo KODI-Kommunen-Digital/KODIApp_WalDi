@@ -1,9 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
 import 'dart:io';
-
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:heidi/src/data/model/model_appointment_service.dart';
+// import 'package:heidi/src/data/model/model_holiday.dart';
+import 'package:heidi/src/data/model/model_open_time.dart';
 import 'package:http/http.dart' as http;
 import 'package:loggy/loggy.dart';
 import 'package:path_provider/path_provider.dart';
@@ -106,6 +108,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
 
   late int? currentCity;
   late List<dynamic> jsonCategory;
+  List<AppointmentServiceModel>? serviceEntries;
+  List<OpenTimeModel>? timeSlots;
+  late List<DateTime?> selectedDates;
 
   @override
   void initState() {
@@ -561,6 +566,18 @@ class _AddListingScreenState extends State<AddListingScreen> {
     }
   }
 
+  Future<void> _navigateAndHandleData(BuildContext context) async {
+    final result = await Navigator.pushNamed(context, Routes.createAppointment);
+    if (result != null) {
+      setState(() {
+        List<dynamic> resultList = result as List<dynamic>;
+        serviceEntries = resultList[0];
+        timeSlots = resultList[1];
+        selectedDates = [];
+      });
+    }
+  }
+
   void _onSubmit() async {
     final success = _validData();
     if (success) {
@@ -644,6 +661,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
           setState(() {
             isLoading = false;
           });
+          _createAppointment();
           _onSuccess();
           if (!mounted) return;
           context.read<AddListingCubit>().clearImagePath();
@@ -664,6 +682,11 @@ class _AddListingScreenState extends State<AddListingScreen> {
     if (widget.isNewList) {
       Navigator.pushNamed(context, Routes.submitSuccess);
     }
+  }
+
+  void _createAppointment() async {
+    context.read<AddListingCubit>().onSubmitAppointment(
+        services: serviceEntries, openHours: timeSlots, holidays: []);
   }
 
   bool _validData() {
@@ -764,11 +787,14 @@ class _AddListingScreenState extends State<AddListingScreen> {
       9: "category_lost_found",
       10: "category_companies",
       11: "category_public_transport",
-      12: "category_offers",
+
+      ///TODO: uncomment when the feature is ready
+      // 12: "category_offers",
       13: "category_food",
       14: "category_rathaus",
-      15: "category_newsletter",
-      16: "category_official_notification",
+      // 15: "category_newsletter",
+      // 16: "category_official_notification",
+      18: "category_appointment",
     };
     return categories[id];
   }
@@ -1210,39 +1236,38 @@ class _AddListingScreenState extends State<AddListingScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const SizedBox(),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, Routes.createAppointment);
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            Translate.of(context)
-                                .translate('appointmentDetails'),
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
+                if (selectedCategory?.toLowerCase() == "appointment bookings")
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: OutlinedButton(
+                        onPressed: () {
+                          _navigateAndHandleData(context);
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              Translate.of(context)
+                                  .translate('appointmentDetails'),
+                              style: const TextStyle(
+                                  fontSize: 16, color: Colors.white),
                             ),
-                          ),
-                          const SizedBox(
-                            width: 4,
-                          ),
-                          const Icon(
-                            Icons.arrow_forward,
-                            color: Colors.blue,
-                          ),
-                        ],
+                            const SizedBox(
+                              width: 4,
+                            ),
+                            const Icon(
+                              Icons.arrow_forward,
+                              color: Colors.blue,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
               ],
             ),
             const SizedBox(height: 10),

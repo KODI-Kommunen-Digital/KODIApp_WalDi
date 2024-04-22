@@ -695,7 +695,7 @@ class Api {
 
   static Future<ResultApiModel> requestSaveAppointment(
       cityId, listingId, params) async {
-    var list = '/cities/$cityId/listings/$listingId/appointments/';
+    var list = '/cities/$cityId/listings/$listingId/appointments';
     final result = await HTTPManager(apiType: APIType.appointment)
         .post(url: list, data: params, loading: false);
     return ResultApiModel.fromJson(result);

@@ -38,7 +38,7 @@ class AppointmentModel {
       endDate = DateFormat('yyyy-MM-ddHH:mm').format(parsedEndDate);
     }
 
-    final List<dynamic>? jsonHolidays = json['metaData']['Holidays'];
+    final List<dynamic>? jsonHolidays = json['metaData']['holidays'];
     List<HolidayModel>? parsedHolidays = [];
 
     if (jsonHolidays != null) {
@@ -52,7 +52,7 @@ class AppointmentModel {
     }
 
     final Map<String, dynamic> openHours =
-        json['metaData']['OpeningDates'] ?? {};
+        json['metaData']['openingDates'] ?? {};
     List<OpenTimeModel> parsedOpenHours = [];
 
     const daysOfWeek = [
@@ -71,7 +71,8 @@ class AppointmentModel {
       if (openHours[day] != null) {
         TimeOfDay startTime = timeOfDayFromString(openHours[day]['startTime']);
         TimeOfDay endTime = timeOfDayFromString(openHours[day]['endTime']);
-        ScheduleModel schedule = ScheduleModel(start: startTime, end: endTime);
+        ScheduleModel schedule =
+            ScheduleModel(startTime: startTime, endTime: endTime);
 
         parsedOpenHours.add(OpenTimeModel(
             dayOfWeek: i + 1,
@@ -88,7 +89,7 @@ class AppointmentModel {
       title: json['title'] ?? '',
       cityId: cityId ?? json['cityId'] ?? 0,
       description: json['description'] ?? '',
-      maxBookingPerSlot: json['metaData']['maxBookingPerSlot'],
+      maxBookingPerSlot: json['metaData']['maxBookingPerSlot'] ?? 8,
       startDate: startDate,
       endDate: endDate,
       holidays: parsedHolidays,

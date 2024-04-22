@@ -1,18 +1,27 @@
-import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
 import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:intl/intl.dart';
+import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 
 class SelectHolidaysScreen extends StatefulWidget {
-  const SelectHolidaysScreen({super.key});
+  final List<DateTime?> selectedDates;
+
+  const SelectHolidaysScreen({Key? key, required this.selectedDates})
+      : super(key: key);
 
   @override
   State<SelectHolidaysScreen> createState() => _SelectHolidaysScreenState();
 }
 
 class _SelectHolidaysScreenState extends State<SelectHolidaysScreen> {
-  List<DateTime?> _multiDatePickerValueWithDefaultValue = [];
+  late List<DateTime?> _multiDatePickerValue;
+
+  @override
+  void initState() {
+    super.initState();
+    _multiDatePickerValue = widget.selectedDates;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,10 +33,10 @@ class _SelectHolidaysScreenState extends State<SelectHolidaysScreen> {
           AppButton(
             'Done',
             onPressed: () {
-              Navigator.of(context).pop(_multiDatePickerValueWithDefaultValue);
+              Navigator.of(context).pop(_multiDatePickerValue);
             },
             type: ButtonType.text,
-          )
+          ),
         ],
       ),
       body: SafeArea(
@@ -36,30 +45,34 @@ class _SelectHolidaysScreenState extends State<SelectHolidaysScreen> {
           children: [
             const SizedBox(height: 10),
             CalendarDatePicker2(
-              config: config,
-              value: _multiDatePickerValueWithDefaultValue,
-              onValueChanged: (dates) =>
-                  setState(() => _multiDatePickerValueWithDefaultValue = dates),
+              config: CalendarDatePicker2Config(
+                calendarType: CalendarDatePicker2Type.multi,
+                selectedDayHighlightColor: Colors.indigo,
+              ),
+              value: _multiDatePickerValue,
+              onValueChanged: (dates) {
+                setState(() {
+                  _multiDatePickerValue = dates;
+                });
+              },
             ),
             const SizedBox(height: 10),
-            const Text('Selected Holiday Dates: \n'),
+            const Text('Selected Holiday Dates:'),
             Wrap(
               crossAxisAlignment: WrapCrossAlignment.center,
-              children: [
-                ..._multiDatePickerValueWithDefaultValue.map((date) {
-                  return Padding(
-                    padding: const EdgeInsets.all(2.0),
-                    child: Chip(
-                      label: Text(DateFormat('dd.MM.yyyy').format(date!)),
-                      onDeleted: () {
-                        setState(() {
-                          _multiDatePickerValueWithDefaultValue.remove(date);
-                        });
-                      },
-                    ),
-                  );
-                }).toList(),
-              ],
+              children: _multiDatePickerValue.map((date) {
+                return Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: Chip(
+                    label: Text(DateFormat('dd.MM.yyyy').format(date!)),
+                    onDeleted: () {
+                      setState(() {
+                        _multiDatePickerValue.remove(date);
+                      });
+                    },
+                  ),
+                );
+              }).toList(),
             ),
             const SizedBox(height: 25),
           ],
@@ -67,9 +80,4 @@ class _SelectHolidaysScreenState extends State<SelectHolidaysScreen> {
       ),
     );
   }
-
-  final config = CalendarDatePicker2Config(
-    calendarType: CalendarDatePicker2Type.multi,
-    selectedDayHighlightColor: Colors.indigo,
-  );
 }

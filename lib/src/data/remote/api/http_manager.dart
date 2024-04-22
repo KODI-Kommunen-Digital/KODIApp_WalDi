@@ -26,7 +26,7 @@ class HTTPManager {
         _baseUrl = 'https://test.smartregion-auf.de/forumapi/';
         break;
       case APIType.appointment:
-        _baseUrl = 'https://test.smartregion-auf.de/appointmentapi/';
+        _baseUrl = 'https://test.smartregion-auf.de/appointmentapi/v1/';
         break;
     }
 
