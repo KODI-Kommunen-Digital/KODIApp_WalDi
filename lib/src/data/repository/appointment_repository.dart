@@ -21,15 +21,8 @@ class AppointmentRepository {
 
   AppointmentRepository(this.prefs);
 
-  Future<List<AppointmentModel>?> loadUserAppointments(
-      int id, int pageNo) async {
-    int userId;
-    if (id == 0) {
-      userId = prefs.getKeyValue('userId', 0);
-    } else {
-      userId = id;
-    }
-
+  Future<List<AppointmentModel>?> loadUserAppointments(int pageNo) async {
+    int userId = prefs.getKeyValue(Preferences.userId, 0);
     final response = await Api.requestUserAppointments(userId, pageNo);
     if (response.success) {
       final responseData =

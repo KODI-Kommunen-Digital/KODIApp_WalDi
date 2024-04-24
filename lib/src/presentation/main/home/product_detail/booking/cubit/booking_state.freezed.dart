@@ -12,7 +12,7 @@ part of 'booking_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
 mixin _$BookingState {
@@ -85,25 +85,25 @@ class _$BookingStateCopyWithImpl<$Res, $Val extends BookingState>
 }
 
 /// @nodoc
-abstract class _$$BookingStateLoadingImplCopyWith<$Res> {
-  factory _$$BookingStateLoadingImplCopyWith(_$BookingStateLoadingImpl value,
-          $Res Function(_$BookingStateLoadingImpl) then) =
-      __$$BookingStateLoadingImplCopyWithImpl<$Res>;
+abstract class _$$BookingStateLoadingCopyWith<$Res> {
+  factory _$$BookingStateLoadingCopyWith(_$BookingStateLoading value,
+          $Res Function(_$BookingStateLoading) then) =
+      __$$BookingStateLoadingCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$BookingStateLoadingImplCopyWithImpl<$Res>
-    extends _$BookingStateCopyWithImpl<$Res, _$BookingStateLoadingImpl>
-    implements _$$BookingStateLoadingImplCopyWith<$Res> {
-  __$$BookingStateLoadingImplCopyWithImpl(_$BookingStateLoadingImpl _value,
-      $Res Function(_$BookingStateLoadingImpl) _then)
+class __$$BookingStateLoadingCopyWithImpl<$Res>
+    extends _$BookingStateCopyWithImpl<$Res, _$BookingStateLoading>
+    implements _$$BookingStateLoadingCopyWith<$Res> {
+  __$$BookingStateLoadingCopyWithImpl(
+      _$BookingStateLoading _value, $Res Function(_$BookingStateLoading) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$BookingStateLoadingImpl implements BookingStateLoading {
-  const _$BookingStateLoadingImpl();
+class _$BookingStateLoading implements BookingStateLoading {
+  const _$BookingStateLoading();
 
   @override
   String toString() {
@@ -111,10 +111,9 @@ class _$BookingStateLoadingImpl implements BookingStateLoading {
   }
 
   @override
-  bool operator ==(Object other) {
+  bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$BookingStateLoadingImpl);
+        (other.runtimeType == runtimeType && other is _$BookingStateLoading);
   }
 
   @override
@@ -194,24 +193,24 @@ class _$BookingStateLoadingImpl implements BookingStateLoading {
 }
 
 abstract class BookingStateLoading implements BookingState {
-  const factory BookingStateLoading() = _$BookingStateLoadingImpl;
+  const factory BookingStateLoading() = _$BookingStateLoading;
 }
 
 /// @nodoc
-abstract class _$$BookingStateLoadedImplCopyWith<$Res> {
-  factory _$$BookingStateLoadedImplCopyWith(_$BookingStateLoadedImpl value,
-          $Res Function(_$BookingStateLoadedImpl) then) =
-      __$$BookingStateLoadedImplCopyWithImpl<$Res>;
+abstract class _$$BookingStateLoadedCopyWith<$Res> {
+  factory _$$BookingStateLoadedCopyWith(_$BookingStateLoaded value,
+          $Res Function(_$BookingStateLoaded) then) =
+      __$$BookingStateLoadedCopyWithImpl<$Res>;
   @useResult
   $Res call({Map<String, int> availableSlots, List<String> services});
 }
 
 /// @nodoc
-class __$$BookingStateLoadedImplCopyWithImpl<$Res>
-    extends _$BookingStateCopyWithImpl<$Res, _$BookingStateLoadedImpl>
-    implements _$$BookingStateLoadedImplCopyWith<$Res> {
-  __$$BookingStateLoadedImplCopyWithImpl(_$BookingStateLoadedImpl _value,
-      $Res Function(_$BookingStateLoadedImpl) _then)
+class __$$BookingStateLoadedCopyWithImpl<$Res>
+    extends _$BookingStateCopyWithImpl<$Res, _$BookingStateLoaded>
+    implements _$$BookingStateLoadedCopyWith<$Res> {
+  __$$BookingStateLoadedCopyWithImpl(
+      _$BookingStateLoaded _value, $Res Function(_$BookingStateLoaded) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -220,7 +219,7 @@ class __$$BookingStateLoadedImplCopyWithImpl<$Res>
     Object? availableSlots = null,
     Object? services = null,
   }) {
-    return _then(_$BookingStateLoadedImpl(
+    return _then(_$BookingStateLoaded(
       null == availableSlots
           ? _value._availableSlots
           : availableSlots // ignore: cast_nullable_to_non_nullable
@@ -235,8 +234,8 @@ class __$$BookingStateLoadedImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$BookingStateLoadedImpl implements BookingStateLoaded {
-  const _$BookingStateLoadedImpl(
+class _$BookingStateLoaded implements BookingStateLoaded {
+  const _$BookingStateLoaded(
       final Map<String, int> availableSlots, final List<String> services)
       : _availableSlots = availableSlots,
         _services = services;
@@ -263,10 +262,10 @@ class _$BookingStateLoadedImpl implements BookingStateLoaded {
   }
 
   @override
-  bool operator ==(Object other) {
+  bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$BookingStateLoadedImpl &&
+            other is _$BookingStateLoaded &&
             const DeepCollectionEquality()
                 .equals(other._availableSlots, _availableSlots) &&
             const DeepCollectionEquality().equals(other._services, _services));
@@ -281,8 +280,8 @@ class _$BookingStateLoadedImpl implements BookingStateLoaded {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$BookingStateLoadedImplCopyWith<_$BookingStateLoadedImpl> get copyWith =>
-      __$$BookingStateLoadedImplCopyWithImpl<_$BookingStateLoadedImpl>(
+  _$$BookingStateLoadedCopyWith<_$BookingStateLoaded> get copyWith =>
+      __$$BookingStateLoadedCopyWithImpl<_$BookingStateLoaded>(
           this, _$identity);
 
   @override
@@ -361,30 +360,30 @@ class _$BookingStateLoadedImpl implements BookingStateLoaded {
 abstract class BookingStateLoaded implements BookingState {
   const factory BookingStateLoaded(
           final Map<String, int> availableSlots, final List<String> services) =
-      _$BookingStateLoadedImpl;
+      _$BookingStateLoaded;
 
   Map<String, int> get availableSlots;
   List<String> get services;
   @JsonKey(ignore: true)
-  _$$BookingStateLoadedImplCopyWith<_$BookingStateLoadedImpl> get copyWith =>
+  _$$BookingStateLoadedCopyWith<_$BookingStateLoaded> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$BookingStateErrorImplCopyWith<$Res> {
-  factory _$$BookingStateErrorImplCopyWith(_$BookingStateErrorImpl value,
-          $Res Function(_$BookingStateErrorImpl) then) =
-      __$$BookingStateErrorImplCopyWithImpl<$Res>;
+abstract class _$$BookingStateErrorCopyWith<$Res> {
+  factory _$$BookingStateErrorCopyWith(
+          _$BookingStateError value, $Res Function(_$BookingStateError) then) =
+      __$$BookingStateErrorCopyWithImpl<$Res>;
   @useResult
   $Res call({String error});
 }
 
 /// @nodoc
-class __$$BookingStateErrorImplCopyWithImpl<$Res>
-    extends _$BookingStateCopyWithImpl<$Res, _$BookingStateErrorImpl>
-    implements _$$BookingStateErrorImplCopyWith<$Res> {
-  __$$BookingStateErrorImplCopyWithImpl(_$BookingStateErrorImpl _value,
-      $Res Function(_$BookingStateErrorImpl) _then)
+class __$$BookingStateErrorCopyWithImpl<$Res>
+    extends _$BookingStateCopyWithImpl<$Res, _$BookingStateError>
+    implements _$$BookingStateErrorCopyWith<$Res> {
+  __$$BookingStateErrorCopyWithImpl(
+      _$BookingStateError _value, $Res Function(_$BookingStateError) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -392,7 +391,7 @@ class __$$BookingStateErrorImplCopyWithImpl<$Res>
   $Res call({
     Object? error = null,
   }) {
-    return _then(_$BookingStateErrorImpl(
+    return _then(_$BookingStateError(
       null == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
@@ -403,8 +402,8 @@ class __$$BookingStateErrorImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$BookingStateErrorImpl implements BookingStateError {
-  const _$BookingStateErrorImpl(this.error);
+class _$BookingStateError implements BookingStateError {
+  const _$BookingStateError(this.error);
 
   @override
   final String error;
@@ -415,10 +414,10 @@ class _$BookingStateErrorImpl implements BookingStateError {
   }
 
   @override
-  bool operator ==(Object other) {
+  bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$BookingStateErrorImpl &&
+            other is _$BookingStateError &&
             (identical(other.error, error) || other.error == error));
   }
 
@@ -428,9 +427,8 @@ class _$BookingStateErrorImpl implements BookingStateError {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$BookingStateErrorImplCopyWith<_$BookingStateErrorImpl> get copyWith =>
-      __$$BookingStateErrorImplCopyWithImpl<_$BookingStateErrorImpl>(
-          this, _$identity);
+  _$$BookingStateErrorCopyWith<_$BookingStateError> get copyWith =>
+      __$$BookingStateErrorCopyWithImpl<_$BookingStateError>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -506,10 +504,10 @@ class _$BookingStateErrorImpl implements BookingStateError {
 }
 
 abstract class BookingStateError implements BookingState {
-  const factory BookingStateError(final String error) = _$BookingStateErrorImpl;
+  const factory BookingStateError(final String error) = _$BookingStateError;
 
   String get error;
   @JsonKey(ignore: true)
-  _$$BookingStateErrorImplCopyWith<_$BookingStateErrorImpl> get copyWith =>
+  _$$BookingStateErrorCopyWith<_$BookingStateError> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model_holiday.dart';
 import 'package:heidi/src/data/model/model_open_time.dart';
@@ -29,6 +31,10 @@ class AppointmentModel {
       this.holidays});
 
   factory AppointmentModel.fromJson(Map<String, dynamic> json, {int? cityId}) {
+    List<OpenTimeModel> parsedOpenHours = [];
+    List<HolidayModel>? parsedHolidays = [];
+    int? maxBookingPerSlot;
+
     final DateTime parsedStartDate = DateTime.parse(json['startDate']);
     final DateTime? parsedEndDate = DateTime.tryParse(json['endDate'] ?? '');
     String startDate = DateFormat('yyyy-MM-ddHH:mm').format(parsedStartDate);
@@ -38,58 +44,63 @@ class AppointmentModel {
       endDate = DateFormat('yyyy-MM-ddHH:mm').format(parsedEndDate);
     }
 
-    final List<dynamic>? jsonHolidays = json['metaData']['holidays'];
-    List<HolidayModel>? parsedHolidays = [];
+    if (json['metadata'] != null) {
+      Map<String, dynamic> metaData = jsonDecode(json['metadata']);
 
-    if (jsonHolidays != null) {
-      for (var holiday in jsonHolidays) {
-        final DateTime parsedDate = DateTime.parse(holiday['date']);
-        String date = DateFormat('dd-MM-yyyy').format(parsedDate);
-        parsedHolidays.add(HolidayModel(date: date, title: holiday['title']));
-      }
-    } else {
-      parsedHolidays = null;
-    }
+      maxBookingPerSlot = metaData['maxBookingPerSlot'];
+      final List<dynamic>? jsonHolidays = metaData['holidays'];
 
-    final Map<String, dynamic> openHours =
-        json['metaData']['openingDates'] ?? {};
-    List<OpenTimeModel> parsedOpenHours = [];
-
-    const daysOfWeek = [
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday',
-      'Sunday'
-    ];
-
-    for (int i = 0; i < daysOfWeek.length; i++) {
-      String day = daysOfWeek[i];
-
-      if (openHours[day] != null) {
-        TimeOfDay startTime = timeOfDayFromString(openHours[day]['startTime']);
-        TimeOfDay endTime = timeOfDayFromString(openHours[day]['endTime']);
-        ScheduleModel schedule =
-            ScheduleModel(startTime: startTime, endTime: endTime);
-
-        parsedOpenHours.add(OpenTimeModel(
-            dayOfWeek: i + 1,
-            key: day.substring(0, 3).toLowerCase(),
-            schedule: [schedule]));
+      if (jsonHolidays != null) {
+        for (var holiday in jsonHolidays) {
+          final DateTime parsedDate = DateTime.parse(holiday['date']);
+          String date = DateFormat('dd-MM-yyyy').format(parsedDate);
+          parsedHolidays.add(HolidayModel(date: date, title: holiday['title']));
+        }
       } else {
-        openHours[day] = null;
+        parsedHolidays = null;
+      }
+
+      final Map<String, dynamic> openHours = metaData['openingDates'] ?? {};
+
+      const daysOfWeek = [
+        'Monday',
+        'Tuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday',
+        'Sunday'
+      ];
+
+      for (int i = 0; i < daysOfWeek.length; i++) {
+        String day = daysOfWeek[i];
+
+        if (openHours[day] != null) {
+          List<dynamic> schedules = openHours[day];
+          for (var schedule in schedules) {
+            TimeOfDay startTime =
+                timeOfDayFromString(schedule['startTime']!);
+            TimeOfDay endTime = timeOfDayFromString(schedule['endTime']!);
+            ScheduleModel parsedSchedule =
+                ScheduleModel(startTime: startTime, endTime: endTime);
+
+            parsedOpenHours.add(OpenTimeModel(
+                dayOfWeek: i + 1,
+                key: day.substring(0, 3).toLowerCase(),
+                schedule: [parsedSchedule]));
+          }
+        } else {
+          openHours[day] = null;
+        }
       }
     }
-
     return AppointmentModel(
       id: json['id'],
       userId: json['userId'],
       title: json['title'] ?? '',
       cityId: cityId ?? json['cityId'] ?? 0,
       description: json['description'] ?? '',
-      maxBookingPerSlot: json['metaData']['maxBookingPerSlot'] ?? 8,
+      maxBookingPerSlot: maxBookingPerSlot ?? 8,
       startDate: startDate,
       endDate: endDate,
       holidays: parsedHolidays,

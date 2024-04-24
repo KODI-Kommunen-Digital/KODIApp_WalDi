@@ -3,6 +3,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:heidi/src/data/model/model_appointment.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/appointments/my_appointments/cubit/my_appointments_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/appointments/my_appointments/cubit/my_appointments_state.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
@@ -42,7 +43,7 @@ class MyAppointmentsLoading extends StatelessWidget {
 }
 
 class MyAppointmentsLoaded extends StatefulWidget {
-  final List<String> appointments;
+  final List<AppointmentModel>? appointments;
   final bool isRefreshLoader;
 
   const MyAppointmentsLoaded(
@@ -54,12 +55,14 @@ class MyAppointmentsLoaded extends StatefulWidget {
 
 class _MyAppointmentsLoadedState extends State<MyAppointmentsLoaded> {
   final _scrollController = ScrollController(initialScrollOffset: 0.0);
-  List<String> appointments = [];
+  List<AppointmentModel> appointments = [];
 
   @override
   void initState() {
     super.initState();
-    appointments.addAll(widget.appointments);
+    if (widget.appointments != null) {
+      appointments.addAll(widget.appointments!);
+    }
   }
 
   @override
@@ -156,7 +159,7 @@ class _MyAppointmentsLoadedState extends State<MyAppointmentsLoaded> {
                                                 CrossAxisAlignment.start,
                                             children: <Widget>[
                                               Text(
-                                                item,
+                                                item.title,
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .bodySmall!
@@ -165,15 +168,15 @@ class _MyAppointmentsLoadedState extends State<MyAppointmentsLoaded> {
                                                           FontWeight.bold,
                                                     ),
                                               ),
-                                              Text("Haarschnitt",
+                                              Text(item.description,
                                                   style: Theme.of(context)
                                                       .textTheme
                                                       .bodySmall!
                                                       .copyWith(
                                                         fontWeight:
-                                                            FontWeight.bold,
+                                                            FontWeight.normal,
                                                       )),
-                                              Text("12.01.2024",
+                                              Text(item.startDate,
                                                   style: Theme.of(context)
                                                       .textTheme
                                                       .bodySmall!)
