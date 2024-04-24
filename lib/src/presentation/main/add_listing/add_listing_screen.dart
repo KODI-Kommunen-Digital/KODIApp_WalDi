@@ -4,6 +4,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_appointment_service.dart';
+
 // import 'package:heidi/src/data/model/model_holiday.dart';
 import 'package:heidi/src/data/model/model_open_time.dart';
 import 'package:http/http.dart' as http;
@@ -686,7 +687,10 @@ class _AddListingScreenState extends State<AddListingScreen> {
 
   void _createAppointment() async {
     context.read<AddListingCubit>().onSubmitAppointment(
-        services: serviceEntries, openHours: timeSlots, holidays: []);
+        services: serviceEntries,
+        openHours: timeSlots,
+        holidays: [],
+        city: selectedCity ?? "");
   }
 
   bool _validData() {

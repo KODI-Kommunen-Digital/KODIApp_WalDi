@@ -8,9 +8,13 @@ import 'package:heidi/src/data/model/model_open_time.dart';
 import 'package:heidi/src/data/model/model_result_api.dart';
 import 'package:heidi/src/data/model/model_schedule.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
+import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:intl/intl.dart';
+
+// ignore: depend_on_referenced_packages
+import 'package:collection/collection.dart';
 
 class AppointmentRepository {
   final Preferences prefs;
@@ -90,6 +94,7 @@ class AppointmentRepository {
       required String title,
       required String description,
       required String startDate,
+      required String city,
       String? endDate,
       int? maxBookingPerSlot,
       List<OpenTimeModel>? openHours,
@@ -121,6 +126,7 @@ class AppointmentRepository {
     } else {
       metaData['holidays'] = [];
     }
+
     if (maxBookingPerSlot != null) {
       metaData['maxBookingPerSlot'] = maxBookingPerSlot;
     }
@@ -139,8 +145,9 @@ class AppointmentRepository {
     if (endDate != null) {
       params['endDate'] = endDate;
     }
-
-    final response = await Api.requestSaveAppointment(1, listingId, params);
+    final cityId = await ListRepository.getCityId(city);
+    final response =
+        await Api.requestSaveAppointment(cityId, listingId, params);
     if (!response.success) {
       logError('Save Appointment Error', response.message);
     }
@@ -368,16 +375,19 @@ class AppointmentRepository {
 
     Map<String, List<Map<String, String>>?> parsedOpenHours = {};
     for (int i = 0; i < 7; i++) {
-      OpenTimeModel day =
-          openHours.firstWhere((element) => element.dayOfWeek == i + 1);
-      List<Map<String, String>> hours = [];
-      for (ScheduleModel schedule in day.schedule) {
-        String startTime =
-            AppointmentModel.stringFromTimeOfDay(schedule.startTime);
-        String endTime = AppointmentModel.stringFromTimeOfDay(schedule.endTime);
-        hours.add({'startTime': startTime, 'endTime': endTime});
+      OpenTimeModel? day =
+          openHours.firstWhereOrNull((element) => element.dayOfWeek == i + 1);
+      if (day != null) {
+        List<Map<String, String>> hours = [];
+        for (ScheduleModel schedule in day.schedule) {
+          String startTime =
+              AppointmentModel.stringFromTimeOfDay(schedule.startTime);
+          String endTime =
+              AppointmentModel.stringFromTimeOfDay(schedule.endTime);
+          hours.add({'startTime': startTime, 'endTime': endTime});
+        }
+        parsedOpenHours[daysOfWeek[day.dayOfWeek - 1]] = hours;
       }
-      parsedOpenHours[daysOfWeek[day.dayOfWeek - 1]] = hours;
     }
     return parsedOpenHours;
   }

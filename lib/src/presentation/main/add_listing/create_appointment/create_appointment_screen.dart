@@ -50,11 +50,12 @@ class _CreateAppointmentLoadedState extends State<CreateAppointmentLoaded> {
         appointmentId: 1,
         userId: 1,
         name: '',
-        duration: 1,
+        duration: 15,
         slotSameAsAppointment: true)
   ];
   List<OpenTimeModel> timeSlots = [];
   List<DateTime?> selectedDates = [];
+  bool nameError = true;
 
   Future<void> _navigateAndDisplayTimeSlots(BuildContext context) async {
     final result = await Navigator.pushNamed(context, Routes.openTime);
@@ -113,7 +114,17 @@ class _CreateAppointmentLoadedState extends State<CreateAppointmentLoaded> {
       child: AppButton(
         Translate.of(context).translate('create_appointment'),
         onPressed: () {
-          Navigator.pop(context, [serviceEntries, timeSlots]);
+          if (nameError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  Translate.of(context).translate("service_hint"),
+                ),
+              ),
+            );
+          } else {
+            Navigator.pop(context, [serviceEntries, timeSlots]);
+          }
         },
         mainAxisSize: MainAxisSize.max,
       ),
@@ -131,18 +142,29 @@ class _CreateAppointmentLoadedState extends State<CreateAppointmentLoaded> {
                 Row(
                   children: <Widget>[
                     Expanded(
-                      child: TextField(
-                        controller: serviceEntries[index].controller,
-                        decoration: InputDecoration(
-                          labelText:
-                              Translate.of(context).translate('addServiceName'),
-                          border: const OutlineInputBorder(),
+                      child: Form(
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        child: TextFormField(
+                          controller: serviceEntries[index].controller,
+                          decoration: InputDecoration(
+                            labelText: Translate.of(context)
+                                .translate('addServiceName'),
+                            border: const OutlineInputBorder(),
+                          ),
+                          onChanged: (value) {
+                            setState(() {
+                              serviceEntries[index].name = value;
+                            });
+                          },
+                          validator: (value) {
+                            if ((value?.length ?? 0) < 3) {
+                              nameError = true;
+                              return Translate.of(context).translate("service_hint");
+                            }
+                            nameError = false;
+                            return null; // Return null if the validation succeeds
+                          },
                         ),
-                        onChanged: (value) {
-                          setState(() {
-                            serviceEntries[index].name = value;
-                          });
-                        },
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -197,10 +219,10 @@ class _CreateAppointmentLoadedState extends State<CreateAppointmentLoaded> {
                     const Text('Duration:'),
                     const SizedBox(width: 20),
                     DropdownButton<int>(
-                      value: serviceEntries[index].selectedMinutes,
+                      value: serviceEntries[index].duration,
                       onChanged: (value) {
                         setState(() {
-                          serviceEntries[index].selectedMinutes = value!;
+                          serviceEntries[index].duration = value!;
                           // widget.onEntryCallback!(entry!);
                         });
                       },
@@ -233,7 +255,7 @@ class _CreateAppointmentLoadedState extends State<CreateAppointmentLoaded> {
                         appointmentId: 1,
                         name: '',
                         userId: 1,
-                        duration: 0,
+                        duration: 15,
                         slotSameAsAppointment: false));
                   });
                 },

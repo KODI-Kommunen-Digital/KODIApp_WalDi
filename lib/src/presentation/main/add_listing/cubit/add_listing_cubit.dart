@@ -343,7 +343,8 @@ class AddListingCubit extends Cubit<AddListingState> {
   Future<bool> onSubmitAppointment(
       {List<OpenTimeModel>? openHours,
       List<HolidayModel>? holidays,
-      List<AppointmentServiceModel>? services}) async {
+      List<AppointmentServiceModel>? services,
+      required String city}) async {
     try {
       final prefs = await Preferences.openBox();
       final listindId = prefs.getKeyValue(Preferences.listingId, 1);
@@ -351,15 +352,15 @@ class AddListingCubit extends Cubit<AddListingState> {
       final listingDesc = prefs.getKeyValue(Preferences.listingDesc, '');
       AppointmentRepository repoAppointment = AppointmentRepository(prefs);
       final response = await repoAppointment.saveAppointment(
-        listingId: listindId,
-        title: listingTitle,
-        description: listingDesc,
-        startDate: "2024-04-02T12:30:45.000Z",
-        maxBookingPerSlot: 8,
-        openHours: openHours,
-        holidays: holidays,
-        services: services,
-      );
+          listingId: listindId,
+          title: listingTitle,
+          description: listingDesc,
+          startDate: "2024-04-02T12:30:45.000Z",
+          maxBookingPerSlot: 8,
+          openHours: openHours,
+          holidays: holidays,
+          city: city,
+          services: services);
       if (response.success) {
         return true;
       } else {

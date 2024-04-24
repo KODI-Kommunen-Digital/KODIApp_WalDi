@@ -46,15 +46,11 @@ class AppBloc {
   static final contactUsCubit = ContactUsCubit();
   static final allListingsCubit = AllListingsCubit();
   static final allRequestsCubit = AllRequestsCubit();
-  // static final testCubit = TestCubit();
 
   static final List<BlocProvider> providers = [
     BlocProvider<ApplicationCubit>(
       create: (context) => applicationCubit,
     ),
-    // BlocProvider<TestCubit>(
-    //   create: (context) => testCubit,
-    // ),
     BlocProvider<UserCubit>(
       create: (context) => userCubit,
     ),

@@ -721,7 +721,7 @@ class ListRepository {
     prefs.setKeyValue(Preferences.categoryId, categoryId);
   }
 
-  Future<int> getCityId(cityName) async {
+  static Future<int> getCityId(cityName) async {
     final response = await Api.requestSubmitCities();
     var jsonCategory = response.data;
     final item = jsonCategory.firstWhere((item) => item['name'] == cityName);

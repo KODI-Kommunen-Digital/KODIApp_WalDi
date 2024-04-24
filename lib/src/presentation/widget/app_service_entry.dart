@@ -105,10 +105,10 @@ class _BuildServiceEntryState extends State<BuildServiceEntry> {
             const Text('Duration:'),
             const SizedBox(width: 20),
             DropdownButton<int>(
-              value: entry?.selectedMinutes,
+              value: entry?.duration,
               onChanged: (value) {
                 setState(() {
-                  entry?.selectedMinutes = value!;
+                  entry?.duration = value!;
                   widget.onEntryCallback!(entry!);
                 });
               },

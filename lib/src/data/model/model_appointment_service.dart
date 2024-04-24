@@ -10,13 +10,12 @@ class AppointmentServiceModel {
   final int appointmentId;
   String name;
   final int userId;
-  final int duration;
+  int duration = 15;
   final bool slotSameAsAppointment;
   final int? maxBookingPerSlot;
   final Set? openingDates;
   final List<HolidayModel>? holidays;
   TextEditingController controller = TextEditingController();
-  int selectedMinutes = 15;
   bool providedTimeSlots = true;
 
   AppointmentServiceModel(
@@ -105,11 +104,21 @@ class AppointmentServiceModel {
         parsedOpenHours =
             AppointmentRepository.parseOpenHours(openingDatesList);
       }
-      Map<String, dynamic> metaData = {
-        'holidays': parsedHolidays ?? [],
-        'maxBookingPerSlot': service.maxBookingPerSlot ?? 8,
-        'openingDates': parsedOpenHours
-      };
+
+      Map<String, dynamic> metaData = {};
+
+      if (parsedHolidays != null) {
+        metaData['holidays'] = parsedHolidays;
+      } else {
+        metaData['holidays'] = [];
+      }
+
+      if (service.maxBookingPerSlot != null) {
+        metaData['maxBookingPerSlot'] = service.maxBookingPerSlot;
+      }
+      if (parsedOpenHours != null && parsedOpenHours.isNotEmpty) {
+        metaData['openingDates'] = parsedOpenHours;
+      }
 
       Map<String, dynamic> params = {
         'name': service.name,
