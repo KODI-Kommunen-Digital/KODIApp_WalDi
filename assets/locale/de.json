@@ -458,7 +458,7 @@
   "category_rathaus": "Rathaus",
   "category_newsletter": "Mitteilungsblatt",
   "category_official_notification": "Amtliche Mitteilung",
-  "category_appointment": "Appointment Booking",
+  "category_appointment": "Terminbuchung",
   "login" : "Anmeldung",
   "please_select_city": "Bitte wähle einen Ort, um das Forum zu betreten.",
   "login_required" : "Anmeldung erforderlich",
@@ -524,6 +524,8 @@
   "openSettings" : "Einstellungen öffnen",
   "enableNotification": "Benachrichtigungen aktivieren",
   "welcomeForumTitle": "Willkommen bei der Gruppenfunktion!",
-  "welcomeForum": "Hier können über das blaue Plusicon neue Gruppen von dir erstellt werden. Du kannst private und öffentliche Gruppen erstellen. Mitglieder können jederzeit bei öffentlichen Gruppen beitreten und bei privaten Gruppen eine Anfrage stellen. Viel Spaß!"
+  "welcomeForum": "Hier können über das blaue Plusicon neue Gruppen von dir erstellt werden. Du kannst private und öffentliche Gruppen erstellen. Mitglieder können jederzeit bei öffentlichen Gruppen beitreten und bei privaten Gruppen eine Anfrage stellen. Viel Spaß!",
+  "appointments": "Termine",
+  "my_appointments": "Meine Termine"
 }
 

@@ -468,6 +468,7 @@
   "subcategory_club_news": "Club news",
   "subcategory_official_notification": "Official Notification",
   "subcategory_timeless_news": "Timeless News",
+  "category_appointment": "Appointment Booking",
   "delete_Account": "Delete Account", 
   "delete_Account_Confirmation": "Are you sure you want to delete your account?",
   "delete_account_success": "Account Deleted Successfully",
@@ -521,5 +522,7 @@
   "openSettings" : "Open Settings",
   "enableNotification": "Enable Notifications",
   "welcomeForumTitle": "Welcome to the group function!",
-  "welcomeForum": "Here you can create new groups using the blue plus icon. You can create private and public groups. Members can join public groups at any time and make a request for private groups. Have fun!"
+  "welcomeForum": "Here you can create new groups using the blue plus icon. You can create private and public groups. Members can join public groups at any time and make a request for private groups. Have fun!",
+  "appointments": "Appointments",
+  "my_appointments": "My appointments"
 }

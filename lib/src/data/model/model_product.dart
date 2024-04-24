@@ -228,7 +228,7 @@ class ProductModel {
     } else if (json['categoryId'] == 16) {
       category = "Amtliche Mitteilung";
     } else if (json['categoryId'] == 18) {
-      category = "Appointment Booking";
+      category = "Terminbuchung";
     }
 
     if (json['sourceId'] == 3 && json['externalId'] != null) {
