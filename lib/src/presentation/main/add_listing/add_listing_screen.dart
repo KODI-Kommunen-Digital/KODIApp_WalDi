@@ -568,7 +568,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
   }
 
   Future<void> _navigateAndHandleData(BuildContext context) async {
-    final result = await Navigator.pushNamed(context, Routes.createAppointment);
+    final result = await Navigator.pushNamed(context, Routes.createAppointment, arguments: {'serviceEntries': serviceEntries});
     if (result != null) {
       setState(() {
         List<dynamic> resultList = result as List<dynamic>;

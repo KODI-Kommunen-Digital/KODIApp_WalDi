@@ -119,7 +119,7 @@
   "price_range": "Preisklasse",
   "avg_price": "AVG-Preis",
   "business_color": "Geschäftsfarbe",
-  "open_time": "Offene Zeit",
+  "open_time": "Öffnungszeit",
   "time": "Zeit",
   "bookings": "Buchungen",
   "my_booking": "Meine Buchung",
@@ -526,6 +526,11 @@
   "welcomeForumTitle": "Willkommen bei der Gruppenfunktion!",
   "welcomeForum": "Hier können über das blaue Plusicon neue Gruppen von dir erstellt werden. Du kannst private und öffentliche Gruppen erstellen. Mitglieder können jederzeit bei öffentlichen Gruppen beitreten und bei privaten Gruppen eine Anfrage stellen. Viel Spaß!",
   "appointments": "Termine",
-  "my_appointments": "Meine Termine"
+  "my_appointments": "Meine Termine",
+  "appointmentDetails": "Termindetails",
+  "addMoreServices": "Füge Dienst hinzu",
+  "create_appointment": "Erstelle Termin",
+  "addServiceName": "Gebe Dienstnamen ein",
+  "duration": "Dauer"
 }
 

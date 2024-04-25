@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_appointment.dart';
+import 'package:heidi/src/data/model/model_appointment_service.dart';
 import 'package:heidi/src/data/model/model_forum_group.dart';
 import 'package:heidi/src/data/model/model_group_posts.dart';
 import 'package:heidi/src/data/model/model_product.dart';
@@ -324,9 +325,14 @@ class Routes {
       case createAppointment:
         return MaterialPageRoute(
           builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
             return BlocProvider(
               create: (context) => CreateAppointmentCubit(),
-              child: const CreateAppointmentScreen(),
+              child: CreateAppointmentScreen(
+                serviceEntries: arguments['serviceEntries']
+                    as List<AppointmentServiceModel>?,
+              ),
             );
           },
         );
