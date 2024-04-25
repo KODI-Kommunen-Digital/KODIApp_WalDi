@@ -1,3 +1,4 @@
+import 'package:heidi/src/data/model/model_bookingGuest.dart';
 import 'package:intl/intl.dart';
 
 class BookingModel {
@@ -12,6 +13,7 @@ class BookingModel {
   final String? remark;
   final int? createdBy;
   final bool isCreatedByGuest;
+  BookingGuestModel? guest;
 
   BookingModel(
       {required this.id,
@@ -24,7 +26,8 @@ class BookingModel {
       required this.isGuest,
       this.remark,
       this.createdBy,
-      required this.isCreatedByGuest});
+      required this.isCreatedByGuest,
+      this.guest});
 
   factory BookingModel.fromJson(Map<String, dynamic> json) {
     final DateTime? parsedStartDate =
@@ -38,13 +41,22 @@ class BookingModel {
     String? createdAt;
 
     if (parsedStartDate != null) {
-      startDate = DateFormat('yyyy-MM-dd HH:mm').format(parsedStartDate);
+      startDate = DateFormat('yyyy-MM-ddHH:mm').format(parsedStartDate);
     }
     if (parsedEndDate != null) {
-      endDate = DateFormat('yyyy-MM-dd HH:mm').format(parsedEndDate);
+      endDate = DateFormat('yyyy-MM-ddHH:mm').format(parsedEndDate);
     }
     if (parsedCreatedDate != null) {
-      createdAt = DateFormat('yyyy-MM-dd HH:mm').format(parsedCreatedDate);
+      createdAt = DateFormat('yyyy-MM-ddHH:mm').format(parsedCreatedDate);
+    }
+    BookingGuestModel? guest;
+    if (json['firstname'] != null) {
+      guest = BookingGuestModel(
+          firstname: json['firstname'],
+          lastname: json['lastname'],
+          description: json['description'],
+          emailId: json['email'],
+          phoneNumber: json['phoneNumber']);
     }
 
     return BookingModel(
@@ -58,6 +70,11 @@ class BookingModel {
         isGuest: ((json['isGuest'] ?? 0) == 1),
         isCreatedByGuest: ((json['isCreatedByGuest'] ?? 0) == 1),
         createdBy: json['createdBy'],
-        remark: json['remark']);
+        remark: json['remark'],
+        guest: guest);
+  }
+
+  void setGuest(BookingGuestModel guestModel) {
+    guest = guestModel;
   }
 }

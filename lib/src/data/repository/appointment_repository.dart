@@ -218,18 +218,14 @@ class AppointmentRepository {
     }
   }
 
-  Future<List<BookingModel>?> loadOwnerBookings(
-      int id, int pageNo, int appointmentId,
+  Future<List<BookingModel>?> loadOwnerBookings(int pageNo, int appointmentId,
       {String? startDate}) async {
-    int userId;
-    if (id == 0) {
-      userId = prefs.getKeyValue('userId', 0);
-    } else {
-      userId = id;
-    }
+    int userId = prefs.getKeyValue('userId', 0);
     if (startDate != null) {
       startDate =
           "&${DateFormat('yyyy-MM-dd').format(DateTime.parse(startDate))}";
+    } else {
+      startDate = '';
     }
     final response = await Api.requestOwnerBookings(
         userId, appointmentId, pageNo, startDate);
@@ -247,15 +243,16 @@ class AppointmentRepository {
     return null;
   }
 
-  Future<List<BookingModel>?> loadUserBookings(int id) async {
-    int userId;
-    if (id == 0) {
-      userId = prefs.getKeyValue('userId', 0);
-    } else {
-      userId = id;
-    }
+  Future<List<BookingModel>?> loadUserBookings(int pageNo,
+      {int? appointmentId, String? startDate}) async {
+    int userId = prefs.getKeyValue('userId', 0);
 
-    final response = await Api.requestUserBookings(userId);
+    late ResultApiModel response;
+    if (appointmentId != null) {
+      response = await Api.requestUserBookingsFilterId(userId, appointmentId);
+    } else {
+      response = await Api.requestUserBookings(userId);
+    }
 
     if (response.success) {
       final responseData =

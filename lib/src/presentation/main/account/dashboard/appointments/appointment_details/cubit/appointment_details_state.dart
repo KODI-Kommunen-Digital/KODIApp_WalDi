@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:heidi/src/data/model/model_booking.dart';
 
 part 'appointment_details_state.freezed.dart';
 
@@ -9,5 +10,5 @@ class AppointmentDetailsState with _$AppointmentDetailsState {
   const factory AppointmentDetailsState.loading() = AppointmentDetailsStateLoading;
 
   const factory AppointmentDetailsState.loaded(
-      List<String> appointments, bool isRefreshLoader) = AppointmentDetailsStateLoaded;
+      List<BookingModel> bookings, bool isRefreshLoader) = AppointmentDetailsStateLoaded;
 }

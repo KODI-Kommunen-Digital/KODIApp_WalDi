@@ -722,7 +722,7 @@ class Api {
   static Future<ResultApiModel> requestOwnerBookings(
       userId, appointmentId, pageNo, startDate) async {
     var list =
-        '/users/$userId/owner/bookings?$pageNo&pageSize=10&appointmentId=$appointmentId$startDate';
+        '/users/$userId/owner/bookings?pageNumber=$pageNo&pageSize=10&appointmentId=$appointmentId$startDate';
     final result =
         await HTTPManager(apiType: APIType.appointment).get(url: list);
     return ResultApiModel.fromJson(result);
@@ -730,6 +730,14 @@ class Api {
 
   static Future<ResultApiModel> requestUserBookings(userId) async {
     var list = '/users/$userId/bookings';
+    final result =
+        await HTTPManager(apiType: APIType.appointment).get(url: list);
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> requestUserBookingsFilterId(
+      userId, appointmentId) async {
+    var list = '/users/$userId/bookings?appointmentId=$appointmentId';
     final result =
         await HTTPManager(apiType: APIType.appointment).get(url: list);
     return ResultApiModel.fromJson(result);

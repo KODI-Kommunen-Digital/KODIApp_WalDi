@@ -20,7 +20,7 @@ mixin _$AppointmentDetailsState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<String> appointments, bool isRefreshLoader)
+    required TResult Function(List<BookingModel> bookings, bool isRefreshLoader)
         loaded,
   }) =>
       throw _privateConstructorUsedError;
@@ -28,14 +28,15 @@ mixin _$AppointmentDetailsState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<String> appointments, bool isRefreshLoader)? loaded,
+    TResult? Function(List<BookingModel> bookings, bool isRefreshLoader)?
+        loaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<String> appointments, bool isRefreshLoader)? loaded,
+    TResult Function(List<BookingModel> bookings, bool isRefreshLoader)? loaded,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -127,7 +128,7 @@ class _$AppointmentDetailsStateInitial
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<String> appointments, bool isRefreshLoader)
+    required TResult Function(List<BookingModel> bookings, bool isRefreshLoader)
         loaded,
   }) {
     return initial();
@@ -138,7 +139,8 @@ class _$AppointmentDetailsStateInitial
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<String> appointments, bool isRefreshLoader)? loaded,
+    TResult? Function(List<BookingModel> bookings, bool isRefreshLoader)?
+        loaded,
   }) {
     return initial?.call();
   }
@@ -148,7 +150,7 @@ class _$AppointmentDetailsStateInitial
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<String> appointments, bool isRefreshLoader)? loaded,
+    TResult Function(List<BookingModel> bookings, bool isRefreshLoader)? loaded,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -243,7 +245,7 @@ class _$AppointmentDetailsStateLoading
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<String> appointments, bool isRefreshLoader)
+    required TResult Function(List<BookingModel> bookings, bool isRefreshLoader)
         loaded,
   }) {
     return loading();
@@ -254,7 +256,8 @@ class _$AppointmentDetailsStateLoading
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<String> appointments, bool isRefreshLoader)? loaded,
+    TResult? Function(List<BookingModel> bookings, bool isRefreshLoader)?
+        loaded,
   }) {
     return loading?.call();
   }
@@ -264,7 +267,7 @@ class _$AppointmentDetailsStateLoading
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<String> appointments, bool isRefreshLoader)? loaded,
+    TResult Function(List<BookingModel> bookings, bool isRefreshLoader)? loaded,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -321,7 +324,7 @@ abstract class _$$AppointmentDetailsStateLoadedCopyWith<$Res> {
           $Res Function(_$AppointmentDetailsStateLoaded) then) =
       __$$AppointmentDetailsStateLoadedCopyWithImpl<$Res>;
   @useResult
-  $Res call({List<String> appointments, bool isRefreshLoader});
+  $Res call({List<BookingModel> bookings, bool isRefreshLoader});
 }
 
 /// @nodoc
@@ -337,14 +340,14 @@ class __$$AppointmentDetailsStateLoadedCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? appointments = null,
+    Object? bookings = null,
     Object? isRefreshLoader = null,
   }) {
     return _then(_$AppointmentDetailsStateLoaded(
-      null == appointments
-          ? _value._appointments
-          : appointments // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+      null == bookings
+          ? _value._bookings
+          : bookings // ignore: cast_nullable_to_non_nullable
+              as List<BookingModel>,
       null == isRefreshLoader
           ? _value.isRefreshLoader
           : isRefreshLoader // ignore: cast_nullable_to_non_nullable
@@ -357,15 +360,15 @@ class __$$AppointmentDetailsStateLoadedCopyWithImpl<$Res>
 
 class _$AppointmentDetailsStateLoaded implements AppointmentDetailsStateLoaded {
   const _$AppointmentDetailsStateLoaded(
-      final List<String> appointments, this.isRefreshLoader)
-      : _appointments = appointments;
+      final List<BookingModel> bookings, this.isRefreshLoader)
+      : _bookings = bookings;
 
-  final List<String> _appointments;
+  final List<BookingModel> _bookings;
   @override
-  List<String> get appointments {
-    if (_appointments is EqualUnmodifiableListView) return _appointments;
+  List<BookingModel> get bookings {
+    if (_bookings is EqualUnmodifiableListView) return _bookings;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_appointments);
+    return EqualUnmodifiableListView(_bookings);
   }
 
   @override
@@ -373,7 +376,7 @@ class _$AppointmentDetailsStateLoaded implements AppointmentDetailsStateLoaded {
 
   @override
   String toString() {
-    return 'AppointmentDetailsState.loaded(appointments: $appointments, isRefreshLoader: $isRefreshLoader)';
+    return 'AppointmentDetailsState.loaded(bookings: $bookings, isRefreshLoader: $isRefreshLoader)';
   }
 
   @override
@@ -381,15 +384,14 @@ class _$AppointmentDetailsStateLoaded implements AppointmentDetailsStateLoaded {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AppointmentDetailsStateLoaded &&
-            const DeepCollectionEquality()
-                .equals(other._appointments, _appointments) &&
+            const DeepCollectionEquality().equals(other._bookings, _bookings) &&
             (identical(other.isRefreshLoader, isRefreshLoader) ||
                 other.isRefreshLoader == isRefreshLoader));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType,
-      const DeepCollectionEquality().hash(_appointments), isRefreshLoader);
+      const DeepCollectionEquality().hash(_bookings), isRefreshLoader);
 
   @JsonKey(ignore: true)
   @override
@@ -403,10 +405,10 @@ class _$AppointmentDetailsStateLoaded implements AppointmentDetailsStateLoaded {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<String> appointments, bool isRefreshLoader)
+    required TResult Function(List<BookingModel> bookings, bool isRefreshLoader)
         loaded,
   }) {
-    return loaded(appointments, isRefreshLoader);
+    return loaded(bookings, isRefreshLoader);
   }
 
   @override
@@ -414,9 +416,10 @@ class _$AppointmentDetailsStateLoaded implements AppointmentDetailsStateLoaded {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<String> appointments, bool isRefreshLoader)? loaded,
+    TResult? Function(List<BookingModel> bookings, bool isRefreshLoader)?
+        loaded,
   }) {
-    return loaded?.call(appointments, isRefreshLoader);
+    return loaded?.call(bookings, isRefreshLoader);
   }
 
   @override
@@ -424,11 +427,11 @@ class _$AppointmentDetailsStateLoaded implements AppointmentDetailsStateLoaded {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<String> appointments, bool isRefreshLoader)? loaded,
+    TResult Function(List<BookingModel> bookings, bool isRefreshLoader)? loaded,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(appointments, isRefreshLoader);
+      return loaded(bookings, isRefreshLoader);
     }
     return orElse();
   }
@@ -471,10 +474,10 @@ class _$AppointmentDetailsStateLoaded implements AppointmentDetailsStateLoaded {
 abstract class AppointmentDetailsStateLoaded
     implements AppointmentDetailsState {
   const factory AppointmentDetailsStateLoaded(
-          final List<String> appointments, final bool isRefreshLoader) =
+          final List<BookingModel> bookings, final bool isRefreshLoader) =
       _$AppointmentDetailsStateLoaded;
 
-  List<String> get appointments;
+  List<BookingModel> get bookings;
   bool get isRefreshLoader;
   @JsonKey(ignore: true)
   _$$AppointmentDetailsStateLoadedCopyWith<_$AppointmentDetailsStateLoaded>

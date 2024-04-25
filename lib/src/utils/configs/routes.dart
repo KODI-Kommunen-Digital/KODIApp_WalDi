@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model.dart';
+import 'package:heidi/src/data/model/model_appointment.dart';
 import 'package:heidi/src/data/model/model_forum_group.dart';
 import 'package:heidi/src/data/model/model_group_posts.dart';
 import 'package:heidi/src/data/model/model_product.dart';
@@ -23,6 +24,7 @@ import 'package:heidi/src/presentation/main/account/dashboard/dashboard_screen.d
 import 'package:heidi/src/presentation/main/account/dashboard/my_groups/cubit/my_groups_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/my_groups/my_groups_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/my_listings/my_listings_screen.dart';
+
 // import 'package:heidi/src/presentation/main/account/dashboard/test/test.dart';
 import 'package:heidi/src/presentation/main/account/edit_profile/edit_profile_screen.dart';
 import 'package:heidi/src/presentation/main/account/faq/cubit/faq_cubit.dart';
@@ -424,9 +426,12 @@ class Routes {
       case appointmentDetails:
         return MaterialPageRoute(
           builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
             return BlocProvider(
-              create: (context) => AppointmentDetailsCubit(context.read()),
-              child: const AppointmentDetailsScreen(),
+              create: (context) => AppointmentDetailsCubit(),
+              child: AppointmentDetailsScreen(
+                  appointment: arguments['item'] as AppointmentModel),
             );
           },
         );

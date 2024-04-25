@@ -97,7 +97,8 @@ class _MyAppointmentsLoadedState extends State<MyAppointmentsLoaded> {
                             child: InkWell(
                               onTap: () {
                                 Navigator.pushNamed(
-                                    context, Routes.appointmentDetails);
+                                    context, Routes.appointmentDetails,
+                                    arguments: {'item': item});
                               },
                               child: Container(
                                 padding:

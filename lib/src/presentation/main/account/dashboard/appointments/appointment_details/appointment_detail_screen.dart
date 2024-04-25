@@ -2,23 +2,41 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:heidi/src/data/model/model_appointment.dart';
+import 'package:heidi/src/data/model/model_booking.dart';
+import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/appointments/appointment_details/cubit/appointment_details_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/appointments/appointment_details/cubit/appointment_details_state.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
-class AppointmentDetailsScreen extends StatelessWidget {
-  const AppointmentDetailsScreen({super.key});
+class AppointmentDetailsScreen extends StatefulWidget {
+  final AppointmentModel appointment;
+
+  const AppointmentDetailsScreen({super.key, required this.appointment});
+
+  @override
+  State<AppointmentDetailsScreen> createState() =>
+      _AppointmentDetailsScreenState();
+}
+
+class _AppointmentDetailsScreenState extends State<AppointmentDetailsScreen> {
+  @override
+  void initState() {
+    super.initState();
+    AppBloc.appointmentDetailsCubit.onLoad(false, widget.appointment.id!);
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AppointmentDetailsCubit, AppointmentDetailsState>(
       builder: (context, state) => state.maybeWhen(
         loading: () => const AppointmentDetailsLoading(),
-        loaded: (appointments, isRefreshLoader) => AppointmentDetailsLoaded(
+        loaded: (bookings, isRefreshLoader) => AppointmentDetailsLoaded(
+          bookings: bookings,
           isRefreshLoader: isRefreshLoader,
-          appointments: appointments,
+          appointment: widget.appointment,
         ),
         orElse: () => ErrorWidget(
           "Failed to load appointments.",
@@ -36,6 +54,7 @@ class AppointmentDetailsLoading extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
+          //TODO translate
           title: Text("Termindetails"),
         ),
         body: const Center(child: CircularProgressIndicator.adaptive()));
@@ -43,11 +62,15 @@ class AppointmentDetailsLoading extends StatelessWidget {
 }
 
 class AppointmentDetailsLoaded extends StatefulWidget {
-  final List<String> appointments;
+  final AppointmentModel appointment;
+  final List<BookingModel> bookings;
   final bool isRefreshLoader;
 
   const AppointmentDetailsLoaded(
-      {required this.isRefreshLoader, required this.appointments, super.key});
+      {required this.isRefreshLoader,
+      required this.appointment,
+      required this.bookings,
+      super.key});
 
   @override
   State<AppointmentDetailsLoaded> createState() => _MyAppointmentsLoadedState();
@@ -55,16 +78,9 @@ class AppointmentDetailsLoaded extends StatefulWidget {
 
 class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
   final _scrollController = ScrollController(initialScrollOffset: 0.0);
-  List<String> appointments = [];
   final List<String> _selectedTimeSlots = [
     '8:00 - 8:15',
   ];
-
-  @override
-  void initState() {
-    super.initState();
-    appointments.addAll(widget.appointments);
-  }
 
   @override
   Widget build(BuildContext buildContext) {
@@ -139,10 +155,10 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
                 children: <Widget>[
                   const SizedBox(height: 16),
                   Text(
-                    'Haarschnitt',
+                    widget.appointment.title,
                     style: Theme.of(context).textTheme.headlineLarge,
                   ),
-                  for (int i = 0; i < 1; i++)
+                  for (int i = 0; i < widget.bookings.length; i++)
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -156,7 +172,9 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
                             labelText: 'Name',
                             border: OutlineInputBorder(),
                           ),
-                          controller: TextEditingController(text: 'Niklas'),
+                          controller: TextEditingController(
+                              text:
+                                  "${widget.bookings[i].guest!.firstname} ${widget.bookings[i].guest!.lastname}"),
                           enabled: false, // Make text unchangeable
                           style: const TextStyle(
                               color: Colors.white), // Set text color to white
@@ -168,49 +186,52 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
                             border: const OutlineInputBorder(),
                           ),
                           controller: TextEditingController(
-                              text: 'niklas123@gmail.com'),
+                              text: widget.bookings[i].guest!.emailId),
                           enabled: false, // Make text unchangeable
                           style: const TextStyle(
                               color: Colors.white), // Set text color to white
                         ),
-                        const SizedBox(height: 16),
-                        TextField(
-                          decoration: InputDecoration(
-                            labelText:
-                                Translate.of(context).translate('address'),
-                            border: const OutlineInputBorder(),
+                        if ((widget.bookings[i].guest?.phoneNumber ?? '') !=
+                            '')
+                          Column(
+                            children: [
+                              const SizedBox(height: 16),
+                              TextField(
+                                decoration: InputDecoration(
+                                  labelText:
+                                      Translate.of(context).translate('phone'),
+                                  border: OutlineInputBorder(),
+                                ),
+                                controller: TextEditingController(
+                                    text:
+                                        widget.bookings[i].guest!.phoneNumber),
+                                enabled: false, // Make text unchangeable
+                                style: const TextStyle(
+                                    color: Colors
+                                        .white), // Set text color to white
+                              ),
+                            ],
                           ),
-                          controller:
-                              TextEditingController(text: 'Salzkotten 13'),
-                          enabled: false, // Make text unchangeable
-                          style: const TextStyle(
-                              color: Colors.white), // Set text color to white
-                        ),
-                        const SizedBox(height: 16),
-                        TextField(
-                          decoration: InputDecoration(
-                            labelText: Translate.of(context).translate('phone'),
-                            border: OutlineInputBorder(),
+                        if (widget.bookings[i].guest!.description != '')
+                          Column(
+                            children: [
+                              const SizedBox(height: 16),
+                              TextField(
+                                decoration: InputDecoration(
+                                  labelText: Translate.of(context)
+                                      .translate('appointmentNote'),
+                                  border: OutlineInputBorder(),
+                                ),
+                                controller: TextEditingController(
+                                    text:
+                                        widget.bookings[i].guest!.description),
+                                enabled: false, // Make text unchangeable
+                                style: const TextStyle(
+                                    color: Colors
+                                        .white), // Set text color to white
+                              ),
+                            ],
                           ),
-                          controller:
-                              TextEditingController(text: '015122392323'),
-                          enabled: false, // Make text unchangeable
-                          style: const TextStyle(
-                              color: Colors.white), // Set text color to white
-                        ),
-                        const SizedBox(height: 16),
-                        TextField(
-                          decoration: InputDecoration(
-                            labelText: Translate.of(context)
-                                .translate('appointmentNote'),
-                            border: OutlineInputBorder(),
-                          ),
-                          controller: TextEditingController(
-                              text: 'Ich brauche dringend einen Haarschnitt'),
-                          enabled: false, // Make text unchangeable
-                          style: const TextStyle(
-                              color: Colors.white), // Set text color to white
-                        ),
                         const SizedBox(height: 16),
                       ],
                     ),
@@ -226,7 +247,8 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
                           Translate.of(context).translate('appointmentDate'),
                       border: OutlineInputBorder(),
                     ),
-                    controller: TextEditingController(text: '12.01.2024'),
+                    controller: TextEditingController(
+                        text: widget.appointment.startDate),
                     enabled: false, // Make text unchangeable
                     style: const TextStyle(
                         color: Colors.white), // Set text color to white

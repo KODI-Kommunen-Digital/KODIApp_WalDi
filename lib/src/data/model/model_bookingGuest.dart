@@ -5,10 +5,12 @@ class BookingGuestModel {
   final String lastname;
   final String description;
   final String emailId;
+  final String? phoneNumber;
 
   BookingGuestModel(
       {required this.firstname,
       required this.lastname,
       required this.description,
-      required this.emailId});
+      required this.emailId,
+      this.phoneNumber});
 }

@@ -12,9 +12,11 @@ class MyAppointmentsCubit extends Cubit<MyAppointmentsState> {
   late AppointmentRepository repo;
 
   Future<void> onLoad(bool isRefreshLoader) async {
-    if (!isRefreshLoader) emit(const MyAppointmentsState.loading());
-    final prefs = await Preferences.openBox();
-    repo = AppointmentRepository(prefs);
+    if (!isRefreshLoader) {
+      emit(const MyAppointmentsState.loading());
+      final prefs = await Preferences.openBox();
+      repo = AppointmentRepository(prefs);
+    }
 
     List<AppointmentModel>? appointments = await repo.loadUserAppointments(1);
     emit(MyAppointmentsState.loaded(appointments, false));

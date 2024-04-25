@@ -46,6 +46,7 @@ class AppBloc {
   static final contactUsCubit = ContactUsCubit();
   static final allListingsCubit = AllListingsCubit();
   static final allRequestsCubit = AllRequestsCubit();
+  static final appointmentDetailsCubit = AppointmentDetailsCubit();
 
   static final List<BlocProvider> providers = [
     BlocProvider<ApplicationCubit>(
@@ -115,7 +116,7 @@ class AppBloc {
       create: (context) => CreateAppointmentCubit(),
     ),
     BlocProvider<AppointmentDetailsCubit>(
-      create: (context) => AppointmentDetailsCubit(context.read()),
+      create: (context) => AppointmentDetailsCubit(),
     ),
     BlocProvider<ContactUsCubit>(
       create: (context) => contactUsCubit,
