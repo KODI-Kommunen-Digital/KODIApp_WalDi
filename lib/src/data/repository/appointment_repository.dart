@@ -21,6 +21,23 @@ class AppointmentRepository {
 
   AppointmentRepository(this.prefs);
 
+  Future<AppointmentModel?> loadAppointment(int cityId, int listingId) async {
+    final listing = await ListRepository.loadProduct(cityId, listingId);
+
+    if (listing != null) {
+      final response = await Api.requestAppointment(
+          cityId, listingId, listing.appointmentId);
+      if (response.success) {
+        final responseData = AppointmentModel.fromJson(response.data.first);
+        return responseData;
+      } else {
+        logError('Load Appointment Error', response.message);
+      }
+    }
+
+    return null;
+  }
+
   Future<List<AppointmentModel>?> loadUserAppointments(int pageNo) async {
     int userId = prefs.getKeyValue(Preferences.userId, 0);
     final response = await Api.requestUserAppointments(userId, pageNo);

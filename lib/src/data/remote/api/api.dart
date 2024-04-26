@@ -668,6 +668,15 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
+  static Future<ResultApiModel> requestAppointment(
+      cityId, listingId, appointmentId) async {
+    var list =
+        '/cities/$cityId/listings/$listingId/appointments/$appointmentId';
+    final result =
+        await HTTPManager(apiType: APIType.appointment).get(url: list);
+    return ResultApiModel.fromJson(result);
+  }
+
   static Future<ResultApiModel> requestUserAppointments(userId, pageNo) async {
     var list = '/users/$userId/appointments?pageNumber=$pageNo&pageSize=10';
     final result =
@@ -689,7 +698,7 @@ class Api {
     var list =
         '/cities/$cityId/listings/$listingId/appointments/$appointmentId/slots?date=$date&serviceId[]=$serviceId';
     final result =
-        await HTTPManager(apiType: APIType.appointment).get(url: list);
+    await HTTPManager(apiType: APIType.appointment).get(url: list);
     return ResultApiModel.fromJson(result);
   }
 
