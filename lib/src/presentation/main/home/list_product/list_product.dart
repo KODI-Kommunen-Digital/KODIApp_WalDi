@@ -32,6 +32,7 @@ class ListProductScreen extends StatefulWidget {
 class _ListProductScreenState extends State<ListProductScreen> {
   final TextEditingController _searchController = TextEditingController();
   late bool isCity;
+  late bool isCategoryService;
 
   //ProductFilter? selectedFilter;
   MultiFilter? selectedFilter;
@@ -41,11 +42,12 @@ class _ListProductScreenState extends State<ListProductScreen> {
   void initState() {
     super.initState();
     isCity = widget.arguments['id'] != 0;
+    isCategoryService = widget.arguments['isCategoryService'] ?? false;
     loadListingsList();
   }
 
   Future<void> loadListingsList() async {
-    if (widget.arguments['id'] != 0 && isCity) {
+    if (widget.arguments['id'] != 0 && isCity && !isCategoryService) {
       await context.read<ListCubit>().setCategoryFilter(0, null);
     }
     await context
@@ -133,6 +135,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
                   bool isEvent = snapshot.data ?? false;
                   return Row(
                     children: [
+                      if(!isCategoryService)
                       AppFilterButton(
                           multiFilter: whatCanFilter(isEvent),
                           filterCallBack: (filter) {
