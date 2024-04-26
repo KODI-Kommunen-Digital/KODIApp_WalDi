@@ -20,7 +20,9 @@ mixin _$BookingState {
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
     required TResult Function(
-            Map<String, int> availableSlots, List<String> services)
+            List<AppointmentSlotModel>? availableSlots,
+            List<AppointmentServiceModel> services,
+            AppointmentModel appointment)
         loaded,
     required TResult Function(String error) error,
   }) =>
@@ -28,7 +30,10 @@ mixin _$BookingState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
-    TResult? Function(Map<String, int> availableSlots, List<String> services)?
+    TResult? Function(
+            List<AppointmentSlotModel>? availableSlots,
+            List<AppointmentServiceModel> services,
+            AppointmentModel appointment)?
         loaded,
     TResult? Function(String error)? error,
   }) =>
@@ -36,7 +41,10 @@ mixin _$BookingState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(Map<String, int> availableSlots, List<String> services)?
+    TResult Function(
+            List<AppointmentSlotModel>? availableSlots,
+            List<AppointmentServiceModel> services,
+            AppointmentModel appointment)?
         loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
@@ -124,7 +132,9 @@ class _$BookingStateLoading implements BookingStateLoading {
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
     required TResult Function(
-            Map<String, int> availableSlots, List<String> services)
+            List<AppointmentSlotModel>? availableSlots,
+            List<AppointmentServiceModel> services,
+            AppointmentModel appointment)
         loaded,
     required TResult Function(String error) error,
   }) {
@@ -135,7 +145,10 @@ class _$BookingStateLoading implements BookingStateLoading {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
-    TResult? Function(Map<String, int> availableSlots, List<String> services)?
+    TResult? Function(
+            List<AppointmentSlotModel>? availableSlots,
+            List<AppointmentServiceModel> services,
+            AppointmentModel appointment)?
         loaded,
     TResult? Function(String error)? error,
   }) {
@@ -146,7 +159,10 @@ class _$BookingStateLoading implements BookingStateLoading {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(Map<String, int> availableSlots, List<String> services)?
+    TResult Function(
+            List<AppointmentSlotModel>? availableSlots,
+            List<AppointmentServiceModel> services,
+            AppointmentModel appointment)?
         loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
@@ -202,7 +218,10 @@ abstract class _$$BookingStateLoadedCopyWith<$Res> {
           $Res Function(_$BookingStateLoaded) then) =
       __$$BookingStateLoadedCopyWithImpl<$Res>;
   @useResult
-  $Res call({Map<String, int> availableSlots, List<String> services});
+  $Res call(
+      {List<AppointmentSlotModel>? availableSlots,
+      List<AppointmentServiceModel> services,
+      AppointmentModel appointment});
 }
 
 /// @nodoc
@@ -216,18 +235,23 @@ class __$$BookingStateLoadedCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? availableSlots = null,
+    Object? availableSlots = freezed,
     Object? services = null,
+    Object? appointment = null,
   }) {
     return _then(_$BookingStateLoaded(
-      null == availableSlots
+      freezed == availableSlots
           ? _value._availableSlots
           : availableSlots // ignore: cast_nullable_to_non_nullable
-              as Map<String, int>,
+              as List<AppointmentSlotModel>?,
       null == services
           ? _value._services
           : services // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as List<AppointmentServiceModel>,
+      null == appointment
+          ? _value.appointment
+          : appointment // ignore: cast_nullable_to_non_nullable
+              as AppointmentModel,
     ));
   }
 }
@@ -235,30 +259,35 @@ class __$$BookingStateLoadedCopyWithImpl<$Res>
 /// @nodoc
 
 class _$BookingStateLoaded implements BookingStateLoaded {
-  const _$BookingStateLoaded(
-      final Map<String, int> availableSlots, final List<String> services)
+  const _$BookingStateLoaded(final List<AppointmentSlotModel>? availableSlots,
+      final List<AppointmentServiceModel> services, this.appointment)
       : _availableSlots = availableSlots,
         _services = services;
 
-  final Map<String, int> _availableSlots;
+  final List<AppointmentSlotModel>? _availableSlots;
   @override
-  Map<String, int> get availableSlots {
-    if (_availableSlots is EqualUnmodifiableMapView) return _availableSlots;
+  List<AppointmentSlotModel>? get availableSlots {
+    final value = _availableSlots;
+    if (value == null) return null;
+    if (_availableSlots is EqualUnmodifiableListView) return _availableSlots;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableMapView(_availableSlots);
+    return EqualUnmodifiableListView(value);
   }
 
-  final List<String> _services;
+  final List<AppointmentServiceModel> _services;
   @override
-  List<String> get services {
+  List<AppointmentServiceModel> get services {
     if (_services is EqualUnmodifiableListView) return _services;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_services);
   }
 
   @override
+  final AppointmentModel appointment;
+
+  @override
   String toString() {
-    return 'BookingState.loaded(availableSlots: $availableSlots, services: $services)';
+    return 'BookingState.loaded(availableSlots: $availableSlots, services: $services, appointment: $appointment)';
   }
 
   @override
@@ -268,14 +297,17 @@ class _$BookingStateLoaded implements BookingStateLoaded {
             other is _$BookingStateLoaded &&
             const DeepCollectionEquality()
                 .equals(other._availableSlots, _availableSlots) &&
-            const DeepCollectionEquality().equals(other._services, _services));
+            const DeepCollectionEquality().equals(other._services, _services) &&
+            (identical(other.appointment, appointment) ||
+                other.appointment == appointment));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(_availableSlots),
-      const DeepCollectionEquality().hash(_services));
+      const DeepCollectionEquality().hash(_services),
+      appointment);
 
   @JsonKey(ignore: true)
   @override
@@ -289,35 +321,43 @@ class _$BookingStateLoaded implements BookingStateLoaded {
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
     required TResult Function(
-            Map<String, int> availableSlots, List<String> services)
+            List<AppointmentSlotModel>? availableSlots,
+            List<AppointmentServiceModel> services,
+            AppointmentModel appointment)
         loaded,
     required TResult Function(String error) error,
   }) {
-    return loaded(availableSlots, services);
+    return loaded(availableSlots, services, appointment);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
-    TResult? Function(Map<String, int> availableSlots, List<String> services)?
+    TResult? Function(
+            List<AppointmentSlotModel>? availableSlots,
+            List<AppointmentServiceModel> services,
+            AppointmentModel appointment)?
         loaded,
     TResult? Function(String error)? error,
   }) {
-    return loaded?.call(availableSlots, services);
+    return loaded?.call(availableSlots, services, appointment);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(Map<String, int> availableSlots, List<String> services)?
+    TResult Function(
+            List<AppointmentSlotModel>? availableSlots,
+            List<AppointmentServiceModel> services,
+            AppointmentModel appointment)?
         loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(availableSlots, services);
+      return loaded(availableSlots, services, appointment);
     }
     return orElse();
   }
@@ -359,11 +399,13 @@ class _$BookingStateLoaded implements BookingStateLoaded {
 
 abstract class BookingStateLoaded implements BookingState {
   const factory BookingStateLoaded(
-          final Map<String, int> availableSlots, final List<String> services) =
-      _$BookingStateLoaded;
+      final List<AppointmentSlotModel>? availableSlots,
+      final List<AppointmentServiceModel> services,
+      final AppointmentModel appointment) = _$BookingStateLoaded;
 
-  Map<String, int> get availableSlots;
-  List<String> get services;
+  List<AppointmentSlotModel>? get availableSlots;
+  List<AppointmentServiceModel> get services;
+  AppointmentModel get appointment;
   @JsonKey(ignore: true)
   _$$BookingStateLoadedCopyWith<_$BookingStateLoaded> get copyWith =>
       throw _privateConstructorUsedError;
@@ -435,7 +477,9 @@ class _$BookingStateError implements BookingStateError {
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
     required TResult Function(
-            Map<String, int> availableSlots, List<String> services)
+            List<AppointmentSlotModel>? availableSlots,
+            List<AppointmentServiceModel> services,
+            AppointmentModel appointment)
         loaded,
     required TResult Function(String error) error,
   }) {
@@ -446,7 +490,10 @@ class _$BookingStateError implements BookingStateError {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
-    TResult? Function(Map<String, int> availableSlots, List<String> services)?
+    TResult? Function(
+            List<AppointmentSlotModel>? availableSlots,
+            List<AppointmentServiceModel> services,
+            AppointmentModel appointment)?
         loaded,
     TResult? Function(String error)? error,
   }) {
@@ -457,7 +504,10 @@ class _$BookingStateError implements BookingStateError {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(Map<String, int> availableSlots, List<String> services)?
+    TResult Function(
+            List<AppointmentSlotModel>? availableSlots,
+            List<AppointmentServiceModel> services,
+            AppointmentModel appointment)?
         loaded,
     TResult Function(String error)? error,
     required TResult orElse(),

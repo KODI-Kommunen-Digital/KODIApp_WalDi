@@ -211,6 +211,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     Widget attachments = Container();
     Widget createdDate = Container();
     Widget description = Container();
+    Widget bookAppointment = Container();
     Widget info = AppPlaceholder(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -949,6 +950,24 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           //   return false;
         });
       }
+      if (product.categoryId == 18) {
+        bookAppointment = AppButton(
+          Translate.of(context).translate('create_appointment'),
+          onPressed: () {
+            if (isLoggedIn) {
+              Navigator.pushNamed(context, Routes.booking, arguments: {
+                'cityId': product.cityId ?? 1,
+                'listingId': product.id,
+              });
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content:
+                      Text(Translate.of(context).translate('login_required'))));
+            }
+          },
+          mainAxisSize: MainAxisSize.max,
+        );
+      }
 
       info = Padding(
         padding: const EdgeInsets.only(left: 16, right: 16),
@@ -1024,6 +1043,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 endDate
                 // priceRange,
               ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [bookAppointment],
             ),
             description,
             address,

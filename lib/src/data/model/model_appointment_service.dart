@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model_holiday.dart';
 import 'package:heidi/src/data/model/model_open_time.dart';
@@ -30,51 +32,59 @@ class AppointmentServiceModel {
       this.holidays});
 
   factory AppointmentServiceModel.fromJson(Map<String, dynamic> json) {
-    final List<dynamic>? jsonHolidays = json['MetaData']['holidays'];
-    List<HolidayModel>? parsedHolidays = [];
-
-    if (jsonHolidays != null) {
-      for (var holiday in jsonHolidays) {
-        final DateTime parsedDate = DateTime.parse(holiday['date']);
-        String date = DateFormat('dd.MM.yyyy').format(parsedDate);
-        parsedHolidays.add(HolidayModel(date: date, title: holiday['title']));
-      }
-    } else {
-      parsedHolidays = [];
-    }
-
-    final Map<String, dynamic>? openHours = json['MetaData']['openingDates'];
     Set parsedOpenHours = {};
+    List<HolidayModel>? parsedHolidays = [];
+    int? maxBookingPerSlot; //Change dummy data
+    if (json['MetaData'] != null) {
+      Map<String, dynamic> metaData = jsonDecode(json['MetaData']);
+      final List<dynamic>? jsonHolidays = metaData['holidays'];
 
-    if (openHours != null) {
-      const daysOfWeek = [
-        'Monday',
-        'Tuesday',
-        'Wednesday',
-        'Thursday',
-        'Friday',
-        'Saturday',
-        'Sunday'
-      ];
-
-      for (int i = 0; i < daysOfWeek.length; i++) {
-        String day = daysOfWeek[i];
-
-        if (openHours[day] != null) {
-          TimeOfDay startTime =
-              timeOfDayFromString(openHours[day]['startTime']);
-          TimeOfDay endTime = timeOfDayFromString(openHours[day]['endTime']);
-          ScheduleModel schedule =
-              ScheduleModel(startTime: startTime, endTime: endTime);
-
-          parsedOpenHours.add(OpenTimeModel(
-              dayOfWeek: i + 1,
-              key: day.substring(0, 3).toLowerCase(),
-              schedule: [schedule]));
-        }
+      if (metaData['maxBookingPerSlot'] != null) {
+        maxBookingPerSlot = metaData['maxBookingPerSlot'];
       }
-    } else {
-      parsedOpenHours = {};
+
+      if (jsonHolidays != null) {
+        for (var holiday in jsonHolidays) {
+          final DateTime parsedDate = DateTime.parse(holiday['date']);
+          String date = DateFormat('dd.MM.yyyy').format(parsedDate);
+          parsedHolidays.add(HolidayModel(date: date, title: holiday['title']));
+        }
+      } else {
+        parsedHolidays = [];
+      }
+
+      final Map<String, dynamic>? openHours = metaData['openingDates'];
+
+      if (openHours != null) {
+        const daysOfWeek = [
+          'Monday',
+          'Tuesday',
+          'Wednesday',
+          'Thursday',
+          'Friday',
+          'Saturday',
+          'Sunday'
+        ];
+
+        for (int i = 0; i < daysOfWeek.length; i++) {
+          String day = daysOfWeek[i];
+
+          if (openHours[day] != null) {
+            TimeOfDay startTime =
+                timeOfDayFromString(openHours[day]['startTime']);
+            TimeOfDay endTime = timeOfDayFromString(openHours[day]['endTime']);
+            ScheduleModel schedule =
+                ScheduleModel(startTime: startTime, endTime: endTime);
+
+            parsedOpenHours.add(OpenTimeModel(
+                dayOfWeek: i + 1,
+                key: day.substring(0, 3).toLowerCase(),
+                schedule: [schedule]));
+          }
+        }
+      } else {
+        parsedOpenHours = {};
+      }
     }
 
     return AppointmentServiceModel(
@@ -84,7 +94,7 @@ class AppointmentServiceModel {
         userId: json['userId'] ?? 0,
         duration: json['duration'],
         slotSameAsAppointment: ((json['slotSameAsAppointment'] ?? 0) == 1),
-        maxBookingPerSlot: json['MetaData']['maxBookingPerSlot'] ?? 8,
+        maxBookingPerSlot: maxBookingPerSlot ?? 8, //Change default value
         openingDates: parsedOpenHours,
         holidays: parsedHolidays);
   }

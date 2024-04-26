@@ -80,19 +80,30 @@ class AppointmentRepository {
     final DateTime parsedDate = DateTime.parse(date);
     date = DateFormat('yyyy-MM-dd').format(parsedDate);
 
+    String idString = "";
+    for (int i = 0; i < serviceId.length; i++) {
+      if (i != serviceId.length - 1) {
+        idString = "$idString${serviceId[i]}, ";
+      } else {
+        idString = "$idString${serviceId[i]}";
+      }
+    }
+
     final response = await Api.requestAppointmentSlots(
         cityId: cityId,
         listingId: listingId,
         appointmentId: appointmentId,
         date: date,
-        serviceId: serviceId);
+        serviceId: idString);
     if (response.success) {
-      final responseData =
-          List<Map<String, dynamic>>.from(response.data ?? []).map((item) {
+      final responseData = response.data;
+      if (responseData == null || responseData.isEmpty) {
+        return [];
+      }
+
+      return List<Map<String, dynamic>>.from(responseData).map((item) {
         return AppointmentSlotModel.fromJson(item);
       }).toList();
-
-      return responseData;
     } else {
       logError('Load Appointment Slots Error', response.message);
     }

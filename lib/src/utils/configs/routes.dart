@@ -296,12 +296,15 @@ class Routes {
       case booking:
         return MaterialPageRoute(
           builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
             return BlocProvider(
               create: (context) => BookingCubit(
                 context.read(),
               ),
               child: BookingScreen(
-                listingTitle: settings.arguments as String,
+                cityId: arguments['cityId'],
+                listingId: arguments['listingId'],
               ),
             );
           },
