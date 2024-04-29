@@ -492,6 +492,7 @@
   "under_review": "Under Review",
   "options": "Options",
   "error": "Error",
+  "error_message": "An error occured, please try again later.",
   "my_groups": "My Groups",  
   "all_groups": "All Groups",
   "public":"Public",  

@@ -89,6 +89,7 @@ dependencies:
   multiple_images_picker: ^1.0.1
   html: ^0.15.4
   calendar_date_picker2: ^0.5.5
+  package_info_plus: ^4.2.0
 
 dev_dependencies:
   flutter_test:
