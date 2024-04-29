@@ -698,7 +698,7 @@ class Api {
     var list =
         '/cities/$cityId/listings/$listingId/appointments/$appointmentId/slots?date=$date&serviceId[]=$serviceId';
     final result =
-    await HTTPManager(apiType: APIType.appointment).get(url: list);
+        await HTTPManager(apiType: APIType.appointment).get(url: list);
     return ResultApiModel.fromJson(result);
   }
 
@@ -761,6 +761,14 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
+  static Future<ResultApiModel> requestDeleteBookingUser(
+      userId, appointmentId, bookingId) async {
+    var list = '/users/$userId/appointments/$appointmentId/booking/$bookingId';
+    final result =
+        await HTTPManager(apiType: APIType.appointment).delete(url: list);
+    return ResultApiModel.fromJson(result);
+  }
+
   static Future<ResultApiModel> requestSaveBooking(
       cityId, listingId, appointmentId, params) async {
     var list =
@@ -770,8 +778,9 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
-  static Future<ResultApiModel> requestTestListings() async {
-    var list = '/cities/1/listings';
+  static Future<ResultApiModel> requestProductForAppointment(
+      appointmentId) async {
+    var list = '/listings?appointmentId=$appointmentId';
     final result =
         await HTTPManager(apiType: APIType.defaultAPI).get(url: list);
     return ResultApiModel.fromJson(result);

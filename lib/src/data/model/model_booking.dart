@@ -10,8 +10,10 @@ class BookingModel {
   final int guestId;
   final bool isGuest;
   final String? remark;
+  final String? description;
   final int? createdBy;
   final bool isCreatedByGuest;
+  final String? appointmentTitle;
 
   BookingModel(
       {required this.id,
@@ -24,7 +26,9 @@ class BookingModel {
       required this.isGuest,
       this.remark,
       this.createdBy,
-      required this.isCreatedByGuest});
+      required this.isCreatedByGuest,
+      this.appointmentTitle,
+      this.description});
 
   factory BookingModel.fromJson(Map<String, dynamic> json) {
     final DateTime? parsedStartDate =
@@ -58,6 +62,37 @@ class BookingModel {
         isGuest: ((json['isGuest'] ?? 0) == 1),
         isCreatedByGuest: ((json['isCreatedByGuest'] ?? 0) == 1),
         createdBy: json['createdBy'],
-        remark: json['remark']);
+        remark: json['remark'],
+        description: json['description']);
+  }
+
+  String getStartTime() {
+    if (startTime == null) return '';
+
+    String startDate = _formatDate(startTime!.substring(0, 10));
+    String startHour = startTime!.substring(10);
+    return "$startDate, $startHour";
+  }
+
+  String dateTimeRange() {
+    if (startTime == null || endTime == null) return '';
+
+    String startDate = startTime!.substring(0, 10);
+    String startTimeOnly = startTime!.substring(10);
+    String endDate = endTime!.substring(0, 10);
+    String endTimeOnly = endTime!.substring(10);
+
+    String formattedStartDate = _formatDate(startDate);
+    String formattedEndDate = _formatDate(endDate);
+
+    String formattedDateTimeRange =
+        '$formattedStartDate, $startTimeOnly - $formattedEndDate, $endTimeOnly';
+
+    return formattedDateTimeRange;
+  }
+
+  String _formatDate(String dateString) {
+    DateTime dateTime = DateTime.parse(dateString);
+    return DateFormat('dd.MM.yyyy').format(dateTime);
   }
 }

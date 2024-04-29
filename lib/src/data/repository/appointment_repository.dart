@@ -5,6 +5,7 @@ import 'package:heidi/src/data/model/model_booking.dart';
 import 'package:heidi/src/data/model/model_bookingGuest.dart';
 import 'package:heidi/src/data/model/model_holiday.dart';
 import 'package:heidi/src/data/model/model_open_time.dart';
+import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_result_api.dart';
 import 'package:heidi/src/data/model/model_schedule.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
@@ -50,6 +51,22 @@ class AppointmentRepository {
       return responseData;
     } else {
       logError('Load User Appointments Error', response.message);
+    }
+    return null;
+  }
+
+  Future<ProductModel?> getProductForAppointment(int appointmentId) async {
+    final response = await Api.requestProductForAppointment(appointmentId);
+
+    if (response.success) {
+      final responseData =
+          List<Map<String, dynamic>>.from(response.data ?? []).map((item) {
+        return ProductModel.fromJson(item);
+      }).toList();
+
+      return responseData.first;
+    } else {
+      logError('Load Product for Appointment Error', response.message);
     }
     return null;
   }
@@ -346,6 +363,19 @@ class AppointmentRepository {
       int cityId, int listingId, int appointmentId, int bookingId) async {
     final response = await Api.requestDeleteBooking(
         cityId, listingId, appointmentId, bookingId);
+
+    if (response.success) {
+      return true;
+    } else {
+      logError('Delete Booking error', response.message);
+      return false;
+    }
+  }
+
+  Future<bool> deleteBookingUser(
+      int userId, int appointmentId, int bookingId) async {
+    final response =
+        await Api.requestDeleteBookingUser(userId, appointmentId, bookingId);
 
     if (response.success) {
       return true;

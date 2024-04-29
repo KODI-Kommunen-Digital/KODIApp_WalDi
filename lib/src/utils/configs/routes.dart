@@ -19,6 +19,8 @@ import 'package:heidi/src/presentation/main/account/dashboard/appointments/appoi
 import 'package:heidi/src/presentation/main/account/dashboard/appointments/appointment_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/appointments/my_appointments/cubit/my_appointments_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/appointments/my_appointments/my_appointments_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/appointments/my_bookings/cubit/my_bookings_cubit.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/appointments/my_bookings/my_bookings_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/appointments/requests/appointment_requests_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/appointments/requests/cubit/appointment_requests_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/dashboard_screen.dart';
@@ -143,9 +145,9 @@ class Routes {
   static const String mitredenWebview = "/mitredenWebview";
   static const String appointments = "/appointments";
   static const String myAppointments = "/myAppointments";
+  static const String myBookings = "/myBookings";
   static const String appointmentDetails = "/appointmentDetails";
   static const String appointmentRequests = "/appointmentRequests";
-  static const String test = "/test";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -428,6 +430,16 @@ class Routes {
             return BlocProvider(
               create: (context) => MyAppointmentsCubit(),
               child: const MyAppointmentsScreen(),
+            );
+          },
+        );
+
+      case myBookings:
+        return MaterialPageRoute(
+          builder: (context) {
+            return BlocProvider(
+              create: (context) => MyBookingsCubit(),
+              child: const MyBookingsScreen(),
             );
           },
         );
