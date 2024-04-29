@@ -35,10 +35,11 @@ class _AppointmentDetailsScreenState extends State<AppointmentDetailsScreen> {
     return BlocBuilder<AppointmentDetailsCubit, AppointmentDetailsState>(
       builder: (context, state) => state.maybeWhen(
         loading: () => const AppointmentDetailsLoading(),
-        loaded: (bookings, isRefreshLoader) => AppointmentDetailsLoaded(
+        loaded: (bookings, guests, isRefreshLoader) => AppointmentDetailsLoaded(
           bookings: bookings,
           isRefreshLoader: isRefreshLoader,
           appointment: widget.appointment,
+          guests: guests,
         ),
         error: (msg) => ErrorWidget(msg),
         orElse: () => ErrorWidget(
@@ -67,12 +68,14 @@ class AppointmentDetailsLoading extends StatelessWidget {
 class AppointmentDetailsLoaded extends StatefulWidget {
   final AppointmentModel appointment;
   final List<BookingModel> bookings;
+  final List<BookingGuestModel> guests;
   final bool isRefreshLoader;
 
   const AppointmentDetailsLoaded(
       {required this.isRefreshLoader,
       required this.appointment,
       required this.bookings,
+      required this.guests,
       super.key});
 
   @override
@@ -84,11 +87,6 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
   final List<String> _selectedTimeSlots = [
     '8:00 - 8:15',
   ];
-  BookingGuestModel guest = BookingGuestModel(
-      firstname: "firstname",
-      lastname: "lastname",
-      description: "description",
-      emailId: "emailId");
 
   @override
   Widget build(BuildContext buildContext) {
@@ -166,7 +164,7 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
                     widget.appointment.title,
                     style: Theme.of(context).textTheme.headlineLarge,
                   ),
-                  for (int i = 0; i < widget.bookings.length; i++)
+                  for (int i = 0; i < widget.guests.length; i++)
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -181,7 +179,7 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
                             border: OutlineInputBorder(),
                           ),
                           controller: TextEditingController(
-                              text: "${guest.firstname}} ${guest.lastname}"),
+                              text: "${widget.guests[i].firstname} ${widget.guests[i].lastname}"),
                           enabled: false, // Make text unchangeable
                           style: const TextStyle(
                               color: Colors.white), // Set text color to white
@@ -193,12 +191,12 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
                             border: const OutlineInputBorder(),
                           ),
                           controller:
-                              TextEditingController(text: guest.emailId),
+                              TextEditingController(text: widget.guests[i].emailId),
                           enabled: false, // Make text unchangeable
                           style: const TextStyle(
                               color: Colors.white), // Set text color to white
                         ),
-                        if ((guest.phoneNumber ?? '') != '')
+                        if ((widget.guests[i].phoneNumber ?? '') != '')
                           Column(
                             children: [
                               const SizedBox(height: 16),
@@ -209,7 +207,7 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
                                   border: OutlineInputBorder(),
                                 ),
                                 controller: TextEditingController(
-                                    text: guest.phoneNumber),
+                                    text: widget.guests[i].phoneNumber),
                                 enabled: false, // Make text unchangeable
                                 style: const TextStyle(
                                     color: Colors
@@ -217,7 +215,7 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
                               ),
                             ],
                           ),
-                        if (guest.description != '')
+                        if (widget.guests[i].description != '')
                           Column(
                             children: [
                               const SizedBox(height: 16),
@@ -228,7 +226,7 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
                                   border: OutlineInputBorder(),
                                 ),
                                 controller: TextEditingController(
-                                    text: guest.description),
+                                    text: widget.guests[i].description),
                                 enabled: false, // Make text unchangeable
                                 style: const TextStyle(
                                     color: Colors
