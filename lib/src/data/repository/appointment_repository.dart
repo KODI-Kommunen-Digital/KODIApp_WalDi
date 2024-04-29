@@ -195,6 +195,7 @@ class AppointmentRepository {
   Future<ResultApiModel> editAppointment(
       {required int listingId,
       required int appointmentId,
+        required String city,
       String? title,
       String? description,
       String? startDate,
@@ -203,7 +204,7 @@ class AppointmentRepository {
       List<OpenTimeModel>? openHours,
       List<HolidayModel>? holidays,
       List<AppointmentServiceModel>? services}) async {
-    final cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    final cityId = await ListRepository.getCityId(city);
 
     final DateTime? parsedStartDate = DateTime.tryParse(startDate ?? '');
     final DateTime? parsedEndDate = DateTime.tryParse(endDate ?? '');

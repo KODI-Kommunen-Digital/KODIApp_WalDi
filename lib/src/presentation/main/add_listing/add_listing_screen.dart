@@ -568,7 +568,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
   }
 
   Future<void> _navigateAndHandleData(BuildContext context) async {
-    final result = await Navigator.pushNamed(context, Routes.createAppointment, arguments: {'serviceEntries': serviceEntries});
+    final result = await Navigator.pushNamed(context, Routes.createAppointment,
+        arguments: {'serviceEntries': serviceEntries});
     if (result != null) {
       setState(() {
         List<dynamic> resultList = result as List<dynamic>;
@@ -686,11 +687,20 @@ class _AddListingScreenState extends State<AddListingScreen> {
   }
 
   void _createAppointment() async {
-    context.read<AddListingCubit>().onSubmitAppointment(
-        services: serviceEntries,
-        openHours: timeSlots,
-        holidays: [],
-        city: selectedCity ?? "");
+    if (widget.item == null) {
+      context.read<AddListingCubit>().onSubmitAppointment(
+          services: serviceEntries,
+          openHours: timeSlots,
+          holidays: [],
+          city: selectedCity ?? "");
+    } else {
+      context.read<AddListingCubit>().onEditAppointment(
+          services: serviceEntries,
+          openHours: timeSlots,
+          holidays: [],
+          city: selectedCity ?? "",
+          appointmentId: widget.item!.appointmentId!);
+    }
   }
 
   bool _validData() {

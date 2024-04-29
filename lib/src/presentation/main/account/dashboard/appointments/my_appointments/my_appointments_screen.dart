@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_appointment.dart';
+import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/appointments/my_appointments/cubit/my_appointments_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/appointments/my_appointments/cubit/my_appointments_state.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
@@ -22,6 +23,7 @@ class MyAppointmentsScreen extends StatelessWidget {
                   isRefreshLoader: isRefreshLoader,
                   appointments: appointments,
                 ),
+            error: (msg) => ErrorWidget(msg),
             orElse: () => ErrorWidget("Failed to load appointments.")));
   }
 }
@@ -214,11 +216,22 @@ class _MyAppointmentsLoadedState extends State<MyAppointmentsLoaded> {
                                                 Translate.of(context).translate(
                                                     'edit_appointments')) {
                                               if (!mounted) return;
-                                              Navigator.pushNamed(
-                                                context,
-                                                Routes.booking,
-                                                arguments: appointments[index],
-                                              );
+                                              ProductModel? product =
+                                                  await context
+                                                      .read<
+                                                          MyAppointmentsCubit>()
+                                                      .getProductFromAppointment(
+                                                          item.id!);
+                                              if (product != null) {
+                                                Navigator.pushNamed(
+                                                  context,
+                                                  Routes.submit,
+                                                  arguments: {
+                                                    'item': product,
+                                                    'isNewList': false
+                                                  },
+                                                );
+                                              }
                                             }
                                           },
                                           itemBuilder: (BuildContext context) {

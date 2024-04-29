@@ -23,6 +23,7 @@ mixin _$MyAppointmentsState {
     required TResult Function(
             List<AppointmentModel>? appointments, bool isRefreshLoader)
         loaded,
+    required TResult Function(String msg) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -32,6 +33,7 @@ mixin _$MyAppointmentsState {
     TResult? Function(
             List<AppointmentModel>? appointments, bool isRefreshLoader)?
         loaded,
+    TResult? Function(String msg)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -41,6 +43,7 @@ mixin _$MyAppointmentsState {
     TResult Function(
             List<AppointmentModel>? appointments, bool isRefreshLoader)?
         loaded,
+    TResult Function(String msg)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -49,6 +52,7 @@ mixin _$MyAppointmentsState {
     required TResult Function(MyAppointmentsStateInitial value) initial,
     required TResult Function(MyAppointmentsStateLoading value) loading,
     required TResult Function(MyAppointmentsStateLoaded value) loaded,
+    required TResult Function(MyAppointmentsStateError value) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -56,6 +60,7 @@ mixin _$MyAppointmentsState {
     TResult? Function(MyAppointmentsStateInitial value)? initial,
     TResult? Function(MyAppointmentsStateLoading value)? loading,
     TResult? Function(MyAppointmentsStateLoaded value)? loaded,
+    TResult? Function(MyAppointmentsStateError value)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -63,6 +68,7 @@ mixin _$MyAppointmentsState {
     TResult Function(MyAppointmentsStateInitial value)? initial,
     TResult Function(MyAppointmentsStateLoading value)? loading,
     TResult Function(MyAppointmentsStateLoaded value)? loaded,
+    TResult Function(MyAppointmentsStateError value)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -133,6 +139,7 @@ class _$MyAppointmentsStateInitial implements MyAppointmentsStateInitial {
     required TResult Function(
             List<AppointmentModel>? appointments, bool isRefreshLoader)
         loaded,
+    required TResult Function(String msg) error,
   }) {
     return initial();
   }
@@ -145,6 +152,7 @@ class _$MyAppointmentsStateInitial implements MyAppointmentsStateInitial {
     TResult? Function(
             List<AppointmentModel>? appointments, bool isRefreshLoader)?
         loaded,
+    TResult? Function(String msg)? error,
   }) {
     return initial?.call();
   }
@@ -157,6 +165,7 @@ class _$MyAppointmentsStateInitial implements MyAppointmentsStateInitial {
     TResult Function(
             List<AppointmentModel>? appointments, bool isRefreshLoader)?
         loaded,
+    TResult Function(String msg)? error,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -171,6 +180,7 @@ class _$MyAppointmentsStateInitial implements MyAppointmentsStateInitial {
     required TResult Function(MyAppointmentsStateInitial value) initial,
     required TResult Function(MyAppointmentsStateLoading value) loading,
     required TResult Function(MyAppointmentsStateLoaded value) loaded,
+    required TResult Function(MyAppointmentsStateError value) error,
   }) {
     return initial(this);
   }
@@ -181,6 +191,7 @@ class _$MyAppointmentsStateInitial implements MyAppointmentsStateInitial {
     TResult? Function(MyAppointmentsStateInitial value)? initial,
     TResult? Function(MyAppointmentsStateLoading value)? loading,
     TResult? Function(MyAppointmentsStateLoaded value)? loaded,
+    TResult? Function(MyAppointmentsStateError value)? error,
   }) {
     return initial?.call(this);
   }
@@ -191,6 +202,7 @@ class _$MyAppointmentsStateInitial implements MyAppointmentsStateInitial {
     TResult Function(MyAppointmentsStateInitial value)? initial,
     TResult Function(MyAppointmentsStateLoading value)? loading,
     TResult Function(MyAppointmentsStateLoaded value)? loaded,
+    TResult Function(MyAppointmentsStateError value)? error,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -251,6 +263,7 @@ class _$MyAppointmentsStateLoading implements MyAppointmentsStateLoading {
     required TResult Function(
             List<AppointmentModel>? appointments, bool isRefreshLoader)
         loaded,
+    required TResult Function(String msg) error,
   }) {
     return loading();
   }
@@ -263,6 +276,7 @@ class _$MyAppointmentsStateLoading implements MyAppointmentsStateLoading {
     TResult? Function(
             List<AppointmentModel>? appointments, bool isRefreshLoader)?
         loaded,
+    TResult? Function(String msg)? error,
   }) {
     return loading?.call();
   }
@@ -275,6 +289,7 @@ class _$MyAppointmentsStateLoading implements MyAppointmentsStateLoading {
     TResult Function(
             List<AppointmentModel>? appointments, bool isRefreshLoader)?
         loaded,
+    TResult Function(String msg)? error,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -289,6 +304,7 @@ class _$MyAppointmentsStateLoading implements MyAppointmentsStateLoading {
     required TResult Function(MyAppointmentsStateInitial value) initial,
     required TResult Function(MyAppointmentsStateLoading value) loading,
     required TResult Function(MyAppointmentsStateLoaded value) loaded,
+    required TResult Function(MyAppointmentsStateError value) error,
   }) {
     return loading(this);
   }
@@ -299,6 +315,7 @@ class _$MyAppointmentsStateLoading implements MyAppointmentsStateLoading {
     TResult? Function(MyAppointmentsStateInitial value)? initial,
     TResult? Function(MyAppointmentsStateLoading value)? loading,
     TResult? Function(MyAppointmentsStateLoaded value)? loaded,
+    TResult? Function(MyAppointmentsStateError value)? error,
   }) {
     return loading?.call(this);
   }
@@ -309,6 +326,7 @@ class _$MyAppointmentsStateLoading implements MyAppointmentsStateLoading {
     TResult Function(MyAppointmentsStateInitial value)? initial,
     TResult Function(MyAppointmentsStateLoading value)? loading,
     TResult Function(MyAppointmentsStateLoaded value)? loaded,
+    TResult Function(MyAppointmentsStateError value)? error,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -414,6 +432,7 @@ class _$MyAppointmentsStateLoaded implements MyAppointmentsStateLoaded {
     required TResult Function(
             List<AppointmentModel>? appointments, bool isRefreshLoader)
         loaded,
+    required TResult Function(String msg) error,
   }) {
     return loaded(appointments, isRefreshLoader);
   }
@@ -426,6 +445,7 @@ class _$MyAppointmentsStateLoaded implements MyAppointmentsStateLoaded {
     TResult? Function(
             List<AppointmentModel>? appointments, bool isRefreshLoader)?
         loaded,
+    TResult? Function(String msg)? error,
   }) {
     return loaded?.call(appointments, isRefreshLoader);
   }
@@ -438,6 +458,7 @@ class _$MyAppointmentsStateLoaded implements MyAppointmentsStateLoaded {
     TResult Function(
             List<AppointmentModel>? appointments, bool isRefreshLoader)?
         loaded,
+    TResult Function(String msg)? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -452,6 +473,7 @@ class _$MyAppointmentsStateLoaded implements MyAppointmentsStateLoaded {
     required TResult Function(MyAppointmentsStateInitial value) initial,
     required TResult Function(MyAppointmentsStateLoading value) loading,
     required TResult Function(MyAppointmentsStateLoaded value) loaded,
+    required TResult Function(MyAppointmentsStateError value) error,
   }) {
     return loaded(this);
   }
@@ -462,6 +484,7 @@ class _$MyAppointmentsStateLoaded implements MyAppointmentsStateLoaded {
     TResult? Function(MyAppointmentsStateInitial value)? initial,
     TResult? Function(MyAppointmentsStateLoading value)? loading,
     TResult? Function(MyAppointmentsStateLoaded value)? loaded,
+    TResult? Function(MyAppointmentsStateError value)? error,
   }) {
     return loaded?.call(this);
   }
@@ -472,6 +495,7 @@ class _$MyAppointmentsStateLoaded implements MyAppointmentsStateLoaded {
     TResult Function(MyAppointmentsStateInitial value)? initial,
     TResult Function(MyAppointmentsStateLoading value)? loading,
     TResult Function(MyAppointmentsStateLoaded value)? loaded,
+    TResult Function(MyAppointmentsStateError value)? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -490,5 +514,159 @@ abstract class MyAppointmentsStateLoaded implements MyAppointmentsState {
   bool get isRefreshLoader;
   @JsonKey(ignore: true)
   _$$MyAppointmentsStateLoadedCopyWith<_$MyAppointmentsStateLoaded>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$MyAppointmentsStateErrorCopyWith<$Res> {
+  factory _$$MyAppointmentsStateErrorCopyWith(_$MyAppointmentsStateError value,
+          $Res Function(_$MyAppointmentsStateError) then) =
+      __$$MyAppointmentsStateErrorCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String msg});
+}
+
+/// @nodoc
+class __$$MyAppointmentsStateErrorCopyWithImpl<$Res>
+    extends _$MyAppointmentsStateCopyWithImpl<$Res, _$MyAppointmentsStateError>
+    implements _$$MyAppointmentsStateErrorCopyWith<$Res> {
+  __$$MyAppointmentsStateErrorCopyWithImpl(_$MyAppointmentsStateError _value,
+      $Res Function(_$MyAppointmentsStateError) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? msg = null,
+  }) {
+    return _then(_$MyAppointmentsStateError(
+      null == msg
+          ? _value.msg
+          : msg // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$MyAppointmentsStateError implements MyAppointmentsStateError {
+  const _$MyAppointmentsStateError(this.msg);
+
+  @override
+  final String msg;
+
+  @override
+  String toString() {
+    return 'MyAppointmentsState.error(msg: $msg)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$MyAppointmentsStateError &&
+            (identical(other.msg, msg) || other.msg == msg));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, msg);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$MyAppointmentsStateErrorCopyWith<_$MyAppointmentsStateError>
+      get copyWith =>
+          __$$MyAppointmentsStateErrorCopyWithImpl<_$MyAppointmentsStateError>(
+              this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(
+            List<AppointmentModel>? appointments, bool isRefreshLoader)
+        loaded,
+    required TResult Function(String msg) error,
+  }) {
+    return error(msg);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(
+            List<AppointmentModel>? appointments, bool isRefreshLoader)?
+        loaded,
+    TResult? Function(String msg)? error,
+  }) {
+    return error?.call(msg);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(
+            List<AppointmentModel>? appointments, bool isRefreshLoader)?
+        loaded,
+    TResult Function(String msg)? error,
+    required TResult orElse(),
+  }) {
+    if (error != null) {
+      return error(msg);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(MyAppointmentsStateInitial value) initial,
+    required TResult Function(MyAppointmentsStateLoading value) loading,
+    required TResult Function(MyAppointmentsStateLoaded value) loaded,
+    required TResult Function(MyAppointmentsStateError value) error,
+  }) {
+    return error(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(MyAppointmentsStateInitial value)? initial,
+    TResult? Function(MyAppointmentsStateLoading value)? loading,
+    TResult? Function(MyAppointmentsStateLoaded value)? loaded,
+    TResult? Function(MyAppointmentsStateError value)? error,
+  }) {
+    return error?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(MyAppointmentsStateInitial value)? initial,
+    TResult Function(MyAppointmentsStateLoading value)? loading,
+    TResult Function(MyAppointmentsStateLoaded value)? loaded,
+    TResult Function(MyAppointmentsStateError value)? error,
+    required TResult orElse(),
+  }) {
+    if (error != null) {
+      return error(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class MyAppointmentsStateError implements MyAppointmentsState {
+  const factory MyAppointmentsStateError(final String msg) =
+      _$MyAppointmentsStateError;
+
+  String get msg;
+  @JsonKey(ignore: true)
+  _$$MyAppointmentsStateErrorCopyWith<_$MyAppointmentsStateError>
       get copyWith => throw _privateConstructorUsedError;
 }
