@@ -527,6 +527,8 @@
   "welcomeForum": "Hier können über das blaue Plusicon neue Gruppen von dir erstellt werden. Du kannst private und öffentliche Gruppen erstellen. Mitglieder können jederzeit bei öffentlichen Gruppen beitreten und bei privaten Gruppen eine Anfrage stellen. Viel Spaß!",
   "appointments": "Termine",
   "my_appointments": "Meine Termine",
+  "edit_appointments": "Bearbeite Termin",
+  "delete_appointments": "Lösche Termin",
   "appointmentDetails": "Termindetails",
   "addMoreServices": "Füge Dienst hinzu",
   "create_appointment": "Erstelle Termin",

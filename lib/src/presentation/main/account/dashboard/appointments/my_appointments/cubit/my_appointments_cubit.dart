@@ -21,4 +21,8 @@ class MyAppointmentsCubit extends Cubit<MyAppointmentsState> {
     List<AppointmentModel>? appointments = await repo.loadUserAppointments(1);
     emit(MyAppointmentsState.loaded(appointments, false));
   }
+
+  Future<void> deleteAppointment(AppointmentModel appointment) async {
+    //repo.deleteAppointment(appointment.cityId!, listingId, appointment.id!)
+  }
 }

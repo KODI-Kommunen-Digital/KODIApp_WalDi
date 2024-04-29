@@ -530,5 +530,7 @@
   "create_appointment": "Create Appointment",
   "addServiceName": "Add service name",
   "duration": "Duration",
-  "no_bookings": "No bookings available"
+  "no_bookings": "No bookings available",
+  "edit_appointments": "Edit Appointment",
+  "delete_appointments": "Delete Appointment"
 }

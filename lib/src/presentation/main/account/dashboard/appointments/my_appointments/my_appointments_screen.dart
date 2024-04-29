@@ -199,7 +199,11 @@ class _MyAppointmentsLoadedState extends State<MyAppointmentsLoaded> {
                                                       context);
                                               if (response) {
                                                 setState(() {
-                                                  appointments.removeAt(index);
+                                                  context
+                                                      .read<
+                                                          MyAppointmentsCubit>()
+                                                      .deleteAppointment(
+                                                          appointments[index]);
                                                 });
                                               }
                                             }
@@ -221,8 +225,8 @@ class _MyAppointmentsLoadedState extends State<MyAppointmentsLoaded> {
                                             return {
                                               Translate.of(context).translate(
                                                   'delete_appointments'),
-                                              // Translate.of(context).translate(
-                                              //     'edit_appointments')
+                                              Translate.of(context).translate(
+                                                  'edit_appointments')
                                             }.map((String choice) {
                                               return PopupMenuItem<String>(
                                                 value: choice,
