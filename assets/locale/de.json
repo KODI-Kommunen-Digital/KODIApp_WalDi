@@ -531,6 +531,7 @@
   "addMoreServices": "Füge Dienst hinzu",
   "create_appointment": "Erstelle Termin",
   "addServiceName": "Gebe Dienstnamen ein",
-  "duration": "Dauer"
+  "duration": "Dauer",
+  "no_bookings": "Keine Buchungen verfügbar"
 }
 

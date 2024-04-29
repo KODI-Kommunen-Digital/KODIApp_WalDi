@@ -529,5 +529,6 @@
   "addMoreServices": "Add service",
   "create_appointment": "Create Appointment",
   "addServiceName": "Add service name",
-  "duration": "Duration"
+  "duration": "Duration",
+  "no_bookings": "No bookings available"
 }

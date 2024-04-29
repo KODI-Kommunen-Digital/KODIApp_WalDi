@@ -84,9 +84,6 @@ class AppointmentDetailsLoaded extends StatefulWidget {
 
 class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
   final _scrollController = ScrollController(initialScrollOffset: 0.0);
-  final List<String> _selectedTimeSlots = [
-    '8:00 - 8:15',
-  ];
 
   @override
   Widget build(BuildContext buildContext) {
@@ -169,7 +166,7 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '\nKunde ${i + 1}:',
+                          '\n${Translate.of(context).translate('booking')} ${i + 1}:',
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 16),
@@ -179,10 +176,15 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
                             border: OutlineInputBorder(),
                           ),
                           controller: TextEditingController(
-                              text: "${widget.guests[i].firstname} ${widget.guests[i].lastname}"),
+                              text:
+                                  "${widget.guests[i].firstname} ${widget.guests[i].lastname}"),
                           enabled: false, // Make text unchangeable
-                          style: const TextStyle(
-                              color: Colors.white), // Set text color to white
+                          style: TextStyle(
+                              color: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.color ??
+                                  Colors.white),
                         ),
                         const SizedBox(height: 16),
                         TextField(
@@ -190,11 +192,15 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
                             labelText: Translate.of(context).translate('email'),
                             border: const OutlineInputBorder(),
                           ),
-                          controller:
-                              TextEditingController(text: widget.guests[i].emailId),
+                          controller: TextEditingController(
+                              text: widget.guests[i].emailId),
                           enabled: false, // Make text unchangeable
-                          style: const TextStyle(
-                              color: Colors.white), // Set text color to white
+                          style: TextStyle(
+                              color: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.color ??
+                                  Colors.white),
                         ),
                         if ((widget.guests[i].phoneNumber ?? '') != '')
                           Column(
@@ -209,9 +215,12 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
                                 controller: TextEditingController(
                                     text: widget.guests[i].phoneNumber),
                                 enabled: false, // Make text unchangeable
-                                style: const TextStyle(
-                                    color: Colors
-                                        .white), // Set text color to white
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge
+                                            ?.color ??
+                                        Colors.white),
                               ),
                             ],
                           ),
@@ -228,52 +237,58 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
                                 controller: TextEditingController(
                                     text: widget.guests[i].description),
                                 enabled: false, // Make text unchangeable
-                                style: const TextStyle(
-                                    color: Colors
-                                        .white), // Set text color to white
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge
+                                            ?.color ??
+                                        Colors.white),
                               ),
                             ],
                           ),
                         const SizedBox(height: 16),
-                      ],
-                    ),
-                  const SizedBox(height: 16),
-                  Text(
-                    Translate.of(context).translate('appointmentSchedule'),
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 16),
-                  TextField(
-                    decoration: InputDecoration(
-                      labelText:
-                          Translate.of(context).translate('appointmentDate'),
-                      border: OutlineInputBorder(),
-                    ),
-                    controller: TextEditingController(
-                        text: widget.appointment.startDate),
-                    enabled: false, // Make text unchangeable
-                    style: const TextStyle(
-                        color: Colors.white), // Set text color to white
-                  ),
-                  const SizedBox(height: 16),
-                  const SizedBox(height: 16),
-                  for (final slots in _selectedTimeSlots)
-                    Column(
-                      children: [
+                        TextField(
+                          decoration: InputDecoration(
+                            labelText: Translate.of(context)
+                                .translate('appointmentDate'),
+                            border: OutlineInputBorder(),
+                          ),
+                          controller: TextEditingController(
+                              text: widget.guests[i].slot!.date!),
+                          enabled: false, // Make text unchangeable
+                          style: TextStyle(
+                              color: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.color ??
+                                  Colors.white),
+                        ),
+                        const SizedBox(height: 16),
                         TextField(
                           decoration: InputDecoration(
                             labelText: Translate.of(context)
                                 .translate('appointmentSlot'),
                             border: OutlineInputBorder(),
                           ),
-                          controller: TextEditingController(text: slots),
+                          controller: TextEditingController(
+                              text:
+                                  "${widget.guests[i].slot!.startTime.format(context)} - ${widget.guests[i].slot!.endTime.format(context)}"),
                           enabled: false, // Make text unchangeable
-                          style: const TextStyle(
-                              color: Colors.white), // Set text color to white
+                          style: TextStyle(
+                              color: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.color ??
+                                  Colors.white),
                         ),
-                        const SizedBox(height: 16),
                       ],
                     ),
+                  const SizedBox(height: 16),
+                  if (widget.bookings.isEmpty)
+                    Center(
+                        child: Text(
+                            Translate.of(context).translate("no_bookings"))),
+                  const SizedBox(height: 16),
                 ],
               ),
             ),

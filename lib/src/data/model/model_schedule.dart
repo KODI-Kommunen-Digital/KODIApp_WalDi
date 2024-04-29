@@ -4,10 +4,12 @@ import 'package:intl/intl.dart';
 
 class ScheduleModel {
   String? view;
+  String? date;
   TimeOfDay startTime;
   TimeOfDay endTime;
 
-  ScheduleModel({this.view, required this.startTime, required this.endTime});
+  ScheduleModel(
+      {this.view, required this.startTime, required this.endTime, this.date});
 
   get title {
     if (view != null) {
@@ -16,11 +18,12 @@ class ScheduleModel {
     return '${startTime.viewTime} - ${endTime.viewTime}';
   }
 
-  factory ScheduleModel.fromString(String value) {
+  factory ScheduleModel.fromString(String value, {String? date}) {
     final arr = value.split(" - ");
     return ScheduleModel(
       startTime: TimeOfDay.fromDateTime(DateFormat('HH:mm').parse(arr[0])),
       endTime: TimeOfDay.fromDateTime(DateFormat('HH:mm').parse(arr[1])),
+      date: date
     );
   }
 
