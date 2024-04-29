@@ -68,6 +68,17 @@ class DashboardScreen extends StatelessWidget {
                         );
                       },
                     ),
+                    GridItemButton(
+                      icon: Icons.group,
+                      title: Translate.of(context).translate("my_groups"),
+                      onPressed: () {
+                        Navigator.pushNamed(
+                          context,
+                          Routes.myGroups,
+                        );
+                        // Add your action here
+                      },
+                    ),
                   ],
                 ),
               );
