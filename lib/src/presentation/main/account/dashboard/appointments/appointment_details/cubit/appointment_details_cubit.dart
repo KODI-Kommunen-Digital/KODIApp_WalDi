@@ -16,9 +16,13 @@ class AppointmentDetailsCubit extends Cubit<AppointmentDetailsState> {
       repo = AppointmentRepository(prefs);
     }
 
-    //Guest Details missing, wait for backend
+    //Guest Details missing
     List<BookingModel>? bookings =
         await repo.loadOwnerBookings(1, appointmentId);
-    emit(AppointmentDetailsState.loaded(bookings ?? [], false));
+    if (bookings != null) {
+      emit(AppointmentDetailsState.loaded(bookings, false));
+    } else {
+      emit(const AppointmentDetailsState.error("Failed to load appointments."));
+    }
   }
 }

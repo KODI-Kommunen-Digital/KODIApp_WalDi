@@ -1,4 +1,3 @@
-import 'package:heidi/src/data/model/model_bookingGuest.dart';
 import 'package:intl/intl.dart';
 
 class BookingModel {
@@ -13,7 +12,6 @@ class BookingModel {
   final String? remark;
   final int? createdBy;
   final bool isCreatedByGuest;
-  BookingGuestModel? guest;
 
   BookingModel(
       {required this.id,
@@ -26,8 +24,7 @@ class BookingModel {
       required this.isGuest,
       this.remark,
       this.createdBy,
-      required this.isCreatedByGuest,
-      this.guest});
+      required this.isCreatedByGuest});
 
   factory BookingModel.fromJson(Map<String, dynamic> json) {
     final DateTime? parsedStartDate =
@@ -49,15 +46,6 @@ class BookingModel {
     if (parsedCreatedDate != null) {
       createdAt = DateFormat('yyyy-MM-ddHH:mm').format(parsedCreatedDate);
     }
-    BookingGuestModel? guest;
-    if (json['firstname'] != null) {
-      guest = BookingGuestModel(
-          firstname: json['firstname'],
-          lastname: json['lastname'],
-          description: json['description'],
-          emailId: json['email'],
-          phoneNumber: json['phoneNumber']);
-    }
 
     return BookingModel(
         id: json['id'],
@@ -70,11 +58,6 @@ class BookingModel {
         isGuest: ((json['isGuest'] ?? 0) == 1),
         isCreatedByGuest: ((json['isCreatedByGuest'] ?? 0) == 1),
         createdBy: json['createdBy'],
-        remark: json['remark'],
-        guest: guest);
-  }
-
-  void setGuest(BookingGuestModel guestModel) {
-    guest = guestModel;
+        remark: json['remark']);
   }
 }

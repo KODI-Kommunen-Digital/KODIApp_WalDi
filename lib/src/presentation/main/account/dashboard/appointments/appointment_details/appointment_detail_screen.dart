@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_appointment.dart';
 import 'package:heidi/src/data/model/model_booking.dart';
-import 'package:heidi/src/presentation/cubit/app_bloc.dart';
+import 'package:heidi/src/data/model/model_bookingGuest.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/appointments/appointment_details/cubit/appointment_details_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/appointments/appointment_details/cubit/appointment_details_state.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
@@ -25,7 +25,9 @@ class _AppointmentDetailsScreenState extends State<AppointmentDetailsScreen> {
   @override
   void initState() {
     super.initState();
-    AppBloc.appointmentDetailsCubit.onLoad(false, widget.appointment.id!);
+    context
+        .read<AppointmentDetailsCubit>()
+        .onLoad(false, widget.appointment.id!);
   }
 
   @override
@@ -38,6 +40,7 @@ class _AppointmentDetailsScreenState extends State<AppointmentDetailsScreen> {
           isRefreshLoader: isRefreshLoader,
           appointment: widget.appointment,
         ),
+        error: (msg) => ErrorWidget(msg),
         orElse: () => ErrorWidget(
           "Failed to load appointments.",
         ),
@@ -81,6 +84,11 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
   final List<String> _selectedTimeSlots = [
     '8:00 - 8:15',
   ];
+  BookingGuestModel guest = BookingGuestModel(
+      firstname: "firstname",
+      lastname: "lastname",
+      description: "description",
+      emailId: "emailId");
 
   @override
   Widget build(BuildContext buildContext) {
@@ -173,8 +181,7 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
                             border: OutlineInputBorder(),
                           ),
                           controller: TextEditingController(
-                              text:
-                                  "${widget.bookings[i].guest!.firstname} ${widget.bookings[i].guest!.lastname}"),
+                              text: "${guest.firstname}} ${guest.lastname}"),
                           enabled: false, // Make text unchangeable
                           style: const TextStyle(
                               color: Colors.white), // Set text color to white
@@ -185,14 +192,13 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
                             labelText: Translate.of(context).translate('email'),
                             border: const OutlineInputBorder(),
                           ),
-                          controller: TextEditingController(
-                              text: widget.bookings[i].guest!.emailId),
+                          controller:
+                              TextEditingController(text: guest.emailId),
                           enabled: false, // Make text unchangeable
                           style: const TextStyle(
                               color: Colors.white), // Set text color to white
                         ),
-                        if ((widget.bookings[i].guest?.phoneNumber ?? '') !=
-                            '')
+                        if ((guest.phoneNumber ?? '') != '')
                           Column(
                             children: [
                               const SizedBox(height: 16),
@@ -203,8 +209,7 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
                                   border: OutlineInputBorder(),
                                 ),
                                 controller: TextEditingController(
-                                    text:
-                                        widget.bookings[i].guest!.phoneNumber),
+                                    text: guest.phoneNumber),
                                 enabled: false, // Make text unchangeable
                                 style: const TextStyle(
                                     color: Colors
@@ -212,7 +217,7 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
                               ),
                             ],
                           ),
-                        if (widget.bookings[i].guest!.description != '')
+                        if (guest.description != '')
                           Column(
                             children: [
                               const SizedBox(height: 16),
@@ -223,8 +228,7 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
                                   border: OutlineInputBorder(),
                                 ),
                                 controller: TextEditingController(
-                                    text:
-                                        widget.bookings[i].guest!.description),
+                                    text: guest.description),
                                 enabled: false, // Make text unchangeable
                                 style: const TextStyle(
                                     color: Colors

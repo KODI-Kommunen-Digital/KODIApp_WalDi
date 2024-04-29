@@ -11,4 +11,6 @@ class AppointmentDetailsState with _$AppointmentDetailsState {
 
   const factory AppointmentDetailsState.loaded(
       List<BookingModel> bookings, bool isRefreshLoader) = AppointmentDetailsStateLoaded;
+
+  const factory AppointmentDetailsState.error(String msg) = AppointmentDetailsStateError;
 }
