@@ -86,6 +86,7 @@ dependencies:
   multiple_images_picker: ^1.0.1
   webview_flutter: ^4.4.1
   html: ^0.15.4
+  package_info_plus: ^4.2.0
 
 dev_dependencies:
   flutter_test:

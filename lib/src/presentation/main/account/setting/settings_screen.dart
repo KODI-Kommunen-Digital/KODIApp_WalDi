@@ -13,6 +13,7 @@ import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/configs/theme.dart';
 import 'package:heidi/src/utils/translate.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key, this.user}) : super(key: key);
@@ -106,6 +107,11 @@ class _SettingsScreenState extends State<SettingsScreen>
         content: Text('Failed to open app settings.'),
       ));
     }
+  }
+
+  Future<String> getAppVersion() async {
+    final PackageInfo info = await PackageInfo.fromPlatform();
+    return info.version;
   }
 
   Future<void> checkNotificationPermissionStatus() async {
@@ -243,6 +249,33 @@ class _SettingsScreenState extends State<SettingsScreen>
                       Icons.keyboard_arrow_right,
                       textDirection: TextDirection.ltr,
                     ),
+                  ),
+                ],
+              ),
+            ),
+            AppListTitle(
+              title: Translate.of(context).translate('version'),
+              trailing: Row(
+                mainAxisAlignment: MainAxisAlignment
+                    .spaceBetween, // Ensures space between items
+                children: <Widget>[
+                  FutureBuilder<String>(
+                    future:
+                        getAppVersion(), // This needs to be your method to get the app version
+                    builder:
+                        (BuildContext context, AsyncSnapshot<String> snapshot) {
+                      if (snapshot.hasData) {
+                        return Text(
+                          snapshot.data!, // Display the version number
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey,
+                          ),
+                        );
+                      } else {
+                        return const CircularProgressIndicator();
+                      }
+                    },
                   ),
                 ],
               ),
