@@ -30,6 +30,17 @@ class MyAppointmentsCubit extends Cubit<MyAppointmentsState> {
     emit(MyAppointmentsState.loaded(appointments, false));
   }
 
+  Future<List<AppointmentModel>> newListings(
+      int pageNo, List<AppointmentModel> previous) async {
+    List<AppointmentModel> appointments = previous;
+    List<AppointmentModel>? newAppointments =
+        await repo.loadUserAppointments(pageNo);
+    if (newAppointments != null && newAppointments.isNotEmpty) {
+      appointments.addAll(newAppointments);
+    }
+    return appointments;
+  }
+
   Future<void> deleteAppointment(
       AppointmentModel appointment, bool deleteListing) async {
     emit(const MyAppointmentsState.loading());
@@ -51,10 +62,10 @@ class MyAppointmentsCubit extends Cubit<MyAppointmentsState> {
 
   Future<bool> onEditAppointment(
       {List<OpenTimeModel?>? openHours,
-        List<HolidayModel>? holidays,
-        List<AppointmentServiceModel>? services,
-        required int cityId,
-        required int appointmentId}) async {
+      List<HolidayModel>? holidays,
+      List<AppointmentServiceModel>? services,
+      required int cityId,
+      required int appointmentId}) async {
     try {
       final prefs = await Preferences.openBox();
       final listindId = prefs.getKeyValue(Preferences.listingId, 1);
@@ -64,12 +75,12 @@ class MyAppointmentsCubit extends Cubit<MyAppointmentsState> {
 
       if (services == null) {
         ProductModel? product =
-        await AppointmentRepository.getProductForAppointment(appointmentId);
+            await AppointmentRepository.getProductForAppointment(appointmentId);
         if (product != null) {
           List<AppointmentServiceModel>? loadedServices =
-          await AppointmentRepository.loadAppointmentServices(
-              product.cityId!, product.id, appointmentId);
-          if(loadedServices != null) {
+              await AppointmentRepository.loadAppointmentServices(
+                  product.cityId!, product.id, appointmentId);
+          if (loadedServices != null) {
             services = loadedServices;
           } else {
             logError("No services, error");
@@ -107,7 +118,8 @@ class MyAppointmentsCubit extends Cubit<MyAppointmentsState> {
   }
 
   Future<ProductModel?> getProductFromAppointment(int appointmentId) async {
-    ProductModel? product = await AppointmentRepository.getProductForAppointment(appointmentId);
+    ProductModel? product =
+        await AppointmentRepository.getProductForAppointment(appointmentId);
     if (product != null) {
       return product;
     }

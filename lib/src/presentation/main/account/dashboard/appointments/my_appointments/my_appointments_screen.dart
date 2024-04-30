@@ -59,12 +59,37 @@ class MyAppointmentsLoaded extends StatefulWidget {
 class _MyAppointmentsLoadedState extends State<MyAppointmentsLoaded> {
   final _scrollController = ScrollController(initialScrollOffset: 0.0);
   List<AppointmentModel> appointments = [];
+  bool isLoadingMore = false;
+  int pageNo = 1;
 
   @override
   void initState() {
     super.initState();
+    _scrollController.addListener(_scrollListener);
     if (widget.appointments != null) {
       appointments.addAll(widget.appointments!);
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_scrollListener);
+    super.dispose();
+  }
+
+  Future _scrollListener() async {
+    if (_scrollController.position.atEdge) {
+      if (_scrollController.position.pixels != 0) {
+        setState(() {
+          isLoadingMore = true;
+        });
+        appointments = await context
+            .read<MyAppointmentsCubit>()
+            .newListings(++pageNo, appointments);
+        setState(() {
+          isLoadingMore = false;
+        });
+      }
     }
   }
 
@@ -94,198 +119,214 @@ class _MyAppointmentsLoadedState extends State<MyAppointmentsLoaded> {
                     SliverList(
                       delegate: SliverChildBuilderDelegate(
                         (BuildContext context, int index) {
-                          final item = appointments[index];
-                          return Padding(
-                            padding: const EdgeInsets.only(top: 12),
-                            child: InkWell(
-                              onTap: () {
-                                Navigator.pushNamed(
-                                    context, Routes.appointmentDetails,
-                                    arguments: {'item': item});
-                              },
-                              child: Container(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 4),
-                                child: Stack(
-                                  children: [
-                                    Row(
-                                      children: <Widget>[
-                                        ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                          child: Image.network(
-                                            "https://newheidi.obs.eu-de.otc.t-systems.com/user_8/city_1_listing_15_2_1709543526085",
-                                            width: 120,
-                                            height: 140,
-                                            fit: BoxFit.cover,
-                                            errorBuilder:
-                                                (context, error, stackTrace) {
-                                              // Handle errors here
-                                              return AppPlaceholder(
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            12),
-                                                    color: Colors.white,
-                                                  ),
-                                                  width: 120,
-                                                  height: 140,
-                                                  child:
-                                                      const Icon(Icons.error),
-                                                ),
-                                              );
-                                            },
-                                            loadingBuilder: (context, child,
-                                                loadingProgress) {
-                                              if (loadingProgress == null) {
-                                                return child;
-                                              }
-                                              return AppPlaceholder(
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            12),
-                                                    color: Colors.white,
-                                                  ),
-                                                  width: 120,
-                                                  height: 140,
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                        ),
-                                        const SizedBox(width: 8),
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: <Widget>[
-                                              Text(
-                                                item.title,
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodySmall!
-                                                    .copyWith(
-                                                      fontWeight:
-                                                          FontWeight.bold,
+                          if (index < appointments.length) {
+                            final item = appointments[index];
+                            return Padding(
+                              padding: const EdgeInsets.only(top: 12),
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                      context, Routes.appointmentDetails,
+                                      arguments: {'item': item});
+                                },
+                                child: Container(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 4),
+                                  child: Stack(
+                                    children: [
+                                      Row(
+                                        children: <Widget>[
+                                          ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                            child: Image.network(
+                                              "https://newheidi.obs.eu-de.otc.t-systems.com/user_8/city_1_listing_15_2_1709543526085",
+                                              width: 120,
+                                              height: 140,
+                                              fit: BoxFit.cover,
+                                              errorBuilder:
+                                                  (context, error, stackTrace) {
+                                                // Handle errors here
+                                                return AppPlaceholder(
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              12),
+                                                      color: Colors.white,
                                                     ),
-                                              ),
-                                              Text(item.description,
+                                                    width: 120,
+                                                    height: 140,
+                                                    child:
+                                                        const Icon(Icons.error),
+                                                  ),
+                                                );
+                                              },
+                                              loadingBuilder: (context, child,
+                                                  loadingProgress) {
+                                                if (loadingProgress == null) {
+                                                  return child;
+                                                }
+                                                return AppPlaceholder(
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              12),
+                                                      color: Colors.white,
+                                                    ),
+                                                    width: 120,
+                                                    height: 140,
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                          const SizedBox(width: 8),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                Text(
+                                                  item.title,
                                                   style: Theme.of(context)
                                                       .textTheme
                                                       .bodySmall!
                                                       .copyWith(
                                                         fontWeight:
-                                                            FontWeight.normal,
-                                                      )),
-                                              Text(item.startDate,
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodySmall!)
-                                            ],
+                                                            FontWeight.bold,
+                                                      ),
+                                                ),
+                                                Text(item.description,
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodySmall!
+                                                        .copyWith(
+                                                          fontWeight:
+                                                              FontWeight.normal,
+                                                        )),
+                                                Text(item.startDate,
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodySmall!)
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                        const Spacer(),
-                                        PopupMenuButton<String>(
-                                          icon: const Icon(
-                                            Icons
-                                                .more_vert, // Three vertical dots icon
-                                          ),
-                                          onSelected: (String choice) async {
-                                            if (choice ==
-                                                Translate.of(context).translate(
-                                                    'delete_appointments')) {
-                                              final response =
-                                                  await showRemoveAppointmentPopup(
-                                                      context);
-                                              bool deleteListing =
-                                                  await showRemoveAppointmentListingPopup(
-                                                      context);
-                                              if (response) {
-                                                setState(() {
-                                                  context
-                                                      .read<
-                                                          MyAppointmentsCubit>()
-                                                      .deleteAppointment(
-                                                          appointments[index],
-                                                          deleteListing);
-                                                });
-                                              }
-                                            }
-
-                                            if (!mounted) return;
-
-                                            if (choice ==
-                                                Translate.of(context).translate(
-                                                    'edit_appointments')) {
-                                              if (!mounted) return;
-                                              ProductModel? product =
-                                                  await context
-                                                      .read<
-                                                          MyAppointmentsCubit>()
-                                                      .getProductFromAppointment(
-                                                          item.id!);
-                                              if (product != null) {
-                                                final servicesResponse =
-                                                    await Navigator.pushNamed(
-                                                        context,
-                                                        Routes
-                                                            .createAppointment,
-                                                        arguments: {
-                                                      'item': product
-                                                    });
-                                                if (servicesResponse != null) {
-                                                  List<dynamic>
-                                                      servicesUpdated =
-                                                      servicesResponse
-                                                          as List<dynamic>;
-                                                  await context
-                                                      .read<
-                                                          MyAppointmentsCubit>()
-                                                      .onEditAppointment(
-                                                          services:
-                                                              servicesUpdated[0]
-                                                                  as List<
-                                                                      AppointmentServiceModel>,
-                                                          openHours:
-                                                              item.openHours,
-                                                          holidays:
-                                                              item.holidays,
-                                                          cityId:
-                                                              product.cityId ??
-                                                                  item.cityId ??
-                                                                  0,
-                                                          appointmentId:
-                                                              item.id!);
+                                          const Spacer(),
+                                          PopupMenuButton<String>(
+                                            icon: const Icon(
+                                              Icons
+                                                  .more_vert, // Three vertical dots icon
+                                            ),
+                                            onSelected: (String choice) async {
+                                              if (choice ==
+                                                  Translate.of(context).translate(
+                                                      'delete_appointments')) {
+                                                final response =
+                                                    await showRemoveAppointmentPopup(
+                                                        context);
+                                                bool deleteListing =
+                                                    await showRemoveAppointmentListingPopup(
+                                                        context);
+                                                if (response) {
+                                                  setState(() {
+                                                    context
+                                                        .read<
+                                                            MyAppointmentsCubit>()
+                                                        .deleteAppointment(
+                                                            appointments[index],
+                                                            deleteListing);
+                                                  });
                                                 }
                                               }
-                                            }
-                                          },
-                                          itemBuilder: (BuildContext context) {
-                                            return {
-                                              Translate.of(context).translate(
-                                                  'delete_appointments'),
-                                              Translate.of(context).translate(
-                                                  'edit_appointments')
-                                            }.map((String choice) {
-                                              return PopupMenuItem<String>(
-                                                value: choice,
-                                                child: Text(choice),
-                                              );
-                                            }).toList();
-                                          },
-                                        )
-                                      ],
-                                    ),
-                                  ],
+
+                                              if (!mounted) return;
+
+                                              if (choice ==
+                                                  Translate.of(context)
+                                                      .translate(
+                                                          'edit_appointments')) {
+                                                if (!mounted) return;
+                                                ProductModel? product = await context
+                                                    .read<MyAppointmentsCubit>()
+                                                    .getProductFromAppointment(
+                                                        item.id!);
+                                                if (product != null) {
+                                                  final servicesResponse =
+                                                      await Navigator.pushNamed(
+                                                          context,
+                                                          Routes
+                                                              .createAppointment,
+                                                          arguments: {
+                                                        'item': product
+                                                      });
+                                                  if (servicesResponse !=
+                                                      null) {
+                                                    List<dynamic>
+                                                        servicesUpdated =
+                                                        servicesResponse
+                                                            as List<dynamic>;
+                                                    await context
+                                                        .read<
+                                                            MyAppointmentsCubit>()
+                                                        .onEditAppointment(
+                                                            services:
+                                                                servicesUpdated[
+                                                                        0]
+                                                                    as List<
+                                                                        AppointmentServiceModel>,
+                                                            openHours:
+                                                                item.openHours,
+                                                            holidays:
+                                                                item.holidays,
+                                                            cityId: product
+                                                                    .cityId ??
+                                                                item.cityId ??
+                                                                0,
+                                                            appointmentId:
+                                                                item.id!);
+                                                  }
+                                                }
+                                              }
+                                            },
+                                            itemBuilder:
+                                                (BuildContext context) {
+                                              return {
+                                                Translate.of(context).translate(
+                                                    'delete_appointments'),
+                                                Translate.of(context).translate(
+                                                    'edit_appointments')
+                                              }.map((String choice) {
+                                                return PopupMenuItem<String>(
+                                                  value: choice,
+                                                  child: Text(choice),
+                                                );
+                                              }).toList();
+                                            },
+                                          )
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          );
+                            );
+                          } else {
+                            return (isLoadingMore)
+                                ? const Positioned(
+                                    bottom: 20,
+                                    left: 0,
+                                    right: 0,
+                                    child: Center(
+                                      child:
+                                          CircularProgressIndicator.adaptive(),
+                                    ),
+                                  )
+                                : Container();
+                          }
                         },
-                        childCount: appointments.length,
+                        childCount: appointments.length + 1,
                       ),
                     ),
                   ],
