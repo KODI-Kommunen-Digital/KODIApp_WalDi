@@ -1,6 +1,6 @@
 name: heidi
 description: A new Flutter project.
-version: 1.0.7
+version: 1.0.8
 
 environment:
   sdk: '>=2.19.6 <3.0.0'

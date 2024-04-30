@@ -227,7 +227,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         String? minAppVersion}) {
                       if (display != null) {
                         setState(() {
-                          latestAppStoreVersion = appStoreVersion ?? '2.4.2';
+                          latestAppStoreVersion = appStoreVersion ?? '2.4.3';
                         });
                       }
                     },

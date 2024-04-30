@@ -514,7 +514,7 @@
   "no_reply":"Keine Antworten",
   "image_size_exceed":"Bildgröße wurde überschritten",
   "select_small_images":"Bitte wählen Sie Bilder aus, die 10 MB oder weniger groß sind.",
-  "quelle":"Quelle",
+  "quelle":"Quelle:",
   "choose_time_period": "Zeitraum auswählen",
   "choose_listing_status": "Beitragsstatus auswählen",
   "choose_forum": "Forum auswählen",
