@@ -627,6 +627,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
           setState(() {
             isLoading = false;
           });
+          _createAppointment();
           _onSuccess();
           if (!mounted) return;
           context.read<AddListingCubit>().clearAssets();
