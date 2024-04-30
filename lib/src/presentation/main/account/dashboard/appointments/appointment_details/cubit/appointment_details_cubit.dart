@@ -21,7 +21,6 @@ class AppointmentDetailsCubit extends Cubit<AppointmentDetailsState> {
       repo = AppointmentRepository(prefs);
     }
 
-    //Guest Details missing
     List<BookingModel>? bookings =
         await repo.loadOwnerBookings(1, appointmentId);
 
@@ -45,6 +44,31 @@ class AppointmentDetailsCubit extends Cubit<AppointmentDetailsState> {
     } else {
       emit(const AppointmentDetailsState.error("Failed to load appointments."));
     }
+  }
+
+  Future<List<BookingGuestModel>> newGuestBookings(int pageNo, List<BookingGuestModel> previousGuestBookings, int appointmentId) async {
+    List<BookingGuestModel> guestBookings = previousGuestBookings;
+
+    List<BookingModel>? newBookings =
+    await repo.loadOwnerBookings(pageNo, appointmentId);
+
+    if (newBookings != null) {
+      List<BookingGuestModel> guests = [];
+
+      for (var booking in newBookings) {
+        UserModel? guest =
+        await UserRepository.requestUserDetails(booking.userId);
+        if (guest != null) {
+          guests.add(BookingGuestModel.fromUser(guest, slot: getSchedule(booking.startTime!, booking.endTime!)));
+        }
+      }
+
+      if ((newBookings.isNotEmpty && guests.isNotEmpty) ||
+          (newBookings.isEmpty && guests.isEmpty)) {
+        guestBookings.addAll(guests);
+      }
+    }
+    return guestBookings;
   }
 
 
