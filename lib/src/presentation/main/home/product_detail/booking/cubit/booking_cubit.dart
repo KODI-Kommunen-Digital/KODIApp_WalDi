@@ -25,7 +25,7 @@ class BookingCubit extends Cubit<BookingState> {
           await AppointmentRepository.loadAppointment(cityId, listingId);
 
       if (appointment != null) {
-        final services = await _appointmentRepo.loadAppointmentServices(
+        final services = await AppointmentRepository.loadAppointmentServices(
             cityId!, listingId, appointment.id!);
 
         if (services != null) {

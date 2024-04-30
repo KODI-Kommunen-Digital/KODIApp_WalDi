@@ -19,21 +19,22 @@ mixin _$CreateAppointmentState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function() loaded,
+    required TResult Function(List<AppointmentServiceModel>? loadedEntries)
+        loaded,
     required TResult Function(String error) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
-    TResult? Function()? loaded,
+    TResult? Function(List<AppointmentServiceModel>? loadedEntries)? loaded,
     TResult? Function(String error)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function()? loaded,
+    TResult Function(List<AppointmentServiceModel>? loadedEntries)? loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) =>
@@ -122,7 +123,8 @@ class _$CreateAppointmentLoading implements CreateAppointmentLoading {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function() loaded,
+    required TResult Function(List<AppointmentServiceModel>? loadedEntries)
+        loaded,
     required TResult Function(String error) error,
   }) {
     return loading();
@@ -132,7 +134,7 @@ class _$CreateAppointmentLoading implements CreateAppointmentLoading {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
-    TResult? Function()? loaded,
+    TResult? Function(List<AppointmentServiceModel>? loadedEntries)? loaded,
     TResult? Function(String error)? error,
   }) {
     return loading?.call();
@@ -142,7 +144,7 @@ class _$CreateAppointmentLoading implements CreateAppointmentLoading {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function()? loaded,
+    TResult Function(List<AppointmentServiceModel>? loadedEntries)? loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
@@ -196,6 +198,8 @@ abstract class _$$CreateAppointmentLoadedCopyWith<$Res> {
   factory _$$CreateAppointmentLoadedCopyWith(_$CreateAppointmentLoaded value,
           $Res Function(_$CreateAppointmentLoaded) then) =
       __$$CreateAppointmentLoadedCopyWithImpl<$Res>;
+  @useResult
+  $Res call({List<AppointmentServiceModel>? loadedEntries});
 }
 
 /// @nodoc
@@ -206,58 +210,94 @@ class __$$CreateAppointmentLoadedCopyWithImpl<$Res>
   __$$CreateAppointmentLoadedCopyWithImpl(_$CreateAppointmentLoaded _value,
       $Res Function(_$CreateAppointmentLoaded) _then)
       : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? loadedEntries = freezed,
+  }) {
+    return _then(_$CreateAppointmentLoaded(
+      freezed == loadedEntries
+          ? _value._loadedEntries
+          : loadedEntries // ignore: cast_nullable_to_non_nullable
+              as List<AppointmentServiceModel>?,
+    ));
+  }
 }
 
 /// @nodoc
 
 class _$CreateAppointmentLoaded implements CreateAppointmentLoaded {
-  const _$CreateAppointmentLoaded();
+  const _$CreateAppointmentLoaded(
+      final List<AppointmentServiceModel>? loadedEntries)
+      : _loadedEntries = loadedEntries;
+
+  final List<AppointmentServiceModel>? _loadedEntries;
+  @override
+  List<AppointmentServiceModel>? get loadedEntries {
+    final value = _loadedEntries;
+    if (value == null) return null;
+    if (_loadedEntries is EqualUnmodifiableListView) return _loadedEntries;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
 
   @override
   String toString() {
-    return 'CreateAppointmentState.loaded()';
+    return 'CreateAppointmentState.loaded(loadedEntries: $loadedEntries)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CreateAppointmentLoaded);
+            other is _$CreateAppointmentLoaded &&
+            const DeepCollectionEquality()
+                .equals(other._loadedEntries, _loadedEntries));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(
+      runtimeType, const DeepCollectionEquality().hash(_loadedEntries));
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$CreateAppointmentLoadedCopyWith<_$CreateAppointmentLoaded> get copyWith =>
+      __$$CreateAppointmentLoadedCopyWithImpl<_$CreateAppointmentLoaded>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function() loaded,
+    required TResult Function(List<AppointmentServiceModel>? loadedEntries)
+        loaded,
     required TResult Function(String error) error,
   }) {
-    return loaded();
+    return loaded(loadedEntries);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
-    TResult? Function()? loaded,
+    TResult? Function(List<AppointmentServiceModel>? loadedEntries)? loaded,
     TResult? Function(String error)? error,
   }) {
-    return loaded?.call();
+    return loaded?.call(loadedEntries);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function()? loaded,
+    TResult Function(List<AppointmentServiceModel>? loadedEntries)? loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded();
+      return loaded(loadedEntries);
     }
     return orElse();
   }
@@ -298,7 +338,14 @@ class _$CreateAppointmentLoaded implements CreateAppointmentLoaded {
 }
 
 abstract class CreateAppointmentLoaded implements CreateAppointmentState {
-  const factory CreateAppointmentLoaded() = _$CreateAppointmentLoaded;
+  const factory CreateAppointmentLoaded(
+          final List<AppointmentServiceModel>? loadedEntries) =
+      _$CreateAppointmentLoaded;
+
+  List<AppointmentServiceModel>? get loadedEntries;
+  @JsonKey(ignore: true)
+  _$$CreateAppointmentLoadedCopyWith<_$CreateAppointmentLoaded> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -367,7 +414,8 @@ class _$CreateAppointmentError implements CreateAppointmentError {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function() loaded,
+    required TResult Function(List<AppointmentServiceModel>? loadedEntries)
+        loaded,
     required TResult Function(String error) error,
   }) {
     return error(this.error);
@@ -377,7 +425,7 @@ class _$CreateAppointmentError implements CreateAppointmentError {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
-    TResult? Function()? loaded,
+    TResult? Function(List<AppointmentServiceModel>? loadedEntries)? loaded,
     TResult? Function(String error)? error,
   }) {
     return error?.call(this.error);
@@ -387,7 +435,7 @@ class _$CreateAppointmentError implements CreateAppointmentError {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function()? loaded,
+    TResult Function(List<AppointmentServiceModel>? loadedEntries)? loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {

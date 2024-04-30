@@ -55,7 +55,7 @@ class AppointmentRepository {
     return null;
   }
 
-  Future<ProductModel?> getProductForAppointment(int appointmentId) async {
+  static Future<ProductModel?> getProductForAppointment(int appointmentId) async {
     final response = await Api.requestProductForAppointment(appointmentId);
 
     if (response.success) {
@@ -71,7 +71,7 @@ class AppointmentRepository {
     return null;
   }
 
-  Future<List<AppointmentServiceModel>?> loadAppointmentServices(
+  static Future<List<AppointmentServiceModel>?> loadAppointmentServices(
       int cityId, int listingId, int appointmentId) async {
     final response = await Api.requestAppointmentServices(
         cityId: cityId, listingId: listingId, appointmentId: appointmentId);
@@ -201,7 +201,7 @@ class AppointmentRepository {
       String? startDate,
       String? endDate,
       int? maxBookingPerSlot,
-      List<OpenTimeModel>? openHours,
+      List<OpenTimeModel?>? openHours,
       List<HolidayModel>? holidays,
       List<AppointmentServiceModel>? services}) async {
     final cityId = await ListRepository.getCityId(city);
@@ -430,7 +430,7 @@ class AppointmentRepository {
   }
 
   static Map<String, List<Map<String, String>>?> parseOpenHours(
-      List<OpenTimeModel> openHours) {
+      List<OpenTimeModel?> openHours) {
     const daysOfWeek = [
       'Monday',
       'Tuesday',
@@ -444,7 +444,7 @@ class AppointmentRepository {
     Map<String, List<Map<String, String>>?> parsedOpenHours = {};
     for (int i = 0; i < 7; i++) {
       OpenTimeModel? day =
-          openHours.firstWhereOrNull((element) => element.dayOfWeek == i + 1);
+          openHours.firstWhereOrNull((element) => element?.dayOfWeek == i + 1);
       if (day != null) {
         List<Map<String, String>> hours = [];
         for (ScheduleModel schedule in day.schedule) {

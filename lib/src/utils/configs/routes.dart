@@ -337,6 +337,7 @@ class Routes {
               child: CreateAppointmentScreen(
                 serviceEntries: arguments['serviceEntries']
                     as List<AppointmentServiceModel>?,
+                item: arguments['item'] as ProductModel?,
               ),
             );
           },

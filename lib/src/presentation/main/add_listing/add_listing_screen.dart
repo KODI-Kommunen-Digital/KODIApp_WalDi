@@ -688,20 +688,11 @@ class _AddListingScreenState extends State<AddListingScreen> {
   }
 
   Future<void> _createAppointment() async {
-    if (widget.item == null) {
-      await context.read<AddListingCubit>().onSubmitAppointment(
-          services: serviceEntries,
-          openHours: timeSlots,
-          holidays: [],
-          city: selectedCity ?? "");
-    } else {
-      await context.read<AddListingCubit>().onEditAppointment(
-          services: serviceEntries,
-          openHours: timeSlots,
-          holidays: [],
-          city: selectedCity ?? "",
-          appointmentId: widget.item!.appointmentId!);
-    }
+    await context.read<AddListingCubit>().onSubmitAppointment(
+        services: serviceEntries,
+        openHours: timeSlots,
+        holidays: [],
+        city: selectedCity ?? "");
   }
 
   bool _validData() {
@@ -743,7 +734,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       _errorContent = "value_desc_limit_exceeded";
     } else if (_textContentController.text.length < 3) {
       _errorContent = "value_asc_limit_exceeded";
-    } else{
+    } else {
       _errorContent = UtilValidator.validate(_textContentController.text,
           allowEmpty: false);
     }
@@ -1270,8 +1261,13 @@ class _AddListingScreenState extends State<AddListingScreen> {
                             Text(
                               Translate.of(context)
                                   .translate('appointmentDetails'),
-                              style: const TextStyle(
-                                  fontSize: 16, color: Colors.white),
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge
+                                          ?.color ??
+                                      Colors.white),
                             ),
                             const SizedBox(
                               width: 4,

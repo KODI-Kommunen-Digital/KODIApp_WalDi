@@ -2,16 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_open_time.dart';
 import 'package:heidi/src/data/model/model_appointment_service.dart';
+import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/presentation/main/add_listing/create_appointment/cubit/create_appointment_state.dart';
 import 'package:heidi/src/presentation/main/add_listing/create_appointment/cubit/create_appoitment_cubit.dart';
 import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
-class CreateAppointmentScreen extends StatelessWidget {
+class CreateAppointmentScreen extends StatefulWidget {
   final List<AppointmentServiceModel>? serviceEntries;
+  final ProductModel? item;
 
-  const CreateAppointmentScreen({super.key, required this.serviceEntries});
+  const CreateAppointmentScreen(
+      {super.key, required this.serviceEntries, required this.item});
+
+  @override
+  State<CreateAppointmentScreen> createState() =>
+      _CreateAppointmentScreenState();
+}
+
+class _CreateAppointmentScreenState extends State<CreateAppointmentScreen> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<CreateAppointmentCubit>().onLoad(widget.item);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +34,9 @@ class CreateAppointmentScreen extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) => state.maybeWhen(
         loading: () => const CreateAppointmentLoading(),
-        loaded: () => CreateAppointmentLoaded(
-          serviceEntries: serviceEntries,
-        ),
+        loaded: (loadedEntries) => CreateAppointmentLoaded(
+            serviceEntries: widget.serviceEntries,
+            loadedEntries: loadedEntries),
         orElse: () => ErrorWidget('Failed to load Accounts.'),
       ),
     );
@@ -41,8 +56,10 @@ class CreateAppointmentLoading extends StatelessWidget {
 
 class CreateAppointmentLoaded extends StatefulWidget {
   final List<AppointmentServiceModel>? serviceEntries;
+  final List<AppointmentServiceModel>? loadedEntries;
 
-  const CreateAppointmentLoaded({super.key, required this.serviceEntries});
+  const CreateAppointmentLoaded(
+      {super.key, required this.serviceEntries, required this.loadedEntries});
 
   @override
   State<CreateAppointmentLoaded> createState() =>
@@ -50,7 +67,7 @@ class CreateAppointmentLoaded extends StatefulWidget {
 }
 
 class _CreateAppointmentLoadedState extends State<CreateAppointmentLoaded> {
-  List<AppointmentServiceModel>? serviceEntries;
+  List<AppointmentServiceModel> serviceEntries = [];
   List<OpenTimeModel> timeSlots = [];
   List<DateTime?> selectedDates = [];
   bool nameError = true;
@@ -70,8 +87,12 @@ class _CreateAppointmentLoadedState extends State<CreateAppointmentLoaded> {
     super.initState();
     if (widget.serviceEntries != null) {
       serviceEntries = [];
-      serviceEntries!.addAll(widget.serviceEntries!);
-    } else {
+      serviceEntries.addAll(widget.serviceEntries!);
+    }
+    if (widget.loadedEntries != null) {
+      serviceEntries.addAll(widget.loadedEntries ?? []);
+    }
+    if (widget.loadedEntries == null && widget.serviceEntries == null) {
       serviceEntries = [
         AppointmentServiceModel(
             id: 1,
@@ -81,6 +102,10 @@ class _CreateAppointmentLoadedState extends State<CreateAppointmentLoaded> {
             duration: 15,
             slotSameAsAppointment: true)
       ];
+    }
+
+    for(AppointmentServiceModel service in serviceEntries) {
+      service.controller.text = service.name;
     }
   }
 
@@ -154,7 +179,7 @@ class _CreateAppointmentLoadedState extends State<CreateAppointmentLoaded> {
       padding: const EdgeInsets.all(10.0),
       child: Column(
         children: <Widget>[
-          for (int index = 0; index < serviceEntries!.length; index++)
+          for (int index = 0; index < serviceEntries.length; index++)
             Column(
               children: [
                 Row(
@@ -163,7 +188,7 @@ class _CreateAppointmentLoadedState extends State<CreateAppointmentLoaded> {
                       child: Form(
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         child: TextFormField(
-                          controller: serviceEntries![index].controller,
+                          controller: serviceEntries[index].controller,
                           decoration: InputDecoration(
                             labelText: Translate.of(context)
                                 .translate('addServiceName'),
@@ -171,7 +196,7 @@ class _CreateAppointmentLoadedState extends State<CreateAppointmentLoaded> {
                           ),
                           onChanged: (value) {
                             setState(() {
-                              serviceEntries![index].name = value;
+                              serviceEntries[index].name = value;
                             });
                           },
                           validator: (value) {
@@ -188,7 +213,7 @@ class _CreateAppointmentLoadedState extends State<CreateAppointmentLoaded> {
                     ),
                     const SizedBox(width: 8),
                     Visibility(
-                      visible: !serviceEntries![index].providedTimeSlots,
+                      visible: !serviceEntries[index].providedTimeSlots,
                       child: IconButton(
                         icon: const Icon(
                           Icons.calendar_month,
@@ -207,7 +232,7 @@ class _CreateAppointmentLoadedState extends State<CreateAppointmentLoaded> {
                       onPressed: () {
                         setState(() {
                           setState(() {
-                            serviceEntries!.removeAt(index);
+                            serviceEntries.removeAt(index);
                           });
                           // widget.onDelete!(widget.index);
                           // employeeTimeSlots.removeAt(index);
@@ -238,10 +263,10 @@ class _CreateAppointmentLoadedState extends State<CreateAppointmentLoaded> {
                     Text("${Translate.of(context).translate("duration")}:"),
                     const SizedBox(width: 20),
                     DropdownButton<int>(
-                      value: serviceEntries![index].duration,
+                      value: serviceEntries[index].duration,
                       onChanged: (value) {
                         setState(() {
-                          serviceEntries![index].duration = value!;
+                          serviceEntries[index].duration = value!;
                           // widget.onEntryCallback!(entry!);
                         });
                       },
@@ -265,11 +290,11 @@ class _CreateAppointmentLoadedState extends State<CreateAppointmentLoaded> {
           Row(
             children: <Widget>[
               IconButton(
-                icon: const Icon(Icons.add_circle, color: Colors.white),
+                icon: Icon(Icons.add_circle, color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white),
                 onPressed: () {
                   // Add a new service entry
                   setState(() {
-                    serviceEntries!.add(AppointmentServiceModel(
+                    serviceEntries.add(AppointmentServiceModel(
                         id: 1,
                         appointmentId: 1,
                         name: '',

@@ -188,7 +188,7 @@ class AddListingCubit extends Cubit<AddListingState> {
 
     try {
       final response =
-      await _repo.editProductStatus(listingId, cityId, statusId);
+          await _repo.editProductStatus(listingId, cityId, statusId);
       if (response.success) {
         return true;
       } else {
@@ -340,10 +340,11 @@ class AddListingCubit extends Cubit<AddListingState> {
     _repo.clearImagePath();
   }
 
-  Future<bool> onSubmitAppointment({List<OpenTimeModel>? openHours,
-    List<HolidayModel>? holidays,
-    List<AppointmentServiceModel>? services,
-    required String city}) async {
+  Future<bool> onSubmitAppointment(
+      {List<OpenTimeModel>? openHours,
+      List<HolidayModel>? holidays,
+      List<AppointmentServiceModel>? services,
+      required String city}) async {
     try {
       final prefs = await Preferences.openBox();
       final listindId = prefs.getKeyValue(Preferences.listingId, 1);
@@ -368,41 +369,6 @@ class AddListingCubit extends Cubit<AddListingState> {
       }
     } catch (e, stackTrace) {
       logError('save Appointment Error', e);
-      await Sentry.captureException(e, stackTrace: stackTrace);
-      return false;
-    }
-  }
-
-  Future<bool> onEditAppointment({List<OpenTimeModel>? openHours,
-    List<HolidayModel>? holidays,
-    List<AppointmentServiceModel>? services,
-    required String city,
-    required int appointmentId}) async {
-    try {
-      final prefs = await Preferences.openBox();
-      final listindId = prefs.getKeyValue(Preferences.listingId, 1);
-      final listingTitle = prefs.getKeyValue(Preferences.listingTitle, '');
-      final listingDesc = prefs.getKeyValue(Preferences.listingDesc, '');
-      AppointmentRepository repoAppointment = AppointmentRepository(prefs);
-      final response = await repoAppointment.editAppointment(
-          listingId: listindId,
-          appointmentId: appointmentId,
-          title: listingTitle,
-          description: listingDesc,
-          startDate: "2024-04-02T12:30:45.000Z",
-          maxBookingPerSlot: 8,
-          openHours: openHours,
-          holidays: holidays,
-          city: city,
-          services: services);
-      if (response.success) {
-        return true;
-      } else {
-        logError('Edit Appointment Error', response.message);
-        return false;
-      }
-    } catch (e, stackTrace) {
-      logError('Edit Appointment Error', e);
       await Sentry.captureException(e, stackTrace: stackTrace);
       return false;
     }

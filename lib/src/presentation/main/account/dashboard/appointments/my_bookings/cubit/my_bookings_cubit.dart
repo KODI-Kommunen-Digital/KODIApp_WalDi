@@ -27,7 +27,7 @@ class MyBookingsCubit extends Cubit<MyBookingsState> {
 
       for (var booking in responseData) {
         ProductModel? product =
-            await repo.getProductForAppointment(booking.appointmentId);
+            await AppointmentRepository.getProductForAppointment(booking.appointmentId);
         if (product != null) {
           bookings.add(BookingModel(
               id: booking.id,

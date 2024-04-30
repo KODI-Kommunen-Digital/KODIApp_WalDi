@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_appointment.dart';
+import 'package:heidi/src/data/model/model_appointment_service.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/appointments/my_appointments/cubit/my_appointments_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/appointments/my_appointments/cubit/my_appointments_state.dart';
@@ -208,7 +209,8 @@ class _MyAppointmentsLoadedState extends State<MyAppointmentsLoaded> {
                                                       .read<
                                                           MyAppointmentsCubit>()
                                                       .deleteAppointment(
-                                                          appointments[index], deleteListing);
+                                                          appointments[index],
+                                                          deleteListing);
                                                 });
                                               }
                                             }
@@ -226,14 +228,38 @@ class _MyAppointmentsLoadedState extends State<MyAppointmentsLoaded> {
                                                       .getProductFromAppointment(
                                                           item.id!);
                                               if (product != null) {
-                                                Navigator.pushNamed(
-                                                  context,
-                                                  Routes.submit,
-                                                  arguments: {
-                                                    'item': product,
-                                                    'isNewList': false
-                                                  },
-                                                );
+                                                final servicesResponse =
+                                                    await Navigator.pushNamed(
+                                                        context,
+                                                        Routes
+                                                            .createAppointment,
+                                                        arguments: {
+                                                      'item': product
+                                                    });
+                                                if (servicesResponse != null) {
+                                                  List<dynamic>
+                                                      servicesUpdated =
+                                                      servicesResponse
+                                                          as List<dynamic>;
+                                                  await context
+                                                      .read<
+                                                          MyAppointmentsCubit>()
+                                                      .onEditAppointment(
+                                                          services:
+                                                              servicesUpdated[0]
+                                                                  as List<
+                                                                      AppointmentServiceModel>,
+                                                          openHours:
+                                                              item.openHours,
+                                                          holidays:
+                                                              item.holidays,
+                                                          cityId:
+                                                              product.cityId ??
+                                                                  item.cityId ??
+                                                                  0,
+                                                          appointmentId:
+                                                              item.id!);
+                                                }
                                               }
                                             }
                                           },
