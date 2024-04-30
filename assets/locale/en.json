@@ -75,6 +75,7 @@
   "Username cannot contain spaces": "Das Benutzername darf keine Leerzeichen enthalten.",
   "Password hint": "-Minimum length 8 \n-Must not contain space.",
   "Username hint": "-Minimum length 6 \n-Maximum length 15 \n-Lowercase letters (a-z) \n-Must not contain space instead use '_'.",
+  "service_hint": "Minimum length 3",
   "Username is required.": "Username is required.",
   "Username must be at least 6 characters long.": "Username must be at least 6 characters long.",
   "Username must not exceed 15 characters.": "Username must not exceed 15 characters.",

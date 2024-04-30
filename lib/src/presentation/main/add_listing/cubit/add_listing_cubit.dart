@@ -1,10 +1,15 @@
-import 'dart:io';
+// ignore_for_file: use_build_context_synchronously
 
-import 'package:bloc/bloc.dart';
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model.dart';
+import 'package:heidi/src/data/model/model_appointment_service.dart';
 import 'package:heidi/src/data/model/model_category.dart';
+import 'package:heidi/src/data/model/model_holiday.dart';
+import 'package:heidi/src/data/model/model_open_time.dart';
 import 'package:heidi/src/data/model/model_product.dart';
+import 'package:heidi/src/data/repository/appointment_repository.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/presentation/main/add_listing/cubit/add_listing_state.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
@@ -331,5 +336,39 @@ class AddListingCubit extends Cubit<AddListingState> {
 
   Future<void> clearImagePath() async {
     _repo.clearImagePath();
+  }
+
+  Future<bool> onSubmitAppointment(
+      {List<OpenTimeModel>? openHours,
+      List<HolidayModel>? holidays,
+      List<AppointmentServiceModel>? services,
+      required String city}) async {
+    try {
+      final prefs = await Preferences.openBox();
+      final listindId = prefs.getKeyValue(Preferences.listingId, 1);
+      final listingTitle = prefs.getKeyValue(Preferences.listingTitle, '');
+      final listingDesc = prefs.getKeyValue(Preferences.listingDesc, '');
+      AppointmentRepository repoAppointment = AppointmentRepository(prefs);
+      final response = await repoAppointment.saveAppointment(
+          listingId: listindId,
+          title: listingTitle,
+          description: listingDesc,
+          startDate: "2024-04-02T12:30:45.000Z",
+          maxBookingPerSlot: 8,
+          openHours: openHours,
+          holidays: holidays,
+          city: city,
+          services: services);
+      if (response.success) {
+        return true;
+      } else {
+        logError('Save Appointment Error', response.message);
+        return false;
+      }
+    } catch (e, stackTrace) {
+      logError('save Appointment Error', e);
+      await Sentry.captureException(e, stackTrace: stackTrace);
+      return false;
+    }
   }
 }

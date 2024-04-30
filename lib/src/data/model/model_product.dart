@@ -216,7 +216,9 @@ class ProductModel {
     } else if (json['categoryId'] == 15) {
       category = "Mitteilungsblatt";
     } else if (json['categoryId'] == 16) {
-      category = "Amtliche Mitteilungen";
+      category = "Amtliche Mitteilung";
+    } else if (json['categoryId'] == 18) {
+      category = "Terminbuchung";
     }
 
     if (json['sourceId'] == 3 && json['externalId'] != null) {

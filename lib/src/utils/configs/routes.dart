@@ -1,10 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:heidi/src/data/model/model.dart';
+import 'package:heidi/src/data/model/model_appointment.dart';
+import 'package:heidi/src/data/model/model_appointment_service.dart';
+import 'package:heidi/src/data/model/model_forum_group.dart';
+import 'package:heidi/src/data/model/model_group_posts.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_user.dart';
 import 'package:heidi/src/presentation/main/account/change_password/change_password_screen.dart';
 import 'package:heidi/src/presentation/main/account/contact_us/contact_us_screen.dart';
 import 'package:heidi/src/presentation/main/account/contact_us/contact_us_success/contact_us_success.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/all_requests/all_requests_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/all_requests/cubit/all_requests_cubit.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/appointments/appointment_details/appointment_detail_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/appointments/appointment_details/cubit/appointment_details_cubit.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/appointments/appointment_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/appointments/my_appointments/cubit/my_appointments_cubit.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/appointments/my_appointments/my_appointments_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/appointments/requests/appointment_requests_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/appointments/requests/cubit/appointment_requests_cubit.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/my_groups/cubit/my_groups_cubit.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/my_groups/my_groups_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/my_listings/my_listings_screen.dart';
+// import 'package:heidi/src/presentation/main/account/dashboard/test/test.dart';
 import 'package:heidi/src/presentation/main/account/edit_profile/edit_profile_screen.dart';
 import 'package:heidi/src/presentation/main/account/legal/imprint/imprint.dart';
 import 'package:heidi/src/presentation/main/account/legal/legal.dart';
@@ -21,8 +39,14 @@ import 'package:heidi/src/presentation/main/dashboard/all_requests/cubit/all_req
 import 'package:heidi/src/presentation/main/dashboard/dashboard_screen.dart';
 import 'package:heidi/src/presentation/main/dashboard/my_listings/my_listings_screen.dart';
 import 'package:heidi/src/presentation/main/discovery/mitreden_webview.dart';
+import 'package:heidi/src/presentation/main/add_listing/create_appointment/create_appointment_screen.dart';
+import 'package:heidi/src/presentation/main/add_listing/create_appointment/cubit/create_appoitment_cubit.dart';
+import 'package:heidi/src/presentation/main/add_listing/create_appointment/open_time_slots/open_time_slots.dart';
+import 'package:heidi/src/presentation/main/add_listing/create_appointment/select_holidays/select_holidays.dart';
 import 'package:heidi/src/presentation/main/home/filter_screen.dart';
 import 'package:heidi/src/presentation/main/home/list_product/list_product.dart';
+import 'package:heidi/src/presentation/main/home/product_detail/booking/booking_screen.dart';
+import 'package:heidi/src/presentation/main/home/product_detail/booking/cubit/booking_cubit.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/image_zoom/image_zoom_screen.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/product_detail.dart';
 import 'package:heidi/src/presentation/main/login/forgot_password/forgot_password_screen.dart';
@@ -54,13 +78,15 @@ class Routes {
   static const String submit = "/submit";
   static const String editProfile = "/editProfile";
   static const String changePassword = "/changePassword";
+  static const String createAppointment = "/createAppointment";
+  static const String selectHolidays = "/selectHolidays";
   static const String changeLanguage = "/changeLanguage";
   static const String contactUs = "/contactUs";
   static const String aboutUs = "/aboutUs";
   static const String gallery = "/gallery";
   static const String themeSetting = "/themeSetting";
   static const String listProduct = "/listProduct";
-  static const String filter = "/filter";
+  static const String filterScreen = "/filterScreen";
   static const String review = "/review";
   static const String writeReview = "/writeReview";
   static const String setting = "/setting";
@@ -91,7 +117,12 @@ class Routes {
   static const String allRequests = "/allRequests";
   static const String dashboard = "/dashboard";
   static const String myListings = "/myListings";
-  static const String filterScreen = "/filterScreen";
+  static const String mitredenWebview = "/mitredenWebview";
+  static const String appointments = "/appointments";
+  static const String myAppointments = "/myAppointments";
+  static const String appointmentDetails = "/appointmentDetails";
+  static const String appointmentRequests = "/appointmentRequests";
+  static const String test = "/test";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -103,7 +134,12 @@ class Routes {
             return ListProductScreen(arguments: arguments);
           },
         );
-
+      // case test:
+      //   return MaterialPageRoute(
+      //     builder: (context) {
+      //       return TestScreen();
+      //     },
+      //   );
       case productDetail:
         return MaterialPageRoute(
           builder: (context) {
@@ -232,6 +268,28 @@ class Routes {
           },
         );
 
+      case forumImageZoom:
+        return MaterialPageRoute(
+          builder: (context) {
+            return ForumImageZoomScreen(imageUrl: settings.arguments as String);
+          },
+          fullscreenDialog: true,
+        );
+
+      case booking:
+        return MaterialPageRoute(
+          builder: (context) {
+            return BlocProvider(
+              create: (context) => BookingCubit(
+                context.read(),
+              ),
+              child: BookingScreen(
+                listingTitle: settings.arguments as String,
+              ),
+            );
+          },
+        );
+
       case submitSuccess:
         return MaterialPageRoute(
           builder: (context) {
@@ -244,6 +302,40 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) {
             return const ChangePasswordScreen();
+          },
+        );
+
+      case createAppointment:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return BlocProvider(
+              create: (context) => CreateAppointmentCubit(),
+              child: CreateAppointmentScreen(
+                serviceEntries: arguments['serviceEntries']
+                    as List<AppointmentServiceModel>?,
+              ),
+            );
+          },
+        );
+
+      case selectHolidays:
+        return MaterialPageRoute(
+          builder: (context) {
+            return BlocProvider(
+              create: (context) => CreateAppointmentCubit(),
+              child: const SelectHolidaysScreen(
+                selectedDates: [],
+              ),
+            );
+          },
+        );
+
+      case openTime:
+        return MaterialPageRoute(
+          builder: (context) {
+            return const OpenTimeSlotsScreen();
           },
         );
 
@@ -316,6 +408,52 @@ class Routes {
           },
         );
 
+      case appointments:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return AppointmentScreen(
+              user: arguments['user'] as UserModel,
+            );
+          },
+        );
+
+      case myAppointments:
+        return MaterialPageRoute(
+          builder: (context) {
+            return BlocProvider(
+              create: (context) => MyAppointmentsCubit(),
+              child: const MyAppointmentsScreen(),
+            );
+          },
+        );
+
+      case appointmentDetails:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return BlocProvider(
+              create: (context) => AppointmentDetailsCubit(),
+              child: AppointmentDetailsScreen(
+                  appointment: arguments['item'] as AppointmentModel),
+            );
+          },
+        );
+
+      case appointmentRequests:
+        return MaterialPageRoute(
+          builder: (context) {
+            return BlocProvider(
+              create: (context) => AppointmentRequestsCubit(
+                context.read(),
+              ),
+              child: const AppointmentRequestsScreen(),
+            );
+          },
+        );
+
       case myListings:
         return MaterialPageRoute(
           builder: (context) {
@@ -333,6 +471,134 @@ class Routes {
             );
           },
         );
+
+      case myGroups:
+        return MaterialPageRoute(
+          builder: (context) {
+            return BlocProvider(
+              create: (context) => MyGroupsCubit(
+                context.read(),
+              ),
+              child: const MyGroupsScreen(),
+            );
+          },
+          fullscreenDialog: true,
+        );
+
+      case listGroups:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return BlocProvider(
+              create: (context) => ListGroupsCubit(
+                context.read(),
+              ),
+              child: ListGroupScreen(arguments: arguments),
+            );
+          },
+          fullscreenDialog: true,
+        );
+
+      case groupDetails:
+        return MaterialPageRoute(
+          builder: (context) {
+            final ForumGroupModel arguments =
+                settings.arguments as ForumGroupModel;
+            return BlocProvider(
+              create: (context) => GroupDetailsCubit(context.read(), arguments),
+              child: const GroupDetailsScreen(),
+            );
+          },
+          fullscreenDialog: true,
+        );
+
+      case groupMembersDetails:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            final int groupId = arguments['groupId'] as int;
+            final int cityId = arguments['cityId'] as int;
+
+            return BlocProvider(
+              create: (context) =>
+                  GroupMembersCubit(context.read(), groupId, cityId),
+              child: GroupMembersScreen(groupId),
+            );
+          },
+          fullscreenDialog: true,
+        );
+
+      case memberRequestDetails:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return BlocProvider(
+              create: (context) => MembersRequestsCubit(
+                  context.read(), arguments['groupId'], arguments['cityId']),
+              child: MemberRequestScreen(arguments['groupId']),
+            );
+          },
+          fullscreenDialog: true,
+        );
+
+      case postDetails:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            final GroupPostsModel item = arguments['item'];
+            final int cityId = arguments['cityId'] as int;
+            final int userId = arguments['userId'] as int;
+            final bool isAdmin = arguments['isAdmin'] as bool;
+
+            return BlocProvider(
+              create: (context) => PostDetailCubit(
+                  context.read(), item, cityId, userId, isAdmin),
+              child: PostDetailsScreen(item),
+            );
+          },
+          fullscreenDialog: true,
+        );
+
+      case addGroups:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return BlocProvider(
+              create: (context) => AddGroupCubit(
+                context.read(),
+              ),
+              child: AddGroupScreen(
+                item: arguments['forumDetails'] as ForumGroupModel?,
+                isNewGroup: arguments['isNewGroup'] as bool,
+              ),
+            );
+          },
+          fullscreenDialog: true,
+        );
+
+      case addPosts:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return BlocProvider(
+              create: (context) => AddPostCubit(
+                context.read(),
+              ),
+              child: AddPostScreen(
+                item: arguments['item'],
+                isNewPost: arguments['isNewPost'] as bool,
+              ),
+            );
+          },
+          fullscreenDialog: true,
+        );
+
       default:
         const SignInScreen();
 
