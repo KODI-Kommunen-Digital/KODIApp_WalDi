@@ -85,7 +85,7 @@ class _MyAppointmentsLoadedState extends State<MyAppointmentsLoaded> {
         });
         appointments = await context
             .read<MyAppointmentsCubit>()
-            .newListings(++pageNo, appointments);
+            .newAppointments(++pageNo, appointments);
         setState(() {
           isLoadingMore = false;
         });

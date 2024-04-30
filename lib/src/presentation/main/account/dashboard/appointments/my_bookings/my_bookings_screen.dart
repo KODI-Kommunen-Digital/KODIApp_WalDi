@@ -54,6 +54,38 @@ class MyBookingsLoaded extends StatefulWidget {
 
 class _MyBookingsLoadedState extends State<MyBookingsLoaded> {
   final _scrollController = ScrollController(initialScrollOffset: 0.0);
+  List<BookingModel> bookings = [];
+  bool isLoadingMore = false;
+  int pageNo = 1;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_scrollListener);
+    bookings.addAll(widget.bookings);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_scrollListener);
+    super.dispose();
+  }
+
+  Future _scrollListener() async {
+    if (_scrollController.position.atEdge) {
+      if (_scrollController.position.pixels != 0) {
+        setState(() {
+          isLoadingMore = true;
+        });
+        bookings = await context
+            .read<MyBookingsCubit>()
+            .newBookings(++pageNo, bookings);
+        setState(() {
+          isLoadingMore = false;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext buildContext) {
@@ -66,7 +98,7 @@ class _MyBookingsLoadedState extends State<MyBookingsLoaded> {
         ),
       ),
       body: Stack(children: [
-        (widget.bookings.isNotEmpty)
+        (bookings.isNotEmpty)
             ? Padding(
                 padding: const EdgeInsets.fromLTRB(8, 8, 4, 0),
                 child: CustomScrollView(
@@ -81,134 +113,153 @@ class _MyBookingsLoadedState extends State<MyBookingsLoaded> {
                     SliverList(
                       delegate: SliverChildBuilderDelegate(
                         (BuildContext context, int index) {
-                          final item = widget.bookings[index];
-                          return Padding(
-                            padding: const EdgeInsets.only(top: 12),
-                            child: Container(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 4),
-                              child: Stack(
-                                children: [
-                                  Row(
-                                    children: <Widget>[
-                                      ClipRRect(
-                                        borderRadius: BorderRadius.circular(12),
-                                        child: Image.network(
-                                          "https://newheidi.obs.eu-de.otc.t-systems.com/user_8/city_1_listing_15_2_1709543526085",
-                                          width: 120,
-                                          height: 140,
-                                          fit: BoxFit.cover,
-                                          errorBuilder:
-                                              (context, error, stackTrace) {
-                                            // Handle errors here
-                                            return AppPlaceholder(
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
-                                                  color: Colors.white,
-                                                ),
-                                                width: 120,
-                                                height: 140,
-                                                child: const Icon(Icons.error),
-                                              ),
-                                            );
-                                          },
-                                          loadingBuilder: (context, child,
-                                              loadingProgress) {
-                                            if (loadingProgress == null) {
-                                              return child;
-                                            }
-                                            return AppPlaceholder(
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
-                                                  color: Colors.white,
-                                                ),
-                                                width: 120,
-                                                height: 140,
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                      const SizedBox(width: 8),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            Text(
-                                              item.appointmentTitle ?? '',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodySmall!
-                                                  .copyWith(
-                                                    fontWeight: FontWeight.bold,
+                          if (index < bookings.length) {
+                            final item = bookings[index];
+                            return Padding(
+                              padding: const EdgeInsets.only(top: 12),
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 4),
+                                child: Stack(
+                                  children: [
+                                    Row(
+                                      children: <Widget>[
+                                        ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          child: Image.network(
+                                            "https://newheidi.obs.eu-de.otc.t-systems.com/user_8/city_1_listing_15_2_1709543526085",
+                                            width: 120,
+                                            height: 140,
+                                            fit: BoxFit.cover,
+                                            errorBuilder:
+                                                (context, error, stackTrace) {
+                                              // Handle errors here
+                                              return AppPlaceholder(
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            12),
+                                                    color: Colors.white,
                                                   ),
-                                            ),
-                                            Text(
-                                                '${Translate.of(context).translate('remark')}: ${item.remark ?? ''}',
+                                                  width: 120,
+                                                  height: 140,
+                                                  child:
+                                                      const Icon(Icons.error),
+                                                ),
+                                              );
+                                            },
+                                            loadingBuilder: (context, child,
+                                                loadingProgress) {
+                                              if (loadingProgress == null) {
+                                                return child;
+                                              }
+                                              return AppPlaceholder(
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            12),
+                                                    color: Colors.white,
+                                                  ),
+                                                  width: 120,
+                                                  height: 140,
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Text(
+                                                item.appointmentTitle ?? '',
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .bodySmall!
                                                     .copyWith(
                                                       fontWeight:
-                                                          FontWeight.normal,
-                                                    )),
-                                            const SizedBox(
-                                              height: 5,
-                                            ),
-                                            Text(item.getStartTime(),
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodySmall!)
-                                          ],
+                                                          FontWeight.bold,
+                                                    ),
+                                              ),
+                                              Text(
+                                                  '${Translate.of(context).translate('remark')}: ${item.remark ?? ''}',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodySmall!
+                                                      .copyWith(
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                      )),
+                                              const SizedBox(
+                                                height: 5,
+                                              ),
+                                              Text(item.getStartTime(),
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodySmall!)
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                      const Spacer(),
-                                      PopupMenuButton<String>(
-                                        icon: const Icon(
-                                          Icons
-                                              .more_vert, // Three vertical dots icon
-                                        ),
-                                        onSelected: (String choice) async {
-                                          if (choice ==
-                                              Translate.of(context).translate(
-                                                  'delete_appointments')) {
-                                            final response =
-                                                await showRemoveAppointmentPopup(
-                                                    context);
-                                            if (response) {
-                                              context
-                                                  .read<MyBookingsCubit>()
-                                                  .deleteBooking(item);
+                                        const Spacer(),
+                                        PopupMenuButton<String>(
+                                          icon: const Icon(
+                                            Icons
+                                                .more_vert, // Three vertical dots icon
+                                          ),
+                                          onSelected: (String choice) async {
+                                            if (choice ==
+                                                Translate.of(context).translate(
+                                                    'delete_appointments')) {
+                                              final response =
+                                                  await showRemoveAppointmentPopup(
+                                                      context);
+                                              if (response) {
+                                                context
+                                                    .read<MyBookingsCubit>()
+                                                    .deleteBooking(item);
+                                              }
                                             }
-                                          }
 
-                                          if (!mounted) return;
-                                        },
-                                        itemBuilder: (BuildContext context) {
-                                          return {
-                                            Translate.of(context).translate(
-                                                'delete_appointments'),
-                                          }.map((String choice) {
-                                            return PopupMenuItem<String>(
-                                              value: choice,
-                                              child: Text(choice),
-                                            );
-                                          }).toList();
-                                        },
-                                      )
-                                    ],
-                                  ),
-                                ],
+                                            if (!mounted) return;
+                                          },
+                                          itemBuilder: (BuildContext context) {
+                                            return {
+                                              Translate.of(context).translate(
+                                                  'delete_appointments'),
+                                            }.map((String choice) {
+                                              return PopupMenuItem<String>(
+                                                value: choice,
+                                                child: Text(choice),
+                                              );
+                                            }).toList();
+                                          },
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
+                            );
+                          } else {
+                            return (isLoadingMore)
+                                ? const Positioned(
+                                    bottom: 20,
+                                    left: 0,
+                                    right: 0,
+                                    child: Center(
+                                      child:
+                                          CircularProgressIndicator.adaptive(),
+                                    ),
+                                  )
+                                : Container();
+                          }
                         },
-                        childCount: widget.bookings.length,
+                        childCount: bookings.length + 1,
                       ),
                     ),
                   ],

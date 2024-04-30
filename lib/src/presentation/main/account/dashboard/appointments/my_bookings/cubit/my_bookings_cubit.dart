@@ -27,7 +27,8 @@ class MyBookingsCubit extends Cubit<MyBookingsState> {
 
       for (var booking in responseData) {
         ProductModel? product =
-            await AppointmentRepository.getProductForAppointment(booking.appointmentId);
+            await AppointmentRepository.getProductForAppointment(
+                booking.appointmentId);
         if (product != null) {
           bookings.add(BookingModel(
               id: booking.id,
@@ -52,6 +53,42 @@ class MyBookingsCubit extends Cubit<MyBookingsState> {
     } else {
       emit(const MyBookingsState.error("Failed loading bookings"));
     }
+  }
+
+  Future<List<BookingModel>> newBookings(
+      int pageNo, List<BookingModel> previous) async {
+    List<BookingModel> bookings = previous;
+    List<BookingModel>? newResponseBookings =
+        await repo.loadUserBookings(pageNo);
+
+    if (newResponseBookings != null) {
+      for (var booking in newResponseBookings) {
+        ProductModel? product =
+            await AppointmentRepository.getProductForAppointment(
+                booking.appointmentId);
+        if (product != null) {
+          bookings.add(BookingModel(
+              id: booking.id,
+              appointmentId: booking.appointmentId,
+              createdAt: booking.createdAt,
+              startTime: booking.startTime,
+              endTime: booking.endTime,
+              userId: booking.userId,
+              guestId: booking.guestId,
+              isGuest: booking.isGuest,
+              remark: booking.remark,
+              createdBy: booking.createdBy,
+              isCreatedByGuest: booking.isCreatedByGuest,
+              description: booking.description,
+              appointmentTitle: product.title));
+        } else {
+          bookings.add(booking);
+          logError("Failed loading product for booking ${booking.id}");
+        }
+      }
+    }
+
+    return bookings;
   }
 
   Future<void> deleteBooking(BookingModel booking) async {

@@ -30,7 +30,7 @@ class MyAppointmentsCubit extends Cubit<MyAppointmentsState> {
     emit(MyAppointmentsState.loaded(appointments, false));
   }
 
-  Future<List<AppointmentModel>> newListings(
+  Future<List<AppointmentModel>> newAppointments(
       int pageNo, List<AppointmentModel> previous) async {
     List<AppointmentModel> appointments = previous;
     List<AppointmentModel>? newAppointments =
