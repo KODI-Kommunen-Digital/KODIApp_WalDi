@@ -22,14 +22,14 @@ class AppointmentRepository {
 
   AppointmentRepository(this.prefs);
 
-  Future<AppointmentModel?> loadAppointment(int cityId, int listingId) async {
+  static Future<AppointmentModel?> loadAppointment(int cityId, int listingId) async {
     final listing = await ListRepository.loadProduct(cityId, listingId);
 
-    if (listing != null) {
+    if (listing != null && listing.appointmentId != null) {
       final response = await Api.requestAppointment(
           cityId, listingId, listing.appointmentId);
-      if (response.success) {
-        final responseData = AppointmentModel.fromJson(response.data.first);
+      if (response.success && response.data != "") {
+        final responseData = AppointmentModel.fromJson(response.data);
         return responseData;
       } else {
         logError('Load Appointment Error', response.message);
@@ -114,7 +114,7 @@ class AppointmentRepository {
         serviceId: idString);
     if (response.success) {
       final responseData = response.data;
-      if (responseData == null || responseData.isEmpty) {
+      if (responseData == null || responseData.isEmpty || responseData['message'] == 'No slots available') {
         return [];
       }
 

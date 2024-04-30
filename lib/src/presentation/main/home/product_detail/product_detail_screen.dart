@@ -950,7 +950,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           //   return false;
         });
       }
-      if (product.categoryId == 18) {
+      if (product.isBookable) {
         bookAppointment = AppButton(
           Translate.of(context).translate('create_appointment'),
           onPressed: () {

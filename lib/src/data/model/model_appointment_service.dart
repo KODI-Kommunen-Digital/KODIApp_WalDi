@@ -35,8 +35,8 @@ class AppointmentServiceModel {
     Set parsedOpenHours = {};
     List<HolidayModel>? parsedHolidays = [];
     int? maxBookingPerSlot; //Change dummy data
-    if (json['MetaData'] != null) {
-      Map<String, dynamic> metaData = jsonDecode(json['MetaData']);
+    if (json['metadata'] != null) {
+      Map<String, dynamic> metaData = jsonDecode(json['metadata']);
       final List<dynamic>? jsonHolidays = metaData['holidays'];
 
       if (metaData['maxBookingPerSlot'] != null) {

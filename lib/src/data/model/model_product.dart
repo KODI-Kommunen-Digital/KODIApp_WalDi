@@ -73,6 +73,7 @@ class ProductModel {
   final String? priceDisplay;
   final int? appointmentId;
   List<ImageListModel>? imageLists;
+  bool isBookable;
 
   int? timeless;
 
@@ -137,7 +138,8 @@ class ProductModel {
       this.sourceId,
       this.imageLists,
       this.showExternal,
-      this.appointmentId});
+      this.appointmentId,
+      this.isBookable = false});
 
   factory ProductModel.fromJson(Map<String, dynamic> json,
       {SettingModel? setting, int? cityId}) {
