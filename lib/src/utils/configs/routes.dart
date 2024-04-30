@@ -97,7 +97,7 @@ class Routes {
     switch (settings.name) {
       case listProduct:
         final Map<String, dynamic> arguments =
-        settings.arguments as Map<String, dynamic>;
+            settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
           builder: (context) {
             return ListProductScreen(arguments: arguments);
@@ -151,7 +151,7 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) {
             final Map<String, dynamic> arguments =
-            settings.arguments as Map<String, dynamic>;
+                settings.arguments as Map<String, dynamic>;
             return BlocProvider(
               create: (context) => AllListingsCubit(),
               child: AllListingsScreen(user: arguments["user"] as UserModel),
@@ -162,7 +162,7 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) {
             final Map<String, dynamic> arguments =
-            settings.arguments as Map<String, dynamic>;
+                settings.arguments as Map<String, dynamic>;
             return FilterScreen(multiFilter: arguments["multifilter"]);
           },
         );
@@ -170,7 +170,7 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) {
             final Map<String, dynamic> arguments =
-            settings.arguments as Map<String, dynamic>;
+                settings.arguments as Map<String, dynamic>;
             return BlocProvider(
               create: (context) => AllRequestsCubit(),
               child: AllRequestsScreen(user: arguments["user"] as UserModel),
@@ -181,7 +181,7 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) {
             final Map<String, dynamic> arguments =
-            settings.arguments as Map<String, dynamic>;
+                settings.arguments as Map<String, dynamic>;
             return SettingsScreen(
               user: arguments['user'] as UserModel?,
             );
@@ -192,7 +192,7 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) {
             final Map<String, dynamic> arguments =
-            settings.arguments as Map<String, dynamic>;
+                settings.arguments as Map<String, dynamic>;
             return ImageZoomScreen(
                 sourceId: arguments['sourceId'] as int,
                 imageList: arguments['imageList']! as List<ImageListModel>?,
@@ -205,7 +205,7 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) {
             final Map<String, dynamic> arguments =
-            settings.arguments as Map<String, dynamic>;
+                settings.arguments as Map<String, dynamic>;
             return AddListingScreen(
               item: arguments['item'] as ProductModel?,
               isNewList: arguments['isNewList'] as bool,
@@ -218,7 +218,7 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) {
             final Map<String, dynamic> arguments =
-            settings.arguments as Map<String, dynamic>;
+                settings.arguments as Map<String, dynamic>;
             return BlocProvider(
               create: (context) => ProfileCubit(
                 context.read(),
@@ -303,7 +303,7 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) {
             final Map<String, dynamic> arguments =
-            settings.arguments as Map<String, dynamic>;
+                settings.arguments as Map<String, dynamic>;
             return BlocProvider(
               create: (context) => ProfileCubit(
                 context.read(),
@@ -320,7 +320,7 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) {
             final Map<String, dynamic> arguments =
-            settings.arguments as Map<String, dynamic>;
+                settings.arguments as Map<String, dynamic>;
             return BlocProvider(
               create: (context) => ProfileCubit(
                 context.read(),
