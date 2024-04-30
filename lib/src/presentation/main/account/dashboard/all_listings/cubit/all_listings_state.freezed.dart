@@ -20,8 +20,8 @@ mixin _$AllListingsState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<ProductModel> recent, bool isRefreshLoader,
-            int currentFilter, int currentCityFilter)
+    required TResult Function(
+            List<ProductModel> recent, int currentFilter, int currentCityFilter)
         loaded,
   }) =>
       throw _privateConstructorUsedError;
@@ -29,8 +29,8 @@ mixin _$AllListingsState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<ProductModel> recent, bool isRefreshLoader,
-            int currentFilter, int currentCityFilter)?
+    TResult? Function(List<ProductModel> recent, int currentFilter,
+            int currentCityFilter)?
         loaded,
   }) =>
       throw _privateConstructorUsedError;
@@ -38,8 +38,8 @@ mixin _$AllListingsState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<ProductModel> recent, bool isRefreshLoader,
-            int currentFilter, int currentCityFilter)?
+    TResult Function(List<ProductModel> recent, int currentFilter,
+            int currentCityFilter)?
         loaded,
     required TResult orElse(),
   }) =>
@@ -127,8 +127,8 @@ class _$AllListingsStateInitial implements AllListingsStateInitial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<ProductModel> recent, bool isRefreshLoader,
-            int currentFilter, int currentCityFilter)
+    required TResult Function(
+            List<ProductModel> recent, int currentFilter, int currentCityFilter)
         loaded,
   }) {
     return initial();
@@ -139,8 +139,8 @@ class _$AllListingsStateInitial implements AllListingsStateInitial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<ProductModel> recent, bool isRefreshLoader,
-            int currentFilter, int currentCityFilter)?
+    TResult? Function(List<ProductModel> recent, int currentFilter,
+            int currentCityFilter)?
         loaded,
   }) {
     return initial?.call();
@@ -151,8 +151,8 @@ class _$AllListingsStateInitial implements AllListingsStateInitial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<ProductModel> recent, bool isRefreshLoader,
-            int currentFilter, int currentCityFilter)?
+    TResult Function(List<ProductModel> recent, int currentFilter,
+            int currentCityFilter)?
         loaded,
     required TResult orElse(),
   }) {
@@ -242,8 +242,8 @@ class _$AllListingsStateLoading implements AllListingsStateLoading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<ProductModel> recent, bool isRefreshLoader,
-            int currentFilter, int currentCityFilter)
+    required TResult Function(
+            List<ProductModel> recent, int currentFilter, int currentCityFilter)
         loaded,
   }) {
     return loading();
@@ -254,8 +254,8 @@ class _$AllListingsStateLoading implements AllListingsStateLoading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<ProductModel> recent, bool isRefreshLoader,
-            int currentFilter, int currentCityFilter)?
+    TResult? Function(List<ProductModel> recent, int currentFilter,
+            int currentCityFilter)?
         loaded,
   }) {
     return loading?.call();
@@ -266,8 +266,8 @@ class _$AllListingsStateLoading implements AllListingsStateLoading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<ProductModel> recent, bool isRefreshLoader,
-            int currentFilter, int currentCityFilter)?
+    TResult Function(List<ProductModel> recent, int currentFilter,
+            int currentCityFilter)?
         loaded,
     required TResult orElse(),
   }) {
@@ -323,10 +323,7 @@ abstract class _$$AllListingsStateLoadedCopyWith<$Res> {
       __$$AllListingsStateLoadedCopyWithImpl<$Res>;
   @useResult
   $Res call(
-      {List<ProductModel> recent,
-      bool isRefreshLoader,
-      int currentFilter,
-      int currentCityFilter});
+      {List<ProductModel> recent, int currentFilter, int currentCityFilter});
 }
 
 /// @nodoc
@@ -341,7 +338,6 @@ class __$$AllListingsStateLoadedCopyWithImpl<$Res>
   @override
   $Res call({
     Object? recent = null,
-    Object? isRefreshLoader = null,
     Object? currentFilter = null,
     Object? currentCityFilter = null,
   }) {
@@ -350,10 +346,6 @@ class __$$AllListingsStateLoadedCopyWithImpl<$Res>
           ? _value._recent
           : recent // ignore: cast_nullable_to_non_nullable
               as List<ProductModel>,
-      null == isRefreshLoader
-          ? _value.isRefreshLoader
-          : isRefreshLoader // ignore: cast_nullable_to_non_nullable
-              as bool,
       null == currentFilter
           ? _value.currentFilter
           : currentFilter // ignore: cast_nullable_to_non_nullable
@@ -370,7 +362,7 @@ class __$$AllListingsStateLoadedCopyWithImpl<$Res>
 
 class _$AllListingsStateLoaded implements AllListingsStateLoaded {
   const _$AllListingsStateLoaded(final List<ProductModel> recent,
-      this.isRefreshLoader, this.currentFilter, this.currentCityFilter)
+      this.currentFilter, this.currentCityFilter)
       : _recent = recent;
 
   final List<ProductModel> _recent;
@@ -382,15 +374,13 @@ class _$AllListingsStateLoaded implements AllListingsStateLoaded {
   }
 
   @override
-  final bool isRefreshLoader;
-  @override
   final int currentFilter;
   @override
   final int currentCityFilter;
 
   @override
   String toString() {
-    return 'AllListingsState.loaded(recent: $recent, isRefreshLoader: $isRefreshLoader, currentFilter: $currentFilter, currentCityFilter: $currentCityFilter)';
+    return 'AllListingsState.loaded(recent: $recent, currentFilter: $currentFilter, currentCityFilter: $currentCityFilter)';
   }
 
   @override
@@ -399,8 +389,6 @@ class _$AllListingsStateLoaded implements AllListingsStateLoaded {
         (other.runtimeType == runtimeType &&
             other is _$AllListingsStateLoaded &&
             const DeepCollectionEquality().equals(other._recent, _recent) &&
-            (identical(other.isRefreshLoader, isRefreshLoader) ||
-                other.isRefreshLoader == isRefreshLoader) &&
             (identical(other.currentFilter, currentFilter) ||
                 other.currentFilter == currentFilter) &&
             (identical(other.currentCityFilter, currentCityFilter) ||
@@ -411,7 +399,6 @@ class _$AllListingsStateLoaded implements AllListingsStateLoaded {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(_recent),
-      isRefreshLoader,
       currentFilter,
       currentCityFilter);
 
@@ -427,11 +414,11 @@ class _$AllListingsStateLoaded implements AllListingsStateLoaded {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<ProductModel> recent, bool isRefreshLoader,
-            int currentFilter, int currentCityFilter)
+    required TResult Function(
+            List<ProductModel> recent, int currentFilter, int currentCityFilter)
         loaded,
   }) {
-    return loaded(recent, isRefreshLoader, currentFilter, currentCityFilter);
+    return loaded(recent, currentFilter, currentCityFilter);
   }
 
   @override
@@ -439,12 +426,11 @@ class _$AllListingsStateLoaded implements AllListingsStateLoaded {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<ProductModel> recent, bool isRefreshLoader,
-            int currentFilter, int currentCityFilter)?
+    TResult? Function(List<ProductModel> recent, int currentFilter,
+            int currentCityFilter)?
         loaded,
   }) {
-    return loaded?.call(
-        recent, isRefreshLoader, currentFilter, currentCityFilter);
+    return loaded?.call(recent, currentFilter, currentCityFilter);
   }
 
   @override
@@ -452,13 +438,13 @@ class _$AllListingsStateLoaded implements AllListingsStateLoaded {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<ProductModel> recent, bool isRefreshLoader,
-            int currentFilter, int currentCityFilter)?
+    TResult Function(List<ProductModel> recent, int currentFilter,
+            int currentCityFilter)?
         loaded,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(recent, isRefreshLoader, currentFilter, currentCityFilter);
+      return loaded(recent, currentFilter, currentCityFilter);
     }
     return orElse();
   }
@@ -501,12 +487,10 @@ class _$AllListingsStateLoaded implements AllListingsStateLoaded {
 abstract class AllListingsStateLoaded implements AllListingsState {
   const factory AllListingsStateLoaded(
       final List<ProductModel> recent,
-      final bool isRefreshLoader,
       final int currentFilter,
       final int currentCityFilter) = _$AllListingsStateLoaded;
 
   List<ProductModel> get recent;
-  bool get isRefreshLoader;
   int get currentFilter;
   int get currentCityFilter;
   @JsonKey(ignore: true)

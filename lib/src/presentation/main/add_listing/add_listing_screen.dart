@@ -7,6 +7,7 @@ import 'package:heidi/src/data/model/model_appointment_service.dart';
 
 // import 'package:heidi/src/data/model/model_holiday.dart';
 import 'package:heidi/src/data/model/model_open_time.dart';
+import 'package:heidi/src/data/remote/local/category_manager.dart';
 import 'package:http/http.dart' as http;
 import 'package:loggy/loggy.dart';
 import 'package:path_provider/path_provider.dart';
@@ -22,9 +23,9 @@ import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/datetime.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:heidi/src/utils/validate.dart';
-import 'package:intl/intl.dart';
 import 'package:html/parser.dart';
-import 'package:heidi/src/data/remote/local/category_manager.dart';
+import 'package:intl/intl.dart';
+
 import 'cubit/add_listing_cubit.dart';
 
 class AddListingScreen extends StatefulWidget {
@@ -92,13 +93,13 @@ class _AddListingScreenState extends State<AddListingScreen> {
 
   String? _featurePdf;
   String? _expiryDate;
-  bool _isExpiryDateEnabled = true;
-  TimeOfDay? _expiryTime;
   String? _startDate;
   String? _endDate;
+  TimeOfDay? _expiryTime;
   String? _createdAt;
   TimeOfDay? _startTime;
   TimeOfDay? _endTime;
+  bool _isExpiryDateEnabled = true;
   String? selectedVillage;
   String? selectedCategory;
   String? selectedSubCategory;
@@ -107,7 +108,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
   List<File>? selectedImages = [];
   List<File> downloadedImages = [];
 
-  int? currentCity;
+  late int? currentCity;
   late List<dynamic> jsonCategory;
   List<AppointmentServiceModel>? serviceEntries;
   List<OpenTimeModel>? timeSlots;
@@ -642,6 +643,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
           isLoading = true;
         });
         final result = await context.read<AddListingCubit>().onSubmit(
+              cityId: cityId ?? 1,
               title: _textTitleController.text,
               city: selectedCity,
               place: _textPlaceController.text,
@@ -786,21 +788,22 @@ class _AddListingScreenState extends State<AddListingScreen> {
   // String? _getCategoryTranslation(int id) {
   //   Map<int, String> categories = {
   //     1: "category_news",
-  //     2: "category_traffic",
   //     3: "category_events",
-  //     4: "category_clubs_add",
+  //     4: "category_clubs",
   //     5: "category_products",
   //     6: "category_offer_search",
   //     7: "category_citizen_info",
-  //     8: "category_defect_report",
   //     9: "category_lost_found",
-  //     10: "category_companies_add",
+  //     10: "category_companies",
   //     11: "category_public_transport",
-  //     12: "category_offers",
+
+  //     ///TODO: uncomment when the feature is ready
+  //     // 12: "category_offers",
   //     13: "category_food",
   //     14: "category_rathaus",
-  //     15: "category_newsletter",
-  //     16: "category_official_notification"
+  //     // 15: "category_newsletter",
+  //     // 16: "category_official_notification",
+  //     18: "category_appointment",
   //   };
   //   return categories[id];
   // }
@@ -847,6 +850,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
                     // downloadedImages[0].path
                     : _featurePdf,
                 profile: false,
+                forumGroup: false,
                 onDelete: () {
                   if (selectedImages!.isNotEmpty) {
                     setState(() {
@@ -881,24 +885,26 @@ class _AddListingScreenState extends State<AddListingScreen> {
               child: _buildImageList(),
             ),
             const SizedBox(height: 16),
-            Text.rich(
-              TextSpan(
-                text: Translate.of(context).translate('title'),
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium!
-                    .copyWith(fontWeight: FontWeight.bold),
-                children: const <TextSpan>[
-                  TextSpan(
-                    text: ' *',
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontWeight: FontWeight.bold,
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+              Text.rich(
+                TextSpan(
+                  text: Translate.of(context).translate('title'),
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium!
+                      .copyWith(fontWeight: FontWeight.bold),
+                  children: const <TextSpan>[
+                    TextSpan(
+                      text: ' *',
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
+            ]),
             const SizedBox(height: 8),
             AppTextInput(
               hintText: Translate.of(context).translate('input_title'),
@@ -922,7 +928,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
             const SizedBox(height: 16),
             Text.rich(
               TextSpan(
-                text: Translate.of(context).translate('content'),
+                text: Translate.of(context).translate('input_content'),
                 style: Theme.of(context)
                     .textTheme
                     .titleMedium!
@@ -975,40 +981,38 @@ class _AddListingScreenState extends State<AddListingScreen> {
             Row(
               children: [
                 Expanded(
-                    child: listCategory.isEmpty
-                        ? const LinearProgressIndicator()
-                        : DropdownButton(
-                            isExpanded: true,
-                            menuMaxHeight: 200,
-                            hint: Text(Translate.of(context)
-                                .translate('input_category')),
-                            value: selectedCategory,
-                            items: listCategory.map((category) {
-                              return DropdownMenuItem(
+                  child: listCategory.isEmpty
+                      ? const LinearProgressIndicator()
+                      : DropdownButton(
+                          isExpanded: true,
+                          menuMaxHeight: 200,
+                          hint: Text(Translate.of(context)
+                              .translate('input_category')),
+                          value: selectedCategory,
+                          items: listCategory.map((category) {
+                            return DropdownMenuItem(
                                 value: category['name'],
-                                child: Text(
-                                  Translate.of(context).translate(
+                                child: Text(Translate.of(context).translate(
                                     CategoryManager.getCategoryTranslation(
-                                        category['id']),
-                                  ),
-                                ),
-                              );
-                            }).toList(),
-                            onChanged: (value) async {
-                              setState(
-                                () {
-                                  selectedCategory = value as String?;
-                                  context.read<AddListingCubit>().setCategoryId(
-                                      selectedCategory?.toLowerCase());
-                                },
-                              );
-                              if (selectedCategory?.toLowerCase() == "news" ||
-                                  selectedCategory == null) {
-                                selectSubCategory(
+                                        category['id']))));
+                          }).toList(),
+                          onChanged: (value) async {
+                            setState(
+                              () {
+                                selectedCategory = value as String?;
+                                context.read<AddListingCubit>().setCategoryId(
                                     selectedCategory?.toLowerCase());
-                                _setDefaultExpiryDate();
-                              }
-                            })),
+                              },
+                            );
+                            if (selectedCategory?.toLowerCase() == "news" ||
+                                selectedCategory == null) {
+                              selectSubCategory(
+                                  selectedCategory?.toLowerCase());
+                              _setDefaultExpiryDate();
+                            }
+                          },
+                        ),
+                )
               ],
             ),
             if (selectedCategory?.toLowerCase() == "news" ||
@@ -1039,35 +1043,35 @@ class _AddListingScreenState extends State<AddListingScreen> {
               children: [
                 if (selectedCategory?.toLowerCase() == "news")
                   Expanded(
-                      child: listSubCategory.isEmpty
-                          ? const LinearProgressIndicator()
-                          : DropdownButton(
-                              isExpanded: true,
-                              menuMaxHeight: 200,
-                              hint: Text(Translate.of(context)
-                                  .translate('input_subcategory')),
-                              value: selectedSubCategory,
-                              items: listSubCategory.map((subcategory) {
-                                return DropdownMenuItem(
-                                    value: subcategory['name'],
-                                    child: Text(Translate.of(context).translate(
-                                        CategoryManager
-                                            .getSubCategoryTranslation(
-                                                subcategory['id']))));
-                              }).toList(),
-                              onChanged: (value) {
+                    child: listSubCategory.isEmpty
+                        ? const LinearProgressIndicator()
+                        : DropdownButton(
+                            isExpanded: true,
+                            menuMaxHeight: 200,
+                            hint: Text(Translate.of(context)
+                                .translate('input_subcategory')),
+                            value: selectedSubCategory,
+                            items: listSubCategory.map((subcategory) {
+                              return DropdownMenuItem(
+                                  value: subcategory['name'],
+                                  child: Text(Translate.of(context).translate(
+                                      CategoryManager.getSubCategoryTranslation(
+                                          subcategory['id']))));
+                            }).toList(),
+                            onChanged: (value) {
+                              context
+                                  .read<AddListingCubit>()
+                                  .getSubCategoryId(value);
+                              setState(() {
+                                selectedSubCategory = value as String?;
                                 context
                                     .read<AddListingCubit>()
-                                    .getSubCategoryId(value);
-                                setState(() {
-                                  selectedSubCategory = value as String?;
-                                  context
-                                      .read<AddListingCubit>()
-                                      .setSubCategoryId(
-                                          selectedSubCategory?.toLowerCase());
-                                });
-                              },
-                            )),
+                                    .setSubCategoryId(
+                                        selectedSubCategory?.toLowerCase());
+                              });
+                            },
+                          ),
+                  ),
               ],
             ),
             if (selectedCategory?.toLowerCase() == "news" ||
@@ -1617,6 +1621,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
         .setSubCategoryId(subCategoryResponse?.data.last['name']);
     setState(() {
       listSubCategory = subCategoryResponse!.data;
+
       selectedSubCategory = subCategoryResponse.data.last['name'];
     });
   }

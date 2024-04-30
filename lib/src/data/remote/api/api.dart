@@ -22,6 +22,7 @@ class Api {
   static const String listings = "/listings?statusId=1";
   static const String contact = "/contactUs";
   static const String faq = "/moreInfo";
+  static const String hasForum = "/cities?hasForum=true";
   static const bool showExternalListings = true;
 
   static Future<ResultApiModel> requestLogin(params) async {
@@ -237,13 +238,6 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
-  static Future<ResultApiModel> requestUserListings(userId, pageNo) async {
-    final result = await httpManager.get(
-        url:
-            '/users/$userId/listings?pageNo=$pageNo&pageSize=5&showExternalListings=$showExternalListings');
-    return ResultApiModel.fromJson(result);
-  }
-
   static Future<ResultApiModel> deleteUserList(cityId, int listingId) async {
     final String removeList = "/cities/$cityId/listings/$listingId";
     final result = await httpManager.delete(
@@ -277,14 +271,6 @@ class Api {
     final filePath = 'users/$userId';
     final result =
         await HTTPManager(apiType: APIType.defaultAPI).get(url: filePath);
-    return ResultApiModel.fromJson(result);
-  }
-
-  static Future<ResultApiModel> getUserDetails(userId, cityId) async {
-    final filePath = 'users/$userId?cityId=$cityId&cityUser=true';
-    final result = await HTTPManager(apiType: APIType.defaultAPI).get(
-      url: filePath,
-    );
     return ResultApiModel.fromJson(result);
   }
 
@@ -507,14 +493,6 @@ class Api {
     final result = await HTTPManager(apiType: APIType.defaultAPI).delete(
       url: '/cities/$cityId/listings/$listingId/imageDelete',
       loading: true,
-    );
-    return ResultApiModel.fromJson(result);
-  }
-
-  static Future<ResultApiModel> deleteUserList(cityId, int listingId) async {
-    final String removeList = "/cities/$cityId/listings/$listingId";
-    final result = await HTTPManager(apiType: APIType.defaultAPI).delete(
-      url: removeList,
     );
     return ResultApiModel.fromJson(result);
   }

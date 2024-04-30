@@ -1,4 +1,4 @@
-// ignore_for_file: unused_local_variable
+// ignore_for_file: unused_local_variable, unused_catch_stack
 
 import 'dart:io';
 
@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:heidi/src/data/repository/forum_repository.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/presentation/main/add_listing/cubit/add_listing_cubit.dart';
 import 'package:heidi/src/utils/configs/application.dart';
@@ -20,7 +21,6 @@ import 'package:multiple_images_picker/multiple_images_picker.dart';
 import 'package:loggy/loggy.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 
 enum UploadImageType { circle, square }
 
@@ -31,6 +31,7 @@ class AppUploadImage extends StatefulWidget {
   final VoidCallback? onDelete;
   final UploadImageType type;
   final bool profile;
+  final bool forumGroup;
 
   const AppUploadImage({
     Key? key,
@@ -39,6 +40,7 @@ class AppUploadImage extends StatefulWidget {
     required this.onChange,
     this.type = UploadImageType.square,
     required this.profile,
+    required this.forumGroup,
     this.onDelete,
   }) : super(key: key);
 
@@ -91,7 +93,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
         image: FileImage(
           _file!,
         ),
-        fit: BoxFit.contain,
+        fit: BoxFit.cover,
       );
     }
 
@@ -142,8 +144,8 @@ class _AppUploadImageState extends State<AppUploadImage> {
                   widget.onDelete!();
                   setState(() {
                     image = null;
+                    // images.removeAt(0);
                     if (selectedAssets.length > 1) {
-                      images.removeAt(0);
                       context.read<AddListingCubit>().removeAssetsByIndex(0);
                     }
                     _file = null;
@@ -203,11 +205,14 @@ class _AppUploadImageState extends State<AppUploadImage> {
             widget.onChange([]);
           });
           final profile = widget.profile;
+          final forumGroup = widget.forumGroup;
 
           if (!profile) {
             await ListRepository.uploadImage(_file!, profile);
           }
-          if (profile) {
+          if (forumGroup) {
+            await ForumRepository.uploadImage(_file!, forumGroup);
+          } else if (profile) {
             final response = await ListRepository.uploadImage(_file!, profile);
             if (response!.data['status'] == 'success') {
               setState(() {
@@ -238,11 +243,14 @@ class _AppUploadImageState extends State<AppUploadImage> {
           widget.onChange([]);
         });
         final profile = widget.profile;
+        final forumGroup = widget.forumGroup;
 
         if (!profile) {
           await ListRepository.uploadImage(_file!, profile);
         }
-        if (profile) {
+        if (forumGroup) {
+          await ForumRepository.uploadImage(_file!, forumGroup);
+        } else if (profile) {
           final response = await ListRepository.uploadImage(_file!, profile);
           if (response!.data['status'] == 'success') {
             setState(() {
@@ -257,7 +265,6 @@ class _AppUploadImageState extends State<AppUploadImage> {
       }
     } catch (e, stackTrace) {
       logError('Image Upload Permission Error', e);
-      await Sentry.captureException(e, stackTrace: stackTrace);
     }
   }
 

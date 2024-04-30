@@ -39,6 +39,7 @@ class AddListingCubit extends Cubit<AddListingState> {
   Future<bool> onSubmit({
     required String title,
     required String description,
+    required int cityId,
     CategoryModel? country,
     CategoryModel? state,
     String? city,
@@ -64,30 +65,31 @@ class AddListingCubit extends Cubit<AddListingState> {
   }) async {
     try {
       final response = await _repo.saveProduct(
-          title,
-          description,
-          place,
-          country,
-          state,
-          city,
-          statusId,
-          sourceId,
-          address,
-          zipcode,
-          phone,
-          email,
-          website,
-          status,
-          expiryDate,
-          startDate,
-          endDate,
-          expiryTime,
-          timeless,
-          startTime,
-          price,
-          endTime,
-          imagesList,
-          isImageChanged);
+        title,
+        description,
+        place,
+        country,
+        state,
+        city,
+        statusId,
+        sourceId,
+        address,
+        zipcode,
+        phone,
+        email,
+        website,
+        status,
+        expiryDate,
+        startDate,
+        endDate,
+        expiryTime,
+        timeless,
+        startTime,
+        endTime,
+        imagesList,
+        isImageChanged,
+      );
+
       if (response.success) {
         return true;
       } else {
@@ -97,7 +99,6 @@ class AddListingCubit extends Cubit<AddListingState> {
     } catch (e, stackTrace) {
       logError('save Product Error', e);
       await Sentry.captureException(e, stackTrace: stackTrace);
-
       return false;
     }
   }
@@ -176,17 +177,37 @@ class AddListingCubit extends Cubit<AddListingState> {
     } catch (e, stackTrace) {
       logError('edit Product Error', e);
       await Sentry.captureException(e, stackTrace: stackTrace);
-
       return false;
     }
   }
 
-  void clearVillage() async {
-    _repo.clearVillageId();
+  Future<bool> changeStatus(ProductModel item, int newStatus) async {
+    int listingId = item.id;
+    int? cityId = item.cityId;
+    int? statusId = newStatus;
+
+    try {
+      final response =
+          await _repo.editProductStatus(listingId, cityId, statusId);
+      if (response.success) {
+        return true;
+      } else {
+        logError('save Product Response Failed', response.message);
+        return false;
+      }
+    } catch (e, stackTrace) {
+      logError('save Product Error', e);
+      await Sentry.captureException(e, stackTrace: stackTrace);
+      return false;
+    }
   }
 
-  void clearCityId() async {
-    _repo.clearCityId();
+  void setImagePref(imagePath) async {
+    await _repo.setImagePrefs(imagePath);
+  }
+
+  void clearVillage() async {
+    _repo.clearVillageId();
   }
 
   Future<void> deletePdf(cityId, listingId) async {
@@ -197,32 +218,12 @@ class AddListingCubit extends Cubit<AddListingState> {
     await _repo.deleteImage(cityId, listingId);
   }
 
+  void clearCityId() async {
+    _repo.clearCityId();
+  }
+
   void clearCategoryId() async {
     _repo.clearCategoryId();
-  }
-
-  void saveAssets(assetList) {
-    selectedAssets = assetList;
-  }
-
-  void removeAssetsByIndex(index) {
-    if (selectedAssets.isNotEmpty && index <= selectedAssets.length - 1) {
-      selectedAssets.removeAt(index);
-    }
-  }
-
-  void removeAssets(assets) {
-    if (selectedAssets.isNotEmpty) {
-      selectedAssets.remove(assets);
-    }
-  }
-
-  void clearAssets() {
-    selectedAssets.clear();
-  }
-
-  List<Asset> getSelectedAssets() {
-    return selectedAssets;
   }
 
   Future<ResultApiModel?> getVillageId(value) async {
@@ -230,9 +231,8 @@ class AddListingCubit extends Cubit<AddListingState> {
       return _repo.requestVillages(value);
     } catch (e, stackTrace) {
       logError('request Village Error', e);
-      await Sentry.captureException(e, stackTrace: stackTrace);
-
       emit(AddListingState.error(e.toString()));
+      await Sentry.captureException(e, stackTrace: stackTrace);
       return null;
     }
   }
@@ -264,10 +264,34 @@ class AddListingCubit extends Cubit<AddListingState> {
     }
   }
 
+  void saveAssets(assetList) {
+    selectedAssets = assetList;
+  }
+
+  void removeAssetsByIndex(index) {
+    if (selectedAssets.isNotEmpty && index <= selectedAssets.length - 1) {
+      selectedAssets.removeAt(index);
+    }
+  }
+
+  void removeAssets(assets) {
+    if (selectedAssets.isNotEmpty) {
+      selectedAssets.remove(assets);
+    }
+  }
+
+  void clearAssets() {
+    selectedAssets.clear();
+  }
+
+  List<Asset> getSelectedAssets() {
+    return selectedAssets;
+  }
+
   Future<ResultApiModel?> loadSubCategory(value) async {
     try {
       if (value != null) {
-        final subCategoryResponse = _repo.loadSubCategory(value);
+        final subCategoryResponse = await _repo.loadSubCategory(value);
         return subCategoryResponse;
       }
       return null;
@@ -310,28 +334,6 @@ class AddListingCubit extends Cubit<AddListingState> {
   Future<ResultApiModel> loadVillages(value) async {
     final response = await _repo.loadVillages(value);
     return response;
-  }
-
-  Future<bool> changeStatus(ProductModel item, int newStatus) async {
-    int listingId = item.id;
-    int? cityId = item.cityId;
-    int? statusId = newStatus;
-
-    try {
-      final response =
-          await _repo.editProductStatus(listingId, cityId, statusId);
-      if (response.success) {
-        return true;
-      } else {
-        logError('save Product Response Failed', response.message);
-        return false;
-      }
-    } catch (e, stackTrace) {
-      logError('save Product Error', e);
-      await Sentry.captureException(e, stackTrace: stackTrace);
-
-      return false;
-    }
   }
 
   Future<void> clearImagePath() async {

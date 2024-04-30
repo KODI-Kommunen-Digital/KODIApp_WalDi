@@ -10,8 +10,5 @@ class AllListingsState with _$AllListingsState {
   const factory AllListingsState.loading() = AllListingsStateLoading;
 
   const factory AllListingsState.loaded(
-      List<ProductModel> recent,
-      bool isRefreshLoader,
-      int currentFilter,
-      int currentCityFilter) = AllListingsStateLoaded;
+      List<ProductModel> recent, int currentFilter, int currentCityFilter) = AllListingsStateLoaded;
 }

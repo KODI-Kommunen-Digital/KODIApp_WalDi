@@ -122,8 +122,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         child: AppUploadImage(
                           title: 'profile',
                           type: UploadImageType.circle,
-                          image: _image,
                           profile: true,
+                          forumGroup: false,
+                          image: _image,
                           onChange: (result) {
                             setState(() {
                               if (result.isNotEmpty) {

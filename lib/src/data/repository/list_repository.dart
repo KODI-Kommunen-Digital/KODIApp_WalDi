@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -91,6 +93,7 @@ class ListRepository {
         (multiFilter.currentCategory ?? 0) != 0) {
       linkFilter = "$linkFilter&categoryId=${multiFilter.currentCategory}";
     }
+
     final response =
         await Api.requestSearchListing(content, linkFilter, pageNo);
     if (response.success) {
@@ -103,14 +106,26 @@ class ListRepository {
     return null;
   }
 
-  Future<int> getCityId(cityName) async {
-    final response = await Api.requestSubmitCities();
-    var jsonCategory = response.data;
-    final item = jsonCategory.firstWhere((item) => item['name'] == cityName);
-    final itemId = item['id'];
-    final cityId = itemId;
-    return cityId;
-  }
+  ///load wish list
+  // static Future<List?> loadWishList({
+  //   int? page,
+  //   int? perPage,
+  // }) async {
+  //   Map<String, dynamic> params = {
+  //     "page": page,
+  //     "per_page": perPage,
+  //   };
+  //   final response = await Api.requestWishList(params);
+  //   if (response.success) {
+  //     final list = List.from(response.data ?? []).map((item) {
+  //       return ProductModel.fromJson(item, setting: Application.setting);
+  //     }).toList();
+
+  //     return [list, response.pagination];
+  //   }
+  //   AppBloc.messageCubit.onShow(response.message);
+  //   return null;
+  // }
 
   static Future<bool> addWishList(int? userId, ProductModel items) async {
     final Map<String, dynamic> params = {};
@@ -136,6 +151,16 @@ class ListRepository {
     }
   }
 
+  Future<bool> deleteUserList(int? cityId, int listingId) async {
+    final response = await Api.deleteUserList(cityId, listingId);
+    if (response.success) {
+      return true;
+    } else {
+      logError('Remove UserList Response Failed', response.message);
+      return false;
+    }
+  }
+
   ///Upload image
   static Future<ResultApiModel?> uploadImage(File image, profile) async {
     final prefs = await Preferences.openBox();
@@ -146,7 +171,13 @@ class ListRepository {
           filename: image.path,
           contentType: MediaType('image', imageExtension)),
     });
-    await prefs.setPickedFile(formData);
+    if (profile) {
+      await prefs.setPickedFile(formData);
+      // final response = await Api.requestUploadImage(formData);
+      // return response;
+    } else if (!profile) {
+      await prefs.setPickedFile(formData);
+    }
     return null;
   }
 
@@ -178,6 +209,58 @@ class ListRepository {
       logError('Product Request Response', response.message);
     }
     return null;
+  }
+
+  Future<List<FavoriteDetailsModel>> loadUserListings(id, pageNo) async {
+    int userId;
+    final userList = <FavoriteDetailsModel>[];
+    if (id == 0) {
+      userId = prefs.getKeyValue('userId', 0);
+    } else {
+      userId = id;
+    }
+
+    final listResponse = await Api.requestUserListings(userId, pageNo);
+    if (listResponse.success) {
+      final responseData = listResponse.data;
+      if (responseData != []) {
+        for (final data in responseData) {
+          userList.add(FavoriteDetailsModel(
+            data['id'],
+            data['userId'],
+            data['title'] ?? '',
+            data['place'] ?? '',
+            '',
+            data['description'] ?? '',
+            data['media'] ?? '',
+            data['categoryId'] ?? 0,
+            data['subcategoryId'] ?? 0,
+            data['address'] ?? '',
+            data['email'] ?? '',
+            data['phone'] ?? '',
+            data['website'] ?? '',
+            data['price'] ?? 0,
+            data['discountPrice'] ?? 0,
+            data['logo'] ?? '',
+            data['statusId'] ?? 0,
+            data['sourceId'] ?? 0,
+            data['longitude'] ?? 0.0,
+            data['latitude'] ?? 0.0,
+            data['villageId'] ?? 0,
+            data['expiryDate'] ?? '',
+            data['startDate'] ?? '',
+            data['endDate'] ?? '',
+            data['createdAt'] ?? '',
+            data['pdf'] ?? '',
+            data['cityId'] ?? 0,
+          ));
+        }
+      }
+      return userList;
+    } else {
+      logError('Load User Listings Error');
+    }
+    return userList;
   }
 
   Future<ResultApiModel> requestVillages(value) async {
@@ -269,7 +352,6 @@ class ListRepository {
     TimeOfDay? expiryTime,
     int? timeless,
     TimeOfDay? startTime,
-    String? price,
     TimeOfDay? endTime,
     List<File>? imagesList,
     bool isImageChanged,
@@ -320,6 +402,8 @@ class ListRepository {
             "${endTime.hour}:${endTime.minute.toString().padLeft(2, '0')}";
         combinedEndDateTime = "${endDate.trim()}T$formattedTime";
       }
+    } else {
+      combinedEndDateTime = "";
     }
 
     if (categoryId == 1) {
@@ -348,10 +432,11 @@ class ListRepository {
       "latitude": 22.456, //dummy data
       "villageId": villageId ?? 0,
       "cityId": cityId,
-      "subcategoryId": subCategoryId,
       "expiryDate": combinedExpiryDateTime,
       "startDate": combinedStartDateTime,
-      "endDate": combinedEndDateTime, "timeless": timeless
+      "endDate": combinedEndDateTime,
+      "subcategoryId": subCategoryId,
+      "timeless": timeless
     };
     final response =
         await Api.requestSaveProduct(cityId, params, isImageChanged);
@@ -427,6 +512,7 @@ class ListRepository {
     final villageId = prefs.getKeyValue(Preferences.villageId, null);
     final userId = prefs.getKeyValue(Preferences.userId, '');
     final media = prefs.getKeyValue(Preferences.path, null);
+
     String? combinedStartDateTime;
     String? combinedEndDateTime;
     DateTime currentDate = DateTime.now();
@@ -459,18 +545,16 @@ class ListRepository {
     }
 
     if (endDate != null && endDate != "" && endTime != null) {
+      String combinedEndDateTime = endDate.trim();
       String formattedTime;
       if (endTime.hour < 10) {
         formattedTime =
-            "${endTime.periodOffset}${endTime.hour}:${endTime.minute.toString().padLeft(2, '0')}";
-        combinedEndDateTime = "${endDate.trim()}T$formattedTime";
+            "0${endTime.hour}:${endTime.minute.toString().padLeft(2, '0')}";
       } else {
         formattedTime =
             "${endTime.hour}:${endTime.minute.toString().padLeft(2, '0')}";
-        combinedEndDateTime = "${endDate.trim()}T$formattedTime";
       }
-    } else {
-      combinedEndDateTime = "";
+      combinedEndDateTime += "T$formattedTime";
     }
 
     if (categoryId == 1) {
@@ -500,21 +584,27 @@ class ListRepository {
       "longitude": 245.65, //dummy data
       "latitude": 22.456, //dummy data
       "villageId": villageId ?? 0,
-      "expiryDate": combinedExpiryDateTime,
-      "timeless": timeless,
       "startDate": combinedStartDateTime,
       "endDate": combinedEndDateTime,
       "createdAt": createdAt,
       "pdf": null,
+      "expiryDate": combinedExpiryDateTime,
+      "timeless": timeless,
       "updatedAt": currentDate.toString(),
       "zipcode": null,
       "appointmentId": null,
       "logo": media,
       "otherlogos": [
-        {"id": null, "imageOrder": null, "listingId": null, "logo": ""}
+        {
+          "id": null,
+          "imageOrder": null,
+          "listingId": null,
+          "logo": "",
+        }
       ],
       "cityId": cityId,
     };
+
     final response =
         await Api.requestEditProduct(cityId, listingId, params, isImageChanged);
     if (response.success) {
@@ -600,6 +690,10 @@ class ListRepository {
     return response;
   }
 
+  Future<void> setImagePrefs(imagePath) async {
+    await prefs.setKeyValue(Preferences.path, imagePath);
+  }
+
   Future<ResultApiModel> loadVillages(value) async {
     final response = await Api.requestSubmitCities();
     var jsonCity = response.data;
@@ -642,7 +736,8 @@ class ListRepository {
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
     final response = await Api.requestSubmitSubCategory(categoryId: categoryId);
     var jsonCategory = response.data;
-    final item = jsonCategory.firstWhere((item) => item['name'] == value);
+    final item =
+        jsonCategory.firstWhere((item) => item['name'] == value.toLowerCase());
     final itemId = item['id'];
     final subCategoryId = itemId;
     prefs.setKeyValue(Preferences.subCategoryId, subCategoryId);
@@ -660,67 +755,5 @@ class ListRepository {
 
   void clearSubCategory() async {
     prefs.deleteKey(Preferences.subCategoryId);
-  }
-
-  Future<bool> deleteUserList(int? cityId, int listingId) async {
-    final response = await Api.deleteUserList(cityId, listingId);
-    if (response.success) {
-      return true;
-    } else {
-      logError('Remove UserList Response Failed', response.message);
-      return false;
-    }
-  }
-
-  Future<List<FavoriteDetailsModel>> loadUserListings(id, pageNo) async {
-    int userId;
-    final userList = <FavoriteDetailsModel>[];
-    if (id == 0) {
-      userId = prefs.getKeyValue('userId', 0);
-    } else {
-      userId = id;
-    }
-
-    final listResponse = await Api.requestUserListings(userId, pageNo);
-    if (listResponse.success) {
-      final responseData = listResponse.data;
-      if (responseData != []) {
-        for (final data in responseData) {
-          userList.add(FavoriteDetailsModel(
-            data['id'],
-            data['userId'],
-            data['title'] ?? '',
-            data['place'] ?? '',
-            '',
-            data['description'] ?? '',
-            data['media'] ?? '',
-            data['categoryId'] ?? 0,
-            data['subcategoryId'] ?? 0,
-            data['address'] ?? '',
-            data['email'] ?? '',
-            data['phone'] ?? '',
-            data['website'] ?? '',
-            data['price'] ?? 0,
-            data['discountPrice'] ?? 0,
-            data['logo'] ?? '',
-            data['statusId'] ?? 0,
-            data['sourceId'] ?? 0,
-            data['longitude'] ?? 0.0,
-            data['latitude'] ?? 0.0,
-            data['villageId'] ?? 0,
-            data['expiryDate'] ?? '',
-            data['startDate'] ?? '',
-            data['endDate'] ?? '',
-            data['createdAt'] ?? '',
-            data['pdf'] ?? '',
-            data['cityId'] ?? 0,
-          ));
-        }
-      }
-      return userList;
-    } else {
-      logError('Load User Listings Error');
-    }
-    return userList;
   }
 }
