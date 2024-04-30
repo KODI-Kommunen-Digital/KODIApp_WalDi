@@ -24,13 +24,15 @@ class MyAppointmentsCubit extends Cubit<MyAppointmentsState> {
     emit(MyAppointmentsState.loaded(appointments, false));
   }
 
-  Future<void> deleteAppointment(AppointmentModel appointment) async {
+  Future<void> deleteAppointment(
+      AppointmentModel appointment, bool deleteListing) async {
     emit(const MyAppointmentsState.loading());
     ProductModel? product = await getProductFromAppointment(appointment.id!);
 
-    if(product != null) {
-      bool success = await repo.deleteAppointment(product.cityId ?? 0, product.id, appointment.id!);
-      if(success) {
+    if (product != null) {
+      bool success = await repo.deleteAppointment(
+          product.cityId ?? 0, product.id, appointment.id!, deleteListing);
+      if (success) {
         onLoad(false);
       } else {
         logError("Error deleting appointment");
@@ -43,7 +45,7 @@ class MyAppointmentsCubit extends Cubit<MyAppointmentsState> {
 
   Future<ProductModel?> getProductFromAppointment(int appointmentId) async {
     ProductModel? product = await repo.getProductForAppointment(appointmentId);
-    if(product != null) {
+    if (product != null) {
       return product;
     }
     logError("Error fetching product for appointment");

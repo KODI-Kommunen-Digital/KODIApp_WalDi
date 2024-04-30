@@ -627,7 +627,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
           setState(() {
             isLoading = false;
           });
-          _createAppointment();
+          await _createAppointment();
           _onSuccess();
           if (!mounted) return;
           context.read<AddListingCubit>().clearAssets();
@@ -664,7 +664,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
           setState(() {
             isLoading = false;
           });
-          _createAppointment();
+          await _createAppointment();
           _onSuccess();
           if (!mounted) return;
           context.read<AddListingCubit>().clearImagePath();
@@ -687,15 +687,15 @@ class _AddListingScreenState extends State<AddListingScreen> {
     }
   }
 
-  void _createAppointment() async {
+  Future<void> _createAppointment() async {
     if (widget.item == null) {
-      context.read<AddListingCubit>().onSubmitAppointment(
+      await context.read<AddListingCubit>().onSubmitAppointment(
           services: serviceEntries,
           openHours: timeSlots,
           holidays: [],
           city: selectedCity ?? "");
     } else {
-      context.read<AddListingCubit>().onEditAppointment(
+      await context.read<AddListingCubit>().onEditAppointment(
           services: serviceEntries,
           openHours: timeSlots,
           holidays: [],

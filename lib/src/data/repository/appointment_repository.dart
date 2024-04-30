@@ -195,7 +195,7 @@ class AppointmentRepository {
   Future<ResultApiModel> editAppointment(
       {required int listingId,
       required int appointmentId,
-        required String city,
+      required String city,
       String? title,
       String? description,
       String? startDate,
@@ -210,10 +210,10 @@ class AppointmentRepository {
     final DateTime? parsedEndDate = DateTime.tryParse(endDate ?? '');
 
     if (parsedStartDate != null) {
-      startDate = DateFormat('yyyy-MM-ddHH:mm').format(parsedStartDate);
+      startDate = DateFormat('yyyy-MM-ddTHH:mm').format(parsedStartDate);
     }
     if (parsedEndDate != null) {
-      endDate = DateFormat('yyyy-MM-ddHH:mm').format(parsedEndDate);
+      endDate = DateFormat('yyyy-MM-ddTHH:mm').format(parsedEndDate);
     }
 
     List<Map<String, String>>? parsedHolidays = parseHolidays(holidays);
@@ -228,20 +228,32 @@ class AppointmentRepository {
       parsedServicesParams = AppointmentServiceModel.parseToParams(services);
     }
 
-    Map<String, dynamic> metaData = {
-      'holidays': parsedHolidays,
-      'maxBookingPerSlot': maxBookingPerSlot ?? 8,
-      'openingDates': parsedOpenHours
-    };
+    Map<String, dynamic> metaData = {};
+    if (parsedHolidays != null) {
+      metaData['holidays'] = parsedHolidays;
+    } else {
+      metaData['holidays'] = [];
+    }
+
+    if (maxBookingPerSlot != null) {
+      metaData['maxBookingPerSlot'] = maxBookingPerSlot;
+    }
+    if (parsedOpenHours != null && parsedOpenHours.isNotEmpty) {
+      metaData['openingDates'] = parsedOpenHours;
+    }
 
     Map<String, dynamic> params = {
+      'id': appointmentId,
       'title': title,
       'description': description,
       'startDate': startDate,
-      'endDate': endDate,
       'metadata': metaData,
-      'services': parsedServicesParams
+      'services': parsedServicesParams ?? []
     };
+
+    if (endDate != null) {
+      params['endDate'] = endDate;
+    }
 
     final response = await Api.requestEditAppointment(
         cityId, listingId, appointmentId, params);
@@ -253,9 +265,16 @@ class AppointmentRepository {
   }
 
   Future<bool> deleteAppointment(
-      int cityId, int listingId, int appointmentId) async {
+      int cityId, int listingId, int appointmentId, bool deleteListing) async {
     final response =
         await Api.requestDeleteAppointment(cityId, listingId, appointmentId);
+    if(deleteListing) {
+      final responseListing = await Api.deleteUserList(cityId, listingId);
+      if (!responseListing.success) {
+        logError('Remove Listing Failed', responseListing.message);
+        return false;
+      }
+    }
     if (response.success) {
       return true;
     } else {

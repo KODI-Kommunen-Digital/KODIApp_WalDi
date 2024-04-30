@@ -534,5 +534,7 @@
   "duration": "Duration",
   "no_bookings": "No bookings available",
   "edit_appointments": "Edit Appointment",
-  "delete_appointments": "Delete Appointment"
+  "delete_appointments": "Delete Appointment",
+  "delete_appointment_listing": "Delete listing of appointment",
+  "delete_appointment_listing_confirmation": "Do you want to also delete the listing of the appointment?"
 }
