@@ -7,7 +7,7 @@ class AppointmentSlotModel {
   final String name;
   final int duration;
   final bool slotSameAsAppointment;
-  final ScheduleModel openHours;
+  final List<ScheduleModel> openHours;
 
   AppointmentSlotModel(
       {required this.serviceId,
@@ -18,11 +18,13 @@ class AppointmentSlotModel {
       required this.openHours});
 
   factory AppointmentSlotModel.fromJson(Map<String, dynamic> json) {
-    final List<Map<String, String>> openHours = json['openingHours'];
-    Map<String, String> day = openHours.first;
-    late ScheduleModel schedule = ScheduleModel(
-        startTime: timeOfDayFromString(day["startTime"]!),
-        endTime: timeOfDayFromString(day["endTime"]!));
+    final List<dynamic> openHours = json['openingHours'];
+    List<ScheduleModel> schedules = [];
+    for (var day in openHours) {
+      schedules.add(ScheduleModel(
+          startTime: timeOfDayFromString(day["startTime"]!),
+          endTime: timeOfDayFromString(day["endTime"]!)));
+    }
 
     return AppointmentSlotModel(
         serviceId: json['serviceId'] ?? 0,
@@ -30,11 +32,7 @@ class AppointmentSlotModel {
         name: json['name'] ?? '',
         duration: json['duration'] ?? 0,
         slotSameAsAppointment: ((json['slotSameAsAppointment'] ?? 0) == 1),
-        openHours: schedule);
-  }
-
-  String? getTimeSlotString() {
-    return "${stringFromTimeOfDay(openHours.startTime)} - ${stringFromTimeOfDay(openHours.endTime)}";
+        openHours: schedules);
   }
 
   static TimeOfDay timeOfDayFromString(String time) {

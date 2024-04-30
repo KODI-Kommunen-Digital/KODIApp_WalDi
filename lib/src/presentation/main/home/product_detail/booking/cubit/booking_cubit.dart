@@ -1,6 +1,7 @@
 // ignore_for_file: unused_field
 
 import 'package:bloc/bloc.dart';
+import 'package:heidi/src/data/model/model_bookingGuest.dart';
 import 'package:heidi/src/data/repository/appointment_repository.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/booking/cubit/booking_state.dart';
@@ -40,6 +41,7 @@ class BookingCubit extends Cubit<BookingState> {
 
             if (availableSlots != null) {
               emit(BookingState.loaded(availableSlots, services, appointment));
+              return;
             }
           }
           emit(BookingState.loaded(null, services, appointment));
@@ -52,6 +54,24 @@ class BookingCubit extends Cubit<BookingState> {
     } else {
       emit(const BookingState.error("No city or listing id given"));
     }
+  }
+
+  Future<bool> onSubmit(
+      {required BookingGuestModel guestDetails,
+      required String date,
+      String? startTime,
+      String? endTime,
+      List<BookingGuestModel>? friends,
+      required int cityId,
+      required int listingId,
+      required int appointmentId}) async {
+    final response = await _appointmentRepo.saveBooking(
+        guestDetails: guestDetails,
+        date: date,
+        cityId: cityId,
+        listingId: listingId,
+        appointmentId: appointmentId);
+    return response.success;
   }
 
   String parseDate(String date) {

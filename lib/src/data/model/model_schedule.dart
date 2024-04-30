@@ -43,4 +43,10 @@ class ScheduleModel {
           TimeOfDay.fromDateTime(DateFormat('HH:mm').parse(json['endTime'])),
     );
   }
+
+  String stringFromTimeOfDay(TimeOfDay time) {
+    final String hour = time.hour.toString().padLeft(2, '0');
+    final String minute = time.minute.toString().padLeft(2, '0');
+    return '$hour:$minute';
+  }
 }

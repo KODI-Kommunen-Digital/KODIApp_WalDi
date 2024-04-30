@@ -360,6 +360,7 @@
   "i_agree": "Ich stimme zu",
   "term_condition": "Allgemeine Geschäftsbedingungen",
   "booking_success_title": "Buchung erfolgreich",
+  "booking_fail_title": "Buchung fehlgeschlagen",
   "booking_success_message": "Sie haben Ihre Daten erfolgreich übermittelt. Ihre Buchung wird in der Inseratbuchung angezeigt.",
   "booking_detail": "Buchungsdetails",
   "booking_id": "Buchungs-ID",
@@ -540,6 +541,7 @@
   "create_appointment": "Erstelle Termin",
   "addServiceName": "Gebe Dienstnamen ein",
   "duration": "Dauer",
-  "no_bookings": "Keine Buchungen verfügbar"
+  "no_bookings": "Keine Buchungen verfügbar",
+  "noAvailableSlots": "Limit pro Person erreicht"
 }
 

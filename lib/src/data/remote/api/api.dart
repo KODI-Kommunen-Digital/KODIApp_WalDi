@@ -774,7 +774,7 @@ class Api {
     var list =
         '/cities/$cityId/listings/$listingId/appointments/$appointmentId/book';
     final result = await HTTPManager(apiType: APIType.appointment)
-        .post(url: list, data: params);
+        .post(url: list, data: params, loading: true);
     return ResultApiModel.fromJson(result);
   }
 

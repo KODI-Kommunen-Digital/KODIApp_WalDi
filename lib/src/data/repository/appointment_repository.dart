@@ -22,7 +22,8 @@ class AppointmentRepository {
 
   AppointmentRepository(this.prefs);
 
-  static Future<AppointmentModel?> loadAppointment(int cityId, int listingId) async {
+  static Future<AppointmentModel?> loadAppointment(
+      int cityId, int listingId) async {
     final listing = await ListRepository.loadProduct(cityId, listingId);
 
     if (listing != null && listing.appointmentId != null) {
@@ -55,7 +56,8 @@ class AppointmentRepository {
     return null;
   }
 
-  static Future<ProductModel?> getProductForAppointment(int appointmentId) async {
+  static Future<ProductModel?> getProductForAppointment(
+      int appointmentId) async {
     final response = await Api.requestProductForAppointment(appointmentId);
 
     if (response.success) {
@@ -88,12 +90,8 @@ class AppointmentRepository {
     return null;
   }
 
-  Future<List<AppointmentSlotModel>?> loadAppointmentSlots(
-      int cityId,
-      int listingId,
-      int appointmentId,
-      String date,
-      List<String> serviceId) async {
+  Future<AppointmentSlotModel?> loadAppointmentSlots(int cityId, int listingId,
+      int appointmentId, String date, List<String> serviceId) async {
     final DateTime parsedDate = DateTime.parse(date);
     date = DateFormat('yyyy-MM-dd').format(parsedDate);
 
@@ -113,14 +111,16 @@ class AppointmentRepository {
         date: date,
         serviceId: idString);
     if (response.success) {
-      final responseData = response.data;
-      if (responseData == null || responseData.isEmpty || responseData['message'] == 'No slots available') {
-        return [];
+      if (response.data == null || response.data.isEmpty) {
+        return null;
       }
 
-      return List<Map<String, dynamic>>.from(responseData).map((item) {
-        return AppointmentSlotModel.fromJson(item);
-      }).toList();
+      return List<Map<String, dynamic>>.from(response.data ?? [])
+          .map((item) {
+            return AppointmentSlotModel.fromJson(item);
+          })
+          .toList()
+          .first;
     } else {
       logError('Load Appointment Slots Error', response.message);
     }
@@ -268,7 +268,7 @@ class AppointmentRepository {
       int cityId, int listingId, int appointmentId, bool deleteListing) async {
     final response =
         await Api.requestDeleteAppointment(cityId, listingId, appointmentId);
-    if(deleteListing) {
+    if (deleteListing) {
       final responseListing = await Api.deleteUserList(cityId, listingId);
       if (!responseListing.success) {
         logError('Remove Listing Failed', responseListing.message);
@@ -341,7 +341,12 @@ class AppointmentRepository {
       required int cityId,
       required int listingId,
       required int appointmentId}) async {
-    date = DateFormat('yyyy-MM-dd').format(DateTime.parse(date));
+    DateTime? parsedDateTime;
+    if (date.length == 10 || date[2] == '.' || date[5] == '.') {
+      parsedDateTime = DateFormat('dd.MM.yyyy').parseStrict(date);
+    }
+    date =
+        DateFormat('yyyy-MM-dd').format(parsedDateTime ?? DateTime.parse(date));
     List<Map<String, String>>? friendDetails = [];
 
     if (friends != null) {

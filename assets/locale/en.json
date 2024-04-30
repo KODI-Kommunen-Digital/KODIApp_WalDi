@@ -364,6 +364,7 @@
   "i_agree": "I am agree with",
   "term_condition": "Terms & Conditions",
   "booking_success_title": "Booking successfully",
+  "booking_fail_title": "Booking failed",
   "booking_success_message": "You have submitted data successfully. Your booking will be appear on the listing booking.",
   "booking_detail": "Booking Detail",
   "booking_id": "Booking ID",
@@ -537,5 +538,6 @@
   "edit_appointments": "Edit Appointment",
   "delete_appointments": "Delete Appointment",
   "delete_appointment_listing": "Delete listing of appointment",
-  "delete_appointment_listing_confirmation": "Do you want to also delete the listing of the appointment?"
+  "delete_appointment_listing_confirmation": "Do you want to also delete the listing of the appointment?",
+  "noAvailableSlots": "Limit per person reached"
 }

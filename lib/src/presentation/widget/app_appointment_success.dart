@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class AppointmentSuccess extends StatelessWidget {
-  const AppointmentSuccess({super.key});
+  final bool success;
+  const AppointmentSuccess({super.key, required this.success});
 
   @override
   Widget build(BuildContext context) {
@@ -18,15 +19,19 @@ class AppointmentSuccess extends StatelessWidget {
               shape: BoxShape.circle,
               color: Theme.of(context).colorScheme.primary,
             ),
-            child: const Icon(
-              Icons.check,
+            child: Icon(
+              (success) ? Icons.check : Icons.close,
               color: Colors.white,
               size: 32,
             ),
           ),
           const SizedBox(height: 8),
           Text(
-            Translate.of(context).translate('booking_success_title'),
+            Translate.of(context).translate(
+              (success)
+                  ? 'booking_success_title'
+                  : 'booking_fail_title'
+          ),
             style: Theme.of(context)
                 .textTheme
                 .titleLarge!
@@ -35,7 +40,9 @@ class AppointmentSuccess extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             Translate.of(context).translate(
-              'booking_success_message',
+              (success)
+                  ? 'booking_success_message'
+                  : 'booking_fail_message'
             ),
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodyMedium,
