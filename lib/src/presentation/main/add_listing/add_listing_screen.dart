@@ -741,7 +741,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
 
     if (_textContentController.text.length >= 65535) {
       _errorContent = "value_desc_limit_exceeded";
-    } else {
+    } else if (_textContentController.text.length < 3) {
+      _errorContent = "value_asc_limit_exceeded";
+    } else{
       _errorContent = UtilValidator.validate(_textContentController.text,
           allowEmpty: false);
     }

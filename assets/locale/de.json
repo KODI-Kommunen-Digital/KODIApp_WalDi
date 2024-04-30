@@ -82,6 +82,7 @@
   "value_not_valid_id": "Eingabe ungültige ID",
   "value_not_date_empty": "Eintrittsdatum leer. Bitte Startdatum eingeben",  
   "value_desc_limit_exceeded":"Die Beschreibung sollte 65535 Zeichen nicht überschreiten",
+  "value_asc_limit_exceeded":"Die Beschreibung sollte länger als 3 Zeichen sein",
   "value_user_desc_limit_exceeded":"Die Beschreibung sollte 255 Zeichen nicht überschreiten",
   "edit_profile": "Profil bearbeiten",
   "edit_group": "Gruppe bearbeiten",
