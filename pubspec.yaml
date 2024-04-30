@@ -97,6 +97,7 @@ dependencies:
   multiple_images_picker: ^1.0.1
   html: ^0.15.4
   package_info_plus: ^4.2.0
+  flutter_dotenv: ^5.1.0
 
 dev_dependencies:
   flutter_test:
@@ -133,6 +134,10 @@ flutter:
     - assets/images/
     - assets/locale/
     - assets/data/
+    - assets/env/.envWaldi
+    - assets/data/categories_config.json
+    - assets/data/subcategories_config.json
+    - assets/data/services_config.json
 
   fonts:
     - family: Poppins

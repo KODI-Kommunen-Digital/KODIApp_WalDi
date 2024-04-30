@@ -21,7 +21,7 @@ import 'package:heidi/src/utils/translate.dart';
 import 'package:heidi/src/utils/validate.dart';
 import 'package:intl/intl.dart';
 import 'package:html/parser.dart';
-
+import 'package:heidi/src/data/remote/local/category_manager.dart';
 import 'cubit/add_listing_cubit.dart';
 
 class AddListingScreen extends StatefulWidget {
@@ -370,7 +370,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
           final subCategoryResponse = await context
               .read<AddListingCubit>()
               .loadSubCategory(Translate.of(context)
-                  .translate(_getCategoryTranslation(
+                  .translate(CategoryManager.getCategoryTranslation(
                       loadCategoryResponse!.data.first['id']))
                   .toLowerCase());
           setState(() {
@@ -755,42 +755,42 @@ class _AddListingScreenState extends State<AddListingScreen> {
     return true;
   }
 
-  String? _getCategoryTranslation(int id) {
-    Map<int, String> categories = {
-      1: "category_news",
-      2: "category_traffic",
-      3: "category_events",
-      4: "category_clubs_add",
-      5: "category_products",
-      6: "category_offer_search",
-      7: "category_citizen_info",
-      8: "category_defect_report",
-      9: "category_lost_found",
-      10: "category_companies_add",
-      11: "category_public_transport",
-      12: "category_offers",
-      13: "category_food",
-      14: "category_rathaus",
-      15: "category_newsletter",
-      16: "category_official_notification"
-    };
-    return categories[id];
-  }
+  // String? _getCategoryTranslation(int id) {
+  //   Map<int, String> categories = {
+  //     1: "category_news",
+  //     2: "category_traffic",
+  //     3: "category_events",
+  //     4: "category_clubs_add",
+  //     5: "category_products",
+  //     6: "category_offer_search",
+  //     7: "category_citizen_info",
+  //     8: "category_defect_report",
+  //     9: "category_lost_found",
+  //     10: "category_companies_add",
+  //     11: "category_public_transport",
+  //     12: "category_offers",
+  //     13: "category_food",
+  //     14: "category_rathaus",
+  //     15: "category_newsletter",
+  //     16: "category_official_notification"
+  //   };
+  //   return categories[id];
+  // }
 
-  String? _getSubCategoryTranslation(int id) {
-    Map<int, String> subCategories = {
-      1: "subcategory_newsflash",
-      3: "subcategory_politics",
-      4: "subcategory_economy",
-      5: "subcategory_sports",
-      7: "subcategory_local",
-      8: "subcategory_club_news",
-      9: "subcategory_road",
-      10: "subcategory_official_notification",
-      11: "subcategory_timeless_news"
-    };
-    return subCategories[id];
-  }
+  // String? _getSubCategoryTranslation(int id) {
+  //   Map<int, String> subCategories = {
+  //     1: "subcategory_newsflash",
+  //     3: "subcategory_politics",
+  //     4: "subcategory_economy",
+  //     5: "subcategory_sports",
+  //     7: "subcategory_local",
+  //     8: "subcategory_club_news",
+  //     9: "subcategory_road",
+  //     10: "subcategory_official_notification",
+  //     11: "subcategory_timeless_news"
+  //   };
+  //   return subCategories[id];
+  // }
 
   Widget _buildContent() {
     if (_processing) {
@@ -960,7 +960,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
                                 value: category['name'],
                                 child: Text(
                                   Translate.of(context).translate(
-                                    _getCategoryTranslation(category['id']),
+                                    CategoryManager.getCategoryTranslation(
+                                        category['id']),
                                   ),
                                 ),
                               );
@@ -1022,8 +1023,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
                                 return DropdownMenuItem(
                                     value: subcategory['name'],
                                     child: Text(Translate.of(context).translate(
-                                        _getSubCategoryTranslation(
-                                            subcategory['id']))));
+                                        CategoryManager
+                                            .getSubCategoryTranslation(
+                                                subcategory['id']))));
                               }).toList(),
                               onChanged: (value) {
                                 context

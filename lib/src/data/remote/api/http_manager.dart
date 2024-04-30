@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
@@ -10,15 +11,28 @@ import 'package:heidi/src/utils/logger.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
+enum APIType { defaultAPI, forum, appointment }
+
 class HTTPManager {
   final exceptionCode = ['jwt_auth_bad_iss', 'jwt_auth_invalid_token'];
   late final Dio _dio;
+  late String _baseUrl;
 
-  HTTPManager() {
+  HTTPManager({APIType apiType = APIType.defaultAPI}) {
+    switch (apiType) {
+      case APIType.defaultAPI:
+        _baseUrl = dotenv.env['DEFAULT_API_URL']!;
+        break;
+      case APIType.forum:
+        _baseUrl = dotenv.env['FORUM_API_URL']!;
+        break;
+      case APIType.appointment:
+        _baseUrl = dotenv.env['APPOINTMENT_API_URL']!;
+        break;
+    }
     _dio = Dio(
       BaseOptions(
-        //baseUrl: 'https://test.smartregion-auf.de/api/',
-        baseUrl: 'https://waldi.app/api',
+        baseUrl: _baseUrl,
         connectTimeout: 30000,
         receiveTimeout: 30000,
         contentType: Headers.formUrlEncodedContentType,
@@ -77,7 +91,6 @@ class HTTPManager {
               );
               handler.resolve(response);
             } catch (e, stackTrace) {
-
               logError('Refresh Token Response Failed', e);
               await Sentry.captureException(e, stackTrace: stackTrace);
               handler.reject(error);

@@ -1,9 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:heidi/firebase_options.dart';
 import 'package:heidi/src/data/remote/api/firebase_api.dart';
+import 'package:heidi/src/data/remote/local/category_manager.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/main_screen.dart';
@@ -47,6 +49,8 @@ Future<void> main() async {
     },
     appRunner: () => runApp(HeidiApp(prefBox)),
   );
+  await dotenv.load(fileName: "assets/env/.envAuf");
+  await CategoryManager.loadCategories();
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
