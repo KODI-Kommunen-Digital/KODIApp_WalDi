@@ -7,6 +7,7 @@ import 'package:heidi/src/data/model/model_appointment.dart';
 import 'package:heidi/src/data/model/model_appointment_service.dart';
 import 'package:heidi/src/data/model/model_forum_group.dart';
 import 'package:heidi/src/data/model/model_group_posts.dart';
+import 'package:heidi/src/data/model/model_open_time.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/main_screen.dart';
 import 'package:heidi/src/presentation/main/account/change_password/change_password_screen.dart';
@@ -335,6 +336,7 @@ class Routes {
             return BlocProvider(
               create: (context) => CreateAppointmentCubit(),
               child: CreateAppointmentScreen(
+                timeSlots: arguments['timeSlots'] as List<OpenTimeModel>?,
                 serviceEntries: arguments['serviceEntries']
                     as List<AppointmentServiceModel>?,
                 item: arguments['item'] as ProductModel?,
@@ -358,7 +360,9 @@ class Routes {
       case openTime:
         return MaterialPageRoute(
           builder: (context) {
-            return const OpenTimeSlotsScreen();
+            final List<OpenTimeModel?>? timeSlots =
+                settings.arguments as List<OpenTimeModel?>?;
+            return OpenTimeSlotsScreen(selected: timeSlots);
           },
         );
 

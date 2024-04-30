@@ -11,10 +11,14 @@ import 'package:heidi/src/utils/translate.dart';
 
 class CreateAppointmentScreen extends StatefulWidget {
   final List<AppointmentServiceModel>? serviceEntries;
+  final List<OpenTimeModel>? timeSlots;
   final ProductModel? item;
 
   const CreateAppointmentScreen(
-      {super.key, required this.serviceEntries, required this.item});
+      {super.key,
+      required this.serviceEntries,
+      required this.item,
+      required this.timeSlots});
 
   @override
   State<CreateAppointmentScreen> createState() =>
@@ -34,12 +38,23 @@ class _CreateAppointmentScreenState extends State<CreateAppointmentScreen> {
       listener: (context, state) {},
       builder: (context, state) => state.maybeWhen(
         loading: () => const CreateAppointmentLoading(),
-        loaded: (loadedEntries) => CreateAppointmentLoaded(
+        loaded: (loadedEntries, appointment) => CreateAppointmentLoaded(
             serviceEntries: widget.serviceEntries,
+            isEdit: widget.item != null,
+            timeSlots: getLoadedTimeSlots(appointment.openHours),
             loadedEntries: loadedEntries),
         orElse: () => ErrorWidget('Failed to load Accounts.'),
       ),
     );
+  }
+
+  List<OpenTimeModel?> getLoadedTimeSlots(List<OpenTimeModel?> loaded) {
+    List<OpenTimeModel?> combinedList = [];
+    if(widget.timeSlots != null) {
+      combinedList.addAll(widget.timeSlots!);
+    }
+    combinedList.addAll(loaded);
+    return combinedList;
   }
 }
 
@@ -56,10 +71,16 @@ class CreateAppointmentLoading extends StatelessWidget {
 
 class CreateAppointmentLoaded extends StatefulWidget {
   final List<AppointmentServiceModel>? serviceEntries;
+  final List<OpenTimeModel?> timeSlots;
   final List<AppointmentServiceModel>? loadedEntries;
+  final bool isEdit;
 
   const CreateAppointmentLoaded(
-      {super.key, required this.serviceEntries, required this.loadedEntries});
+      {super.key,
+      required this.serviceEntries,
+      required this.loadedEntries,
+      required this.timeSlots,
+      required this.isEdit});
 
   @override
   State<CreateAppointmentLoaded> createState() =>
@@ -68,12 +89,13 @@ class CreateAppointmentLoaded extends StatefulWidget {
 
 class _CreateAppointmentLoadedState extends State<CreateAppointmentLoaded> {
   List<AppointmentServiceModel> serviceEntries = [];
-  List<OpenTimeModel> timeSlots = [];
+  List<OpenTimeModel?> timeSlots = [];
   List<DateTime?> selectedDates = [];
   bool nameError = true;
 
   Future<void> _navigateAndDisplayTimeSlots(BuildContext context) async {
-    final result = await Navigator.pushNamed(context, Routes.openTime);
+    final result = await Navigator.pushNamed(context, Routes.openTime,
+        arguments: (timeSlots.isEmpty) ? null : timeSlots);
 
     if (result != null) {
       timeSlots = (result as List)[0] as List<OpenTimeModel>;
@@ -92,6 +114,7 @@ class _CreateAppointmentLoadedState extends State<CreateAppointmentLoaded> {
     if (widget.loadedEntries != null) {
       serviceEntries.addAll(widget.loadedEntries ?? []);
     }
+    timeSlots.addAll(widget.timeSlots);
     if (widget.loadedEntries == null && widget.serviceEntries == null) {
       serviceEntries = [
         AppointmentServiceModel(
@@ -104,7 +127,7 @@ class _CreateAppointmentLoadedState extends State<CreateAppointmentLoaded> {
       ];
     }
 
-    for(AppointmentServiceModel service in serviceEntries) {
+    for (AppointmentServiceModel service in serviceEntries) {
       service.controller.text = service.name;
     }
   }
@@ -115,6 +138,8 @@ class _CreateAppointmentLoadedState extends State<CreateAppointmentLoaded> {
       appBar: AppBar(
         title: Text(Translate.of(context).translate('create_appointment')),
         actions: [
+          //Remove if change open Hours
+          if(!widget.isEdit)
           IconButton(
             icon: const Icon(
               Icons.calendar_month,
@@ -290,7 +315,9 @@ class _CreateAppointmentLoadedState extends State<CreateAppointmentLoaded> {
           Row(
             children: <Widget>[
               IconButton(
-                icon: Icon(Icons.add_circle, color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white),
+                icon: Icon(Icons.add_circle,
+                    color: Theme.of(context).textTheme.bodyLarge?.color ??
+                        Colors.white),
                 onPressed: () {
                   // Add a new service entry
                   setState(() {

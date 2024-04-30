@@ -10,7 +10,7 @@ import 'package:heidi/src/utils/datetime.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class OpenTimeSlotsScreen extends StatefulWidget {
-  final List<OpenTimeModel>? selected;
+  final List<OpenTimeModel?>? selected;
 
   const OpenTimeSlotsScreen({Key? key, this.selected}) : super(key: key);
 
@@ -30,7 +30,11 @@ class _OpenTimeSlotsScreenState extends State<OpenTimeSlotsScreen> {
   void initState() {
     super.initState();
     if (widget.selected != null) {
-      _time = widget.selected!;
+      for(var schedule in widget.selected!) {
+        if(schedule != null) {
+          _time.add(schedule);
+        }
+      }
     } else {
       _time = [
         OpenTimeModel(dayOfWeek: 1, key: 'mon', schedule: [

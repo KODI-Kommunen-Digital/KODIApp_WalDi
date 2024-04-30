@@ -20,12 +20,12 @@ class CreateAppointmentCubit extends Cubit<CreateAppointmentState> {
         List<AppointmentServiceModel>? services =
             await AppointmentRepository.loadAppointmentServices(
                 product.cityId!, product.id, appointment.id!);
-        emit(CreateAppointmentState.loaded(services));
+        emit(CreateAppointmentState.loaded(services, appointment));
       } else {
         emit(const CreateAppointmentState.error("Fail loading Appointment"));
       }
     } else {
-      emit(const CreateAppointmentState.loaded(null));
+      emit(const CreateAppointmentState.error("No product given"));
     }
   }
 }

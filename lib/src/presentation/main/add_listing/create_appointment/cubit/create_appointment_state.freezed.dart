@@ -19,7 +19,8 @@ mixin _$CreateAppointmentState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(List<AppointmentServiceModel>? loadedEntries)
+    required TResult Function(List<AppointmentServiceModel>? loadedEntries,
+            AppointmentModel appointment)
         loaded,
     required TResult Function(String error) error,
   }) =>
@@ -27,14 +28,18 @@ mixin _$CreateAppointmentState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
-    TResult? Function(List<AppointmentServiceModel>? loadedEntries)? loaded,
+    TResult? Function(List<AppointmentServiceModel>? loadedEntries,
+            AppointmentModel appointment)?
+        loaded,
     TResult? Function(String error)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(List<AppointmentServiceModel>? loadedEntries)? loaded,
+    TResult Function(List<AppointmentServiceModel>? loadedEntries,
+            AppointmentModel appointment)?
+        loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) =>
@@ -123,7 +128,8 @@ class _$CreateAppointmentLoading implements CreateAppointmentLoading {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(List<AppointmentServiceModel>? loadedEntries)
+    required TResult Function(List<AppointmentServiceModel>? loadedEntries,
+            AppointmentModel appointment)
         loaded,
     required TResult Function(String error) error,
   }) {
@@ -134,7 +140,9 @@ class _$CreateAppointmentLoading implements CreateAppointmentLoading {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
-    TResult? Function(List<AppointmentServiceModel>? loadedEntries)? loaded,
+    TResult? Function(List<AppointmentServiceModel>? loadedEntries,
+            AppointmentModel appointment)?
+        loaded,
     TResult? Function(String error)? error,
   }) {
     return loading?.call();
@@ -144,7 +152,9 @@ class _$CreateAppointmentLoading implements CreateAppointmentLoading {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(List<AppointmentServiceModel>? loadedEntries)? loaded,
+    TResult Function(List<AppointmentServiceModel>? loadedEntries,
+            AppointmentModel appointment)?
+        loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
@@ -199,7 +209,9 @@ abstract class _$$CreateAppointmentLoadedCopyWith<$Res> {
           $Res Function(_$CreateAppointmentLoaded) then) =
       __$$CreateAppointmentLoadedCopyWithImpl<$Res>;
   @useResult
-  $Res call({List<AppointmentServiceModel>? loadedEntries});
+  $Res call(
+      {List<AppointmentServiceModel>? loadedEntries,
+      AppointmentModel appointment});
 }
 
 /// @nodoc
@@ -215,12 +227,17 @@ class __$$CreateAppointmentLoadedCopyWithImpl<$Res>
   @override
   $Res call({
     Object? loadedEntries = freezed,
+    Object? appointment = null,
   }) {
     return _then(_$CreateAppointmentLoaded(
       freezed == loadedEntries
           ? _value._loadedEntries
           : loadedEntries // ignore: cast_nullable_to_non_nullable
               as List<AppointmentServiceModel>?,
+      null == appointment
+          ? _value.appointment
+          : appointment // ignore: cast_nullable_to_non_nullable
+              as AppointmentModel,
     ));
   }
 }
@@ -229,7 +246,7 @@ class __$$CreateAppointmentLoadedCopyWithImpl<$Res>
 
 class _$CreateAppointmentLoaded implements CreateAppointmentLoaded {
   const _$CreateAppointmentLoaded(
-      final List<AppointmentServiceModel>? loadedEntries)
+      final List<AppointmentServiceModel>? loadedEntries, this.appointment)
       : _loadedEntries = loadedEntries;
 
   final List<AppointmentServiceModel>? _loadedEntries;
@@ -243,8 +260,11 @@ class _$CreateAppointmentLoaded implements CreateAppointmentLoaded {
   }
 
   @override
+  final AppointmentModel appointment;
+
+  @override
   String toString() {
-    return 'CreateAppointmentState.loaded(loadedEntries: $loadedEntries)';
+    return 'CreateAppointmentState.loaded(loadedEntries: $loadedEntries, appointment: $appointment)';
   }
 
   @override
@@ -253,12 +273,14 @@ class _$CreateAppointmentLoaded implements CreateAppointmentLoaded {
         (other.runtimeType == runtimeType &&
             other is _$CreateAppointmentLoaded &&
             const DeepCollectionEquality()
-                .equals(other._loadedEntries, _loadedEntries));
+                .equals(other._loadedEntries, _loadedEntries) &&
+            (identical(other.appointment, appointment) ||
+                other.appointment == appointment));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(_loadedEntries));
+  int get hashCode => Object.hash(runtimeType,
+      const DeepCollectionEquality().hash(_loadedEntries), appointment);
 
   @JsonKey(ignore: true)
   @override
@@ -271,33 +293,38 @@ class _$CreateAppointmentLoaded implements CreateAppointmentLoaded {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(List<AppointmentServiceModel>? loadedEntries)
+    required TResult Function(List<AppointmentServiceModel>? loadedEntries,
+            AppointmentModel appointment)
         loaded,
     required TResult Function(String error) error,
   }) {
-    return loaded(loadedEntries);
+    return loaded(loadedEntries, appointment);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
-    TResult? Function(List<AppointmentServiceModel>? loadedEntries)? loaded,
+    TResult? Function(List<AppointmentServiceModel>? loadedEntries,
+            AppointmentModel appointment)?
+        loaded,
     TResult? Function(String error)? error,
   }) {
-    return loaded?.call(loadedEntries);
+    return loaded?.call(loadedEntries, appointment);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(List<AppointmentServiceModel>? loadedEntries)? loaded,
+    TResult Function(List<AppointmentServiceModel>? loadedEntries,
+            AppointmentModel appointment)?
+        loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(loadedEntries);
+      return loaded(loadedEntries, appointment);
     }
     return orElse();
   }
@@ -339,10 +366,11 @@ class _$CreateAppointmentLoaded implements CreateAppointmentLoaded {
 
 abstract class CreateAppointmentLoaded implements CreateAppointmentState {
   const factory CreateAppointmentLoaded(
-          final List<AppointmentServiceModel>? loadedEntries) =
-      _$CreateAppointmentLoaded;
+      final List<AppointmentServiceModel>? loadedEntries,
+      final AppointmentModel appointment) = _$CreateAppointmentLoaded;
 
   List<AppointmentServiceModel>? get loadedEntries;
+  AppointmentModel get appointment;
   @JsonKey(ignore: true)
   _$$CreateAppointmentLoadedCopyWith<_$CreateAppointmentLoaded> get copyWith =>
       throw _privateConstructorUsedError;
@@ -414,7 +442,8 @@ class _$CreateAppointmentError implements CreateAppointmentError {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(List<AppointmentServiceModel>? loadedEntries)
+    required TResult Function(List<AppointmentServiceModel>? loadedEntries,
+            AppointmentModel appointment)
         loaded,
     required TResult Function(String error) error,
   }) {
@@ -425,7 +454,9 @@ class _$CreateAppointmentError implements CreateAppointmentError {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
-    TResult? Function(List<AppointmentServiceModel>? loadedEntries)? loaded,
+    TResult? Function(List<AppointmentServiceModel>? loadedEntries,
+            AppointmentModel appointment)?
+        loaded,
     TResult? Function(String error)? error,
   }) {
     return error?.call(this.error);
@@ -435,7 +466,9 @@ class _$CreateAppointmentError implements CreateAppointmentError {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(List<AppointmentServiceModel>? loadedEntries)? loaded,
+    TResult Function(List<AppointmentServiceModel>? loadedEntries,
+            AppointmentModel appointment)?
+        loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
