@@ -268,7 +268,7 @@ class _MyAppointmentsLoadedState extends State<AppointmentRequestsLoaded> {
                 children: <Widget>[
                   Text(
                     Translate.of(context)
-                        .translate('deleteAppointmentConfirmation'),
+                        .translate('delete_appointment_confirmation'),
                   ),
                   const SizedBox(height: 20),
                   TextField(

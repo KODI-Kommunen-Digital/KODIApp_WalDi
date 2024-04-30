@@ -534,6 +534,7 @@
   "delete_appointments": "Lösche Termin",
   "delete_appointment_listing": "Lösche Eintrag zum Termin",
   "delete_appointment_listing_confirmation": "Wollen Sie den dazugehörigen Eintrag zum Termin ebenfalls löschen?",
+  "delete_appointment_confirmation": "Sind Sie sicher, dass Sie diesen Termin löschen wollen?",
   "appointmentDetails": "Termindetails",
   "addMoreServices": "Füge Dienst hinzu",
   "create_appointment": "Erstelle Termin",

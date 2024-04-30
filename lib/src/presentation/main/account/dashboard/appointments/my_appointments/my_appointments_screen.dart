@@ -320,10 +320,10 @@ class _MyAppointmentsLoadedState extends State<MyAppointmentsLoaded> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-            Translate.of(context).translate('delete_appointment'),
+            Translate.of(context).translate('delete_appointments'),
           ),
           content: Text(
-            Translate.of(context).translate('deleteAppointmentConfirmation'),
+            Translate.of(context).translate('delete_appointment_confirmation'),
           ),
           actions: <Widget>[
             TextButton(
