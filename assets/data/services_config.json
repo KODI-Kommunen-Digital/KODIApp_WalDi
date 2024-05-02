@@ -1,0 +1,51 @@
+[
+    {
+      "imageUrl": "assets/images/services-4.png",
+      "imageLink": "4",
+      "arguments": 1,
+      "categoryId": 1
+    },
+    {
+      "imageUrl": "assets/images/services-5.png",
+      "imageLink": "5",
+      "arguments": 3,
+      "categoryId": 3
+    },
+    {
+      "imageUrl": "assets/images/services-6.png",
+      "imageLink": "6",
+      "arguments": 4,
+      "categoryId": 4
+    },
+    {
+      "imageUrl": "assets/images/services-7.png",
+      "imageLink": "7",
+      "arguments": 10,
+      "categoryId": 10
+    },
+    {
+      "imageUrl": "assets/images/services-8.png",
+      "imageLink": "8",
+      "arguments": 13,
+      "categoryId": 13
+    },
+    {
+      "imageUrl": "assets/images/services-9.png",
+      "imageLink": "9",
+      "arguments": 6,
+      "categoryId": 6
+    },
+    {
+      "imageUrl": "assets/images/services-10.png",
+      "imageLink": "10",
+      "arguments": 0,
+      "categoryId": null
+    },
+    {
+      "imageUrl": "assets/images/services-14.png",
+      "imageLink": "14",
+      "arguments": 14,
+      "categoryId": 14
+    }
+  ]
+  

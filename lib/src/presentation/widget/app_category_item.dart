@@ -19,7 +19,7 @@ class AppCategory extends StatelessWidget {
   final CategoryView type;
   final CategoryModel? item;
   final VoidCallback? onPressed;
-  static const String profilePicUrl = Application.picturesURL;
+  static String profilePicUrl = Application.picturesURL;
 
   @override
   Widget build(BuildContext context) {

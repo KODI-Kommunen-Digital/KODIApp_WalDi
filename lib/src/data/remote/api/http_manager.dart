@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
@@ -20,13 +21,13 @@ class HTTPManager {
   HTTPManager({APIType apiType = APIType.defaultAPI}) {
     switch (apiType) {
       case APIType.defaultAPI:
-        _baseUrl = 'https://test.smartregion-auf.de/api/';
+        _baseUrl = dotenv.env['DEFAULT_API_URL']!;
         break;
       case APIType.forum:
-        _baseUrl = 'https://test.smartregion-auf.de/forumapi/';
+        _baseUrl = dotenv.env['FORUM_API_URL']!;
         break;
       case APIType.appointment:
-        _baseUrl = 'https://test.smartregion-auf.de/appointmentapi/v1/';
+        _baseUrl = dotenv.env['APPOINTMENT_API_URL']!;
         break;
     }
 

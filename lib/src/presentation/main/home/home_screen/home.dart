@@ -2,7 +2,6 @@
 
 import 'dart:async';
 import 'dart:io';
-
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -414,7 +413,6 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       } else {
         final prefs = await Preferences.openBox();
-        prefs.setKeyValue(Preferences.categoryId, item.id);
         prefs.setKeyValue(Preferences.categoryId, item.id);
         prefs.setKeyValue(Preferences.type, "category");
         if (!mounted) return;

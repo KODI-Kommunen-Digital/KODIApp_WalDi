@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
@@ -66,7 +67,6 @@ class HomeCubit extends Cubit<HomeState> {
 
     List<CategoryModel> formattedCategories =
         await formatCategoriesList(category, categoryCount, savedCity?.id);
-
     emit(HomeStateLoaded(
       banner,
       formattedCategories,
@@ -176,7 +176,7 @@ class HomeCubit extends Cubit<HomeState> {
       if (!hasContent) {
         element.hide = true;
       }
-      if (element.id == 17) {
+      if (element.id == 17 && dotenv.env['FORUM'] == "TRUE") {
         element.hide = false;
       }
     }
