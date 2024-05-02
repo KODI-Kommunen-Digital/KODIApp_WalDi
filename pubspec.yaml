@@ -1,6 +1,6 @@
 name: heidi
 description: A new Flutter project.
-version: 1.0.7
+version: 1.0.8
 
 environment:
   sdk: '>=2.19.6 <3.0.0'
@@ -89,6 +89,7 @@ dependencies:
   multiple_images_picker: ^1.0.1
   html: ^0.15.4
   calendar_date_picker2: ^0.5.5
+  package_info_plus: ^4.2.0
 
 dev_dependencies:
   flutter_test:

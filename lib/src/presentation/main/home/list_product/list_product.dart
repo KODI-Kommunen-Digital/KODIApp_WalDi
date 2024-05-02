@@ -32,6 +32,7 @@ class ListProductScreen extends StatefulWidget {
 class _ListProductScreenState extends State<ListProductScreen> {
   final TextEditingController _searchController = TextEditingController();
   late bool isCity;
+  late bool isCategoryService;
 
   //ProductFilter? selectedFilter;
   MultiFilter? selectedFilter;
@@ -41,11 +42,12 @@ class _ListProductScreenState extends State<ListProductScreen> {
   void initState() {
     super.initState();
     isCity = widget.arguments['id'] != 0;
+    isCategoryService = widget.arguments['isCategoryService'] ?? false;
     loadListingsList();
   }
 
   Future<void> loadListingsList() async {
-    if (widget.arguments['id'] != 0 && isCity) {
+    if (widget.arguments['id'] != 0 && isCity && !isCategoryService) {
       await context.read<ListCubit>().setCategoryFilter(0, null);
     }
     await context
@@ -56,15 +58,20 @@ class _ListProductScreenState extends State<ListProductScreen> {
   MultiFilter whatCanFilter(bool isEvent) {
     if (isCity) {
       return MultiFilter(
-          hasCategoryFilter: true,
-          categories: AppBloc.homeCubit.category,
-          currentCategory: selectedFilter?.currentCategory ?? 0);
+        hasCategoryFilter: true,
+        categories: AppBloc.homeCubit.category,
+        currentCategory: selectedFilter?.currentCategory ?? 0,
+      );
     }
 
     if (isEvent) {
       return MultiFilter(
           hasProductEventFilter: true,
-          currentProductEventFilter: selectedFilter?.currentProductEventFilter);
+          currentProductEventFilter: selectedFilter?.currentProductEventFilter,
+          hasLocationFilter: true,
+          currentLocation:
+              selectedFilter?.currentLocation ?? widget.arguments['id'],
+          cities: AppBloc.discoveryCubit.location);
     } else {
       return MultiFilter(
           hasLocationFilter: true,
@@ -79,13 +86,15 @@ class _ListProductScreenState extends State<ListProductScreen> {
     final loadedList = context.read<ListCubit>().getLoadedList();
     setState(() {
       if (filter?.hasProductEventFilter ?? false) {
-        context
-            .read<ListCubit>()
-            .onDateProductFilter(filter?.currentProductEventFilter, loadedList);
-      }
-      if (filter?.hasLocationFilter ?? false) {
+        context.read<ListCubit>().onDateProductFilter(
+            filter?.currentProductEventFilter,
+            loadedList,
+            filter?.hasLocationFilter ?? false,
+            filter?.currentLocation);
+      } else if (filter?.hasLocationFilter ?? false) {
         loadListingsList();
       }
+
       if (filter?.hasCategoryFilter ?? false) {
         context.read<ListCubit>().setCategoryFilter(
             filter?.currentCategory ?? 0,
@@ -126,6 +135,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
                   bool isEvent = snapshot.data ?? false;
                   return Row(
                     children: [
+                      if(!isCategoryService)
                       AppFilterButton(
                           multiFilter: whatCanFilter(isEvent),
                           filterCallBack: (filter) {
