@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:heidi/src/data/model/model_user.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
@@ -68,17 +69,18 @@ class DashboardScreen extends StatelessWidget {
                         );
                       },
                     ),
-                    GridItemButton(
-                      icon: Icons.group,
-                      title: Translate.of(context).translate("my_groups"),
-                      onPressed: () {
-                        Navigator.pushNamed(
-                          context,
-                          Routes.myGroups,
-                        );
-                        // Add your action here
-                      },
-                    ),
+                    if (dotenv.env['FORUM'] == "TRUE")
+                      GridItemButton(
+                        icon: Icons.group,
+                        title: Translate.of(context).translate("my_groups"),
+                        onPressed: () {
+                          Navigator.pushNamed(
+                            context,
+                            Routes.myGroups,
+                          );
+                          // Add your action here
+                        },
+                      ),
                   ],
                 ),
               );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:heidi/src/presentation/widget/app_list_title.dart';
 import 'package:heidi/src/utils/configs/language.dart';
 import 'package:heidi/src/utils/translate.dart';
@@ -45,7 +46,7 @@ class _LegalScreenState extends State<LegalScreen> {
             AppListTitle(
               title: Translate.of(context).translate('imprint'),
               onPressed: () {
-                _makeAction('https://app.smartregion-auf.de/ImprintPage');
+                _makeAction(dotenv.env['IMPRINT_URL']!);
               },
               trailing: Row(
                 children: <Widget>[
@@ -62,7 +63,7 @@ class _LegalScreenState extends State<LegalScreen> {
             AppListTitle(
               title: Translate.of(context).translate('privacy_policy'),
               onPressed: () {
-                _makeAction('https://app.smartregion-auf.de/PrivacyPolicy');
+                _makeAction(dotenv.env['PRIVACY_POLICY_URL']!);
               },
               trailing: Row(
                 children: <Widget>[
@@ -79,7 +80,7 @@ class _LegalScreenState extends State<LegalScreen> {
             AppListTitle(
               title: Translate.of(context).translate('terms_of_use'),
               onPressed: () {
-                _makeAction('https://app.smartregion-auf.de/TermsOfUse');
+                _makeAction(dotenv.env['TERMS_OF_USE_URL']!);
               },
               trailing: Row(
                 children: <Widget>[

@@ -306,7 +306,6 @@ class Api {
 
   ///Get Cities
   static Future<ResultApiModel> requestCities() async {
-    // final result = await UtilAsset.loadJson("assets/data/locations.json");
     final result =
         await HTTPManager(apiType: APIType.defaultAPI).get(url: cities);
     return ResultApiModel.fromJson(result);

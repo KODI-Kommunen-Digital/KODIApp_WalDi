@@ -90,6 +90,8 @@ dependencies:
   html: ^0.15.4
   calendar_date_picker2: ^0.5.5
   package_info_plus: ^4.2.0
+  flutter_dotenv: ^5.1.0
+  firebase_remote_config: ^4.3.8
 
 dev_dependencies:
   flutter_test:
@@ -126,6 +128,10 @@ flutter:
     - assets/images/
     - assets/locale/
     - assets/data/
+    - assets/env/.envAuf
+    - assets/data/categories_config.json
+    - assets/data/subcategories_config.json
+    - assets/data/services_config.json
 
   fonts:
     - family: Poppins
