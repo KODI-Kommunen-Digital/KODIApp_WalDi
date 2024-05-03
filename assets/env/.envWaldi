@@ -1,4 +1,4 @@
-DEFAULT_API_URL=https://waldi.app/api
+DEFAULT_API_URL=https://waldi.app/api/
 FORUM_API_URL=https://waldi.app/forumapi/
 APPOINTMENT_API_URL=https://waldi.app/appointmentapi/v1/
 IMAGE_URL=https://unsa1heidi.obs.eu-de.otc.t-systems.com/
@@ -6,6 +6,10 @@ DEFAULT_PROFILE_IMAGE_URL=https://smrauf1heidi.obs.eu-de.otc.t-systems.com/admin
 CATEGORIES_JSON=assets/data/categories_config.json
 SUBCATEGORIES_JSON=assets/data/subcategories_config.json
 SERVICES_CONFIG=assets/data/services_config.json
+MITREDEN_LINKS_JSON=assets/data/mitreden_links_config.json
+VIRTUAL_TOUR_LINKS_JSON=assets/data/virtual_tour_config.json
+CITY_LINKS_JSON=assets/data/city_links_config.json
+TOURISM_LINKS_JSON=assets/data/tourism_links_config.json
 IMPRINT_URL=https://ilzerland.bayern/impressum/
 PRIVACY_POLICY_URL=https://ilzerland.bayern/datenschutz/
 TERMS_OF_USE_URL=https://ilzerland.bayern/nutzungsbedingungen-waldi/

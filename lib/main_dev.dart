@@ -49,7 +49,7 @@ Future<void> main() async {
     },
     appRunner: () => runApp(HeidiApp(prefBox)),
   );
-  await dotenv.load(fileName: "assets/env/.envAuf");
+  await dotenv.load(fileName: "assets/env/.envWaldi");
   await CategoryManager.loadCategories();
 
   await Firebase.initializeApp(
