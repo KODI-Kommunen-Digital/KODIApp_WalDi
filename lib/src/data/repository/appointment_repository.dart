@@ -111,7 +111,8 @@ class AppointmentRepository {
         date: date,
         serviceId: idString);
     if (response.success) {
-      if (response.data == null || response.data.isEmpty) {
+      if (response.data == null || response.message == "No slots available") {
+        logError('Load Appointment Slots Error', response.message);
         return null;
       }
 
@@ -207,13 +208,15 @@ class AppointmentRepository {
     final cityId = await ListRepository.getCityId(city);
 
     final DateTime? parsedStartDate = DateTime.tryParse(startDate ?? '');
-    final DateTime? parsedEndDate = DateTime.tryParse(endDate ?? '');
 
     if (parsedStartDate != null) {
       startDate = DateFormat('yyyy-MM-ddTHH:mm').format(parsedStartDate);
     }
-    if (parsedEndDate != null) {
-      endDate = DateFormat('yyyy-MM-ddTHH:mm').format(parsedEndDate);
+    if (endDate != null) {
+      final DateTime? parsedEndDate = DateTime.tryParse(endDate);
+      if (parsedEndDate != null) {
+        endDate = DateFormat('yyyy-MM-ddTHH:mm').format(parsedEndDate);
+      }
     }
 
     List<Map<String, String>>? parsedHolidays = parseHolidays(holidays);
@@ -285,23 +288,43 @@ class AppointmentRepository {
 
   Future<List<BookingModel>?> loadOwnerBookings(int pageNo, int appointmentId,
       {String? startDate}) async {
-    int userId = prefs.getKeyValue('userId', 0);
+    int userId = prefs.getKeyValue(
+        'userId', 0); // Assuming prefs is previously defined and accessible
+
+    // Formatting startDate if it's provided
     if (startDate != null) {
       startDate =
           "&${DateFormat('yyyy-MM-dd').format(DateTime.parse(startDate))}";
     } else {
       startDate = '';
     }
+
+    // API request
     final response = await Api.requestOwnerBookings(
         userId, appointmentId, pageNo, startDate);
 
     if (response.success) {
-      final responseData =
-          List<Map<String, dynamic>>.from(response.data ?? []).map((item) {
-        return BookingModel.fromJson(item);
-      }).toList();
-
-      return responseData;
+      // Safely handling the response data
+      if (response.data is List) {
+        // Map each element to BookingModel if it is a Map<String, dynamic>
+        var responseData = (response.data as List)
+            .map((item) {
+              if (item is Map<String, dynamic>) {
+                return BookingModel.fromJson(item);
+              } else {
+                // Log or handle the case where item is not a Map<String, dynamic>
+                logError('Invalid item type', '');
+                return null;
+              }
+            })
+            .where((item) => item != null)
+            .cast<BookingModel>()
+            .toList();
+        return responseData;
+      } else {
+        // Log or handle the case where data is not a List
+        logError('Expected a list of data', '');
+      }
     } else {
       logError('Load Owner Bookings Error', response.message);
     }
@@ -352,10 +375,10 @@ class AppointmentRepository {
     if (friends != null) {
       for (BookingGuestModel friend in friends) {
         friendDetails.add({
-          'fistname': friend.firstname,
-          'lastName': friend.lastname,
+          'firstname': friend.firstname,
+          'lastname': friend.lastname,
           'description': friend.description,
-          'emailId': friend.emailId
+          'email': friend.email
         });
       }
     } else {
@@ -364,14 +387,14 @@ class AppointmentRepository {
 
     Map<String, dynamic> params = {
       'guestDetails': {
-        'fistname': guestDetails.firstname,
-        'lastName': guestDetails.lastname,
+        'firstname': guestDetails.firstname,
+        'lastname': guestDetails.lastname,
         'description': guestDetails.description,
-        'emailId': guestDetails.emailId
+        'email': guestDetails.email
       },
       'date': date,
-      'startTime': startTime,
-      'endTime': endTime,
+      'startTime': startTime ?? "",
+      'endTime': endTime ?? "",
       'friends': friendDetails
     };
 

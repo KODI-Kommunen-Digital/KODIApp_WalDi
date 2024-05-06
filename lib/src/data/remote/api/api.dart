@@ -695,7 +695,7 @@ class Api {
   static Future<ResultApiModel> requestAppointmentSlots(
       {cityId, listingId, appointmentId, date, serviceId}) async {
     var list =
-        '/cities/$cityId/listings/$listingId/appointments/$appointmentId/slots?date=$date&serviceId[]=$serviceId';
+        '/cities/$cityId/listings/$listingId/appointments/$appointmentId/slots?serviceId[]=$serviceId&date=$date&serviceId[]=$serviceId';
     final result =
         await HTTPManager(apiType: APIType.appointment).get(url: list);
     return ResultApiModel.fromJson(result);

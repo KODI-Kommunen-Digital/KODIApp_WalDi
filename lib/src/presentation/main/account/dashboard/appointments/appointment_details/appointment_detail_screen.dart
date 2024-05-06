@@ -224,7 +224,7 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
                                   border: const OutlineInputBorder(),
                                 ),
                                 controller: TextEditingController(
-                                    text: guests[i].emailId),
+                                    text: guests[i].email),
                                 enabled: false, // Make text unchangeable
                                 style: TextStyle(
                                     color: Theme.of(context)
@@ -312,6 +312,33 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
                                             ?.color ??
                                         Colors.white),
                               ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  context
+                                      .read<AppointmentDetailsCubit>()
+                                      .onCancel(1);
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Text(
+                                      "Cancel Booking",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelLarge!
+                                          .copyWith(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                              )
                             ],
                           )
                         : (isLoadingMore)

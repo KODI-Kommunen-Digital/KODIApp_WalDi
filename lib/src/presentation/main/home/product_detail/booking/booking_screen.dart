@@ -54,7 +54,7 @@ class _BookingScreenState extends State<BookingScreen> {
             services: services,
             listingId: widget.listingId,
             cityId: widget.cityId),
-        orElse: () => ErrorWidget('Failed to load Accounts.'),
+        orElse: () => ErrorWidget('Failed to load booking details.'),
       ),
     );
   }
@@ -375,14 +375,14 @@ class _BookingDetailsLoadedState extends State<BookingDetailsLoaded> {
                 firstname: _textFistNameController[0].text,
                 lastname: _textLastNameController[0].text,
                 description: _textMessageController[0].text,
-                emailId: _textEmailController[0].text,
+                email: _textEmailController[0].text,
                 phoneNumber: _textPhoneController[0].text);
             for (int i = 1; i < adults; i++) {
               friends.add(BookingGuestModel(
                   firstname: _textFistNameController[i].text,
                   lastname: _textLastNameController[i].text,
                   description: '',
-                  emailId: _textEmailController[0].text));
+                  email: _textEmailController[0].text));
             }
           } else {
             isWrongEntry = false;
@@ -829,7 +829,11 @@ class _BookingDetailsLoadedState extends State<BookingDetailsLoaded> {
           friends: friends,
           listingId: widget.listingId,
           appointmentId: widget.appointment.id!);
-      if (!success) {
+      if (success) {
+        setState(() {
+          submittedSuccessful = true;
+        });
+      } else {
         submittedSuccessful = false;
       }
     }

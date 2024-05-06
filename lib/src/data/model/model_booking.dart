@@ -31,22 +31,25 @@ class BookingModel {
       this.description});
 
   factory BookingModel.fromJson(Map<String, dynamic> json) {
+    String? endDate;
     final DateTime? parsedStartDate =
         DateTime.tryParse(json['startTime'] ?? '');
-    final DateTime? parsedEndDate = DateTime.tryParse(json['endTime'] ?? '');
+    if (json['endTime'] != null) {
+      final DateTime? parsedEndDate = DateTime.tryParse(json['endTime'] ?? '');
+      if (parsedEndDate != null) {
+        endDate = DateFormat('yyyy-MM-ddHH:mm').format(parsedEndDate);
+      }
+    }
     final DateTime? parsedCreatedDate =
         DateTime.tryParse(json['createdAt'] ?? '');
 
     String? startDate;
-    String? endDate;
     String? createdAt;
 
     if (parsedStartDate != null) {
       startDate = DateFormat('yyyy-MM-ddHH:mm').format(parsedStartDate);
     }
-    if (parsedEndDate != null) {
-      endDate = DateFormat('yyyy-MM-ddHH:mm').format(parsedEndDate);
-    }
+
     if (parsedCreatedDate != null) {
       createdAt = DateFormat('yyyy-MM-ddHH:mm').format(parsedCreatedDate);
     }
@@ -57,7 +60,7 @@ class BookingModel {
         startTime: startDate,
         endTime: endDate,
         createdAt: createdAt,
-        userId: json['userId'],
+        userId: json['userId'] ?? 1,
         guestId: json['guestId'],
         isGuest: ((json['isGuest'] ?? 0) == 1),
         isCreatedByGuest: ((json['isCreatedByGuest'] ?? 0) == 1),

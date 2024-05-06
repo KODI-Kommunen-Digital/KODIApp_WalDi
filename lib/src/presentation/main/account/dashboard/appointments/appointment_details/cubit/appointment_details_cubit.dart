@@ -31,7 +31,8 @@ class AppointmentDetailsCubit extends Cubit<AppointmentDetailsState> {
         UserModel? guest =
             await UserRepository.requestUserDetails(booking.userId);
         if (guest != null) {
-          guests.add(BookingGuestModel.fromUser(guest, slot: getSchedule(booking.startTime!, booking.endTime!)));
+          guests.add(BookingGuestModel.fromUser(guest,
+              slot: getSchedule(booking.startTime!, booking.endTime!)));
         }
       }
 
@@ -46,20 +47,22 @@ class AppointmentDetailsCubit extends Cubit<AppointmentDetailsState> {
     }
   }
 
-  Future<List<BookingGuestModel>> newGuestBookings(int pageNo, List<BookingGuestModel> previousGuestBookings, int appointmentId) async {
+  Future<List<BookingGuestModel>> newGuestBookings(int pageNo,
+      List<BookingGuestModel> previousGuestBookings, int appointmentId) async {
     List<BookingGuestModel> guestBookings = previousGuestBookings;
 
     List<BookingModel>? newBookings =
-    await repo.loadOwnerBookings(pageNo, appointmentId);
+        await repo.loadOwnerBookings(pageNo, appointmentId);
 
     if (newBookings != null) {
       List<BookingGuestModel> guests = [];
 
       for (var booking in newBookings) {
         UserModel? guest =
-        await UserRepository.requestUserDetails(booking.userId);
+            await UserRepository.requestUserDetails(booking.userId);
         if (guest != null) {
-          guests.add(BookingGuestModel.fromUser(guest, slot: getSchedule(booking.startTime!, booking.endTime!)));
+          guests.add(BookingGuestModel.fromUser(guest,
+              slot: getSchedule(booking.startTime!, booking.endTime!)));
         }
       }
 
@@ -70,7 +73,6 @@ class AppointmentDetailsCubit extends Cubit<AppointmentDetailsState> {
     }
     return guestBookings;
   }
-
 
   ScheduleModel getSchedule(String start, String end) {
     String startDate = start.substring(0, 10);
@@ -86,12 +88,30 @@ class AppointmentDetailsCubit extends Cubit<AppointmentDetailsState> {
 
     String formattedTime = "$startTime - $endTime";
 
-    ScheduleModel schedule = ScheduleModel.fromString(formattedTime, date: date);
+    ScheduleModel schedule =
+        ScheduleModel.fromString(formattedTime, date: date);
     return schedule;
   }
 
   String _formatDate(String dateString) {
     DateTime dateTime = DateTime.parse(dateString);
     return DateFormat('dd.MM.yyyy').format(dateTime);
+  }
+
+  Future<void> onCancel(int bookingId) async {
+    List<BookingModel>? bookings = await repo.loadOwnerBookings(1, bookingId);
+
+    if (bookings != null) {
+      List<BookingGuestModel> guests = [];
+
+      for (var booking in bookings) {
+        UserModel? guest =
+            await UserRepository.requestUserDetails(booking.guestId);
+        if (guest != null) {
+          guests.add(BookingGuestModel.fromUser(guest,
+              slot: getSchedule(booking.startTime!, booking.endTime!)));
+        }
+      }
+    } else {}
   }
 }

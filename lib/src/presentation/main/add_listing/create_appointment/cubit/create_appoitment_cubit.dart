@@ -13,19 +13,34 @@ class CreateAppointmentCubit extends Cubit<CreateAppointmentState> {
   Future<void> onLoad(ProductModel? product) async {
     emit(const CreateAppointmentState.loading());
     if (product != null) {
-      AppointmentModel? appointment =
-          await AppointmentRepository.loadAppointment(
-              product.cityId!, product.id);
-      if (appointment != null) {
-        List<AppointmentServiceModel>? services =
-            await AppointmentRepository.loadAppointmentServices(
-                product.cityId!, product.id, appointment.id!);
-        emit(CreateAppointmentState.loaded(services, appointment));
-      } else {
-        emit(const CreateAppointmentState.error("Fail loading Appointment"));
+      try {
+        AppointmentModel? appointment =
+            await AppointmentRepository.loadAppointment(
+                product.cityId!, product.id);
+        if (appointment != null) {
+          List<AppointmentServiceModel>? services =
+              await AppointmentRepository.loadAppointmentServices(
+                  product.cityId!, product.id, appointment.id!);
+          emit(CreateAppointmentState.loaded(services, appointment));
+        } else {
+          emit(
+              const CreateAppointmentState.error("Failed to load appointment"));
+        }
+      } catch (e) {
+        emit(CreateAppointmentState.error(
+            "Error loading appointment: ${e.toString()}"));
       }
     } else {
-      emit(const CreateAppointmentState.error("No product given"));
+      List<AppointmentServiceModel> services =
+          []; // Example of initializing with an empty list
+      AppointmentModel appointment = AppointmentModel(
+        id: 0,
+        title: '',
+        description: '',
+        startDate: '',
+        openHours: [],
+      );
+      emit(CreateAppointmentState.loaded(services, appointment));
     }
   }
 }

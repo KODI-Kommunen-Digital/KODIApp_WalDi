@@ -294,9 +294,9 @@ class _MyAppointmentsLoadedState extends State<MyAppointmentsLoaded> {
                                                 (BuildContext context) {
                                               return {
                                                 Translate.of(context).translate(
-                                                    'delete_appointments'),
+                                                    'edit_appointments'),
                                                 Translate.of(context).translate(
-                                                    'edit_appointments')
+                                                    'delete_appointments')
                                               }.map((String choice) {
                                                 return PopupMenuItem<String>(
                                                   value: choice,

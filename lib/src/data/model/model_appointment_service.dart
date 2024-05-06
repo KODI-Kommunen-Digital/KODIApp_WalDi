@@ -93,7 +93,8 @@ class AppointmentServiceModel {
         name: json['name'] ?? '',
         userId: json['userId'] ?? 0,
         duration: json['duration'],
-        slotSameAsAppointment: ((json['slotSameAsAppointment'] ?? 0) == 1),
+        // slotSameAsAppointment: ((json['slotSameAsAppointment'] ?? 0) == 1),
+        slotSameAsAppointment: true,
         maxBookingPerSlot: maxBookingPerSlot ?? 8, //Change default value
         openingDates: parsedOpenHours,
         holidays: parsedHolidays);
@@ -133,7 +134,8 @@ class AppointmentServiceModel {
       Map<String, dynamic> params = {
         'name': service.name,
         'duration': service.duration,
-        'slotSameAsAppointment': service.slotSameAsAppointment,
+        // 'slotSameAsAppointment': service.slotSameAsAppointment,
+        'slotSameAsAppointment': true,
         'metadata': metaData
       };
 

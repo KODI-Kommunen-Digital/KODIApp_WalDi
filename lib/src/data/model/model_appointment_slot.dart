@@ -31,7 +31,8 @@ class AppointmentSlotModel {
         appointmentId: json['appointmentId'] ?? 0,
         name: json['name'] ?? '',
         duration: json['duration'] ?? 0,
-        slotSameAsAppointment: ((json['slotSameAsAppointment'] ?? 0) == 1),
+        // slotSameAsAppointment: ((json['slotSameAsAppointment'] ?? 0) == 1),
+        slotSameAsAppointment: true,
         openHours: schedules);
   }
 

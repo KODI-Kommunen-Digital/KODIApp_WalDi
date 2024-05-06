@@ -34,7 +34,7 @@ class MyListingsScreen extends StatelessWidget {
       builder: (context, state) => state.maybeWhen(
         loading: () => const ProfileLoading(),
         loaded: (userListing) => ProfileLoaded(user, userListing, isEditable),
-        orElse: () => ErrorWidget('Failed to load Accounts.'),
+        orElse: () => ErrorWidget('Failed to load user listings.'),
       ),
     );
   }

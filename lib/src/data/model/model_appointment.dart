@@ -34,15 +34,16 @@ class AppointmentModel {
     List<OpenTimeModel> parsedOpenHours = [];
     List<HolidayModel>? parsedHolidays = [];
     int? maxBookingPerSlot;
-
-    final DateTime parsedStartDate = DateTime.parse(json['startDate']);
-    final DateTime? parsedEndDate = DateTime.tryParse(json['endDate'] ?? '');
-    String startDate = DateFormat('yyyy-MM-ddHH:mm').format(parsedStartDate);
     String? endDate;
 
-    if (parsedEndDate != null) {
-      endDate = DateFormat('yyyy-MM-ddHH:mm').format(parsedEndDate);
+    final DateTime parsedStartDate = DateTime.parse(json['startDate']);
+    if (json['endDate'] != null) {
+      final DateTime? parsedEndDate = DateTime.tryParse(json['endDate'] ?? '');
+      if (parsedEndDate != null) {
+        endDate = DateFormat('yyyy-MM-ddHH:mm').format(parsedEndDate);
+      }
     }
+    String startDate = DateFormat('yyyy-MM-ddHH:mm').format(parsedStartDate);
 
     if (json['metadata'] != null) {
       Map<String, dynamic> metaData = jsonDecode(json['metadata']);
@@ -78,8 +79,7 @@ class AppointmentModel {
         if (openHours[day] != null) {
           List<dynamic> schedules = openHours[day];
           for (var schedule in schedules) {
-            TimeOfDay startTime =
-                timeOfDayFromString(schedule['startTime']!);
+            TimeOfDay startTime = timeOfDayFromString(schedule['startTime']!);
             TimeOfDay endTime = timeOfDayFromString(schedule['endTime']!);
             ScheduleModel parsedSchedule =
                 ScheduleModel(startTime: startTime, endTime: endTime);

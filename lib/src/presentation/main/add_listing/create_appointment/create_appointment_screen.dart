@@ -43,14 +43,14 @@ class _CreateAppointmentScreenState extends State<CreateAppointmentScreen> {
             isEdit: widget.item != null,
             timeSlots: getLoadedTimeSlots(appointment.openHours),
             loadedEntries: loadedEntries),
-        orElse: () => ErrorWidget('Failed to load Accounts.'),
+        orElse: () => ErrorWidget('Failed to load appointment details.'),
       ),
     );
   }
 
   List<OpenTimeModel?> getLoadedTimeSlots(List<OpenTimeModel?> loaded) {
     List<OpenTimeModel?> combinedList = [];
-    if(widget.timeSlots != null) {
+    if (widget.timeSlots != null) {
       combinedList.addAll(widget.timeSlots!);
     }
     combinedList.addAll(loaded);
@@ -139,16 +139,16 @@ class _CreateAppointmentLoadedState extends State<CreateAppointmentLoaded> {
         title: Text(Translate.of(context).translate('create_appointment')),
         actions: [
           //Remove if change open Hours
-          if(!widget.isEdit)
-          IconButton(
-            icon: const Icon(
-              Icons.calendar_month,
-              size: 32,
+          if (!widget.isEdit)
+            IconButton(
+              icon: const Icon(
+                Icons.calendar_month,
+                size: 32,
+              ),
+              onPressed: () {
+                _navigateAndDisplayTimeSlots(context);
+              },
             ),
-            onPressed: () {
-              _navigateAndDisplayTimeSlots(context);
-            },
-          ),
         ],
       ),
       body: SafeArea(

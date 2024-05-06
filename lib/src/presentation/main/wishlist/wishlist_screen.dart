@@ -40,7 +40,7 @@ class _WishListScreenState extends State<WishListScreen> {
       builder: (context, state) => state.maybeWhen(
         loading: () => const WishListLoading(),
         loaded: (favoritesList) => WishListLoaded(favoritesList: favoritesList),
-        orElse: () => ErrorWidget('Failed to load Accounts.'),
+        orElse: () => ErrorWidget('Failed to load wishlist.'),
       ),
     );
   }

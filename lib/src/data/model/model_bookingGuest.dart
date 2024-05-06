@@ -7,7 +7,7 @@ class BookingGuestModel {
   final String firstname;
   final String lastname;
   final String description;
-  final String emailId;
+  final String email;
   final String? phoneNumber;
   final ScheduleModel? slot;
 
@@ -15,17 +15,16 @@ class BookingGuestModel {
       {required this.firstname,
       required this.lastname,
       required this.description,
-      required this.emailId,
+      required this.email,
       this.phoneNumber,
       this.slot});
 
-  factory BookingGuestModel.fromUser(UserModel user,
-      {ScheduleModel? slot}) {
+  factory BookingGuestModel.fromUser(UserModel user, {ScheduleModel? slot}) {
     return BookingGuestModel(
         firstname: user.firstname,
         lastname: user.lastname,
         description: user.description,
-        emailId: user.email,
+        email: user.email,
         slot: slot);
   }
 }

@@ -66,6 +66,8 @@ class BookingCubit extends Cubit<BookingState> {
       required int listingId,
       required int appointmentId}) async {
     final response = await _appointmentRepo.saveBooking(
+        startTime: startTime,
+        endTime: endTime,
         guestDetails: guestDetails,
         date: date,
         cityId: cityId,
