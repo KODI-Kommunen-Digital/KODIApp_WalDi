@@ -126,7 +126,7 @@ class _AccountLoadedState extends State<AccountLoaded> {
                       type: UserViewType.information,
                       onPressed: () {
                         Navigator.pushNamed(context, Routes.profile,
-                            arguments: {'editable': true});
+                            arguments: {'user': user, 'editable': true});
                       },
                       showDirectionIcon: true,
                     ),

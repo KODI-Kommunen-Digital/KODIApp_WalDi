@@ -144,8 +144,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(
-                color: Theme.of(context).textTheme.bodyLarge?.color ??
-                    Colors.white,
+                color: Colors.black,
                 padding: const EdgeInsets.fromLTRB(16, 32, 16, 0),
                 child: Row(
                   children: [
@@ -154,18 +153,16 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         link,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
-                        style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyLarge?.color ??
-                              Colors.white,
+                        style: const TextStyle(
+                          color: Colors.white,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                     IconButton(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.close,
-                        color: Theme.of(context).textTheme.bodyLarge?.color ??
-                            Colors.white,
+                        color: Colors.white,
                       ),
                       onPressed: () {
                         Navigator.of(context).pop();
