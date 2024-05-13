@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_appointment.dart';
 import 'package:heidi/src/data/model/model_appointment_service.dart';
+import 'package:heidi/src/data/model/model_open_time.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/appointments/my_appointments/cubit/my_appointments_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/appointments/my_appointments/cubit/my_appointments_state.dart';
@@ -276,8 +277,10 @@ class _MyAppointmentsLoadedState extends State<MyAppointmentsLoaded> {
                                                                         0]
                                                                     as List<
                                                                         AppointmentServiceModel>,
-                                                            openHours:
-                                                                item.openHours,
+                                                            openHours: servicesUpdated[
+                                                                        1]
+                                                                    as List<
+                                                                        OpenTimeModel?>,
                                                             holidays:
                                                                 item.holidays,
                                                             cityId: product

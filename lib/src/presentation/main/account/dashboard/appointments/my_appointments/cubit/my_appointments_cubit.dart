@@ -68,15 +68,12 @@ class MyAppointmentsCubit extends Cubit<MyAppointmentsState> {
       required int appointmentId}) async {
     try {
       final prefs = await Preferences.openBox();
-      final listindId = prefs.getKeyValue(Preferences.listingId, 1);
-      final listingTitle = prefs.getKeyValue(Preferences.listingTitle, '');
-      final listingDesc = prefs.getKeyValue(Preferences.listingDesc, '');
       AppointmentRepository repoAppointment = AppointmentRepository(prefs);
 
-      if (services == null) {
-        ProductModel? product =
-            await AppointmentRepository.getProductForAppointment(appointmentId);
-        if (product != null) {
+      ProductModel? product =
+          await AppointmentRepository.getProductForAppointment(appointmentId);
+      if (product != null) {
+        if (services == null) {
           List<AppointmentServiceModel>? loadedServices =
               await AppointmentRepository.loadAppointmentServices(
                   product.cityId!, product.id, appointmentId);
@@ -85,29 +82,31 @@ class MyAppointmentsCubit extends Cubit<MyAppointmentsState> {
           } else {
             logError("No services, error");
           }
-        } else {
-          logError("No services, couldn't load product, error");
         }
-      }
 
-      List<CategoryModel> cities = AppBloc.homeCubit.location;
-      String city = cities.firstWhere((element) => element.id == cityId).title;
+        List<CategoryModel> cities = AppBloc.homeCubit.location;
+        String city =
+            cities.firstWhere((element) => element.id == cityId).title;
 
-      final response = await repoAppointment.editAppointment(
-          listingId: listindId,
-          appointmentId: appointmentId,
-          title: listingTitle,
-          description: listingDesc,
-          startDate: "2024-04-02T12:30:45.000Z",
-          maxBookingPerSlot: 8,
-          openHours: openHours,
-          holidays: holidays,
-          city: city,
-          services: services);
-      if (response.success) {
-        return true;
+        final response = await repoAppointment.editAppointment(
+            listingId: product.id,
+            appointmentId: appointmentId,
+            title: product.title,
+            description: product.description,
+            startDate: "2024-04-02T12:30:45.000Z",
+            maxBookingPerSlot: 8,
+            openHours: openHours,
+            holidays: holidays,
+            city: city,
+            services: services);
+        if (response.success) {
+          return true;
+        } else {
+          logError('Edit Appointment Error', response.message);
+          return false;
+        }
       } else {
-        logError('Edit Appointment Error', response.message);
+        logError("Couldn't load product, error");
         return false;
       }
     } catch (e, stackTrace) {

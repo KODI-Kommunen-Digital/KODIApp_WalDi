@@ -138,8 +138,6 @@ class _CreateAppointmentLoadedState extends State<CreateAppointmentLoaded> {
       appBar: AppBar(
         title: Text(Translate.of(context).translate('create_appointment')),
         actions: [
-          //Remove if change open Hours
-          if (!widget.isEdit)
             IconButton(
               icon: const Icon(
                 Icons.calendar_month,
