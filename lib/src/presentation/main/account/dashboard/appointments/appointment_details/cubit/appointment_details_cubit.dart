@@ -1,10 +1,10 @@
 import 'package:bloc/bloc.dart';
-import 'package:heidi/src/data/model/model.dart';
+// import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_booking.dart';
 import 'package:heidi/src/data/model/model_bookingGuest.dart';
 import 'package:heidi/src/data/model/model_schedule.dart';
 import 'package:heidi/src/data/repository/appointment_repository.dart';
-import 'package:heidi/src/data/repository/user_repository.dart';
+// import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:intl/intl.dart';
 import 'appointment_details_state.dart';
@@ -28,10 +28,10 @@ class AppointmentDetailsCubit extends Cubit<AppointmentDetailsState> {
       List<BookingGuestModel> guests = [];
 
       for (var booking in bookings) {
-        UserModel? guest =
-            await UserRepository.requestUserDetails(booking.userId);
+        GuestDetails? guest = booking.guestDetails;
+        // await UserRepository.requestUserDetails(booking.userId);
         if (guest != null) {
-          guests.add(BookingGuestModel.fromUser(guest,
+          guests.add(BookingGuestModel.fromUser(guest, booking.remark,
               slot: getSchedule(booking.startTime!, booking.endTime!)));
         }
       }
@@ -58,10 +58,9 @@ class AppointmentDetailsCubit extends Cubit<AppointmentDetailsState> {
       List<BookingGuestModel> guests = [];
 
       for (var booking in newBookings) {
-        UserModel? guest =
-            await UserRepository.requestUserDetails(booking.userId);
+        GuestDetails? guest = booking.guestDetails;
         if (guest != null) {
-          guests.add(BookingGuestModel.fromUser(guest,
+          guests.add(BookingGuestModel.fromUser(guest, booking.remark,
               slot: getSchedule(booking.startTime!, booking.endTime!)));
         }
       }
@@ -98,20 +97,13 @@ class AppointmentDetailsCubit extends Cubit<AppointmentDetailsState> {
     return DateFormat('dd.MM.yyyy').format(dateTime);
   }
 
-  Future<void> onCancel(int bookingId) async {
-    List<BookingModel>? bookings = await repo.loadOwnerBookings(1, bookingId);
-
-    if (bookings != null) {
-      List<BookingGuestModel> guests = [];
-
-      for (var booking in bookings) {
-        UserModel? guest =
-            await UserRepository.requestUserDetails(booking.guestId);
-        if (guest != null) {
-          guests.add(BookingGuestModel.fromUser(guest,
-              slot: getSchedule(booking.startTime!, booking.endTime!)));
-        }
-      }
-    } else {}
+  Future<bool> onCancelOwner(int appointmentId, int bookingId) async {
+    final response = repo.cancelAppointmentOwner(appointmentId, bookingId);
+    if (await response) {
+      onLoad(true, appointmentId);
+      return true;
+    } else {
+      return false;
+    }
   }
 }

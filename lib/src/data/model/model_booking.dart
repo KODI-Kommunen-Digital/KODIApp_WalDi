@@ -14,21 +14,24 @@ class BookingModel {
   final int? createdBy;
   final bool isCreatedByGuest;
   final String? appointmentTitle;
+  final GuestDetails? guestDetails;
 
-  BookingModel(
-      {required this.id,
-      required this.appointmentId,
-      this.createdAt,
-      this.startTime,
-      this.endTime,
-      required this.userId,
-      required this.guestId,
-      required this.isGuest,
-      this.remark,
-      this.createdBy,
-      required this.isCreatedByGuest,
-      this.appointmentTitle,
-      this.description});
+  BookingModel({
+    required this.id,
+    required this.appointmentId,
+    this.createdAt,
+    this.startTime,
+    this.endTime,
+    required this.userId,
+    required this.guestId,
+    required this.isGuest,
+    this.remark,
+    this.createdBy,
+    required this.isCreatedByGuest,
+    this.appointmentTitle,
+    this.description,
+    this.guestDetails,
+  });
 
   factory BookingModel.fromJson(Map<String, dynamic> json) {
     String? endDate;
@@ -66,7 +69,8 @@ class BookingModel {
         isCreatedByGuest: ((json['isCreatedByGuest'] ?? 0) == 1),
         createdBy: json['createdBy'],
         remark: json['remark'],
-        description: json['description']);
+        description: json['description'],
+        guestDetails: GuestDetails.fromJson(json['guest_details']));
   }
 
   String getStartTime() {
@@ -97,5 +101,25 @@ class BookingModel {
   String _formatDate(String dateString) {
     DateTime dateTime = DateTime.parse(dateString);
     return DateFormat('dd.MM.yyyy').format(dateTime);
+  }
+}
+
+class GuestDetails {
+  final String email;
+  final String lastname;
+  final String firstname;
+
+  GuestDetails({
+    required this.email,
+    required this.lastname,
+    required this.firstname,
+  });
+
+  factory GuestDetails.fromJson(Map<String, dynamic> json) {
+    return GuestDetails(
+      email: json['email'],
+      lastname: json['lastName'],
+      firstname: json['firstName'],
+    );
   }
 }

@@ -785,6 +785,23 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
+  static Future<ResultApiModel> requestCancelBookingUser(
+      cityId, listingId, appointmentId, bookingId) async {
+    var list =
+        '/cities/$cityId/listings/$listingId/appointments/$appointmentId/booking/$bookingId';
+    final result =
+        await HTTPManager(apiType: APIType.appointment).delete(url: list);
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> requestCancelBookingOwner(
+      userId, appointmentId, bookingId) async {
+    var list = '/users/$userId/appointments/$appointmentId/booking/$bookingId';
+    final result =
+        await HTTPManager(apiType: APIType.appointment).delete(url: list);
+    return ResultApiModel.fromJson(result);
+  }
+
   ///Singleton factory
   static final Api _instance = Api._internal();
 

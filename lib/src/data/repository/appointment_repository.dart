@@ -286,6 +286,32 @@ class AppointmentRepository {
     }
   }
 
+  Future<bool> cancelAppointmentUser(
+      int cityId, int listingId, int appointmentId, int bookingId) async {
+    final response = await Api.requestCancelBookingUser(
+        cityId, listingId, appointmentId, bookingId);
+
+    if (response.success) {
+      return true;
+    } else {
+      logError('Remove Appointment Failed', response.message);
+      return false;
+    }
+  }
+
+  Future<bool> cancelAppointmentOwner(int appointmentId, int bookingId) async {
+    int userId = prefs.getKeyValue('userId', 0);
+    final response =
+        await Api.requestCancelBookingOwner(userId, appointmentId, bookingId);
+
+    if (response.success) {
+      return true;
+    } else {
+      logError('Remove Booking Owner Failed', response.message);
+      return false;
+    }
+  }
+
   Future<List<BookingModel>?> loadOwnerBookings(int pageNo, int appointmentId,
       {String? startDate}) async {
     int userId = prefs.getKeyValue(
@@ -377,7 +403,7 @@ class AppointmentRepository {
         friendDetails.add({
           'firstname': friend.firstname,
           'lastname': friend.lastname,
-          'description': friend.description,
+          // 'description': friend.description,
           'email': friend.email
         });
       }
@@ -389,7 +415,7 @@ class AppointmentRepository {
       'guestDetails': {
         'firstname': guestDetails.firstname,
         'lastname': guestDetails.lastname,
-        'description': guestDetails.description,
+        // 'description': guestDetails.description,
         'email': guestDetails.email
       },
       'date': date,

@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_appointment.dart';
+import 'package:heidi/src/data/model/model_booking.dart';
 import 'package:heidi/src/data/model/model_bookingGuest.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/appointments/appointment_details/cubit/appointment_details_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/appointments/appointment_details/cubit/appointment_details_state.dart';
@@ -38,6 +39,7 @@ class _AppointmentDetailsScreenState extends State<AppointmentDetailsScreen> {
           isRefreshLoader: isRefreshLoader,
           appointment: widget.appointment,
           guests: guests,
+          bookings: bookings,
         ),
         error: (msg) => ErrorWidget(msg),
         orElse: () => ErrorWidget(
@@ -67,11 +69,13 @@ class AppointmentDetailsLoaded extends StatefulWidget {
   final AppointmentModel appointment;
   final List<BookingGuestModel> guests;
   final bool isRefreshLoader;
+  final List<BookingModel> bookings;
 
   const AppointmentDetailsLoaded(
       {required this.isRefreshLoader,
       required this.appointment,
       required this.guests,
+      required this.bookings,
       super.key});
 
   @override
@@ -81,6 +85,7 @@ class AppointmentDetailsLoaded extends StatefulWidget {
 class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
   final _scrollController = ScrollController(initialScrollOffset: 0.0);
   List<BookingGuestModel> guests = [];
+  List<BookingModel> bookings = [];
   bool isLoadingMore = false;
   int pageNo = 1;
 
@@ -89,6 +94,7 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
     super.initState();
     _scrollController.addListener(_scrollListener);
     guests.addAll(widget.guests);
+    bookings.addAll(widget.bookings);
   }
 
   @override
@@ -255,7 +261,7 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
                                     ),
                                   ],
                                 ),
-                              if (guests[i].description != '')
+                              if (guests[i].remark != '')
                                 Column(
                                   children: [
                                     const SizedBox(height: 16),
@@ -266,7 +272,7 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
                                         border: OutlineInputBorder(),
                                       ),
                                       controller: TextEditingController(
-                                          text: guests[i].description),
+                                          text: guests[i].remark),
                                       enabled: false, // Make text unchangeable
                                       style: TextStyle(
                                           color: Theme.of(context)
@@ -316,7 +322,8 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
                                 onPressed: () {
                                   context
                                       .read<AppointmentDetailsCubit>()
-                                      .onCancel(1);
+                                      .onCancelOwner(bookings[i].appointmentId,
+                                          bookings[i].id);
                                 },
                                 style: ElevatedButton.styleFrom(
                                   shape: RoundedRectangleBorder(

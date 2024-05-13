@@ -32,16 +32,16 @@ class AppointmentScreen extends StatelessWidget {
                 );
               },
             ),
-            GridItemButton(
-              icon: Icons.calendar_today_outlined,
-              title: Translate.of(context).translate("requests"),
-              onPressed: () {
-                Navigator.pushNamed(
-                  context,
-                  Routes.appointmentRequests,
-                );
-              },
-            ),
+            // GridItemButton(
+            //   icon: Icons.calendar_today_outlined,
+            //   title: Translate.of(context).translate("requests"),
+            //   onPressed: () {
+            //     Navigator.pushNamed(
+            //       context,
+            //       Routes.appointmentRequests,
+            //     );
+            //   },
+            // ),
             GridItemButton(
               icon: Icons.calendar_month,
               title: Translate.of(context).translate("my_bookings"),

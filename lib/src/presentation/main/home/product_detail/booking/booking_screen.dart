@@ -374,14 +374,14 @@ class _BookingDetailsLoadedState extends State<BookingDetailsLoaded> {
             guestModel = BookingGuestModel(
                 firstname: _textFistNameController[0].text,
                 lastname: _textLastNameController[0].text,
-                description: _textMessageController[0].text,
+                remark: _textMessageController[0].text,
                 email: _textEmailController[0].text,
                 phoneNumber: _textPhoneController[0].text);
             for (int i = 1; i < adults; i++) {
               friends.add(BookingGuestModel(
                   firstname: _textFistNameController[i].text,
                   lastname: _textLastNameController[i].text,
-                  description: '',
+                  remark: '',
                   email: _textEmailController[0].text));
             }
           } else {
