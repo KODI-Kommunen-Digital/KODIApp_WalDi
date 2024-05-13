@@ -98,9 +98,9 @@ class AppointmentDetailsCubit extends Cubit<AppointmentDetailsState> {
   }
 
   Future<bool> onCancelOwner(int appointmentId, int bookingId) async {
-    final response = repo.cancelAppointmentOwner(appointmentId, bookingId);
-    if (await response) {
-      onLoad(true, appointmentId);
+    final response = await repo.cancelAppointmentOwner(appointmentId, bookingId);
+    if (response) {
+      onLoad(false, appointmentId);
       return true;
     } else {
       return false;
