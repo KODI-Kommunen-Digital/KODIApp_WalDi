@@ -418,6 +418,7 @@ class AppointmentRepository {
     }
 
     Map<String, dynamic> params = {
+      'serviceId': serviceId,
       'guestDetails': {
         'firstname': guestDetails.firstname,
         'lastname': guestDetails.lastname,
@@ -431,7 +432,7 @@ class AppointmentRepository {
     };
 
     final response =
-        await Api.requestSaveBooking(cityId, listingId, appointmentId, serviceId, params);
+        await Api.requestSaveBooking(cityId, listingId, appointmentId, params);
 
     if (!response.success) {
       logError('Save Booking Error', response.message);
