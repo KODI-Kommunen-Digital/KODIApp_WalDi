@@ -374,10 +374,15 @@ class AppointmentRepository {
     }
 
     if (response.success) {
-      final responseData =
-          List<Map<String, dynamic>>.from(response.data ?? []).map((item) {
-        return BookingModel.fromJson(item);
-      }).toList();
+      List<BookingModel>? responseData = [];
+      if (response.data.length != 1) {
+        responseData =
+            List<Map<String, dynamic>>.from(response.data ?? []).map((item) {
+          return BookingModel.fromJson(item);
+        }).toList();
+      } else {
+        responseData.add(BookingModel.fromJson(response.data.first));
+      }
 
       return responseData;
     } else {

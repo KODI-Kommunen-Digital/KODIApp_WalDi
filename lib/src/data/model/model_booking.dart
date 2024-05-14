@@ -124,9 +124,9 @@ class GuestDetails {
 
   factory GuestDetails.fromJson(Map<String, dynamic> json) {
     return GuestDetails(
-      email: json['email'],
-      lastname: json['lastName'],
-      firstname: json['firstName'],
+      email: json['email'] ?? '',
+      lastname: json['lastName'] ?? '',
+      firstname: json['firstName'] ?? '',
     );
   }
 }
