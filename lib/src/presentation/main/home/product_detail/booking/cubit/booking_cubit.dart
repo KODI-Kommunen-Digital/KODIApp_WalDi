@@ -1,6 +1,7 @@
 // ignore_for_file: unused_field
 
 import 'package:bloc/bloc.dart';
+import 'package:heidi/src/data/model/model_appointment_slot.dart';
 import 'package:heidi/src/data/model/model_bookingGuest.dart';
 import 'package:heidi/src/data/repository/appointment_repository.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
@@ -32,12 +33,18 @@ class BookingCubit extends Cubit<BookingState> {
         if (services != null) {
           if (selectedDate != null && selectedService != null) {
             selectedDate = selectedDate;
-            final availableSlots = await _appointmentRepo.loadAppointmentSlots(
-                cityId,
-                listingId,
-                appointment.id!,
-                parseDate(selectedDate),
-                [selectedService.id.toString()]);
+            AppointmentSlotModel? availableSlots;
+            try {
+              availableSlots = await _appointmentRepo.loadAppointmentSlots(
+                  cityId,
+                  listingId,
+                  appointment.id!,
+                  parseDate(selectedDate),
+                  [selectedService.id.toString()]);
+            } catch (e) {
+              emit(BookingState.loaded(null, services, appointment));
+              return;
+            }
 
             if (availableSlots != null) {
               emit(BookingState.loaded(availableSlots, services, appointment));

@@ -340,7 +340,7 @@ class _BookingDetailsLoadedState extends State<BookingDetailsLoaded> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              Translate.of(context).translate('chooseDate'),
+              Translate.of(context).translate('choose_date'),
             ),
           ),
         );
@@ -518,7 +518,7 @@ class _BookingDetailsLoadedState extends State<BookingDetailsLoaded> {
                     Icon(Icons.access_time),
                     SizedBox(width: 8),
                     Text(
-                      Translate.of(context).translate('selectTimeSlot'),
+                      Translate.of(context).translate('select_time_slot'),
                     ),
                   ],
                 ),
