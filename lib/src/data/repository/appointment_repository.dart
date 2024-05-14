@@ -389,7 +389,8 @@ class AppointmentRepository {
       List<BookingGuestModel>? friends,
       required int cityId,
       required int listingId,
-      required int appointmentId}) async {
+      required int appointmentId,
+      required int serviceId}) async {
     DateTime? parsedDateTime;
     if (date.length == 10 || date[2] == '.' || date[5] == '.') {
       parsedDateTime = DateFormat('dd.MM.yyyy').parseStrict(date);
@@ -425,7 +426,7 @@ class AppointmentRepository {
     };
 
     final response =
-        await Api.requestSaveBooking(cityId, listingId, appointmentId, params);
+        await Api.requestSaveBooking(cityId, listingId, appointmentId, serviceId, params);
 
     if (!response.success) {
       logError('Save Booking Error', response.message);

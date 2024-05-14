@@ -828,7 +828,9 @@ class _BookingDetailsLoadedState extends State<BookingDetailsLoaded> {
           cityId: widget.cityId,
           friends: friends,
           listingId: widget.listingId,
-          appointmentId: widget.appointment.id!);
+          appointmentId: widget.appointment.id!,
+        serviceId: _selectedService!.id
+      );
       if (success) {
         setState(() {
           submittedSuccessful = true;
