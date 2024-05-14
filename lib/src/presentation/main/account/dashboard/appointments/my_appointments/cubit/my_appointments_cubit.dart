@@ -41,14 +41,13 @@ class MyAppointmentsCubit extends Cubit<MyAppointmentsState> {
     return appointments;
   }
 
-  Future<void> deleteAppointment(
-      AppointmentModel appointment, bool deleteListing) async {
+  Future<void> deleteAppointment(AppointmentModel appointment) async {
     emit(const MyAppointmentsState.loading());
     ProductModel? product = await getProductFromAppointment(appointment.id!);
 
     if (product != null) {
       bool success = await repo.deleteAppointment(
-          product.cityId ?? 0, product.id, appointment.id!, deleteListing);
+          product.cityId ?? 0, product.id, appointment.id!);
       if (success) {
         onLoad(false);
       } else {

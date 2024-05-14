@@ -268,10 +268,11 @@ class AppointmentRepository {
   }
 
   Future<bool> deleteAppointment(
-      int cityId, int listingId, int appointmentId, bool deleteListing) async {
+      int cityId, int listingId, int appointmentId) async {
     final response =
         await Api.requestDeleteAppointment(cityId, listingId, appointmentId);
-    if (deleteListing) {
+    final listing = await Api.requestProduct(cityId, listingId);
+    if (listing.success) {
       final responseListing = await Api.deleteUserList(cityId, listingId);
       if (!responseListing.success) {
         logError('Remove Listing Failed', responseListing.message);

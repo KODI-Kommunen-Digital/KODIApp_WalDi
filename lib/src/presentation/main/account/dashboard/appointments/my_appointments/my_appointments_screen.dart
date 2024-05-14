@@ -227,17 +227,14 @@ class _MyAppointmentsLoadedState extends State<MyAppointmentsLoaded> {
                                                 final response =
                                                     await showRemoveAppointmentPopup(
                                                         context);
-                                                bool deleteListing =
-                                                    await showRemoveAppointmentListingPopup(
-                                                        context);
                                                 if (response) {
                                                   setState(() {
                                                     context
                                                         .read<
                                                             MyAppointmentsCubit>()
                                                         .deleteAppointment(
-                                                            appointments[index],
-                                                            deleteListing);
+                                                            appointments[
+                                                                index]);
                                                   });
                                                 }
                                               }
@@ -277,7 +274,8 @@ class _MyAppointmentsLoadedState extends State<MyAppointmentsLoaded> {
                                                                         0]
                                                                     as List<
                                                                         AppointmentServiceModel>,
-                                                            openHours: servicesUpdated[
+                                                            openHours:
+                                                                servicesUpdated[
                                                                         1]
                                                                     as List<
                                                                         OpenTimeModel?>,
@@ -368,47 +366,6 @@ class _MyAppointmentsLoadedState extends State<MyAppointmentsLoaded> {
           ),
           content: Text(
             Translate.of(context).translate('delete_appointment_confirmation'),
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(false); // Close the dialog
-              },
-              child: Text(
-                Translate.of(context).translate('no'),
-              ),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
-              child: Text(
-                Translate.of(context).translate('yes'),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-
-    if (result) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  Future<bool> showRemoveAppointmentListingPopup(BuildContext context) async {
-    final result = await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(
-            Translate.of(context).translate('delete_appointment_listing'),
-          ),
-          content: Text(
-            Translate.of(context)
-                .translate('delete_appointment_listing_confirmation'),
           ),
           actions: <Widget>[
             TextButton(
