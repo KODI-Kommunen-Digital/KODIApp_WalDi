@@ -7,7 +7,7 @@ class BookingModel {
   final String? startTime;
   final String? endTime;
   final int userId;
-  final int guestId;
+  final int? guestId;
   final bool isGuest;
   final String? remark;
   final String? description;
@@ -23,7 +23,7 @@ class BookingModel {
     this.startTime,
     this.endTime,
     required this.userId,
-    required this.guestId,
+    this.guestId,
     required this.isGuest,
     this.remark,
     this.createdBy,
@@ -57,6 +57,13 @@ class BookingModel {
       createdAt = DateFormat('yyyy-MM-ddHH:mm').format(parsedCreatedDate);
     }
 
+    GuestDetails guestDetails = (json['guest_details'] != null)
+        ? GuestDetails.fromJson(json['guest_details'])
+        : GuestDetails(
+            email: json['emailId'] ?? '',
+            lastname: json['lastName'] ?? '',
+            firstname: json['firstName'] ?? '');
+
     return BookingModel(
         id: json['id'],
         appointmentId: json['appointmentId'],
@@ -70,7 +77,7 @@ class BookingModel {
         createdBy: json['createdBy'],
         remark: json['remark'],
         description: json['description'],
-        guestDetails: GuestDetails.fromJson(json['guest_details']));
+        guestDetails: guestDetails);
   }
 
   String getStartTime() {
