@@ -515,7 +515,7 @@ class _HomeScreenState extends State<HomeScreen> {
         prefs.setKeyValue(Preferences.type, "category");
         if (!mounted) return;
         Navigator.pushNamed(context, Routes.listProduct,
-            arguments: {'id': selectedCityId, 'title': ''});
+            arguments: {'id': selectedCityId, 'title': '', 'type': 'category'});
       }
     } else if (item.id != -1 && !item.hasChild) {
       _onPopUpCatError();
@@ -533,7 +533,7 @@ class _HomeScreenState extends State<HomeScreen> {
       prefs.setKeyValue(Preferences.type, "location");
       if (!mounted) return;
       Navigator.pushNamed(context, Routes.listProduct,
-          arguments: {'id': item.id, 'title': item.title});
+          arguments: {'id': item.id, 'title': item.title, 'type': 'location'});
     } else if (item.id != -1 && !item.hasChild) {
       _onPopUpCatError();
     }
