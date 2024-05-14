@@ -78,11 +78,15 @@ class AppointmentRepository {
     final response = await Api.requestAppointmentServices(
         cityId: cityId, listingId: listingId, appointmentId: appointmentId);
     if (response.success) {
-      final responseData =
-          List<Map<String, dynamic>>.from(response.data ?? []).map((item) {
-        return AppointmentServiceModel.fromJson(item);
-      }).toList();
-
+      List<AppointmentServiceModel> responseData = [];
+      if (response.data.length != 1) {
+        responseData =
+            List<Map<String, dynamic>>.from(response.data ?? []).map((item) {
+          return AppointmentServiceModel.fromJson(item);
+        }).toList();
+      } else {
+        responseData.add(AppointmentServiceModel.fromJson(response.data.first));
+      }
       return responseData;
     } else {
       logError('Load Appointment Services Error', response.message);

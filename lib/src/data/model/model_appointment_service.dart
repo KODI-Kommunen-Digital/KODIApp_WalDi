@@ -71,8 +71,8 @@ class AppointmentServiceModel {
 
           if (openHours[day] != null) {
             TimeOfDay startTime =
-                timeOfDayFromString(openHours[day]['startTime']);
-            TimeOfDay endTime = timeOfDayFromString(openHours[day]['endTime']);
+                timeOfDayFromString(openHours[day].first['startTime']);
+            TimeOfDay endTime = timeOfDayFromString(openHours[day].first['endTime']);
             ScheduleModel schedule =
                 ScheduleModel(startTime: startTime, endTime: endTime);
 
