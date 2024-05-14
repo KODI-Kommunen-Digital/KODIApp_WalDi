@@ -540,5 +540,6 @@
   "delete_appointments": "Delete Appointment",
   "delete_appointment_listing": "Delete listing of appointment",
   "delete_appointment_listing_confirmation": "Do you want to also delete the listing of the appointment?",
+  "appointment_service_mandatory": "At least one appointment service is mandatory",
   "noAvailableSlots": "Limit per person reached"
 }

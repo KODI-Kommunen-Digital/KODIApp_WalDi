@@ -80,6 +80,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
   String? _errorStatus;
   String? _errorSDate;
   String? _errorCategory;
+  String? _errorAppointment;
   String? selectedCity;
   int? cityId;
   int? statusId;
@@ -734,6 +735,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
     _errorTitle =
         UtilValidator.validate(_textTitleController.text, allowEmpty: false);
 
+
+
     if (_textContentController.text.length >= 65535) {
       _errorContent = "value_desc_limit_exceeded";
     } else if (_textContentController.text.length < 3) {
@@ -751,6 +754,14 @@ class _AddListingScreenState extends State<AddListingScreen> {
       }
     }
 
+    if(selectedCategory?.toLowerCase() == "appointment bookings") {
+      if((serviceEntries ?? []).isEmpty) {
+        _errorAppointment = "appointment_service_mandatory";
+      } else {
+        _errorAppointment = null;
+      }
+    }
+
     List<String?> errors = [
       _errorTitle,
       _errorContent,
@@ -760,6 +771,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       _errorWebsite,
       _errorStatus,
       _errorSDate,
+      _errorAppointment
     ];
 
     if (_errorTitle != null ||
@@ -769,7 +781,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
         // _errorEmail != null ||
         _errorWebsite != null ||
         _errorStatus != null ||
-        _errorSDate != null) {
+        _errorSDate != null ||
+        _errorAppointment != null) {
       String errorMessage = "";
       for (var element in errors) {
         if (element != null &&

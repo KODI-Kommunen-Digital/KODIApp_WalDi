@@ -91,7 +91,7 @@ class _CreateAppointmentLoadedState extends State<CreateAppointmentLoaded> {
   List<AppointmentServiceModel> serviceEntries = [];
   List<OpenTimeModel?> timeSlots = [];
   List<DateTime?> selectedDates = [];
-  bool nameError = true;
+  bool nameError = false;
 
   Future<void> _navigateAndDisplayTimeSlots(BuildContext context) async {
     final result = await Navigator.pushNamed(context, Routes.openTime,
@@ -115,7 +115,8 @@ class _CreateAppointmentLoadedState extends State<CreateAppointmentLoaded> {
       serviceEntries.addAll(widget.loadedEntries ?? []);
     }
     timeSlots.addAll(widget.timeSlots);
-    if (widget.loadedEntries == null && widget.serviceEntries == null) {
+    if (serviceEntries.isEmpty) {
+      nameError = true;
       serviceEntries = [
         AppointmentServiceModel(
             id: 1,
@@ -129,6 +130,9 @@ class _CreateAppointmentLoadedState extends State<CreateAppointmentLoaded> {
 
     for (AppointmentServiceModel service in serviceEntries) {
       service.controller.text = service.name;
+      if(service.controller.text.length < 3) {
+        nameError = true;
+      }
     }
   }
 
@@ -184,7 +188,11 @@ class _CreateAppointmentLoadedState extends State<CreateAppointmentLoaded> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(
-                  Translate.of(context).translate("service_hint"),
+                  Translate.of(context).translate(
+                      (serviceEntries.isEmpty)
+                          ? "appointment_service_mandatory"
+                          : "service_hint"
+                  ),
                 ),
               ),
             );
