@@ -5,6 +5,7 @@ import 'package:heidi/src/data/model/model_open_time.dart';
 import 'package:heidi/src/data/model/model_schedule.dart';
 import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/presentation/widget/app_picker_item.dart';
+
 // import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/datetime.dart';
 import 'package:heidi/src/utils/translate.dart';
@@ -30,8 +31,8 @@ class _OpenTimeSlotsScreenState extends State<OpenTimeSlotsScreen> {
   void initState() {
     super.initState();
     if (widget.selected != null) {
-      for(var schedule in widget.selected!) {
-        if(schedule != null) {
+      for (var schedule in widget.selected!) {
+        if (schedule != null) {
           _time.add(schedule);
         }
       }
@@ -115,6 +116,13 @@ class _OpenTimeSlotsScreenState extends State<OpenTimeSlotsScreen> {
 
   ///On Save
   void _onSave() {
+    for (var schedule in _time) {
+      if (!schedule.checkValid()) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(Translate.of(context).translate("time_invalid"))));
+        return;
+      }
+    }
     Navigator.pop(context, [_time, selectedDates]);
   }
 

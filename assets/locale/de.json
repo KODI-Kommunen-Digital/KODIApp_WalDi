@@ -490,6 +490,7 @@
   "enable_expiry_date":"Ein Ablaufdatum hinzufügen, an dem der Beitrag gelöscht wird",  
   "choose_stime":"Startzeit wählen",
   "choose_etime":"Endzeit wählen",
+  "time_invalid": "Zeit ungültig",
   "message_sent":"Nachricht gesendet",
   "message_sent_success":"Die Nachricht wurde versandt.",
   "submit_contactUs_message":"Vielen Dank für dein Feedback.",
