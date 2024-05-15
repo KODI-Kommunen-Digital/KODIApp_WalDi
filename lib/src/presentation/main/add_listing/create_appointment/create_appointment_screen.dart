@@ -91,7 +91,6 @@ class _CreateAppointmentLoadedState extends State<CreateAppointmentLoaded> {
   List<AppointmentServiceModel> serviceEntries = [];
   List<OpenTimeModel?> timeSlots = [];
   List<DateTime?> selectedDates = [];
-  bool nameError = false;
 
   Future<void> _navigateAndDisplayTimeSlots(BuildContext context) async {
     final result = await Navigator.pushNamed(context, Routes.openTime,
@@ -116,7 +115,6 @@ class _CreateAppointmentLoadedState extends State<CreateAppointmentLoaded> {
     }
     timeSlots.addAll(widget.timeSlots);
     if (serviceEntries.isEmpty) {
-      nameError = true;
       serviceEntries = [
         AppointmentServiceModel(
             id: 1,
@@ -130,9 +128,6 @@ class _CreateAppointmentLoadedState extends State<CreateAppointmentLoaded> {
 
     for (AppointmentServiceModel service in serviceEntries) {
       service.controller.text = service.name;
-      if(service.controller.text.length < 3) {
-        nameError = true;
-      }
     }
   }
 
@@ -142,15 +137,15 @@ class _CreateAppointmentLoadedState extends State<CreateAppointmentLoaded> {
       appBar: AppBar(
         title: Text(Translate.of(context).translate('create_appointment')),
         actions: [
-            IconButton(
-              icon: const Icon(
-                Icons.calendar_month,
-                size: 32,
-              ),
-              onPressed: () {
-                _navigateAndDisplayTimeSlots(context);
-              },
+          IconButton(
+            icon: const Icon(
+              Icons.calendar_month,
+              size: 32,
             ),
+            onPressed: () {
+              _navigateAndDisplayTimeSlots(context);
+            },
+          ),
         ],
       ),
       body: SafeArea(
@@ -184,15 +179,19 @@ class _CreateAppointmentLoadedState extends State<CreateAppointmentLoaded> {
       child: AppButton(
         Translate.of(context).translate('create_appointment'),
         onPressed: () {
+          bool nameError = false;
+          for (var service in serviceEntries) {
+            if (service.controller.text.length < 3) {
+              nameError = true;
+            }
+          }
           if (nameError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(
-                  Translate.of(context).translate(
-                      (serviceEntries.isEmpty)
-                          ? "appointment_service_mandatory"
-                          : "service_hint"
-                  ),
+                  Translate.of(context).translate((serviceEntries.isEmpty)
+                      ? "appointment_service_mandatory"
+                      : "service_hint"),
                 ),
               ),
             );
@@ -232,11 +231,9 @@ class _CreateAppointmentLoadedState extends State<CreateAppointmentLoaded> {
                           },
                           validator: (value) {
                             if ((value?.length ?? 0) < 3) {
-                              nameError = true;
                               return Translate.of(context)
                                   .translate("service_hint");
                             }
-                            nameError = false;
                             return null; // Return null if the validation succeeds
                           },
                         ),
