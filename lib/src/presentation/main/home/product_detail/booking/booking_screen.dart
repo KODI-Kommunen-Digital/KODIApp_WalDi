@@ -171,7 +171,7 @@ class _BookingDetailsLoadedState extends State<BookingDetailsLoaded> {
         icon: Icons.contact_mail_outlined,
       ),
       StepModel(
-        title: Translate.of(context).translate('summary'),
+        title: Translate.of(context).translate('overview'),
         icon: Icons.contact_mail_outlined,
       ),
       StepModel(
@@ -182,7 +182,7 @@ class _BookingDetailsLoadedState extends State<BookingDetailsLoaded> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(Translate.of(context).translate('bookAppointment')),
+        title: Text(Translate.of(context).translate('booking')),
       ),
       body: SafeArea(
         child: Column(
@@ -235,7 +235,7 @@ class _BookingDetailsLoadedState extends State<BookingDetailsLoaded> {
             horizontal: 16,
           ),
           child: AppButton(
-            Translate.of(context).translate('next'),
+            Translate.of(context).translate('proceed'),
             onPressed: () {
               _onNext(step: 0);
             },
@@ -260,7 +260,7 @@ class _BookingDetailsLoadedState extends State<BookingDetailsLoaded> {
               const SizedBox(width: 16),
               Expanded(
                 child: AppButton(
-                  Translate.of(context).translate('next'),
+                  Translate.of(context).translate('proceed'),
                   onPressed: () {
                     _onNext(step: 1);
                   },
@@ -288,7 +288,7 @@ class _BookingDetailsLoadedState extends State<BookingDetailsLoaded> {
               const SizedBox(width: 16),
               Expanded(
                 child: AppButton(
-                  Translate.of(context).translate('next'),
+                  Translate.of(context).translate('proceed'),
                   onPressed: () async {
                     await _onSubmit();
                     _onNext(step: 2);

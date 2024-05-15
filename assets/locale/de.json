@@ -252,6 +252,7 @@
   "back": "Zurück",
   "sort": "Sortieren",
   "add": "Hinzufügen",
+  "proceed": "Weiter",
   "input_description": "Eingabebeschreibung",
   "contact": "Feedback",
   "input_content": "Beschreibung",
@@ -547,6 +548,7 @@
   "addServiceName": "Gebe Dienstnamen ein",
   "duration": "Dauer",
   "no_bookings": "Keine Buchungen verfügbar",
-  "noAvailableSlots": "Limit pro Person erreicht"
+  "noAvailableSlots": "Limit pro Person erreicht",
+  "overview": "Übersicht"
 }
 
