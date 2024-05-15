@@ -49,6 +49,13 @@ class AppointmentRepository {
         return AppointmentModel.fromJson(item);
       }).toList();
 
+      for(AppointmentModel entry in responseData) {
+        final ProductModel? listing = await getProductForAppointment(entry.id!);
+        if(listing != null) {
+          entry.imageLink = listing.image;
+        }
+      }
+
       return responseData;
     } else {
       logError('Load User Appointments Error', response.message);
