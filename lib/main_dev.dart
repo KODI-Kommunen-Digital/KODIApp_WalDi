@@ -50,14 +50,15 @@ Future<void> main() async {
   );
 
   await FirebaseApi(globalNavKey, prefBox).initNotifications();
+  await dotenv.load(fileName: "assets/env/.envAuf");
+  await CategoryManager.loadCategories();
 
   await SentryFlutter.init((options) {
     options.dsn =
         'https://a4fb5224118623425d802bf0acaf087b@o4506393481510912.ingest.sentry.io/4506393482493952';
     options.tracesSampleRate = 0.01;
   }, appRunner: () => runApp(HeidiApp(prefBox)));
-  await dotenv.load(fileName: "assets/env/.envAuf");
-  await CategoryManager.loadCategories();
+
 }
 
 final globalNavKey = GlobalKey<NavigatorState>();
