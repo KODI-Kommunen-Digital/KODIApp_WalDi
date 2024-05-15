@@ -546,5 +546,7 @@
   "appointment_service_mandatory": "At least one appointment service is mandatory",
   "select_time_slot": "Choose time slot",
   "noAvailableSlots": "Limit per person reached",
-  "overview": "Overview"
+  "overview": "Overview",
+  "empty_slots": "There are no timeslots for this date. Please choose a different date.",
+  "choose_slots": "Please choose a timeslot"
 }

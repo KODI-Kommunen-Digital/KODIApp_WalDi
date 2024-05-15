@@ -48,12 +48,13 @@ class _BookingScreenState extends State<BookingScreen> {
       listener: (context, state) {},
       builder: (context, state) => state.maybeWhen(
         loading: () => const BookingDetailsLoading(),
-        loaded: (slot, services, appointment) => BookingDetailsLoaded(
+        loaded: (slot, services, appointment, isEmpty) => BookingDetailsLoaded(
             appointment: appointment,
             slot: slot,
             services: services,
             listingId: widget.listingId,
-            cityId: widget.cityId),
+            cityId: widget.cityId,
+            isEmpty: isEmpty),
         orElse: () => ErrorWidget('Failed to load booking details.'),
       ),
     );
@@ -77,6 +78,7 @@ class BookingDetailsLoaded extends StatefulWidget {
   final List<AppointmentServiceModel> services;
   final int listingId;
   final int cityId;
+  final bool isEmpty;
 
   const BookingDetailsLoaded(
       {super.key,
@@ -84,7 +86,8 @@ class BookingDetailsLoaded extends StatefulWidget {
       required this.slot,
       required this.services,
       required this.listingId,
-      required this.cityId});
+      required this.cityId,
+      required this.isEmpty});
 
   @override
   State<BookingDetailsLoaded> createState() => _BookingDetailsLoadedState();
@@ -237,7 +240,17 @@ class _BookingDetailsLoadedState extends State<BookingDetailsLoaded> {
           child: AppButton(
             Translate.of(context).translate('proceed'),
             onPressed: () {
-              _onNext(step: 0);
+              if (widget.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content:
+                        Text(Translate.of(context).translate('empty_slots'))));
+              } else if (selectedSlots.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content:
+                        Text(Translate.of(context).translate('choose_slot'))));
+              } else {
+                _onNext(step: 0);
+              }
             },
             mainAxisSize: MainAxisSize.max,
           ),
@@ -518,7 +531,7 @@ class _BookingDetailsLoadedState extends State<BookingDetailsLoaded> {
                     Icon(Icons.access_time),
                     SizedBox(width: 8),
                     Text(
-                      Translate.of(context).translate('select_time_slot'),
+                      Translate.of(context).translate('choose_time_period'),
                     ),
                   ],
                 ),
@@ -829,8 +842,7 @@ class _BookingDetailsLoadedState extends State<BookingDetailsLoaded> {
           friends: friends,
           listingId: widget.listingId,
           appointmentId: widget.appointment.id!,
-        serviceId: _selectedService!.id
-      );
+          serviceId: _selectedService!.id);
       if (success) {
         setState(() {
           submittedSuccessful = true;

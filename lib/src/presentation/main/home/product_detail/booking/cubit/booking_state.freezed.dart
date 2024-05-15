@@ -12,7 +12,7 @@ part of 'booking_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$BookingState {
@@ -22,7 +22,8 @@ mixin _$BookingState {
     required TResult Function(
             AppointmentSlotModel? slot,
             List<AppointmentServiceModel> services,
-            AppointmentModel appointment)
+            AppointmentModel appointment,
+            bool isEmpty)
         loaded,
     required TResult Function(String error) error,
   }) =>
@@ -33,7 +34,8 @@ mixin _$BookingState {
     TResult? Function(
             AppointmentSlotModel? slot,
             List<AppointmentServiceModel> services,
-            AppointmentModel appointment)?
+            AppointmentModel appointment,
+            bool isEmpty)?
         loaded,
     TResult? Function(String error)? error,
   }) =>
@@ -44,7 +46,8 @@ mixin _$BookingState {
     TResult Function(
             AppointmentSlotModel? slot,
             List<AppointmentServiceModel> services,
-            AppointmentModel appointment)?
+            AppointmentModel appointment,
+            bool isEmpty)?
         loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
@@ -93,25 +96,25 @@ class _$BookingStateCopyWithImpl<$Res, $Val extends BookingState>
 }
 
 /// @nodoc
-abstract class _$$BookingStateLoadingCopyWith<$Res> {
-  factory _$$BookingStateLoadingCopyWith(_$BookingStateLoading value,
-          $Res Function(_$BookingStateLoading) then) =
-      __$$BookingStateLoadingCopyWithImpl<$Res>;
+abstract class _$$BookingStateLoadingImplCopyWith<$Res> {
+  factory _$$BookingStateLoadingImplCopyWith(_$BookingStateLoadingImpl value,
+          $Res Function(_$BookingStateLoadingImpl) then) =
+      __$$BookingStateLoadingImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$BookingStateLoadingCopyWithImpl<$Res>
-    extends _$BookingStateCopyWithImpl<$Res, _$BookingStateLoading>
-    implements _$$BookingStateLoadingCopyWith<$Res> {
-  __$$BookingStateLoadingCopyWithImpl(
-      _$BookingStateLoading _value, $Res Function(_$BookingStateLoading) _then)
+class __$$BookingStateLoadingImplCopyWithImpl<$Res>
+    extends _$BookingStateCopyWithImpl<$Res, _$BookingStateLoadingImpl>
+    implements _$$BookingStateLoadingImplCopyWith<$Res> {
+  __$$BookingStateLoadingImplCopyWithImpl(_$BookingStateLoadingImpl _value,
+      $Res Function(_$BookingStateLoadingImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$BookingStateLoading implements BookingStateLoading {
-  const _$BookingStateLoading();
+class _$BookingStateLoadingImpl implements BookingStateLoading {
+  const _$BookingStateLoadingImpl();
 
   @override
   String toString() {
@@ -119,9 +122,10 @@ class _$BookingStateLoading implements BookingStateLoading {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$BookingStateLoading);
+        (other.runtimeType == runtimeType &&
+            other is _$BookingStateLoadingImpl);
   }
 
   @override
@@ -134,7 +138,8 @@ class _$BookingStateLoading implements BookingStateLoading {
     required TResult Function(
             AppointmentSlotModel? slot,
             List<AppointmentServiceModel> services,
-            AppointmentModel appointment)
+            AppointmentModel appointment,
+            bool isEmpty)
         loaded,
     required TResult Function(String error) error,
   }) {
@@ -148,7 +153,8 @@ class _$BookingStateLoading implements BookingStateLoading {
     TResult? Function(
             AppointmentSlotModel? slot,
             List<AppointmentServiceModel> services,
-            AppointmentModel appointment)?
+            AppointmentModel appointment,
+            bool isEmpty)?
         loaded,
     TResult? Function(String error)? error,
   }) {
@@ -162,7 +168,8 @@ class _$BookingStateLoading implements BookingStateLoading {
     TResult Function(
             AppointmentSlotModel? slot,
             List<AppointmentServiceModel> services,
-            AppointmentModel appointment)?
+            AppointmentModel appointment,
+            bool isEmpty)?
         loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
@@ -209,27 +216,28 @@ class _$BookingStateLoading implements BookingStateLoading {
 }
 
 abstract class BookingStateLoading implements BookingState {
-  const factory BookingStateLoading() = _$BookingStateLoading;
+  const factory BookingStateLoading() = _$BookingStateLoadingImpl;
 }
 
 /// @nodoc
-abstract class _$$BookingStateLoadedCopyWith<$Res> {
-  factory _$$BookingStateLoadedCopyWith(_$BookingStateLoaded value,
-          $Res Function(_$BookingStateLoaded) then) =
-      __$$BookingStateLoadedCopyWithImpl<$Res>;
+abstract class _$$BookingStateLoadedImplCopyWith<$Res> {
+  factory _$$BookingStateLoadedImplCopyWith(_$BookingStateLoadedImpl value,
+          $Res Function(_$BookingStateLoadedImpl) then) =
+      __$$BookingStateLoadedImplCopyWithImpl<$Res>;
   @useResult
   $Res call(
       {AppointmentSlotModel? slot,
       List<AppointmentServiceModel> services,
-      AppointmentModel appointment});
+      AppointmentModel appointment,
+      bool isEmpty});
 }
 
 /// @nodoc
-class __$$BookingStateLoadedCopyWithImpl<$Res>
-    extends _$BookingStateCopyWithImpl<$Res, _$BookingStateLoaded>
-    implements _$$BookingStateLoadedCopyWith<$Res> {
-  __$$BookingStateLoadedCopyWithImpl(
-      _$BookingStateLoaded _value, $Res Function(_$BookingStateLoaded) _then)
+class __$$BookingStateLoadedImplCopyWithImpl<$Res>
+    extends _$BookingStateCopyWithImpl<$Res, _$BookingStateLoadedImpl>
+    implements _$$BookingStateLoadedImplCopyWith<$Res> {
+  __$$BookingStateLoadedImplCopyWithImpl(_$BookingStateLoadedImpl _value,
+      $Res Function(_$BookingStateLoadedImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -238,8 +246,9 @@ class __$$BookingStateLoadedCopyWithImpl<$Res>
     Object? slot = freezed,
     Object? services = null,
     Object? appointment = null,
+    Object? isEmpty = null,
   }) {
-    return _then(_$BookingStateLoaded(
+    return _then(_$BookingStateLoadedImpl(
       freezed == slot
           ? _value.slot
           : slot // ignore: cast_nullable_to_non_nullable
@@ -252,15 +261,22 @@ class __$$BookingStateLoadedCopyWithImpl<$Res>
           ? _value.appointment
           : appointment // ignore: cast_nullable_to_non_nullable
               as AppointmentModel,
+      null == isEmpty
+          ? _value.isEmpty
+          : isEmpty // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
 
 /// @nodoc
 
-class _$BookingStateLoaded implements BookingStateLoaded {
-  const _$BookingStateLoaded(
-      this.slot, final List<AppointmentServiceModel> services, this.appointment)
+class _$BookingStateLoadedImpl implements BookingStateLoaded {
+  const _$BookingStateLoadedImpl(
+      this.slot,
+      final List<AppointmentServiceModel> services,
+      this.appointment,
+      this.isEmpty)
       : _services = services;
 
   @override
@@ -275,32 +291,35 @@ class _$BookingStateLoaded implements BookingStateLoaded {
 
   @override
   final AppointmentModel appointment;
+  @override
+  final bool isEmpty;
 
   @override
   String toString() {
-    return 'BookingState.loaded(slot: $slot, services: $services, appointment: $appointment)';
+    return 'BookingState.loaded(slot: $slot, services: $services, appointment: $appointment, isEmpty: $isEmpty)';
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$BookingStateLoaded &&
+            other is _$BookingStateLoadedImpl &&
             (identical(other.slot, slot) || other.slot == slot) &&
             const DeepCollectionEquality().equals(other._services, _services) &&
             (identical(other.appointment, appointment) ||
-                other.appointment == appointment));
+                other.appointment == appointment) &&
+            (identical(other.isEmpty, isEmpty) || other.isEmpty == isEmpty));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, slot,
-      const DeepCollectionEquality().hash(_services), appointment);
+      const DeepCollectionEquality().hash(_services), appointment, isEmpty);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$BookingStateLoadedCopyWith<_$BookingStateLoaded> get copyWith =>
-      __$$BookingStateLoadedCopyWithImpl<_$BookingStateLoaded>(
+  _$$BookingStateLoadedImplCopyWith<_$BookingStateLoadedImpl> get copyWith =>
+      __$$BookingStateLoadedImplCopyWithImpl<_$BookingStateLoadedImpl>(
           this, _$identity);
 
   @override
@@ -310,11 +329,12 @@ class _$BookingStateLoaded implements BookingStateLoaded {
     required TResult Function(
             AppointmentSlotModel? slot,
             List<AppointmentServiceModel> services,
-            AppointmentModel appointment)
+            AppointmentModel appointment,
+            bool isEmpty)
         loaded,
     required TResult Function(String error) error,
   }) {
-    return loaded(slot, services, appointment);
+    return loaded(slot, services, appointment, isEmpty);
   }
 
   @override
@@ -324,11 +344,12 @@ class _$BookingStateLoaded implements BookingStateLoaded {
     TResult? Function(
             AppointmentSlotModel? slot,
             List<AppointmentServiceModel> services,
-            AppointmentModel appointment)?
+            AppointmentModel appointment,
+            bool isEmpty)?
         loaded,
     TResult? Function(String error)? error,
   }) {
-    return loaded?.call(slot, services, appointment);
+    return loaded?.call(slot, services, appointment, isEmpty);
   }
 
   @override
@@ -338,13 +359,14 @@ class _$BookingStateLoaded implements BookingStateLoaded {
     TResult Function(
             AppointmentSlotModel? slot,
             List<AppointmentServiceModel> services,
-            AppointmentModel appointment)?
+            AppointmentModel appointment,
+            bool isEmpty)?
         loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(slot, services, appointment);
+      return loaded(slot, services, appointment, isEmpty);
     }
     return orElse();
   }
@@ -388,31 +410,33 @@ abstract class BookingStateLoaded implements BookingState {
   const factory BookingStateLoaded(
       final AppointmentSlotModel? slot,
       final List<AppointmentServiceModel> services,
-      final AppointmentModel appointment) = _$BookingStateLoaded;
+      final AppointmentModel appointment,
+      final bool isEmpty) = _$BookingStateLoadedImpl;
 
   AppointmentSlotModel? get slot;
   List<AppointmentServiceModel> get services;
   AppointmentModel get appointment;
+  bool get isEmpty;
   @JsonKey(ignore: true)
-  _$$BookingStateLoadedCopyWith<_$BookingStateLoaded> get copyWith =>
+  _$$BookingStateLoadedImplCopyWith<_$BookingStateLoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$BookingStateErrorCopyWith<$Res> {
-  factory _$$BookingStateErrorCopyWith(
-          _$BookingStateError value, $Res Function(_$BookingStateError) then) =
-      __$$BookingStateErrorCopyWithImpl<$Res>;
+abstract class _$$BookingStateErrorImplCopyWith<$Res> {
+  factory _$$BookingStateErrorImplCopyWith(_$BookingStateErrorImpl value,
+          $Res Function(_$BookingStateErrorImpl) then) =
+      __$$BookingStateErrorImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String error});
 }
 
 /// @nodoc
-class __$$BookingStateErrorCopyWithImpl<$Res>
-    extends _$BookingStateCopyWithImpl<$Res, _$BookingStateError>
-    implements _$$BookingStateErrorCopyWith<$Res> {
-  __$$BookingStateErrorCopyWithImpl(
-      _$BookingStateError _value, $Res Function(_$BookingStateError) _then)
+class __$$BookingStateErrorImplCopyWithImpl<$Res>
+    extends _$BookingStateCopyWithImpl<$Res, _$BookingStateErrorImpl>
+    implements _$$BookingStateErrorImplCopyWith<$Res> {
+  __$$BookingStateErrorImplCopyWithImpl(_$BookingStateErrorImpl _value,
+      $Res Function(_$BookingStateErrorImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -420,7 +444,7 @@ class __$$BookingStateErrorCopyWithImpl<$Res>
   $Res call({
     Object? error = null,
   }) {
-    return _then(_$BookingStateError(
+    return _then(_$BookingStateErrorImpl(
       null == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
@@ -431,8 +455,8 @@ class __$$BookingStateErrorCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$BookingStateError implements BookingStateError {
-  const _$BookingStateError(this.error);
+class _$BookingStateErrorImpl implements BookingStateError {
+  const _$BookingStateErrorImpl(this.error);
 
   @override
   final String error;
@@ -443,10 +467,10 @@ class _$BookingStateError implements BookingStateError {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$BookingStateError &&
+            other is _$BookingStateErrorImpl &&
             (identical(other.error, error) || other.error == error));
   }
 
@@ -456,8 +480,9 @@ class _$BookingStateError implements BookingStateError {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$BookingStateErrorCopyWith<_$BookingStateError> get copyWith =>
-      __$$BookingStateErrorCopyWithImpl<_$BookingStateError>(this, _$identity);
+  _$$BookingStateErrorImplCopyWith<_$BookingStateErrorImpl> get copyWith =>
+      __$$BookingStateErrorImplCopyWithImpl<_$BookingStateErrorImpl>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -466,7 +491,8 @@ class _$BookingStateError implements BookingStateError {
     required TResult Function(
             AppointmentSlotModel? slot,
             List<AppointmentServiceModel> services,
-            AppointmentModel appointment)
+            AppointmentModel appointment,
+            bool isEmpty)
         loaded,
     required TResult Function(String error) error,
   }) {
@@ -480,7 +506,8 @@ class _$BookingStateError implements BookingStateError {
     TResult? Function(
             AppointmentSlotModel? slot,
             List<AppointmentServiceModel> services,
-            AppointmentModel appointment)?
+            AppointmentModel appointment,
+            bool isEmpty)?
         loaded,
     TResult? Function(String error)? error,
   }) {
@@ -494,7 +521,8 @@ class _$BookingStateError implements BookingStateError {
     TResult Function(
             AppointmentSlotModel? slot,
             List<AppointmentServiceModel> services,
-            AppointmentModel appointment)?
+            AppointmentModel appointment,
+            bool isEmpty)?
         loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
@@ -541,10 +569,10 @@ class _$BookingStateError implements BookingStateError {
 }
 
 abstract class BookingStateError implements BookingState {
-  const factory BookingStateError(final String error) = _$BookingStateError;
+  const factory BookingStateError(final String error) = _$BookingStateErrorImpl;
 
   String get error;
   @JsonKey(ignore: true)
-  _$$BookingStateErrorCopyWith<_$BookingStateError> get copyWith =>
+  _$$BookingStateErrorImplCopyWith<_$BookingStateErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

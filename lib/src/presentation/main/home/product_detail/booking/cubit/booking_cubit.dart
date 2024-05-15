@@ -42,16 +42,16 @@ class BookingCubit extends Cubit<BookingState> {
                   parseDate(selectedDate),
                   [selectedService.id.toString()]);
             } catch (e) {
-              emit(BookingState.loaded(null, services, appointment));
+              emit(BookingState.loaded(null, services, appointment, true));
               return;
             }
 
             if (availableSlots != null) {
-              emit(BookingState.loaded(availableSlots, services, appointment));
+              emit(BookingState.loaded(availableSlots, services, appointment, false));
               return;
             }
           }
-          emit(BookingState.loaded(null, services, appointment));
+          emit(BookingState.loaded(null, services, appointment, false));
         } else {
           emit(const BookingState.error("Failed loading services"));
         }
