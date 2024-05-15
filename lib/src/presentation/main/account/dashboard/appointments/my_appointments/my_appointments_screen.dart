@@ -141,7 +141,9 @@ class _MyAppointmentsLoadedState extends State<MyAppointmentsLoaded> {
                                             borderRadius:
                                                 BorderRadius.circular(12),
                                             child: Image.network(
-                                              "https://newheidi.obs.eu-de.otc.t-systems.com/user_8/city_1_listing_15_2_1709543526085",
+                                              (item.imageLink != null)
+                                                  ? item.imageLink!
+                                                  : "https://newheidi.obs.eu-de.otc.t-systems.com/user_8/city_1_listing_15_2_1709543526085",
                                               width: 120,
                                               height: 140,
                                               fit: BoxFit.cover,
