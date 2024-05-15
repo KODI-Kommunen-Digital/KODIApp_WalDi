@@ -32,10 +32,6 @@ class AppointmentModel {
       this.holidays,
       this.imageLink});
 
-  void setImage(String link) {
-    imageLink = link;
-  }
-
   factory AppointmentModel.fromJson(Map<String, dynamic> json, {int? cityId}) {
     List<OpenTimeModel> parsedOpenHours = [];
     List<HolidayModel>? parsedHolidays = [];

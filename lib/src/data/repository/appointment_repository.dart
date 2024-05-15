@@ -49,9 +49,9 @@ class AppointmentRepository {
         return AppointmentModel.fromJson(item);
       }).toList();
 
-      for(AppointmentModel entry in responseData) {
+      for (AppointmentModel entry in responseData) {
         final ProductModel? listing = await getProductForAppointment(entry.id!);
-        if(listing != null) {
+        if (listing != null) {
           entry.imageLink = listing.image;
         }
       }
@@ -390,7 +390,6 @@ class AppointmentRepository {
       } else {
         responseData.add(BookingModel.fromJson(response.data.first));
       }
-
       return responseData;
     } else {
       logError('Load User Bookings Error', response.message);

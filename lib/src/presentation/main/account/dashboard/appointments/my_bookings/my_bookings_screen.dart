@@ -7,6 +7,7 @@ import 'package:heidi/src/data/model/model_booking.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/appointments/my_bookings/cubit/my_bookings_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/appointments/my_bookings/cubit/my_bookings_state.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
+import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class MyBookingsScreen extends StatelessWidget {
@@ -128,7 +129,10 @@ class _MyBookingsLoadedState extends State<MyBookingsLoaded> {
                                           borderRadius:
                                               BorderRadius.circular(12),
                                           child: Image.network(
-                                            "https://newheidi.obs.eu-de.otc.t-systems.com/user_8/city_1_listing_15_2_1709543526085",
+                                            (item.imageLink != null)
+                                                ? "${Application.picturesURL}${item.imageLink!}"
+                                                //Change default URL
+                                                : "https://newheidi.obs.eu-de.otc.t-systems.com/user_8/city_1_listing_15_2_1709543526085",
                                             width: 120,
                                             height: 140,
                                             fit: BoxFit.cover,
