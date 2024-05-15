@@ -548,5 +548,6 @@
   "noAvailableSlots": "Limit per person reached",
   "overview": "Overview",
   "empty_slots": "There are no timeslots for this date. Please choose a different date.",
-  "choose_slots": "Please choose a timeslot"
+  "choose_slots": "Please choose a timeslot",
+  "schedule_required": "Schedule required"
 }

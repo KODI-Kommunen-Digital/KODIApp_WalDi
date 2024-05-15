@@ -735,8 +735,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
     _errorTitle =
         UtilValidator.validate(_textTitleController.text, allowEmpty: false);
 
-
-
     if (_textContentController.text.length >= 65535) {
       _errorContent = "value_desc_limit_exceeded";
     } else if (_textContentController.text.length < 3) {
@@ -754,9 +752,11 @@ class _AddListingScreenState extends State<AddListingScreen> {
       }
     }
 
-    if(selectedCategory?.toLowerCase() == "appointment bookings") {
-      if((serviceEntries ?? []).isEmpty) {
+    if (selectedCategory?.toLowerCase() == "appointmentbooking") {
+      if ((serviceEntries ?? []).isEmpty) {
         _errorAppointment = "appointment_service_mandatory";
+      } else if ((timeSlots ?? []).isEmpty) {
+        _errorAppointment = "schedule_required";
       } else {
         _errorAppointment = null;
       }
@@ -1262,7 +1262,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const SizedBox(),
-                if (selectedCategory?.toLowerCase() == "appointment bookings")
+                if (selectedCategory?.toLowerCase() == "appointmentbooking")
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
                     child: Container(

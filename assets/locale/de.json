@@ -550,6 +550,7 @@
   "noAvailableSlots": "Limit pro Person erreicht",
   "overview": "Übersicht",
   "empty_slots": "Es sind keine Zeiträume für dieses Datum vorhanden. Bitte wähle ein anderes Datum.",
-  "choose_slot": "Bitte wähle einen Zeitraum"
+  "choose_slot": "Bitte wähle einen Zeitraum",
+  "schedule_required": "Zeitplan erforderlich"
 }
 
