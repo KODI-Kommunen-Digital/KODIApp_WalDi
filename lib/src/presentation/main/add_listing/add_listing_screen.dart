@@ -758,7 +758,20 @@ class _AddListingScreenState extends State<AddListingScreen> {
       } else if ((timeSlots ?? []).isEmpty) {
         _errorAppointment = "schedule_required";
       } else {
-        _errorAppointment = null;
+        bool isZero = true;
+        for (var day in timeSlots!) {
+          for (var schedule in day.schedule) {
+            if (schedule.endTime.hour + schedule.endTime.minute != 0) {
+              isZero = false;
+            }
+          }
+        }
+
+        if (isZero) {
+          _errorAppointment = "schedule_required";
+        } else {
+          _errorAppointment = null;
+        }
       }
     }
 
