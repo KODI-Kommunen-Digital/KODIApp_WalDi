@@ -787,8 +787,14 @@ class _BookingDetailsLoadedState extends State<BookingDetailsLoaded> {
 
   void _onDatePicker() async {
     final now = DateTime.now();
+    DateTime date = now;
+    if(selectedDate != "") {
+      DateTime parsedDate = DateFormat("dd.MM.yyyy").parse(selectedDate);
+      date = DateTime.parse(DateFormat("yyyy-MM-dd").format(parsedDate));
+    }
+
     final result = await showDatePicker(
-      initialDate: DateTime.now(),
+      initialDate: date,
       firstDate: DateTime(now.year, now.month),
       context: context,
       lastDate: DateTime(now.year + 5),
