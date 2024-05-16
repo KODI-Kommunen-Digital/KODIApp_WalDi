@@ -199,7 +199,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
             .setServiceValue(Preferences.categoryId, null, service.categoryId);
       }
       Navigator.pushNamed(context, Routes.listProduct,
-          arguments: {'id': service.arguments, 'title': '', 'isCategoryService': true});
+          arguments: {'id': service.arguments, 'title': '', 'type': 'categoryService'});
     }
   }
 

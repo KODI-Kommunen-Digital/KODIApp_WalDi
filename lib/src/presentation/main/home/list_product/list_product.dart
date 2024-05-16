@@ -41,13 +41,13 @@ class _ListProductScreenState extends State<ListProductScreen> {
   @override
   void initState() {
     super.initState();
-    isCity = widget.arguments['id'] != 0;
-    isCategoryService = widget.arguments['isCategoryService'] ?? false;
+    isCity = widget.arguments['type'] == 'location';
+    isCategoryService = widget.arguments['type'] == 'categoryService';
     loadListingsList();
   }
 
   Future<void> loadListingsList() async {
-    if (widget.arguments['id'] != 0 && isCity && !isCategoryService) {
+    if (isCity) {
       await context.read<ListCubit>().setCategoryFilter(0, null);
     }
     await context
