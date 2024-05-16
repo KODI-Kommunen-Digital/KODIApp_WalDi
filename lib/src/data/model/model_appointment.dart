@@ -50,13 +50,18 @@ class AppointmentModel {
     if (json['metadata'] != null) {
       Map<String, dynamic> metaData = jsonDecode(json['metadata']);
 
-      maxBookingPerSlot = metaData['maxBookingPerSlot'];
+      maxBookingPerSlot = metaData['maxBookingPerSlot'] is int
+          ? metaData['maxBookingPerSlot']
+          : metaData['maxBookingPerSlot'] != null
+              ? int.parse(metaData['maxBookingPerSlot'])
+              : 0;
+
       final List<dynamic>? jsonHolidays = metaData['holidays'];
 
       if (jsonHolidays != null) {
         for (var holiday in jsonHolidays) {
-          final DateTime parsedDate = DateTime.parse(holiday['date']);
-          String date = DateFormat('dd-MM-yyyy').format(parsedDate);
+          final DateTime parsedDate = DateFormat("dd-MM-YYYY").parse(holiday['date']);
+          String date = DateFormat('yyyy-MM-dd').format(parsedDate);
           parsedHolidays.add(HolidayModel(date: date, title: holiday['title']));
         }
       } else {
@@ -127,7 +132,7 @@ class AppointmentModel {
   }
 
   String getStartTime(String startTime) {
-    if(startTime.length < 10) return startTime;
+    if (startTime.length < 10) return startTime;
     String startDate = _formatDate(startTime.substring(0, 10));
     String startHour = startTime.substring(10);
     return "$startDate, $startHour";
