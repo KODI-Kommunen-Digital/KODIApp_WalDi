@@ -578,11 +578,7 @@ class _BookingDetailsLoadedState extends State<BookingDetailsLoaded> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
-                Translate.of(context)
-                    .translate('noAvailableSlots')
-                    .replaceFirst("{0}", "$adults")
-                    .replaceFirst("{1}", "$adults"),
-                style: const TextStyle(color: Colors.white, fontSize: 14),
+                Translate.of(context).translate('noAvailableSlots'),
               ),
               duration: const Duration(seconds: 2),
             ),
