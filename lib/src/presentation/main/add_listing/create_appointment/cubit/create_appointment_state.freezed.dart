@@ -12,7 +12,7 @@ part of 'create_appointment_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$CreateAppointmentState {
@@ -88,26 +88,28 @@ class _$CreateAppointmentStateCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$CreateAppointmentLoadingCopyWith<$Res> {
-  factory _$$CreateAppointmentLoadingCopyWith(_$CreateAppointmentLoading value,
-          $Res Function(_$CreateAppointmentLoading) then) =
-      __$$CreateAppointmentLoadingCopyWithImpl<$Res>;
+abstract class _$$CreateAppointmentLoadingImplCopyWith<$Res> {
+  factory _$$CreateAppointmentLoadingImplCopyWith(
+          _$CreateAppointmentLoadingImpl value,
+          $Res Function(_$CreateAppointmentLoadingImpl) then) =
+      __$$CreateAppointmentLoadingImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$CreateAppointmentLoadingCopyWithImpl<$Res>
+class __$$CreateAppointmentLoadingImplCopyWithImpl<$Res>
     extends _$CreateAppointmentStateCopyWithImpl<$Res,
-        _$CreateAppointmentLoading>
-    implements _$$CreateAppointmentLoadingCopyWith<$Res> {
-  __$$CreateAppointmentLoadingCopyWithImpl(_$CreateAppointmentLoading _value,
-      $Res Function(_$CreateAppointmentLoading) _then)
+        _$CreateAppointmentLoadingImpl>
+    implements _$$CreateAppointmentLoadingImplCopyWith<$Res> {
+  __$$CreateAppointmentLoadingImplCopyWithImpl(
+      _$CreateAppointmentLoadingImpl _value,
+      $Res Function(_$CreateAppointmentLoadingImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$CreateAppointmentLoading implements CreateAppointmentLoading {
-  const _$CreateAppointmentLoading();
+class _$CreateAppointmentLoadingImpl implements CreateAppointmentLoading {
+  const _$CreateAppointmentLoadingImpl();
 
   @override
   String toString() {
@@ -115,10 +117,10 @@ class _$CreateAppointmentLoading implements CreateAppointmentLoading {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CreateAppointmentLoading);
+            other is _$CreateAppointmentLoadingImpl);
   }
 
   @override
@@ -200,14 +202,15 @@ class _$CreateAppointmentLoading implements CreateAppointmentLoading {
 }
 
 abstract class CreateAppointmentLoading implements CreateAppointmentState {
-  const factory CreateAppointmentLoading() = _$CreateAppointmentLoading;
+  const factory CreateAppointmentLoading() = _$CreateAppointmentLoadingImpl;
 }
 
 /// @nodoc
-abstract class _$$CreateAppointmentLoadedCopyWith<$Res> {
-  factory _$$CreateAppointmentLoadedCopyWith(_$CreateAppointmentLoaded value,
-          $Res Function(_$CreateAppointmentLoaded) then) =
-      __$$CreateAppointmentLoadedCopyWithImpl<$Res>;
+abstract class _$$CreateAppointmentLoadedImplCopyWith<$Res> {
+  factory _$$CreateAppointmentLoadedImplCopyWith(
+          _$CreateAppointmentLoadedImpl value,
+          $Res Function(_$CreateAppointmentLoadedImpl) then) =
+      __$$CreateAppointmentLoadedImplCopyWithImpl<$Res>;
   @useResult
   $Res call(
       {List<AppointmentServiceModel>? loadedEntries,
@@ -215,12 +218,13 @@ abstract class _$$CreateAppointmentLoadedCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$CreateAppointmentLoadedCopyWithImpl<$Res>
+class __$$CreateAppointmentLoadedImplCopyWithImpl<$Res>
     extends _$CreateAppointmentStateCopyWithImpl<$Res,
-        _$CreateAppointmentLoaded>
-    implements _$$CreateAppointmentLoadedCopyWith<$Res> {
-  __$$CreateAppointmentLoadedCopyWithImpl(_$CreateAppointmentLoaded _value,
-      $Res Function(_$CreateAppointmentLoaded) _then)
+        _$CreateAppointmentLoadedImpl>
+    implements _$$CreateAppointmentLoadedImplCopyWith<$Res> {
+  __$$CreateAppointmentLoadedImplCopyWithImpl(
+      _$CreateAppointmentLoadedImpl _value,
+      $Res Function(_$CreateAppointmentLoadedImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -229,7 +233,7 @@ class __$$CreateAppointmentLoadedCopyWithImpl<$Res>
     Object? loadedEntries = freezed,
     Object? appointment = null,
   }) {
-    return _then(_$CreateAppointmentLoaded(
+    return _then(_$CreateAppointmentLoadedImpl(
       freezed == loadedEntries
           ? _value._loadedEntries
           : loadedEntries // ignore: cast_nullable_to_non_nullable
@@ -244,8 +248,8 @@ class __$$CreateAppointmentLoadedCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$CreateAppointmentLoaded implements CreateAppointmentLoaded {
-  const _$CreateAppointmentLoaded(
+class _$CreateAppointmentLoadedImpl implements CreateAppointmentLoaded {
+  const _$CreateAppointmentLoadedImpl(
       final List<AppointmentServiceModel>? loadedEntries, this.appointment)
       : _loadedEntries = loadedEntries;
 
@@ -268,10 +272,10 @@ class _$CreateAppointmentLoaded implements CreateAppointmentLoaded {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CreateAppointmentLoaded &&
+            other is _$CreateAppointmentLoadedImpl &&
             const DeepCollectionEquality()
                 .equals(other._loadedEntries, _loadedEntries) &&
             (identical(other.appointment, appointment) ||
@@ -285,9 +289,9 @@ class _$CreateAppointmentLoaded implements CreateAppointmentLoaded {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$CreateAppointmentLoadedCopyWith<_$CreateAppointmentLoaded> get copyWith =>
-      __$$CreateAppointmentLoadedCopyWithImpl<_$CreateAppointmentLoaded>(
-          this, _$identity);
+  _$$CreateAppointmentLoadedImplCopyWith<_$CreateAppointmentLoadedImpl>
+      get copyWith => __$$CreateAppointmentLoadedImplCopyWithImpl<
+          _$CreateAppointmentLoadedImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -367,30 +371,33 @@ class _$CreateAppointmentLoaded implements CreateAppointmentLoaded {
 abstract class CreateAppointmentLoaded implements CreateAppointmentState {
   const factory CreateAppointmentLoaded(
       final List<AppointmentServiceModel>? loadedEntries,
-      final AppointmentModel appointment) = _$CreateAppointmentLoaded;
+      final AppointmentModel appointment) = _$CreateAppointmentLoadedImpl;
 
   List<AppointmentServiceModel>? get loadedEntries;
   AppointmentModel get appointment;
   @JsonKey(ignore: true)
-  _$$CreateAppointmentLoadedCopyWith<_$CreateAppointmentLoaded> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$CreateAppointmentLoadedImplCopyWith<_$CreateAppointmentLoadedImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$CreateAppointmentErrorCopyWith<$Res> {
-  factory _$$CreateAppointmentErrorCopyWith(_$CreateAppointmentError value,
-          $Res Function(_$CreateAppointmentError) then) =
-      __$$CreateAppointmentErrorCopyWithImpl<$Res>;
+abstract class _$$CreateAppointmentErrorImplCopyWith<$Res> {
+  factory _$$CreateAppointmentErrorImplCopyWith(
+          _$CreateAppointmentErrorImpl value,
+          $Res Function(_$CreateAppointmentErrorImpl) then) =
+      __$$CreateAppointmentErrorImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String error});
 }
 
 /// @nodoc
-class __$$CreateAppointmentErrorCopyWithImpl<$Res>
-    extends _$CreateAppointmentStateCopyWithImpl<$Res, _$CreateAppointmentError>
-    implements _$$CreateAppointmentErrorCopyWith<$Res> {
-  __$$CreateAppointmentErrorCopyWithImpl(_$CreateAppointmentError _value,
-      $Res Function(_$CreateAppointmentError) _then)
+class __$$CreateAppointmentErrorImplCopyWithImpl<$Res>
+    extends _$CreateAppointmentStateCopyWithImpl<$Res,
+        _$CreateAppointmentErrorImpl>
+    implements _$$CreateAppointmentErrorImplCopyWith<$Res> {
+  __$$CreateAppointmentErrorImplCopyWithImpl(
+      _$CreateAppointmentErrorImpl _value,
+      $Res Function(_$CreateAppointmentErrorImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -398,7 +405,7 @@ class __$$CreateAppointmentErrorCopyWithImpl<$Res>
   $Res call({
     Object? error = null,
   }) {
-    return _then(_$CreateAppointmentError(
+    return _then(_$CreateAppointmentErrorImpl(
       null == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
@@ -409,8 +416,8 @@ class __$$CreateAppointmentErrorCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$CreateAppointmentError implements CreateAppointmentError {
-  const _$CreateAppointmentError(this.error);
+class _$CreateAppointmentErrorImpl implements CreateAppointmentError {
+  const _$CreateAppointmentErrorImpl(this.error);
 
   @override
   final String error;
@@ -421,10 +428,10 @@ class _$CreateAppointmentError implements CreateAppointmentError {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CreateAppointmentError &&
+            other is _$CreateAppointmentErrorImpl &&
             (identical(other.error, error) || other.error == error));
   }
 
@@ -434,9 +441,9 @@ class _$CreateAppointmentError implements CreateAppointmentError {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$CreateAppointmentErrorCopyWith<_$CreateAppointmentError> get copyWith =>
-      __$$CreateAppointmentErrorCopyWithImpl<_$CreateAppointmentError>(
-          this, _$identity);
+  _$$CreateAppointmentErrorImplCopyWith<_$CreateAppointmentErrorImpl>
+      get copyWith => __$$CreateAppointmentErrorImplCopyWithImpl<
+          _$CreateAppointmentErrorImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -515,10 +522,10 @@ class _$CreateAppointmentError implements CreateAppointmentError {
 
 abstract class CreateAppointmentError implements CreateAppointmentState {
   const factory CreateAppointmentError(final String error) =
-      _$CreateAppointmentError;
+      _$CreateAppointmentErrorImpl;
 
   String get error;
   @JsonKey(ignore: true)
-  _$$CreateAppointmentErrorCopyWith<_$CreateAppointmentError> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$CreateAppointmentErrorImplCopyWith<_$CreateAppointmentErrorImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }

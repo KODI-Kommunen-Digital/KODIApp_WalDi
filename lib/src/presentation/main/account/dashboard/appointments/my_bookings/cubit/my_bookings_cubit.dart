@@ -43,7 +43,8 @@ class MyBookingsCubit extends Cubit<MyBookingsState> {
               createdBy: booking.createdBy,
               isCreatedByGuest: booking.isCreatedByGuest,
               description: booking.description,
-              appointmentTitle: product.title));
+              appointmentTitle: product.title,
+          imageLink: product.image));
         } else {
           bookings.add(booking);
           logError("Failed loading product for booking ${booking.id}");

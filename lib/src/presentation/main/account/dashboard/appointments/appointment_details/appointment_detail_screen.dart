@@ -5,9 +5,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_appointment.dart';
 import 'package:heidi/src/data/model/model_booking.dart';
 import 'package:heidi/src/data/model/model_bookingGuest.dart';
+import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/appointments/appointment_details/cubit/appointment_details_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/appointments/appointment_details/cubit/appointment_details_state.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
+import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
@@ -35,11 +37,13 @@ class _AppointmentDetailsScreenState extends State<AppointmentDetailsScreen> {
     return BlocBuilder<AppointmentDetailsCubit, AppointmentDetailsState>(
       builder: (context, state) => state.maybeWhen(
         loading: () => const AppointmentDetailsLoading(),
-        loaded: (bookings, guests, isRefreshLoader) => AppointmentDetailsLoaded(
+        loaded: (bookings, guests, isRefreshLoader, listing) =>
+            AppointmentDetailsLoaded(
           isRefreshLoader: isRefreshLoader,
           appointment: widget.appointment,
           guests: guests,
           bookings: bookings,
+          listing: listing,
         ),
         error: (msg) => ErrorWidget(msg),
         orElse: () => ErrorWidget(
@@ -70,12 +74,14 @@ class AppointmentDetailsLoaded extends StatefulWidget {
   final List<BookingGuestModel> guests;
   final bool isRefreshLoader;
   final List<BookingModel> bookings;
+  final ProductModel? listing;
 
   const AppointmentDetailsLoaded(
       {required this.isRefreshLoader,
       required this.appointment,
       required this.guests,
       required this.bookings,
+      required this.listing,
       super.key});
 
   @override
@@ -141,12 +147,16 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
                   Navigator.pushNamed(
                     context,
                     Routes.imageZoom,
-                    arguments:
-                        "https://newheidi.obs.eu-de.otc.t-systems.com/user_8/city_1_listing_15_2_1709543526085",
+                    arguments: {
+                      'sourceId': widget.listing?.sourceId,
+                      'imageList': [ImageListModel(listingId: widget.listing?.id, logo: "${widget.listing?.image}", )],
+                      'pdf': null,}
                   );
                 },
                 child: Image.network(
-                  "https://newheidi.obs.eu-de.otc.t-systems.com/user_8/city_1_listing_15_2_1709543526085",
+                  (widget.listing?.image != null)
+                      ? "${Application.picturesURL}${widget.listing!.image}"
+                      : "https://newheidi.obs.eu-de.otc.t-systems.com/user_8/city_1_listing_15_2_1709543526085",
                   width: 120,
                   height: 140,
                   fit: BoxFit.cover,

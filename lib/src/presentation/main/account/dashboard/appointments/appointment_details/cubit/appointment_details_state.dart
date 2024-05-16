@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:heidi/src/data/model/model_booking.dart';
 import 'package:heidi/src/data/model/model_bookingGuest.dart';
+import 'package:heidi/src/data/model/model_product.dart';
 
 part 'appointment_details_state.freezed.dart';
 
@@ -15,7 +16,8 @@ class AppointmentDetailsState with _$AppointmentDetailsState {
   const factory AppointmentDetailsState.loaded(
       List<BookingModel> bookings,
       List<BookingGuestModel> guests,
-      bool isRefreshLoader) = AppointmentDetailsStateLoaded;
+      bool isRefreshLoader,
+      ProductModel? listing) = AppointmentDetailsStateLoaded;
 
   const factory AppointmentDetailsState.error(String msg) =
       AppointmentDetailsStateError;

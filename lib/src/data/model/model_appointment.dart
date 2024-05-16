@@ -17,6 +17,7 @@ class AppointmentModel {
   final int? maxBookingPerSlot;
   final List<OpenTimeModel?> openHours;
   final List<HolidayModel>? holidays;
+  String? imageLink;
 
   AppointmentModel(
       {this.id,
@@ -28,7 +29,8 @@ class AppointmentModel {
       this.endDate,
       this.maxBookingPerSlot,
       required this.openHours,
-      this.holidays});
+      this.holidays,
+      this.imageLink});
 
   factory AppointmentModel.fromJson(Map<String, dynamic> json, {int? cityId}) {
     List<OpenTimeModel> parsedOpenHours = [];

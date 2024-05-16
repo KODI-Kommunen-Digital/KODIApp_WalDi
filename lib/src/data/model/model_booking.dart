@@ -15,6 +15,7 @@ class BookingModel {
   final bool isCreatedByGuest;
   final String? appointmentTitle;
   final GuestDetails? guestDetails;
+  final String? imageLink;
 
   BookingModel({
     required this.id,
@@ -31,6 +32,7 @@ class BookingModel {
     this.appointmentTitle,
     this.description,
     this.guestDetails,
+    this.imageLink
   });
 
   factory BookingModel.fromJson(Map<String, dynamic> json) {

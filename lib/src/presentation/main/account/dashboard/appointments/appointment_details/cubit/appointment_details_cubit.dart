@@ -1,9 +1,12 @@
 import 'package:bloc/bloc.dart';
+
 // import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_booking.dart';
 import 'package:heidi/src/data/model/model_bookingGuest.dart';
+import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_schedule.dart';
 import 'package:heidi/src/data/repository/appointment_repository.dart';
+
 // import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:intl/intl.dart';
@@ -20,6 +23,9 @@ class AppointmentDetailsCubit extends Cubit<AppointmentDetailsState> {
       final prefs = await Preferences.openBox();
       repo = AppointmentRepository(prefs);
     }
+
+    final ProductModel? listing =
+        await AppointmentRepository.getProductForAppointment(appointmentId);
 
     List<BookingModel>? bookings =
         await repo.loadOwnerBookings(1, appointmentId);
@@ -38,7 +44,7 @@ class AppointmentDetailsCubit extends Cubit<AppointmentDetailsState> {
 
       if ((bookings.isNotEmpty && guests.isNotEmpty) ||
           (bookings.isEmpty && guests.isEmpty)) {
-        emit(AppointmentDetailsState.loaded(bookings, guests, false));
+        emit(AppointmentDetailsState.loaded(bookings, guests, false, listing));
       } else {
         emit(const AppointmentDetailsState.error("Failed to load guests."));
       }
@@ -98,7 +104,8 @@ class AppointmentDetailsCubit extends Cubit<AppointmentDetailsState> {
   }
 
   Future<bool> onCancelOwner(int appointmentId, int bookingId) async {
-    final response = await repo.cancelAppointmentOwner(appointmentId, bookingId);
+    final response =
+        await repo.cancelAppointmentOwner(appointmentId, bookingId);
     if (response) {
       onLoad(false, appointmentId);
       return true;

@@ -20,8 +20,11 @@ mixin _$AppointmentDetailsState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<BookingModel> bookings,
-            List<BookingGuestModel> guests, bool isRefreshLoader)
+    required TResult Function(
+            List<BookingModel> bookings,
+            List<BookingGuestModel> guests,
+            bool isRefreshLoader,
+            ProductModel? listing)
         loaded,
     required TResult Function(String msg) error,
   }) =>
@@ -30,8 +33,11 @@ mixin _$AppointmentDetailsState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<BookingModel> bookings,
-            List<BookingGuestModel> guests, bool isRefreshLoader)?
+    TResult? Function(
+            List<BookingModel> bookings,
+            List<BookingGuestModel> guests,
+            bool isRefreshLoader,
+            ProductModel? listing)?
         loaded,
     TResult? Function(String msg)? error,
   }) =>
@@ -40,8 +46,11 @@ mixin _$AppointmentDetailsState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<BookingModel> bookings,
-            List<BookingGuestModel> guests, bool isRefreshLoader)?
+    TResult Function(
+            List<BookingModel> bookings,
+            List<BookingGuestModel> guests,
+            bool isRefreshLoader,
+            ProductModel? listing)?
         loaded,
     TResult Function(String msg)? error,
     required TResult orElse(),
@@ -138,8 +147,11 @@ class _$AppointmentDetailsStateInitialImpl
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<BookingModel> bookings,
-            List<BookingGuestModel> guests, bool isRefreshLoader)
+    required TResult Function(
+            List<BookingModel> bookings,
+            List<BookingGuestModel> guests,
+            bool isRefreshLoader,
+            ProductModel? listing)
         loaded,
     required TResult Function(String msg) error,
   }) {
@@ -151,8 +163,11 @@ class _$AppointmentDetailsStateInitialImpl
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<BookingModel> bookings,
-            List<BookingGuestModel> guests, bool isRefreshLoader)?
+    TResult? Function(
+            List<BookingModel> bookings,
+            List<BookingGuestModel> guests,
+            bool isRefreshLoader,
+            ProductModel? listing)?
         loaded,
     TResult? Function(String msg)? error,
   }) {
@@ -164,8 +179,11 @@ class _$AppointmentDetailsStateInitialImpl
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<BookingModel> bookings,
-            List<BookingGuestModel> guests, bool isRefreshLoader)?
+    TResult Function(
+            List<BookingModel> bookings,
+            List<BookingGuestModel> guests,
+            bool isRefreshLoader,
+            ProductModel? listing)?
         loaded,
     TResult Function(String msg)? error,
     required TResult orElse(),
@@ -265,8 +283,11 @@ class _$AppointmentDetailsStateLoadingImpl
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<BookingModel> bookings,
-            List<BookingGuestModel> guests, bool isRefreshLoader)
+    required TResult Function(
+            List<BookingModel> bookings,
+            List<BookingGuestModel> guests,
+            bool isRefreshLoader,
+            ProductModel? listing)
         loaded,
     required TResult Function(String msg) error,
   }) {
@@ -278,8 +299,11 @@ class _$AppointmentDetailsStateLoadingImpl
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<BookingModel> bookings,
-            List<BookingGuestModel> guests, bool isRefreshLoader)?
+    TResult? Function(
+            List<BookingModel> bookings,
+            List<BookingGuestModel> guests,
+            bool isRefreshLoader,
+            ProductModel? listing)?
         loaded,
     TResult? Function(String msg)? error,
   }) {
@@ -291,8 +315,11 @@ class _$AppointmentDetailsStateLoadingImpl
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<BookingModel> bookings,
-            List<BookingGuestModel> guests, bool isRefreshLoader)?
+    TResult Function(
+            List<BookingModel> bookings,
+            List<BookingGuestModel> guests,
+            bool isRefreshLoader,
+            ProductModel? listing)?
         loaded,
     TResult Function(String msg)? error,
     required TResult orElse(),
@@ -357,7 +384,8 @@ abstract class _$$AppointmentDetailsStateLoadedImplCopyWith<$Res> {
   $Res call(
       {List<BookingModel> bookings,
       List<BookingGuestModel> guests,
-      bool isRefreshLoader});
+      bool isRefreshLoader,
+      ProductModel? listing});
 }
 
 /// @nodoc
@@ -376,6 +404,7 @@ class __$$AppointmentDetailsStateLoadedImplCopyWithImpl<$Res>
     Object? bookings = null,
     Object? guests = null,
     Object? isRefreshLoader = null,
+    Object? listing = freezed,
   }) {
     return _then(_$AppointmentDetailsStateLoadedImpl(
       null == bookings
@@ -390,6 +419,10 @@ class __$$AppointmentDetailsStateLoadedImplCopyWithImpl<$Res>
           ? _value.isRefreshLoader
           : isRefreshLoader // ignore: cast_nullable_to_non_nullable
               as bool,
+      freezed == listing
+          ? _value.listing
+          : listing // ignore: cast_nullable_to_non_nullable
+              as ProductModel?,
     ));
   }
 }
@@ -399,7 +432,7 @@ class __$$AppointmentDetailsStateLoadedImplCopyWithImpl<$Res>
 class _$AppointmentDetailsStateLoadedImpl
     implements AppointmentDetailsStateLoaded {
   const _$AppointmentDetailsStateLoadedImpl(final List<BookingModel> bookings,
-      final List<BookingGuestModel> guests, this.isRefreshLoader)
+      final List<BookingGuestModel> guests, this.isRefreshLoader, this.listing)
       : _bookings = bookings,
         _guests = guests;
 
@@ -421,10 +454,12 @@ class _$AppointmentDetailsStateLoadedImpl
 
   @override
   final bool isRefreshLoader;
+  @override
+  final ProductModel? listing;
 
   @override
   String toString() {
-    return 'AppointmentDetailsState.loaded(bookings: $bookings, guests: $guests, isRefreshLoader: $isRefreshLoader)';
+    return 'AppointmentDetailsState.loaded(bookings: $bookings, guests: $guests, isRefreshLoader: $isRefreshLoader, listing: $listing)';
   }
 
   @override
@@ -435,7 +470,8 @@ class _$AppointmentDetailsStateLoadedImpl
             const DeepCollectionEquality().equals(other._bookings, _bookings) &&
             const DeepCollectionEquality().equals(other._guests, _guests) &&
             (identical(other.isRefreshLoader, isRefreshLoader) ||
-                other.isRefreshLoader == isRefreshLoader));
+                other.isRefreshLoader == isRefreshLoader) &&
+            (identical(other.listing, listing) || other.listing == listing));
   }
 
   @override
@@ -443,7 +479,8 @@ class _$AppointmentDetailsStateLoadedImpl
       runtimeType,
       const DeepCollectionEquality().hash(_bookings),
       const DeepCollectionEquality().hash(_guests),
-      isRefreshLoader);
+      isRefreshLoader,
+      listing);
 
   @JsonKey(ignore: true)
   @override
@@ -458,12 +495,15 @@ class _$AppointmentDetailsStateLoadedImpl
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<BookingModel> bookings,
-            List<BookingGuestModel> guests, bool isRefreshLoader)
+    required TResult Function(
+            List<BookingModel> bookings,
+            List<BookingGuestModel> guests,
+            bool isRefreshLoader,
+            ProductModel? listing)
         loaded,
     required TResult Function(String msg) error,
   }) {
-    return loaded(bookings, guests, isRefreshLoader);
+    return loaded(bookings, guests, isRefreshLoader, listing);
   }
 
   @override
@@ -471,12 +511,15 @@ class _$AppointmentDetailsStateLoadedImpl
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<BookingModel> bookings,
-            List<BookingGuestModel> guests, bool isRefreshLoader)?
+    TResult? Function(
+            List<BookingModel> bookings,
+            List<BookingGuestModel> guests,
+            bool isRefreshLoader,
+            ProductModel? listing)?
         loaded,
     TResult? Function(String msg)? error,
   }) {
-    return loaded?.call(bookings, guests, isRefreshLoader);
+    return loaded?.call(bookings, guests, isRefreshLoader, listing);
   }
 
   @override
@@ -484,14 +527,17 @@ class _$AppointmentDetailsStateLoadedImpl
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<BookingModel> bookings,
-            List<BookingGuestModel> guests, bool isRefreshLoader)?
+    TResult Function(
+            List<BookingModel> bookings,
+            List<BookingGuestModel> guests,
+            bool isRefreshLoader,
+            ProductModel? listing)?
         loaded,
     TResult Function(String msg)? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(bookings, guests, isRefreshLoader);
+      return loaded(bookings, guests, isRefreshLoader, listing);
     }
     return orElse();
   }
@@ -539,11 +585,13 @@ abstract class AppointmentDetailsStateLoaded
   const factory AppointmentDetailsStateLoaded(
       final List<BookingModel> bookings,
       final List<BookingGuestModel> guests,
-      final bool isRefreshLoader) = _$AppointmentDetailsStateLoadedImpl;
+      final bool isRefreshLoader,
+      final ProductModel? listing) = _$AppointmentDetailsStateLoadedImpl;
 
   List<BookingModel> get bookings;
   List<BookingGuestModel> get guests;
   bool get isRefreshLoader;
+  ProductModel? get listing;
   @JsonKey(ignore: true)
   _$$AppointmentDetailsStateLoadedImplCopyWith<
           _$AppointmentDetailsStateLoadedImpl>
@@ -622,8 +670,11 @@ class _$AppointmentDetailsStateErrorImpl
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<BookingModel> bookings,
-            List<BookingGuestModel> guests, bool isRefreshLoader)
+    required TResult Function(
+            List<BookingModel> bookings,
+            List<BookingGuestModel> guests,
+            bool isRefreshLoader,
+            ProductModel? listing)
         loaded,
     required TResult Function(String msg) error,
   }) {
@@ -635,8 +686,11 @@ class _$AppointmentDetailsStateErrorImpl
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<BookingModel> bookings,
-            List<BookingGuestModel> guests, bool isRefreshLoader)?
+    TResult? Function(
+            List<BookingModel> bookings,
+            List<BookingGuestModel> guests,
+            bool isRefreshLoader,
+            ProductModel? listing)?
         loaded,
     TResult? Function(String msg)? error,
   }) {
@@ -648,8 +702,11 @@ class _$AppointmentDetailsStateErrorImpl
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<BookingModel> bookings,
-            List<BookingGuestModel> guests, bool isRefreshLoader)?
+    TResult Function(
+            List<BookingModel> bookings,
+            List<BookingGuestModel> guests,
+            bool isRefreshLoader,
+            ProductModel? listing)?
         loaded,
     TResult Function(String msg)? error,
     required TResult orElse(),

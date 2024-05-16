@@ -12,7 +12,7 @@ part of 'discovery_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$DiscoveryState {
@@ -93,25 +93,26 @@ class _$DiscoveryStateCopyWithImpl<$Res, $Val extends DiscoveryState>
 }
 
 /// @nodoc
-abstract class _$$DiscoveryStateInitialCopyWith<$Res> {
-  factory _$$DiscoveryStateInitialCopyWith(_$DiscoveryStateInitial value,
-          $Res Function(_$DiscoveryStateInitial) then) =
-      __$$DiscoveryStateInitialCopyWithImpl<$Res>;
+abstract class _$$DiscoveryStateInitialImplCopyWith<$Res> {
+  factory _$$DiscoveryStateInitialImplCopyWith(
+          _$DiscoveryStateInitialImpl value,
+          $Res Function(_$DiscoveryStateInitialImpl) then) =
+      __$$DiscoveryStateInitialImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$DiscoveryStateInitialCopyWithImpl<$Res>
-    extends _$DiscoveryStateCopyWithImpl<$Res, _$DiscoveryStateInitial>
-    implements _$$DiscoveryStateInitialCopyWith<$Res> {
-  __$$DiscoveryStateInitialCopyWithImpl(_$DiscoveryStateInitial _value,
-      $Res Function(_$DiscoveryStateInitial) _then)
+class __$$DiscoveryStateInitialImplCopyWithImpl<$Res>
+    extends _$DiscoveryStateCopyWithImpl<$Res, _$DiscoveryStateInitialImpl>
+    implements _$$DiscoveryStateInitialImplCopyWith<$Res> {
+  __$$DiscoveryStateInitialImplCopyWithImpl(_$DiscoveryStateInitialImpl _value,
+      $Res Function(_$DiscoveryStateInitialImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$DiscoveryStateInitial implements DiscoveryStateInitial {
-  const _$DiscoveryStateInitial();
+class _$DiscoveryStateInitialImpl implements DiscoveryStateInitial {
+  const _$DiscoveryStateInitialImpl();
 
   @override
   String toString() {
@@ -119,9 +120,10 @@ class _$DiscoveryStateInitial implements DiscoveryStateInitial {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$DiscoveryStateInitial);
+        (other.runtimeType == runtimeType &&
+            other is _$DiscoveryStateInitialImpl);
   }
 
   @override
@@ -209,29 +211,30 @@ class _$DiscoveryStateInitial implements DiscoveryStateInitial {
 }
 
 abstract class DiscoveryStateInitial implements DiscoveryState {
-  const factory DiscoveryStateInitial() = _$DiscoveryStateInitial;
+  const factory DiscoveryStateInitial() = _$DiscoveryStateInitialImpl;
 }
 
 /// @nodoc
-abstract class _$$DiscoveryStateLoadingCopyWith<$Res> {
-  factory _$$DiscoveryStateLoadingCopyWith(_$DiscoveryStateLoading value,
-          $Res Function(_$DiscoveryStateLoading) then) =
-      __$$DiscoveryStateLoadingCopyWithImpl<$Res>;
+abstract class _$$DiscoveryStateLoadingImplCopyWith<$Res> {
+  factory _$$DiscoveryStateLoadingImplCopyWith(
+          _$DiscoveryStateLoadingImpl value,
+          $Res Function(_$DiscoveryStateLoadingImpl) then) =
+      __$$DiscoveryStateLoadingImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$DiscoveryStateLoadingCopyWithImpl<$Res>
-    extends _$DiscoveryStateCopyWithImpl<$Res, _$DiscoveryStateLoading>
-    implements _$$DiscoveryStateLoadingCopyWith<$Res> {
-  __$$DiscoveryStateLoadingCopyWithImpl(_$DiscoveryStateLoading _value,
-      $Res Function(_$DiscoveryStateLoading) _then)
+class __$$DiscoveryStateLoadingImplCopyWithImpl<$Res>
+    extends _$DiscoveryStateCopyWithImpl<$Res, _$DiscoveryStateLoadingImpl>
+    implements _$$DiscoveryStateLoadingImplCopyWith<$Res> {
+  __$$DiscoveryStateLoadingImplCopyWithImpl(_$DiscoveryStateLoadingImpl _value,
+      $Res Function(_$DiscoveryStateLoadingImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$DiscoveryStateLoading implements DiscoveryStateLoading {
-  const _$DiscoveryStateLoading();
+class _$DiscoveryStateLoadingImpl implements DiscoveryStateLoading {
+  const _$DiscoveryStateLoadingImpl();
 
   @override
   String toString() {
@@ -239,9 +242,10 @@ class _$DiscoveryStateLoading implements DiscoveryStateLoading {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$DiscoveryStateLoading);
+        (other.runtimeType == runtimeType &&
+            other is _$DiscoveryStateLoadingImpl);
   }
 
   @override
@@ -329,24 +333,24 @@ class _$DiscoveryStateLoading implements DiscoveryStateLoading {
 }
 
 abstract class DiscoveryStateLoading implements DiscoveryState {
-  const factory DiscoveryStateLoading() = _$DiscoveryStateLoading;
+  const factory DiscoveryStateLoading() = _$DiscoveryStateLoadingImpl;
 }
 
 /// @nodoc
-abstract class _$$DiscoveryStateLoadedCopyWith<$Res> {
-  factory _$$DiscoveryStateLoadedCopyWith(_$DiscoveryStateLoaded value,
-          $Res Function(_$DiscoveryStateLoaded) then) =
-      __$$DiscoveryStateLoadedCopyWithImpl<$Res>;
+abstract class _$$DiscoveryStateLoadedImplCopyWith<$Res> {
+  factory _$$DiscoveryStateLoadedImplCopyWith(_$DiscoveryStateLoadedImpl value,
+          $Res Function(_$DiscoveryStateLoadedImpl) then) =
+      __$$DiscoveryStateLoadedImplCopyWithImpl<$Res>;
   @useResult
   $Res call({List<CitizenServiceModel> list});
 }
 
 /// @nodoc
-class __$$DiscoveryStateLoadedCopyWithImpl<$Res>
-    extends _$DiscoveryStateCopyWithImpl<$Res, _$DiscoveryStateLoaded>
-    implements _$$DiscoveryStateLoadedCopyWith<$Res> {
-  __$$DiscoveryStateLoadedCopyWithImpl(_$DiscoveryStateLoaded _value,
-      $Res Function(_$DiscoveryStateLoaded) _then)
+class __$$DiscoveryStateLoadedImplCopyWithImpl<$Res>
+    extends _$DiscoveryStateCopyWithImpl<$Res, _$DiscoveryStateLoadedImpl>
+    implements _$$DiscoveryStateLoadedImplCopyWith<$Res> {
+  __$$DiscoveryStateLoadedImplCopyWithImpl(_$DiscoveryStateLoadedImpl _value,
+      $Res Function(_$DiscoveryStateLoadedImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -354,7 +358,7 @@ class __$$DiscoveryStateLoadedCopyWithImpl<$Res>
   $Res call({
     Object? list = null,
   }) {
-    return _then(_$DiscoveryStateLoaded(
+    return _then(_$DiscoveryStateLoadedImpl(
       null == list
           ? _value._list
           : list // ignore: cast_nullable_to_non_nullable
@@ -365,8 +369,8 @@ class __$$DiscoveryStateLoadedCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$DiscoveryStateLoaded implements DiscoveryStateLoaded {
-  const _$DiscoveryStateLoaded(final List<CitizenServiceModel> list)
+class _$DiscoveryStateLoadedImpl implements DiscoveryStateLoaded {
+  const _$DiscoveryStateLoadedImpl(final List<CitizenServiceModel> list)
       : _list = list;
 
   final List<CitizenServiceModel> _list;
@@ -383,10 +387,10 @@ class _$DiscoveryStateLoaded implements DiscoveryStateLoaded {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$DiscoveryStateLoaded &&
+            other is _$DiscoveryStateLoadedImpl &&
             const DeepCollectionEquality().equals(other._list, _list));
   }
 
@@ -397,9 +401,10 @@ class _$DiscoveryStateLoaded implements DiscoveryStateLoaded {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$DiscoveryStateLoadedCopyWith<_$DiscoveryStateLoaded> get copyWith =>
-      __$$DiscoveryStateLoadedCopyWithImpl<_$DiscoveryStateLoaded>(
-          this, _$identity);
+  _$$DiscoveryStateLoadedImplCopyWith<_$DiscoveryStateLoadedImpl>
+      get copyWith =>
+          __$$DiscoveryStateLoadedImplCopyWithImpl<_$DiscoveryStateLoadedImpl>(
+              this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -484,29 +489,30 @@ class _$DiscoveryStateLoaded implements DiscoveryStateLoaded {
 
 abstract class DiscoveryStateLoaded implements DiscoveryState {
   const factory DiscoveryStateLoaded(final List<CitizenServiceModel> list) =
-      _$DiscoveryStateLoaded;
+      _$DiscoveryStateLoadedImpl;
 
   List<CitizenServiceModel> get list;
   @JsonKey(ignore: true)
-  _$$DiscoveryStateLoadedCopyWith<_$DiscoveryStateLoaded> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$DiscoveryStateLoadedImplCopyWith<_$DiscoveryStateLoadedImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$DiscoveryStateUpdatedCopyWith<$Res> {
-  factory _$$DiscoveryStateUpdatedCopyWith(_$DiscoveryStateUpdated value,
-          $Res Function(_$DiscoveryStateUpdated) then) =
-      __$$DiscoveryStateUpdatedCopyWithImpl<$Res>;
+abstract class _$$DiscoveryStateUpdatedImplCopyWith<$Res> {
+  factory _$$DiscoveryStateUpdatedImplCopyWith(
+          _$DiscoveryStateUpdatedImpl value,
+          $Res Function(_$DiscoveryStateUpdatedImpl) then) =
+      __$$DiscoveryStateUpdatedImplCopyWithImpl<$Res>;
   @useResult
   $Res call({List<CategoryModel> list});
 }
 
 /// @nodoc
-class __$$DiscoveryStateUpdatedCopyWithImpl<$Res>
-    extends _$DiscoveryStateCopyWithImpl<$Res, _$DiscoveryStateUpdated>
-    implements _$$DiscoveryStateUpdatedCopyWith<$Res> {
-  __$$DiscoveryStateUpdatedCopyWithImpl(_$DiscoveryStateUpdated _value,
-      $Res Function(_$DiscoveryStateUpdated) _then)
+class __$$DiscoveryStateUpdatedImplCopyWithImpl<$Res>
+    extends _$DiscoveryStateCopyWithImpl<$Res, _$DiscoveryStateUpdatedImpl>
+    implements _$$DiscoveryStateUpdatedImplCopyWith<$Res> {
+  __$$DiscoveryStateUpdatedImplCopyWithImpl(_$DiscoveryStateUpdatedImpl _value,
+      $Res Function(_$DiscoveryStateUpdatedImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -514,7 +520,7 @@ class __$$DiscoveryStateUpdatedCopyWithImpl<$Res>
   $Res call({
     Object? list = null,
   }) {
-    return _then(_$DiscoveryStateUpdated(
+    return _then(_$DiscoveryStateUpdatedImpl(
       null == list
           ? _value._list
           : list // ignore: cast_nullable_to_non_nullable
@@ -525,8 +531,9 @@ class __$$DiscoveryStateUpdatedCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$DiscoveryStateUpdated implements DiscoveryStateUpdated {
-  const _$DiscoveryStateUpdated(final List<CategoryModel> list) : _list = list;
+class _$DiscoveryStateUpdatedImpl implements DiscoveryStateUpdated {
+  const _$DiscoveryStateUpdatedImpl(final List<CategoryModel> list)
+      : _list = list;
 
   final List<CategoryModel> _list;
   @override
@@ -542,10 +549,10 @@ class _$DiscoveryStateUpdated implements DiscoveryStateUpdated {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$DiscoveryStateUpdated &&
+            other is _$DiscoveryStateUpdatedImpl &&
             const DeepCollectionEquality().equals(other._list, _list));
   }
 
@@ -556,9 +563,9 @@ class _$DiscoveryStateUpdated implements DiscoveryStateUpdated {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$DiscoveryStateUpdatedCopyWith<_$DiscoveryStateUpdated> get copyWith =>
-      __$$DiscoveryStateUpdatedCopyWithImpl<_$DiscoveryStateUpdated>(
-          this, _$identity);
+  _$$DiscoveryStateUpdatedImplCopyWith<_$DiscoveryStateUpdatedImpl>
+      get copyWith => __$$DiscoveryStateUpdatedImplCopyWithImpl<
+          _$DiscoveryStateUpdatedImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -643,29 +650,29 @@ class _$DiscoveryStateUpdated implements DiscoveryStateUpdated {
 
 abstract class DiscoveryStateUpdated implements DiscoveryState {
   const factory DiscoveryStateUpdated(final List<CategoryModel> list) =
-      _$DiscoveryStateUpdated;
+      _$DiscoveryStateUpdatedImpl;
 
   List<CategoryModel> get list;
   @JsonKey(ignore: true)
-  _$$DiscoveryStateUpdatedCopyWith<_$DiscoveryStateUpdated> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$DiscoveryStateUpdatedImplCopyWith<_$DiscoveryStateUpdatedImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$DiscoveryStateErrorCopyWith<$Res> {
-  factory _$$DiscoveryStateErrorCopyWith(_$DiscoveryStateError value,
-          $Res Function(_$DiscoveryStateError) then) =
-      __$$DiscoveryStateErrorCopyWithImpl<$Res>;
+abstract class _$$DiscoveryStateErrorImplCopyWith<$Res> {
+  factory _$$DiscoveryStateErrorImplCopyWith(_$DiscoveryStateErrorImpl value,
+          $Res Function(_$DiscoveryStateErrorImpl) then) =
+      __$$DiscoveryStateErrorImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String error});
 }
 
 /// @nodoc
-class __$$DiscoveryStateErrorCopyWithImpl<$Res>
-    extends _$DiscoveryStateCopyWithImpl<$Res, _$DiscoveryStateError>
-    implements _$$DiscoveryStateErrorCopyWith<$Res> {
-  __$$DiscoveryStateErrorCopyWithImpl(
-      _$DiscoveryStateError _value, $Res Function(_$DiscoveryStateError) _then)
+class __$$DiscoveryStateErrorImplCopyWithImpl<$Res>
+    extends _$DiscoveryStateCopyWithImpl<$Res, _$DiscoveryStateErrorImpl>
+    implements _$$DiscoveryStateErrorImplCopyWith<$Res> {
+  __$$DiscoveryStateErrorImplCopyWithImpl(_$DiscoveryStateErrorImpl _value,
+      $Res Function(_$DiscoveryStateErrorImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -673,7 +680,7 @@ class __$$DiscoveryStateErrorCopyWithImpl<$Res>
   $Res call({
     Object? error = null,
   }) {
-    return _then(_$DiscoveryStateError(
+    return _then(_$DiscoveryStateErrorImpl(
       null == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
@@ -684,8 +691,8 @@ class __$$DiscoveryStateErrorCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$DiscoveryStateError implements DiscoveryStateError {
-  const _$DiscoveryStateError(this.error);
+class _$DiscoveryStateErrorImpl implements DiscoveryStateError {
+  const _$DiscoveryStateErrorImpl(this.error);
 
   @override
   final String error;
@@ -696,10 +703,10 @@ class _$DiscoveryStateError implements DiscoveryStateError {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$DiscoveryStateError &&
+            other is _$DiscoveryStateErrorImpl &&
             (identical(other.error, error) || other.error == error));
   }
 
@@ -709,8 +716,8 @@ class _$DiscoveryStateError implements DiscoveryStateError {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$DiscoveryStateErrorCopyWith<_$DiscoveryStateError> get copyWith =>
-      __$$DiscoveryStateErrorCopyWithImpl<_$DiscoveryStateError>(
+  _$$DiscoveryStateErrorImplCopyWith<_$DiscoveryStateErrorImpl> get copyWith =>
+      __$$DiscoveryStateErrorImplCopyWithImpl<_$DiscoveryStateErrorImpl>(
           this, _$identity);
 
   @override
@@ -795,10 +802,11 @@ class _$DiscoveryStateError implements DiscoveryStateError {
 }
 
 abstract class DiscoveryStateError implements DiscoveryState {
-  const factory DiscoveryStateError(final String error) = _$DiscoveryStateError;
+  const factory DiscoveryStateError(final String error) =
+      _$DiscoveryStateErrorImpl;
 
   String get error;
   @JsonKey(ignore: true)
-  _$$DiscoveryStateErrorCopyWith<_$DiscoveryStateError> get copyWith =>
+  _$$DiscoveryStateErrorImplCopyWith<_$DiscoveryStateErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
