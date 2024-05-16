@@ -125,4 +125,16 @@ class AppointmentModel {
     final String minute = time.minute.toString().padLeft(2, '0');
     return '$hour:$minute';
   }
+
+  String getStartTime(String startTime) {
+    if(startTime.length < 10) return startTime;
+    String startDate = _formatDate(startTime.substring(0, 10));
+    String startHour = startTime.substring(10);
+    return "$startDate, $startHour";
+  }
+
+  String _formatDate(String dateString) {
+    DateTime dateTime = DateTime.parse(dateString);
+    return DateFormat('dd.MM.yyyy').format(dateTime);
+  }
 }

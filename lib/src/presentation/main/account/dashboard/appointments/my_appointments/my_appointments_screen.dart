@@ -211,7 +211,7 @@ class _MyAppointmentsLoadedState extends State<MyAppointmentsLoaded> {
                                                           fontWeight:
                                                               FontWeight.normal,
                                                         )),
-                                                Text(item.startDate,
+                                                Text(item.getStartTime(item.startDate),
                                                     style: Theme.of(context)
                                                         .textTheme
                                                         .bodySmall!)

@@ -190,8 +190,9 @@ class _MyBookingsLoadedState extends State<MyBookingsLoaded> {
                                                           FontWeight.bold,
                                                     ),
                                               ),
+                                              if((item.remark ?? '') != '')
                                               Text(
-                                                  '${Translate.of(context).translate('remark')}: ${item.remark ?? ''}',
+                                                  '${Translate.of(context).translate('remark')}: ${item.remark}',
                                                   style: Theme.of(context)
                                                       .textTheme
                                                       .bodySmall!
