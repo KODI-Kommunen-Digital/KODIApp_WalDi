@@ -776,9 +776,9 @@ class _BookingDetailsLoadedState extends State<BookingDetailsLoaded> {
           'Buchungsdatum: $selectedDate',
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        for (final slots in selectedSlots)
+        for (int i = 0; i < selectedSlots.length; i++)
           Text(
-            'Buchungsslots: ${slots.title},',
+            'Buchungsslots: ${selectedSlots[i].title}${i == selectedSlots.length - 1 ? "" : ","}',
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
       ],
@@ -788,7 +788,7 @@ class _BookingDetailsLoadedState extends State<BookingDetailsLoaded> {
   void _onDatePicker() async {
     final now = DateTime.now();
     DateTime date = now;
-    if(selectedDate != "") {
+    if (selectedDate != "") {
       DateTime parsedDate = DateFormat("dd.MM.yyyy").parse(selectedDate);
       date = DateTime.parse(DateFormat("yyyy-MM-dd").format(parsedDate));
     }

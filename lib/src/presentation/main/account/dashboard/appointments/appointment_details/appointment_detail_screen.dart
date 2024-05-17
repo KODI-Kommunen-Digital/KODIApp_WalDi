@@ -329,11 +329,17 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
                                         Colors.white),
                               ),
                               ElevatedButton(
-                                onPressed: () {
-                                  context
-                                      .read<AppointmentDetailsCubit>()
-                                      .onCancelOwner(bookings[i].appointmentId,
-                                          bookings[i].id);
+                                onPressed: () async {
+                                  final response = await showRemoveAppointmentPopup(context);
+                                  if(response) {
+                                    // ignore: use_build_context_synchronously
+                                    context
+                                        .read<AppointmentDetailsCubit>()
+                                        .onCancelOwner(
+                                            bookings[i].appointmentId,
+                                            bookings[i].id);
+                                  }
+
                                 },
                                 style: ElevatedButton.styleFrom(
                                   shape: RoundedRectangleBorder(
@@ -381,5 +387,44 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
         ],
       ),
     );
+  }
+  Future<bool> showRemoveAppointmentPopup(BuildContext context) async {
+    final result = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            Translate.of(context).translate('delete_appointments'),
+          ),
+          content: Text(
+            Translate.of(context).translate('delete_appointment_confirmation'),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(false); // Close the dialog
+              },
+              child: Text(
+                Translate.of(context).translate('no'),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              child: Text(
+                Translate.of(context).translate('yes'),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (result) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
