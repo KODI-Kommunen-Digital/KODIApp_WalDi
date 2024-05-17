@@ -60,7 +60,7 @@ class AppointmentModel {
 
       if (jsonHolidays != null) {
         for (var holiday in jsonHolidays) {
-          final DateTime parsedDate = DateFormat("dd-MM-YYYY").parse(holiday['date']);
+          final DateTime parsedDate = DateFormat("dd-MM-yyyy").parse(holiday['date']);
           String date = DateFormat('yyyy-MM-dd').format(parsedDate);
           parsedHolidays.add(HolidayModel(date: date, title: holiday['title']));
         }
