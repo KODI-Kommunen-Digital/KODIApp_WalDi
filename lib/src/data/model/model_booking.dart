@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 class BookingModel {
   final int id;
   final int appointmentId;
+  final int serviceId;
   final String? createdAt;
   final String? startTime;
   final String? endTime;
@@ -32,7 +33,8 @@ class BookingModel {
     this.appointmentTitle,
     this.description,
     this.guestDetails,
-    this.imageLink
+    this.imageLink,
+    required this.serviceId
   });
 
   factory BookingModel.fromJson(Map<String, dynamic> json) {
@@ -70,6 +72,7 @@ class BookingModel {
         id: json['id'],
         appointmentId: json['appointmentId'],
         startTime: startDate,
+        serviceId: json['serviceId'],
         endTime: endDate,
         createdAt: createdAt,
         userId: json['userId'] ?? 1,

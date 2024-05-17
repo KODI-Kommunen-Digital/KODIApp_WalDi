@@ -206,7 +206,14 @@ class _MyBookingsLoadedState extends State<MyBookingsLoaded> {
                                               Text(item.getStartTime(),
                                                   style: Theme.of(context)
                                                       .textTheme
-                                                      .bodySmall!)
+                                                      .bodySmall!),
+                                              const SizedBox(
+                                                height: 5,
+                                              ),
+                                              Text("${item.appointmentId}-${item.serviceId}-${item.id}",
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodySmall!),
                                             ],
                                           ),
                                         ),
