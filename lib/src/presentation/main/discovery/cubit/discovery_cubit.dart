@@ -143,8 +143,6 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
   //       imageLink: "10",
   //       arguments: 10,
   //     ),
-
-  //     ///TODO: commented for testing, uncomment it
   //     // CitizenServiceModel(
   //     //     imageUrl: Images.service13,
   //     //     imageLink: "13",

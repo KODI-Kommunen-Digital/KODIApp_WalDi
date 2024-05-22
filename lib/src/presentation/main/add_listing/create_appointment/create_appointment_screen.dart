@@ -104,7 +104,6 @@ class _CreateAppointmentLoadedState extends State<CreateAppointmentLoaded> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     if (widget.serviceEntries != null) {
       serviceEntries = [];

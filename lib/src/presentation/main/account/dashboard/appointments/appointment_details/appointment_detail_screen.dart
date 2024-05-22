@@ -62,8 +62,7 @@ class AppointmentDetailsLoading extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          //TODO translate
-          title: Text("Termindetails"),
+          title: Text(Translate.of(context).translate('appointmentDetails')),
         ),
         body: const Center(child: CircularProgressIndicator.adaptive()));
   }
@@ -144,14 +143,16 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
               collapseMode: CollapseMode.none,
               background: InkWell(
                 onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    Routes.imageZoom,
-                    arguments: {
-                      'sourceId': widget.listing?.sourceId,
-                      'imageList': [ImageListModel(listingId: widget.listing?.id, logo: "${widget.listing?.image}", )],
-                      'pdf': null,}
-                  );
+                  Navigator.pushNamed(context, Routes.imageZoom, arguments: {
+                    'sourceId': widget.listing?.sourceId,
+                    'imageList': [
+                      ImageListModel(
+                        listingId: widget.listing?.id,
+                        logo: "${widget.listing?.image}",
+                      )
+                    ],
+                    'pdf': null,
+                  });
                 },
                 child: Image.network(
                   (widget.listing?.image != null)
@@ -330,8 +331,9 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
                               ),
                               ElevatedButton(
                                 onPressed: () async {
-                                  final response = await showRemoveAppointmentPopup(context);
-                                  if(response) {
+                                  final response =
+                                      await showRemoveAppointmentPopup(context);
+                                  if (response) {
                                     // ignore: use_build_context_synchronously
                                     context
                                         .read<AppointmentDetailsCubit>()
@@ -339,7 +341,6 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
                                             bookings[i].appointmentId,
                                             bookings[i].id);
                                   }
-
                                 },
                                 style: ElevatedButton.styleFrom(
                                   shape: RoundedRectangleBorder(
@@ -388,6 +389,7 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
       ),
     );
   }
+
   Future<bool> showRemoveAppointmentPopup(BuildContext context) async {
     final result = await showDialog(
       context: context,
