@@ -134,8 +134,7 @@ class AppointmentModel {
   String getStartTime(String startTime) {
     if (startTime.length < 10) return startTime;
     String startDate = _formatDate(startTime.substring(0, 10));
-    String startHour = startTime.substring(10);
-    return "$startDate, $startHour";
+    return startDate;
   }
 
   String _formatDate(String dateString) {

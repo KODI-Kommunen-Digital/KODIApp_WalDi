@@ -153,9 +153,11 @@ class AppointmentRepository {
     final DateTime parsedStartDate = DateTime.parse(startDate);
     final DateTime? parsedEndDate = DateTime.tryParse(endDate ?? '');
 
-    startDate = DateFormat('yyyy-MM-ddTHH:mm').format(parsedStartDate);
+    //startDate = DateFormat('yyyy-MM-ddTHH:mm').format(parsedStartDate);
+    startDate = DateFormat('dd-MM-yyyy').format(parsedStartDate);
     if (parsedEndDate != null) {
-      endDate = DateFormat('yyyy-MM-ddTHH:mm').format(parsedEndDate);
+      //endDate = DateFormat('yyyy-MM-ddTHH:mm').format(parsedStartDate);
+      endDate = DateFormat('dd-MM-yyyy').format(parsedEndDate);
     }
 
     List<Map<String, String>>? parsedHolidays = parseHolidays(holidays);
@@ -221,12 +223,12 @@ class AppointmentRepository {
     final DateTime? parsedStartDate = DateTime.tryParse(startDate ?? '');
 
     if (parsedStartDate != null) {
-      startDate = DateFormat('yyyy-MM-ddTHH:mm').format(parsedStartDate);
+      startDate = DateFormat('dd-MM-yyyy').format(parsedStartDate);
     }
     if (endDate != null) {
       final DateTime? parsedEndDate = DateTime.tryParse(endDate);
       if (parsedEndDate != null) {
-        endDate = DateFormat('yyyy-MM-ddTHH:mm').format(parsedEndDate);
+        endDate = DateFormat('dd-MM-yyyy').format(parsedEndDate);
       }
     }
 
