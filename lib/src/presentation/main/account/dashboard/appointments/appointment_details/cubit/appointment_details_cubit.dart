@@ -5,7 +5,9 @@ import 'package:heidi/src/data/model/model_booking.dart';
 import 'package:heidi/src/data/model/model_bookingGuest.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_schedule.dart';
+import 'package:heidi/src/data/model/model_user.dart';
 import 'package:heidi/src/data/repository/appointment_repository.dart';
+import 'package:heidi/src/data/repository/user_repository.dart';
 
 // import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
@@ -35,6 +37,17 @@ class AppointmentDetailsCubit extends Cubit<AppointmentDetailsState> {
 
       for (var booking in bookings) {
         GuestDetails? guest = booking.guestDetails;
+
+        if (booking.isCreatedByGuest == false) {
+          final UserModel? user =
+              await UserRepository.fetchUser(booking.userId);
+          if (user != null) {
+            guest = GuestDetails(
+                email: user.email,
+                lastname: user.lastname,
+                firstname: user.firstname);
+          }
+        }
         // await UserRepository.requestUserDetails(booking.userId);
         if (guest != null) {
           guests.add(BookingGuestModel.fromUser(guest, booking.remark,
