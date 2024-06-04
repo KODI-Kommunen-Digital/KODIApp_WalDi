@@ -204,6 +204,8 @@ class _MyAppointmentsLoadedState extends State<MyAppointmentsLoaded> {
                                                       ),
                                                 ),
                                                 Text(item.description,
+                                                    overflow: TextOverflow.ellipsis,
+                                                    maxLines: 2,
                                                     style: Theme.of(context)
                                                         .textTheme
                                                         .bodySmall!

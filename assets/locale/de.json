@@ -551,6 +551,8 @@
   "overview": "Übersicht",
   "empty_slots": "Es sind keine Zeiträume für dieses Datum vorhanden. Bitte wähle ein anderes Datum.",
   "choose_slot": "Bitte wähle einen Zeitraum",
-  "schedule_required": "Zeitplan erforderlich"
+  "timeslot": "Zeitraum",
+  "schedule_required": "Zeitplan erforderlich",
+  "cancel_booking": "Buchung absagen"
 }
 

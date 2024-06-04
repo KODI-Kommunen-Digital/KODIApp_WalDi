@@ -279,7 +279,7 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
                                     TextField(
                                       decoration: InputDecoration(
                                         labelText: Translate.of(context)
-                                            .translate('appointmentNote'),
+                                            .translate('remark'),
                                         border: OutlineInputBorder(),
                                       ),
                                       controller: TextEditingController(
@@ -298,7 +298,7 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
                               TextField(
                                 decoration: InputDecoration(
                                   labelText: Translate.of(context)
-                                      .translate('appointmentDate'),
+                                      .translate('date'),
                                   border: OutlineInputBorder(),
                                 ),
                                 controller: TextEditingController(
@@ -315,7 +315,7 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
                               TextField(
                                 decoration: InputDecoration(
                                   labelText: Translate.of(context)
-                                      .translate('appointmentSlot'),
+                                      .translate('timeslot'),
                                   border: OutlineInputBorder(),
                                 ),
                                 controller: TextEditingController(
@@ -352,7 +352,7 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
                                     Text(
-                                      "Cancel Booking",
+                                      Translate.of(context).translate("cancel_booking"),
                                       style: Theme.of(context)
                                           .textTheme
                                           .labelLarge!
