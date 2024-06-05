@@ -37,7 +37,6 @@ class AppointmentDetailsCubit extends Cubit<AppointmentDetailsState> {
 
       for (var booking in bookings) {
         GuestDetails? guest = booking.guestDetails;
-
         if (booking.isGuest == false) {
           final UserModel? user =
               await UserRepository.fetchUser(booking.userId);

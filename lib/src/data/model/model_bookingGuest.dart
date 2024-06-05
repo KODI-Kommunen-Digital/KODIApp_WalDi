@@ -24,7 +24,7 @@ class BookingGuestModel {
     return BookingGuestModel(
         firstname: user.firstname,
         lastname: user.lastname,
-        remark: remark ?? 'Keine Bemerkungen',
+        remark: remark ?? 'Keine Bemerkung',
         email: user.email,
         slot: slot);
   }
