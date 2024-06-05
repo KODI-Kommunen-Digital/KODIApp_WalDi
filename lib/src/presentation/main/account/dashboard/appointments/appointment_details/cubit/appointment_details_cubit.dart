@@ -38,7 +38,7 @@ class AppointmentDetailsCubit extends Cubit<AppointmentDetailsState> {
       for (var booking in bookings) {
         GuestDetails? guest = booking.guestDetails;
 
-        if (booking.isCreatedByGuest == false) {
+        if (booking.isGuest == false) {
           final UserModel? user =
               await UserRepository.fetchUser(booking.userId);
           if (user != null) {
@@ -77,7 +77,20 @@ class AppointmentDetailsCubit extends Cubit<AppointmentDetailsState> {
       List<BookingGuestModel> guests = [];
 
       for (var booking in newBookings) {
-        GuestDetails? guest = booking.guestDetails;
+        GuestDetails? guest;
+        if (booking.isGuest) {
+          guest = booking.guestDetails;
+        } else {
+          final UserModel? user =
+              await UserRepository.fetchUser(booking.userId);
+          if (user != null) {
+            guest = GuestDetails(
+                email: user.email,
+                lastname: user.lastname,
+                firstname: user.firstname);
+          }
+        }
+
         if (guest != null) {
           guests.add(BookingGuestModel.fromUser(guest, booking.remark,
               slot: getSchedule(booking.startTime!, booking.endTime!)));
