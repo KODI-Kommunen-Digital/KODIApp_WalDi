@@ -73,7 +73,11 @@ class AppointmentRepository {
         return ProductModel.fromJson(item);
       }).toList();
 
-      return responseData.first;
+      if (responseData.isNotEmpty) {
+        return responseData.first;
+      } else {
+        return null;
+      }
     } else {
       logError('Load Product for Appointment Error', response.message);
     }
