@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:loggy/loggy.dart';
+import 'package:multi_dropdown/multiselect_dropdown.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/data/model/model_product.dart';
@@ -1068,17 +1069,30 @@ class _AddListingScreenState extends State<AddListingScreen> {
                 Expanded(
                   child: listCity.isEmpty
                       ? const LinearProgressIndicator()
-                      : DropdownButton(
-                          isExpanded: true,
-                          menuMaxHeight: 200,
-                          hint: Text(
-                              Translate.of(context).translate('input_city')),
-                          value: selectedCity ?? listCity.first['name'],
-                          items: listCity.map((city) {
-                            return DropdownMenuItem(
-                                value: city['name'], child: Text(city['name']));
+                      : MultiSelectDropDown(
+                          //isExpanded: true,
+                          backgroundColor:
+                              Theme.of(context).scaffoldBackgroundColor,
+                          borderColor:
+                              Theme.of(context).textTheme.bodyLarge?.color ??
+                                  Colors.white,
+                          optionsBackgroundColor:
+                              Theme.of(context).scaffoldBackgroundColor,
+                          optionTextStyle: TextStyle(
+                              color: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.color ??
+                                  Colors.white),
+                          selectedOptionBackgroundColor:
+                              Theme.of(context).scaffoldBackgroundColor,
+                          dropdownHeight: 200,
+                          hint: Translate.of(context).translate('input_city'),
+                          options: listCity.map((city) {
+                            return ValueItem(
+                                value: city['name'], label: city['name']);
                           }).toList(),
-                          onChanged: widget.item == null
+                          onOptionSelected: widget.item == null
                               ? (value) async {
                                   setState(() {
                                     selectedCity = value as String?;
@@ -1092,18 +1106,16 @@ class _AddListingScreenState extends State<AddListingScreen> {
                                   context
                                       .read<AddListingCubit>()
                                       .clearVillage();
-                                  if (value != null) {
-                                    final loadVillageResponse = await context
-                                        .read<AddListingCubit>()
-                                        .loadVillages(value);
-                                    selectedVillage =
-                                        loadVillageResponse.data.first['name'];
-                                    villageId =
-                                        loadVillageResponse.data.first['id'];
-                                    setState(() {
-                                      listVillage = loadVillageResponse.data;
-                                    });
-                                  }
+                                  final loadVillageResponse = await context
+                                      .read<AddListingCubit>()
+                                      .loadVillages(value);
+                                  selectedVillage =
+                                      loadVillageResponse.data.first['name'];
+                                  villageId =
+                                      loadVillageResponse.data.first['id'];
+                                  setState(() {
+                                    listVillage = loadVillageResponse.data;
+                                  });
                                 }
                               : null),
                 ),
