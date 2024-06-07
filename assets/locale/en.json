@@ -197,6 +197,7 @@
   "input_lname": "Input your last name",
   "input_place": "Enter your place",
   "default": "Default",
+  "default_values": "Set default values",
   "brown": "Brown",
   "pink": "Pink",
   "orange": "Orange",

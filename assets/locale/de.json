@@ -192,6 +192,7 @@
   "input_fname": "Gib deinen Vornamen ein",
   "input_lname": "Gib deinen Nachnamen ein",
   "default": "Standard",
+  "default_values": "Standardwerte einsetzen",
   "brown": "Braun",
   "pink": "Rosa",
   "orange": "Orange",
