@@ -103,13 +103,17 @@ class ListRepository {
     return null;
   }
 
-  Future<int> getCityId(cityName) async {
+  Future<List<int>> getCityIds(List<String> cityName) async {
     final response = await Api.requestSubmitCities();
     var jsonCategory = response.data;
-    final item = jsonCategory.firstWhere((item) => item['name'] == cityName);
-    final itemId = item['id'];
-    final cityId = itemId;
-    return cityId;
+    List<int> cityIds = [];
+    for (var city in cityName) {
+      final item = jsonCategory.firstWhere((item) => item['name'] == city);
+      final itemId = item['id'];
+      cityIds.add(itemId);
+    }
+
+    return cityIds;
   }
 
   static Future<bool> addWishList(int? userId, ProductModel items) async {
@@ -248,7 +252,7 @@ class ListRepository {
     String place,
     CategoryModel? country,
     CategoryModel? state,
-    String? city,
+    List<String>? city,
     int? statusId,
     int? sourceId,
     String address,
@@ -272,7 +276,7 @@ class ListRepository {
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
     final villageId = prefs.getKeyValue(Preferences.villageId, null);
     final userId = prefs.getKeyValue(Preferences.userId, '');
-    final cityId = await getCityId(city);
+    final cityId = await getCityIds(city ?? []);
     String? combinedStartDateTime;
     String? combinedEndDateTime;
     String? combinedExpiryDateTime;
@@ -341,14 +345,14 @@ class ListRepository {
       "longitude": 245.65, //dummy data
       "latitude": 22.456, //dummy data
       "villageId": villageId ?? 0,
-      "cityId": cityId,
+      "cityId": cityId.toString(),
       "subcategoryId": subCategoryId,
       "expiryDate": combinedExpiryDateTime,
       "startDate": combinedStartDateTime,
       "endDate": combinedEndDateTime, "timeless": timeless
     };
     final response =
-        await Api.requestSaveProduct(cityId, params, isImageChanged);
+        await Api.requestSaveProduct(cityId.first, params, isImageChanged);
     if (response.success) {
       final prefs = await Preferences.openBox();
       FormData? pickedFile = prefs.getPickedFile();

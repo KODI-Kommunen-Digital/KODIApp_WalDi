@@ -36,7 +36,7 @@ class AddListingCubit extends Cubit<AddListingState> {
     required String description,
     CategoryModel? country,
     CategoryModel? state,
-    String? city,
+    List<String>? city,
     int? statusId,
     int? sourceId,
     required String address,

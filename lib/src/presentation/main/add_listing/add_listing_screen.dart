@@ -77,8 +77,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
   String? _errorStatus;
   String? _errorSDate;
   String? _errorCategory;
-  String? selectedCity;
-  int? cityId;
+  List<String> selectedCities = [];
+  List<int> cityIds = [];
   int? statusId;
   int? villageId;
   int? categoryId;
@@ -248,12 +248,12 @@ class _AddListingScreenState extends State<AddListingScreen> {
       if (currentCity != null && currentCity != 0) {
         for (var cityData in loadCitiesResponse!.data) {
           if (cityData['id'] == currentCity) {
-            selectedCity = cityData['name'];
+            selectedCities.add(cityData['name']);
             break; // Exit the loop once the desired city is found
           }
         }
       } else {
-        selectedCity = loadCitiesResponse!.data.first['name'];
+        selectedCities.add(loadCitiesResponse!.data.first['name']);
       }
       selectedSubCategory = loadCategoryResponse?.data.first['name'];
       listCity = loadCitiesResponse.data;
@@ -289,7 +289,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
 
       final city = listCity
           .firstWhere((element) => element['id'] == widget.item?.cityId);
-      selectedCity = city['name'];
+      selectedCities.add(city['name']);
       if (selectedCategory?.toLowerCase() == "news" ||
           selectedCategory == null) {
         final subCategoryResponse = await context
@@ -357,12 +357,12 @@ class _AddListingScreenState extends State<AddListingScreen> {
       if (currentCity != null && currentCity != 0) {
         for (var cityData in loadCitiesResponse?.data) {
           if (cityData['id'] == currentCity) {
-            selectedCity = cityData['name'];
+            selectedCities.add(cityData['name']);
             break; // Exit the loop once the desired city is found
           }
         }
       } else {
-        selectedCity = loadCitiesResponse?.data.first['name'];
+        selectedCities.add(loadCitiesResponse?.data.first['name']);
       }
       if (!loadCategoryResponse?.data.isEmpty) {
         if (!mounted) return;
@@ -625,7 +625,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
         });
         final result = await context.read<AddListingCubit>().onSubmit(
               title: _textTitleController.text,
-              city: selectedCity,
+              city: selectedCities,
               place: _textPlaceController.text,
               description: _textContentController.text,
               address: _textAddressController.text,
@@ -1093,12 +1093,16 @@ class _AddListingScreenState extends State<AddListingScreen> {
                                 value: city['name'], label: city['name']);
                           }).toList(),
                           onOptionSelected: widget.item == null
-                              ? (value) async {
+                              ? (List<ValueItem> selectedOptions) async {
+                                  List<String> options = [];
+                                  for (var option in selectedOptions) {
+                                    options.add(option.value!);
+                                  }
                                   setState(() {
-                                    selectedCity = value as String?;
+                                    selectedCities = options;
                                     for (var element in listCity) {
-                                      if (element["name"] == value) {
-                                        cityId = element["id"];
+                                      if (element["name"] == options.last) {
+                                        cityIds.add(element["id"]);
                                       }
                                     }
                                   });
@@ -1108,7 +1112,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
                                       .clearVillage();
                                   final loadVillageResponse = await context
                                       .read<AddListingCubit>()
-                                      .loadVillages(value);
+                                      .loadVillages(options.last);
                                   selectedVillage =
                                       loadVillageResponse.data.first['name'];
                                   villageId =
