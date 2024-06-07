@@ -30,57 +30,57 @@ class _OpenTimeSlotsScreenState extends State<OpenTimeSlotsScreen> {
   @override
   void initState() {
     super.initState();
+    _time = [
+      OpenTimeModel(dayOfWeek: 1, key: 'mon', schedule: [
+        ScheduleModel(
+          startTime: _defaultStartTime,
+          endTime: _defaultEndTime,
+        ),
+      ]),
+      OpenTimeModel(dayOfWeek: 2, key: 'tue', schedule: [
+        ScheduleModel(
+          startTime: _defaultStartTime,
+          endTime: _defaultEndTime,
+        ),
+      ]),
+      OpenTimeModel(dayOfWeek: 3, key: 'wed', schedule: [
+        ScheduleModel(
+          startTime: _defaultStartTime,
+          endTime: _defaultEndTime,
+        ),
+      ]),
+      OpenTimeModel(dayOfWeek: 4, key: 'thu', schedule: [
+        ScheduleModel(
+          startTime: _defaultStartTime,
+          endTime: _defaultEndTime,
+        ),
+      ]),
+      OpenTimeModel(dayOfWeek: 5, key: 'fri', schedule: [
+        ScheduleModel(
+          startTime: _defaultStartTime,
+          endTime: _defaultEndTime,
+        ),
+      ]),
+      OpenTimeModel(dayOfWeek: 6, key: 'sat', schedule: [
+        ScheduleModel(
+          startTime: _defaultStartTime,
+          endTime: _defaultEndTime,
+        ),
+      ]),
+      OpenTimeModel(dayOfWeek: 7, key: 'sun', schedule: [
+        ScheduleModel(
+          startTime: _defaultStartTime,
+          endTime: _defaultEndTime,
+        ),
+      ]),
+    ];
     if (widget.selected != null) {
       for (var schedule in widget.selected!) {
         if (schedule != null) {
-          _time.add(schedule);
+          _time.removeAt(schedule.dayOfWeek - 1);
+          _time.insert(schedule.dayOfWeek - 1, schedule);
         }
       }
-    } else {
-      _time = [
-        OpenTimeModel(dayOfWeek: 1, key: 'mon', schedule: [
-          ScheduleModel(
-            startTime: _defaultStartTime,
-            endTime: _defaultEndTime,
-          ),
-        ]),
-        OpenTimeModel(dayOfWeek: 2, key: 'tue', schedule: [
-          ScheduleModel(
-            startTime: _defaultStartTime,
-            endTime: _defaultEndTime,
-          ),
-        ]),
-        OpenTimeModel(dayOfWeek: 3, key: 'wed', schedule: [
-          ScheduleModel(
-            startTime: _defaultStartTime,
-            endTime: _defaultEndTime,
-          ),
-        ]),
-        OpenTimeModel(dayOfWeek: 4, key: 'thu', schedule: [
-          ScheduleModel(
-            startTime: _defaultStartTime,
-            endTime: _defaultEndTime,
-          ),
-        ]),
-        OpenTimeModel(dayOfWeek: 5, key: 'fri', schedule: [
-          ScheduleModel(
-            startTime: _defaultStartTime,
-            endTime: _defaultEndTime,
-          ),
-        ]),
-        OpenTimeModel(dayOfWeek: 6, key: 'sat', schedule: [
-          ScheduleModel(
-            startTime: _defaultStartTime,
-            endTime: _defaultEndTime,
-          ),
-        ]),
-        OpenTimeModel(dayOfWeek: 7, key: 'sun', schedule: [
-          ScheduleModel(
-            startTime: _defaultStartTime,
-            endTime: _defaultEndTime,
-          ),
-        ]),
-      ];
     }
   }
 

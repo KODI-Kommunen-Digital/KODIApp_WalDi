@@ -530,9 +530,13 @@ class AppointmentRepository {
               AppointmentModel.stringFromTimeOfDay(schedule.startTime);
           String endTime =
               AppointmentModel.stringFromTimeOfDay(schedule.endTime);
-          hours.add({'startTime': startTime, 'endTime': endTime});
+          if (startTime != endTime) {
+            hours.add({'startTime': startTime, 'endTime': endTime});
+          }
         }
-        parsedOpenHours[daysOfWeek[day.dayOfWeek - 1]] = hours;
+        if (hours.isNotEmpty) {
+          parsedOpenHours[daysOfWeek[day.dayOfWeek - 1]] = hours;
+        }
       }
     }
     return parsedOpenHours;
