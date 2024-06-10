@@ -544,6 +544,7 @@
   "appointmentDetails": "Termindetails",
   "addMoreServices": "Füge Dienst hinzu",
   "create_appointment": "Erstelle Termin",
+  "book": "Buche",
   "appointment_service_mandatory": "Mindestens ein Terminservice ist notwendig",
   "addServiceName": "Gebe Dienstnamen ein",
   "duration": "Dauer",

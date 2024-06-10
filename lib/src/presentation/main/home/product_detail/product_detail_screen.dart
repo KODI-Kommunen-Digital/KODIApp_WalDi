@@ -949,7 +949,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       }
       if (product.isBookable) {
         bookAppointment = AppButton(
-          Translate.of(context).translate('create_appointment'),
+          Translate.of(context).translate('book'),
           onPressed: () {
             if (isLoggedIn) {
               Navigator.pushNamed(context, Routes.booking, arguments: {
@@ -957,6 +957,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 'listingId': product.id,
               });
             } else {
+              ScaffoldMessenger.of(context).removeCurrentSnackBar();
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content:
                       Text(Translate.of(context).translate('login_required'))));
