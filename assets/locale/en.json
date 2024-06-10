@@ -351,7 +351,9 @@
   "contact": "Feedback",
   "adult": "Adults",
   "children": "Children",
+  "person_count": "Personenanzahl",
   "person": "Persons",
+  "one_person": "Person",
   "booked": "Booked",
   "selected": "Selected",
   "empty": "Empty",
@@ -537,7 +539,7 @@
   "appointmentDetails": "Appointment details",
   "addMoreServices": "Add service",
   "create_appointment": "Create Appointment",
-  "book": "Book",
+  "create_booking": "Book appointment",
   "addServiceName": "Add service name",
   "duration": "Duration",
   "no_bookings": "No bookings available",
@@ -553,5 +555,8 @@
   "choose_slots": "Please choose a timeslot",
   "timeslot": "Timeslot",
   "schedule_required": "Schedule required",
-  "cancel_booking": "Cancel booking"
+  "cancel_booking": "Cancel booking",
+  "booking_date": "Booking date",
+  "booking_time": "Booking time",
+  "minutes": "Minutes"
 }

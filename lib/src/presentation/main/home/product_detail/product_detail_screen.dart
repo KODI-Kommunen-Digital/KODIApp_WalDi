@@ -949,7 +949,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       }
       if (product.isBookable) {
         bookAppointment = AppButton(
-          Translate.of(context).translate('book'),
+          Translate.of(context).translate('create_booking'),
           onPressed: () {
             if (isLoggedIn) {
               Navigator.pushNamed(context, Routes.booking, arguments: {

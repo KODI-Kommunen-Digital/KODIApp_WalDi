@@ -3,6 +3,7 @@ import 'package:heidi/src/data/model/model_appointment_service.dart';
 import 'package:heidi/src/data/model/model_open_time.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
+import 'package:heidi/src/utils/translate.dart';
 
 class BuildServiceEntry extends StatefulWidget {
   final AppointmentServiceModel entry;
@@ -116,7 +117,7 @@ class _BuildServiceEntryState extends State<BuildServiceEntry> {
                 5,
                 (index) => DropdownMenuItem<int>(
                   value: (index + 1) * 15,
-                  child: Text('${(index + 1) * 15} mins'),
+                  child: Text('${(index + 1) * 15} ${Translate.of(context).translate('minutes')}'),
                 ),
               ),
             ),

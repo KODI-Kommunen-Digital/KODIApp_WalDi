@@ -301,7 +301,7 @@ class _CreateAppointmentLoadedState extends State<CreateAppointmentLoaded> {
                         5,
                         (index) => DropdownMenuItem<int>(
                           value: (index + 1) * 15,
-                          child: Text('${(index + 1) * 15} mins'),
+                          child: Text('${(index + 1) * 15} ${Translate.of(context).translate('minutes')}'),
                         ),
                       ),
                     ),

@@ -485,7 +485,7 @@ class _BookingDetailsLoadedState extends State<BookingDetailsLoaded> {
             color: Theme.of(context).hintColor,
           ),
           value: adults.toString(),
-          title: Translate.of(context).translate('adult'),
+          title: Translate.of(context).translate('person_count'),
           onPressed: () {
             _onPersonPicker(adults, (value) {
               setState(() {
@@ -600,7 +600,7 @@ class _BookingDetailsLoadedState extends State<BookingDetailsLoaded> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'USER ${index + 1}:',
+                  '${Translate.of(context).translate('one_person')} ${index + 1}:',
                   style: const TextStyle(color: Colors.grey),
                 ),
                 const SizedBox(height: 16),
@@ -763,7 +763,7 @@ class _BookingDetailsLoadedState extends State<BookingDetailsLoaded> {
         ),
         for (int i = 0; i < adults; i++)
           Text(
-            'Kunde ${i + 1}:\n'
+            '${Translate.of(context).translate('one_person')} ${i + 1}:\n'
             'Name: ${_textFistNameController[i].text} ${_textLastNameController[i].text} '
             '${_textEmailController[i].text.isNotEmpty ? '\nEmail: ${_textEmailController[i].text}' : ''}  '
             '${_textAddressController[i].text != '' ? '\nAddress: ${_textAddressController[i].text}' : ''} '
@@ -773,12 +773,12 @@ class _BookingDetailsLoadedState extends State<BookingDetailsLoaded> {
                 fontWeight: FontWeight.bold), // Apply bold style
           ),
         Text(
-          'Buchungsdatum: $selectedDate',
+          '${Translate.of(context).translate('booking_date')}: $selectedDate',
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         for (int i = 0; i < selectedSlots.length; i++)
           Text(
-            'Buchungsslots: ${selectedSlots[i].title}${i == selectedSlots.length - 1 ? "" : ","}',
+            '${Translate.of(context).translate('booking_time')}: ${selectedSlots[i].title}${i == selectedSlots.length - 1 ? "" : ","}',
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
       ],
