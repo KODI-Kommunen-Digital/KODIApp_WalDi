@@ -231,9 +231,15 @@ class _MyBookingsLoadedState extends State<MyBookingsLoaded> {
                                                   await showRemoveAppointmentPopup(
                                                       context);
                                               if (response) {
-                                                context
+                                                bool success = await context
                                                     .read<MyBookingsCubit>()
                                                     .deleteBooking(item);
+                                                if(success) {
+                                                  setState(() {
+                                                    bookings.remove(item);
+                                                  });
+                                                }
+
                                               }
                                             }
 

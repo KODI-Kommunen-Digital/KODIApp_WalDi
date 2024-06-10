@@ -94,25 +94,23 @@ class MyBookingsCubit extends Cubit<MyBookingsState> {
     return bookings;
   }
 
-  Future<void> deleteBooking(BookingModel booking) async {
-    emit(const MyBookingsState.loading());
+  Future<bool> deleteBooking(BookingModel booking) async {
 
     final prefs = await Preferences.openBox();
     int userId = prefs.getKeyValue(Preferences.userId, -1);
 
     if (userId == -1) {
-      emit(const MyBookingsState.error("Failed deleting booking"));
       logError("Failed loading product for booking, can't fetch userId");
     } else {
       bool success = await repo.deleteBookingUser(
           userId, booking.appointmentId, booking.id);
 
       if (success) {
-        onLoad(false);
+        return true;
       } else {
-        emit(const MyBookingsState.error("Failed deleting booking"));
         logError("Failed deleting booking");
       }
     }
+    return false;
   }
 }

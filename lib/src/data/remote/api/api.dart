@@ -723,7 +723,7 @@ class Api {
     var list =
         '/cities/$cityId/listings/$listingId/appointments/$appointmentId';
     final result =
-        await HTTPManager(apiType: APIType.appointment).delete(url: list);
+        await HTTPManager(apiType: APIType.appointment).delete(url: list, loading: true);
     return ResultApiModel.fromJson(result);
   }
 
@@ -764,7 +764,7 @@ class Api {
       userId, appointmentId, bookingId) async {
     var list = '/users/$userId/appointments/$appointmentId/booking/$bookingId';
     final result =
-        await HTTPManager(apiType: APIType.appointment).delete(url: list);
+        await HTTPManager(apiType: APIType.appointment).delete(url: list, loading: true);
     return ResultApiModel.fromJson(result);
   }
 

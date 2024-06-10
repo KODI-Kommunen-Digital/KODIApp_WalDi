@@ -204,7 +204,8 @@ class _MyAppointmentsLoadedState extends State<MyAppointmentsLoaded> {
                                                       ),
                                                 ),
                                                 Text(item.description,
-                                                    overflow: TextOverflow.ellipsis,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
                                                     maxLines: 2,
                                                     style: Theme.of(context)
                                                         .textTheme
@@ -213,7 +214,9 @@ class _MyAppointmentsLoadedState extends State<MyAppointmentsLoaded> {
                                                           fontWeight:
                                                               FontWeight.normal,
                                                         )),
-                                                Text(item.getStartTime(item.startDate),
+                                                Text(
+                                                    item.getStartTime(
+                                                        item.startDate),
                                                     style: Theme.of(context)
                                                         .textTheme
                                                         .bodySmall!)
@@ -234,14 +237,17 @@ class _MyAppointmentsLoadedState extends State<MyAppointmentsLoaded> {
                                                     await showRemoveAppointmentPopup(
                                                         context);
                                                 if (response) {
-                                                  setState(() {
-                                                    context
-                                                        .read<
-                                                            MyAppointmentsCubit>()
-                                                        .deleteAppointment(
-                                                            appointments[
-                                                                index]);
-                                                  });
+                                                  bool success = await context
+                                                      .read<
+                                                          MyAppointmentsCubit>()
+                                                      .deleteAppointment(
+                                                          appointments[index]);
+                                                  if (success) {
+                                                    setState(() {
+                                                      appointments
+                                                          .removeAt(index);
+                                                    });
+                                                  }
                                                 }
                                               }
 
