@@ -144,8 +144,7 @@ class _MyAppointmentsLoadedState extends State<MyAppointmentsLoaded> {
                                             child: Image.network(
                                               (item.imageLink != null)
                                                   ? "${Application.picturesURL}${item.imageLink!}"
-                                                  //Change default URL
-                                                  : "https://newheidi.obs.eu-de.otc.t-systems.com/user_8/city_1_listing_15_2_1709543526085",
+                                                  : Application.defaultAppointmentPicturesURL,
                                               width: 120,
                                               height: 140,
                                               fit: BoxFit.cover,

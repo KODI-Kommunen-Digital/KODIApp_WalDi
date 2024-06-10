@@ -129,10 +129,10 @@ class _MyBookingsLoadedState extends State<MyBookingsLoaded> {
                                           borderRadius:
                                               BorderRadius.circular(12),
                                           child: Image.network(
-                                            (item.imageLink != null)
+                                            ((item.imageLink ?? '').isNotEmpty)
                                                 ? "${Application.picturesURL}${item.imageLink!}"
-                                                //Change default URL
-                                                : "https://newheidi.obs.eu-de.otc.t-systems.com/user_8/city_1_listing_15_2_1709543526085",
+                                                : Application
+                                                    .defaultAppointmentPicturesURL,
                                             width: 120,
                                             height: 140,
                                             fit: BoxFit.cover,
@@ -190,16 +190,16 @@ class _MyBookingsLoadedState extends State<MyBookingsLoaded> {
                                                           FontWeight.bold,
                                                     ),
                                               ),
-                                              if((item.remark ?? '') != '')
-                                              Text(
-                                                  '${Translate.of(context).translate('remark')}: ${item.remark}',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodySmall!
-                                                      .copyWith(
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                      )),
+                                              if ((item.remark ?? '') != '')
+                                                Text(
+                                                    '${Translate.of(context).translate('remark')}: ${item.remark}',
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodySmall!
+                                                        .copyWith(
+                                                          fontWeight:
+                                                              FontWeight.normal,
+                                                        )),
                                               const SizedBox(
                                                 height: 5,
                                               ),
@@ -210,7 +210,8 @@ class _MyBookingsLoadedState extends State<MyBookingsLoaded> {
                                               const SizedBox(
                                                 height: 5,
                                               ),
-                                              Text("${item.appointmentId}-${item.serviceId}-${item.id}",
+                                              Text(
+                                                  "${item.appointmentId}-${item.serviceId}-${item.id}",
                                                   style: Theme.of(context)
                                                       .textTheme
                                                       .bodySmall!),
@@ -234,12 +235,11 @@ class _MyBookingsLoadedState extends State<MyBookingsLoaded> {
                                                 bool success = await context
                                                     .read<MyBookingsCubit>()
                                                     .deleteBooking(item);
-                                                if(success) {
+                                                if (success) {
                                                   setState(() {
                                                     bookings.remove(item);
                                                   });
                                                 }
-
                                               }
                                             }
 
