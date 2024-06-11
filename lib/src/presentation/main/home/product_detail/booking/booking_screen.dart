@@ -114,6 +114,7 @@ class _BookingDetailsLoadedState extends State<BookingDetailsLoaded> {
   final List<String?> _errorPhone = [];
   final List<String?> _errorEmail = [];
   final List<String?> _errorAddress = [];
+  String? _errorSlot;
 
   int _active = 0;
   bool isWrongEntry = false;
@@ -244,10 +245,6 @@ class _BookingDetailsLoadedState extends State<BookingDetailsLoaded> {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content:
                         Text(Translate.of(context).translate('empty_slots'))));
-              } else if (selectedSlots.isEmpty) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content:
-                        Text(Translate.of(context).translate('choose_slot'))));
               } else {
                 _onNext(step: 0);
               }
@@ -363,6 +360,20 @@ class _BookingDetailsLoadedState extends State<BookingDetailsLoaded> {
         });
       }
     } else if (step == 1) {
+      if (selectedSlots.length != adults) {
+        _errorSlot = Translate.of(context).translate('slot_message');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              _errorSlot!,
+            ),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+
+      } else {
+        _errorSlot = null;
+      }
       for (int i = 0; i < (adults); i++) {
         if (_textFistNameController[i].text.isEmpty) {
           _errorFirstName[i] =
@@ -381,7 +392,8 @@ class _BookingDetailsLoadedState extends State<BookingDetailsLoaded> {
         setState(() {
           if (_errorFirstName[i] == null &&
               _errorLastName[i] == null &&
-              _errorEmail[i] == null) {
+              _errorEmail[i] == null &&
+              _errorSlot == null) {
             isWrongEntry = true;
             //address does not get saved!!
             guestModel = BookingGuestModel(
@@ -389,13 +401,15 @@ class _BookingDetailsLoadedState extends State<BookingDetailsLoaded> {
                 lastname: _textLastNameController[0].text,
                 remark: _textMessageController[0].text,
                 email: _textEmailController[0].text,
-                phoneNumber: _textPhoneController[0].text);
+                phoneNumber: _textPhoneController[0].text,
+                slot: getSlot(0));
             for (int i = 1; i < adults; i++) {
               friends.add(BookingGuestModel(
                   firstname: _textFistNameController[i].text,
                   lastname: _textLastNameController[i].text,
                   remark: '',
-                  email: _textEmailController[0].text));
+                  email: _textEmailController[0].text,
+                  slot: getSlot(i)));
             }
           } else {
             isWrongEntry = false;
@@ -507,55 +521,6 @@ class _BookingDetailsLoadedState extends State<BookingDetailsLoaded> {
           title: Translate.of(context).translate('date'),
           onPressed: _onDatePicker,
         ),
-        const SizedBox(height: 20),
-        Container(
-          width: MediaQuery.of(context).size.width * 0.9,
-          decoration: BoxDecoration(
-            color: Theme.of(context).dividerColor.withOpacity(.07),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: DropdownButtonHideUnderline(
-            child: DropdownButton<ScheduleModel>(
-              value: null,
-              items: _buildDropdownItems(),
-              onChanged: _onTimeSlotSelected,
-              elevation: 16,
-              style: TextStyle(
-                  color: Theme.of(context).textTheme.bodyLarge?.color ??
-                      Colors.white,
-                  fontSize: 18),
-              hint: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12),
-                child: Row(
-                  children: [
-                    Icon(Icons.access_time),
-                    SizedBox(width: 8),
-                    Text(
-                      Translate.of(context).translate('choose_time_period'),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(height: 20),
-        Wrap(
-          spacing: 4.0,
-          children: selectedSlots
-              .map(
-                (slot) => Chip(
-                  label: Text(slot.title),
-                  deleteIcon: const Icon(Icons.close),
-                  onDeleted: () {
-                    setState(() {
-                      selectedSlots.remove(slot);
-                    });
-                  },
-                ),
-              )
-              .toList(),
-        ),
       ],
     );
   }
@@ -564,16 +529,36 @@ class _BookingDetailsLoadedState extends State<BookingDetailsLoaded> {
     return allSlots.map((ScheduleModel timeSlot) {
       return DropdownMenuItem<ScheduleModel>(
         value: timeSlot,
-        child: Text(timeSlot.title),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Text(timeSlot.title),
+            Text(
+                "${Translate.of(context).translate('available')}: ${(timeSlot.availableSlots ?? 0).toString()}")
+          ],
+        ),
       );
     }).toList();
   }
 
-  void _onTimeSlotSelected(ScheduleModel? slot) {
+  void _onTimeSlotSelected(ScheduleModel? slot, int index) {
     if (slot != null) {
       setState(() {
+        if ((slot.availableSlots ?? 0) == 0) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                Translate.of(context).translate('slot_booked_out'),
+              ),
+              duration: const Duration(seconds: 2),
+            ),
+          );
+          return;
+        }
         if (selectedSlots.length < adults) {
           selectedSlots.add(slot);
+          slot.booked.add(index);
+          slot.availableSlots = slot.availableSlots! - 1;
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -742,6 +727,59 @@ class _BookingDetailsLoadedState extends State<BookingDetailsLoaded> {
                     textInputAction: TextInputAction.done,
                   ),
                 ),
+                const SizedBox(height: 20),
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).dividerColor.withOpacity(.07),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<ScheduleModel>(
+                      value: null,
+                      items: _buildDropdownItems(),
+                      onChanged: (ScheduleModel? slot) {
+                        _onTimeSlotSelected(slot, index);
+                      },
+                      elevation: 16,
+                      style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyLarge?.color ??
+                              Colors.white,
+                          fontSize: 18),
+                      hint: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 12),
+                        child: Row(
+                          children: [
+                            Icon(Icons.access_time),
+                            SizedBox(width: 8),
+                            Text(
+                              Translate.of(context)
+                                  .translate('choose_time_period'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Visibility(
+                  visible: getSlot(index) != null,
+                  child: Chip(
+                    label: Text(getSlot(index)?.title ?? ""),
+                    deleteIcon: const Icon(Icons.close),
+                    onDeleted: () {
+                      setState(() {
+                        ScheduleModel? slot = getSlot(index);
+                        if(slot != null) {
+                          selectedSlots.remove(slot);
+                          slot.availableSlots = slot.availableSlots! + 1;
+                          slot.booked.remove(index);
+                        }
+                      });
+                    },
+                  ),
+                ),
                 const SizedBox(height: 16),
                 const Divider(),
                 const SizedBox(height: 16),
@@ -831,6 +869,17 @@ class _BookingDetailsLoadedState extends State<BookingDetailsLoaded> {
           .read<BookingCubit>()
           .onLoadBooking(widget.cityId, widget.listingId);
     }
+  }
+
+  ScheduleModel? getSlot(int index) {
+    for(var slot in selectedSlots) {
+      for(var user in slot.booked) {
+        if(user == index) {
+          return slot;
+        }
+      }
+    }
+    return null;
   }
 
   Future<void> _onSubmit() async {

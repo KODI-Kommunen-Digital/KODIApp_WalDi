@@ -8,6 +8,7 @@ class ScheduleModel {
   TimeOfDay startTime;
   TimeOfDay endTime;
   int? availableSlots;
+  List<int> booked = [];
 
   ScheduleModel(
       {this.view,
