@@ -361,6 +361,7 @@ class ListRepository {
 
       if (pickedFile != null && pickedFile.files.isNotEmpty) {
         if (pickedFile.files[0].key == 'pdf') {
+          //TODO: Foreach cityId in response send new request
           await Api.requestListingUploadMedia(id, cityId, pickedFile);
         } else {
           if (imagesList!.isNotEmpty) {
@@ -381,6 +382,7 @@ class ListRepository {
                 ),
               ));
             }
+            //TODO: Foreach cityId in response send new request
             await Api.requestListingUploadMedia(id, cityId, formData);
           }
         }
@@ -520,6 +522,7 @@ class ListRepository {
       FormData? pickedFile = prefs.getPickedFile();
       // if (pickedFile!.files.isNotEmpty) {
       if (pickedFile?.files[0].key == 'pdf') {
+        //TODO: Foreach cityId in response send new request
         await Api.requestListingUploadMedia(listingId, cityId, pickedFile);
       } else {
         if (isImageChanged) {
@@ -569,6 +572,7 @@ class ListRepository {
                 ));
               }
             }
+            //TODO: Foreach cityId in response send new request
             await Api.requestListingUploadMedia(listingId, cityId, formData);
           }
           // if (pickedFile!.files.isNotEmpty) {
