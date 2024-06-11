@@ -345,7 +345,7 @@ class ListRepository {
       "longitude": 245.65, //dummy data
       "latitude": 22.456, //dummy data
       "villageId": villageId ?? 0,
-      "cityId": cityId.toString(),
+      "cityIds": cityId.toString(),
       "subcategoryId": subCategoryId,
       "expiryDate": combinedExpiryDateTime,
       "startDate": combinedStartDateTime,
