@@ -23,7 +23,6 @@ class DashboardScreen extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: Text(Translate.of(context).translate("dashboard")),
-          centerTitle: true,
         ),
         body: FutureBuilder(
           future: getUser(),
