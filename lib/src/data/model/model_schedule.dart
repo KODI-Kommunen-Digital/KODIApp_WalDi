@@ -7,9 +7,14 @@ class ScheduleModel {
   String? date;
   TimeOfDay startTime;
   TimeOfDay endTime;
+  int? availableSlots;
 
   ScheduleModel(
-      {this.view, required this.startTime, required this.endTime, this.date});
+      {this.view,
+      required this.startTime,
+      required this.endTime,
+      this.date,
+      this.availableSlots});
 
   get title {
     if (view != null) {
@@ -21,10 +26,9 @@ class ScheduleModel {
   factory ScheduleModel.fromString(String value, {String? date}) {
     final arr = value.split(" - ");
     return ScheduleModel(
-      startTime: TimeOfDay.fromDateTime(DateFormat('HH:mm').parse(arr[0])),
-      endTime: TimeOfDay.fromDateTime(DateFormat('HH:mm').parse(arr[1])),
-      date: date
-    );
+        startTime: TimeOfDay.fromDateTime(DateFormat('HH:mm').parse(arr[0])),
+        endTime: TimeOfDay.fromDateTime(DateFormat('HH:mm').parse(arr[1])),
+        date: date);
   }
 
   factory ScheduleModel.fromJson(Map<String, dynamic> json) {

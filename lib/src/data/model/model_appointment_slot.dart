@@ -9,13 +9,14 @@ class AppointmentSlotModel {
   final bool slotSameAsAppointment;
   final List<ScheduleModel> openHours;
 
-  AppointmentSlotModel(
-      {required this.serviceId,
-      required this.appointmentId,
-      required this.name,
-      required this.duration,
-      required this.slotSameAsAppointment,
-      required this.openHours});
+  AppointmentSlotModel({
+    required this.serviceId,
+    required this.appointmentId,
+    required this.name,
+    required this.duration,
+    required this.slotSameAsAppointment,
+    required this.openHours,
+  });
 
   factory AppointmentSlotModel.fromJson(Map<String, dynamic> json) {
     final List<dynamic> openHours = json['openingHours'];
@@ -23,7 +24,8 @@ class AppointmentSlotModel {
     for (var day in openHours) {
       schedules.add(ScheduleModel(
           startTime: timeOfDayFromString(day["startTime"]!),
-          endTime: timeOfDayFromString(day["endTime"]!)));
+          endTime: timeOfDayFromString(day["endTime"]!),
+          availableSlots: day["availableSlot"]));
     }
 
     return AppointmentSlotModel(
