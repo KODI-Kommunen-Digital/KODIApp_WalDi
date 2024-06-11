@@ -370,7 +370,6 @@ class _BookingDetailsLoadedState extends State<BookingDetailsLoaded> {
             duration: const Duration(seconds: 2),
           ),
         );
-
       } else {
         _errorSlot = null;
       }
@@ -495,6 +494,16 @@ class _BookingDetailsLoadedState extends State<BookingDetailsLoaded> {
         const SizedBox(height: 20),
         AppPickerItem(
           leading: Icon(
+            Icons.calendar_today_outlined,
+            color: Theme.of(context).hintColor,
+          ),
+          value: selectedDate,
+          title: Translate.of(context).translate('date'),
+          onPressed: _onDatePicker,
+        ),
+        const SizedBox(height: 20),
+        AppPickerItem(
+          leading: Icon(
             Icons.person_outline,
             color: Theme.of(context).hintColor,
           ),
@@ -510,16 +519,6 @@ class _BookingDetailsLoadedState extends State<BookingDetailsLoaded> {
               });
             });
           },
-        ),
-        const SizedBox(height: 20),
-        AppPickerItem(
-          leading: Icon(
-            Icons.calendar_today_outlined,
-            color: Theme.of(context).hintColor,
-          ),
-          value: selectedDate,
-          title: Translate.of(context).translate('date'),
-          onPressed: _onDatePicker,
         ),
       ],
     );
@@ -771,7 +770,7 @@ class _BookingDetailsLoadedState extends State<BookingDetailsLoaded> {
                     onDeleted: () {
                       setState(() {
                         ScheduleModel? slot = getSlot(index);
-                        if(slot != null) {
+                        if (slot != null) {
                           selectedSlots.remove(slot);
                           slot.availableSlots = slot.availableSlots! + 1;
                           slot.booked.remove(index);
@@ -872,9 +871,9 @@ class _BookingDetailsLoadedState extends State<BookingDetailsLoaded> {
   }
 
   ScheduleModel? getSlot(int index) {
-    for(var slot in selectedSlots) {
-      for(var user in slot.booked) {
-        if(user == index) {
+    for (var slot in selectedSlots) {
+      for (var user in slot.booked) {
+        if (user == index) {
           return slot;
         }
       }
