@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -356,13 +357,15 @@ class ListRepository {
     if (response.success) {
       final prefs = await Preferences.openBox();
       FormData? pickedFile = prefs.getPickedFile();
-      final id = response.id;
+      final List<dynamic> responseData = jsonDecode(response.data);
       var formData = FormData();
 
       if (pickedFile != null && pickedFile.files.isNotEmpty) {
         if (pickedFile.files[0].key == 'pdf') {
-          //TODO: Foreach cityId in response send new request
-          await Api.requestListingUploadMedia(id, cityId, pickedFile);
+          for (var listing in responseData) {
+            await Api.requestListingUploadMedia(
+                listing['listingId'], listing['cityId'], pickedFile);
+          }
         } else {
           if (imagesList!.isNotEmpty) {
             for (final image in imagesList) {
@@ -382,8 +385,10 @@ class ListRepository {
                 ),
               ));
             }
-            //TODO: Foreach cityId in response send new request
-            await Api.requestListingUploadMedia(id, cityId, formData);
+            for (var listing in responseData) {
+              await Api.requestListingUploadMedia(
+                  listing['listingId'], listing['cityId'], formData);
+            }
           }
         }
       }
@@ -522,7 +527,6 @@ class ListRepository {
       FormData? pickedFile = prefs.getPickedFile();
       // if (pickedFile!.files.isNotEmpty) {
       if (pickedFile?.files[0].key == 'pdf') {
-        //TODO: Foreach cityId in response send new request
         await Api.requestListingUploadMedia(listingId, cityId, pickedFile);
       } else {
         if (isImageChanged) {
@@ -572,7 +576,6 @@ class ListRepository {
                 ));
               }
             }
-            //TODO: Foreach cityId in response send new request
             await Api.requestListingUploadMedia(listingId, cityId, formData);
           }
           // if (pickedFile!.files.isNotEmpty) {
