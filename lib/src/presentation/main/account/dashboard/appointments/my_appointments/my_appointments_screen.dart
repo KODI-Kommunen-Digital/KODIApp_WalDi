@@ -144,7 +144,8 @@ class _MyAppointmentsLoadedState extends State<MyAppointmentsLoaded> {
                                             child: Image.network(
                                               (item.imageLink != null)
                                                   ? "${Application.picturesURL}${item.imageLink!}"
-                                                  : Application.defaultAppointmentPicturesURL,
+                                                  : Application
+                                                      .defaultAppointmentPicturesURL,
                                               width: 120,
                                               height: 140,
                                               fit: BoxFit.cover,
@@ -326,14 +327,8 @@ class _MyAppointmentsLoadedState extends State<MyAppointmentsLoaded> {
                             );
                           } else {
                             return (isLoadingMore)
-                                ? const Positioned(
-                                    bottom: 20,
-                                    left: 0,
-                                    right: 0,
-                                    child: Center(
-                                      child:
-                                          CircularProgressIndicator.adaptive(),
-                                    ),
+                                ? const Center(
+                                    child: CircularProgressIndicator.adaptive(),
                                   )
                                 : Container();
                           }
