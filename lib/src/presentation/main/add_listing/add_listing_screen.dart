@@ -1069,59 +1069,75 @@ class _AddListingScreenState extends State<AddListingScreen> {
                 Expanded(
                   child: listCity.isEmpty
                       ? const LinearProgressIndicator()
-                      : MultiSelectDropDown(
-                          //isExpanded: true,
-                          backgroundColor:
-                              Theme.of(context).scaffoldBackgroundColor,
-                          borderColor:
-                              Theme.of(context).textTheme.bodyLarge?.color ??
-                                  Colors.white,
-                          optionsBackgroundColor:
-                              Theme.of(context).scaffoldBackgroundColor,
-                          optionTextStyle: TextStyle(
-                              color: Theme.of(context)
+                      : (widget.item != null)
+                          ? DropdownButton(
+                              isExpanded: true,
+                              menuMaxHeight: 200,
+                              hint: Text(Translate.of(context)
+                                  .translate('input_city')),
+                              value: selectedCities.first,
+                              items: listCity.map((city) {
+                                return DropdownMenuItem(
+                                    value: city['name'],
+                                    child: Text(city['name']));
+                              }).toList(),
+                              onChanged: null)
+                          : MultiSelectDropDown(
+                              //isExpanded: true,
+                              backgroundColor:
+                                  Theme.of(context).scaffoldBackgroundColor,
+                              borderColor: Theme.of(context)
                                       .textTheme
                                       .bodyLarge
                                       ?.color ??
-                                  Colors.white),
-                          selectedOptionBackgroundColor:
-                              Theme.of(context).scaffoldBackgroundColor,
-                          dropdownHeight: 200,
-                          hint: Translate.of(context).translate('input_city'),
-                          options: listCity.map((city) {
-                            return ValueItem(
-                                value: city['name'], label: city['name']);
-                          }).toList(),
-                          onOptionSelected: widget.item == null
-                              ? (List<ValueItem> selectedOptions) async {
-                                  List<String> options = [];
-                                  for (var option in selectedOptions) {
-                                    options.add(option.value!);
-                                  }
-                                  setState(() {
-                                    selectedCities = options;
-                                    for (var element in listCity) {
-                                      if (element["name"] == options.last) {
-                                        cityIds.add(element["id"]);
+                                  Colors.white,
+                              optionsBackgroundColor:
+                                  Theme.of(context).scaffoldBackgroundColor,
+                              optionTextStyle: TextStyle(
+                                  color: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge
+                                          ?.color ??
+                                      Colors.white),
+                              selectedOptionBackgroundColor:
+                                  Theme.of(context).scaffoldBackgroundColor,
+                              dropdownHeight: 200,
+                              hint:
+                                  Translate.of(context).translate('input_city'),
+                              options: listCity.map((city) {
+                                return ValueItem(
+                                    value: city['name'], label: city['name']);
+                              }).toList(),
+                              onOptionSelected: widget.item == null
+                                  ? (List<ValueItem> selectedOptions) async {
+                                      List<String> options = [];
+                                      for (var option in selectedOptions) {
+                                        options.add(option.value!);
                                       }
+                                      setState(() {
+                                        selectedCities = options;
+                                        for (var element in listCity) {
+                                          if (element["name"] == options.last) {
+                                            cityIds.add(element["id"]);
+                                          }
+                                        }
+                                      });
+                                      selectedVillage = null;
+                                      context
+                                          .read<AddListingCubit>()
+                                          .clearVillage();
+                                      final loadVillageResponse = await context
+                                          .read<AddListingCubit>()
+                                          .loadVillages(options.last);
+                                      selectedVillage = loadVillageResponse
+                                          .data.first['name'];
+                                      villageId =
+                                          loadVillageResponse.data.first['id'];
+                                      setState(() {
+                                        listVillage = loadVillageResponse.data;
+                                      });
                                     }
-                                  });
-                                  selectedVillage = null;
-                                  context
-                                      .read<AddListingCubit>()
-                                      .clearVillage();
-                                  final loadVillageResponse = await context
-                                      .read<AddListingCubit>()
-                                      .loadVillages(options.last);
-                                  selectedVillage =
-                                      loadVillageResponse.data.first['name'];
-                                  villageId =
-                                      loadVillageResponse.data.first['id'];
-                                  setState(() {
-                                    listVillage = loadVillageResponse.data;
-                                  });
-                                }
-                              : null),
+                                  : null),
                 ),
               ],
             ),
