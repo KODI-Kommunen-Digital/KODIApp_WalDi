@@ -350,10 +350,11 @@ class Api {
         filePath = '/cities/$cityId/listings/$listingId/imageUpload';
       }
 
-      await httpManager.post(
+      final result = await httpManager.post(
         url: filePath,
         formData: pickedFile,
       );
+      logInfo(result);
     }
   }
 
