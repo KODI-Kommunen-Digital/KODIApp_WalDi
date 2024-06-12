@@ -83,6 +83,12 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
     }
   }
 
+  Future<bool> isLoggedIn() async {
+    final prefs = await Preferences.openBox();
+    bool isLoggedIn = prefs.getKeyValue(Preferences.userId, 0).toString() != "0";
+    return isLoggedIn;
+  }
+
   Future<bool> isDarkMode() async {
     final prefBox = await Preferences.openBox();
     String darkMode = await prefBox.getKeyValue(Preferences.darkOption, 'on');

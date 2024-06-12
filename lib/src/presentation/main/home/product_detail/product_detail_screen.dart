@@ -950,7 +950,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       if (product.isBookable) {
         bookAppointment = AppButton(
           Translate.of(context).translate('create_booking'),
-          onPressed: () {
+          onPressed: () async {
             if (isLoggedIn) {
               Navigator.pushNamed(context, Routes.booking, arguments: {
                 'cityId': product.cityId ?? 1,
@@ -961,6 +961,16 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content:
                       Text(Translate.of(context).translate('login_required'))));
+              await Navigator.pushNamed(context, Routes.signIn);
+              bool loggedIn =
+                  await context.read<ProductDetailCubit>().isLoggedIn();
+              if (loggedIn) {
+                isLoggedIn = true;
+                Navigator.pushNamed(context, Routes.booking, arguments: {
+                  'cityId': product.cityId ?? 1,
+                  'listingId': product.id,
+                });
+              }
             }
           },
           mainAxisSize: MainAxisSize.max,
