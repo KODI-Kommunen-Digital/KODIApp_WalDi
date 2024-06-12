@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -346,7 +345,7 @@ class ListRepository {
       "longitude": 245.65, //dummy data
       "latitude": 22.456, //dummy data
       "villageId": villageId ?? 0,
-      "cityIds": cityId.toString(),
+      "cityIds": cityId,
       "subcategoryId": subCategoryId,
       "expiryDate": combinedExpiryDateTime,
       "startDate": combinedStartDateTime,
@@ -357,7 +356,7 @@ class ListRepository {
     if (response.success) {
       final prefs = await Preferences.openBox();
       FormData? pickedFile = prefs.getPickedFile();
-      final List<dynamic> responseData = jsonDecode(response.data);
+      final List<dynamic> responseData = response.data;
       var formData = FormData();
 
       if (pickedFile != null && pickedFile.files.isNotEmpty) {
