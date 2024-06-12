@@ -166,7 +166,9 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                     controller: _scrollController,
                     slivers: <Widget>[
                       CupertinoSliverRefreshControl(
-                        onRefresh: _onRefresh,
+                        onRefresh: () async {
+                          _onRefresh(true);
+                        },
                       ),
                       SliverList(
                         delegate: SliverChildBuilderDelegate(
@@ -185,7 +187,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                           'isNewList': false,
                                           'isAdmin': true
                                         }).then((value) async {
-                                          await _onRefresh();
+                                          await _onRefresh(false);
                                         });
                                       },
                                       backgroundColor: Colors.blue,
@@ -200,9 +202,8 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                             await showDeleteConfirmation(
                                                 context, item);
                                         if (response) {
-                                          await AppBloc.homeCubit
-                                              .onLoad(false)
-                                              .then((value) => _onRefresh());
+                                          await AppBloc.homeCubit.onLoad(false);
+                                          _onRefresh(false);
                                         }
                                       },
                                       backgroundColor: Colors.red,
@@ -541,13 +542,15 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
         Navigator.pushNamed(context, Routes.submit,
                 arguments: {'item': item, 'isNewList': false, 'isAdmin': true})
             .then((value) async {
-          await _onRefresh();
+          await _onRefresh(false);
         });
         break;
       case 2:
         bool response = await showDeleteConfirmation(context, item);
         if (response) {
-          await AppBloc.homeCubit.onLoad(false).then((value) => _onRefresh());
+          await AppBloc.homeCubit
+              .onLoad(false)
+              .then((value) => _onRefresh(false));
         }
         break;
     }
@@ -648,7 +651,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                     Translate.of(context)
                                         .translate(chosen ?? "inactive");
                                 Navigator.of(context).pop();
-                                _onRefresh();
+                                _onRefresh(false);
                                 AppBloc.homeCubit.onLoad(true);
                               },
                               items: [
@@ -745,8 +748,8 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
     return false;
   }
 
-  Future _onRefresh() async {
-    await context.read<AllListingsCubit>().onLoad(true);
+  Future _onRefresh(bool reload) async {
+    await context.read<AllListingsCubit>().onLoad(reload);
   }
 
   void _onProductDetail(ProductModel item) {
