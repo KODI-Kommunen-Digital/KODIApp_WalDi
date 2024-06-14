@@ -105,6 +105,7 @@ class ListRepository {
 
   Future<List<int>> getCityIds(List<String> cityName) async {
     final response = await Api.requestSubmitCities();
+    cityName = cityName.toSet().toList();
     var jsonCategory = response.data;
     List<int> cityIds = [];
     for (var city in cityName) {
@@ -264,6 +265,7 @@ class ListRepository {
     String? expiryDate,
     String? startDate,
     String? endDate,
+    String? createdAt,
     TimeOfDay? expiryTime,
     int? timeless,
     TimeOfDay? startTime,
@@ -351,8 +353,7 @@ class ListRepository {
       "startDate": combinedStartDateTime,
       "endDate": combinedEndDateTime, "timeless": timeless
     };
-    final response =
-        await Api.requestSaveProduct(cityId.first, params, isImageChanged);
+    final response = await Api.requestSaveProduct(params, isImageChanged);
     if (response.success) {
       final prefs = await Preferences.openBox();
       FormData? pickedFile = prefs.getPickedFile();
@@ -362,8 +363,35 @@ class ListRepository {
       if (pickedFile != null && pickedFile.files.isNotEmpty) {
         if (pickedFile.files[0].key == 'pdf') {
           for (var listing in responseData) {
-            await Api.requestListingUploadMedia(
-                listing['listingId'], listing['cityId'], pickedFile);
+            await editProduct(
+                listing['listingId'],
+                categoryId,
+                listing['cityId'],
+                title,
+                description,
+                place,
+                country,
+                state,
+                null,
+                statusId,
+                sourceId,
+                address,
+                zipcode,
+                phone,
+                email,
+                website,
+                status,
+                expiryDate,
+                startDate,
+                endDate,
+                createdAt,
+                price,
+                true,
+                expiryTime,
+                timeless,
+                startTime,
+                endTime,
+                imagesList);
           }
         } else {
           if (imagesList!.isNotEmpty) {
@@ -385,8 +413,35 @@ class ListRepository {
               ));
             }
             for (var listing in responseData) {
-              await Api.requestListingUploadMedia(
-                  listing['listingId'], listing['cityId'], formData);
+              await editProduct(
+                  listing['listingId'],
+                  categoryId,
+                  listing['cityId'],
+                  title,
+                  description,
+                  place,
+                  country,
+                  state,
+                  null,
+                  statusId,
+                  sourceId,
+                  address,
+                  zipcode,
+                  phone,
+                  email,
+                  website,
+                  status,
+                  expiryDate,
+                  startDate,
+                  endDate,
+                  createdAt,
+                  price,
+                  true,
+                  expiryTime,
+                  timeless,
+                  startTime,
+                  endTime,
+                  imagesList);
             }
           }
         }

@@ -227,7 +227,7 @@ class Api {
 
   ///Save Product
   static Future<ResultApiModel> requestSaveProduct(
-      cityId, params, isImageChanged) async {
+      params, isImageChanged) async {
     //final filePath = '/cities/$cityId/listings';
     const filePath = '/listings';
     final result = await httpManager.post(

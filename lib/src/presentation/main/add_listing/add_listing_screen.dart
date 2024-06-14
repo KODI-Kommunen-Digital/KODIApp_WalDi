@@ -77,6 +77,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
   String? _errorStatus;
   String? _errorSDate;
   String? _errorCategory;
+  String? _errorCity;
   List<String> selectedCities = [];
   List<int> cityIds = [];
   int? statusId;
@@ -253,10 +254,10 @@ class _AddListingScreenState extends State<AddListingScreen> {
           }
         }
       } else {
-        selectedCities.add(loadCitiesResponse!.data.first['name']);
+        //selectedCities.add(loadCitiesResponse!.data.first['name']);
       }
       selectedSubCategory = loadCategoryResponse?.data.first['name'];
-      listCity = loadCitiesResponse.data;
+      listCity = loadCitiesResponse?.data;
       selectedCategory = selectedSubCategory;
       _processing = true;
     });
@@ -362,7 +363,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
           }
         }
       } else {
-        selectedCities.add(loadCitiesResponse?.data.first['name']);
+        //selectedCities.add(loadCitiesResponse?.data.first['name']);
       }
       if (!loadCategoryResponse?.data.isEmpty) {
         if (!mounted) return;
@@ -635,6 +636,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
               expiryDate: submitExpiryDate,
               startDate: _startDate,
               endDate: _endDate,
+              createdAt: _createdAt ?? '',
               expiryTime: submitExpiryTime,
               timeless: _isExpiryDateEnabled ? 0 : 1,
               startTime: _startTime,
@@ -719,6 +721,12 @@ class _AddListingScreenState extends State<AddListingScreen> {
       }
     }
 
+    if (selectedCities.isEmpty) {
+      _errorCity = "city_require";
+    } else {
+      _errorCity = null;
+    }
+
     List<String?> errors = [
       _errorTitle,
       _errorContent,
@@ -728,6 +736,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       _errorWebsite,
       _errorStatus,
       _errorSDate,
+      _errorCity
     ];
 
     if (_errorTitle != null ||
@@ -737,7 +746,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
         // _errorEmail != null ||
         _errorWebsite != null ||
         _errorStatus != null ||
-        _errorSDate != null) {
+        _errorSDate != null ||
+        _errorCity != null) {
       String errorMessage = "";
       for (var element in errors) {
         if (element != null &&
