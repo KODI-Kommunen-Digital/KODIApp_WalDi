@@ -1,9 +1,11 @@
 import 'package:bloc/bloc.dart';
 import 'package:heidi/src/data/model/model.dart';
+import 'package:heidi/src/data/model/model_multifilter.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'cubit.dart';
 
 enum ProductFilter {
@@ -20,20 +22,21 @@ class ListCubit extends Cubit<ListState> {
 
   int pageNo = 1;
   List<ProductModel> list = [];
+  List listCity = [];
   PaginationModel? pagination;
   List<ProductModel> listLoaded = [];
   List<ProductModel> filteredList = [];
+  bool isSearching = false;
+  String? searchTerm;
 
   Future<void> onLoad(cityId) async {
     pageNo = 1;
     final prefs = await Preferences.openBox();
-    final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
-    final type = prefs.getKeyValue(Preferences.type, '');
-    if (type == 'location') {
-      prefs.setKeyValue(Preferences.categoryId, '');
-    }
+    final categoryId = prefs.getKeyValue(Preferences.categoryId, 0);
+    final type = await prefs.getKeyValue(Preferences.type, '');
+    listCity = await getCityList() ?? [];
     final result = await ListRepository.loadList(
-      categoryId: categoryId,
+      categoryId: (categoryId == 0) ? "" : categoryId,
       type: type,
       pageNo: pageNo,
       cityId: cityId,
@@ -42,22 +45,30 @@ class ListCubit extends Cubit<ListState> {
       list = result[0];
       pagination = result[1];
       listLoaded = list;
-      emit(ListStateLoaded(
-        list,
-      ));
+      emit(ListStateLoaded(list, listCity));
+    }
+  }
+
+  Future<void> setCategoryFilter(int filter, int? cityId) async {
+    final prefs = await Preferences.openBox();
+
+    if (filter == 0) {
+      prefs.setKeyValue(Preferences.categoryId, 0);
+    } else {
+      prefs.setKeyValue(Preferences.categoryId, filter);
+    }
+    if (cityId != null) {
+      onLoad(cityId);
     }
   }
 
   Future<List<ProductModel>> newListings(int pageNo, cityId) async {
     final prefs = await Preferences.openBox();
-    final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
+    final categoryId = prefs.getKeyValue(Preferences.categoryId, 0);
     final type = prefs.getKeyValue(Preferences.type, '');
-    if (type == 'location') {
-      prefs.setKeyValue(Preferences.categoryId, '');
-    }
 
     final result = await ListRepository.loadList(
-      categoryId: categoryId,
+      categoryId: (categoryId == 0) ? "" : categoryId,
       type: type,
       pageNo: pageNo,
       cityId: cityId,
@@ -73,7 +84,75 @@ class ListCubit extends Cubit<ListState> {
 
   List<ProductModel> getLoadedList() => listLoaded;
 
-  void onProductFilter(ProductFilter? type, List<ProductModel> loadedList) {
+  Future<void> searchListing(content, bool newSearch) async {
+    if (newSearch) {
+      emit(const ListState.loading());
+      pageNo = 1;
+    }
+    isSearching = true;
+    searchTerm = content.toString();
+    final prefs = await Preferences.openBox();
+
+    final categoryId = prefs.getKeyValue(Preferences.categoryId, 0);
+    final cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    List<ProductModel>? listDataList = [];
+    MultiFilter multiFilter = MultiFilter(
+        hasCategoryFilter: true,
+        hasLocationFilter: true,
+        currentLocation: cityId,
+        currentCategory: categoryId);
+
+    final result = await ListRepository.searchListing(
+        content: content, multiFilter: multiFilter, pageNo: pageNo++);
+    final List<ProductModel>? listUpdated = result?[0];
+    if (listUpdated != null) {
+      if (newSearch) {
+        list = [];
+      }
+      list.addAll(listUpdated);
+    }
+    for (final product in list) {
+      listDataList.add(
+        ProductModel(
+          id: product.id,
+          cityId: product.cityId,
+          title: product.title,
+          image: product.image,
+          pdf: product.pdf,
+          category: product.category,
+          categoryId: product.categoryId,
+          subcategoryId: product.subcategoryId,
+          startDate: product.startDate,
+          endDate: product.endDate,
+          createDate: product.createDate,
+          favorite: product.favorite,
+          address: product.address,
+          phone: product.phone,
+          email: product.email,
+          website: product.website,
+          description: product.description,
+          statusId: product.statusId,
+          userId: product.userId,
+          sourceId: product.sourceId,
+          imageLists: product.imageLists,
+          externalId: product.externalId,
+          expiryDate: product.expiryDate,
+        ),
+      );
+    }
+
+    emit(ListStateUpdated(listDataList, listCity));
+  }
+
+  Future<void> cancelSearch(int cityId) async {
+    isSearching = true;
+    searchTerm = "";
+    pageNo = 0;
+    onLoad(cityId);
+  }
+
+  void onDateProductFilter(ProductFilter? type, List<ProductModel> loadedList,
+      bool filterLocation, int? currentCity) {
     final currentDate = DateTime.now();
     if (type == ProductFilter.month) {
       filteredList = loadedList.where((product) {
@@ -81,25 +160,40 @@ class ListCubit extends Cubit<ListState> {
         if (startDate != null) {
           final startMonth = startDate.month;
           final currentMonth = currentDate.month;
-          return startMonth == currentMonth;
+          if (filterLocation && (currentCity ?? 0) != 0) {
+            return (startMonth == currentMonth) &&
+                (product.cityId == currentCity);
+          } else {
+            return startMonth == currentMonth;
+          }
         }
         return false;
       }).toList();
-      emit(ListStateUpdated(filteredList));
+      emit(ListStateUpdated(filteredList, listCity));
     } else if (type == ProductFilter.week) {
       filteredList = loadedList.where((product) {
         final startDate = _parseDate(product.startDate);
         if (startDate != null) {
           final startWeek = _getWeekNumber(startDate);
           final currentWeek = _getWeekNumber(currentDate);
-          return startWeek == currentWeek;
+          if (filterLocation && (currentCity ?? 0) != 0) {
+            return (startWeek == currentWeek) &&
+                (product.cityId == currentCity);
+          } else {
+            return startWeek == currentWeek;
+          }
         }
         return false;
       }).toList();
+      emit(ListStateUpdated(filteredList, listCity));
+    } else if (type == null && filterLocation && (currentCity ?? 0) != 0) {
+      filteredList = loadedList.where((product) {
+        return product.cityId == currentCity;
+      }).toList();
 
-      emit(ListStateUpdated(filteredList));
+      emit(ListStateUpdated(filteredList, listCity));
     } else {
-      emit(ListStateUpdated(loadedList));
+      emit(ListStateUpdated(loadedList, listCity));
     }
   }
 
@@ -120,6 +214,29 @@ class ListCubit extends Cubit<ListState> {
       logError("Error parsing date: $dateTimeString");
     }
     return null;
+  }
+
+  Future<List?> getCityList() async {
+    ResultApiModel? loadCitiesResponse;
+    try {
+      loadCitiesResponse = await repo.loadCities();
+    } catch (e, stackTrace) {
+      logError('load cities error', e.toString());
+      await Sentry.captureException(e, stackTrace: stackTrace);
+
+      return null;
+    }
+
+    List listCity = loadCitiesResponse.data;
+    return listCity;
+  }
+
+  String getCityNameFromId(List listCity, int cityId) {
+    if (listCity.isNotEmpty) {
+      final city = listCity.firstWhere((cityData) => cityData["id"] == cityId);
+      return city["name"];
+    }
+    return "";
   }
 
   int _getWeekNumber(DateTime date) {
@@ -153,7 +270,10 @@ class ListCubit extends Cubit<ListState> {
       10: "category_companies",
       11: "category_public_transport",
       12: "category_offers",
-      13: "category_food"
+      13: "category_food",
+      14: "category_rathaus",
+      15: "category_newsletter",
+      16: "category_official_notification"
     };
     return categories[categoryId];
   }

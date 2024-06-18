@@ -196,7 +196,11 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                                   key: Key(
                                       item.id.toString() + isSwiped.toString()),
                                   child: InkWell(
-                                    onTap: () {
+                                    onTap: () async {
+                                      // String pdfURL =
+                                      //     '${Application.picturesURL}${item.pdf}?cacheKey=$uniqueKey';
+                                      // await pdfService.downloadPDF(pdfURL, item.pdf);
+
                                       _onProductDetail(item);
                                     },
                                     child: Padding(
@@ -209,8 +213,32 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                                           children: [
                                             Row(
                                               children: <Widget>[
-                                                item.pdf == ''
-                                                    ? CachedNetworkImage(
+                                                item.pdf != '' &&
+                                                        item.image ==
+                                                            'admin/News.jpeg'
+                                                    ? ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(11),
+                                                        child: SizedBox(
+                                                            width: 120,
+                                                            height: 140,
+                                                            child: const PDF()
+                                                                .cachedFromUrl(
+                                                              "${Application.picturesURL}${item.pdf}?cacheKey=$uniqueKey",
+                                                              placeholder:
+                                                                  (progress) =>
+                                                                      Center(
+                                                                          child:
+                                                                              Text('$progress %')),
+                                                              errorWidget:
+                                                                  (error) => Center(
+                                                                      child: Text(
+                                                                          error
+                                                                              .toString())),
+                                                            )),
+                                                      )
+                                                    : CachedNetworkImage(
                                                         imageUrl: item
                                                                     .sourceId ==
                                                                 2
@@ -292,28 +320,6 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                                                             ),
                                                           );
                                                         },
-                                                      )
-                                                    : ClipRRect(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(11),
-                                                        child: SizedBox(
-                                                            width: 120,
-                                                            height: 140,
-                                                            child: const PDF()
-                                                                .cachedFromUrl(
-                                                              "${Application.picturesURL}${item.pdf}?cacheKey=$uniqueKey",
-                                                              placeholder:
-                                                                  (progress) =>
-                                                                      Center(
-                                                                          child:
-                                                                              Text('$progress %')),
-                                                              errorWidget:
-                                                                  (error) => Center(
-                                                                      child: Text(
-                                                                          error
-                                                                              .toString())),
-                                                            )),
                                                       ),
                                                 const SizedBox(width: 8),
                                                 Expanded(
@@ -353,10 +359,15 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                                                         userListingsList[index]
                                                                     .categoryId ==
                                                                 3
-                                                            ? "${userListingsList[index].startDate} ${Translate.of(context).translate('to')} ${userListingsList[index].endDate}"
-                                                            : userListingsList[
-                                                                    index]
-                                                                .createDate,
+                                                            ? (userListingsList[
+                                                                            index]
+                                                                        .endDate !=
+                                                                    ""
+                                                                ? "${userListingsList[index].startDate} ${Translate.of(context).translate('to')} ${userListingsList[index].endDate}"
+                                                                : userListingsList[
+                                                                        index]
+                                                                    .startDate)
+                                                            : item.createDate,
                                                         style: Theme.of(context)
                                                             .textTheme
                                                             .bodySmall!

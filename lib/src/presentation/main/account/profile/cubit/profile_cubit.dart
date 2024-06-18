@@ -20,14 +20,16 @@ class ProfileCubit extends Cubit<ProfileState> {
     for (final list in result) {
       final product = await loadProduct(list.cityId, list.id);
       if (product != null) {
-        listDataList.add(ProductModel(
+        listDataList.add(
+          ProductModel(
             id: list.id,
             cityId: list.cityId,
             title: product.title,
-            image: product.image,
+            image: list.logo!,
             pdf: product.pdf,
             category: product.category,
             categoryId: product.categoryId,
+            subcategoryId: product.subcategoryId,
             startDate: product.startDate,
             endDate: product.endDate,
             createDate: product.createDate,
@@ -36,9 +38,14 @@ class ProfileCubit extends Cubit<ProfileState> {
             phone: product.phone,
             email: product.email,
             website: product.website,
+            externalId: product.externalId,
             description: product.description,
             userId: product.userId,
-            sourceId: product.sourceId));
+            sourceId: product.sourceId,
+            imageLists: product.imageLists,
+            expiryDate: product.expiryDate,
+          ),
+        );
       }
     }
     emit(ProfileState.loaded(listDataList));
@@ -51,7 +58,8 @@ class ProfileCubit extends Cubit<ProfileState> {
     for (final list in result) {
       final product = await loadProduct(list.cityId, list.id);
       if (product != null) {
-        listDataList.add(ProductModel(
+        listDataList.add(
+          ProductModel(
             id: list.id,
             cityId: list.cityId,
             title: product.title,
@@ -59,6 +67,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             pdf: product.pdf,
             category: product.category,
             categoryId: product.categoryId,
+            subcategoryId: product.subcategoryId,
             startDate: product.startDate,
             endDate: product.endDate,
             createDate: product.createDate,
@@ -67,9 +76,14 @@ class ProfileCubit extends Cubit<ProfileState> {
             phone: product.phone,
             email: product.email,
             website: product.website,
+            externalId: product.externalId,
             description: product.description,
             userId: product.userId,
-            sourceId: product.sourceId));
+            sourceId: product.sourceId,
+            imageLists: product.imageLists,
+            expiryDate: product.expiryDate,
+          ),
+        );
       }
     }
     return listDataList;

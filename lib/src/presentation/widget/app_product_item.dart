@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
@@ -8,22 +10,25 @@ import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:path_provider/path_provider.dart';
 
 class AppProductItem extends StatelessWidget {
-  const AppProductItem({
-    Key? key,
-    this.item,
-    this.onPressed,
-    required this.type,
-    this.trailing,
-    required this.isRefreshLoader,
-  }) : super(key: key);
+  const AppProductItem(
+      {Key? key,
+      this.item,
+      this.onPressed,
+      required this.type,
+      this.trailing,
+      required this.isRefreshLoader,
+      this.cityName})
+      : super(key: key);
 
   final ProductModel? item;
   final ProductViewType type;
   final VoidCallback? onPressed;
   final Widget? trailing;
   final bool isRefreshLoader;
+  final String? cityName;
 
   @override
   Widget build(BuildContext context) {
@@ -35,62 +40,82 @@ class AppProductItem extends StatelessWidget {
           return const EmptyProductItem();
         }
         return InkWell(
-          onTap: onPressed,
+          onTap: () async {
+            onPressed!();
+          },
           child: Row(
             children: <Widget>[
-              item?.pdf == ''
-                  ? Image.network(
-                      item?.sourceId == 2
-                          ? item!.image
-                          : item!.image == 'admin/News.jpeg'
-                              ? "${Application.picturesURL}${item!.image}"
-                              : isRefreshLoader
-                                  ? "${Application.picturesURL}${item!.image}"
-                                  : "${Application.picturesURL}${item!.image}?cache=$uniqueKey",
-                      width: 84,
-                      height: 84,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return AppPlaceholder(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              color: Colors.white,
-                            ),
-                            width: 84,
-                            height: 84,
-                            child: const Icon(Icons.error),
-                          ),
-                        );
-                      },
-                      loadingBuilder: (context, child, loadingProgress) {
-                        if (loadingProgress == null) {
-                          return child;
-                        }
-                        return AppPlaceholder(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              color: Colors.white,
-                            ),
-                            width: 84,
-                            height: 84,
-                          ),
-                        );
-                      },
+              item?.pdf != '' && item?.image == 'admin/News.jpeg'
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: SizedBox(
+                        width: 120,
+                        height: 140,
+                        child: const PDF().cachedFromUrl(
+                          "${Application.picturesURL}${item?.pdf}?cacheKey=$uniqueKey",
+                          placeholder: (progress) =>
+                              Center(child: Text('$progress %')),
+                          errorWidget: (error) =>
+                              Center(child: Text(error.toString())),
+                        ),
+                      ),
                     )
                   : ClipRRect(
-                      borderRadius: BorderRadius.circular(11),
-                      child: SizedBox(
-                          width: 84,
-                          height: 84,
-                          child: const PDF().cachedFromUrl(
-                            "${Application.picturesURL}${item?.pdf}?cacheKey=$uniqueKey",
-                            placeholder: (progress) =>
-                                Center(child: Text('$progress %')),
-                            errorWidget: (error) =>
-                                Center(child: Text(error.toString())),
-                          )),
+                      borderRadius: BorderRadius.circular(12),
+                      child: CachedNetworkImage(
+                        imageUrl: item?.sourceId == 2 &&
+                                item?.image != null &&
+                                item?.image != 'admin/News.jpeg'
+                            ? item!.image
+                            : item?.sourceId == 3 && item?.image != null
+                                ? (item!.image.startsWith('admin')
+                                    ? "${Application.picturesURL}${item!.image}"
+                                    : item!.image)
+                                : item?.image != null &&
+                                        item!.image.startsWith('admin')
+                                    ? "${Application.picturesURL}${item!.image}"
+                                    : "${Application.picturesURL}${item?.image ?? 'admin/News.jpeg'}",
+                        cacheManager: memoryCacheManager,
+                        placeholder: (context, url) {
+                          return AppPlaceholder(
+                            child: Container(
+                              width: 120,
+                              height: 140,
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                              ),
+                            ),
+                          );
+                        },
+                        imageBuilder: (context, imageProvider) {
+                          return Container(
+                            width: 120,
+                            height: 140,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                          );
+                        },
+                        errorWidget: (context, url, error) {
+                          return AppPlaceholder(
+                            child: Container(
+                              width: 120,
+                              height: 140,
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(8),
+                                  bottomLeft: Radius.circular(8),
+                                ),
+                              ),
+                              child: const Icon(Icons.error),
+                            ),
+                          );
+                        },
+                      ),
                     ),
               const SizedBox(width: 8),
               Expanded(
@@ -107,7 +132,9 @@ class AppProductItem extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      item?.category ?? '',
+                      (cityName != null)
+                          ? "${item?.category ?? ''} - $cityName"
+                          : item?.category ?? '',
                       style: Theme.of(context)
                           .textTheme
                           .bodySmall!
@@ -116,7 +143,7 @@ class AppProductItem extends StatelessWidget {
                     const SizedBox(height: 2),
                     Visibility(
                       visible: item!.startDate.isNotEmpty &&
-                          item?.startDate != item?.endDate,
+                          item!.endDate.isNotEmpty,
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.white30,
@@ -135,8 +162,8 @@ class AppProductItem extends StatelessWidget {
                       ),
                     ),
                     Visibility(
-                      visible: item!.startDate.isNotEmpty &&
-                          item?.startDate == item?.endDate,
+                      visible:
+                          item!.startDate.isNotEmpty && item!.endDate == "",
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.white30,
@@ -145,7 +172,7 @@ class AppProductItem extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(3.5),
                           child: Text(
-                            "${item?.startDate} ${Translate.of(context).translate('to')} ",
+                            "${item?.startDate}",
                             style: Theme.of(context)
                                 .textTheme
                                 .bodySmall!
@@ -154,7 +181,35 @@ class AppProductItem extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    Visibility(
+                      visible: item?.categoryId == 1,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white30,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(3.5),
+                          child: Text(
+                            "${item?.createDate}",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall!
+                                .copyWith(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    ),
+                    if (item?.sourceId == 3)
+                      Text(
+                        "${Translate.of(context).translate('quelle')} ${item?.externalId ?? ''}",
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall!
+                            .copyWith(fontWeight: FontWeight.w600),
+                        maxLines: 1,
+                      ),
+                    const SizedBox(height: 2),
                   ],
                 ),
               ),
@@ -162,21 +217,30 @@ class AppProductItem extends StatelessWidget {
             ],
           ),
         );
-
       case ProductViewType.grid:
         if (item == null) {
           return const EmptyProductItem();
         }
 
         return InkWell(
-          onTap: onPressed,
+          onTap: () async {
+            onPressed!();
+          },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               CachedNetworkImage(
-                imageUrl: item?.sourceId == 2
+                imageUrl: item?.sourceId == 2 &&
+                        item?.image != null &&
+                        item?.image != 'admin/News.jpeg'
                     ? item!.image
-                    : "${Application.picturesURL}${item!.image}",
+                    : item?.sourceId == 3 && item?.image != null
+                        ? (item!.image.startsWith('admin')
+                            ? "${Application.picturesURL}${item!.image}"
+                            : item!.image)
+                        : item?.image != null && item!.image.startsWith('admin')
+                            ? "${Application.picturesURL}${item!.image}"
+                            : "${Application.picturesURL}${item?.image ?? 'admin/News.jpeg'}",
                 cacheManager: memoryCacheManager,
                 imageBuilder: (context, imageProvider) {
                   return Container(
@@ -263,6 +327,15 @@ class AppProductItem extends StatelessWidget {
                 maxLines: 1,
                 style: Theme.of(context).textTheme.bodySmall,
               ),
+              if (item?.sourceId == 3)
+                Text(
+                  "${Translate.of(context).translate('quelle')} ${item?.externalId ?? ''}",
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodySmall!
+                      .copyWith(fontWeight: FontWeight.w600),
+                  maxLines: 2,
+                ),
             ],
           ),
         );
@@ -273,58 +346,15 @@ class AppProductItem extends StatelessWidget {
         }
 
         return InkWell(
-          onTap: onPressed,
+          onTap: () async {
+            onPressed!();
+          },
           child: Stack(
             children: [
               Row(
                 children: <Widget>[
-                  item?.pdf == ''
+                  item?.pdf != '' && item?.image == 'admin/News.jpeg'
                       ? ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child: Image.network(
-                            item?.sourceId == 2
-                                ? item!.image
-                                : item!.image == 'admin/News.jpeg'
-                                    ? "${Application.picturesURL}${item!.image}"
-                                    : isRefreshLoader
-                                        ? "${Application.picturesURL}${item!.image}"
-                                        : "${Application.picturesURL}${item!.image}?cache=$uniqueKey",
-                            width: 120,
-                            height: 140,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              // Handle errors here
-                              return AppPlaceholder(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
-                                    color: Colors.white,
-                                  ),
-                                  width: 120,
-                                  height: 140,
-                                  child: const Icon(Icons.error),
-                                ),
-                              );
-                            },
-                            loadingBuilder: (context, child, loadingProgress) {
-                              // Display the AppPlaceholder while the image is loading
-                              if (loadingProgress == null) {
-                                return child;
-                              }
-                              return AppPlaceholder(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
-                                    color: Colors.white,
-                                  ),
-                                  width: 120,
-                                  height: 140,
-                                ),
-                              );
-                            },
-                          ),
-                        )
-                      : ClipRRect(
                           borderRadius: BorderRadius.circular(11),
                           child: SizedBox(
                               width: 120,
@@ -336,6 +366,63 @@ class AppProductItem extends StatelessWidget {
                                 errorWidget: (error) =>
                                     Center(child: Text(error.toString())),
                               )),
+                        )
+                      : ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: CachedNetworkImage(
+                            imageUrl: item?.sourceId == 2 &&
+                                    item?.image != null &&
+                                    item?.image != 'admin/News.jpeg'
+                                ? item!.image
+                                : item?.sourceId == 3 && item?.image != null
+                                    ? (item!.image.startsWith('admin')
+                                        ? "${Application.picturesURL}${item!.image}"
+                                        : item!.image)
+                                    : item?.image != null &&
+                                            item!.image.startsWith('admin')
+                                        ? "${Application.picturesURL}${item!.image}"
+                                        : "${Application.picturesURL}${item?.image ?? 'admin/News.jpeg'}",
+                            cacheManager: memoryCacheManager,
+                            placeholder: (context, url) {
+                              return AppPlaceholder(
+                                child: Container(
+                                  width: 120,
+                                  height: 140,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              );
+                            },
+                            imageBuilder: (context, imageProvider) {
+                              return Container(
+                                width: 120,
+                                height: 140,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: imageProvider,
+                                    fit: BoxFit.fitHeight,
+                                  ),
+                                ),
+                              );
+                            },
+                            errorWidget: (context, url, error) {
+                              return AppPlaceholder(
+                                child: Container(
+                                  width: 120,
+                                  height: 140,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(8),
+                                      bottomLeft: Radius.circular(8),
+                                    ),
+                                  ),
+                                  child: const Icon(Icons.error),
+                                ),
+                              );
+                            },
+                          ),
                         ),
                   const SizedBox(width: 8),
                   Expanded(
@@ -351,36 +438,37 @@ class AppProductItem extends StatelessWidget {
                               .copyWith(fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 8),
-                        (item?.categoryId == 3)
-                            ? Container(
-                                padding: const EdgeInsets.all(3.5),
-                                decoration: BoxDecoration(
-                                  color: Colors.white30,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Text(
-                                  item?.categoryId == 3
-                                      ? "${item?.startDate} ${Translate.of(context).translate('to')} ${item?.endDate}"
-                                      : "",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodySmall!
-                                      .copyWith(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                ),
-                              )
-                            : Text(
-                                item?.categoryId == 3
-                                    ? "${item?.startDate} ${Translate.of(context).translate('to')} ${item?.endDate}"
-                                    : "",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall!
-                                    .copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                              ),
+                        Text(
+                          (cityName != null)
+                              ? "${item?.category ?? ''} - $cityName"
+                              : item?.category ?? '',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall!
+                              .copyWith(fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(
+                          height: 4,
+                        ),
+                        if (item?.categoryId == 3)
+                          Container(
+                            padding: const EdgeInsets.all(3.5),
+                            decoration: BoxDecoration(
+                              color: Colors.white30,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text(
+                              item?.endDate == ""
+                                  ? "${item?.startDate}"
+                                  : "${item?.startDate} ${Translate.of(context).translate('to')} ${item?.endDate}",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall!
+                                  .copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                            ),
+                          ),
                         Text(
                           item?.categoryId == 1 ? "${item?.createDate}" : "",
                           style:
@@ -388,6 +476,15 @@ class AppProductItem extends StatelessWidget {
                                     fontWeight: FontWeight.bold,
                                   ),
                         ),
+                        if (item?.sourceId == 3)
+                          Text(
+                            "${Translate.of(context).translate('quelle')} ${item?.externalId ?? ''}",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall!
+                                .copyWith(fontWeight: FontWeight.w600),
+                            maxLines: 2,
+                          ),
                         const SizedBox(height: 4),
                         const SizedBox(height: 8),
                         const Row(
@@ -407,6 +504,16 @@ class AppProductItem extends StatelessWidget {
 
       default:
         return Container(width: 160.0);
+    }
+  }
+
+  Future<void> savePDFLocally(String pdfContent) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final filePath = '${directory.path}/$pdfContent';
+    final file = File(filePath);
+
+    if (!await file.exists()) {
+      await file.writeAsBytes(pdfContent.codeUnits);
     }
   }
 }

@@ -1,7 +1,6 @@
-// ignore_for_file: depend_on_referenced_packages
-
+// ignore_for_file: depend_on_referenced_packages, use_build_context_synchronously
 import 'dart:async';
-
+import 'dart:io';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -16,12 +15,14 @@ import 'package:heidi/src/presentation/main/home/widget/home_category_item.dart'
 import 'package:heidi/src/presentation/main/home/widget/home_sliver_app_bar.dart';
 import 'package:heidi/src/presentation/widget/app_category_item.dart';
 import 'package:heidi/src/presentation/widget/app_product_item.dart';
+import 'package:heidi/src/presentation/widget/app_text_input.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:heidi/src/utils/translate.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:upgrader/upgrader.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-
 import 'cubit/home_cubit.dart';
 import 'cubit/home_state.dart';
 
@@ -36,8 +37,11 @@ class _HomeScreenState extends State<HomeScreen> {
   String selectedCityTitle = '';
   int selectedCityId = 0;
   int pageNo = 1;
+  bool isSearching = false;
+  String searchTerm = "";
   late bool checkSavedCity;
   final _scrollController = ScrollController();
+  final _searchController = TextEditingController();
   bool isLoading = false;
   bool categoryLoading = false;
   bool isRefreshLoader = false;
@@ -45,6 +49,8 @@ class _HomeScreenState extends State<HomeScreen> {
   List<CategoryModel>? category = [];
   List<CategoryModel>? location = [];
   List<ProductModel>? recent = [];
+  String latestAppStoreVersion = '';
+  String ignoreAppStoreVersion = '';
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
     Factory(() => EagerGestureRecognizer())
   };
@@ -57,6 +63,13 @@ class _HomeScreenState extends State<HomeScreen> {
     AppBloc.homeCubit.onLoad(false);
     connectivityInternet();
     checkUserExist();
+  }
+
+  Future<void> getIgnoreAppVersion() async {
+    String ignoreVersion = await AppBloc.homeCubit.getIgnoreAppVersion();
+    setState(() {
+      ignoreAppStoreVersion = ignoreVersion;
+    });
   }
 
   void connectivityInternet() {
@@ -86,25 +99,34 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-
   Future<void> _scrollListener() async {
     if (_scrollController.position.atEdge) {
       if (_scrollController.position.pixels != 0) {
         setState(() {
           isLoading = true;
         });
-        recent = await AppBloc.homeCubit.newListings(++pageNo).then((_) {
-          setState(() {
-            isLoading = false;
-          });
-        }).catchError(
-          (error) {
+        if (!isSearching) {
+          recent = await AppBloc.homeCubit.newListings(++pageNo).then((_) {
             setState(() {
               isLoading = false;
             });
-            logError('Error loading new listings: $error');
-          },
-        );
+          }).catchError(
+            (error, stackTrace) async {
+              setState(() {
+                isLoading = false;
+              });
+              logError('Error loading new listings: $error');
+              await Sentry.captureException(error, stackTrace: stackTrace);
+            },
+          );
+        } else {
+          recent = await context
+              .read<HomeCubit>()
+              .searchListing(searchTerm, ++pageNo);
+          setState(() {
+            isLoading = false;
+          });
+        }
       }
     }
   }
@@ -141,6 +163,18 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        actions: [
+          IconButton(
+              onPressed: () {
+                _searchListings();
+              },
+              icon: const Icon(Icons.search))
+        ],
+      ),
+      extendBodyBehindAppBar: true,
       body: BlocConsumer<HomeCubit, HomeState>(
         listener: (context, state) {
           state.maybeWhen(
@@ -165,9 +199,6 @@ class _HomeScreenState extends State<HomeScreen> {
               if (checkSavedCity) {
                 checkSavedCity = false;
                 _setSavedCity(location!);
-              } else if (AppBloc.homeCubit.getCalledExternally()) {
-                _setSavedCity(location!);
-                AppBloc.homeCubit.setCalledExternally(false);
               }
             }
           }
@@ -176,7 +207,7 @@ class _HomeScreenState extends State<HomeScreen> {
             banner = state.banner;
             category = state.category;
             location = state.location;
-            recent = state.recent;
+            if (!isSearching) recent = state.recent;
             categoryLoading = false;
             isRefreshLoader = true;
 
@@ -198,55 +229,86 @@ class _HomeScreenState extends State<HomeScreen> {
             }
           }
 
-          return CustomScrollView(
-            physics: const BouncingScrollPhysics(
-              parent: AlwaysScrollableScrollPhysics(),
-            ),
-            controller: _scrollController,
-            slivers: <Widget>[
-              SliverPersistentHeader(
-                delegate: AppBarHomeSliver(
-                    cityTitlesList: cityTitles,
-                    hintText:
-                        Translate.of(context).translate('hselect_location'),
-                    selectedOption: (selectedCityId > 0)
-                        ? selectedCityTitle
-                        : Translate.of(context).translate('select_location'),
-                    expandedHeight: MediaQuery.of(context).size.height * 0.3,
-                    banners: banner,
-                    setLocationCallback: (data) async {
-                      for (final list in location!) {
-                        if (list.title == data) {
-                          _onUpdateCategory();
-                          setState(() {
-                            selectedCityTitle = data;
-                            selectedCityId = list.id;
-                          });
-
-                          await AppBloc.discoveryCubit
-                              .onLocationFilter(selectedCityId, false);
-                        } else if (data ==
-                            Translate.of(context)
-                                .translate('select_location')) {
-                          setState(() {
-                            selectedCityId = 0;
-                          });
-                          _onUpdateCategory();
-                          AppBloc.homeCubit.saveCityId(selectedCityId);
-                          await AppBloc.discoveryCubit
-                              .onLocationFilter(selectedCityId, false);
-                          break;
-                        }
+          return UpgradeAlert(
+            upgrader: ignoreAppStoreVersion == latestAppStoreVersion
+                ? null
+                : Upgrader(
+                    debugLogging: true,
+                    debugDisplayAlways: true,
+                    countryCode: 'DE',
+                    showLater: false,
+                    shouldPopScope: () => true,
+                    canDismissDialog: true,
+                    durationUntilAlertAgain: const Duration(seconds: 30),
+                    dialogStyle: Platform.isIOS
+                        ? UpgradeDialogStyle.cupertino
+                        : UpgradeDialogStyle.material,
+                    willDisplayUpgrade: (
+                        {String? appStoreVersion,
+                        bool? display,
+                        String? installedVersion,
+                        String? minAppVersion}) {
+                      if (display != null) {
+                        setState(() {
+                          latestAppStoreVersion = appStoreVersion ?? '1.12.1';
+                        });
                       }
+                    },
+                    onUpdate: () {
+                      return true;
+                    },
+                    onIgnore: () {
+                      AppBloc.homeCubit
+                          .saveIgnoreAppVersion(latestAppStoreVersion);
+                      return true;
                     }),
-                pinned: true,
+            child: CustomScrollView(
+              physics: const BouncingScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics(),
               ),
-              CupertinoSliverRefreshControl(
-                onRefresh: _onRefresh,
-              ),
-              SliverList(
-                delegate: SliverChildListDelegate(
-                  [
+              controller: _scrollController,
+              slivers: <Widget>[
+                SliverPersistentHeader(
+                  delegate: AppBarHomeSliver(
+                      cityTitlesList: cityTitles,
+                      hintText:
+                          Translate.of(context).translate('hselect_location'),
+                      selectedOption: (selectedCityId > 0)
+                          ? selectedCityTitle
+                          : Translate.of(context).translate('select_location'),
+                      expandedHeight: MediaQuery.of(context).size.height * 0.3,
+                      banners: banner,
+                      setLocationCallback: (data) async {
+                        for (final list in location!) {
+                          if (list.title == data) {
+                            _onUpdateCategory();
+                            setState(() {
+                              selectedCityTitle = data;
+                              selectedCityId = list.id;
+                            });
+                            await AppBloc.discoveryCubit
+                                .onLocationFilter(selectedCityId, false);
+                          } else if (data ==
+                              Translate.of(context)
+                                  .translate('select_location')) {
+                            setState(() {
+                              selectedCityId = 0;
+                            });
+                            _onUpdateCategory();
+                            AppBloc.homeCubit.saveCityId(selectedCityId);
+                            await AppBloc.discoveryCubit
+                                .onLocationFilter(selectedCityId, false);
+                            break;
+                          }
+                        }
+                      }),
+                  pinned: true,
+                ),
+                CupertinoSliverRefreshControl(
+                  onRefresh: _onRefresh,
+                ),
+                SliverList(
+                  delegate: SliverChildListDelegate([
                     SafeArea(
                       top: false,
                       bottom: false,
@@ -254,22 +316,20 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: <Widget>[
                           categoryLoading
                               ? const CircularProgressIndicator.adaptive()
-                              : _buildCategory(
-                                  AppBloc.homeCubit.getCategoriesWithoutHidden(
-                                      category ?? []),
-                                ),
+                              : _buildCategory(AppBloc.homeCubit
+                                  .getCategoriesWithoutHidden(category ?? [])),
                           _buildLocation(location),
-                          _buildRecent(recent, selectedCityId),
+                          _buildRecent(recent, selectedCityId, location),
                           if (isLoading)
                             const CircularProgressIndicator.adaptive(),
                           const SizedBox(height: 50),
                         ],
                       ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+                    )
+                  ]),
+                )
+              ],
+            ),
           );
         },
       ),
@@ -341,7 +401,6 @@ class _HomeScreenState extends State<HomeScreen> {
     if (item.id != -1) {
       final prefs = await Preferences.openBox();
       prefs.setKeyValue(Preferences.categoryId, item.id);
-      prefs.setKeyValue(Preferences.categoryId, item.id);
       prefs.setKeyValue(Preferences.type, "category");
       if (!mounted) return;
       Navigator.pushNamed(context, Routes.listProduct,
@@ -364,7 +423,7 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedCityId = 0;
       });
     }
-    AppBloc.homeCubit.onLoad(false);
+    //AppBloc.homeCubit.onLoad(true);
   }
 
   Future<void> _onLocation(CategoryModel item) async {
@@ -445,9 +504,82 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  Future _searchListings() async {
+    String? searchResult = await openSearchDialog();
+    if (searchResult is String && searchResult.trim() != "") {
+      pageNo = 1;
+      isSearching = true;
+      searchTerm = searchResult.trim();
+      setState(() {
+        recent = [];
+      });
+      recent =
+          await context.read<HomeCubit>().searchListing(searchTerm, pageNo);
+      setState(() {});
+    } else if ((searchResult == null || searchResult.trim() == "") &&
+        isSearching) {
+      pageNo = 1;
+      isSearching = false;
+      searchTerm = "";
+      await context.read<HomeCubit>().onLoad(false);
+    }
+  }
+
+  Future<String?> openSearchDialog() async {
+    String? searchRequest = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return WillPopScope(
+          onWillPop: () async {
+            Navigator.pop(context, searchTerm);
+            return false;
+          },
+          child: SimpleDialog(
+              title: Center(
+                  child: Text(Translate.of(context).translate('search_title'))),
+              contentPadding: const EdgeInsets.all(24.0),
+              children: [
+                AppTextInput(
+                  hintText: Translate.of(context).translate('search_title'),
+                  keyboardType: TextInputType.text,
+                  controller: _searchController,
+                  //focusNode: _focusPass,
+                ),
+                const SizedBox(height: 8.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        _searchController.clear();
+                        Navigator.pop(context, null);
+                      },
+                      child: Text(Translate.of(context).translate('cancel')),
+                    ),
+                    const SizedBox(width: 8.0),
+                    TextButton(
+                      child: Text(
+                        Translate.of(context).translate('search_title'),
+                      ),
+                      onPressed: () {
+                        String content = _searchController.text;
+                        Navigator.pop(context, content);
+                      },
+                    ),
+                  ],
+                ),
+              ]),
+        );
+      },
+    );
+    return searchRequest;
+  }
+
   void _onProductDetail(ProductModel item) {
-    if (item.sourceId == 2) {
+    if (item.sourceId == 2 || item.showExternal == 1) {
       _makeAction(item.website);
+    } else if (item.showExternal == 0) {
+      Navigator.pushNamed(context, Routes.productDetail, arguments: item);
     } else {
       Navigator.pushNamed(context, Routes.productDetail, arguments: item);
     }
@@ -470,7 +602,7 @@ class _HomeScreenState extends State<HomeScreen> {
         "id": -1,
         "name": Translate.of(context).translate("more"),
         "icon": "fas fa-ellipsis",
-        "color": "#ff8a65",
+        "color": "#36454F",
       });
 
       if (category.length >= 7) {
@@ -586,7 +718,8 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildRecent(List<ProductModel>? recent, int selectedCity) {
+  Widget _buildRecent(List<ProductModel>? recent, int selectedCity,
+      List<CategoryModel>? cities) {
     Widget content = ListView.builder(
       padding: const EdgeInsets.all(0),
       shrinkWrap: true,
@@ -600,7 +733,6 @@ class _HomeScreenState extends State<HomeScreen> {
       },
       itemCount: 8,
     );
-
     if (recent != null) {
       content = ListView.builder(
         shrinkWrap: true,
@@ -620,6 +752,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       item: item,
                       type: ProductViewType.small,
                       isRefreshLoader: isRefreshLoader,
+                      cityName: AppBloc.homeCubit
+                          .getCityName(cities, item.cityId ?? 0),
                     ),
                   ),
                 )
@@ -632,6 +766,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     isRefreshLoader: isRefreshLoader,
                     item: item,
                     type: ProductViewType.small,
+                    cityName:
+                        AppBloc.homeCubit.getCityName(cities, item.cityId ?? 0),
                   ),
                 );
         },

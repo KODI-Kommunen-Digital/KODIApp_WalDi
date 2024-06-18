@@ -17,6 +17,7 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
   final List<CitizenServiceModel> hiddenServices = [];
   late List<CitizenServiceModel> services;
   bool doesScroll = false;
+  int? currentCity;
 
   Future<void> onLoad() async {
     emit(const DiscoveryStateLoading());
@@ -26,7 +27,9 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
     }).toList();
 
     services = initializeServices();
-    for (var element in services) {
+    List<CitizenServiceModel> servicesCopy = List.from(services);
+
+    for (var element in servicesCopy) {
       if (element.categoryId != null || element.type == "subCategoryService") {
         bool hasContent = await element.hasContent();
         if (!hasContent) {
@@ -35,6 +38,8 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
       }
     }
     services.removeWhere((element) => hiddenServices.contains(element));
+
+    await getCitySelected();
 
     emit(DiscoveryStateLoaded(
       services,
@@ -64,6 +69,7 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
   Future<int?> getCitySelected() async {
     final prefs = await Preferences.openBox();
     int cityId = await prefs.getKeyValue(Preferences.cityId, 0);
+    currentCity = cityId;
     return cityId;
   }
 
@@ -104,7 +110,7 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
       8: "https://www.ilztal.de",
       9: "https://www.ilztal.de",
       10: "https://www.ilztal.de",
-      11: "https://www.ilztal.de",
+      11: "https://tourmkr.com/F14GDqSiQS/40669119p&26.93h&72.5t",
       12: "https://www.ilztal.de"
     };
 
@@ -166,6 +172,16 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
           arguments: 9,
           categoryId: 6),
       CitizenServiceModel(
+          imageUrl: Images.service13,
+          imageLink: "13",
+          arguments: 10,
+          categoryId: 15),
+      CitizenServiceModel(
+          imageUrl: Images.service14,
+          imageLink: "14",
+          arguments: 11,
+          categoryId: 14),
+      CitizenServiceModel(
         imageUrl: Images.service11,
         imageLink: "11",
       ),
@@ -180,7 +196,7 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
     final prefs = await Preferences.openBox();
     int cityId = await prefs.getKeyValue(Preferences.cityId, int);
     Map<int, String> cityWebsites = {
-      0: "https://mitreden.ilzerland.bayern/projekts?order=index_order_all",
+      0: "https://mitreden.ilzerland.bayern/",
       1: "https://mitreden.ilzerland.bayern/schoefweg",
       2: "https://mitreden.ilzerland.bayern/innernzell",
       3: "https://mitreden.ilzerland.bayern/eppenschlag",
@@ -201,7 +217,7 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
 
   Future<String?> getVirtualTourLink() async {
     final prefs = await Preferences.openBox();
-    int cityId = await prefs.getKeyValue(Preferences.cityId, int);
+    int cityId = await prefs.getKeyValue(Preferences.cityId, 0);
     Map<int, String> cityWebsites = {
       0: "https://ilzerland.bayern/interaktive-karte/",
       1: "https://tourmkr.com/F1Rg5oRge1/40641615p&310.64h&63.33t",
@@ -212,7 +228,7 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
       6: "https://tourmkr.com/F1P2Ti1VAp/34427036p&103.72h&86.75t",
       7: "https://tourmkr.com/F14t5AzQfp/38906996p&331.62h&73.64t",
       8: "https://tourmkr.com/F1iNyE4eSp/40686073p&260.81h&68.33t",
-      9: "https://ilzerland.bayern/interaktive-karte/",
+      9: "https://tourmkr.com/F1a9UlAwuh",
       10: "https://ilzerland.bayern/interaktive-karte/",
       11: "https://tourmkr.com/F1c50qnKc8/38390190p&350.66h&70.41t",
       12: "https://tourmkr.com/F1Hi8IDyo2/38390171p&231.46h&80.78t",

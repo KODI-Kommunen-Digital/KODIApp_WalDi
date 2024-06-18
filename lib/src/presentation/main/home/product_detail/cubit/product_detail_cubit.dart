@@ -2,11 +2,14 @@ import 'package:bloc/bloc.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_favorite.dart';
 import 'package:heidi/src/data/model/model_product.dart';
+import 'package:heidi/src/data/remote/api/api.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/cubit/cubit.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
+import 'package:loggy/loggy.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class ProductDetailCubit extends Cubit<ProductDetailState> {
   ProductDetailCubit() : super(const ProductDetailLoading());
@@ -17,12 +20,14 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
 
   void onLoad(ProductModel item) async {
     final int userId = await UserRepository.getLoggedUserId();
+    final cityList = await getCityList() ?? [];
     bool isLoggedIn = false;
     if (userId == 0) {
       isLoggedIn = false;
     } else {
       isLoggedIn = true;
     }
+    bool darkModeEnabled = await isDarkMode();
 
     if (item.cityId != null) {
       final result = await ListRepository.loadProduct(item.cityId, item.id);
@@ -31,25 +36,82 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
         product = result;
         userDetail = await getUserDetails(item.userId, item.cityId);
         if (userId != 0) {
-          favoritesList = await UserRepository.loadFavorites(userId);
-          if (product != null) {
-            for (final fList in favoritesList) {
-              if (fList.listingsId == product?.id) {
-                product?.favorite = true;
-                isFavorite = product!.favorite;
+          try {
+            favoritesList = await UserRepository.loadFavorites(userId);
+            if (product != null) {
+              for (final fList in favoritesList) {
+                if (fList.listingsId == product?.id) {
+                  product?.favorite = true;
+                  isFavorite = product!.favorite;
+                }
               }
             }
+            if (favoritesList.isNotEmpty) {
+              emit(ProductDetailLoaded(product!, favoritesList, userDetail,
+                  isLoggedIn, cityList, darkModeEnabled));
+            } else {
+              final int userId = await UserRepository.getLoggedUserId();
+              if (userId == 0) {
+                isLoggedIn = false;
+              } else {
+                isLoggedIn = true;
+              }
+              emit(ProductDetailLoaded(product!, null, userDetail, isLoggedIn,
+                  cityList, darkModeEnabled));
+            }
+
           }
-          emit(ProductDetailLoaded(
-              product!, favoritesList, userDetail, isLoggedIn));
+        catch (e, stackTrace){
+            emit(ProductDetailLoaded(
+                product!, null, userDetail, isLoggedIn, cityList,darkModeEnabled));
+            await Sentry.captureException(e, stackTrace: stackTrace);
+
+
+          }
         } else {
-          emit(ProductDetailLoaded(product!, null, userDetail, isLoggedIn));
+          emit(ProductDetailLoaded(product!, null, userDetail, isLoggedIn,
+              cityList, darkModeEnabled));
         }
       }
     } else {
       isFavorite = true;
-      emit(ProductDetailLoaded(item, null, userDetail, isLoggedIn));
+      emit(ProductDetailLoaded(
+          item, null, userDetail, isLoggedIn, cityList, darkModeEnabled));
     }
+  }
+
+  Future<bool> isDarkMode() async {
+    final prefBox = await Preferences.openBox();
+    String darkMode = await prefBox.getKeyValue(Preferences.darkOption, 'on');
+    return (darkMode == 'on');
+  }
+
+  Future<List?> getCityList() async {
+    ResultApiModel? loadCitiesResponse;
+    try {
+      loadCitiesResponse = await loadCities();
+    } catch (e, stackTrace) {
+      logError('load cities error', e.toString());
+      await Sentry.captureException(e, stackTrace: stackTrace);
+
+      return null;
+    }
+
+    List listCity = loadCitiesResponse.data;
+    return listCity;
+  }
+
+  String getCityNameFromId(List listCity, int cityId) {
+    if (listCity.isNotEmpty) {
+      final city = listCity.firstWhere((cityData) => cityData["id"] == cityId);
+      return city["name"];
+    }
+    return "";
+  }
+
+  Future<ResultApiModel> loadCities() async {
+    final response = await Api.requestSubmitCities();
+    return response;
   }
 
   bool getFavoriteIconValue() => isFavorite;

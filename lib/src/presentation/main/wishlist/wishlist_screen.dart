@@ -269,12 +269,14 @@ class _WishListLoadedState extends State<WishListLoaded> {
         address: favoritesList.address,
         phone: favoritesList.phone ?? '',
         website: favoritesList.website ?? '',
+        externalId: favoritesList.externalId ?? '',
         email: favoritesList.email ?? '',
         favorite: true,
         cityId: favoritesList.cityId ?? 0,
         startDate: favoritesList.startDate ?? '',
         endDate: favoritesList.endDate ?? '',
-        createDate: WishListCubit().onDateParse(favoritesList.createdAt));
+        createDate: WishListCubit().onDateParse(favoritesList.createdAt),
+        expiryDate: '');
 
     Navigator.pushNamed(context, Routes.productDetail, arguments: product)
         .then((value) async {

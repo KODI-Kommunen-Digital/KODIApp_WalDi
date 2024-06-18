@@ -30,12 +30,13 @@ FavoriteDetailsModel _$FavoriteDetailsModelFromJson(
       (json['longitude'] as num?)?.toDouble(),
       (json['latitude'] as num?)?.toDouble(),
       json['villageId'] as int?,
+      json['expiryDate'] as String?,
       json['startDate'] as String?,
       json['endDate'] as String?,
       json['createdAt'] as String,
       json['pdf'] as String?,
       json['cityId'] as int?,
-    );
+    )..externalId = json['externalId'] as String?;
 
 Map<String, dynamic> _$FavoriteDetailsModelToJson(
         FavoriteDetailsModel instance) =>
@@ -53,6 +54,7 @@ Map<String, dynamic> _$FavoriteDetailsModelToJson(
       'email': instance.email,
       'phone': instance.phone,
       'website': instance.website,
+      'externalId': instance.externalId,
       'price': instance.price,
       'discountPrice': instance.discountPrice,
       'logo': instance.logo,
@@ -61,6 +63,7 @@ Map<String, dynamic> _$FavoriteDetailsModelToJson(
       'longitude': instance.longitude,
       'latitude': instance.latitude,
       'villageId': instance.villageId,
+      'expiryDate': instance.expiryDate,
       'startDate': instance.startDate,
       'endDate': instance.endDate,
       'createdAt': instance.createdAt,

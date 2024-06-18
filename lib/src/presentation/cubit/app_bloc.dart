@@ -5,6 +5,7 @@ import 'package:heidi/src/presentation/main/account/account_profile/cubit/accoun
 import 'package:heidi/src/presentation/main/account/change_password/cubit/change_password_cubit.dart';
 import 'package:heidi/src/presentation/main/account/edit_profile/cubit/edit_profile_cubit.dart';
 import 'package:heidi/src/presentation/main/add_listing/cubit/add_listing_cubit.dart';
+import 'package:heidi/src/presentation/main/dashboard/all_listings/cubit/all_listings_cubit.dart';
 import 'package:heidi/src/presentation/main/discovery/cubit/discovery_cubit.dart';
 import 'package:heidi/src/presentation/main/home/home_screen/cubit/home_cubit.dart';
 import 'package:heidi/src/presentation/main/home/list_product/cubit/cubit.dart';
@@ -40,6 +41,7 @@ class AppBloc {
   // static final searchCubit = SearchCubit();
   static final productDetailCubit = ProductDetailCubit();
   static final contactUsCubit = ContactUsCubit();
+  static final allListingsCubit = AllListingsCubit();
 
   static final List<BlocProvider> providers = [
     BlocProvider<ApplicationCubit>(

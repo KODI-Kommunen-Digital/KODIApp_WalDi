@@ -14,7 +14,14 @@ import 'package:heidi/src/presentation/main/account/profile/profile_screen.dart'
 import 'package:heidi/src/presentation/main/account/setting/settings_screen.dart';
 import 'package:heidi/src/presentation/main/add_listing/add_listing_screen.dart';
 import 'package:heidi/src/presentation/main/add_listing/add_listing_success/add_listing_success.dart';
+import 'package:heidi/src/presentation/main/dashboard/all_listings/all_listings_screen.dart';
+import 'package:heidi/src/presentation/main/dashboard/all_listings/cubit/all_listings_cubit.dart';
+import 'package:heidi/src/presentation/main/dashboard/all_requests/all_requests_screen.dart';
+import 'package:heidi/src/presentation/main/dashboard/all_requests/cubit/all_requests_cubit.dart';
+import 'package:heidi/src/presentation/main/dashboard/dashboard_screen.dart';
+import 'package:heidi/src/presentation/main/dashboard/my_listings/my_listings_screen.dart';
 import 'package:heidi/src/presentation/main/discovery/mitreden_webview.dart';
+import 'package:heidi/src/presentation/main/home/filter_screen.dart';
 import 'package:heidi/src/presentation/main/home/list_product/list_product.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/image_zoom/image_zoom_screen.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/product_detail.dart';
@@ -80,12 +87,17 @@ class Routes {
   static const String profileSettings = "/profileSettings";
   static const String mitredenWebview = "/mitredenWebview";
   static const String faq = "/faq";
+  static const String allListings = "/allListings";
+  static const String allRequests = "/allRequests";
+  static const String dashboard = "/dashboard";
+  static const String myListings = "/myListings";
+  static const String filterScreen = "/filterScreen";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case listProduct:
         final Map<String, dynamic> arguments =
-            settings.arguments as Map<String, dynamic>;
+        settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
           builder: (context) {
             return ListProductScreen(arguments: arguments);
@@ -135,18 +147,56 @@ class Routes {
             return const EditProfileScreen();
           },
         );
-
+      case allListings:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+            settings.arguments as Map<String, dynamic>;
+            return BlocProvider(
+              create: (context) => AllListingsCubit(),
+              child: AllListingsScreen(user: arguments["user"] as UserModel),
+            );
+          },
+        );
+      case filterScreen:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+            settings.arguments as Map<String, dynamic>;
+            return FilterScreen(multiFilter: arguments["multifilter"]);
+          },
+        );
+      case allRequests:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+            settings.arguments as Map<String, dynamic>;
+            return BlocProvider(
+              create: (context) => AllRequestsCubit(),
+              child: AllRequestsScreen(user: arguments["user"] as UserModel),
+            );
+          },
+        );
       case setting:
         return MaterialPageRoute(
           builder: (context) {
-            return const SettingsScreen();
+            final Map<String, dynamic> arguments =
+            settings.arguments as Map<String, dynamic>;
+            return SettingsScreen(
+              user: arguments['user'] as UserModel?,
+            );
           },
         );
 
       case imageZoom:
         return MaterialPageRoute(
           builder: (context) {
-            return ImageZoomScreen(imageUrl: settings.arguments as String);
+            final Map<String, dynamic> arguments =
+            settings.arguments as Map<String, dynamic>;
+            return ImageZoomScreen(
+                sourceId: arguments['sourceId'] as int,
+                imageList: arguments['imageList']! as List<ImageListModel>?,
+                pdf: arguments['pdf'] ?? '');
           },
           fullscreenDialog: true,
         );
@@ -155,7 +205,7 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) {
             final Map<String, dynamic> arguments =
-                settings.arguments as Map<String, dynamic>;
+            settings.arguments as Map<String, dynamic>;
             return AddListingScreen(
               item: arguments['item'] as ProductModel?,
               isNewList: arguments['isNewList'] as bool,
@@ -168,7 +218,7 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) {
             final Map<String, dynamic> arguments =
-                settings.arguments as Map<String, dynamic>;
+            settings.arguments as Map<String, dynamic>;
             return BlocProvider(
               create: (context) => ProfileCubit(
                 context.read(),
@@ -245,6 +295,41 @@ class Routes {
             return BlocProvider(
               create: (context) => FaqCubit(),
               child: const FaqScreen(),
+            );
+          },
+        );
+
+      case dashboard:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+            settings.arguments as Map<String, dynamic>;
+            return BlocProvider(
+              create: (context) => ProfileCubit(
+                context.read(),
+                arguments['user'] as UserModel,
+              ),
+              child: DashboardScreen(
+                isEditable: arguments['editable'] as bool,
+              ),
+            );
+          },
+        );
+
+      case myListings:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+            settings.arguments as Map<String, dynamic>;
+            return BlocProvider(
+              create: (context) => ProfileCubit(
+                context.read(),
+                arguments['user'] as UserModel,
+              ),
+              child: MyListingsScreen(
+                user: arguments['user'] as UserModel,
+                isEditable: arguments['editable'] as bool,
+              ),
             );
           },
         );

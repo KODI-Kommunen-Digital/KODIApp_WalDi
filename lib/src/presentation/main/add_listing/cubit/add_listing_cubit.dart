@@ -1,14 +1,20 @@
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_category.dart';
+import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/presentation/main/add_listing/cubit/add_listing_state.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
+import 'package:multiple_images_picker/multiple_images_picker.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class AddListingCubit extends Cubit<AddListingState> {
   final ListRepository _repo;
+  List<Asset> selectedAssets = [];
 
   AddListingCubit(this._repo) : super(const AddListingState.loaded());
 
@@ -40,11 +46,16 @@ class AddListingCubit extends Cubit<AddListingState> {
     String? email,
     String? website,
     String? status,
+    String? expiryDate,
     String? startDate,
     String? endDate,
     String? price,
+    TimeOfDay? expiryTime,
+    int? timeless,
     TimeOfDay? startTime,
     TimeOfDay? endTime,
+    List<File>? imagesList,
+    isImageChanged,
   }) async {
     try {
       final response = await _repo.saveProduct(
@@ -62,19 +73,26 @@ class AddListingCubit extends Cubit<AddListingState> {
           email,
           website,
           status,
+          expiryDate,
           startDate,
           endDate,
-          price,
+          expiryTime,
+          timeless,
           startTime,
-          endTime);
+          price,
+          endTime,
+          imagesList,
+          isImageChanged);
       if (response.success) {
         return true;
       } else {
         logError('save Product Response Failed', response.message);
         return false;
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
       logError('save Product Error', e);
+      await Sentry.captureException(e, stackTrace: stackTrace);
+
       return false;
     }
   }
@@ -102,12 +120,17 @@ class AddListingCubit extends Cubit<AddListingState> {
     String? email,
     String? website,
     String? status,
+    String? expiryDate,
     String? startDate,
     String? endDate,
+    String? createdAt,
     String? price,
+    TimeOfDay? expiryTime,
+    int? timeless,
     TimeOfDay? startTime,
     TimeOfDay? endTime,
     required bool isImageChanged,
+    List<File>? imagesList,
   }) async {
     try {
       final response = await _repo.editProduct(
@@ -128,20 +151,27 @@ class AddListingCubit extends Cubit<AddListingState> {
           email,
           website,
           status,
+          expiryDate,
           startDate,
           endDate,
+          createdAt,
           price,
           isImageChanged,
+          expiryTime,
+          timeless,
           startTime,
-          endTime);
+          endTime,
+          imagesList);
       if (response.success) {
         return true;
       } else {
         logError('edit Product Response Failed', response.message);
         return false;
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
       logError('edit Product Error', e);
+      await Sentry.captureException(e, stackTrace: stackTrace);
+
       return false;
     }
   }
@@ -166,11 +196,37 @@ class AddListingCubit extends Cubit<AddListingState> {
     _repo.clearCategoryId();
   }
 
+  void saveAssets(assetList) {
+    selectedAssets = assetList;
+  }
+
+  void removeAssetsByIndex(index) {
+    if (selectedAssets.isNotEmpty && index <= selectedAssets.length - 1) {
+      selectedAssets.removeAt(index);
+    }
+  }
+
+  void removeAssets(assets) {
+    if (selectedAssets.isNotEmpty) {
+      selectedAssets.remove(assets);
+    }
+  }
+
+  void clearAssets() {
+    selectedAssets.clear();
+  }
+
+  List<Asset> getSelectedAssets() {
+    return selectedAssets;
+  }
+
   Future<ResultApiModel?> getVillageId(value) async {
     try {
       return _repo.requestVillages(value);
-    } catch (e) {
+    } catch (e, stackTrace) {
       logError('request Village Error', e);
+      await Sentry.captureException(e, stackTrace: stackTrace);
+
       emit(AddListingState.error(e.toString()));
       return null;
     }
@@ -179,16 +235,27 @@ class AddListingCubit extends Cubit<AddListingState> {
   void setCategoryId(value) async {
     try {
       _repo.setCategoryId(value);
-    } catch (e) {
+    } catch (e, stackTrace) {
       logError('request categoryID Error', e);
+      await Sentry.captureException(e, stackTrace: stackTrace);
     }
   }
 
   void getSubCategoryId(value) async {
     try {
       _repo.getSubCategoryId(value);
-    } catch (e) {
+    } catch (e, stackTrace) {
       logError('request subCategoryID Error', e);
+      await Sentry.captureException(e, stackTrace: stackTrace);
+    }
+  }
+
+  void setSubCategoryId(value) async {
+    try {
+      _repo.setSubCategoryId(value);
+    } catch (e, stackTrace) {
+      logError('set subCategoryID Error', e);
+      await Sentry.captureException(e, stackTrace: stackTrace);
     }
   }
 
@@ -199,8 +266,10 @@ class AddListingCubit extends Cubit<AddListingState> {
         return subCategoryResponse;
       }
       return null;
-    } catch (e) {
+    } catch (e, stackTrace) {
       logError('request subCategoryID Error', e);
+      await Sentry.captureException(e, stackTrace: stackTrace);
+
       return null;
     }
   }
@@ -213,8 +282,10 @@ class AddListingCubit extends Cubit<AddListingState> {
     try {
       final loadCitiesResponse = _repo.loadCities();
       return loadCitiesResponse;
-    } catch (e) {
+    } catch (e, stackTrace) {
       logError('load cities error', e.toString());
+      await Sentry.captureException(e, stackTrace: stackTrace);
+
       return null;
     }
   }
@@ -223,8 +294,10 @@ class AddListingCubit extends Cubit<AddListingState> {
     try {
       final loadCategoryResponse = _repo.loadCategory();
       return loadCategoryResponse;
-    } catch (e) {
+    } catch (e, stackTrace) {
       logError('load category error', e.toString());
+      await Sentry.captureException(e, stackTrace: stackTrace);
+
       return null;
     }
   }
@@ -232,6 +305,28 @@ class AddListingCubit extends Cubit<AddListingState> {
   Future<ResultApiModel> loadVillages(value) async {
     final response = await _repo.loadVillages(value);
     return response;
+  }
+
+  Future<bool> changeStatus(ProductModel item, int newStatus) async {
+    int listingId = item.id;
+    int? cityId = item.cityId;
+    int? statusId = newStatus;
+
+    try {
+      final response =
+          await _repo.editProductStatus(listingId, cityId, statusId);
+      if (response.success) {
+        return true;
+      } else {
+        logError('save Product Response Failed', response.message);
+        return false;
+      }
+    } catch (e, stackTrace) {
+      logError('save Product Error', e);
+      await Sentry.captureException(e, stackTrace: stackTrace);
+
+      return false;
+    }
   }
 
   Future<void> clearImagePath() async {

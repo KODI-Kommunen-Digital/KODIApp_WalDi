@@ -9,13 +9,11 @@ class ListState with _$ListState {
 
   const factory ListState.loading() = ListStateLoading;
 
-  const factory ListState.loaded(
-    List<ProductModel> list,
-  ) = ListStateLoaded;
+  const factory ListState.loaded(List<ProductModel> list, List cityList) =
+      ListStateLoaded;
 
-  const factory ListState.updated(
-    List<ProductModel> list,
-  ) = ListStateUpdated;
+  const factory ListState.updated(List<ProductModel> list, List cityList) =
+      ListStateUpdated;
 
   const factory ListState.error(String error) = ListStateError;
 }

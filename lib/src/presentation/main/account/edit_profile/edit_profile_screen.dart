@@ -68,7 +68,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         type: ValidateType.email,
       );
       _errorWebsite = UtilValidator.validate(_textWebsiteController.text);
-      _errorInfo = UtilValidator.validate(_textInfoController.text);
+      if (_textInfoController.text.length >= 255) {
+        _errorInfo = "value_user_desc_limit_exceeded";
+      } else {
+        _errorInfo = UtilValidator.validate(_textInfoController.text);
+      }
     });
     if (_errorUName == null &&
         _errorFName == null &&
@@ -122,7 +126,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           profile: true,
                           onChange: (result) {
                             setState(() {
-                              _image = result;
+                              if (result.isNotEmpty) {
+                                // _image = result[0];
+                              }
                             });
                           },
                         ),

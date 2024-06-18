@@ -17,6 +17,7 @@ class FavoriteDetailsModel {
   String? email;
   String? phone;
   String? website;
+  String? externalId;
   int? price;
   int? discountPrice;
   String? logo;
@@ -25,6 +26,7 @@ class FavoriteDetailsModel {
   double? longitude;
   double? latitude;
   int? villageId;
+  String? expiryDate;
   String? startDate;
   String? endDate;
   String createdAt;
@@ -53,6 +55,7 @@ class FavoriteDetailsModel {
       this.longitude,
       this.latitude,
       this.villageId,
+      this.expiryDate,
       this.startDate,
       this.endDate,
       this.createdAt,

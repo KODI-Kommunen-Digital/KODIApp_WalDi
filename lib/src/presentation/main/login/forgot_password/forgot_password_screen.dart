@@ -11,7 +11,6 @@ class ForgotPasswordScreen extends StatefulWidget {
 
   @override
   State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
-
 }
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
@@ -30,6 +29,16 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     super.dispose();
   }
 
+  void _showSuccessSnackBar() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          Translate.of(context).translate("forgot_password_success"),
+        ),
+      ),
+    );
+  }
+
   ///Fetch API
   void _forgotPassword() async {
     Utils.hiddenKeyboard(context);
@@ -43,10 +52,17 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       final result = await AppBloc.forgotPasswordCubit.onForgotPassword(
         textUserNameController.text,
       );
-      if (result) {
-        if (!mounted) return;
-        Navigator.pop(context);
-      }
+        if (result.success) {
+          _showSuccessSnackBar();
+          if (!mounted) return;
+          Navigator.pop(context);
+        }
+        else{
+          if(!mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content:
+              Text(Translate.of(context).translate("username_does_not_exist"))));
+        }
     }
   }
 
@@ -92,7 +108,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     });
                   },
                   controller: textUserNameController,
-                  keyboardType: TextInputType.name,
+                  keyboardType: TextInputType.emailAddress,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 16),

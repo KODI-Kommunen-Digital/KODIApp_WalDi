@@ -1,6 +1,9 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:heidi/firebase_options.dart';
+import 'package:heidi/src/data/remote/api/firebase_api.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/main_screen.dart';
@@ -19,6 +22,7 @@ import 'package:heidi/src/utils/translate.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:loggy/loggy.dart';
 import 'package:provider/provider.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 Future<void> main() async {
   await Hive.initFlutter();
@@ -35,8 +39,21 @@ Future<void> main() async {
   );
   await Hive.initFlutter();
   final prefBox = await Preferences.openBox();
+  await SentryFlutter.init(
+    (options) {
+      options.dsn =
+          'https://542f038b34b6392062f9392c877a58e1@o4506393481510912.ingest.sentry.io/4506394295336960';
+      options.tracesSampleRate = 0.01;
+    },
+    appRunner: () => runApp(HeidiApp(prefBox)),
+  );
 
-  runApp(HeidiApp(prefBox));
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  await FirebaseApi(globalNavKey, prefBox).initNotifications();
+
   Bloc.observer = HeidiBlocObserver();
 }
 
@@ -79,8 +96,9 @@ class _HeidiAppState extends State<HeidiApp> {
             return BlocBuilder<ThemeCubit, ThemeState>(
               builder: (context, theme) {
                 return ChangeNotifierProvider(
-                  create:  (_) => LanguageManager(),
+                  create: (_) => LanguageManager(),
                   child: MaterialApp(
+                    navigatorKey: globalNavKey,
                     debugShowCheckedModeBanner: false,
                     theme: theme.lightTheme,
                     darkTheme: theme.darkTheme,

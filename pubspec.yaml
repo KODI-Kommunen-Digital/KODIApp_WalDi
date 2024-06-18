@@ -1,6 +1,6 @@
 name: heidi
 description: A new Flutter project.
-version: 1.0.0
+version: 1.0.6
 
 environment:
   sdk: '>=2.19.6 <3.0.0'
@@ -15,6 +15,7 @@ dependencies:
   loggy: ^2.0.3
   flutter_loggy: ^2.0.2
   cupertino_icons: ^1.0.2
+  sentry_flutter: ^7.13.2
 
   ### l10n
   intl: ^0.18.0
@@ -33,10 +34,14 @@ dependencies:
   hive: ^2.2.3
   hive_flutter: ^1.1.0
 
+  ### Update
+  upgrader: ^8.4.0
+
   ### Networking
   dio: ^4.0.6
   retrofit: ^3.3.1
   http_parser: ^4.0.2
+  http: ^0.13.3
 
   ### Code Generation
   freezed_annotation: ^2.2.0
@@ -61,17 +66,27 @@ dependencies:
   cached_network_image: 3.2.3
   flutter_html: ^3.0.0-beta.1
   photo_view: ^0.14.0
+  carousel_slider: ^4.2.1
   flutter_slidable: ^3.0.0
   flutter_inappwebview: ^5.8.0
+
+  ### Firebase
+  firebase_core: ^2.24.2
+  firebase_messaging: ^14.7.10
 
   ### File Reading
   open_filex: 4.3.1
   image_picker: 0.8.6
   flutter_widget_from_html: ^0.10.3
-  file_picker: ^5.5.0
+  file_picker: ^6.0.0
   flutter_pdfview: ^1.0.1
   flutter_cached_pdfview: ^0.4.2
   flutter_cache_manager: ^3.3.1
+  path_provider: ^2.1.1
+  multiple_images_picker: ^1.0.1
+  webview_flutter: ^4.4.1
+  html: ^0.15.4
+  package_info_plus: ^4.2.0
 
 dev_dependencies:
   flutter_test:

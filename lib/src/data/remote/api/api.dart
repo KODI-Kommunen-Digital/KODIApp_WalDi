@@ -1,9 +1,10 @@
 import 'dart:async';
-import 'package:dio/dio.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/remote/api/http_manager.dart';
 import 'package:heidi/src/utils/asset.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
+import 'package:loggy/loggy.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class Api {
   static final httpManager = HTTPManager();
@@ -21,19 +22,30 @@ class Api {
   static const String listings = "/listings?statusId=1";
   static const String contact = "/contactUs";
   static const String faq = "/moreInfo";
+  static const bool showExternalListings = true;
 
   static Future<ResultApiModel> requestLogin(params) async {
     try {
       final result = await httpManager.post(url: login, data: params);
       return ResultApiModel.fromJson(result);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      await Sentry.captureException(e, stackTrace: stackTrace);
       return await httpManager.post(url: login, data: params);
     }
   }
 
   static Future<ResultApiModel> requestFavorites(userId) async {
-    final result = await httpManager.get(url: '/users/$userId/favorites?pageNo=1&pageSize=19');
-    return ResultApiModel.fromJson(result);
+    try {
+      final result = await httpManager.get(
+          url: '/users/$userId/favorites?pageNo=1&pageSize=19');
+      return ResultApiModel.fromJson(result);
+    } catch (e, stackTrace) {
+      logError('Load Favorite Error', e);
+      await Sentry.captureException(e, stackTrace: stackTrace);
+      final result = await httpManager.get(
+          url: '/users/$userId/favorites?pageNo=1&pageSize=19');
+      return ResultApiModel.fromJson(result);
+    }
   }
 
   static Future<ResultApiModel> requestFavoritesDetailsList(
@@ -72,7 +84,9 @@ class Api {
   }
 
   static Future<ResultApiModel> requestUserListings(userId, pageNo) async {
-    final result = await httpManager.get(url: '/users/$userId/listings?pageNo=$pageNo&pageSize=5');
+    final result = await httpManager.get(
+        url:
+            '/users/$userId/listings?pageNo=$pageNo&pageSize=5&showExternalListings=$showExternalListings');
     return ResultApiModel.fromJson(result);
   }
 
@@ -123,6 +137,15 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
+  static Future<ResultApiModel> uploadToken(userId, params) async {
+    final filePath = '/users/$userId/storeFirebaseUserToken';
+    final result = await httpManager.post(
+      url: filePath,
+      data: params,
+    );
+    return ResultApiModel.fromJson(result);
+  }
+
   static Future<ResultApiModel> requestSubmitSubCategory(
       {required categoryId}) async {
     final filePath = '/categories/$categoryId/subcategories';
@@ -167,8 +190,18 @@ class Api {
 
   ///Get Recent Listings
   static Future<ResultApiModel> requestRecentListings(params) async {
-    final listings = "/listings?statusId=1&pageNo=$params&pageSize=10";
+    final listings =
+        "/listings?statusId=1&pageNo=$params&pageSize=10&showExternalListings=$showExternalListings";
     final result = await httpManager.get(url: listings);
+    return ResultApiModel.fromJson(result);
+  }
+
+  ///Get Listings by status and location
+  static Future<ResultApiModel> requestStatusLocList(
+      params, pageNo, status) async {
+    var list =
+        '/listings?cityId=$params&statusId=$status&pageNo=$pageNo&pageSize=19&showExternalListings=$showExternalListings';
+    final result = await HTTPManager().get(url: list);
     return ResultApiModel.fromJson(result);
   }
 
@@ -193,37 +226,24 @@ class Api {
   }
 
   ///Save Product
-  static Future<ResultApiModel> requestSaveProduct(cityId, params) async {
+  static Future<ResultApiModel> requestSaveProduct(
+      cityId, params, isImageChanged) async {
     final filePath = '/cities/$cityId/listings';
-    final prefs = await Preferences.openBox();
-    FormData? pickedFile = prefs.getPickedFile();
     final result = await httpManager.post(
       url: filePath,
       data: params,
       loading: true,
     );
-    final id = result['id'];
-    if (pickedFile != null) {
-      Api.requestListingUploadMedia(id, cityId, pickedFile);
-    }
     return ResultApiModel.fromJson(result);
   }
 
   static Future<ResultApiModel> requestEditProduct(
       cityId, listingId, params, bool isImageChanged) async {
     final filePath = '/cities/$cityId/listings/$listingId';
-    final prefs = await Preferences.openBox();
-    FormData? pickedFile = prefs.getPickedFile();
     final result = await httpManager.patch(
       url: filePath,
       data: params,
-      loading: true,
     );
-    if (isImageChanged) {
-      if (pickedFile!.files.isNotEmpty) {
-        await Api.requestListingUploadMedia(listingId, cityId, pickedFile);
-      }
-    }
     return ResultApiModel.fromJson(result);
   }
 
@@ -254,29 +274,44 @@ class Api {
   }
 
   ///Get Product List
-  static Future<ResultApiModel> requestCatList(params, pageNo) async {
+  static Future<ResultApiModel> requestCatList(params, cityId, pageNo) async {
     if (params == 3) {
-      var list =
-          '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&sortByStartDate=true';
-      final result = await httpManager.get(url: list);
-      return ResultApiModel.fromJson(result);
+      if (cityId != 0 && cityId != null) {
+        var list =
+            '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&sortByStartDate=true&cityId=$cityId&showExternalListings=$showExternalListings';
+        final result = await httpManager.get(url: list);
+        return ResultApiModel.fromJson(result);
+      } else {
+        var list =
+            '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&sortByStartDate=true&showExternalListings=$showExternalListings';
+        final result = await httpManager.get(url: list);
+        return ResultApiModel.fromJson(result);
+      }
     } else {
-      var list =
-          '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19';
-      final result = await httpManager.get(url: list);
-      return ResultApiModel.fromJson(result);
+      if (cityId != 0 && cityId != null) {
+        var list =
+            '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&cityId=$cityId&showExternalListings=$showExternalListings';
+        final result = await httpManager.get(url: list);
+        return ResultApiModel.fromJson(result);
+      } else {
+        var list =
+            '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&showExternalListings=$showExternalListings';
+        final result = await httpManager.get(url: list);
+        return ResultApiModel.fromJson(result);
+      }
     }
   }
 
   static Future<ResultApiModel> requestSubCatList(params, pageNo) async {
     var list =
-        '/listings?subCategoryId=10&categoryId=1&statusId=1&pageNo=$pageNo&pageSize=19';
+        '/listings?subCategoryId=10&categoryId=1&statusId=1&pageNo=$pageNo&pageSize=19&showExternalListings=$showExternalListings';
     final result = await httpManager.get(url: list);
     return ResultApiModel.fromJson(result);
   }
 
   static Future<ResultApiModel> requestLocList(params, pageNo) async {
-    var list = '/listings?cityId=$params&statusId=1&pageNo=$pageNo&pageSize=19';
+    var list =
+        '/listings?cityId=$params&statusId=1&pageNo=$pageNo&pageSize=19&showExternalListings=$showExternalListings';
     final result = await httpManager.get(url: list);
     return ResultApiModel.fromJson(result);
   }
@@ -303,21 +338,22 @@ class Api {
     return ResultApiModel.fromJson(convertResponse);
   }
 
-  static Future<ResultApiModel> requestListingUploadMedia(
+  static Future<void> requestListingUploadMedia(
       listingId, cityId, pickedFile) async {
     var filePath = '';
-    var firstFileEntry = pickedFile?.files[0];
-    if (firstFileEntry?.key == 'pdf') {
-      filePath = '/cities/$cityId/listings/$listingId/pdfUpload';
-    } else if (firstFileEntry?.key == 'image') {
-      filePath = '/cities/$cityId/listings/$listingId/imageUpload';
+    if (pickedFile?.files.length != 0) {
+      var firstFileEntry = pickedFile?.files[0];
+      if (firstFileEntry?.key == 'pdf') {
+        filePath = '/cities/$cityId/listings/$listingId/pdfUpload';
+      } else if (firstFileEntry?.key == 'image') {
+        filePath = '/cities/$cityId/listings/$listingId/imageUpload';
+      }
+
+      await httpManager.post(
+        url: filePath,
+        formData: pickedFile,
+      );
     }
-    var result = await httpManager.post(
-      url: filePath,
-      formData: pickedFile,
-    );
-    final convertResponse = {"success": result['id'] != null, "data": result};
-    return ResultApiModel.fromJson(convertResponse);
   }
 
   static Future<ResultApiModel> deleteUserAccount(userId) async {
@@ -328,6 +364,44 @@ class Api {
 
   static Future<ResultApiModel> moreInfo() async {
     final result = await httpManager.get(url: faq);
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> requestEditProductStatus(
+    cityId,
+    listingId,
+    params,
+  ) async {
+    final filePath = '/cities/$cityId/listings/$listingId';
+    final result = await httpManager.patch(
+      url: filePath,
+      data: params,
+      loading: true,
+    );
+
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> requestAllListings(params) async {
+    final listings =
+        "/listings?pageNo=$params&pageSize=10&showExternalListings=$showExternalListings";
+    final result = await httpManager.get(url: listings);
+    return ResultApiModel.fromJson(result);
+  }
+
+  ///Get Listings by status
+  static Future<ResultApiModel> requestStatusListings(status, params) async {
+    final listings =
+        "/listings?statusId=$status&pageNo=$params&pageSize=10&showExternalListings=$showExternalListings";
+    final result = await httpManager.get(url: listings);
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> requestSearchListing(
+      content, filter, pageNo) async {
+    var list =
+        '/listings/search?searchQuery=$content$filter&pageNo=$pageNo&pageSize=10&showExternalListings=$showExternalListings';
+    final result = await HTTPManager().get(url: list);
     return ResultApiModel.fromJson(result);
   }
 

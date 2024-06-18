@@ -20,8 +20,10 @@ class ProductModel {
   final String title;
   final String image;
   final String? pdf;
+  final int? showExternal;
   final String? videoURL;
   final String? category;
+  final String expiryDate;
   final String startDate;
   final String endDate;
   final String createDate;
@@ -42,6 +44,7 @@ class ProductModel {
   final String? fax;
   final String email;
   final String website;
+  final String externalId;
   final String description;
   final String? color;
   final String? icon;
@@ -65,6 +68,8 @@ class ProductModel {
   final bool? bookingUse;
   final String? bookingStyle;
   final String? priceDisplay;
+  List<ImageListModel>? imageLists;
+  int? timeless;
 
   ProductModel(
       {required this.id,
@@ -73,6 +78,7 @@ class ProductModel {
       this.pdf,
       this.videoURL,
       this.category,
+      required this.expiryDate,
       required this.startDate,
       required this.endDate,
       required this.createDate,
@@ -92,6 +98,7 @@ class ProductModel {
       this.fax,
       required this.email,
       required this.website,
+      required this.externalId,
       required this.description,
       this.color,
       this.icon,
@@ -120,13 +127,14 @@ class ProductModel {
       required this.userId,
       this.cityId,
       this.villageId,
+      this.imageLists,
       this.statusId,
-      this.sourceId});
+      this.timeless,
+      this.sourceId,
+      this.showExternal});
 
-  factory ProductModel.fromJson(
-    Map<String, dynamic> json, {
-    SettingModel? setting,
-  }) {
+  factory ProductModel.fromJson(Map<String, dynamic> json,
+      {SettingModel? setting, int? cityId}) {
     List<ImageModel> galleries = [];
     List<CategoryModel> features = [];
     List<OpenTimeModel> openHours = [];
@@ -135,38 +143,55 @@ class ProductModel {
     Map<String, dynamic> socials = {};
     UserModel? author;
     String? category;
+    String? externalId;
     LocationData? location;
     CategoryModel? country;
     CategoryModel? state;
     CategoryModel? city;
     String status = '';
     String videoURL = '';
+    String expiryDate = '';
     String startDate = '';
     String endDate = '';
     String createDate = '';
     String priceMin = '';
     String priceMax = '';
+    int? timeless;
     String priceDisplay = '';
 
     if (json['author'] != null) {
       author = UserModel.fromJson(json['author']);
+    }
+    if ((json['expiryDate']) != null) {
+      timeless = 0;
+    } else {
+      timeless = 1;
     }
 
     if (json['categoryId'] == 1) {
       category = "Nachricht";
       final parsedDateTime = DateTime.parse(json['createdAt']);
       createDate = DateFormat('dd.MM.yyyy').format(parsedDateTime);
+      if ((json['expiryDate']) != null) {
+        final parsedExpiryDateTime = DateTime.parse(json['expiryDate']);
+        expiryDate =
+            DateFormat('dd.MM.yyyy HH:mm').format(parsedExpiryDateTime);
+      }
     } else if (json['categoryId'] == 3) {
       category = "Veranstaltungen";
       final parsedDateTime = DateTime.parse(json['startDate']);
       startDate = DateFormat('dd.MM.yyyy HH:mm').format(parsedDateTime);
-      final parsedEDateTime = DateTime.parse(json['endDate']);
-      if (parsedDateTime.year == parsedEDateTime.year &&
-          parsedDateTime.month == parsedEDateTime.month &&
-          parsedDateTime.day == parsedEDateTime.day) {
-        endDate = DateFormat('HH:mm').format(parsedEDateTime);
+      if ((json['endDate']) != null) {
+        final parsedEDateTime = DateTime.parse(json['endDate']);
+        if (parsedDateTime.year == parsedEDateTime.year &&
+            parsedDateTime.month == parsedEDateTime.month &&
+            parsedDateTime.day == parsedEDateTime.day) {
+          endDate = DateFormat('HH:mm').format(parsedEDateTime);
+        } else {
+          endDate = DateFormat('dd.MM.yyyy HH:mm').format(parsedEDateTime);
+        }
       } else {
-        endDate = DateFormat('dd.MM.yyyy HH:mm').format(parsedEDateTime);
+        endDate = "";
       }
     } else if (json['categoryId'] == 4) {
       category = "Vereine";
@@ -179,13 +204,26 @@ class ProductModel {
     } else if (json['categoryId'] == 9) {
       category = "Verloren gefunden";
     } else if (json['categoryId'] == 10) {
-      category = "Firmenporträts";
+      category = "Unternehmen";
     } else if (json['categoryId'] == 11) {
       category = "Fahrgemeinschaften/Öffentliche Verkehrsmittel";
     } else if (json['categoryId'] == 12) {
       category = "Angebote";
     } else if (json['categoryId'] == 13) {
-      category = "Essen & Trinken";
+      category = "Essen";
+    } else if (json['categoryId'] == 14) {
+      category = "Rathaus";
+    } else if (json['categoryId'] == 15) {
+      category = "Mitteilungsblatt";
+    } else if (json['categoryId'] == 16) {
+      category = "Amtliche Mitteilungen";
+    }
+
+    if (json['sourceId'] == 3 && json['externalId'] != null) {
+      Uri uri = Uri.parse(json['externalId']);
+      externalId = uri.authority;
+    } else {
+      externalId = json['externalId'];
     }
 
     final listRelated = List.from(json['related'] ?? []).map((item) {
@@ -194,6 +232,10 @@ class ProductModel {
 
     final listLatest = List.from(json['lastest'] ?? []).map((item) {
       return ProductModel.fromJson(item, setting: setting);
+    }).toList();
+
+    final imagesList = List.from(json['otherlogos'] ?? []).map((item) {
+      return ImageListModel.fromJson(item);
     }).toList();
 
     final bookingUse = json['booking_use'] == true;
@@ -205,9 +247,13 @@ class ProductModel {
       id: json['id'],
       userId: json['userId'] ?? 0,
       title: json['title'] ?? '',
-      image: json['logo'] ?? 'admin/News.jpeg',
+      image: (json['logo'] is List<dynamic> && json['logo'].isNotEmpty)
+          ? json['logo'][0]?.toString() ?? 'admin/News.jpeg'
+          : (json['logo']?.toString() ?? 'admin/News.jpeg'),
       videoURL: videoURL,
       category: category ?? '',
+      expiryDate: expiryDate,
+      timeless: timeless,
       createDate: createDate,
       startDate: startDate,
       endDate: endDate,
@@ -227,14 +273,16 @@ class ProductModel {
       fax: json['fax'] ?? '',
       email: json['email'] ?? '',
       website: json['website'] ?? '',
-      description: json['description'] ?? '',
+      externalId: externalId ?? '',
+      description: json['description'],
       color: json['color'] ?? '',
-      categoryId: json['categoryId'] ?? 0,
-      subcategoryId: json['subcategoryId'] ?? 0,
-      cityId: json['cityId'] ?? 0,
+      categoryId: json['categoryId'] ?? 1,
+      subcategoryId: json['subcategoryId'] ?? 1,
+      cityId: cityId ?? int.parse(json['cityId']?.toString() ?? '0'),
       villageId: json['villageId'] ?? 0,
       statusId: json['statusId'] ?? 0,
       sourceId: json['sourceId'] ?? 1,
+      showExternal: json['showExternal'] ?? 0,
       icon: json['icon'] ?? '',
       tags: tags,
       price: json['booking_price'] ?? '',
@@ -256,6 +304,7 @@ class ProductModel {
       bookingUse: bookingUse,
       bookingStyle: json['booking_style'] ?? '',
       priceDisplay: priceDisplay,
+      imageLists: imagesList,
     );
   }
 
@@ -267,6 +316,7 @@ class ProductModel {
       image: json['logo'],
       // image: ImageModel.fromJson(json['image'] ?? {'full': {}, 'thumb': {}}),
       videoURL: '',
+      expiryDate: '',
       createDate: '',
       startDate: '',
       endDate: '',
@@ -280,6 +330,7 @@ class ProductModel {
       subcategoryId: 0,
       statusId: 0,
       sourceId: 0,
+      showExternal: 0,
       cityId: 0,
       villageId: 0,
       rateText: '',
@@ -291,6 +342,7 @@ class ProductModel {
       fax: '',
       email: '',
       website: '',
+      externalId: '',
       description: '',
       color: '',
       icon: '',
@@ -309,6 +361,7 @@ class ProductModel {
       bookingUse: false,
       bookingStyle: '',
       priceDisplay: '',
+      imageLists: json['otherlogos'],
     );
   }
 
@@ -322,5 +375,30 @@ class ProductModel {
         "thumb": {},
       },
     };
+  }
+}
+
+class ImageListModel {
+  int? id;
+  int? imageOrder;
+  int? listingId;
+  String? logo;
+
+  ImageListModel({this.id, this.imageOrder, this.listingId, this.logo});
+
+  ImageListModel.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    imageOrder = json['imageOrder'];
+    listingId = json['listingId'];
+    logo = json['logo'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['imageOrder'] = imageOrder;
+    data['listingId'] = listingId;
+    data['logo'] = logo;
+    return data;
   }
 }
