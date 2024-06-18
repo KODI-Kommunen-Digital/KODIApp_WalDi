@@ -40,8 +40,8 @@ class AppointmentRepository {
     return null;
   }
 
-  Future<List<AppointmentModel>?> loadUserAppointments(int pageNo) async {
-    int userId = prefs.getKeyValue(Preferences.userId, 0);
+  Future<List<AppointmentModel>?> loadUserAppointments(
+      int userId, int pageNo) async {
     final response = await Api.requestUserAppointments(userId, pageNo);
     if (response.success) {
       final responseData =
@@ -378,7 +378,6 @@ class AppointmentRepository {
   Future<List<BookingModel>?> loadUserBookings(int pageNo,
       {int? appointmentId, String? startDate}) async {
     int userId = prefs.getKeyValue('userId', 0);
-
     late ResultApiModel response;
     if (appointmentId != null) {
       response = await Api.requestUserBookingsFilterId(userId, appointmentId);

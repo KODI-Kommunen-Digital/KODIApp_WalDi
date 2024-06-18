@@ -25,16 +25,21 @@ class MyAppointmentsCubit extends Cubit<MyAppointmentsState> {
       final prefs = await Preferences.openBox();
       repo = AppointmentRepository(prefs);
     }
+    final prefs = await Preferences.openBox();
+    int userId = prefs.getKeyValue('userId', 0);
 
-    List<AppointmentModel>? appointments = await repo.loadUserAppointments(1);
+    List<AppointmentModel>? appointments =
+        await repo.loadUserAppointments(userId, 1);
     emit(MyAppointmentsState.loaded(appointments, false));
   }
 
   Future<List<AppointmentModel>> newAppointments(
       int pageNo, List<AppointmentModel> previous) async {
+    final prefs = await Preferences.openBox();
+    int userId = prefs.getKeyValue('userId', 0);
     List<AppointmentModel> appointments = previous;
     List<AppointmentModel>? newAppointments =
-        await repo.loadUserAppointments(pageNo);
+        await repo.loadUserAppointments(userId, pageNo);
     if (newAppointments != null && newAppointments.isNotEmpty) {
       appointments.addAll(newAppointments);
     }

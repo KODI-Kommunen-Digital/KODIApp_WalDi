@@ -722,8 +722,8 @@ class Api {
       cityId, listingId, appointmentId) async {
     var list =
         '/cities/$cityId/listings/$listingId/appointments/$appointmentId';
-    final result =
-        await HTTPManager(apiType: APIType.appointment).delete(url: list, loading: true);
+    final result = await HTTPManager(apiType: APIType.appointment)
+        .delete(url: list, loading: true);
     return ResultApiModel.fromJson(result);
   }
 
@@ -737,7 +737,7 @@ class Api {
   }
 
   static Future<ResultApiModel> requestUserBookings(userId) async {
-    var list = '/users/$userId/bookings';
+    var list = '/users/$userId/bookings?pageNumber=1&pageSize=9';
     final result =
         await HTTPManager(apiType: APIType.appointment).get(url: list);
     return ResultApiModel.fromJson(result);
@@ -763,8 +763,8 @@ class Api {
   static Future<ResultApiModel> requestDeleteBookingUser(
       userId, appointmentId, bookingId) async {
     var list = '/users/$userId/appointments/$appointmentId/booking/$bookingId';
-    final result =
-        await HTTPManager(apiType: APIType.appointment).delete(url: list, loading: true);
+    final result = await HTTPManager(apiType: APIType.appointment)
+        .delete(url: list, loading: true);
     return ResultApiModel.fromJson(result);
   }
 
@@ -774,6 +774,7 @@ class Api {
         '/cities/$cityId/listings/$listingId/appointments/$appointmentId/book';
     final result = await HTTPManager(apiType: APIType.appointment)
         .post(url: list, data: params, loading: true);
+    print(params);
     return ResultApiModel.fromJson(result);
   }
 
