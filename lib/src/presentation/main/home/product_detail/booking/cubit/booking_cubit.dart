@@ -24,7 +24,7 @@ class BookingCubit extends Cubit<BookingState> {
 
     if (cityId != null && listingId != null) {
       final appointment =
-      await AppointmentRepository.loadAppointment(cityId, listingId);
+          await AppointmentRepository.loadAppointment(cityId, listingId);
 
       if (appointment != null) {
         final services = await AppointmentRepository.loadAppointmentServices(
@@ -47,7 +47,8 @@ class BookingCubit extends Cubit<BookingState> {
             }
 
             if (availableSlots != null) {
-              emit(BookingState.loaded(availableSlots, services, appointment, false));
+              emit(BookingState.loaded(
+                  availableSlots, services, appointment, false));
               return;
             }
           }
@@ -63,15 +64,16 @@ class BookingCubit extends Cubit<BookingState> {
     }
   }
 
-  Future<bool> onSubmit({required BookingGuestModel guestDetails,
-    required String date,
-    String? startTime,
-    String? endTime,
-    List<BookingGuestModel>? friends,
-    required int cityId,
-    required int listingId,
-    required int serviceId,
-    required int appointmentId}) async {
+  Future<bool> onSubmit(
+      {required BookingGuestModel guestDetails,
+      required String date,
+      String? startTime,
+      String? endTime,
+      List<BookingGuestModel>? friends,
+      required int cityId,
+      required int listingId,
+      required int serviceId,
+      required int appointmentId}) async {
     final response = await _appointmentRepo.saveBooking(
         startTime: startTime,
         endTime: endTime,
@@ -80,8 +82,8 @@ class BookingCubit extends Cubit<BookingState> {
         cityId: cityId,
         listingId: listingId,
         appointmentId: appointmentId,
-        serviceId: serviceId
-    );
+        serviceId: serviceId,
+        friends: friends);
     return response.success;
   }
 

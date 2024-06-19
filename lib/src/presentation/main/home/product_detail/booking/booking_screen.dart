@@ -373,7 +373,7 @@ class _BookingDetailsLoadedState extends State<BookingDetailsLoaded> {
       } else {
         _errorSlot = null;
       }
-      for (int i = 0; i < (adults); i++) {
+      for (int i = 0; i < adults; i++) {
         if (_textFistNameController[i].text.isEmpty) {
           _errorFirstName[i] =
               Translate.of(context).translate('first_name_message');
@@ -395,20 +395,21 @@ class _BookingDetailsLoadedState extends State<BookingDetailsLoaded> {
               _errorSlot == null) {
             isWrongEntry = true;
             //address does not get saved!!
-            guestModel = BookingGuestModel(
-                firstname: _textFistNameController[0].text,
-                lastname: _textLastNameController[0].text,
-                remark: _textMessageController[0].text,
-                email: _textEmailController[0].text,
-                phoneNumber: _textPhoneController[0].text,
-                slot: getSlot(0));
-            for (int i = 1; i < adults; i++) {
+            if (i != 0) {
               friends.add(BookingGuestModel(
                   firstname: _textFistNameController[i].text,
                   lastname: _textLastNameController[i].text,
                   remark: '',
                   email: _textEmailController[i].text,
                   slot: getSlot(i)));
+            } else {
+              guestModel = BookingGuestModel(
+                  firstname: _textFistNameController[0].text,
+                  lastname: _textLastNameController[0].text,
+                  remark: _textMessageController[0].text,
+                  email: _textEmailController[0].text,
+                  phoneNumber: _textPhoneController[0].text,
+                  slot: getSlot(0));
             }
           } else {
             isWrongEntry = false;
@@ -882,29 +883,25 @@ class _BookingDetailsLoadedState extends State<BookingDetailsLoaded> {
   }
 
   Future<void> _onSubmit() async {
-    for (int i = 0; i < adults; i++) {
-      ScheduleModel? slot = getSlot(i);
-      if (slot != null) {
-        bool success = await context.read<BookingCubit>().onSubmit(
-            startTime: slot.stringFromTimeOfDay(slot.startTime),
-            endTime: slot.stringFromTimeOfDay(slot.endTime),
-            guestDetails: (i == 0) ? guestModel! : friends[i - 1],
-            date: selectedDate,
-            cityId: widget.cityId,
-            friends: (i == 0) ? friends : [],
-            listingId: widget.listingId,
-            appointmentId: widget.appointment.id!,
-            serviceId: _selectedService!.id);
-        if (success) {
-          setState(() {
-            submittedSuccessful = true;
-          });
-        } else {
-          submittedSuccessful = false;
-        }
+    ScheduleModel? slot = guestModel?.slot;
+    if (slot != null) {
+      bool success = await context.read<BookingCubit>().onSubmit(
+          startTime: slot.stringFromTimeOfDay(slot.startTime),
+          endTime: slot.stringFromTimeOfDay(slot.endTime),
+          guestDetails: guestModel!,
+          date: selectedDate,
+          cityId: widget.cityId,
+          friends: friends,
+          listingId: widget.listingId,
+          appointmentId: widget.appointment.id!,
+          serviceId: _selectedService!.id);
+      if (success) {
+        submittedSuccessful = true;
       } else {
         submittedSuccessful = false;
       }
+    } else {
+      submittedSuccessful = false;
     }
   }
 }

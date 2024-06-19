@@ -422,12 +422,22 @@ class AppointmentRepository {
 
     if (friends != null) {
       for (BookingGuestModel friend in friends) {
-        friendDetails.add({
-          'firstname': friend.firstname,
-          'lastname': friend.lastname,
-          // 'description': friend.description,
-          'email': friend.email
-        });
+        if (friend.slot != null) {
+          friendDetails.add({
+            'firstname': friend.firstname,
+            'lastname': friend.lastname,
+            'email': friend.email,
+            'startTime':
+                friend.slot!.stringFromTimeOfDay(friend.slot!.startTime),
+            'endTime': friend.slot!.stringFromTimeOfDay(friend.slot!.endTime),
+          });
+        } else {
+          friendDetails.add({
+            'firstname': friend.firstname,
+            'lastname': friend.lastname,
+            'email': friend.email,
+          });
+        }
       }
     } else {
       friends = null;
