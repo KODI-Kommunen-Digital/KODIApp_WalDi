@@ -8,6 +8,7 @@ import 'package:heidi/src/data/model/model_appointment_slot.dart';
 import 'package:heidi/src/data/model/model_bookingGuest.dart';
 import 'package:heidi/src/data/model/model_schedule.dart';
 import 'package:heidi/src/data/model/model_step_item.dart';
+import 'package:heidi/src/data/model/model_user.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/booking/cubit/booking_cubit.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/booking/cubit/booking_state.dart';
 import 'package:heidi/src/presentation/widget/app_appointment_success.dart';
@@ -48,13 +49,16 @@ class _BookingScreenState extends State<BookingScreen> {
       listener: (context, state) {},
       builder: (context, state) => state.maybeWhen(
         loading: () => const BookingDetailsLoading(),
-        loaded: (slot, services, appointment, isEmpty) => BookingDetailsLoaded(
-            appointment: appointment,
-            slot: slot,
-            services: services,
-            listingId: widget.listingId,
-            cityId: widget.cityId,
-            isEmpty: isEmpty),
+        loaded: (slot, services, appointment, isEmpty, userModel) =>
+            BookingDetailsLoaded(
+          appointment: appointment,
+          slot: slot,
+          services: services,
+          listingId: widget.listingId,
+          cityId: widget.cityId,
+          isEmpty: isEmpty,
+          userModel: userModel,
+        ),
         orElse: () => ErrorWidget('Failed to load booking details.'),
       ),
     );
@@ -79,6 +83,7 @@ class BookingDetailsLoaded extends StatefulWidget {
   final int listingId;
   final int cityId;
   final bool isEmpty;
+  final UserModel userModel;
 
   const BookingDetailsLoaded(
       {super.key,
@@ -87,7 +92,8 @@ class BookingDetailsLoaded extends StatefulWidget {
       required this.services,
       required this.listingId,
       required this.cityId,
-      required this.isEmpty});
+      required this.isEmpty,
+      required this.userModel});
 
   @override
   State<BookingDetailsLoaded> createState() => _BookingDetailsLoadedState();
@@ -164,6 +170,10 @@ class _BookingDetailsLoadedState extends State<BookingDetailsLoaded> {
       _errorEmail.add(null);
       _errorAddress.add(null);
     }
+
+    _textFistNameController[0].text = widget.userModel.firstname;
+    _textLastNameController[0].text = widget.userModel.lastname;
+    _textEmailController[0].text = widget.userModel.email;
 
     List<StepModel> step = [
       StepModel(
@@ -595,6 +605,8 @@ class _BookingDetailsLoadedState extends State<BookingDetailsLoaded> {
                   controller: _textFistNameController[index],
                   focusNode: _focusFistName[index],
                   textInputAction: TextInputAction.next,
+                  readOnly: (index == 0) ? true : false,
+                  hasDelete: (index == 0) ? false : true,
                   onChanged: (text) {
                     setState(() {
                       _errorFirstName[index] = UtilValidator.validate(
@@ -617,6 +629,8 @@ class _BookingDetailsLoadedState extends State<BookingDetailsLoaded> {
                   controller: _textLastNameController[index],
                   focusNode: _focusLastName[index],
                   textInputAction: TextInputAction.next,
+                  readOnly: (index == 0) ? true : false,
+                  hasDelete: (index == 0) ? false : true,
                   onChanged: (text) {
                     setState(() {
                       _errorLastName[index] = UtilValidator.validate(
@@ -669,6 +683,8 @@ class _BookingDetailsLoadedState extends State<BookingDetailsLoaded> {
                   controller: _textEmailController[index],
                   focusNode: _focusEmail[index],
                   textInputAction: TextInputAction.next,
+                  readOnly: (index == 0) ? true : false,
+                  hasDelete: (index == 0) ? false : true,
                   onChanged: (text) {
                     setState(() {
                       _errorEmail[index] = UtilValidator.validate(

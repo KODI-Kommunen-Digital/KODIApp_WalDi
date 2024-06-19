@@ -23,7 +23,8 @@ mixin _$BookingState {
             AppointmentSlotModel? slot,
             List<AppointmentServiceModel> services,
             AppointmentModel appointment,
-            bool isEmpty)
+            bool isEmpty,
+            UserModel userModel)
         loaded,
     required TResult Function(String error) error,
   }) =>
@@ -35,7 +36,8 @@ mixin _$BookingState {
             AppointmentSlotModel? slot,
             List<AppointmentServiceModel> services,
             AppointmentModel appointment,
-            bool isEmpty)?
+            bool isEmpty,
+            UserModel userModel)?
         loaded,
     TResult? Function(String error)? error,
   }) =>
@@ -47,7 +49,8 @@ mixin _$BookingState {
             AppointmentSlotModel? slot,
             List<AppointmentServiceModel> services,
             AppointmentModel appointment,
-            bool isEmpty)?
+            bool isEmpty,
+            UserModel userModel)?
         loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
@@ -139,7 +142,8 @@ class _$BookingStateLoadingImpl implements BookingStateLoading {
             AppointmentSlotModel? slot,
             List<AppointmentServiceModel> services,
             AppointmentModel appointment,
-            bool isEmpty)
+            bool isEmpty,
+            UserModel userModel)
         loaded,
     required TResult Function(String error) error,
   }) {
@@ -154,7 +158,8 @@ class _$BookingStateLoadingImpl implements BookingStateLoading {
             AppointmentSlotModel? slot,
             List<AppointmentServiceModel> services,
             AppointmentModel appointment,
-            bool isEmpty)?
+            bool isEmpty,
+            UserModel userModel)?
         loaded,
     TResult? Function(String error)? error,
   }) {
@@ -169,7 +174,8 @@ class _$BookingStateLoadingImpl implements BookingStateLoading {
             AppointmentSlotModel? slot,
             List<AppointmentServiceModel> services,
             AppointmentModel appointment,
-            bool isEmpty)?
+            bool isEmpty,
+            UserModel userModel)?
         loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
@@ -229,7 +235,8 @@ abstract class _$$BookingStateLoadedImplCopyWith<$Res> {
       {AppointmentSlotModel? slot,
       List<AppointmentServiceModel> services,
       AppointmentModel appointment,
-      bool isEmpty});
+      bool isEmpty,
+      UserModel userModel});
 }
 
 /// @nodoc
@@ -247,6 +254,7 @@ class __$$BookingStateLoadedImplCopyWithImpl<$Res>
     Object? services = null,
     Object? appointment = null,
     Object? isEmpty = null,
+    Object? userModel = null,
   }) {
     return _then(_$BookingStateLoadedImpl(
       freezed == slot
@@ -265,6 +273,10 @@ class __$$BookingStateLoadedImplCopyWithImpl<$Res>
           ? _value.isEmpty
           : isEmpty // ignore: cast_nullable_to_non_nullable
               as bool,
+      null == userModel
+          ? _value.userModel
+          : userModel // ignore: cast_nullable_to_non_nullable
+              as UserModel,
     ));
   }
 }
@@ -276,7 +288,8 @@ class _$BookingStateLoadedImpl implements BookingStateLoaded {
       this.slot,
       final List<AppointmentServiceModel> services,
       this.appointment,
-      this.isEmpty)
+      this.isEmpty,
+      this.userModel)
       : _services = services;
 
   @override
@@ -293,10 +306,12 @@ class _$BookingStateLoadedImpl implements BookingStateLoaded {
   final AppointmentModel appointment;
   @override
   final bool isEmpty;
+  @override
+  final UserModel userModel;
 
   @override
   String toString() {
-    return 'BookingState.loaded(slot: $slot, services: $services, appointment: $appointment, isEmpty: $isEmpty)';
+    return 'BookingState.loaded(slot: $slot, services: $services, appointment: $appointment, isEmpty: $isEmpty, userModel: $userModel)';
   }
 
   @override
@@ -308,12 +323,19 @@ class _$BookingStateLoadedImpl implements BookingStateLoaded {
             const DeepCollectionEquality().equals(other._services, _services) &&
             (identical(other.appointment, appointment) ||
                 other.appointment == appointment) &&
-            (identical(other.isEmpty, isEmpty) || other.isEmpty == isEmpty));
+            (identical(other.isEmpty, isEmpty) || other.isEmpty == isEmpty) &&
+            (identical(other.userModel, userModel) ||
+                other.userModel == userModel));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, slot,
-      const DeepCollectionEquality().hash(_services), appointment, isEmpty);
+  int get hashCode => Object.hash(
+      runtimeType,
+      slot,
+      const DeepCollectionEquality().hash(_services),
+      appointment,
+      isEmpty,
+      userModel);
 
   @JsonKey(ignore: true)
   @override
@@ -330,11 +352,12 @@ class _$BookingStateLoadedImpl implements BookingStateLoaded {
             AppointmentSlotModel? slot,
             List<AppointmentServiceModel> services,
             AppointmentModel appointment,
-            bool isEmpty)
+            bool isEmpty,
+            UserModel userModel)
         loaded,
     required TResult Function(String error) error,
   }) {
-    return loaded(slot, services, appointment, isEmpty);
+    return loaded(slot, services, appointment, isEmpty, userModel);
   }
 
   @override
@@ -345,11 +368,12 @@ class _$BookingStateLoadedImpl implements BookingStateLoaded {
             AppointmentSlotModel? slot,
             List<AppointmentServiceModel> services,
             AppointmentModel appointment,
-            bool isEmpty)?
+            bool isEmpty,
+            UserModel userModel)?
         loaded,
     TResult? Function(String error)? error,
   }) {
-    return loaded?.call(slot, services, appointment, isEmpty);
+    return loaded?.call(slot, services, appointment, isEmpty, userModel);
   }
 
   @override
@@ -360,13 +384,14 @@ class _$BookingStateLoadedImpl implements BookingStateLoaded {
             AppointmentSlotModel? slot,
             List<AppointmentServiceModel> services,
             AppointmentModel appointment,
-            bool isEmpty)?
+            bool isEmpty,
+            UserModel userModel)?
         loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(slot, services, appointment, isEmpty);
+      return loaded(slot, services, appointment, isEmpty, userModel);
     }
     return orElse();
   }
@@ -411,12 +436,14 @@ abstract class BookingStateLoaded implements BookingState {
       final AppointmentSlotModel? slot,
       final List<AppointmentServiceModel> services,
       final AppointmentModel appointment,
-      final bool isEmpty) = _$BookingStateLoadedImpl;
+      final bool isEmpty,
+      final UserModel userModel) = _$BookingStateLoadedImpl;
 
   AppointmentSlotModel? get slot;
   List<AppointmentServiceModel> get services;
   AppointmentModel get appointment;
   bool get isEmpty;
+  UserModel get userModel;
   @JsonKey(ignore: true)
   _$$BookingStateLoadedImplCopyWith<_$BookingStateLoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;
@@ -492,7 +519,8 @@ class _$BookingStateErrorImpl implements BookingStateError {
             AppointmentSlotModel? slot,
             List<AppointmentServiceModel> services,
             AppointmentModel appointment,
-            bool isEmpty)
+            bool isEmpty,
+            UserModel userModel)
         loaded,
     required TResult Function(String error) error,
   }) {
@@ -507,7 +535,8 @@ class _$BookingStateErrorImpl implements BookingStateError {
             AppointmentSlotModel? slot,
             List<AppointmentServiceModel> services,
             AppointmentModel appointment,
-            bool isEmpty)?
+            bool isEmpty,
+            UserModel userModel)?
         loaded,
     TResult? Function(String error)? error,
   }) {
@@ -522,7 +551,8 @@ class _$BookingStateErrorImpl implements BookingStateError {
             AppointmentSlotModel? slot,
             List<AppointmentServiceModel> services,
             AppointmentModel appointment,
-            bool isEmpty)?
+            bool isEmpty,
+            UserModel userModel)?
         loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
