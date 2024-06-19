@@ -581,7 +581,8 @@ class ListRepository {
       FormData? pickedFile = prefs.getPickedFile();
       // if (pickedFile!.files.isNotEmpty) {
       if (pickedFile?.files[0].key == 'pdf') {
-        await Api.requestListingUploadMedia(listingId, cityId, pickedFile);
+        final result = await Api.requestListingUploadMedia(listingId, cityId, pickedFile);
+        logInfo(result);
       } else {
         if (isImageChanged) {
           var formData = FormData();

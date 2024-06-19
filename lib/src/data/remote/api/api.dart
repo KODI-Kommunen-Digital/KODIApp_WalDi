@@ -339,7 +339,7 @@ class Api {
     return ResultApiModel.fromJson(convertResponse);
   }
 
-  static Future<void> requestListingUploadMedia(
+  static Future<dynamic> requestListingUploadMedia(
       listingId, cityId, pickedFile) async {
     var filePath = '';
     if (pickedFile?.files.length != 0) {
@@ -354,7 +354,7 @@ class Api {
         url: filePath,
         formData: pickedFile,
       );
-      logInfo(result);
+      return result;
     }
   }
 
