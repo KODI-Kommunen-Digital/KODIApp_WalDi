@@ -581,7 +581,22 @@ class ListRepository {
       FormData? pickedFile = prefs.getPickedFile();
       // if (pickedFile!.files.isNotEmpty) {
       if (pickedFile?.files[0].key == 'pdf') {
-        final result = await Api.requestListingUploadMedia(listingId, cityId, pickedFile);
+        var formData = FormData();
+
+        formData.files.add(MapEntry(
+          'pdf',
+          await MultipartFile.fromFile(
+            pickedFile!.files[0].value.filename!,
+            filename: pickedFile.files[0].value.filename!,
+            contentType:
+                MediaType('application', 'pdf'), // Set the correct content type
+          ),
+        ));
+
+        formData.fields.addAll(pickedFile.fields);
+
+        final result =
+            await Api.requestListingUploadMedia(listingId, cityId, formData);
         logInfo(result);
       } else {
         if (isImageChanged) {
@@ -631,7 +646,9 @@ class ListRepository {
                 ));
               }
             }
-            await Api.requestListingUploadMedia(listingId, cityId, formData);
+            final result = await Api.requestListingUploadMedia(
+                listingId, cityId, formData);
+            logInfo(result);
           }
           // if (pickedFile!.files.isNotEmpty) {
           //   await Api.requestListingUploadMedia(listingId, cityId, pickedFile);
