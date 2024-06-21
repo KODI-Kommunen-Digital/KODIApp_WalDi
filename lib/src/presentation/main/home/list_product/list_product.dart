@@ -1,7 +1,5 @@
 // ignore_for_file: depend_on_referenced_packages, use_build_context_synchronously
-
 import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +8,7 @@ import 'package:heidi/src/data/model/model_multifilter.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
-import 'package:heidi/src/presentation/main/home/widget/app_filter_button.dart';
+import 'package:heidi/src/presentation/widget/app_filter_button.dart';
 import 'package:heidi/src/presentation/widget/app_navbar.dart';
 import 'package:heidi/src/presentation/widget/app_product_item.dart';
 import 'package:heidi/src/presentation/widget/app_text_input.dart';
@@ -32,16 +30,19 @@ class ListProductScreen extends StatefulWidget {
 }
 
 class _ListProductScreenState extends State<ListProductScreen> {
-  int pageNo = 1;
   final TextEditingController _searchController = TextEditingController();
   late bool isCity;
+  late bool isCategoryService;
 
+  //ProductFilter? selectedFilter;
   MultiFilter? selectedFilter;
+  int pageNo = 1;
 
   @override
   void initState() {
     super.initState();
-    isCity = widget.arguments['title'] != '';
+    isCity = widget.arguments['type'] == 'location';
+    isCategoryService = widget.arguments['type'] == 'categoryService';
     loadListingsList();
   }
 
@@ -57,9 +58,10 @@ class _ListProductScreenState extends State<ListProductScreen> {
   MultiFilter whatCanFilter(bool isEvent) {
     if (isCity) {
       return MultiFilter(
-          hasCategoryFilter: true,
-          categories: AppBloc.homeCubit.category,
-          currentCategory: selectedFilter?.currentCategory ?? 0);
+        hasCategoryFilter: true,
+        categories: AppBloc.homeCubit.category,
+        currentCategory: selectedFilter?.currentCategory ?? 0,
+      );
     }
 
     if (isEvent) {
@@ -92,6 +94,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
       } else if (filter?.hasLocationFilter ?? false) {
         loadListingsList();
       }
+
       if (filter?.hasCategoryFilter ?? false) {
         context.read<ListCubit>().setCategoryFilter(
             filter?.currentCategory ?? 0,
@@ -132,6 +135,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
                   bool isEvent = snapshot.data ?? false;
                   return Row(
                     children: [
+                      if(!isCategoryService)
                       AppFilterButton(
                           multiFilter: whatCanFilter(isEvent),
                           filterCallBack: (filter) {
@@ -167,11 +171,12 @@ class _ListProductScreenState extends State<ListProductScreen> {
             ),
             updated: (list, listCity) {
               return ListLoaded(
-                  list: list,
-                  listCity: listCity,
-                  selectedId:
-                      selectedFilter?.currentLocation ?? widget.arguments['id'],
-                  updated: true);
+                list: list,
+                listCity: listCity,
+                updated: true,
+                selectedId:
+                    selectedFilter?.currentLocation ?? widget.arguments['id'],
+              );
             },
             error: (e) => ErrorWidget('Failed to load listings.'),
             initial: () {
@@ -258,8 +263,8 @@ class ListLoading extends StatelessWidget {
 
 class ListLoaded extends StatefulWidget {
   final List<ProductModel> list;
-  final List listCity;
   final int selectedId;
+  final List listCity;
   final bool updated;
 
   const ListLoaded(
@@ -275,8 +280,8 @@ class ListLoaded extends StatefulWidget {
 }
 
 class _ListLoadedState extends State<ListLoaded> {
-  List listCity = [];
   List<ProductModel> list = [];
+  List listCity = [];
   final _scrollController = ScrollController(initialScrollOffset: 0.0);
   bool isLoading = false;
   bool isLoadingMore = false;
@@ -307,7 +312,7 @@ class _ListLoadedState extends State<ListLoaded> {
       if (_scrollController.position.pixels != 0) {
         setState(() {
           isLoadingMore = true;
-          //previousScrollPosition = _scrollController.position.pixels;
+          // previousScrollPosition = _scrollController.position.pixels;
         });
         if (context.read<ListCubit>().isSearching) {
           context
@@ -459,7 +464,7 @@ class _ListLoadedState extends State<ListLoaded> {
           );
         }
         return AppProductItem(
-          isRefreshLoader: false,
+          isRefreshLoader: true,
           type: _listMode,
         );
     }
@@ -512,7 +517,6 @@ class _ListLoadedState extends State<ListLoaded> {
                 contentList,
                 if (isLoadingMore)
                   const Positioned(
-                    //bottom: 20,
                     bottom: 5,
                     left: 0,
                     right: 0,

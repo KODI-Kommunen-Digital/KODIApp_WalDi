@@ -4,10 +4,18 @@ import 'package:intl/intl.dart';
 
 class ScheduleModel {
   String? view;
+  String? date;
   TimeOfDay startTime;
   TimeOfDay endTime;
+  int? availableSlots;
+  List<int> booked = [];
 
-  ScheduleModel({this.view, required this.startTime, required this.endTime});
+  ScheduleModel(
+      {this.view,
+      required this.startTime,
+      required this.endTime,
+      this.date,
+      this.availableSlots});
 
   get title {
     if (view != null) {
@@ -16,12 +24,12 @@ class ScheduleModel {
     return '${startTime.viewTime} - ${endTime.viewTime}';
   }
 
-  factory ScheduleModel.fromString(String value) {
+  factory ScheduleModel.fromString(String value, {String? date}) {
     final arr = value.split(" - ");
     return ScheduleModel(
-      startTime: TimeOfDay.fromDateTime(DateFormat('HH:mm').parse(arr[0])),
-      endTime: TimeOfDay.fromDateTime(DateFormat('HH:mm').parse(arr[1])),
-    );
+        startTime: TimeOfDay.fromDateTime(DateFormat('HH:mm').parse(arr[0])),
+        endTime: TimeOfDay.fromDateTime(DateFormat('HH:mm').parse(arr[1])),
+        date: date);
   }
 
   factory ScheduleModel.fromJson(Map<String, dynamic> json) {
@@ -39,5 +47,11 @@ class ScheduleModel {
       endTime:
           TimeOfDay.fromDateTime(DateFormat('HH:mm').parse(json['endTime'])),
     );
+  }
+
+  String stringFromTimeOfDay(TimeOfDay time) {
+    final String hour = time.hour.toString().padLeft(2, '0');
+    final String minute = time.minute.toString().padLeft(2, '0');
+    return '$hour:$minute';
   }
 }

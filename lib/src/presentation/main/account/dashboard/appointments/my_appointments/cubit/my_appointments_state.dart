@@ -11,4 +11,6 @@ class MyAppointmentsState with _$MyAppointmentsState {
 
   const factory MyAppointmentsState.loaded(
       List<AppointmentModel>? appointments, bool isRefreshLoader) = MyAppointmentsStateLoaded;
+
+  const factory MyAppointmentsState.error(String msg) = MyAppointmentsStateError;
 }

@@ -2,7 +2,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:heidi/src/data/model/model_appointment.dart';
+import 'package:heidi/src/data/model/model_appointment_service.dart';
+import 'package:heidi/src/data/model/model_appointment_slot.dart';
+import 'package:heidi/src/data/model/model_bookingGuest.dart';
+import 'package:heidi/src/data/model/model_schedule.dart';
 import 'package:heidi/src/data/model/model_step_item.dart';
+import 'package:heidi/src/data/model/model_user.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/booking/cubit/booking_cubit.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/booking/cubit/booking_state.dart';
 import 'package:heidi/src/presentation/widget/app_appointment_success.dart';
@@ -16,13 +22,26 @@ import 'package:heidi/src/utils/translate.dart';
 import 'package:heidi/src/utils/validate.dart';
 import 'package:intl/intl.dart';
 
-class BookingScreen extends StatelessWidget {
-  final String listingTitle;
+class BookingScreen extends StatefulWidget {
+  final int cityId;
+  final int listingId;
 
   const BookingScreen({
     super.key,
-    required this.listingTitle,
+    required this.cityId,
+    required this.listingId,
   });
+
+  @override
+  State<BookingScreen> createState() => _BookingScreenState();
+}
+
+class _BookingScreenState extends State<BookingScreen> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<BookingCubit>().onLoadBooking(widget.cityId, widget.listingId);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,12 +49,17 @@ class BookingScreen extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) => state.maybeWhen(
         loading: () => const BookingDetailsLoading(),
-        loaded: (availableSlots, services) => BookingDetailsLoaded(
-          listingTitle: listingTitle,
-          availableSlots: availableSlots,
+        loaded: (slot, services, appointment, isEmpty, userModel) =>
+            BookingDetailsLoaded(
+          appointment: appointment,
+          slot: slot,
           services: services,
+          listingId: widget.listingId,
+          cityId: widget.cityId,
+          isEmpty: isEmpty,
+          userModel: userModel,
         ),
-        orElse: () => ErrorWidget('Failed to load Accounts.'),
+        orElse: () => ErrorWidget('Failed to load booking details.'),
       ),
     );
   }
@@ -46,27 +70,36 @@ class BookingDetailsLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return const Center(
+      child: CircularProgressIndicator.adaptive(),
+    );
   }
 }
 
 class BookingDetailsLoaded extends StatefulWidget {
-  final String listingTitle;
-  final Map<String, int> availableSlots;
-  final List<String> services;
+  final AppointmentModel appointment;
+  final AppointmentSlotModel? slot;
+  final List<AppointmentServiceModel> services;
+  final int listingId;
+  final int cityId;
+  final bool isEmpty;
+  final UserModel userModel;
 
-  const BookingDetailsLoaded({
-    super.key,
-    required this.listingTitle,
-    required this.availableSlots,
-    required this.services,
-  });
+  const BookingDetailsLoaded(
+      {super.key,
+      required this.appointment,
+      required this.slot,
+      required this.services,
+      required this.listingId,
+      required this.cityId,
+      required this.isEmpty,
+      required this.userModel});
 
   @override
-  State<BookingDetailsLoaded> createState() => _BookingScreenState();
+  State<BookingDetailsLoaded> createState() => _BookingDetailsLoadedState();
 }
 
-class _BookingScreenState extends State<BookingDetailsLoaded> {
+class _BookingDetailsLoadedState extends State<BookingDetailsLoaded> {
   final List<TextEditingController> _textFistNameController = [];
   final List<TextEditingController> _textLastNameController = [];
   final List<TextEditingController> _textPhoneController = [];
@@ -87,22 +120,28 @@ class _BookingScreenState extends State<BookingDetailsLoaded> {
   final List<String?> _errorPhone = [];
   final List<String?> _errorEmail = [];
   final List<String?> _errorAddress = [];
+  String? _errorSlot;
 
   int _active = 0;
   bool isWrongEntry = false;
   String selectedDate = '';
   int adults = 1;
   String selectedTime = '';
-  String? _selectedService = '';
-  final List<String> _selectedTimeSlots = [];
+  AppointmentServiceModel? _selectedService;
+  BookingGuestModel? guestModel;
+  List<BookingGuestModel> friends = [];
+  bool? submittedSuccessful;
+  final List<ScheduleModel> selectedSlots = [];
 
-  final Map<String, int> _availableSlots = {};
-  final List<String> services = [];
+  final List<ScheduleModel> allSlots = [];
+  final List<AppointmentServiceModel> services = [];
 
   @override
   void initState() {
-    _selectedService = widget.services.first;
-    _availableSlots.addAll(widget.availableSlots);
+    selectedDate = context.read<BookingCubit>().selectedDate ?? '';
+    _selectedService =
+        context.read<BookingCubit>().selectedService ?? widget.services.first;
+    allSlots.addAll(widget.slot?.openHours ?? []);
     services.addAll(widget.services);
     super.initState();
   }
@@ -132,6 +171,10 @@ class _BookingScreenState extends State<BookingDetailsLoaded> {
       _errorAddress.add(null);
     }
 
+    _textFistNameController[0].text = widget.userModel.firstname;
+    _textLastNameController[0].text = widget.userModel.lastname;
+    _textEmailController[0].text = widget.userModel.email;
+
     List<StepModel> step = [
       StepModel(
         title: Translate.of(context).translate('details'),
@@ -142,7 +185,7 @@ class _BookingScreenState extends State<BookingDetailsLoaded> {
         icon: Icons.contact_mail_outlined,
       ),
       StepModel(
-        title: Translate.of(context).translate('summary'),
+        title: Translate.of(context).translate('overview'),
         icon: Icons.contact_mail_outlined,
       ),
       StepModel(
@@ -153,7 +196,7 @@ class _BookingScreenState extends State<BookingDetailsLoaded> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(Translate.of(context).translate('bookAppointment')),
+        title: Text(Translate.of(context).translate('booking')),
       ),
       body: SafeArea(
         child: Column(
@@ -191,7 +234,7 @@ class _BookingScreenState extends State<BookingDetailsLoaded> {
       case 2:
         return _buildSummary();
       case 3:
-        return const AppointmentSuccess();
+        return AppointmentSuccess(success: submittedSuccessful ?? false);
       default:
         return Container();
     }
@@ -206,9 +249,15 @@ class _BookingScreenState extends State<BookingDetailsLoaded> {
             horizontal: 16,
           ),
           child: AppButton(
-            Translate.of(context).translate('next'),
+            Translate.of(context).translate('proceed'),
             onPressed: () {
-              _onNext(step: 0);
+              if (widget.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content:
+                        Text(Translate.of(context).translate('empty_slots'))));
+              } else {
+                _onNext(step: 0);
+              }
             },
             mainAxisSize: MainAxisSize.max,
           ),
@@ -231,7 +280,7 @@ class _BookingScreenState extends State<BookingDetailsLoaded> {
               const SizedBox(width: 16),
               Expanded(
                 child: AppButton(
-                  Translate.of(context).translate('next'),
+                  Translate.of(context).translate('proceed'),
                   onPressed: () {
                     _onNext(step: 1);
                   },
@@ -259,8 +308,9 @@ class _BookingScreenState extends State<BookingDetailsLoaded> {
               const SizedBox(width: 16),
               Expanded(
                 child: AppButton(
-                  Translate.of(context).translate('next'),
-                  onPressed: () {
+                  Translate.of(context).translate('proceed'),
+                  onPressed: () async {
+                    await _onSubmit();
                     _onNext(step: 2);
                   },
                   mainAxisSize: MainAxisSize.max,
@@ -310,7 +360,7 @@ class _BookingScreenState extends State<BookingDetailsLoaded> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              Translate.of(context).translate('chooseDate'),
+              Translate.of(context).translate('choose_date'),
             ),
           ),
         );
@@ -320,7 +370,20 @@ class _BookingScreenState extends State<BookingDetailsLoaded> {
         });
       }
     } else if (step == 1) {
-      for (int i = 0; i < (adults); i++) {
+      if (selectedSlots.length != adults) {
+        _errorSlot = Translate.of(context).translate('slot_message');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              _errorSlot!,
+            ),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      } else {
+        _errorSlot = null;
+      }
+      for (int i = 0; i < adults; i++) {
         if (_textFistNameController[i].text.isEmpty) {
           _errorFirstName[i] =
               Translate.of(context).translate('first_name_message');
@@ -338,8 +401,26 @@ class _BookingScreenState extends State<BookingDetailsLoaded> {
         setState(() {
           if (_errorFirstName[i] == null &&
               _errorLastName[i] == null &&
-              _errorEmail[i] == null) {
+              _errorEmail[i] == null &&
+              _errorSlot == null) {
             isWrongEntry = true;
+            //address does not get saved!!
+            if (i != 0) {
+              friends.add(BookingGuestModel(
+                  firstname: _textFistNameController[i].text,
+                  lastname: _textLastNameController[i].text,
+                  remark: '',
+                  email: _textEmailController[i].text,
+                  slot: getSlot(i)));
+            } else {
+              guestModel = BookingGuestModel(
+                  firstname: _textFistNameController[0].text,
+                  lastname: _textLastNameController[0].text,
+                  remark: _textMessageController[0].text,
+                  email: _textEmailController[0].text,
+                  phoneNumber: _textPhoneController[0].text,
+                  slot: getSlot(0));
+            }
           } else {
             isWrongEntry = false;
           }
@@ -369,15 +450,17 @@ class _BookingScreenState extends State<BookingDetailsLoaded> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Padding(
+              Padding(
                 padding: EdgeInsets.only(left: 12),
-                child: Icon(Icons.miscellaneous_services, color: Colors.white),
+                child: Icon(Icons.miscellaneous_services,
+                    color: Theme.of(context).textTheme.bodyLarge?.color ??
+                        Colors.white),
               ),
               const SizedBox(width: 8),
               Expanded(
                 child: DropdownButtonHideUnderline(
-                  child: DropdownButton<String>(
-                    value: _selectedService,
+                  child: DropdownButton<int>(
+                    value: _selectedService!.id,
                     hint: Row(
                       children: [
                         Text(
@@ -385,25 +468,32 @@ class _BookingScreenState extends State<BookingDetailsLoaded> {
                         ),
                       ],
                     ),
-                    items: services.map((category) {
+                    items: services.map((service) {
                       return DropdownMenuItem(
-                        value: category,
+                        value: service.id,
                         child: Text(
                           overflow: TextOverflow.ellipsis,
-                          category,
+                          service.name,
                         ),
                       );
                     }).toList(),
-                    onChanged: (String? value) {
+                    onChanged: (value) {
                       setState(() {
-                        _selectedService = value;
+                        _selectedService = services
+                            .firstWhere((element) => element.id == value);
+                        _updateSlots();
                       });
                     },
                     elevation: 16,
-                    style: const TextStyle(color: Colors.white, fontSize: 18),
-                    icon: const Padding(
+                    style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyLarge?.color ??
+                            Colors.white,
+                        fontSize: 18),
+                    icon: Padding(
                       padding: EdgeInsets.only(right: 8),
-                      child: Icon(Icons.arrow_drop_down, color: Colors.white),
+                      child: Icon(Icons.arrow_drop_down,
+                          color: Theme.of(context).textTheme.bodyLarge?.color ??
+                              Colors.white),
                     ),
                     iconSize: 26,
                   ),
@@ -411,25 +501,6 @@ class _BookingScreenState extends State<BookingDetailsLoaded> {
               ),
             ],
           ),
-        ),
-        const SizedBox(height: 20),
-        AppPickerItem(
-          leading: Icon(
-            Icons.person_outline,
-            color: Theme.of(context).hintColor,
-          ),
-          value: adults.toString(),
-          title: Translate.of(context).translate('adult'),
-          onPressed: () {
-            _onPersonPicker(adults, (value) {
-              setState(() {
-                adults = value;
-                _selectedTimeSlots.clear();
-                _availableSlots.clear();
-                _availableSlots.addAll(widget.availableSlots);
-              });
-            });
-          },
         ),
         const SizedBox(height: 20),
         AppPickerItem(
@@ -442,106 +513,67 @@ class _BookingScreenState extends State<BookingDetailsLoaded> {
           onPressed: _onDatePicker,
         ),
         const SizedBox(height: 20),
-        Container(
-          width: MediaQuery.of(context).size.width * 0.9,
-          decoration: BoxDecoration(
-            color: Theme.of(context).dividerColor.withOpacity(.07),
-            borderRadius: BorderRadius.circular(10),
+        AppPickerItem(
+          leading: Icon(
+            Icons.person_outline,
+            color: Theme.of(context).hintColor,
           ),
-          child: DropdownButtonHideUnderline(
-            child: DropdownButton<String>(
-              value: null,
-              items: _buildDropdownItems(),
-              onChanged: _onTimeSlotSelected,
-              elevation: 16,
-              style: const TextStyle(color: Colors.white, fontSize: 18),
-              hint: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12),
-                child: Row(
-                  children: [
-                    Icon(Icons.access_time),
-                    SizedBox(width: 8),
-                    Text(
-                      Translate.of(context).translate('selectTimeSlot'),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(height: 20),
-        Wrap(
-          spacing: 4.0,
-          children: _selectedTimeSlots
-              .map(
-                (timeSlot) => Chip(
-                  label: Text(timeSlot),
-                  deleteIcon: const Icon(Icons.close),
-                  onDeleted: () {
-                    setState(() {
-                      _selectedTimeSlots.remove(timeSlot);
-                      _availableSlots[timeSlot] =
-                          (_availableSlots[timeSlot] ?? 0) + 1;
-                    });
-                  },
-                ),
-              )
-              .toList(),
+          value: adults.toString(),
+          title: Translate.of(context).translate('person_count'),
+          onPressed: () {
+            _onPersonPicker(adults, (value) {
+              setState(() {
+                adults = value;
+                selectedSlots.clear();
+                allSlots.clear();
+                allSlots.addAll(widget.slot?.openHours ?? []);
+              });
+            });
+          },
         ),
       ],
     );
   }
 
-  List<DropdownMenuItem<String>> _buildDropdownItems() {
-    return _availableSlots.keys.map((String timeSlot) {
-      return DropdownMenuItem<String>(
+  List<DropdownMenuItem<ScheduleModel>> _buildDropdownItems() {
+    return allSlots.map((ScheduleModel timeSlot) {
+      return DropdownMenuItem<ScheduleModel>(
         value: timeSlot,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Text(timeSlot),
-            _availableSlots[timeSlot] != null
-                ? Container(
-                    padding: const EdgeInsets.all(4),
-                    child: Text(
-                      "${Translate.of(context).translate('availableSlots')} ${_availableSlots[timeSlot]!.toString()}",
-                      style: const TextStyle(color: Colors.white, fontSize: 14),
-                    ),
-                  )
-                : const SizedBox(),
+            Text(timeSlot.title),
+            Text(
+                "${Translate.of(context).translate('available')}: ${(timeSlot.availableSlots ?? 0).toString()}")
           ],
         ),
       );
     }).toList();
   }
 
-  void _onTimeSlotSelected(String? value) {
-    if (value != null) {
+  void _onTimeSlotSelected(ScheduleModel? slot, int index) {
+    if (slot != null) {
       setState(() {
-        if (_selectedTimeSlots.length < adults) {
-          if (_availableSlots[value] != null && _availableSlots[value]! > 0) {
-            _selectedTimeSlots.add(value);
-            _availableSlots[value] = (_availableSlots[value] ?? 0) - 1;
-          } else {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  Translate.of(context).translate('noAvailableSlots'),
-                ),
-                duration: Duration(seconds: 2),
+        if ((slot.availableSlots ?? 0) == 0) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                Translate.of(context).translate('slot_booked_out'),
               ),
-            );
-          }
+              duration: const Duration(seconds: 2),
+            ),
+          );
+          return;
+        }
+        if (selectedSlots.length < adults) {
+          selectedSlots.add(slot);
+          slot.booked.add(index);
+          slot.availableSlots = slot.availableSlots! - 1;
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
-                Translate.of(context)
-                    .translate('noAvailableSlots')
-                    .replaceFirst("{0}", "$adults")
-                    .replaceFirst("{1}", "$adults"),
-                style: const TextStyle(color: Colors.white, fontSize: 14),
+                Translate.of(context).translate('noAvailableSlots'),
               ),
               duration: const Duration(seconds: 2),
             ),
@@ -563,7 +595,7 @@ class _BookingScreenState extends State<BookingDetailsLoaded> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'USER ${index + 1}:',
+                  '${Translate.of(context).translate('one_person')} ${index + 1}:',
                   style: const TextStyle(color: Colors.grey),
                 ),
                 const SizedBox(height: 16),
@@ -573,6 +605,8 @@ class _BookingScreenState extends State<BookingDetailsLoaded> {
                   controller: _textFistNameController[index],
                   focusNode: _focusFistName[index],
                   textInputAction: TextInputAction.next,
+                  readOnly: (index == 0) ? true : false,
+                  hasDelete: (index == 0) ? false : true,
                   onChanged: (text) {
                     setState(() {
                       _errorFirstName[index] = UtilValidator.validate(
@@ -595,6 +629,8 @@ class _BookingScreenState extends State<BookingDetailsLoaded> {
                   controller: _textLastNameController[index],
                   focusNode: _focusLastName[index],
                   textInputAction: TextInputAction.next,
+                  readOnly: (index == 0) ? true : false,
+                  hasDelete: (index == 0) ? false : true,
                   onChanged: (text) {
                     setState(() {
                       _errorLastName[index] = UtilValidator.validate(
@@ -647,6 +683,8 @@ class _BookingScreenState extends State<BookingDetailsLoaded> {
                   controller: _textEmailController[index],
                   focusNode: _focusEmail[index],
                   textInputAction: TextInputAction.next,
+                  readOnly: (index == 0) ? true : false,
+                  hasDelete: (index == 0) ? false : true,
                   onChanged: (text) {
                     setState(() {
                       _errorEmail[index] = UtilValidator.validate(
@@ -705,6 +743,59 @@ class _BookingScreenState extends State<BookingDetailsLoaded> {
                     textInputAction: TextInputAction.done,
                   ),
                 ),
+                const SizedBox(height: 20),
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).dividerColor.withOpacity(.07),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<ScheduleModel>(
+                      value: null,
+                      items: _buildDropdownItems(),
+                      onChanged: (ScheduleModel? slot) {
+                        _onTimeSlotSelected(slot, index);
+                      },
+                      elevation: 16,
+                      style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyLarge?.color ??
+                              Colors.white,
+                          fontSize: 18),
+                      hint: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 12),
+                        child: Row(
+                          children: [
+                            Icon(Icons.access_time),
+                            SizedBox(width: 8),
+                            Text(
+                              Translate.of(context)
+                                  .translate('choose_time_period'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Visibility(
+                  visible: getSlot(index) != null,
+                  child: Chip(
+                    label: Text(getSlot(index)?.title ?? ""),
+                    deleteIcon: const Icon(Icons.close),
+                    onDeleted: () {
+                      setState(() {
+                        ScheduleModel? slot = getSlot(index);
+                        if (slot != null) {
+                          selectedSlots.remove(slot);
+                          slot.availableSlots = slot.availableSlots! + 1;
+                          slot.booked.remove(index);
+                        }
+                      });
+                    },
+                  ),
+                ),
                 const SizedBox(height: 16),
                 const Divider(),
                 const SizedBox(height: 16),
@@ -721,12 +812,12 @@ class _BookingScreenState extends State<BookingDetailsLoaded> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          _selectedService!,
+          _selectedService?.name ?? '',
           style: Theme.of(context).textTheme.headlineLarge,
         ),
         for (int i = 0; i < adults; i++)
           Text(
-            'Kunde ${i + 1}:\n'
+            '${Translate.of(context).translate('one_person')} ${i + 1}:\n'
             'Name: ${_textFistNameController[i].text} ${_textLastNameController[i].text} '
             '${_textEmailController[i].text.isNotEmpty ? '\nEmail: ${_textEmailController[i].text}' : ''}  '
             '${_textAddressController[i].text != '' ? '\nAddress: ${_textAddressController[i].text}' : ''} '
@@ -736,12 +827,12 @@ class _BookingScreenState extends State<BookingDetailsLoaded> {
                 fontWeight: FontWeight.bold), // Apply bold style
           ),
         Text(
-          'Buchungsdatum: $selectedDate',
+          '${Translate.of(context).translate('booking_date')}: $selectedDate',
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        for (final slots in _selectedTimeSlots)
+        for (int i = 0; i < selectedSlots.length; i++)
           Text(
-            'Buchungsslots $slots,',
+            '${Translate.of(context).translate('booking_time')}: ${selectedSlots[i].title}${i == selectedSlots.length - 1 ? "" : ","}',
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
       ],
@@ -750,8 +841,14 @@ class _BookingScreenState extends State<BookingDetailsLoaded> {
 
   void _onDatePicker() async {
     final now = DateTime.now();
+    DateTime date = now;
+    if (selectedDate != "") {
+      DateTime parsedDate = DateFormat("dd.MM.yyyy").parse(selectedDate);
+      date = DateTime.parse(DateFormat("yyyy-MM-dd").format(parsedDate));
+    }
+
     final result = await showDatePicker(
-      initialDate: DateTime.now(),
+      initialDate: date,
       firstDate: DateTime(now.year, now.month),
       context: context,
       lastDate: DateTime(now.year + 5),
@@ -760,6 +857,7 @@ class _BookingScreenState extends State<BookingDetailsLoaded> {
       setState(() {
         String formattedDate = DateFormat('dd.MM.yyyy').format(result);
         selectedDate = formattedDate;
+        _updateSlots();
       });
     }
   }
@@ -776,6 +874,50 @@ class _BookingScreenState extends State<BookingDetailsLoaded> {
     );
     if (result != null) {
       callback(result);
+    }
+  }
+
+  void _updateSlots() {
+    if (_selectedService != null && selectedDate.isNotEmpty) {
+      context.read<BookingCubit>().selectedService = _selectedService;
+      context.read<BookingCubit>().selectedDate = selectedDate;
+      context
+          .read<BookingCubit>()
+          .onLoadBooking(widget.cityId, widget.listingId);
+    }
+  }
+
+  ScheduleModel? getSlot(int index) {
+    for (var slot in selectedSlots) {
+      for (var user in slot.booked) {
+        if (user == index) {
+          return slot;
+        }
+      }
+    }
+    return null;
+  }
+
+  Future<void> _onSubmit() async {
+    ScheduleModel? slot = guestModel?.slot;
+    if (slot != null) {
+      bool success = await context.read<BookingCubit>().onSubmit(
+          startTime: slot.stringFromTimeOfDay(slot.startTime),
+          endTime: slot.stringFromTimeOfDay(slot.endTime),
+          guestDetails: guestModel!,
+          date: selectedDate,
+          cityId: widget.cityId,
+          friends: friends,
+          listingId: widget.listingId,
+          appointmentId: widget.appointment.id!,
+          serviceId: _selectedService!.id);
+      if (success) {
+        submittedSuccessful = true;
+      } else {
+        submittedSuccessful = false;
+      }
+    } else {
+      submittedSuccessful = false;
     }
   }
 }

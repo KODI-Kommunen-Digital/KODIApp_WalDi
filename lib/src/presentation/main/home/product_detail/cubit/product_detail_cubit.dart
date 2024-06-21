@@ -34,6 +34,12 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
 
       if (result != null) {
         product = result;
+        if (product!.categoryId == 18) {
+         /* AppointmentModel? appointment =
+              await AppointmentRepository.loadAppointment(
+                  item.cityId!, item.id);*/
+          product!.isBookable = true;
+        }
         userDetail = await getUserDetails(item.userId, item.cityId);
         if (userId != 0) {
           try {
@@ -59,14 +65,10 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
               emit(ProductDetailLoaded(product!, null, userDetail, isLoggedIn,
                   cityList, darkModeEnabled));
             }
-
-          }
-        catch (e, stackTrace){
-            emit(ProductDetailLoaded(
-                product!, null, userDetail, isLoggedIn, cityList,darkModeEnabled));
+          } catch (e, stackTrace) {
+            emit(ProductDetailLoaded(product!, null, userDetail, isLoggedIn,
+                cityList, darkModeEnabled));
             await Sentry.captureException(e, stackTrace: stackTrace);
-
-
           }
         } else {
           emit(ProductDetailLoaded(product!, null, userDetail, isLoggedIn,
@@ -78,6 +80,13 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
       emit(ProductDetailLoaded(
           item, null, userDetail, isLoggedIn, cityList, darkModeEnabled));
     }
+  }
+
+  Future<bool> isLoggedIn() async {
+    final prefs = await Preferences.openBox();
+    bool isLoggedIn =
+        prefs.getKeyValue(Preferences.userId, 0).toString() != "0";
+    return isLoggedIn;
   }
 
   Future<bool> isDarkMode() async {

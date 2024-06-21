@@ -193,7 +193,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
           mode: LaunchMode.inAppWebView);
     } else if (service.imageLink == "11") {
       await launchUrl(
-          Uri.parse(await AppBloc.discoveryCubit.getToruismLink() ?? ""),
+          Uri.parse(await AppBloc.discoveryCubit.getTourismLink() ?? ""),
           mode: LaunchMode.inAppWebView);
     } else if (service.imageLink == "12") {
       await launchUrl(

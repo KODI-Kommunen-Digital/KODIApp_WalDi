@@ -12,7 +12,7 @@ part of 'appointment_details_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$AppointmentDetailsState {
@@ -20,23 +20,39 @@ mixin _$AppointmentDetailsState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<BookingModel> bookings, bool isRefreshLoader)
+    required TResult Function(
+            List<BookingModel> bookings,
+            List<BookingGuestModel> guests,
+            bool isRefreshLoader,
+            ProductModel? listing)
         loaded,
+    required TResult Function(String msg) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<BookingModel> bookings, bool isRefreshLoader)?
+    TResult? Function(
+            List<BookingModel> bookings,
+            List<BookingGuestModel> guests,
+            bool isRefreshLoader,
+            ProductModel? listing)?
         loaded,
+    TResult? Function(String msg)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<BookingModel> bookings, bool isRefreshLoader)? loaded,
+    TResult Function(
+            List<BookingModel> bookings,
+            List<BookingGuestModel> guests,
+            bool isRefreshLoader,
+            ProductModel? listing)?
+        loaded,
+    TResult Function(String msg)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -45,6 +61,7 @@ mixin _$AppointmentDetailsState {
     required TResult Function(AppointmentDetailsStateInitial value) initial,
     required TResult Function(AppointmentDetailsStateLoading value) loading,
     required TResult Function(AppointmentDetailsStateLoaded value) loaded,
+    required TResult Function(AppointmentDetailsStateError value) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -52,6 +69,7 @@ mixin _$AppointmentDetailsState {
     TResult? Function(AppointmentDetailsStateInitial value)? initial,
     TResult? Function(AppointmentDetailsStateLoading value)? loading,
     TResult? Function(AppointmentDetailsStateLoaded value)? loaded,
+    TResult? Function(AppointmentDetailsStateError value)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -59,6 +77,7 @@ mixin _$AppointmentDetailsState {
     TResult Function(AppointmentDetailsStateInitial value)? initial,
     TResult Function(AppointmentDetailsStateLoading value)? loading,
     TResult Function(AppointmentDetailsStateLoaded value)? loaded,
+    TResult Function(AppointmentDetailsStateError value)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -84,29 +103,29 @@ class _$AppointmentDetailsStateCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$AppointmentDetailsStateInitialCopyWith<$Res> {
-  factory _$$AppointmentDetailsStateInitialCopyWith(
-          _$AppointmentDetailsStateInitial value,
-          $Res Function(_$AppointmentDetailsStateInitial) then) =
-      __$$AppointmentDetailsStateInitialCopyWithImpl<$Res>;
+abstract class _$$AppointmentDetailsStateInitialImplCopyWith<$Res> {
+  factory _$$AppointmentDetailsStateInitialImplCopyWith(
+          _$AppointmentDetailsStateInitialImpl value,
+          $Res Function(_$AppointmentDetailsStateInitialImpl) then) =
+      __$$AppointmentDetailsStateInitialImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$AppointmentDetailsStateInitialCopyWithImpl<$Res>
+class __$$AppointmentDetailsStateInitialImplCopyWithImpl<$Res>
     extends _$AppointmentDetailsStateCopyWithImpl<$Res,
-        _$AppointmentDetailsStateInitial>
-    implements _$$AppointmentDetailsStateInitialCopyWith<$Res> {
-  __$$AppointmentDetailsStateInitialCopyWithImpl(
-      _$AppointmentDetailsStateInitial _value,
-      $Res Function(_$AppointmentDetailsStateInitial) _then)
+        _$AppointmentDetailsStateInitialImpl>
+    implements _$$AppointmentDetailsStateInitialImplCopyWith<$Res> {
+  __$$AppointmentDetailsStateInitialImplCopyWithImpl(
+      _$AppointmentDetailsStateInitialImpl _value,
+      $Res Function(_$AppointmentDetailsStateInitialImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$AppointmentDetailsStateInitial
+class _$AppointmentDetailsStateInitialImpl
     implements AppointmentDetailsStateInitial {
-  const _$AppointmentDetailsStateInitial();
+  const _$AppointmentDetailsStateInitialImpl();
 
   @override
   String toString() {
@@ -114,10 +133,10 @@ class _$AppointmentDetailsStateInitial
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$AppointmentDetailsStateInitial);
+            other is _$AppointmentDetailsStateInitialImpl);
   }
 
   @override
@@ -128,8 +147,13 @@ class _$AppointmentDetailsStateInitial
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<BookingModel> bookings, bool isRefreshLoader)
+    required TResult Function(
+            List<BookingModel> bookings,
+            List<BookingGuestModel> guests,
+            bool isRefreshLoader,
+            ProductModel? listing)
         loaded,
+    required TResult Function(String msg) error,
   }) {
     return initial();
   }
@@ -139,8 +163,13 @@ class _$AppointmentDetailsStateInitial
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<BookingModel> bookings, bool isRefreshLoader)?
+    TResult? Function(
+            List<BookingModel> bookings,
+            List<BookingGuestModel> guests,
+            bool isRefreshLoader,
+            ProductModel? listing)?
         loaded,
+    TResult? Function(String msg)? error,
   }) {
     return initial?.call();
   }
@@ -150,7 +179,13 @@ class _$AppointmentDetailsStateInitial
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<BookingModel> bookings, bool isRefreshLoader)? loaded,
+    TResult Function(
+            List<BookingModel> bookings,
+            List<BookingGuestModel> guests,
+            bool isRefreshLoader,
+            ProductModel? listing)?
+        loaded,
+    TResult Function(String msg)? error,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -165,6 +200,7 @@ class _$AppointmentDetailsStateInitial
     required TResult Function(AppointmentDetailsStateInitial value) initial,
     required TResult Function(AppointmentDetailsStateLoading value) loading,
     required TResult Function(AppointmentDetailsStateLoaded value) loaded,
+    required TResult Function(AppointmentDetailsStateError value) error,
   }) {
     return initial(this);
   }
@@ -175,6 +211,7 @@ class _$AppointmentDetailsStateInitial
     TResult? Function(AppointmentDetailsStateInitial value)? initial,
     TResult? Function(AppointmentDetailsStateLoading value)? loading,
     TResult? Function(AppointmentDetailsStateLoaded value)? loaded,
+    TResult? Function(AppointmentDetailsStateError value)? error,
   }) {
     return initial?.call(this);
   }
@@ -185,6 +222,7 @@ class _$AppointmentDetailsStateInitial
     TResult Function(AppointmentDetailsStateInitial value)? initial,
     TResult Function(AppointmentDetailsStateLoading value)? loading,
     TResult Function(AppointmentDetailsStateLoaded value)? loaded,
+    TResult Function(AppointmentDetailsStateError value)? error,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -197,33 +235,33 @@ class _$AppointmentDetailsStateInitial
 abstract class AppointmentDetailsStateInitial
     implements AppointmentDetailsState {
   const factory AppointmentDetailsStateInitial() =
-      _$AppointmentDetailsStateInitial;
+      _$AppointmentDetailsStateInitialImpl;
 }
 
 /// @nodoc
-abstract class _$$AppointmentDetailsStateLoadingCopyWith<$Res> {
-  factory _$$AppointmentDetailsStateLoadingCopyWith(
-          _$AppointmentDetailsStateLoading value,
-          $Res Function(_$AppointmentDetailsStateLoading) then) =
-      __$$AppointmentDetailsStateLoadingCopyWithImpl<$Res>;
+abstract class _$$AppointmentDetailsStateLoadingImplCopyWith<$Res> {
+  factory _$$AppointmentDetailsStateLoadingImplCopyWith(
+          _$AppointmentDetailsStateLoadingImpl value,
+          $Res Function(_$AppointmentDetailsStateLoadingImpl) then) =
+      __$$AppointmentDetailsStateLoadingImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$AppointmentDetailsStateLoadingCopyWithImpl<$Res>
+class __$$AppointmentDetailsStateLoadingImplCopyWithImpl<$Res>
     extends _$AppointmentDetailsStateCopyWithImpl<$Res,
-        _$AppointmentDetailsStateLoading>
-    implements _$$AppointmentDetailsStateLoadingCopyWith<$Res> {
-  __$$AppointmentDetailsStateLoadingCopyWithImpl(
-      _$AppointmentDetailsStateLoading _value,
-      $Res Function(_$AppointmentDetailsStateLoading) _then)
+        _$AppointmentDetailsStateLoadingImpl>
+    implements _$$AppointmentDetailsStateLoadingImplCopyWith<$Res> {
+  __$$AppointmentDetailsStateLoadingImplCopyWithImpl(
+      _$AppointmentDetailsStateLoadingImpl _value,
+      $Res Function(_$AppointmentDetailsStateLoadingImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$AppointmentDetailsStateLoading
+class _$AppointmentDetailsStateLoadingImpl
     implements AppointmentDetailsStateLoading {
-  const _$AppointmentDetailsStateLoading();
+  const _$AppointmentDetailsStateLoadingImpl();
 
   @override
   String toString() {
@@ -231,10 +269,10 @@ class _$AppointmentDetailsStateLoading
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$AppointmentDetailsStateLoading);
+            other is _$AppointmentDetailsStateLoadingImpl);
   }
 
   @override
@@ -245,8 +283,13 @@ class _$AppointmentDetailsStateLoading
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<BookingModel> bookings, bool isRefreshLoader)
+    required TResult Function(
+            List<BookingModel> bookings,
+            List<BookingGuestModel> guests,
+            bool isRefreshLoader,
+            ProductModel? listing)
         loaded,
+    required TResult Function(String msg) error,
   }) {
     return loading();
   }
@@ -256,8 +299,13 @@ class _$AppointmentDetailsStateLoading
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<BookingModel> bookings, bool isRefreshLoader)?
+    TResult? Function(
+            List<BookingModel> bookings,
+            List<BookingGuestModel> guests,
+            bool isRefreshLoader,
+            ProductModel? listing)?
         loaded,
+    TResult? Function(String msg)? error,
   }) {
     return loading?.call();
   }
@@ -267,7 +315,13 @@ class _$AppointmentDetailsStateLoading
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<BookingModel> bookings, bool isRefreshLoader)? loaded,
+    TResult Function(
+            List<BookingModel> bookings,
+            List<BookingGuestModel> guests,
+            bool isRefreshLoader,
+            ProductModel? listing)?
+        loaded,
+    TResult Function(String msg)? error,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -282,6 +336,7 @@ class _$AppointmentDetailsStateLoading
     required TResult Function(AppointmentDetailsStateInitial value) initial,
     required TResult Function(AppointmentDetailsStateLoading value) loading,
     required TResult Function(AppointmentDetailsStateLoaded value) loaded,
+    required TResult Function(AppointmentDetailsStateError value) error,
   }) {
     return loading(this);
   }
@@ -292,6 +347,7 @@ class _$AppointmentDetailsStateLoading
     TResult? Function(AppointmentDetailsStateInitial value)? initial,
     TResult? Function(AppointmentDetailsStateLoading value)? loading,
     TResult? Function(AppointmentDetailsStateLoaded value)? loaded,
+    TResult? Function(AppointmentDetailsStateError value)? error,
   }) {
     return loading?.call(this);
   }
@@ -302,6 +358,7 @@ class _$AppointmentDetailsStateLoading
     TResult Function(AppointmentDetailsStateInitial value)? initial,
     TResult Function(AppointmentDetailsStateLoading value)? loading,
     TResult Function(AppointmentDetailsStateLoaded value)? loaded,
+    TResult Function(AppointmentDetailsStateError value)? error,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -314,54 +371,70 @@ class _$AppointmentDetailsStateLoading
 abstract class AppointmentDetailsStateLoading
     implements AppointmentDetailsState {
   const factory AppointmentDetailsStateLoading() =
-      _$AppointmentDetailsStateLoading;
+      _$AppointmentDetailsStateLoadingImpl;
 }
 
 /// @nodoc
-abstract class _$$AppointmentDetailsStateLoadedCopyWith<$Res> {
-  factory _$$AppointmentDetailsStateLoadedCopyWith(
-          _$AppointmentDetailsStateLoaded value,
-          $Res Function(_$AppointmentDetailsStateLoaded) then) =
-      __$$AppointmentDetailsStateLoadedCopyWithImpl<$Res>;
+abstract class _$$AppointmentDetailsStateLoadedImplCopyWith<$Res> {
+  factory _$$AppointmentDetailsStateLoadedImplCopyWith(
+          _$AppointmentDetailsStateLoadedImpl value,
+          $Res Function(_$AppointmentDetailsStateLoadedImpl) then) =
+      __$$AppointmentDetailsStateLoadedImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({List<BookingModel> bookings, bool isRefreshLoader});
+  $Res call(
+      {List<BookingModel> bookings,
+      List<BookingGuestModel> guests,
+      bool isRefreshLoader,
+      ProductModel? listing});
 }
 
 /// @nodoc
-class __$$AppointmentDetailsStateLoadedCopyWithImpl<$Res>
+class __$$AppointmentDetailsStateLoadedImplCopyWithImpl<$Res>
     extends _$AppointmentDetailsStateCopyWithImpl<$Res,
-        _$AppointmentDetailsStateLoaded>
-    implements _$$AppointmentDetailsStateLoadedCopyWith<$Res> {
-  __$$AppointmentDetailsStateLoadedCopyWithImpl(
-      _$AppointmentDetailsStateLoaded _value,
-      $Res Function(_$AppointmentDetailsStateLoaded) _then)
+        _$AppointmentDetailsStateLoadedImpl>
+    implements _$$AppointmentDetailsStateLoadedImplCopyWith<$Res> {
+  __$$AppointmentDetailsStateLoadedImplCopyWithImpl(
+      _$AppointmentDetailsStateLoadedImpl _value,
+      $Res Function(_$AppointmentDetailsStateLoadedImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? bookings = null,
+    Object? guests = null,
     Object? isRefreshLoader = null,
+    Object? listing = freezed,
   }) {
-    return _then(_$AppointmentDetailsStateLoaded(
+    return _then(_$AppointmentDetailsStateLoadedImpl(
       null == bookings
           ? _value._bookings
           : bookings // ignore: cast_nullable_to_non_nullable
               as List<BookingModel>,
+      null == guests
+          ? _value._guests
+          : guests // ignore: cast_nullable_to_non_nullable
+              as List<BookingGuestModel>,
       null == isRefreshLoader
           ? _value.isRefreshLoader
           : isRefreshLoader // ignore: cast_nullable_to_non_nullable
               as bool,
+      freezed == listing
+          ? _value.listing
+          : listing // ignore: cast_nullable_to_non_nullable
+              as ProductModel?,
     ));
   }
 }
 
 /// @nodoc
 
-class _$AppointmentDetailsStateLoaded implements AppointmentDetailsStateLoaded {
-  const _$AppointmentDetailsStateLoaded(
-      final List<BookingModel> bookings, this.isRefreshLoader)
-      : _bookings = bookings;
+class _$AppointmentDetailsStateLoadedImpl
+    implements AppointmentDetailsStateLoaded {
+  const _$AppointmentDetailsStateLoadedImpl(final List<BookingModel> bookings,
+      final List<BookingGuestModel> guests, this.isRefreshLoader, this.listing)
+      : _bookings = bookings,
+        _guests = guests;
 
   final List<BookingModel> _bookings;
   @override
@@ -371,44 +444,66 @@ class _$AppointmentDetailsStateLoaded implements AppointmentDetailsStateLoaded {
     return EqualUnmodifiableListView(_bookings);
   }
 
+  final List<BookingGuestModel> _guests;
+  @override
+  List<BookingGuestModel> get guests {
+    if (_guests is EqualUnmodifiableListView) return _guests;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_guests);
+  }
+
   @override
   final bool isRefreshLoader;
+  @override
+  final ProductModel? listing;
 
   @override
   String toString() {
-    return 'AppointmentDetailsState.loaded(bookings: $bookings, isRefreshLoader: $isRefreshLoader)';
+    return 'AppointmentDetailsState.loaded(bookings: $bookings, guests: $guests, isRefreshLoader: $isRefreshLoader, listing: $listing)';
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$AppointmentDetailsStateLoaded &&
+            other is _$AppointmentDetailsStateLoadedImpl &&
             const DeepCollectionEquality().equals(other._bookings, _bookings) &&
+            const DeepCollectionEquality().equals(other._guests, _guests) &&
             (identical(other.isRefreshLoader, isRefreshLoader) ||
-                other.isRefreshLoader == isRefreshLoader));
+                other.isRefreshLoader == isRefreshLoader) &&
+            (identical(other.listing, listing) || other.listing == listing));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType,
-      const DeepCollectionEquality().hash(_bookings), isRefreshLoader);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_bookings),
+      const DeepCollectionEquality().hash(_guests),
+      isRefreshLoader,
+      listing);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$AppointmentDetailsStateLoadedCopyWith<_$AppointmentDetailsStateLoaded>
-      get copyWith => __$$AppointmentDetailsStateLoadedCopyWithImpl<
-          _$AppointmentDetailsStateLoaded>(this, _$identity);
+  _$$AppointmentDetailsStateLoadedImplCopyWith<
+          _$AppointmentDetailsStateLoadedImpl>
+      get copyWith => __$$AppointmentDetailsStateLoadedImplCopyWithImpl<
+          _$AppointmentDetailsStateLoadedImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<BookingModel> bookings, bool isRefreshLoader)
+    required TResult Function(
+            List<BookingModel> bookings,
+            List<BookingGuestModel> guests,
+            bool isRefreshLoader,
+            ProductModel? listing)
         loaded,
+    required TResult Function(String msg) error,
   }) {
-    return loaded(bookings, isRefreshLoader);
+    return loaded(bookings, guests, isRefreshLoader, listing);
   }
 
   @override
@@ -416,10 +511,15 @@ class _$AppointmentDetailsStateLoaded implements AppointmentDetailsStateLoaded {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<BookingModel> bookings, bool isRefreshLoader)?
+    TResult? Function(
+            List<BookingModel> bookings,
+            List<BookingGuestModel> guests,
+            bool isRefreshLoader,
+            ProductModel? listing)?
         loaded,
+    TResult? Function(String msg)? error,
   }) {
-    return loaded?.call(bookings, isRefreshLoader);
+    return loaded?.call(bookings, guests, isRefreshLoader, listing);
   }
 
   @override
@@ -427,11 +527,17 @@ class _$AppointmentDetailsStateLoaded implements AppointmentDetailsStateLoaded {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<BookingModel> bookings, bool isRefreshLoader)? loaded,
+    TResult Function(
+            List<BookingModel> bookings,
+            List<BookingGuestModel> guests,
+            bool isRefreshLoader,
+            ProductModel? listing)?
+        loaded,
+    TResult Function(String msg)? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(bookings, isRefreshLoader);
+      return loaded(bookings, guests, isRefreshLoader, listing);
     }
     return orElse();
   }
@@ -442,6 +548,7 @@ class _$AppointmentDetailsStateLoaded implements AppointmentDetailsStateLoaded {
     required TResult Function(AppointmentDetailsStateInitial value) initial,
     required TResult Function(AppointmentDetailsStateLoading value) loading,
     required TResult Function(AppointmentDetailsStateLoaded value) loaded,
+    required TResult Function(AppointmentDetailsStateError value) error,
   }) {
     return loaded(this);
   }
@@ -452,6 +559,7 @@ class _$AppointmentDetailsStateLoaded implements AppointmentDetailsStateLoaded {
     TResult? Function(AppointmentDetailsStateInitial value)? initial,
     TResult? Function(AppointmentDetailsStateLoading value)? loading,
     TResult? Function(AppointmentDetailsStateLoaded value)? loaded,
+    TResult? Function(AppointmentDetailsStateError value)? error,
   }) {
     return loaded?.call(this);
   }
@@ -462,6 +570,7 @@ class _$AppointmentDetailsStateLoaded implements AppointmentDetailsStateLoaded {
     TResult Function(AppointmentDetailsStateInitial value)? initial,
     TResult Function(AppointmentDetailsStateLoading value)? loading,
     TResult Function(AppointmentDetailsStateLoaded value)? loaded,
+    TResult Function(AppointmentDetailsStateError value)? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -474,12 +583,185 @@ class _$AppointmentDetailsStateLoaded implements AppointmentDetailsStateLoaded {
 abstract class AppointmentDetailsStateLoaded
     implements AppointmentDetailsState {
   const factory AppointmentDetailsStateLoaded(
-          final List<BookingModel> bookings, final bool isRefreshLoader) =
-      _$AppointmentDetailsStateLoaded;
+      final List<BookingModel> bookings,
+      final List<BookingGuestModel> guests,
+      final bool isRefreshLoader,
+      final ProductModel? listing) = _$AppointmentDetailsStateLoadedImpl;
 
   List<BookingModel> get bookings;
+  List<BookingGuestModel> get guests;
   bool get isRefreshLoader;
+  ProductModel? get listing;
   @JsonKey(ignore: true)
-  _$$AppointmentDetailsStateLoadedCopyWith<_$AppointmentDetailsStateLoaded>
+  _$$AppointmentDetailsStateLoadedImplCopyWith<
+          _$AppointmentDetailsStateLoadedImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$AppointmentDetailsStateErrorImplCopyWith<$Res> {
+  factory _$$AppointmentDetailsStateErrorImplCopyWith(
+          _$AppointmentDetailsStateErrorImpl value,
+          $Res Function(_$AppointmentDetailsStateErrorImpl) then) =
+      __$$AppointmentDetailsStateErrorImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String msg});
+}
+
+/// @nodoc
+class __$$AppointmentDetailsStateErrorImplCopyWithImpl<$Res>
+    extends _$AppointmentDetailsStateCopyWithImpl<$Res,
+        _$AppointmentDetailsStateErrorImpl>
+    implements _$$AppointmentDetailsStateErrorImplCopyWith<$Res> {
+  __$$AppointmentDetailsStateErrorImplCopyWithImpl(
+      _$AppointmentDetailsStateErrorImpl _value,
+      $Res Function(_$AppointmentDetailsStateErrorImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? msg = null,
+  }) {
+    return _then(_$AppointmentDetailsStateErrorImpl(
+      null == msg
+          ? _value.msg
+          : msg // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$AppointmentDetailsStateErrorImpl
+    implements AppointmentDetailsStateError {
+  const _$AppointmentDetailsStateErrorImpl(this.msg);
+
+  @override
+  final String msg;
+
+  @override
+  String toString() {
+    return 'AppointmentDetailsState.error(msg: $msg)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$AppointmentDetailsStateErrorImpl &&
+            (identical(other.msg, msg) || other.msg == msg));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, msg);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$AppointmentDetailsStateErrorImplCopyWith<
+          _$AppointmentDetailsStateErrorImpl>
+      get copyWith => __$$AppointmentDetailsStateErrorImplCopyWithImpl<
+          _$AppointmentDetailsStateErrorImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(
+            List<BookingModel> bookings,
+            List<BookingGuestModel> guests,
+            bool isRefreshLoader,
+            ProductModel? listing)
+        loaded,
+    required TResult Function(String msg) error,
+  }) {
+    return error(msg);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(
+            List<BookingModel> bookings,
+            List<BookingGuestModel> guests,
+            bool isRefreshLoader,
+            ProductModel? listing)?
+        loaded,
+    TResult? Function(String msg)? error,
+  }) {
+    return error?.call(msg);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(
+            List<BookingModel> bookings,
+            List<BookingGuestModel> guests,
+            bool isRefreshLoader,
+            ProductModel? listing)?
+        loaded,
+    TResult Function(String msg)? error,
+    required TResult orElse(),
+  }) {
+    if (error != null) {
+      return error(msg);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(AppointmentDetailsStateInitial value) initial,
+    required TResult Function(AppointmentDetailsStateLoading value) loading,
+    required TResult Function(AppointmentDetailsStateLoaded value) loaded,
+    required TResult Function(AppointmentDetailsStateError value) error,
+  }) {
+    return error(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(AppointmentDetailsStateInitial value)? initial,
+    TResult? Function(AppointmentDetailsStateLoading value)? loading,
+    TResult? Function(AppointmentDetailsStateLoaded value)? loaded,
+    TResult? Function(AppointmentDetailsStateError value)? error,
+  }) {
+    return error?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(AppointmentDetailsStateInitial value)? initial,
+    TResult Function(AppointmentDetailsStateLoading value)? loading,
+    TResult Function(AppointmentDetailsStateLoaded value)? loaded,
+    TResult Function(AppointmentDetailsStateError value)? error,
+    required TResult orElse(),
+  }) {
+    if (error != null) {
+      return error(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class AppointmentDetailsStateError implements AppointmentDetailsState {
+  const factory AppointmentDetailsStateError(final String msg) =
+      _$AppointmentDetailsStateErrorImpl;
+
+  String get msg;
+  @JsonKey(ignore: true)
+  _$$AppointmentDetailsStateErrorImplCopyWith<
+          _$AppointmentDetailsStateErrorImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

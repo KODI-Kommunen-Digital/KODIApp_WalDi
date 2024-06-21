@@ -5,6 +5,7 @@ import 'package:heidi/src/data/model/model_appointment.dart';
 import 'package:heidi/src/data/model/model_appointment_service.dart';
 import 'package:heidi/src/data/model/model_forum_group.dart';
 import 'package:heidi/src/data/model/model_group_posts.dart';
+import 'package:heidi/src/data/model/model_open_time.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_user.dart';
 import 'package:heidi/src/presentation/main/account/change_password/change_password_screen.dart';
@@ -19,6 +20,8 @@ import 'package:heidi/src/presentation/main/account/dashboard/appointments/appoi
 import 'package:heidi/src/presentation/main/account/dashboard/appointments/appointment_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/appointments/my_appointments/cubit/my_appointments_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/appointments/my_appointments/my_appointments_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/appointments/my_bookings/cubit/my_bookings_cubit.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/appointments/my_bookings/my_bookings_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/appointments/requests/appointment_requests_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/appointments/requests/cubit/appointment_requests_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/dashboard_screen.dart';
@@ -140,9 +143,9 @@ class Routes {
   static const String myListings = "/myListings";
   static const String appointments = "/appointments";
   static const String myAppointments = "/myAppointments";
+  static const String myBookings = "/myBookings";
   static const String appointmentDetails = "/appointmentDetails";
   static const String appointmentRequests = "/appointmentRequests";
-  static const String test = "/test";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -299,12 +302,15 @@ class Routes {
       case booking:
         return MaterialPageRoute(
           builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
             return BlocProvider(
               create: (context) => BookingCubit(
                 context.read(),
               ),
               child: BookingScreen(
-                listingTitle: settings.arguments as String,
+                cityId: arguments['cityId'],
+                listingId: arguments['listingId'],
               ),
             );
           },
@@ -333,8 +339,10 @@ class Routes {
             return BlocProvider(
               create: (context) => CreateAppointmentCubit(),
               child: CreateAppointmentScreen(
+                timeSlots: arguments['timeSlots'] as List<OpenTimeModel>?,
                 serviceEntries: arguments['serviceEntries']
                     as List<AppointmentServiceModel>?,
+                item: arguments['item'] as ProductModel?,
               ),
             );
           },
@@ -355,7 +363,9 @@ class Routes {
       case openTime:
         return MaterialPageRoute(
           builder: (context) {
-            return const OpenTimeSlotsScreen();
+            final List<OpenTimeModel?>? timeSlots =
+                settings.arguments as List<OpenTimeModel?>?;
+            return OpenTimeSlotsScreen(selected: timeSlots);
           },
         );
 
@@ -445,6 +455,16 @@ class Routes {
             return BlocProvider(
               create: (context) => MyAppointmentsCubit(),
               child: const MyAppointmentsScreen(),
+            );
+          },
+        );
+
+      case myBookings:
+        return MaterialPageRoute(
+          builder: (context) {
+            return BlocProvider(
+              create: (context) => MyBookingsCubit(),
+              child: const MyBookingsScreen(),
             );
           },
         );

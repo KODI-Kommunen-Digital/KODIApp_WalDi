@@ -14,14 +14,14 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
   List<CitizenServiceModel> list = [];
   List<CitizenServiceModel> listLoaded = [];
   List<CitizenServiceModel> filteredList = [];
-  dynamic location;
+  List<CategoryModel> location = [];
   final List<CitizenServiceModel> hiddenServices = [];
   late List<CitizenServiceModel> services;
   bool doesScroll = false;
   int? currentCity;
 
   Future<void> onLoad() async {
-    emit(const DiscoveryStateLoading());
+    emit(const DiscoveryState.loading());
     final cityRequestResponse = await Api.requestCities();
     location = List.from(cityRequestResponse.data ?? []).map((item) {
       return CategoryModel.fromJson(item);
@@ -96,7 +96,7 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
     return cityWebsites[cityId];
   }
 
-  Future<String?> getToruismLink() async {
+  Future<String?> getTourismLink() async {
     final prefs = await Preferences.openBox();
     int cityId = await prefs.getKeyValue(Preferences.cityId, 0);
     Map<int, String> cityWebsites = {
@@ -118,8 +118,6 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
     return cityWebsites[cityId];
   }
 
-  Future<void> hideEmptyService() async {}
-
   bool getDoesScroll() {
     return doesScroll;
   }
@@ -135,13 +133,12 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
 
   // List<CitizenServiceModel> initializeServices() {
   //   return [
-  //     CitizenServiceModel(imageUrl: Images.service1, imageLink: "1"),
-  //     CitizenServiceModel(imageUrl: Images.service2, imageLink: "2"),
-  //     CitizenServiceModel(
-  //         imageUrl: Images.service3,
-  //         imageLink: "3",
-  //         categoryId: 16,
-  //         arguments: 4),
+  //     // CitizenServiceModel(imageUrl: Images.service2, imageLink: "2"),
+  //     // CitizenServiceModel(
+  //     //     imageUrl: Images.service3,
+  //     //     imageLink: "3",
+  //     //     type: "subCategoryService",
+  //     //     arguments: 4),
   //     CitizenServiceModel(
   //         imageUrl: Images.service4,
   //         imageLink: "4",
@@ -173,23 +170,20 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
   //         arguments: 9,
   //         categoryId: 6),
   //     CitizenServiceModel(
-  //         imageUrl: Images.service13,
-  //         imageLink: "13",
-  //         arguments: 10,
-  //         categoryId: 15),
+  //       imageUrl: Images.service10,
+  //       imageLink: "10",
+  //       arguments: 10,
+  //     ),
+  //     // CitizenServiceModel(
+  //     //     imageUrl: Images.service13,
+  //     //     imageLink: "13",
+  //     //     categoryId: 15,
+  //     //     arguments: 0),
   //     CitizenServiceModel(
   //         imageUrl: Images.service14,
   //         imageLink: "14",
-  //         arguments: 11,
-  //         categoryId: 14),
-  //     CitizenServiceModel(
-  //       imageUrl: Images.service11,
-  //       imageLink: "11",
-  //     ),
-  //     CitizenServiceModel(
-  //       imageUrl: Images.service12,
-  //       imageLink: "12",
-  //     ),
+  //         categoryId: 14,
+  //         arguments: 0),
   //   ];
   // }
 

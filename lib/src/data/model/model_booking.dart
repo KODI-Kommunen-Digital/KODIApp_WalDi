@@ -1,80 +1,137 @@
-import 'package:heidi/src/data/model/model_bookingGuest.dart';
 import 'package:intl/intl.dart';
 
 class BookingModel {
   final int id;
   final int appointmentId;
+  final int serviceId;
   final String? createdAt;
   final String? startTime;
   final String? endTime;
   final int userId;
-  final int guestId;
+  final int? guestId;
   final bool isGuest;
   final String? remark;
+  final String? description;
   final int? createdBy;
   final bool isCreatedByGuest;
-  BookingGuestModel? guest;
+  final String? appointmentTitle;
+  final GuestDetails? guestDetails;
+  final String? imageLink;
 
-  BookingModel(
-      {required this.id,
-      required this.appointmentId,
-      this.createdAt,
-      this.startTime,
-      this.endTime,
-      required this.userId,
-      required this.guestId,
-      required this.isGuest,
-      this.remark,
-      this.createdBy,
-      required this.isCreatedByGuest,
-      this.guest});
+  BookingModel({
+    required this.id,
+    required this.appointmentId,
+    this.createdAt,
+    this.startTime,
+    this.endTime,
+    required this.userId,
+    this.guestId,
+    required this.isGuest,
+    this.remark,
+    this.createdBy,
+    required this.isCreatedByGuest,
+    this.appointmentTitle,
+    this.description,
+    this.guestDetails,
+    this.imageLink,
+    required this.serviceId
+  });
 
   factory BookingModel.fromJson(Map<String, dynamic> json) {
+    String? endDate;
     final DateTime? parsedStartDate =
         DateTime.tryParse(json['startTime'] ?? '');
-    final DateTime? parsedEndDate = DateTime.tryParse(json['endTime'] ?? '');
+    if (json['endTime'] != null) {
+      final DateTime? parsedEndDate = DateTime.tryParse(json['endTime'] ?? '');
+      if (parsedEndDate != null) {
+        endDate = DateFormat('yyyy-MM-ddHH:mm').format(parsedEndDate);
+      }
+    }
     final DateTime? parsedCreatedDate =
         DateTime.tryParse(json['createdAt'] ?? '');
 
     String? startDate;
-    String? endDate;
     String? createdAt;
 
     if (parsedStartDate != null) {
       startDate = DateFormat('yyyy-MM-ddHH:mm').format(parsedStartDate);
     }
-    if (parsedEndDate != null) {
-      endDate = DateFormat('yyyy-MM-ddHH:mm').format(parsedEndDate);
-    }
+
     if (parsedCreatedDate != null) {
       createdAt = DateFormat('yyyy-MM-ddHH:mm').format(parsedCreatedDate);
     }
-    BookingGuestModel? guest;
-    if (json['firstname'] != null) {
-      guest = BookingGuestModel(
-          firstname: json['firstname'],
-          lastname: json['lastname'],
-          description: json['description'],
-          emailId: json['email'],
-          phoneNumber: json['phoneNumber']);
-    }
+
+    GuestDetails guestDetails = (json['guest_details'] != null)
+        ? GuestDetails.fromJson(json['guest_details'])
+        : GuestDetails(
+            email: json['emailId'] ?? '',
+            lastname: json['lastName'] ?? '',
+            firstname: json['firstName'] ?? '');
 
     return BookingModel(
         id: json['id'],
         appointmentId: json['appointmentId'],
         startTime: startDate,
+        serviceId: json['serviceId'],
         endTime: endDate,
         createdAt: createdAt,
-        userId: json['userId'],
+        userId: json['userId'] ?? 1,
         guestId: json['guestId'],
         isGuest: ((json['isGuest'] ?? 0) == 1),
         isCreatedByGuest: ((json['isCreatedByGuest'] ?? 0) == 1),
         createdBy: json['createdBy'],
         remark: json['remark'],
-        guest: guest);
+        description: json['description'],
+        guestDetails: guestDetails);
   }
 
-  void setGuest(BookingGuestModel guestModel) {
-    guest = guestModel;
+  String getStartTime() {
+    if (startTime == null) return '';
+
+    String startDate = _formatDate(startTime!.substring(0, 10));
+    String startHour = startTime!.substring(10);
+    return "$startDate, $startHour";
+  }
+
+  String dateTimeRange() {
+    if (startTime == null || endTime == null) return '';
+
+    String startDate = startTime!.substring(0, 10);
+    String startTimeOnly = startTime!.substring(10);
+    String endDate = endTime!.substring(0, 10);
+    String endTimeOnly = endTime!.substring(10);
+
+    String formattedStartDate = _formatDate(startDate);
+    String formattedEndDate = _formatDate(endDate);
+
+    String formattedDateTimeRange =
+        '$formattedStartDate, $startTimeOnly - $formattedEndDate, $endTimeOnly';
+
+    return formattedDateTimeRange;
+  }
+
+  String _formatDate(String dateString) {
+    DateTime dateTime = DateTime.parse(dateString);
+    return DateFormat('dd.MM.yyyy').format(dateTime);
+  }
+}
+
+class GuestDetails {
+  final String email;
+  final String lastname;
+  final String firstname;
+
+  GuestDetails({
+    required this.email,
+    required this.lastname,
+    required this.firstname,
+  });
+
+  factory GuestDetails.fromJson(Map<String, dynamic> json) {
+    return GuestDetails(
+      email: json['email'] ?? '',
+      lastname: json['lastName'] ?? '',
+      firstname: json['firstName'] ?? '',
+    );
   }
 }

@@ -42,7 +42,6 @@ class LinkManager {
       return (jsonDecode(data) as Map)
           .map((key, value) => MapEntry(int.parse(key), value.toString()));
     } catch (e) {
-      print("Failed to load links: $e");
       return null;
     }
   }

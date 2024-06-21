@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:heidi/src/data/model/model_schedule.dart';
 
 class AppointmentSlotModel {
   final int serviceId;
@@ -6,24 +7,35 @@ class AppointmentSlotModel {
   final String name;
   final int duration;
   final bool slotSameAsAppointment;
-  final List<Map<String, TimeOfDay>> openHours;
+  final List<ScheduleModel> openHours;
 
-  AppointmentSlotModel(
-      {required this.serviceId,
-      required this.appointmentId,
-      required this.name,
-      required this.duration,
-      required this.slotSameAsAppointment,
-      required this.openHours});
+  AppointmentSlotModel({
+    required this.serviceId,
+    required this.appointmentId,
+    required this.name,
+    required this.duration,
+    required this.slotSameAsAppointment,
+    required this.openHours,
+  });
 
   factory AppointmentSlotModel.fromJson(Map<String, dynamic> json) {
+    final List<dynamic> openHours = json['openingHours'];
+    List<ScheduleModel> schedules = [];
+    for (var day in openHours) {
+      schedules.add(ScheduleModel(
+          startTime: timeOfDayFromString(day["startTime"]!),
+          endTime: timeOfDayFromString(day["endTime"]!),
+          availableSlots: day["availableSlot"]));
+    }
+
     return AppointmentSlotModel(
         serviceId: json['serviceId'] ?? 0,
         appointmentId: json['appointmentId'] ?? 0,
         name: json['name'] ?? '',
         duration: json['duration'] ?? 0,
-        slotSameAsAppointment: ((json['slotSameAsAppointment'] ?? 0) == 1),
-        openHours: json['openingHours'] ?? []);
+        // slotSameAsAppointment: ((json['slotSameAsAppointment'] ?? 0) == 1),
+        slotSameAsAppointment: true,
+        openHours: schedules);
   }
 
   static TimeOfDay timeOfDayFromString(String time) {
@@ -34,5 +46,11 @@ class AppointmentSlotModel {
     TimeOfDay timeOfDay = TimeOfDay(hour: hours, minute: minutes);
 
     return timeOfDay;
+  }
+
+  static String stringFromTimeOfDay(TimeOfDay time) {
+    final String hour = time.hour.toString().padLeft(2, '0');
+    final String minute = time.minute.toString().padLeft(2, '0');
+    return '$hour:$minute';
   }
 }

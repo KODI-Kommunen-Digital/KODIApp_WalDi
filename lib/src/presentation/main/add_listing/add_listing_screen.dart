@@ -80,6 +80,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
   String? _errorStatus;
   String? _errorSDate;
   String? _errorCategory;
+  String? _errorAppointment;
   String? selectedCity;
   int? cityId;
   int? statusId;
@@ -573,7 +574,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
 
   Future<void> _navigateAndHandleData(BuildContext context) async {
     final result = await Navigator.pushNamed(context, Routes.createAppointment,
-        arguments: {'serviceEntries': serviceEntries});
+        arguments: {'serviceEntries': serviceEntries, 'timeSlots': timeSlots});
     if (result != null) {
       setState(() {
         List<dynamic> resultList = result as List<dynamic>;
@@ -631,6 +632,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
           setState(() {
             isLoading = false;
           });
+          await _createAppointment();
           _onSuccess();
           if (!mounted) return;
           context.read<AddListingCubit>().clearAssets();
@@ -667,7 +669,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
           setState(() {
             isLoading = false;
           });
-          _createAppointment();
+          await _createAppointment();
           _onSuccess();
           if (!mounted) return;
           context.read<AddListingCubit>().clearImagePath();
@@ -690,8 +692,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
     }
   }
 
-  void _createAppointment() async {
-    context.read<AddListingCubit>().onSubmitAppointment(
+  Future<void> _createAppointment() async {
+    await context.read<AddListingCubit>().onSubmitAppointment(
         services: serviceEntries,
         openHours: timeSlots,
         holidays: [],
@@ -735,6 +737,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
 
     if (_textContentController.text.length >= 65535) {
       _errorContent = "value_desc_limit_exceeded";
+    } else if (_textContentController.text.length < 3) {
+      _errorContent = "value_asc_limit_exceeded";
     } else {
       _errorContent = UtilValidator.validate(_textContentController.text,
           allowEmpty: false);
@@ -748,6 +752,29 @@ class _AddListingScreenState extends State<AddListingScreen> {
       }
     }
 
+    if (selectedCategory?.toLowerCase() == "appointmentbooking") {
+      if ((serviceEntries ?? []).isEmpty) {
+        _errorAppointment = "appointment_service_mandatory";
+      } else if ((timeSlots ?? []).isEmpty) {
+        _errorAppointment = "schedule_required";
+      } else {
+        bool isZero = true;
+        for (var day in timeSlots!) {
+          for (var schedule in day.schedule) {
+            if (schedule.endTime.hour + schedule.endTime.minute != 0) {
+              isZero = false;
+            }
+          }
+        }
+
+        if (isZero) {
+          _errorAppointment = "schedule_required";
+        } else {
+          _errorAppointment = null;
+        }
+      }
+    }
+
     List<String?> errors = [
       _errorTitle,
       _errorContent,
@@ -757,6 +784,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       _errorWebsite,
       _errorStatus,
       _errorSDate,
+      _errorAppointment
     ];
 
     if (_errorTitle != null ||
@@ -766,7 +794,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
         // _errorEmail != null ||
         _errorWebsite != null ||
         _errorStatus != null ||
-        _errorSDate != null) {
+        _errorSDate != null ||
+        _errorAppointment != null) {
       String errorMessage = "";
       for (var element in errors) {
         if (element != null &&
@@ -796,8 +825,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
   //     9: "category_lost_found",
   //     10: "category_companies",
   //     11: "category_public_transport",
-
-  //     ///TODO: uncomment when the feature is ready
   //     // 12: "category_offers",
   //     13: "category_food",
   //     14: "category_rathaus",
@@ -808,20 +835,31 @@ class _AddListingScreenState extends State<AddListingScreen> {
   //   return categories[id];
   // }
 
-  // String? _getSubCategoryTranslation(int id) {
-  //   Map<int, String> subCategories = {
-  //     1: "subcategory_newsflash",
-  //     3: "subcategory_politics",
-  //     4: "subcategory_economy",
-  //     5: "subcategory_sports",
-  //     7: "subcategory_local",
-  //     8: "subcategory_club_news",
-  //     9: "subcategory_road",
-  //     10: "subcategory_official_notification",
-  //     11: "subcategory_timeless_news"
-  //   };
-  //   return subCategories[id];
-  // }
+      ///TODO: uncomment when the feature is ready
+      // 12: "category_offers",
+  //    13: "category_food",
+   //   14: "category_rathaus",
+      // 15: "category_newsletter",
+      // 16: "category_official_notification",
+    //  18: "category_appointment",
+  //  };
+  //  return categories[id];
+  //}
+
+  //String? _getSubCategoryTranslation(int id) {
+   // Map<int, String> subCategories = {
+     // 1: "subcategory_newsflash",
+     // 3: "subcategory_politics",
+     // 4: "subcategory_economy",
+     // 5: "subcategory_sports",
+     // 7: "subcategory_local",
+     // 8: "subcategory_club_news",
+     // 9: "subcategory_road",
+     // 10: "subcategory_official_notification",
+     // 11: "subcategory_timeless_news"
+    //};
+    //return subCategories[id];
+  //}
 
   Widget _buildContent() {
     if (_processing) {
@@ -1247,7 +1285,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const SizedBox(),
-                if (selectedCategory?.toLowerCase() == "appointment bookings")
+                if (selectedCategory?.toLowerCase() == "appointmentbooking")
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
                     child: Container(
@@ -1264,8 +1302,13 @@ class _AddListingScreenState extends State<AddListingScreen> {
                             Text(
                               Translate.of(context)
                                   .translate('appointmentDetails'),
-                              style: const TextStyle(
-                                  fontSize: 16, color: Colors.white),
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge
+                                          ?.color ??
+                                      Colors.white),
                             ),
                             const SizedBox(
                               width: 4,

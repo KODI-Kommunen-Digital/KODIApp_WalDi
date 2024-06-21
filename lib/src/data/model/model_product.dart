@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_category.dart';
@@ -7,6 +9,7 @@ import 'package:heidi/src/data/model/model_open_time.dart';
 import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:intl/intl.dart';
 import 'package:location/location.dart';
+import 'package:html/parser.dart';
 
 class ProductModel {
   final int id;
@@ -17,10 +20,10 @@ class ProductModel {
   final int? villageId;
   final int? statusId;
   final int? sourceId;
+  final int? showExternal;
   final String title;
   final String image;
   final String? pdf;
-  final int? showExternal;
   final String? videoURL;
   final String? category;
   final String expiryDate;
@@ -68,7 +71,10 @@ class ProductModel {
   final bool? bookingUse;
   final String? bookingStyle;
   final String? priceDisplay;
+  final int? appointmentId;
   List<ImageListModel>? imageLists;
+  bool isBookable;
+
   int? timeless;
 
   ProductModel(
@@ -127,11 +133,13 @@ class ProductModel {
       required this.userId,
       this.cityId,
       this.villageId,
-      this.imageLists,
       this.statusId,
       this.timeless,
       this.sourceId,
-      this.showExternal});
+      this.imageLists,
+      this.showExternal,
+      this.appointmentId,
+      this.isBookable = false});
 
   factory ProductModel.fromJson(Map<String, dynamic> json,
       {SettingModel? setting, int? cityId}) {
@@ -156,8 +164,9 @@ class ProductModel {
     String createDate = '';
     String priceMin = '';
     String priceMax = '';
-    int? timeless;
     String priceDisplay = '';
+    int? timeless;
+    String description = '';
 
     if (json['author'] != null) {
       author = UserModel.fromJson(json['author']);
@@ -166,6 +175,11 @@ class ProductModel {
       timeless = 0;
     } else {
       timeless = 1;
+    }
+
+    if (json['description'] != null) {
+      var document = parse(json['description']);
+      description = document.body!.text;
     }
 
     if (json['categoryId'] == 1) {
@@ -254,9 +268,9 @@ class ProductModel {
           : (json['logo']?.toString() ?? 'admin/News.jpeg'),
       videoURL: videoURL,
       category: category ?? '',
+      createDate: createDate,
       expiryDate: expiryDate,
       timeless: timeless,
-      createDate: createDate,
       startDate: startDate,
       endDate: endDate,
       username: json['username'],
@@ -307,6 +321,7 @@ class ProductModel {
       bookingStyle: json['booking_style'] ?? '',
       priceDisplay: priceDisplay,
       imageLists: imagesList,
+      appointmentId: json['appointmentId']
     );
   }
 
@@ -318,8 +333,8 @@ class ProductModel {
       image: json['logo'],
       // image: ImageModel.fromJson(json['image'] ?? {'full': {}, 'thumb': {}}),
       videoURL: '',
-      expiryDate: '',
       createDate: '',
+      expiryDate: '',
       startDate: '',
       endDate: '',
       username: json['username'],
@@ -364,6 +379,7 @@ class ProductModel {
       bookingStyle: '',
       priceDisplay: '',
       imageLists: json['otherlogos'],
+      appointmentId: json['appointmentId']
     );
   }
 

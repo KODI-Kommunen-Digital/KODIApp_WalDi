@@ -17,6 +17,7 @@ class AppointmentModel {
   final int? maxBookingPerSlot;
   final List<OpenTimeModel?> openHours;
   final List<HolidayModel>? holidays;
+  String? imageLink;
 
   AppointmentModel(
       {this.id,
@@ -28,32 +29,39 @@ class AppointmentModel {
       this.endDate,
       this.maxBookingPerSlot,
       required this.openHours,
-      this.holidays});
+      this.holidays,
+      this.imageLink});
 
   factory AppointmentModel.fromJson(Map<String, dynamic> json, {int? cityId}) {
     List<OpenTimeModel> parsedOpenHours = [];
     List<HolidayModel>? parsedHolidays = [];
     int? maxBookingPerSlot;
-
-    final DateTime parsedStartDate = DateTime.parse(json['startDate']);
-    final DateTime? parsedEndDate = DateTime.tryParse(json['endDate'] ?? '');
-    String startDate = DateFormat('yyyy-MM-ddHH:mm').format(parsedStartDate);
     String? endDate;
 
-    if (parsedEndDate != null) {
-      endDate = DateFormat('yyyy-MM-ddHH:mm').format(parsedEndDate);
+    final DateTime parsedStartDate = DateTime.parse(json['startDate']);
+    if (json['endDate'] != null) {
+      final DateTime? parsedEndDate = DateTime.tryParse(json['endDate'] ?? '');
+      if (parsedEndDate != null) {
+        endDate = DateFormat('yyyy-MM-ddHH:mm').format(parsedEndDate);
+      }
     }
+    String startDate = DateFormat('yyyy-MM-ddHH:mm').format(parsedStartDate);
 
     if (json['metadata'] != null) {
       Map<String, dynamic> metaData = jsonDecode(json['metadata']);
 
-      maxBookingPerSlot = metaData['maxBookingPerSlot'];
+      maxBookingPerSlot = metaData['maxBookingPerSlot'] is int
+          ? metaData['maxBookingPerSlot']
+          : metaData['maxBookingPerSlot'] != null
+              ? int.parse(metaData['maxBookingPerSlot'])
+              : 0;
+
       final List<dynamic>? jsonHolidays = metaData['holidays'];
 
       if (jsonHolidays != null) {
         for (var holiday in jsonHolidays) {
-          final DateTime parsedDate = DateTime.parse(holiday['date']);
-          String date = DateFormat('dd-MM-yyyy').format(parsedDate);
+          final DateTime parsedDate = DateFormat("dd-MM-yyyy").parse(holiday['date']);
+          String date = DateFormat('yyyy-MM-dd').format(parsedDate);
           parsedHolidays.add(HolidayModel(date: date, title: holiday['title']));
         }
       } else {
@@ -78,8 +86,7 @@ class AppointmentModel {
         if (openHours[day] != null) {
           List<dynamic> schedules = openHours[day];
           for (var schedule in schedules) {
-            TimeOfDay startTime =
-                timeOfDayFromString(schedule['startTime']!);
+            TimeOfDay startTime = timeOfDayFromString(schedule['startTime']!);
             TimeOfDay endTime = timeOfDayFromString(schedule['endTime']!);
             ScheduleModel parsedSchedule =
                 ScheduleModel(startTime: startTime, endTime: endTime);
@@ -122,5 +129,16 @@ class AppointmentModel {
     final String hour = time.hour.toString().padLeft(2, '0');
     final String minute = time.minute.toString().padLeft(2, '0');
     return '$hour:$minute';
+  }
+
+  String getStartTime(String startTime) {
+    if (startTime.length < 10) return startTime;
+    String startDate = _formatDate(startTime.substring(0, 10));
+    return startDate;
+  }
+
+  String _formatDate(String dateString) {
+    DateTime dateTime = DateTime.parse(dateString);
+    return DateFormat('dd.MM.yyyy').format(dateTime);
   }
 }

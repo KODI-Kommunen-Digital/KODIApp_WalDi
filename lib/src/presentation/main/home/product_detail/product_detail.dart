@@ -153,18 +153,16 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         link,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
-                        style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyLarge?.color ??
-                              Colors.white,
+                        style: const TextStyle(
+                          color: Colors.white,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                     IconButton(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.close,
-                        color: Theme.of(context).textTheme.bodyLarge?.color ??
-                            Colors.white,
+                        color: Colors.white,
                       ),
                       onPressed: () {
                         Navigator.of(context).pop();
@@ -211,6 +209,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     Widget attachments = Container();
     Widget createdDate = Container();
     Widget description = Container();
+    Widget bookAppointment = Container();
     Widget info = AppPlaceholder(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -958,6 +957,35 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           // },
         );
       }
+      if (product.isBookable) {
+        bookAppointment = AppButton(
+          Translate.of(context).translate('create_booking'),
+          onPressed: () async {
+            if (isLoggedIn) {
+              Navigator.pushNamed(context, Routes.booking, arguments: {
+                'cityId': product.cityId ?? 1,
+                'listingId': product.id,
+              });
+            } else {
+              ScaffoldMessenger.of(context).removeCurrentSnackBar();
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content:
+                      Text(Translate.of(context).translate('login_required'))));
+              await Navigator.pushNamed(context, Routes.signIn);
+              bool loggedIn =
+                  await context.read<ProductDetailCubit>().isLoggedIn();
+              if (loggedIn) {
+                isLoggedIn = true;
+                Navigator.pushNamed(context, Routes.booking, arguments: {
+                  'cityId': product.cityId ?? 1,
+                  'listingId': product.id,
+                });
+              }
+            }
+          },
+          mainAxisSize: MainAxisSize.max,
+        );
+      }
 
       info = Padding(
         padding: const EdgeInsets.only(left: 16, right: 16),
@@ -1035,6 +1063,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 endDate
                 // priceRange,
               ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [bookAppointment],
             ),
             description,
             address,

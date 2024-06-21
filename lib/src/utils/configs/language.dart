@@ -74,9 +74,8 @@ class AppLanguage {
         return 'Indian';
       case 'es':
         return 'Spanish';
-
       default:
-        return 'Unknown';
+        return 'German';
     }
   }
 

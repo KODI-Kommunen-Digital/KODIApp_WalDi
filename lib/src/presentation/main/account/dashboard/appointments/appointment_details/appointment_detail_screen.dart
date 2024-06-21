@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_appointment.dart';
 import 'package:heidi/src/data/model/model_booking.dart';
-import 'package:heidi/src/presentation/cubit/app_bloc.dart';
+import 'package:heidi/src/data/model/model_bookingGuest.dart';
+import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/appointments/appointment_details/cubit/appointment_details_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/appointments/appointment_details/cubit/appointment_details_state.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
+import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
@@ -25,7 +27,9 @@ class _AppointmentDetailsScreenState extends State<AppointmentDetailsScreen> {
   @override
   void initState() {
     super.initState();
-    AppBloc.appointmentDetailsCubit.onLoad(false, widget.appointment.id!);
+    context
+        .read<AppointmentDetailsCubit>()
+        .onLoad(false, widget.appointment.id!);
   }
 
   @override
@@ -33,11 +37,15 @@ class _AppointmentDetailsScreenState extends State<AppointmentDetailsScreen> {
     return BlocBuilder<AppointmentDetailsCubit, AppointmentDetailsState>(
       builder: (context, state) => state.maybeWhen(
         loading: () => const AppointmentDetailsLoading(),
-        loaded: (bookings, isRefreshLoader) => AppointmentDetailsLoaded(
-          bookings: bookings,
+        loaded: (bookings, guests, isRefreshLoader, listing) =>
+            AppointmentDetailsLoaded(
           isRefreshLoader: isRefreshLoader,
           appointment: widget.appointment,
+          guests: guests,
+          bookings: bookings,
+          listing: listing,
         ),
+        error: (msg) => ErrorWidget(msg),
         orElse: () => ErrorWidget(
           "Failed to load appointments.",
         ),
@@ -54,8 +62,7 @@ class AppointmentDetailsLoading extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          //TODO translate
-          title: Text("Termindetails"),
+          title: Text(Translate.of(context).translate('appointmentDetails')),
         ),
         body: const Center(child: CircularProgressIndicator.adaptive()));
   }
@@ -63,13 +70,17 @@ class AppointmentDetailsLoading extends StatelessWidget {
 
 class AppointmentDetailsLoaded extends StatefulWidget {
   final AppointmentModel appointment;
-  final List<BookingModel> bookings;
+  final List<BookingGuestModel> guests;
   final bool isRefreshLoader;
+  final List<BookingModel> bookings;
+  final ProductModel? listing;
 
   const AppointmentDetailsLoaded(
       {required this.isRefreshLoader,
       required this.appointment,
+      required this.guests,
       required this.bookings,
+      required this.listing,
       super.key});
 
   @override
@@ -78,9 +89,40 @@ class AppointmentDetailsLoaded extends StatefulWidget {
 
 class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
   final _scrollController = ScrollController(initialScrollOffset: 0.0);
-  final List<String> _selectedTimeSlots = [
-    '8:00 - 8:15',
-  ];
+  List<BookingGuestModel> guests = [];
+  List<BookingModel> bookings = [];
+  bool isLoadingMore = false;
+  int pageNo = 1;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_scrollListener);
+    guests.addAll(widget.guests);
+    bookings.addAll(widget.bookings);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_scrollListener);
+    super.dispose();
+  }
+
+  Future _scrollListener() async {
+    if (_scrollController.position.atEdge) {
+      if (_scrollController.position.pixels != 0) {
+        setState(() {
+          isLoadingMore = true;
+        });
+        guests = await context
+            .read<AppointmentDetailsCubit>()
+            .newGuestBookings(++pageNo, guests, widget.appointment.id!);
+        setState(() {
+          isLoadingMore = false;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext buildContext) {
@@ -101,15 +143,21 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
               collapseMode: CollapseMode.none,
               background: InkWell(
                 onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    Routes.imageZoom,
-                    arguments:
-                        "https://newheidi.obs.eu-de.otc.t-systems.com/user_8/city_1_listing_15_2_1709543526085",
-                  );
+                  Navigator.pushNamed(context, Routes.imageZoom, arguments: {
+                    'sourceId': widget.listing?.sourceId,
+                    'imageList': [
+                      ImageListModel(
+                        listingId: widget.listing?.id,
+                        logo: "${widget.listing?.image}",
+                      )
+                    ],
+                    'pdf': null,
+                  });
                 },
                 child: Image.network(
-                  "https://newheidi.obs.eu-de.otc.t-systems.com/user_8/city_1_listing_15_2_1709543526085",
+                  (widget.listing?.image != null)
+                      ? "${Application.picturesURL}${widget.listing!.image}"
+                      : "https://newheidi.obs.eu-de.otc.t-systems.com/user_8/city_1_listing_15_2_1709543526085",
                   width: 120,
                   height: 140,
                   fit: BoxFit.cover,
@@ -158,120 +206,181 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
                     widget.appointment.title,
                     style: Theme.of(context).textTheme.headlineLarge,
                   ),
-                  for (int i = 0; i < widget.bookings.length; i++)
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '\nKunde ${i + 1}:',
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 16),
-                        TextField(
-                          decoration: const InputDecoration(
-                            labelText: 'Name',
-                            border: OutlineInputBorder(),
-                          ),
-                          controller: TextEditingController(
-                              text:
-                                  "${widget.bookings[i].guest!.firstname} ${widget.bookings[i].guest!.lastname}"),
-                          enabled: false, // Make text unchangeable
-                          style: const TextStyle(
-                              color: Colors.white), // Set text color to white
-                        ),
-                        const SizedBox(height: 16),
-                        TextField(
-                          decoration: InputDecoration(
-                            labelText: Translate.of(context).translate('email'),
-                            border: const OutlineInputBorder(),
-                          ),
-                          controller: TextEditingController(
-                              text: widget.bookings[i].guest!.emailId),
-                          enabled: false, // Make text unchangeable
-                          style: const TextStyle(
-                              color: Colors.white), // Set text color to white
-                        ),
-                        if ((widget.bookings[i].guest?.phoneNumber ?? '') !=
-                            '')
-                          Column(
+                  for (int i = 0; i < guests.length + 1; i++)
+                    (i < guests.length)
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              Text(
+                                '\n${Translate.of(context).translate('booking')} ${i + 1}:',
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              const SizedBox(height: 16),
+                              TextField(
+                                decoration: const InputDecoration(
+                                  labelText: 'Name',
+                                  border: OutlineInputBorder(),
+                                ),
+                                controller: TextEditingController(
+                                    text:
+                                        "${guests[i].firstname} ${guests[i].lastname}"),
+                                enabled: false, // Make text unchangeable
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge
+                                            ?.color ??
+                                        Colors.white),
+                              ),
                               const SizedBox(height: 16),
                               TextField(
                                 decoration: InputDecoration(
                                   labelText:
-                                      Translate.of(context).translate('phone'),
-                                  border: OutlineInputBorder(),
+                                      Translate.of(context).translate('email'),
+                                  border: const OutlineInputBorder(),
                                 ),
                                 controller: TextEditingController(
-                                    text:
-                                        widget.bookings[i].guest!.phoneNumber),
+                                    text: guests[i].email),
                                 enabled: false, // Make text unchangeable
-                                style: const TextStyle(
-                                    color: Colors
-                                        .white), // Set text color to white
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge
+                                            ?.color ??
+                                        Colors.white),
                               ),
-                            ],
-                          ),
-                        if (widget.bookings[i].guest!.description != '')
-                          Column(
-                            children: [
+                              if ((guests[i].phoneNumber ?? '') != '')
+                                Column(
+                                  children: [
+                                    const SizedBox(height: 16),
+                                    TextField(
+                                      decoration: InputDecoration(
+                                        labelText: Translate.of(context)
+                                            .translate('phone'),
+                                        border: OutlineInputBorder(),
+                                      ),
+                                      controller: TextEditingController(
+                                          text: guests[i].phoneNumber),
+                                      enabled: false, // Make text unchangeable
+                                      style: TextStyle(
+                                          color: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyLarge
+                                                  ?.color ??
+                                              Colors.white),
+                                    ),
+                                  ],
+                                ),
+                              if (guests[i].remark != '')
+                                Column(
+                                  children: [
+                                    const SizedBox(height: 16),
+                                    TextField(
+                                      decoration: InputDecoration(
+                                        labelText: Translate.of(context)
+                                            .translate('remark'),
+                                        border: OutlineInputBorder(),
+                                      ),
+                                      controller: TextEditingController(
+                                          text: guests[i].remark),
+                                      enabled: false, // Make text unchangeable
+                                      style: TextStyle(
+                                          color: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyLarge
+                                                  ?.color ??
+                                              Colors.white),
+                                    ),
+                                  ],
+                                ),
                               const SizedBox(height: 16),
                               TextField(
                                 decoration: InputDecoration(
                                   labelText: Translate.of(context)
-                                      .translate('appointmentNote'),
+                                      .translate('date'),
+                                  border: OutlineInputBorder(),
+                                ),
+                                controller: TextEditingController(
+                                    text: guests[i].slot!.date!),
+                                enabled: false, // Make text unchangeable
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge
+                                            ?.color ??
+                                        Colors.white),
+                              ),
+                              const SizedBox(height: 16),
+                              TextField(
+                                decoration: InputDecoration(
+                                  labelText: Translate.of(context)
+                                      .translate('timeslot'),
                                   border: OutlineInputBorder(),
                                 ),
                                 controller: TextEditingController(
                                     text:
-                                        widget.bookings[i].guest!.description),
+                                        "${guests[i].slot!.startTime.format(context)} - ${guests[i].slot!.endTime.format(context)}"),
                                 enabled: false, // Make text unchangeable
-                                style: const TextStyle(
-                                    color: Colors
-                                        .white), // Set text color to white
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge
+                                            ?.color ??
+                                        Colors.white),
                               ),
+                              ElevatedButton(
+                                onPressed: () async {
+                                  final response =
+                                      await showRemoveAppointmentPopup(context);
+                                  if (response) {
+                                    // ignore: use_build_context_synchronously
+                                    context
+                                        .read<AppointmentDetailsCubit>()
+                                        .onCancelOwner(
+                                            bookings[i].appointmentId,
+                                            bookings[i].id);
+                                  }
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Text(
+                                      Translate.of(context).translate("cancel_booking"),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelLarge!
+                                          .copyWith(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                              )
                             ],
-                          ),
-                        const SizedBox(height: 16),
-                      ],
-                    ),
+                          )
+                        : (isLoadingMore)
+                            ? const Positioned(
+                                bottom: 20,
+                                left: 0,
+                                right: 0,
+                                child: Center(
+                                  child: CircularProgressIndicator.adaptive(),
+                                ),
+                              )
+                            : Container(),
                   const SizedBox(height: 16),
-                  Text(
-                    Translate.of(context).translate('appointmentSchedule'),
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
+                  if (guests.isEmpty)
+                    Center(
+                        child: Text(
+                            Translate.of(context).translate("no_bookings"))),
                   const SizedBox(height: 16),
-                  TextField(
-                    decoration: InputDecoration(
-                      labelText:
-                          Translate.of(context).translate('appointmentDate'),
-                      border: OutlineInputBorder(),
-                    ),
-                    controller: TextEditingController(
-                        text: widget.appointment.startDate),
-                    enabled: false, // Make text unchangeable
-                    style: const TextStyle(
-                        color: Colors.white), // Set text color to white
-                  ),
-                  const SizedBox(height: 16),
-                  const SizedBox(height: 16),
-                  for (final slots in _selectedTimeSlots)
-                    Column(
-                      children: [
-                        TextField(
-                          decoration: InputDecoration(
-                            labelText: Translate.of(context)
-                                .translate('appointmentSlot'),
-                            border: OutlineInputBorder(),
-                          ),
-                          controller: TextEditingController(text: slots),
-                          enabled: false, // Make text unchangeable
-                          style: const TextStyle(
-                              color: Colors.white), // Set text color to white
-                        ),
-                        const SizedBox(height: 16),
-                      ],
-                    ),
                 ],
               ),
             ),
@@ -279,5 +388,45 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
         ],
       ),
     );
+  }
+
+  Future<bool> showRemoveAppointmentPopup(BuildContext context) async {
+    final result = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            Translate.of(context).translate('delete_appointments'),
+          ),
+          content: Text(
+            Translate.of(context).translate('delete_appointment_confirmation'),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(false); // Close the dialog
+              },
+              child: Text(
+                Translate.of(context).translate('no'),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              child: Text(
+                Translate.of(context).translate('yes'),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (result) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

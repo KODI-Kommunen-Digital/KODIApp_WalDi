@@ -36,7 +36,7 @@ class ListCubit extends Cubit<ListState> {
     final type = await prefs.getKeyValue(Preferences.type, '');
     listCity = await getCityList() ?? [];
     final result = await ListRepository.loadList(
-      categoryId: (categoryId == 0) ? "" : categoryId,
+      categoryId: categoryId,
       type: type,
       pageNo: pageNo,
       cityId: cityId,

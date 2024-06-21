@@ -5,12 +5,13 @@ import 'package:heidi/src/data/model/model_open_time.dart';
 import 'package:heidi/src/data/model/model_schedule.dart';
 import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/presentation/widget/app_picker_item.dart';
+
 // import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/datetime.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class OpenTimeSlotsScreen extends StatefulWidget {
-  final List<OpenTimeModel>? selected;
+  final List<OpenTimeModel?>? selected;
 
   const OpenTimeSlotsScreen({Key? key, this.selected}) : super(key: key);
 
@@ -21,61 +22,67 @@ class OpenTimeSlotsScreen extends StatefulWidget {
 }
 
 class _OpenTimeSlotsScreenState extends State<OpenTimeSlotsScreen> {
-  final _defaultStartTime = const TimeOfDay(hour: 0, minute: 0);
-  final _defaultEndTime = const TimeOfDay(hour: 0, minute: 0);
+  final _emptyStartTime = const TimeOfDay(hour: 0, minute: 0);
+  final _emptyEndTime = const TimeOfDay(hour: 0, minute: 0);
+  final _defaultStartTime = const TimeOfDay(hour: 8, minute: 0);
+  final _defaultEndTime = const TimeOfDay(hour: 18, minute: 0);
   List<OpenTimeModel> _time = [];
   List<DateTime?> selectedDates = [];
 
   @override
   void initState() {
     super.initState();
+    _time = [
+      OpenTimeModel(dayOfWeek: 1, key: 'mon', schedule: [
+        ScheduleModel(
+          startTime: _emptyStartTime,
+          endTime: _emptyEndTime,
+        ),
+      ]),
+      OpenTimeModel(dayOfWeek: 2, key: 'tue', schedule: [
+        ScheduleModel(
+          startTime: _emptyStartTime,
+          endTime: _emptyEndTime,
+        ),
+      ]),
+      OpenTimeModel(dayOfWeek: 3, key: 'wed', schedule: [
+        ScheduleModel(
+          startTime: _emptyStartTime,
+          endTime: _emptyEndTime,
+        ),
+      ]),
+      OpenTimeModel(dayOfWeek: 4, key: 'thu', schedule: [
+        ScheduleModel(
+          startTime: _emptyStartTime,
+          endTime: _emptyEndTime,
+        ),
+      ]),
+      OpenTimeModel(dayOfWeek: 5, key: 'fri', schedule: [
+        ScheduleModel(
+          startTime: _emptyStartTime,
+          endTime: _emptyEndTime,
+        ),
+      ]),
+      OpenTimeModel(dayOfWeek: 6, key: 'sat', schedule: [
+        ScheduleModel(
+          startTime: _emptyStartTime,
+          endTime: _emptyEndTime,
+        ),
+      ]),
+      OpenTimeModel(dayOfWeek: 7, key: 'sun', schedule: [
+        ScheduleModel(
+          startTime: _emptyStartTime,
+          endTime: _emptyEndTime,
+        ),
+      ]),
+    ];
     if (widget.selected != null) {
-      _time = widget.selected!;
-    } else {
-      _time = [
-        OpenTimeModel(dayOfWeek: 1, key: 'mon', schedule: [
-          ScheduleModel(
-            startTime: _defaultStartTime,
-            endTime: _defaultEndTime,
-          ),
-        ]),
-        OpenTimeModel(dayOfWeek: 2, key: 'tue', schedule: [
-          ScheduleModel(
-            startTime: _defaultStartTime,
-            endTime: _defaultEndTime,
-          ),
-        ]),
-        OpenTimeModel(dayOfWeek: 3, key: 'wed', schedule: [
-          ScheduleModel(
-            startTime: _defaultStartTime,
-            endTime: _defaultEndTime,
-          ),
-        ]),
-        OpenTimeModel(dayOfWeek: 4, key: 'thu', schedule: [
-          ScheduleModel(
-            startTime: _defaultStartTime,
-            endTime: _defaultEndTime,
-          ),
-        ]),
-        OpenTimeModel(dayOfWeek: 5, key: 'fri', schedule: [
-          ScheduleModel(
-            startTime: _defaultStartTime,
-            endTime: _defaultEndTime,
-          ),
-        ]),
-        OpenTimeModel(dayOfWeek: 6, key: 'sat', schedule: [
-          ScheduleModel(
-            startTime: _defaultStartTime,
-            endTime: _defaultEndTime,
-          ),
-        ]),
-        OpenTimeModel(dayOfWeek: 7, key: 'sun', schedule: [
-          ScheduleModel(
-            startTime: _defaultStartTime,
-            endTime: _defaultEndTime,
-          ),
-        ]),
-      ];
+      for (var schedule in widget.selected!) {
+        if (schedule != null) {
+          _time.removeAt(schedule.dayOfWeek - 1);
+          _time.insert(schedule.dayOfWeek - 1, schedule);
+        }
+      }
     }
   }
 
@@ -111,6 +118,13 @@ class _OpenTimeSlotsScreenState extends State<OpenTimeSlotsScreen> {
 
   ///On Save
   void _onSave() {
+    for (var schedule in _time) {
+      if (!schedule.checkValid()) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(Translate.of(context).translate("time_invalid"))));
+        return;
+      }
+    }
     Navigator.pop(context, [_time, selectedDates]);
   }
 
@@ -194,8 +208,8 @@ class _OpenTimeSlotsScreenState extends State<OpenTimeSlotsScreen> {
                                   if (addAction) {
                                     item.schedule.add(
                                       ScheduleModel(
-                                        startTime: _defaultStartTime,
-                                        endTime: _defaultEndTime,
+                                        startTime: _emptyStartTime,
+                                        endTime: _emptyEndTime,
                                       ),
                                     );
                                   } else {
@@ -234,7 +248,62 @@ class _OpenTimeSlotsScreenState extends State<OpenTimeSlotsScreen> {
                 itemCount: _time.length,
               ),
             ),
-            Row(
+            const SizedBox(
+              height: 8,
+            ),
+            AppButton(Translate.of(context).translate("default_values"),
+                onPressed: () {
+              setState(() {
+                _time = [
+                  OpenTimeModel(dayOfWeek: 1, key: 'mon', schedule: [
+                    ScheduleModel(
+                      startTime: _defaultStartTime,
+                      endTime: _defaultEndTime,
+                    ),
+                  ]),
+                  OpenTimeModel(dayOfWeek: 2, key: 'tue', schedule: [
+                    ScheduleModel(
+                      startTime: _defaultStartTime,
+                      endTime: _defaultEndTime,
+                    ),
+                  ]),
+                  OpenTimeModel(dayOfWeek: 3, key: 'wed', schedule: [
+                    ScheduleModel(
+                      startTime: _defaultStartTime,
+                      endTime: _defaultEndTime,
+                    ),
+                  ]),
+                  OpenTimeModel(dayOfWeek: 4, key: 'thu', schedule: [
+                    ScheduleModel(
+                      startTime: _defaultStartTime,
+                      endTime: _defaultEndTime,
+                    ),
+                  ]),
+                  OpenTimeModel(dayOfWeek: 5, key: 'fri', schedule: [
+                    ScheduleModel(
+                      startTime: _defaultStartTime,
+                      endTime: _defaultEndTime,
+                    ),
+                  ]),
+                  OpenTimeModel(dayOfWeek: 6, key: 'sat', schedule: [
+                    ScheduleModel(
+                      startTime: _defaultStartTime,
+                      endTime: _defaultEndTime,
+                    ),
+                  ]),
+                  OpenTimeModel(dayOfWeek: 7, key: 'sun', schedule: [
+                    ScheduleModel(
+                      startTime: _emptyStartTime,
+                      endTime: _emptyEndTime,
+                    ),
+                  ]),
+                ];
+              });
+            }),
+            const SizedBox(
+              height: 8,
+            ),
+            /*Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const SizedBox(),
@@ -275,7 +344,7 @@ class _OpenTimeSlotsScreenState extends State<OpenTimeSlotsScreen> {
                   ),
                 ),
               ],
-            ),
+            ),*/
           ],
         ),
       ),
