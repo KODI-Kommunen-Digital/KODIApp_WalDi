@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:loggy/loggy.dart';
+import 'package:multi_dropdown/multiselect_dropdown.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/data/model/model_product.dart';
@@ -76,8 +77,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
   String? _errorStatus;
   String? _errorSDate;
   String? _errorCategory;
-  String? selectedCity;
-  int? cityId;
+  String? _errorCity;
+  List<String> selectedCities = [];
+  List<int> cityIds = [];
   int? statusId;
   int? villageId;
   int? categoryId;
@@ -247,15 +249,15 @@ class _AddListingScreenState extends State<AddListingScreen> {
       if (currentCity != null && currentCity != 0) {
         for (var cityData in loadCitiesResponse!.data) {
           if (cityData['id'] == currentCity) {
-            selectedCity = cityData['name'];
+            selectedCities.add(cityData['name']);
             break; // Exit the loop once the desired city is found
           }
         }
       } else {
-        selectedCity = loadCitiesResponse!.data.first['name'];
+        //selectedCities.add(loadCitiesResponse!.data.first['name']);
       }
       selectedSubCategory = loadCategoryResponse?.data.first['name'];
-      listCity = loadCitiesResponse.data;
+      listCity = loadCitiesResponse?.data;
       selectedCategory = selectedSubCategory;
       _processing = true;
     });
@@ -288,7 +290,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
 
       final city = listCity
           .firstWhere((element) => element['id'] == widget.item?.cityId);
-      selectedCity = city['name'];
+      selectedCities.add(city['name']);
       if (selectedCategory?.toLowerCase() == "news" ||
           selectedCategory == null) {
         final subCategoryResponse = await context
@@ -356,12 +358,12 @@ class _AddListingScreenState extends State<AddListingScreen> {
       if (currentCity != null && currentCity != 0) {
         for (var cityData in loadCitiesResponse?.data) {
           if (cityData['id'] == currentCity) {
-            selectedCity = cityData['name'];
+            selectedCities.add(cityData['name']);
             break; // Exit the loop once the desired city is found
           }
         }
       } else {
-        selectedCity = loadCitiesResponse?.data.first['name'];
+        //selectedCities.add(loadCitiesResponse?.data.first['name']);
       }
       if (!loadCategoryResponse?.data.isEmpty) {
         if (!mounted) return;
@@ -624,7 +626,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
         });
         final result = await context.read<AddListingCubit>().onSubmit(
               title: _textTitleController.text,
-              city: selectedCity,
+              city: selectedCities,
               place: _textPlaceController.text,
               description: _textContentController.text,
               address: _textAddressController.text,
@@ -634,6 +636,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
               expiryDate: submitExpiryDate,
               startDate: _startDate,
               endDate: _endDate,
+              createdAt: _createdAt ?? '',
               expiryTime: submitExpiryTime,
               timeless: _isExpiryDateEnabled ? 0 : 1,
               startTime: _startTime,
@@ -718,6 +721,12 @@ class _AddListingScreenState extends State<AddListingScreen> {
       }
     }
 
+    if (selectedCities.isEmpty) {
+      _errorCity = "city_require";
+    } else {
+      _errorCity = null;
+    }
+
     List<String?> errors = [
       _errorTitle,
       _errorContent,
@@ -727,6 +736,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       _errorWebsite,
       _errorStatus,
       _errorSDate,
+      _errorCity
     ];
 
     if (_errorTitle != null ||
@@ -736,7 +746,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
         // _errorEmail != null ||
         _errorWebsite != null ||
         _errorStatus != null ||
-        _errorSDate != null) {
+        _errorSDate != null ||
+        _errorCity != null) {
       String errorMessage = "";
       for (var element in errors) {
         if (element != null &&
@@ -1068,44 +1079,75 @@ class _AddListingScreenState extends State<AddListingScreen> {
                 Expanded(
                   child: listCity.isEmpty
                       ? const LinearProgressIndicator()
-                      : DropdownButton(
-                          isExpanded: true,
-                          menuMaxHeight: 200,
-                          hint: Text(
-                              Translate.of(context).translate('input_city')),
-                          value: selectedCity ?? listCity.first['name'],
-                          items: listCity.map((city) {
-                            return DropdownMenuItem(
-                                value: city['name'], child: Text(city['name']));
-                          }).toList(),
-                          onChanged: widget.item == null
-                              ? (value) async {
-                                  setState(() {
-                                    selectedCity = value as String?;
-                                    for (var element in listCity) {
-                                      if (element["name"] == value) {
-                                        cityId = element["id"];
+                      : (widget.item != null)
+                          ? DropdownButton(
+                              isExpanded: true,
+                              menuMaxHeight: 200,
+                              hint: Text(Translate.of(context)
+                                  .translate('input_city')),
+                              value: selectedCities.first,
+                              items: listCity.map((city) {
+                                return DropdownMenuItem(
+                                    value: city['name'],
+                                    child: Text(city['name']));
+                              }).toList(),
+                              onChanged: null)
+                          : MultiSelectDropDown(
+                              //isExpanded: true,
+                              backgroundColor:
+                                  Theme.of(context).scaffoldBackgroundColor,
+                              borderColor: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.color ??
+                                  Colors.white,
+                              optionsBackgroundColor:
+                                  Theme.of(context).scaffoldBackgroundColor,
+                              optionTextStyle: TextStyle(
+                                  color: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge
+                                          ?.color ??
+                                      Colors.white),
+                              selectedOptionBackgroundColor:
+                                  Theme.of(context).scaffoldBackgroundColor,
+                              dropdownHeight: 200,
+                              hint:
+                                  Translate.of(context).translate('input_city'),
+                              options: listCity.map((city) {
+                                return ValueItem(
+                                    value: city['name'], label: city['name']);
+                              }).toList(),
+                              onOptionSelected: widget.item == null
+                                  ? (List<ValueItem> selectedOptions) async {
+                                      List<String> options = [];
+                                      for (var option in selectedOptions) {
+                                        options.add(option.value!);
                                       }
+                                      setState(() {
+                                        selectedCities = options;
+                                        for (var element in listCity) {
+                                          if (element["name"] == options.last) {
+                                            cityIds.add(element["id"]);
+                                          }
+                                        }
+                                      });
+                                      selectedVillage = null;
+                                      context
+                                          .read<AddListingCubit>()
+                                          .clearVillage();
+                                      final loadVillageResponse = await context
+                                          .read<AddListingCubit>()
+                                          .loadVillages(options.last);
+                                      selectedVillage = loadVillageResponse
+                                          .data.first['name'];
+                                      villageId =
+                                          loadVillageResponse.data.first['id'];
+                                      setState(() {
+                                        listVillage = loadVillageResponse.data;
+                                      });
                                     }
-                                  });
-                                  selectedVillage = null;
-                                  context
-                                      .read<AddListingCubit>()
-                                      .clearVillage();
-                                  if (value != null) {
-                                    final loadVillageResponse = await context
-                                        .read<AddListingCubit>()
-                                        .loadVillages(value);
-                                    selectedVillage =
-                                        loadVillageResponse.data.first['name'];
-                                    villageId =
-                                        loadVillageResponse.data.first['id'];
-                                    setState(() {
-                                      listVillage = loadVillageResponse.data;
-                                    });
-                                  }
-                                }
-                              : null),
+                                  : null),
                 ),
               ],
             ),
