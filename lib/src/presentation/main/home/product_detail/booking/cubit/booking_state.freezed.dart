@@ -29,6 +29,7 @@ mixin _$BookingState {
     required TResult Function(String error) error,
   }) =>
       throw _privateConstructorUsedError;
+
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
@@ -56,6 +57,7 @@ mixin _$BookingState {
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
+
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(BookingStateLoading value) loading,
@@ -63,6 +65,7 @@ mixin _$BookingState {
     required TResult Function(BookingStateError value) error,
   }) =>
       throw _privateConstructorUsedError;
+
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(BookingStateLoading value)? loading,
@@ -92,9 +95,9 @@ class _$BookingStateCopyWithImpl<$Res, $Val extends BookingState>
     implements $BookingStateCopyWith<$Res> {
   _$BookingStateCopyWithImpl(this._value, this._then);
 
-  // ignore: unused_field
+// ignore: unused_field
   final $Val _value;
-  // ignore: unused_field
+// ignore: unused_field
   final $Res Function($Val) _then;
 }
 
@@ -298,7 +301,7 @@ class _$BookingStateLoadedImpl implements BookingStateLoaded {
   @override
   List<AppointmentServiceModel> get services {
     if (_services is EqualUnmodifiableListView) return _services;
-    // ignore: implicit_dynamic_type
+// ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_services);
   }
 

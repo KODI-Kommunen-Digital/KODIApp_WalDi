@@ -135,12 +135,12 @@ class _ListProductScreenState extends State<ListProductScreen> {
                   bool isEvent = snapshot.data ?? false;
                   return Row(
                     children: [
-                      if(!isCategoryService)
-                      AppFilterButton(
-                          multiFilter: whatCanFilter(isEvent),
-                          filterCallBack: (filter) {
-                            _updateSelectedFilter(filter);
-                          }),
+                      if (!isCategoryService)
+                        AppFilterButton(
+                            multiFilter: whatCanFilter(isEvent),
+                            filterCallBack: (filter) {
+                              _updateSelectedFilter(filter);
+                            }),
                       IconButton(
                           onPressed: () {
                             _searchListings();

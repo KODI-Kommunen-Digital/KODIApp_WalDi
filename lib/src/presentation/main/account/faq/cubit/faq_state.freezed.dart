@@ -23,6 +23,7 @@ mixin _$FaqState {
     required TResult Function() error,
   }) =>
       throw _privateConstructorUsedError;
+
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
@@ -38,6 +39,7 @@ mixin _$FaqState {
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
+
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(FaqStateLoading value) loading,
@@ -45,6 +47,7 @@ mixin _$FaqState {
     required TResult Function(FaqStateError value) error,
   }) =>
       throw _privateConstructorUsedError;
+
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(FaqStateLoading value)? loading,
@@ -73,9 +76,9 @@ class _$FaqStateCopyWithImpl<$Res, $Val extends FaqState>
     implements $FaqStateCopyWith<$Res> {
   _$FaqStateCopyWithImpl(this._value, this._then);
 
-  // ignore: unused_field
+// ignore: unused_field
   final $Val _value;
-  // ignore: unused_field
+// ignore: unused_field
   final $Res Function($Val) _then;
 }
 

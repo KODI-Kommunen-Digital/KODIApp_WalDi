@@ -23,6 +23,7 @@ class Application {
 
   static String defaultAppointmentPicturesURL =
       'https://test1heidi.obs.eu-de.otc.t-systems.com/admin/AppointmentBooking/Defaultimage1.png';
+
   //
   //
 

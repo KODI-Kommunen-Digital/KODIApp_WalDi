@@ -72,7 +72,8 @@ class AppointmentServiceModel {
           if (openHours[day] != null) {
             TimeOfDay startTime =
                 timeOfDayFromString(openHours[day].first['startTime']);
-            TimeOfDay endTime = timeOfDayFromString(openHours[day].first['endTime']);
+            TimeOfDay endTime =
+                timeOfDayFromString(openHours[day].first['endTime']);
             ScheduleModel schedule =
                 ScheduleModel(startTime: startTime, endTime: endTime);
 
@@ -95,7 +96,8 @@ class AppointmentServiceModel {
         duration: json['duration'],
         // slotSameAsAppointment: ((json['slotSameAsAppointment'] ?? 0) == 1),
         slotSameAsAppointment: true,
-        maxBookingPerSlot: maxBookingPerSlot ?? 8, //Change default value
+        maxBookingPerSlot: maxBookingPerSlot ?? 8,
+        //Change default value
         openingDates: parsedOpenHours,
         holidays: parsedHolidays);
   }

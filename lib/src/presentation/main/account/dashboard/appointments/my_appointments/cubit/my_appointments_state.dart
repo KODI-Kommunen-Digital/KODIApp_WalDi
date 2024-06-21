@@ -10,7 +10,9 @@ class MyAppointmentsState with _$MyAppointmentsState {
   const factory MyAppointmentsState.loading() = MyAppointmentsStateLoading;
 
   const factory MyAppointmentsState.loaded(
-      List<AppointmentModel>? appointments, bool isRefreshLoader) = MyAppointmentsStateLoaded;
+          List<AppointmentModel>? appointments, bool isRefreshLoader) =
+      MyAppointmentsStateLoaded;
 
-  const factory MyAppointmentsState.error(String msg) = MyAppointmentsStateError;
+  const factory MyAppointmentsState.error(String msg) =
+      MyAppointmentsStateError;
 }

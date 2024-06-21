@@ -25,6 +25,7 @@ mixin _$DiscoveryState {
     required TResult Function(String error) error,
   }) =>
       throw _privateConstructorUsedError;
+
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
@@ -44,6 +45,7 @@ mixin _$DiscoveryState {
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
+
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(DiscoveryStateInitial value) initial,
@@ -53,6 +55,7 @@ mixin _$DiscoveryState {
     required TResult Function(DiscoveryStateError value) error,
   }) =>
       throw _privateConstructorUsedError;
+
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(DiscoveryStateInitial value)? initial,
@@ -86,9 +89,9 @@ class _$DiscoveryStateCopyWithImpl<$Res, $Val extends DiscoveryState>
     implements $DiscoveryStateCopyWith<$Res> {
   _$DiscoveryStateCopyWithImpl(this._value, this._then);
 
-  // ignore: unused_field
+// ignore: unused_field
   final $Val _value;
-  // ignore: unused_field
+// ignore: unused_field
   final $Res Function($Val) _then;
 }
 
@@ -377,7 +380,7 @@ class _$DiscoveryStateLoadedImpl implements DiscoveryStateLoaded {
   @override
   List<CitizenServiceModel> get list {
     if (_list is EqualUnmodifiableListView) return _list;
-    // ignore: implicit_dynamic_type
+// ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_list);
   }
 
@@ -539,7 +542,7 @@ class _$DiscoveryStateUpdatedImpl implements DiscoveryStateUpdated {
   @override
   List<CategoryModel> get list {
     if (_list is EqualUnmodifiableListView) return _list;
-    // ignore: implicit_dynamic_type
+// ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_list);
   }
 

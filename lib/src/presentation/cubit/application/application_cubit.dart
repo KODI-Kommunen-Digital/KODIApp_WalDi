@@ -38,7 +38,7 @@ class ApplicationCubit extends Cubit<ApplicationState> {
         emit(const ApplicationState.loaded());
       });
     } else {
-        emit(const ApplicationState.loaded());
+      emit(const ApplicationState.loaded());
     }
 
     if (oldDomain != '') {
@@ -56,7 +56,6 @@ class ApplicationCubit extends Cubit<ApplicationState> {
     } catch (e, stackTrace) {
       UtilLogger.log("ERROR", e);
       await Sentry.captureException(e, stackTrace: stackTrace);
-
     }
 
     if (oldTheme != '') {

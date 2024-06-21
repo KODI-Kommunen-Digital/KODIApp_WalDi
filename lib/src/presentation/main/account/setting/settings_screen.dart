@@ -260,8 +260,8 @@ class _SettingsScreenState extends State<SettingsScreen>
                     .spaceBetween, // Ensures space between items
                 children: <Widget>[
                   FutureBuilder<String>(
-                    future:
-                        getAppVersion(), // This needs to be your method to get the app version
+                    future: getAppVersion(),
+                    // This needs to be your method to get the app version
                     builder:
                         (BuildContext context, AsyncSnapshot<String> snapshot) {
                       if (snapshot.hasData) {

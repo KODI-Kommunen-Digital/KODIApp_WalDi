@@ -47,7 +47,10 @@ class LinkManager {
   }
 
   static String? getMitredenLink(int cityId) => mitredenLinks?[cityId];
+
   static String? getVirtualTourLink(int cityId) => virtualTourLinks?[cityId];
+
   static String? getCityLink(int cityId) => cityLinks?[cityId];
+
   static String? getTourismLink(int cityId) => tourismLinks?[cityId];
 }

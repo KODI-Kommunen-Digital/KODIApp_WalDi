@@ -45,7 +45,7 @@ class MyBookingsCubit extends Cubit<MyBookingsState> {
               isCreatedByGuest: booking.isCreatedByGuest,
               description: booking.description,
               appointmentTitle: product.title,
-          imageLink: product.image));
+              imageLink: product.image));
         } else {
           bookings.add(booking);
           logError("Failed loading product for booking ${booking.id}");
@@ -95,7 +95,6 @@ class MyBookingsCubit extends Cubit<MyBookingsState> {
   }
 
   Future<bool> deleteBooking(BookingModel booking) async {
-
     final prefs = await Preferences.openBox();
     int userId = prefs.getKeyValue(Preferences.userId, -1);
 

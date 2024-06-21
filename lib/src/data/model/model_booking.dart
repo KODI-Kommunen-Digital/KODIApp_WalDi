@@ -18,24 +18,23 @@ class BookingModel {
   final GuestDetails? guestDetails;
   final String? imageLink;
 
-  BookingModel({
-    required this.id,
-    required this.appointmentId,
-    this.createdAt,
-    this.startTime,
-    this.endTime,
-    required this.userId,
-    this.guestId,
-    required this.isGuest,
-    this.remark,
-    this.createdBy,
-    required this.isCreatedByGuest,
-    this.appointmentTitle,
-    this.description,
-    this.guestDetails,
-    this.imageLink,
-    required this.serviceId
-  });
+  BookingModel(
+      {required this.id,
+      required this.appointmentId,
+      this.createdAt,
+      this.startTime,
+      this.endTime,
+      required this.userId,
+      this.guestId,
+      required this.isGuest,
+      this.remark,
+      this.createdBy,
+      required this.isCreatedByGuest,
+      this.appointmentTitle,
+      this.description,
+      this.guestDetails,
+      this.imageLink,
+      required this.serviceId});
 
   factory BookingModel.fromJson(Map<String, dynamic> json) {
     String? endDate;

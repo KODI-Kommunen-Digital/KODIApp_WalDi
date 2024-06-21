@@ -82,17 +82,17 @@ class _AccountLoadedState extends State<AccountLoaded> {
           actions: [
             (user != null)
                 ? AppButton(
-              Translate.of(context).translate('sign_out'),
-              mainAxisSize: MainAxisSize.max,
-              onPressed: _onLogout,
-              type: ButtonType.text,
-            )
+                    Translate.of(context).translate('sign_out'),
+                    mainAxisSize: MainAxisSize.max,
+                    onPressed: _onLogout,
+                    type: ButtonType.text,
+                  )
                 : AppButton(
-              Translate.of(context).translate('sign_in'),
-              mainAxisSize: MainAxisSize.max,
-              onPressed: _onLogin,
-              type: ButtonType.text,
-            )
+                    Translate.of(context).translate('sign_in'),
+                    mainAxisSize: MainAxisSize.max,
+                    onPressed: _onLogin,
+                    type: ButtonType.text,
+                  )
           ],
         ),
         body: SafeArea(
@@ -110,8 +110,8 @@ class _AccountLoadedState extends State<AccountLoaded> {
                       boxShadow: [
                         BoxShadow(
                           color: Theme.of(context).dividerColor.withOpacity(
-                            .05,
-                          ),
+                                .05,
+                              ),
                           spreadRadius: 4,
                           blurRadius: 4,
                           offset: const Offset(

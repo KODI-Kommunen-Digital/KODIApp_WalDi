@@ -23,6 +23,7 @@ mixin _$ContactUsState {
     required TResult Function() error,
   }) =>
       throw _privateConstructorUsedError;
+
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
@@ -38,6 +39,7 @@ mixin _$ContactUsState {
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
+
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(ContactUsStateLoading value) loading,
@@ -45,6 +47,7 @@ mixin _$ContactUsState {
     required TResult Function(ContactUsStateError value) error,
   }) =>
       throw _privateConstructorUsedError;
+
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(ContactUsStateLoading value)? loading,
@@ -74,9 +77,9 @@ class _$ContactUsStateCopyWithImpl<$Res, $Val extends ContactUsState>
     implements $ContactUsStateCopyWith<$Res> {
   _$ContactUsStateCopyWithImpl(this._value, this._then);
 
-  // ignore: unused_field
+// ignore: unused_field
   final $Val _value;
-  // ignore: unused_field
+// ignore: unused_field
   final $Res Function($Val) _then;
 }
 

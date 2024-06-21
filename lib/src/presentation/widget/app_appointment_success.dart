@@ -3,6 +3,7 @@ import 'package:heidi/src/utils/translate.dart';
 
 class AppointmentSuccess extends StatelessWidget {
   final bool success;
+
   const AppointmentSuccess({super.key, required this.success});
 
   @override
@@ -28,10 +29,7 @@ class AppointmentSuccess extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             Translate.of(context).translate(
-              (success)
-                  ? 'booking_success_title'
-                  : 'booking_fail_title'
-          ),
+                (success) ? 'booking_success_title' : 'booking_fail_title'),
             style: Theme.of(context)
                 .textTheme
                 .titleLarge!
@@ -40,10 +38,7 @@ class AppointmentSuccess extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             Translate.of(context).translate(
-              (success)
-                  ? 'booking_success_message'
-                  : 'booking_fail_message'
-            ),
+                (success) ? 'booking_success_message' : 'booking_fail_message'),
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodyMedium,
           )

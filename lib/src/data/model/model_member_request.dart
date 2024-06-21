@@ -9,12 +9,12 @@ class MemberRequestModel {
 
   MemberRequestModel(
       {this.cityUserId,
-        this.username,
-        this.requestId,
-        this.firstname,
-        this.lastname,
-        this.image,
-        this.createdAt});
+      this.username,
+      this.requestId,
+      this.firstname,
+      this.lastname,
+      this.image,
+      this.createdAt});
 
   MemberRequestModel.fromJson(Map<String, dynamic> json) {
     cityUserId = json['cityUserId'];

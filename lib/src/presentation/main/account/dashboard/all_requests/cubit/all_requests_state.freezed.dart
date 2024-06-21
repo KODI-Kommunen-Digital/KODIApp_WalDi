@@ -24,6 +24,7 @@ mixin _$AllRequestsState {
         loaded,
   }) =>
       throw _privateConstructorUsedError;
+
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
@@ -39,6 +40,7 @@ mixin _$AllRequestsState {
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
+
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(AllRequestsStateInitial value) initial,
@@ -46,6 +48,7 @@ mixin _$AllRequestsState {
     required TResult Function(AllRequestsStateLoaded value) loaded,
   }) =>
       throw _privateConstructorUsedError;
+
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(AllRequestsStateInitial value)? initial,
@@ -75,9 +78,9 @@ class _$AllRequestsStateCopyWithImpl<$Res, $Val extends AllRequestsState>
     implements $AllRequestsStateCopyWith<$Res> {
   _$AllRequestsStateCopyWithImpl(this._value, this._then);
 
-  // ignore: unused_field
+// ignore: unused_field
   final $Val _value;
-  // ignore: unused_field
+// ignore: unused_field
   final $Res Function($Val) _then;
 }
 
@@ -348,7 +351,7 @@ class _$AllRequestsStateLoaded implements AllRequestsStateLoaded {
   @override
   List<ProductModel> get recent {
     if (_recent is EqualUnmodifiableListView) return _recent;
-    // ignore: implicit_dynamic_type
+// ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_recent);
   }
 

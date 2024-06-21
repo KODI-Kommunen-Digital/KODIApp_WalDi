@@ -16,8 +16,8 @@ class AppFilterButton extends StatelessWidget {
         Navigator.pushNamed(context, Routes.filterScreen, arguments: {
           "multifilter": multiFilter
         }).then((filter) => {
-          if (filter != null) {filterCallBack(filter as MultiFilter)}
-        });
+              if (filter != null) {filterCallBack(filter as MultiFilter)}
+            });
       },
       style: TextButton.styleFrom(
         textStyle: Theme.of(context)

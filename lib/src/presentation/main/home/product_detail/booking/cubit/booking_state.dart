@@ -10,7 +10,12 @@ part 'booking_state.freezed.dart';
 class BookingState with _$BookingState {
   const factory BookingState.loading() = BookingStateLoading;
 
-  const factory BookingState.loaded(AppointmentSlotModel? slot, List<AppointmentServiceModel> services, AppointmentModel appointment, bool isEmpty, UserModel userModel) = BookingStateLoaded;
+  const factory BookingState.loaded(
+      AppointmentSlotModel? slot,
+      List<AppointmentServiceModel> services,
+      AppointmentModel appointment,
+      bool isEmpty,
+      UserModel userModel) = BookingStateLoaded;
 
   const factory BookingState.error(String error) = BookingStateError;
 }

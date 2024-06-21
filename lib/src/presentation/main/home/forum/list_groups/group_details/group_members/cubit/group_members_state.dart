@@ -10,9 +10,9 @@ class GroupMembersState with _$GroupMembersState {
   const factory GroupMembersState.loading() = GroupMembersLoading;
 
   const factory GroupMembersState.loaded(
-      List<GroupMembersModel> list,
-      bool isAdmin,
-      ) = GroupMembersLoaded;
+    List<GroupMembersModel> list,
+    bool isAdmin,
+  ) = GroupMembersLoaded;
 
   const factory GroupMembersState.error(String error) = GroupMembersStateError;
 }

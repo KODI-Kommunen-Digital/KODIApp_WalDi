@@ -9,12 +9,12 @@ class RequestMemberModel {
 
   RequestMemberModel(
       {this.forumId,
-        this.userId,
-        this.statusId,
-        this.createdAt,
-        this.updatedAt,
-        this.id,
-        this.reason});
+      this.userId,
+      this.statusId,
+      this.createdAt,
+      this.updatedAt,
+      this.id,
+      this.reason});
 
   RequestMemberModel.fromJson(Map<String, dynamic> json) {
     forumId = json['forumId'];

@@ -35,7 +35,7 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
       if (result != null) {
         product = result;
         if (product!.categoryId == 18) {
-         /* AppointmentModel? appointment =
+          /* AppointmentModel? appointment =
               await AppointmentRepository.loadAppointment(
                   item.cityId!, item.id);*/
           product!.isBookable = true;

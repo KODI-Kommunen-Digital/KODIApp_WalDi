@@ -10,8 +10,8 @@ class MemberRequestState with _$MemberRequestState {
   const factory MemberRequestState.loading() = MemberRequestLoading;
 
   const factory MemberRequestState.loaded(
-      List<MemberRequestModel> list,
-      ) = MemberRequestLoaded;
+    List<MemberRequestModel> list,
+  ) = MemberRequestLoaded;
 
   const factory MemberRequestState.error(String error) = MemberRequestError;
 }

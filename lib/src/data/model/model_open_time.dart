@@ -22,10 +22,10 @@ class OpenTimeModel {
   }
 
   bool checkValid() {
-    for(var time in schedule) {
+    for (var time in schedule) {
       int start = time.startTime.hour * 60 + time.startTime.minute;
       int end = time.endTime.hour * 60 + time.endTime.minute;
-      if(end<start) {
+      if (end < start) {
         return false;
       }
     }

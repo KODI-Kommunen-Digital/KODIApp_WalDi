@@ -24,6 +24,7 @@ mixin _$MemberRequestState {
     required TResult Function(String error) error,
   }) =>
       throw _privateConstructorUsedError;
+
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
@@ -41,6 +42,7 @@ mixin _$MemberRequestState {
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
+
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(MemberRequestStateInitial value) initial,
@@ -49,6 +51,7 @@ mixin _$MemberRequestState {
     required TResult Function(MemberRequestError value) error,
   }) =>
       throw _privateConstructorUsedError;
+
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(MemberRequestStateInitial value)? initial,
@@ -80,9 +83,9 @@ class _$MemberRequestStateCopyWithImpl<$Res, $Val extends MemberRequestState>
     implements $MemberRequestStateCopyWith<$Res> {
   _$MemberRequestStateCopyWithImpl(this._value, this._then);
 
-  // ignore: unused_field
+// ignore: unused_field
   final $Val _value;
-  // ignore: unused_field
+// ignore: unused_field
   final $Res Function($Val) _then;
 }
 
@@ -357,7 +360,7 @@ class _$MemberRequestLoaded implements MemberRequestLoaded {
   @override
   List<MemberRequestModel> get list {
     if (_list is EqualUnmodifiableListView) return _list;
-    // ignore: implicit_dynamic_type
+// ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_list);
   }
 

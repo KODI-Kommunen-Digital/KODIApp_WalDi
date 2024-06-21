@@ -13,14 +13,14 @@ class ResultApiModel {
 
   ResultApiModel(
       {required this.success,
-        required this.message,
-        this.data,
-        this.pagination,
-        this.attr,
-        this.payment,
-        this.user,
-        this.id,
-        this.token});
+      required this.message,
+      this.data,
+      this.pagination,
+      this.attr,
+      this.payment,
+      this.user,
+      this.id,
+      this.token});
 
   factory ResultApiModel.fromJson(Map<String, dynamic> json) {
     UserModel? user;

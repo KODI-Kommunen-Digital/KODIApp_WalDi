@@ -11,7 +11,7 @@ class DiscoveryState with _$DiscoveryState {
   const factory DiscoveryState.loading() = DiscoveryStateLoading;
 
   const factory DiscoveryState.loaded(List<CitizenServiceModel> list) =
-  DiscoveryStateLoaded;
+      DiscoveryStateLoaded;
 
   const factory DiscoveryState.updated(
     List<CategoryModel> list,

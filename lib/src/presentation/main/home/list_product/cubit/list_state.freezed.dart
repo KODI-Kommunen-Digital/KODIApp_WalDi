@@ -27,6 +27,7 @@ mixin _$ListState {
     required TResult Function(String error) error,
   }) =>
       throw _privateConstructorUsedError;
+
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
@@ -46,6 +47,7 @@ mixin _$ListState {
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
+
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(ListStateInitial value) initial,
@@ -55,6 +57,7 @@ mixin _$ListState {
     required TResult Function(ListStateError value) error,
   }) =>
       throw _privateConstructorUsedError;
+
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(ListStateInitial value)? initial,
@@ -87,9 +90,9 @@ class _$ListStateCopyWithImpl<$Res, $Val extends ListState>
     implements $ListStateCopyWith<$Res> {
   _$ListStateCopyWithImpl(this._value, this._then);
 
-  // ignore: unused_field
+// ignore: unused_field
   final $Val _value;
-  // ignore: unused_field
+// ignore: unused_field
   final $Res Function($Val) _then;
 }
 
@@ -385,7 +388,7 @@ class _$ListStateLoaded implements ListStateLoaded {
   @override
   List<ProductModel> get list {
     if (_list is EqualUnmodifiableListView) return _list;
-    // ignore: implicit_dynamic_type
+// ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_list);
   }
 
@@ -393,7 +396,7 @@ class _$ListStateLoaded implements ListStateLoaded {
   @override
   List<dynamic> get cityList {
     if (_cityList is EqualUnmodifiableListView) return _cityList;
-    // ignore: implicit_dynamic_type
+// ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_cityList);
   }
 
@@ -566,7 +569,7 @@ class _$ListStateUpdated implements ListStateUpdated {
   @override
   List<ProductModel> get list {
     if (_list is EqualUnmodifiableListView) return _list;
-    // ignore: implicit_dynamic_type
+// ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_list);
   }
 
@@ -574,7 +577,7 @@ class _$ListStateUpdated implements ListStateUpdated {
   @override
   List<dynamic> get cityList {
     if (_cityList is EqualUnmodifiableListView) return _cityList;
-    // ignore: implicit_dynamic_type
+// ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_cityList);
   }
 

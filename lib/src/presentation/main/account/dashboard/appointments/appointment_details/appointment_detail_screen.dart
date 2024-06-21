@@ -297,8 +297,8 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
                               const SizedBox(height: 16),
                               TextField(
                                 decoration: InputDecoration(
-                                  labelText: Translate.of(context)
-                                      .translate('date'),
+                                  labelText:
+                                      Translate.of(context).translate('date'),
                                   border: OutlineInputBorder(),
                                 ),
                                 controller: TextEditingController(
@@ -352,7 +352,8 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
                                     Text(
-                                      Translate.of(context).translate("cancel_booking"),
+                                      Translate.of(context)
+                                          .translate("cancel_booking"),
                                       style: Theme.of(context)
                                           .textTheme
                                           .labelLarge!

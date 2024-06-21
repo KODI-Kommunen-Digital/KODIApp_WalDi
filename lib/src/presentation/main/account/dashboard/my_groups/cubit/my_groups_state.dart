@@ -10,14 +10,14 @@ class MyGroupsState with _$MyGroupsState {
   const factory MyGroupsState.loading() = MyGroupsStateLoading;
 
   const factory MyGroupsState.loaded(
-      List<ForumGroupModel> list,
-      int userId,
-      ) = MyGroupsStateLoaded;
+    List<ForumGroupModel> list,
+    int userId,
+  ) = MyGroupsStateLoaded;
 
   const factory MyGroupsState.updated(
-      List<ForumGroupModel> list,
-      int userId,
-      ) = MyGroupsStateUpdated;
+    List<ForumGroupModel> list,
+    int userId,
+  ) = MyGroupsStateUpdated;
 
   const factory MyGroupsState.error(String error) = MyGroupsStateError;
 }

@@ -10,13 +10,13 @@ class UserJoinedGroupsModel {
 
   UserJoinedGroupsModel(
       {this.forumName,
-        this.forumId,
-        this.memberId,
-        this.image,
-        this.isPrivate,
-        this.isAdmin,
-        this.joinedAt,
-        this.cityId});
+      this.forumId,
+      this.memberId,
+      this.image,
+      this.isPrivate,
+      this.isAdmin,
+      this.joinedAt,
+      this.cityId});
 
   UserJoinedGroupsModel.fromJson(Map<String, dynamic> json) {
     forumName = json['forumName'];

@@ -9,7 +9,9 @@ class MyBookingsState with _$MyBookingsState {
 
   const factory MyBookingsState.loading() = MyBookingsStateLoading;
 
-  const factory MyBookingsState.loaded(List<BookingModel> bookings, bool isRefreshLoader) = MyBookingsStateLoaded;
+  const factory MyBookingsState.loaded(
+          List<BookingModel> bookings, bool isRefreshLoader) =
+      MyBookingsStateLoaded;
 
   const factory MyBookingsState.error(String msg) = MyBookingsStateError;
 }

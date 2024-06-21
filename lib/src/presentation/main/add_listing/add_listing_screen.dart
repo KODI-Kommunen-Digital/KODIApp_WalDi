@@ -835,30 +835,30 @@ class _AddListingScreenState extends State<AddListingScreen> {
   //   return categories[id];
   // }
 
-      ///TODO: uncomment when the feature is ready
-      // 12: "category_offers",
+  ///TODO: uncomment when the feature is ready
+  // 12: "category_offers",
   //    13: "category_food",
-   //   14: "category_rathaus",
-      // 15: "category_newsletter",
-      // 16: "category_official_notification",
-    //  18: "category_appointment",
+  //   14: "category_rathaus",
+  // 15: "category_newsletter",
+  // 16: "category_official_notification",
+  //  18: "category_appointment",
   //  };
   //  return categories[id];
   //}
 
   //String? _getSubCategoryTranslation(int id) {
-   // Map<int, String> subCategories = {
-     // 1: "subcategory_newsflash",
-     // 3: "subcategory_politics",
-     // 4: "subcategory_economy",
-     // 5: "subcategory_sports",
-     // 7: "subcategory_local",
-     // 8: "subcategory_club_news",
-     // 9: "subcategory_road",
-     // 10: "subcategory_official_notification",
-     // 11: "subcategory_timeless_news"
-    //};
-    //return subCategories[id];
+  // Map<int, String> subCategories = {
+  // 1: "subcategory_newsflash",
+  // 3: "subcategory_politics",
+  // 4: "subcategory_economy",
+  // 5: "subcategory_sports",
+  // 7: "subcategory_local",
+  // 8: "subcategory_club_news",
+  // 9: "subcategory_road",
+  // 10: "subcategory_official_notification",
+  // 11: "subcategory_timeless_news"
+  //};
+  //return subCategories[id];
   //}
 
   Widget _buildContent() {

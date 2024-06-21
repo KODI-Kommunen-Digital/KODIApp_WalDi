@@ -25,6 +25,7 @@ mixin _$ListGroupsState {
     required TResult Function(String error) error,
   }) =>
       throw _privateConstructorUsedError;
+
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
@@ -44,6 +45,7 @@ mixin _$ListGroupsState {
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
+
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(ListGroupsStateInitial value) initial,
@@ -53,6 +55,7 @@ mixin _$ListGroupsState {
     required TResult Function(ListGroupsStateError value) error,
   }) =>
       throw _privateConstructorUsedError;
+
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(ListGroupsStateInitial value)? initial,
@@ -86,9 +89,9 @@ class _$ListGroupsStateCopyWithImpl<$Res, $Val extends ListGroupsState>
     implements $ListGroupsStateCopyWith<$Res> {
   _$ListGroupsStateCopyWithImpl(this._value, this._then);
 
-  // ignore: unused_field
+// ignore: unused_field
   final $Val _value;
-  // ignore: unused_field
+// ignore: unused_field
   final $Res Function($Val) _then;
 }
 
@@ -378,7 +381,7 @@ class _$ListGroupsStateLoaded implements ListGroupsStateLoaded {
   @override
   List<ForumGroupModel> get list {
     if (_list is EqualUnmodifiableListView) return _list;
-    // ignore: implicit_dynamic_type
+// ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_list);
   }
 
@@ -549,7 +552,7 @@ class _$ListGroupsStateUpdated implements ListGroupsStateUpdated {
   @override
   List<ForumGroupModel> get list {
     if (_list is EqualUnmodifiableListView) return _list;
-    // ignore: implicit_dynamic_type
+// ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_list);
   }
 
