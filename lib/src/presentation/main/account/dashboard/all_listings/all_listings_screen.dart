@@ -16,7 +16,7 @@ import 'package:heidi/src/presentation/main/account/dashboard/all_listings/cubit
 import 'package:heidi/src/presentation/main/account/dashboard/all_listings/cubit/all_listings_state.dart';
 import 'package:heidi/src/presentation/main/add_listing/cubit/add_listing_cubit.dart';
 import 'package:heidi/src/presentation/main/add_listing/cubit/add_listing_state.dart';
-import 'package:heidi/src/presentation/widget/app_filter_button.dart';
+import 'package:heidi/src/presentation/main/home/widget/app_filter_button.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/presentation/widget/app_text_input.dart';
 import 'package:heidi/src/utils/configs/application.dart';
@@ -27,21 +27,10 @@ import 'package:heidi/src/utils/translate.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 // ignore: must_be_immutable
-class AllListingsScreen extends StatefulWidget {
+class AllListingsScreen extends StatelessWidget {
   final UserModel user;
 
   const AllListingsScreen({required this.user, super.key});
-
-  @override
-  State<AllListingsScreen> createState() => _AllListingsScreenState();
-}
-
-class _AllListingsScreenState extends State<AllListingsScreen> {
-  @override
-  void dispose() {
-    AppBloc.allListingsCubit.setCurrentStatus(0);
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +39,7 @@ class _AllListingsScreenState extends State<AllListingsScreen> {
             loading: () => const AllListingsLoading(),
             loaded: (posts, currentListingFilter, currentCityFilter) =>
                 AllListingsLoaded(
-                    user: widget.user,
+                    user: user,
                     posts: posts,
                     currentListingFilter: currentListingFilter,
                     currentCityFilter: currentCityFilter),
@@ -96,9 +85,9 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
   final TextEditingController _searchController = TextEditingController();
   double previousScrollPosition = 0;
   bool isLoadingMore = false;
+  int pageNo = 1;
   bool isSearching = false;
   String? searchTerm;
-  int pageNo = 1;
   List<ProductModel>? posts;
   bool isSwiped = false;
   String selectedListingStatusValue = "inactive";
@@ -120,6 +109,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
 
   @override
   void dispose() {
+    AppBloc.allListingsCubit.setCurrentStatus(0);
     _scrollController.removeListener(_scrollListener);
     _scrollController.dispose();
     super.dispose();
@@ -128,8 +118,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
   @override
   Widget build(BuildContext context) {
     final memoryCacheManager = DefaultCacheManager();
-    return SafeArea(
-        child: Scaffold(
+    return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: Text(
@@ -150,7 +139,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                         .setCurrentCityFilter(filter.currentLocation ?? 0);
                     await AppBloc.allListingsCubit
                         .setCurrentStatus(filter.currentListingStatus ?? 0);
-                    await _onRefresh();
+                    await context.read<AllListingsCubit>().onLoad(false);
                   }),
               IconButton(
                   onPressed: () {
@@ -161,299 +150,309 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
           ),
         ],
       ),
-      body: Stack(children: [
-        (posts?.isNotEmpty ?? false)
-            ? Padding(
-                padding: const EdgeInsets.fromLTRB(8, 8, 4, 0),
-                child: CustomScrollView(
-                  physics: const BouncingScrollPhysics(
-                    parent: AlwaysScrollableScrollPhysics(),
-                  ),
-                  controller: _scrollController,
-                  slivers: <Widget>[
-                    CupertinoSliverRefreshControl(
-                      onRefresh: _onRefreshLoader,
+      body: SafeArea(
+        child: Stack(children: [
+          (posts?.isNotEmpty ?? false)
+              ? Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 8, 4, 0),
+                  child: CustomScrollView(
+                    physics: const BouncingScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics(),
                     ),
-                    SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (BuildContext context, int index) {
-                          if (index < posts!.length) {
-                            final item = posts![index];
-                            return Slidable(
-                              endActionPane: ActionPane(
-                                motion: const ScrollMotion(),
-                                children: [
-                                  SlidableAction(
-                                    onPressed: (aContext) {
-                                      Navigator.pushNamed(
-                                          context, Routes.submit, arguments: {
-                                        'item': item,
-                                        'isNewList': false,
-                                        'isAdmin': true
-                                      }).then((value) async {
-                                        await _onRefresh();
-                                      });
-                                    },
-                                    backgroundColor: Colors.blue,
-                                    foregroundColor: Colors.white,
-                                    icon: Icons.edit,
-                                    label:
-                                        Translate.of(context).translate('edit'),
-                                  ),
-                                  SlidableAction(
-                                    onPressed: (aContext) async {
-                                      bool response =
-                                          await showDeleteConfirmation(
-                                              context, item);
-                                      if (response) {
-                                        await AppBloc.homeCubit
-                                            .onLoad(false)
-                                            .then((value) => _onRefresh());
-                                      }
-                                    },
-                                    backgroundColor: Colors.red,
-                                    foregroundColor: Colors.white,
-                                    icon: Icons.delete,
-                                    label: Translate.of(context)
-                                        .translate('delete'),
-                                  ),
-                                ],
-                              ),
-                              key:
-                                  Key(item.id.toString() + isSwiped.toString()),
-                              child: InkWell(
-                                onTap: () {
-                                  _onProductDetail(item);
-                                },
-                                child: Container(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 4),
-                                  child: Stack(
-                                    children: [
-                                      Row(
-                                        children: <Widget>[
-                                          ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            child: CachedNetworkImage(
-                                              imageUrl: item.sourceId == 2 &&
-                                                      item.image != null &&
-                                                      item.image !=
-                                                          'admin/News.jpeg'
-                                                  ? item.image
-                                                  : item.sourceId == 3 &&
-                                                          item.image != null
-                                                      ? (item.image.startsWith(
-                                                              'admin')
-                                                          ? "${Application.picturesURL}${item.image}"
-                                                          : item.image)
-                                                      : item.image != null &&
-                                                              item.image
-                                                                  .startsWith(
-                                                                      'admin')
-                                                          ? "${Application.picturesURL}${item.image}"
-                                                          : "${Application.picturesURL}${item.image}",
-                                              cacheManager: memoryCacheManager,
-                                              placeholder: (context, url) {
-                                                return AppPlaceholder(
-                                                  child: Container(
-                                                    height: 140,
-                                                    width: 120,
-                                                    decoration:
-                                                        const BoxDecoration(
-                                                      color: Colors.white,
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                              imageBuilder:
-                                                  (context, imageProvider) {
-                                                return Container(
-                                                  width: 120,
-                                                  height: 140,
-                                                  decoration: BoxDecoration(
-                                                    image: DecorationImage(
-                                                      image: imageProvider,
-                                                      fit: BoxFit.fitHeight,
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                              errorWidget:
-                                                  (context, url, error) {
-                                                return AppPlaceholder(
-                                                  child: Container(
-                                                    width: 120,
-                                                    height: 140,
-                                                    decoration:
-                                                        const BoxDecoration(
-                                                      color: Colors.white,
-                                                      borderRadius:
-                                                          BorderRadius.only(
-                                                        topLeft:
-                                                            Radius.circular(8),
-                                                        bottomLeft:
-                                                            Radius.circular(8),
+                    controller: _scrollController,
+                    slivers: <Widget>[
+                      CupertinoSliverRefreshControl(
+                        onRefresh: () async {
+                          _onRefresh(true);
+                        },
+                      ),
+                      SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          (BuildContext context, int index) {
+                            if (index < posts!.length) {
+                              final item = posts![index];
+                              return Slidable(
+                                endActionPane: ActionPane(
+                                  motion: const ScrollMotion(),
+                                  children: [
+                                    SlidableAction(
+                                      onPressed: (aContext) {
+                                        Navigator.pushNamed(
+                                            context, Routes.submit, arguments: {
+                                          'item': item,
+                                          'isNewList': false,
+                                          'isAdmin': true
+                                        }).then((value) async {
+                                          await _onRefresh(false);
+                                        });
+                                      },
+                                      backgroundColor: Colors.blue,
+                                      foregroundColor: Colors.white,
+                                      icon: Icons.edit,
+                                      label: Translate.of(context)
+                                          .translate('edit'),
+                                    ),
+                                    SlidableAction(
+                                      onPressed: (aContext) async {
+                                        bool response =
+                                            await showDeleteConfirmation(
+                                                context, item);
+                                        if (response) {
+                                          await AppBloc.homeCubit.onLoad(false);
+                                          _onRefresh(false);
+                                        }
+                                      },
+                                      backgroundColor: Colors.red,
+                                      foregroundColor: Colors.white,
+                                      icon: Icons.delete,
+                                      label: Translate.of(context)
+                                          .translate('delete'),
+                                    ),
+                                  ],
+                                ),
+                                key: Key(
+                                    item.id.toString() + isSwiped.toString()),
+                                child: InkWell(
+                                  onTap: () {
+                                    _onProductDetail(item);
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 4),
+                                    child: Stack(
+                                      children: [
+                                        Row(
+                                          children: <Widget>[
+                                            ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              child: CachedNetworkImage(
+                                                imageUrl: item.sourceId == 2 &&
+                                                        item.image != null &&
+                                                        item.image !=
+                                                            'admin/News.jpeg'
+                                                    ? item.image
+                                                    : item.sourceId == 3 &&
+                                                            item.image != null
+                                                        ? (item.image
+                                                                .startsWith(
+                                                                    'admin')
+                                                            ? "${Application.picturesURL}${item.image}"
+                                                            : item.image)
+                                                        : item.image != null &&
+                                                                item.image
+                                                                    .startsWith(
+                                                                        'admin')
+                                                            ? "${Application.picturesURL}${item.image}"
+                                                            : "${Application.picturesURL}${item.image}",
+                                                cacheManager:
+                                                    memoryCacheManager,
+                                                placeholder: (context, url) {
+                                                  return AppPlaceholder(
+                                                    child: Container(
+                                                      height: 140,
+                                                      width: 120,
+                                                      decoration:
+                                                          const BoxDecoration(
+                                                        color: Colors.white,
                                                       ),
                                                     ),
-                                                    child:
-                                                        const Icon(Icons.error),
-                                                  ),
-                                                );
-                                              },
+                                                  );
+                                                },
+                                                imageBuilder:
+                                                    (context, imageProvider) {
+                                                  return Container(
+                                                    width: 120,
+                                                    height: 140,
+                                                    decoration: BoxDecoration(
+                                                      image: DecorationImage(
+                                                        image: imageProvider,
+                                                        fit: BoxFit.fitHeight,
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                                errorWidget:
+                                                    (context, url, error) {
+                                                  return AppPlaceholder(
+                                                    child: Container(
+                                                      width: 120,
+                                                      height: 140,
+                                                      decoration:
+                                                          const BoxDecoration(
+                                                        color: Colors.white,
+                                                        borderRadius:
+                                                            BorderRadius.only(
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  8),
+                                                          bottomLeft:
+                                                              Radius.circular(
+                                                                  8),
+                                                        ),
+                                                      ),
+                                                      child: const Icon(
+                                                          Icons.error),
+                                                    ),
+                                                  );
+                                                },
+                                              ),
                                             ),
-                                          ),
-                                          const SizedBox(width: 8),
-                                          Expanded(
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: <Widget>[
-                                                const SizedBox(
-                                                  height: 24,
-                                                ),
-                                                Text(
-                                                  item.category ?? '',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodySmall!
-                                                      .copyWith(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                ),
-                                                const SizedBox(height: 8),
-                                                Text(
-                                                  item.title,
-                                                  maxLines: 2,
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .titleSmall!
-                                                      .copyWith(
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                ),
-                                                const SizedBox(height: 4),
-                                                Text(
-                                                  item.categoryId == 3
-                                                      ? (item.endDate != ""
-                                                          ? "${item.startDate} ${Translate.of(context).translate('to')} ${item.endDate}"
-                                                          : item.startDate)
-                                                      : item.createDate,
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodySmall!
-                                                      .copyWith(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                ),
-                                                if (item.sourceId == 3)
+                                            const SizedBox(width: 8),
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: <Widget>[
+                                                  const SizedBox(
+                                                    height: 24,
+                                                  ),
                                                   Text(
-                                                    "${Translate.of(context).translate('quelle')} ${item.externalId}",
+                                                    item.category ?? '',
                                                     style: Theme.of(context)
                                                         .textTheme
                                                         .bodySmall!
                                                         .copyWith(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                  ),
+                                                  const SizedBox(height: 8),
+                                                  Text(
+                                                    item.title,
+                                                    maxLines: 2,
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .titleSmall!
+                                                        .copyWith(
                                                             fontWeight:
                                                                 FontWeight
-                                                                    .w600),
-                                                    maxLines: 1,
+                                                                    .bold),
                                                   ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Container(
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10),
-                                                      ),
-                                                      child: ElevatedButton(
-                                                        onPressed: () async {
-                                                          _openListingStatusActionPopUp(
-                                                              item);
-                                                        },
-                                                        child: Text(
-                                                          Translate.of(context)
-                                                              .translate(
-                                                                  getStatusTanslation(
-                                                                      item.statusId ??
-                                                                          0,
-                                                                      null)),
-                                                          style:
-                                                              Theme.of(context)
-                                                                  .textTheme
-                                                                  .bodySmall!
-                                                                  .copyWith(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                  ),
+                                                  const SizedBox(height: 4),
+                                                  Text(
+                                                    item.categoryId == 3
+                                                        ? (item.endDate != ""
+                                                            ? "${item.startDate} ${Translate.of(context).translate('to')} ${item.endDate}"
+                                                            : item.startDate)
+                                                        : item.createDate,
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodySmall!
+                                                        .copyWith(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                  ),
+                                                  if (item.sourceId == 3)
+                                                    Text(
+                                                      "${Translate.of(context).translate('quelle')} ${item.externalId}",
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .bodySmall!
+                                                          .copyWith(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600),
+                                                      maxLines: 1,
+                                                    ),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Container(
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(10),
+                                                        ),
+                                                        child: ElevatedButton(
+                                                          onPressed: () async {
+                                                            _openListingStatusActionPopUp(
+                                                                item);
+                                                          },
+                                                          child: Text(
+                                                            Translate.of(
+                                                                    context)
+                                                                .translate(
+                                                                    getStatusTanslation(
+                                                                        item.statusId ??
+                                                                            0,
+                                                                        null)),
+                                                            style: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .bodySmall!
+                                                                .copyWith(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                    IconButton(
-                                                        onPressed: () {
-                                                          _openListingActionPopUp(
-                                                              item);
-                                                        },
-                                                        icon: const Icon(
-                                                            Icons.more_vert))
-                                                  ],
-                                                ),
-                                                const SizedBox(height: 8),
-                                                const SizedBox(height: 4),
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ],
+                                                      IconButton(
+                                                          onPressed: () {
+                                                            _openListingActionPopUp(
+                                                                item);
+                                                          },
+                                                          icon: const Icon(
+                                                              Icons.more_vert))
+                                                    ],
+                                                  ),
+                                                  const SizedBox(height: 8),
+                                                  const SizedBox(height: 4),
+                                                ],
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            );
-                          } else {
-                            (isLoadingMore)
-                                ? const Positioned(
-                                    bottom: 20,
-                                    left: 0,
-                                    right: 0,
-                                    child: Center(
-                                      child:
-                                          CircularProgressIndicator.adaptive(),
-                                    ),
-                                  )
-                                : Container();
-                          }
-                          return null;
-                        },
-                        childCount: posts!.length + 1,
+                              );
+                            } else {
+                              isLoadingMore
+                                  ? const Positioned(
+                                      bottom: 20,
+                                      left: 0,
+                                      right: 0,
+                                      child: Center(
+                                        child: CircularProgressIndicator
+                                            .adaptive(),
+                                      ),
+                                    )
+                                  : Container();
+                            }
+                            return null;
+                          },
+                          childCount: posts!.length + 1,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              )
-            : Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    const Icon(Icons.sentiment_satisfied),
-                    Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: Text(
-                        Translate.of(context).translate('list_is_empty'),
-                        style: Theme.of(context).textTheme.bodyLarge,
+                    ],
+                  ),
+                )
+              : Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      const Icon(Icons.sentiment_satisfied),
+                      Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Text(
+                          Translate.of(context).translate('list_is_empty'),
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-      ]),
-    ));
+        ]),
+      ),
+    );
   }
 
   Future<String?> openSearchDialog() async {
@@ -506,6 +505,31 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
     return searchRequest;
   }
 
+  Future _searchListings() async {
+    String? searchResult = await openSearchDialog();
+    if (searchResult is String && searchResult.trim() != "") {
+      pageNo = 1;
+      isSearching = true;
+      searchTerm = searchResult.trim();
+      setState(() {
+        posts = [];
+        isLoadingMore = true;
+      });
+      posts = await context
+          .read<AllListingsCubit>()
+          .searchListing(searchTerm, pageNo);
+      setState(() {
+        isLoadingMore = false;
+      });
+    } else if ((searchResult == null || searchResult.trim() == "") &&
+        isSearching) {
+      pageNo = 1;
+      isSearching = false;
+      searchTerm = "";
+      await context.read<AllListingsCubit>().onLoad(false);
+    }
+  }
+
   Future _onListingAction(int? chosen, ProductModel item) async {
     if (chosen == null) return;
 
@@ -514,13 +538,15 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
         Navigator.pushNamed(context, Routes.submit,
                 arguments: {'item': item, 'isNewList': false, 'isAdmin': true})
             .then((value) async {
-          await _onRefresh();
+          await _onRefresh(false);
         });
         break;
       case 2:
         bool response = await showDeleteConfirmation(context, item);
         if (response) {
-          await AppBloc.homeCubit.onLoad(false).then((value) => _onRefresh());
+          await AppBloc.homeCubit
+              .onLoad(false)
+              .then((value) => _onRefresh(false));
         }
         break;
     }
@@ -556,8 +582,9 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                           },
                           child: ListTile(
                             leading: const Icon(Icons.edit),
-                            title:
-                                Text(Translate.of(context).translate('edit')),
+                            title: Text(
+                              Translate.of(context).translate('edit'),
+                            ),
                           ),
                         ),
                         SimpleDialogOption(
@@ -567,8 +594,9 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                           },
                           child: ListTile(
                             leading: const Icon(Icons.delete),
-                            title:
-                                Text(Translate.of(context).translate('delete')),
+                            title: Text(
+                              Translate.of(context).translate('delete'),
+                            ),
                           ),
                         ),
                       ]);
@@ -619,7 +647,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                     Translate.of(context)
                                         .translate(chosen ?? "inactive");
                                 Navigator.of(context).pop();
-                                _onRefresh();
+                                _onRefresh(false);
                                 AppBloc.homeCubit.onLoad(true);
                               },
                               items: [
@@ -631,14 +659,17 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                 DropdownMenuItem<String>(
                                   value: Translate.of(context)
                                       .translate('inactive'),
-                                  child: Text(Translate.of(context)
-                                      .translate('inactive')),
+                                  child: Text(
+                                    Translate.of(context).translate('inactive'),
+                                  ),
                                 ),
                                 DropdownMenuItem<String>(
                                   value: Translate.of(context)
                                       .translate('under_review'),
-                                  child: Text(Translate.of(context)
-                                      .translate('under_review')),
+                                  child: Text(
+                                    Translate.of(context)
+                                        .translate('under_review'),
+                                  ),
                                 ),
                               ],
                             ),
@@ -661,7 +692,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
       if (_scrollController.position.pixels != 0) {
         setState(() {
           isLoadingMore = true;
-          //previousScrollPosition = _scrollController.position.pixels;
+          previousScrollPosition = _scrollController.position.pixels;
         });
         if (!isSearching) {
           posts = await context.read<AllListingsCubit>().newListings(++pageNo);
@@ -670,37 +701,10 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
               .read<AllListingsCubit>()
               .searchListing(searchTerm, ++pageNo);
         }
-
         setState(() {
           isLoadingMore = false;
         });
       }
-    }
-  }
-
-  Future _searchListings() async {
-    String? searchResult = await openSearchDialog();
-
-    if (searchResult is String && searchResult.trim() != "") {
-      pageNo = 1;
-      isSearching = true;
-      searchTerm = searchResult.trim();
-      setState(() {
-        posts = [];
-        isLoadingMore = true;
-      });
-      posts = await context
-          .read<AllListingsCubit>()
-          .searchListing(searchTerm, pageNo);
-      setState(() {
-        isLoadingMore = false;
-      });
-    } else if ((searchResult == null || searchResult.trim() == "") &&
-        isSearching) {
-      pageNo = 1;
-      isSearching = false;
-      searchTerm = "";
-      _onRefresh();
     }
   }
 
@@ -740,12 +744,8 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
     return false;
   }
 
-  Future _onRefresh() async {
-    await context.read<AllListingsCubit>().onLoad(false);
-  }
-
-  Future _onRefreshLoader() async {
-    await context.read<AllListingsCubit>().onLoad(true);
+  Future _onRefresh(bool reload) async {
+    await context.read<AllListingsCubit>().onLoad(reload);
   }
 
   void _onProductDetail(ProductModel item) {

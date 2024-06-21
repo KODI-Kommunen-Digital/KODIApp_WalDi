@@ -66,7 +66,7 @@ class Api {
   static Future<ResultApiModel> requestUserListings(userId, pageNo) async {
     final result = await HTTPManager(apiType: APIType.defaultAPI).get(
         url:
-            '/users/$userId/listings?pageNo=$pageNo&pageSize=5&showExternalListings=$showExternalListings');
+        '/users/$userId/listings?pageNo=$pageNo&pageSize=5&showExternalListings=$showExternalListings');
     return ResultApiModel.fromJson(result);
   }
 
@@ -99,7 +99,7 @@ class Api {
   static Future<ResultApiModel> requestToJoinGroup(forumId, cityId) async {
     final filepath = "cities/$cityId/forums/$forumId/memberRequests";
     final result =
-        await HTTPManager(apiType: APIType.forum).post(url: filepath);
+    await HTTPManager(apiType: APIType.forum).post(url: filepath);
     return ResultApiModel.fromJson(result);
   }
 
@@ -113,7 +113,7 @@ class Api {
       forumId, cityId, memberId) async {
     final filepath = "cities/$cityId/forums/$forumId/members/$memberId";
     final result =
-        await HTTPManager(apiType: APIType.forum).delete(url: filepath);
+    await HTTPManager(apiType: APIType.forum).delete(url: filepath);
     return ResultApiModel.fromJson(result);
   }
 
@@ -126,7 +126,7 @@ class Api {
   static Future<ResultApiModel> deleteGroupPost(forumId, cityId, postId) async {
     final filepath = "/cities/$cityId/forums/$forumId/posts/$postId";
     final result =
-        await HTTPManager(apiType: APIType.forum).delete(url: filepath);
+    await HTTPManager(apiType: APIType.forum).delete(url: filepath);
     return ResultApiModel.fromJson(result);
   }
 
@@ -201,7 +201,7 @@ class Api {
 
   static Future<ResultApiModel> requestHasForum() async {
     final result =
-        await HTTPManager(apiType: APIType.defaultAPI).get(url: hasForum);
+    await HTTPManager(apiType: APIType.defaultAPI).get(url: hasForum);
     return ResultApiModel.fromJson(result);
   }
 
@@ -214,7 +214,7 @@ class Api {
 
   static Future<ResultApiModel> requestForgotPassword(params) async {
     Map<String, dynamic> result =
-        await HTTPManager(apiType: APIType.defaultAPI).post(
+    await HTTPManager(apiType: APIType.defaultAPI).post(
       url: forgotPassword,
       data: params,
       loading: true,
@@ -273,7 +273,7 @@ class Api {
   static Future<ResultApiModel> requestUser({required userId}) async {
     final filePath = '/users/$userId';
     final result =
-        await HTTPManager(apiType: APIType.defaultAPI).get(url: filePath);
+    await HTTPManager(apiType: APIType.defaultAPI).get(url: filePath);
     return ResultApiModel.fromJson(result);
   }
 
@@ -286,7 +286,7 @@ class Api {
 
   static Future<ResultApiModel> requestSubmitCategory() async {
     final result =
-        await HTTPManager(apiType: APIType.defaultAPI).get(url: categories);
+    await HTTPManager(apiType: APIType.defaultAPI).get(url: categories);
     return ResultApiModel.fromJson(result);
   }
 
@@ -294,7 +294,7 @@ class Api {
       {required categoryId}) async {
     final filePath = 'categories/$categoryId/subcategories';
     final result =
-        await HTTPManager(apiType: APIType.defaultAPI).get(url: filePath);
+    await HTTPManager(apiType: APIType.defaultAPI).get(url: filePath);
     return ResultApiModel.fromJson(result);
   }
 
@@ -317,21 +317,21 @@ class Api {
   ///Get Cities
   static Future<ResultApiModel> requestCities() async {
     final result =
-        await HTTPManager(apiType: APIType.defaultAPI).get(url: cities);
+    await HTTPManager(apiType: APIType.defaultAPI).get(url: cities);
     return ResultApiModel.fromJson(result);
   }
 
   static Future<ResultApiModel> requestVillages({required cityId}) async {
     final filePath = '/cities/$cityId/villages';
     final result =
-        await HTTPManager(apiType: APIType.defaultAPI).get(url: filePath);
+    await HTTPManager(apiType: APIType.defaultAPI).get(url: filePath);
     return ResultApiModel.fromJson(result);
   }
 
   ///Get Submit Cities
   static Future<ResultApiModel> requestSubmitCities() async {
     final result =
-        await HTTPManager(apiType: APIType.defaultAPI).get(url: cities);
+    await HTTPManager(apiType: APIType.defaultAPI).get(url: cities);
     return ResultApiModel.fromJson(result);
   }
 
@@ -340,7 +340,7 @@ class Api {
     final listings =
         "/listings?statusId=1&pageNo=$params&pageSize=19&showExternalListings=$showExternalListings";
     final result =
-        await HTTPManager(apiType: APIType.defaultAPI).get(url: listings);
+    await HTTPManager(apiType: APIType.defaultAPI).get(url: listings);
     return ResultApiModel.fromJson(result);
   }
 
@@ -349,7 +349,7 @@ class Api {
     final listings =
         "/listings?pageNo=$params&pageSize=10&showExternalListings=$showExternalListings";
     final result =
-        await HTTPManager(apiType: APIType.defaultAPI).get(url: listings);
+    await HTTPManager(apiType: APIType.defaultAPI).get(url: listings);
     return ResultApiModel.fromJson(result);
   }
 
@@ -358,7 +358,7 @@ class Api {
     final listings =
         "/listings?statusId=$status&pageNo=$params&pageSize=10&showExternalListings=$showExternalListings";
     final result =
-        await HTTPManager(apiType: APIType.defaultAPI).get(url: listings);
+    await HTTPManager(apiType: APIType.defaultAPI).get(url: listings);
     return ResultApiModel.fromJson(result);
   }
 
@@ -368,7 +368,7 @@ class Api {
     var list =
         '/listings?cityId=$params&statusId=$status&pageNo=$pageNo&pageSize=19';
     final result =
-        await HTTPManager(apiType: APIType.defaultAPI).get(url: list);
+    await HTTPManager(apiType: APIType.defaultAPI).get(url: list);
     return ResultApiModel.fromJson(result);
   }
 
@@ -382,7 +382,7 @@ class Api {
   static Future<ResultApiModel> requestProduct(cityId, id) async {
     final filePath = '/cities/$cityId/listings/$id';
     final result =
-        await HTTPManager(apiType: APIType.defaultAPI).get(url: filePath);
+    await HTTPManager(apiType: APIType.defaultAPI).get(url: filePath);
     return ResultApiModel.fromJson(result);
   }
 
@@ -395,9 +395,8 @@ class Api {
   }
 
   ///Save Product
-  static Future<ResultApiModel> requestSaveProduct(
-      cityId, params, isImageChanged) async {
-    final filePath = '/cities/$cityId/listings';
+  static Future<ResultApiModel> requestSaveProduct(params, isImageChanged) async {
+    const filePath = '/listings';
     final result = await HTTPManager(apiType: APIType.defaultAPI).post(
       url: filePath,
       data: params,
@@ -459,10 +458,10 @@ class Api {
   }
 
   static Future<ResultApiModel> requestEditProductStatus(
-    cityId,
-    listingId,
-    params,
-  ) async {
+      cityId,
+      listingId,
+      params,
+      ) async {
     final filePath = '/cities/$cityId/listings/$listingId';
     final result = await HTTPManager(apiType: APIType.defaultAPI).patch(
       url: filePath,
@@ -506,13 +505,13 @@ class Api {
         var list =
             '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&sortByStartDate=true&cityId=$cityId&showExternalListings=$showExternalListings';
         final result =
-            await HTTPManager(apiType: APIType.defaultAPI).get(url: list);
+        await HTTPManager(apiType: APIType.defaultAPI).get(url: list);
         return ResultApiModel.fromJson(result);
       } else {
         var list =
             '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&sortByStartDate=true&showExternalListings=$showExternalListings';
         final result =
-            await HTTPManager(apiType: APIType.defaultAPI).get(url: list);
+        await HTTPManager(apiType: APIType.defaultAPI).get(url: list);
         return ResultApiModel.fromJson(result);
       }
     } else {
@@ -520,13 +519,13 @@ class Api {
         var list =
             '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&cityId=$cityId&showExternalListings=$showExternalListings';
         final result =
-            await HTTPManager(apiType: APIType.defaultAPI).get(url: list);
+        await HTTPManager(apiType: APIType.defaultAPI).get(url: list);
         return ResultApiModel.fromJson(result);
       } else {
         var list =
             '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&showExternalListings=$showExternalListings';
         final result =
-            await HTTPManager(apiType: APIType.defaultAPI).get(url: list);
+        await HTTPManager(apiType: APIType.defaultAPI).get(url: list);
         return ResultApiModel.fromJson(result);
       }
     }
@@ -536,7 +535,7 @@ class Api {
     var list =
         '/listings?subCategoryId=10&categoryId=1&statusId=1&pageNo=$pageNo&pageSize=19&showExternalListings=$showExternalListings';
     final result =
-        await HTTPManager(apiType: APIType.defaultAPI).get(url: list);
+    await HTTPManager(apiType: APIType.defaultAPI).get(url: list);
     return ResultApiModel.fromJson(result);
   }
 
@@ -544,7 +543,7 @@ class Api {
     var list =
         '/listings?cityId=$params&statusId=1&pageNo=$pageNo&pageSize=19&showExternalListings=$showExternalListings';
     final result =
-        await HTTPManager(apiType: APIType.defaultAPI).get(url: list);
+    await HTTPManager(apiType: APIType.defaultAPI).get(url: list);
     return ResultApiModel.fromJson(result);
   }
 
@@ -570,7 +569,7 @@ class Api {
     return ResultApiModel.fromJson(convertResponse);
   }
 
-  static Future<void> requestListingUploadMedia(
+  static Future<dynamic> requestListingUploadMedia(
       listingId, cityId, pickedFile) async {
     var filePath = '';
 
@@ -581,10 +580,11 @@ class Api {
       } else if (firstFileEntry?.key == 'image') {
         filePath = '/cities/$cityId/listings/$listingId/imageUpload';
       }
-      await HTTPManager(apiType: APIType.defaultAPI).post(
+      final response = await HTTPManager(apiType: APIType.defaultAPI).post(
         url: filePath,
         formData: pickedFile,
       );
+      return response;
     }
   }
 
@@ -665,7 +665,7 @@ class Api {
     var list =
         '/listings/search?searchQuery=$content$filter&pageNo=$pageNo&pageSize=10';
     final result =
-        await HTTPManager(apiType: APIType.defaultAPI).get(url: list);
+    await HTTPManager(apiType: APIType.defaultAPI).get(url: list);
     return ResultApiModel.fromJson(result);
   }
 
@@ -674,14 +674,14 @@ class Api {
     var list =
         '/cities/$cityId/listings/$listingId/appointments/$appointmentId';
     final result =
-        await HTTPManager(apiType: APIType.appointment).get(url: list);
+    await HTTPManager(apiType: APIType.appointment).get(url: list);
     return ResultApiModel.fromJson(result);
   }
 
   static Future<ResultApiModel> requestUserAppointments(userId, pageNo) async {
     var list = '/users/$userId/appointments?pageNumber=$pageNo&pageSize=10';
     final result =
-        await HTTPManager(apiType: APIType.appointment).get(url: list);
+    await HTTPManager(apiType: APIType.appointment).get(url: list);
     return ResultApiModel.fromJson(result);
   }
 
@@ -690,7 +690,7 @@ class Api {
     var list =
         '/cities/$cityId/listings/$listingId/appointments/$appointmentId/services';
     final result =
-        await HTTPManager(apiType: APIType.appointment).get(url: list);
+    await HTTPManager(apiType: APIType.appointment).get(url: list);
     return ResultApiModel.fromJson(result);
   }
 
@@ -699,7 +699,7 @@ class Api {
     var list =
         '/cities/$cityId/listings/$listingId/appointments/$appointmentId/slots?serviceId[]=$serviceId&date=$date&serviceId[]=$serviceId';
     final result =
-        await HTTPManager(apiType: APIType.appointment).get(url: list);
+    await HTTPManager(apiType: APIType.appointment).get(url: list);
     return ResultApiModel.fromJson(result);
   }
 
@@ -734,14 +734,14 @@ class Api {
     var list =
         '/users/$userId/owner/bookings?pageNumber=$pageNo&pageSize=10&appointmentId=$appointmentId$startDate';
     final result =
-        await HTTPManager(apiType: APIType.appointment).get(url: list);
+    await HTTPManager(apiType: APIType.appointment).get(url: list);
     return ResultApiModel.fromJson(result);
   }
 
   static Future<ResultApiModel> requestUserBookings(userId) async {
     var list = '/users/$userId/bookings?pageNumber=1&pageSize=9';
     final result =
-        await HTTPManager(apiType: APIType.appointment).get(url: list);
+    await HTTPManager(apiType: APIType.appointment).get(url: list);
     return ResultApiModel.fromJson(result);
   }
 
@@ -749,7 +749,7 @@ class Api {
       userId, appointmentId) async {
     var list = '/users/$userId/bookings?appointmentId=$appointmentId';
     final result =
-        await HTTPManager(apiType: APIType.appointment).get(url: list);
+    await HTTPManager(apiType: APIType.appointment).get(url: list);
     return ResultApiModel.fromJson(result);
   }
 
@@ -758,7 +758,7 @@ class Api {
     var list =
         '/cities/$cityId/listings/$listingId/appointments/$appointmentId/booking/$bookingId';
     final result =
-        await HTTPManager(apiType: APIType.appointment).delete(url: list);
+    await HTTPManager(apiType: APIType.appointment).delete(url: list);
     return ResultApiModel.fromJson(result);
   }
 
@@ -783,7 +783,7 @@ class Api {
       appointmentId) async {
     var list = '/listings?appointmentId=$appointmentId';
     final result =
-        await HTTPManager(apiType: APIType.defaultAPI).get(url: list);
+    await HTTPManager(apiType: APIType.defaultAPI).get(url: list);
     return ResultApiModel.fromJson(result);
   }
 
@@ -792,7 +792,7 @@ class Api {
     var list =
         '/cities/$cityId/listings/$listingId/appointments/$appointmentId/booking/$bookingId';
     final result =
-        await HTTPManager(apiType: APIType.appointment).delete(url: list);
+    await HTTPManager(apiType: APIType.appointment).delete(url: list);
     return ResultApiModel.fromJson(result);
   }
 
@@ -800,7 +800,7 @@ class Api {
       userId, appointmentId, bookingId) async {
     var list = '/users/$userId/appointments/$appointmentId/booking/$bookingId';
     final result =
-        await HTTPManager(apiType: APIType.appointment).delete(url: list);
+    await HTTPManager(apiType: APIType.appointment).delete(url: list);
     return ResultApiModel.fromJson(result);
   }
 

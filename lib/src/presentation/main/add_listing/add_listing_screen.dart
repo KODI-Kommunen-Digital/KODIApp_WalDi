@@ -10,6 +10,7 @@ import 'package:heidi/src/data/model/model_open_time.dart';
 import 'package:heidi/src/data/remote/local/category_manager.dart';
 import 'package:http/http.dart' as http;
 import 'package:loggy/loggy.dart';
+import 'package:multi_dropdown/multiselect_dropdown.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/data/model/model_product.dart';
@@ -23,8 +24,8 @@ import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/datetime.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:heidi/src/utils/validate.dart';
-import 'package:html/parser.dart';
 import 'package:intl/intl.dart';
+import 'package:html/parser.dart';
 
 import 'cubit/add_listing_cubit.dart';
 
@@ -81,8 +82,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
   String? _errorSDate;
   String? _errorCategory;
   String? _errorAppointment;
-  String? selectedCity;
-  int? cityId;
+  String? _errorCity;
+  List<String> selectedCities = [];
+  List<int> cityIds = [];
   int? statusId;
   int? villageId;
   int? categoryId;
@@ -94,13 +96,13 @@ class _AddListingScreenState extends State<AddListingScreen> {
 
   String? _featurePdf;
   String? _expiryDate;
+  bool _isExpiryDateEnabled = true;
+  TimeOfDay? _expiryTime;
   String? _startDate;
   String? _endDate;
-  TimeOfDay? _expiryTime;
   String? _createdAt;
   TimeOfDay? _startTime;
   TimeOfDay? _endTime;
-  bool _isExpiryDateEnabled = true;
   String? selectedVillage;
   String? selectedCategory;
   String? selectedSubCategory;
@@ -109,7 +111,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
   List<File>? selectedImages = [];
   List<File> downloadedImages = [];
 
-  late int? currentCity;
+  int? currentCity;
   late List<dynamic> jsonCategory;
   List<AppointmentServiceModel>? serviceEntries;
   List<OpenTimeModel>? timeSlots;
@@ -237,10 +239,10 @@ class _AddListingScreenState extends State<AddListingScreen> {
 
   void _onProcess() async {
     final loadCitiesResponse =
-        await context.read<AddListingCubit>().loadCities();
+    await context.read<AddListingCubit>().loadCities();
     if (!mounted) return;
     final loadCategoryResponse =
-        await context.read<AddListingCubit>().loadCategory();
+    await context.read<AddListingCubit>().loadCategory();
     if (!loadCategoryResponse?.data.isEmpty) {
       jsonCategory = loadCategoryResponse!.data;
       final selectedCategory = jsonCategory.first['name'];
@@ -255,15 +257,15 @@ class _AddListingScreenState extends State<AddListingScreen> {
       if (currentCity != null && currentCity != 0) {
         for (var cityData in loadCitiesResponse!.data) {
           if (cityData['id'] == currentCity) {
-            selectedCity = cityData['name'];
+            selectedCities.add(cityData['name']);
             break; // Exit the loop once the desired city is found
           }
         }
       } else {
-        selectedCity = loadCitiesResponse!.data.first['name'];
+        //selectedCities.add(loadCitiesResponse!.data.first['name']);
       }
       selectedSubCategory = loadCategoryResponse?.data.first['name'];
-      listCity = loadCitiesResponse.data;
+      listCity = loadCitiesResponse?.data;
       selectedCategory = selectedSubCategory;
       _processing = true;
     });
@@ -290,13 +292,13 @@ class _AddListingScreenState extends State<AddListingScreen> {
       _textWebsiteController.text = widget.item?.website ?? '';
       _createdAt = widget.item?.createDate ?? '';
       selectedCategory = jsonCategory.firstWhere(
-          (element) => element["id"] == widget.item!.categoryId)["name"];
+              (element) => element["id"] == widget.item!.categoryId)["name"];
       selectedSubCategory = listSubCategory.firstWhere(
-          (element) => element["id"] == widget.item!.subcategoryId)["name"];
+              (element) => element["id"] == widget.item!.subcategoryId)["name"];
 
       final city = listCity
           .firstWhere((element) => element['id'] == widget.item?.cityId);
-      selectedCity = city['name'];
+      selectedCities.add(city['name']);
       if (selectedCategory?.toLowerCase() == "news" ||
           selectedCategory == null) {
         final subCategoryResponse = await context
@@ -319,7 +321,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
           if (endDateTime.length == 2) {
             String dateString = endDateTime[0];
             DateTime parsedDateTime =
-                DateFormat('dd.MM.yyyy').parse(dateString);
+            DateFormat('dd.MM.yyyy').parse(dateString);
             _endDate = DateFormat('yyyy-MM-dd').format(parsedDateTime);
             List<String> endTimeParts = endDateTime[1].split(':');
             int endHour = int.parse(endTimeParts[0]);
@@ -328,7 +330,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
           } else {
             String dateString = startDateTime[0];
             DateTime parsedDateTime =
-                DateFormat('dd.MM.yyyy').parse(dateString);
+            DateFormat('dd.MM.yyyy').parse(dateString);
             _endDate = DateFormat('yyyy-MM-dd').format(parsedDateTime);
             // List<String> endTimeParts = endDateTime[0].split(':');
             // int endHour = int.parse(endTimeParts[0]);
@@ -364,12 +366,12 @@ class _AddListingScreenState extends State<AddListingScreen> {
       if (currentCity != null && currentCity != 0) {
         for (var cityData in loadCitiesResponse?.data) {
           if (cityData['id'] == currentCity) {
-            selectedCity = cityData['name'];
+            selectedCities.add(cityData['name']);
             break; // Exit the loop once the desired city is found
           }
         }
       } else {
-        selectedCity = loadCitiesResponse?.data.first['name'];
+        //selectedCities.add(loadCitiesResponse?.data.first['name']);
       }
       if (!loadCategoryResponse?.data.isEmpty) {
         if (!mounted) return;
@@ -378,9 +380,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
           final subCategoryResponse = await context
               .read<AddListingCubit>()
               .loadSubCategory(Translate.of(context)
-                  .translate(CategoryManager.getCategoryTranslation(
-                      loadCategoryResponse!.data.first['id']))
-                  .toLowerCase());
+              .translate(CategoryManager.getCategoryTranslation(
+              loadCategoryResponse!.data.first['id']))
+              .toLowerCase());
           setState(() {
             listSubCategory = subCategoryResponse!.data;
           });
@@ -424,7 +426,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
             .get(Uri.parse("${Application.picturesURL}${imageUrl.logo}"));
         if (response.statusCode == 200) {
           String savePath =
-              '${appDocumentsDirectory.path}/${imageUrl.logo?.replaceAll(RegExp(r'[^\w\s\.]'), '_')}';
+              '${appDocumentsDirectory.path}/${imageUrl.logo?.replaceAll(
+              RegExp(r'[^\w\s\.]'), '_')}';
 
           File file = File(savePath);
           await file.writeAsBytes(response.bodyBytes);
@@ -604,35 +607,37 @@ class _AddListingScreenState extends State<AddListingScreen> {
           isLoading = true;
         });
         final result = await context.read<AddListingCubit>().onEdit(
-              cityId: widget.item?.cityId,
-              categoryId: widget.item!.categoryId,
-              listingId: widget.item?.id,
-              title: _textTitleController.text,
-              place: _textPlaceController.text,
-              description: _textContentController.text,
-              address: _textAddressController.text,
-              email: _textEmailController.text,
-              phone: _textPhoneController.text,
-              website: _textWebsiteController.text,
-              price: _textPriceController.text,
-              expiryDate: submitExpiryDate,
-              expiryTime: submitExpiryTime,
-              startDate: _startDate,
-              endDate: _endDate,
-              createdAt: _createdAt,
-              startTime: _startTime,
-              endTime: _endTime,
-              timeless: _isExpiryDateEnabled ? 0 : 1,
-              isImageChanged: isImageChanged,
-              statusId: statusId,
-              imagesList: selectedImages,
-            );
+          cityId: widget.item?.cityId,
+          categoryId: widget.item!.categoryId,
+          listingId: widget.item?.id,
+          title: _textTitleController.text,
+          place: _textPlaceController.text,
+          description: _textContentController.text,
+          address: _textAddressController.text,
+          email: _textEmailController.text,
+          phone: _textPhoneController.text,
+          website: _textWebsiteController.text,
+          price: _textPriceController.text,
+          expiryDate: submitExpiryDate,
+          expiryTime: submitExpiryTime,
+          startDate: _startDate,
+          endDate: _endDate,
+          createdAt: _createdAt,
+          startTime: _startTime,
+          endTime: _endTime,
+          timeless: _isExpiryDateEnabled ? 0 : 1,
+          isImageChanged: isImageChanged,
+          statusId: statusId,
+          imagesList: selectedImages,
+        );
         if (result) {
           await AppBloc.homeCubit.onLoad(false);
+          if (selectedCategory?.toLowerCase() == "appointmentbooking") {
+            await _createAppointment();
+          }
           setState(() {
             isLoading = false;
           });
-          await _createAppointment();
           _onSuccess();
           if (!mounted) return;
           context.read<AddListingCubit>().clearAssets();
@@ -645,31 +650,33 @@ class _AddListingScreenState extends State<AddListingScreen> {
           isLoading = true;
         });
         final result = await context.read<AddListingCubit>().onSubmit(
-              cityId: cityId ?? 1,
-              title: _textTitleController.text,
-              city: selectedCity,
-              place: _textPlaceController.text,
-              description: _textContentController.text,
-              address: _textAddressController.text,
-              email: _textEmailController.text,
-              phone: _textPhoneController.text,
-              website: _textWebsiteController.text,
-              expiryDate: submitExpiryDate,
-              startDate: _startDate,
-              endDate: _endDate,
-              expiryTime: submitExpiryTime,
-              timeless: _isExpiryDateEnabled ? 0 : 1,
-              startTime: _startTime,
-              endTime: _endTime,
-              imagesList: selectedImages,
-              isImageChanged: isImageChanged,
-            );
+          title: _textTitleController.text,
+          city: selectedCities,
+          place: _textPlaceController.text,
+          description: _textContentController.text,
+          address: _textAddressController.text,
+          email: _textEmailController.text,
+          phone: _textPhoneController.text,
+          website: _textWebsiteController.text,
+          expiryDate: submitExpiryDate,
+          startDate: _startDate,
+          endDate: _endDate,
+          createdAt: _createdAt ?? '',
+          expiryTime: submitExpiryTime,
+          timeless: _isExpiryDateEnabled ? 0 : 1,
+          startTime: _startTime,
+          endTime: _endTime,
+          imagesList: selectedImages,
+          isImageChanged: isImageChanged,
+        );
         if (result) {
           await AppBloc.homeCubit.onLoad(false);
+          if (selectedCategory?.toLowerCase() == "appointmentbooking") {
+            await _createAppointment();
+          }
           setState(() {
             isLoading = false;
           });
-          await _createAppointment();
           _onSuccess();
           if (!mounted) return;
           context.read<AddListingCubit>().clearImagePath();
@@ -697,7 +704,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
         services: serviceEntries,
         openHours: timeSlots,
         holidays: [],
-        city: selectedCity ?? "");
+        city: (selectedCities.isNotEmpty)
+            ? selectedCities.first
+            : listCity.first['name']);
   }
 
   bool _validData() {
@@ -752,6 +761,12 @@ class _AddListingScreenState extends State<AddListingScreen> {
       }
     }
 
+    if (selectedCities.isEmpty) {
+      _errorCity = "city_require";
+    } else {
+      _errorCity = null;
+    }
+
     if (selectedCategory?.toLowerCase() == "appointmentbooking") {
       if ((serviceEntries ?? []).isEmpty) {
         _errorAppointment = "appointment_service_mandatory";
@@ -772,6 +787,12 @@ class _AddListingScreenState extends State<AddListingScreen> {
         } else {
           _errorAppointment = null;
         }
+
+
+        if (selectedCities.isEmpty) {
+          _errorCity = null;
+          selectedCities.add(listCity.first['name']);
+        }
       }
     }
 
@@ -784,6 +805,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       _errorWebsite,
       _errorStatus,
       _errorSDate,
+      _errorCity,
       _errorAppointment
     ];
 
@@ -795,13 +817,15 @@ class _AddListingScreenState extends State<AddListingScreen> {
         _errorWebsite != null ||
         _errorStatus != null ||
         _errorSDate != null ||
+        _errorCity != null ||
+        _errorSDate != null ||
         _errorAppointment != null) {
       String errorMessage = "";
       for (var element in errors) {
         if (element != null &&
             !errorMessage.contains(Translate.of(context).translate(element))) {
           errorMessage =
-              "$errorMessage${Translate.of(context).translate(element)}, ";
+          "$errorMessage${Translate.of(context).translate(element)}, ";
         }
       }
       errorMessage = errorMessage.substring(0, errorMessage.length - 2);
@@ -880,12 +904,12 @@ class _AddListingScreenState extends State<AddListingScreen> {
               height: 180,
               child: AppUploadImage(
                 title:
-                    Translate.of(context).translate('upload_feature_image_pdf'),
+                Translate.of(context).translate('upload_feature_image_pdf'),
                 image: _featurePdf == ''
                     ? selectedImages!.isNotEmpty
-                        ? selectedImages![0].path
-                        : null
-                    // downloadedImages[0].path
+                    ? selectedImages![0].path
+                    : null
+                // downloadedImages[0].path
                     : _featurePdf,
                 profile: false,
                 forumGroup: false,
@@ -927,7 +951,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
               Text.rich(
                 TextSpan(
                   text: Translate.of(context).translate('title'),
-                  style: Theme.of(context)
+                  style: Theme
+                      .of(context)
                       .textTheme
                       .titleMedium!
                       .copyWith(fontWeight: FontWeight.bold),
@@ -967,7 +992,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
             Text.rich(
               TextSpan(
                 text: Translate.of(context).translate('input_content'),
-                style: Theme.of(context)
+                style: Theme
+                    .of(context)
                     .textTheme
                     .titleMedium!
                     .copyWith(fontWeight: FontWeight.bold),
@@ -1001,7 +1027,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
             Text.rich(
               TextSpan(
                 text: Translate.of(context).translate('category'),
-                style: Theme.of(context)
+                style: Theme
+                    .of(context)
                     .textTheme
                     .titleMedium!
                     .copyWith(fontWeight: FontWeight.bold),
@@ -1023,34 +1050,34 @@ class _AddListingScreenState extends State<AddListingScreen> {
                   child: listCategory.isEmpty
                       ? const LinearProgressIndicator()
                       : DropdownButton(
-                          isExpanded: true,
-                          menuMaxHeight: 200,
-                          hint: Text(Translate.of(context)
-                              .translate('input_category')),
-                          value: selectedCategory,
-                          items: listCategory.map((category) {
-                            return DropdownMenuItem(
-                                value: category['name'],
-                                child: Text(Translate.of(context).translate(
-                                    CategoryManager.getCategoryTranslation(
-                                        category['id']))));
-                          }).toList(),
-                          onChanged: (value) async {
-                            setState(
-                              () {
-                                selectedCategory = value as String?;
-                                context.read<AddListingCubit>().setCategoryId(
-                                    selectedCategory?.toLowerCase());
-                              },
-                            );
-                            if (selectedCategory?.toLowerCase() == "news" ||
-                                selectedCategory == null) {
-                              selectSubCategory(
-                                  selectedCategory?.toLowerCase());
-                              _setDefaultExpiryDate();
-                            }
-                          },
-                        ),
+                    isExpanded: true,
+                    menuMaxHeight: 200,
+                    hint: Text(Translate.of(context)
+                        .translate('input_category')),
+                    value: selectedCategory,
+                    items: listCategory.map((category) {
+                      return DropdownMenuItem(
+                          value: category['name'],
+                          child: Text(Translate.of(context).translate(
+                              CategoryManager.getCategoryTranslation(
+                                  category['id']))));
+                    }).toList(),
+                    onChanged: (value) async {
+                      setState(
+                            () {
+                          selectedCategory = value as String?;
+                          context.read<AddListingCubit>().setCategoryId(
+                              selectedCategory?.toLowerCase());
+                        },
+                      );
+                      if (selectedCategory?.toLowerCase() == "news" ||
+                          selectedCategory == null) {
+                        selectSubCategory(
+                            selectedCategory?.toLowerCase());
+                        _setDefaultExpiryDate();
+                      }
+                    },
+                  ),
                 )
               ],
             ),
@@ -1062,7 +1089,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
               Text.rich(
                 TextSpan(
                   text: Translate.of(context).translate('subCategory'),
-                  style: Theme.of(context)
+                  style: Theme
+                      .of(context)
                       .textTheme
                       .titleMedium!
                       .copyWith(fontWeight: FontWeight.bold),
@@ -1085,31 +1113,31 @@ class _AddListingScreenState extends State<AddListingScreen> {
                     child: listSubCategory.isEmpty
                         ? const LinearProgressIndicator()
                         : DropdownButton(
-                            isExpanded: true,
-                            menuMaxHeight: 200,
-                            hint: Text(Translate.of(context)
-                                .translate('input_subcategory')),
-                            value: selectedSubCategory,
-                            items: listSubCategory.map((subcategory) {
-                              return DropdownMenuItem(
-                                  value: subcategory['name'],
-                                  child: Text(Translate.of(context).translate(
-                                      CategoryManager.getSubCategoryTranslation(
-                                          subcategory['id']))));
-                            }).toList(),
-                            onChanged: (value) {
-                              context
-                                  .read<AddListingCubit>()
-                                  .getSubCategoryId(value);
-                              setState(() {
-                                selectedSubCategory = value as String?;
-                                context
-                                    .read<AddListingCubit>()
-                                    .setSubCategoryId(
-                                        selectedSubCategory?.toLowerCase());
-                              });
-                            },
-                          ),
+                      isExpanded: true,
+                      menuMaxHeight: 200,
+                      hint: Text(Translate.of(context)
+                          .translate('input_subcategory')),
+                      value: selectedSubCategory,
+                      items: listSubCategory.map((subcategory) {
+                        return DropdownMenuItem(
+                            value: subcategory['name'],
+                            child: Text(Translate.of(context).translate(
+                                CategoryManager.getSubCategoryTranslation(
+                                    subcategory['id']))));
+                      }).toList(),
+                      onChanged: (value) {
+                        context
+                            .read<AddListingCubit>()
+                            .getSubCategoryId(value);
+                        setState(() {
+                          selectedSubCategory = value as String?;
+                          context
+                              .read<AddListingCubit>()
+                              .setSubCategoryId(
+                              selectedSubCategory?.toLowerCase());
+                        });
+                      },
+                    ),
                   ),
               ],
             ),
@@ -1120,7 +1148,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
             Text.rich(
               TextSpan(
                 text: Translate.of(context).translate('city'),
-                style: Theme.of(context)
+                style: Theme
+                    .of(context)
                     .textTheme
                     .titleMedium!
                     .copyWith(fontWeight: FontWeight.bold),
@@ -1141,44 +1170,131 @@ class _AddListingScreenState extends State<AddListingScreen> {
                 Expanded(
                   child: listCity.isEmpty
                       ? const LinearProgressIndicator()
-                      : DropdownButton(
-                          isExpanded: true,
-                          menuMaxHeight: 200,
-                          hint: Text(
-                              Translate.of(context).translate('input_city')),
-                          value: selectedCity ?? listCity.first['name'],
-                          items: listCity.map((city) {
-                            return DropdownMenuItem(
-                                value: city['name'], child: Text(city['name']));
-                          }).toList(),
-                          onChanged: widget.item == null
-                              ? (value) async {
-                                  setState(() {
-                                    selectedCity = value as String?;
-                                    for (var element in listCity) {
-                                      if (element["name"] == value) {
-                                        cityId = element["id"];
-                                      }
-                                    }
-                                  });
-                                  selectedVillage = null;
-                                  context
-                                      .read<AddListingCubit>()
-                                      .clearVillage();
-                                  if (value != null) {
-                                    final loadVillageResponse = await context
-                                        .read<AddListingCubit>()
-                                        .loadVillages(value);
-                                    selectedVillage =
-                                        loadVillageResponse.data.first['name'];
-                                    villageId =
-                                        loadVillageResponse.data.first['id'];
-                                    setState(() {
-                                      listVillage = loadVillageResponse.data;
-                                    });
-                                  }
-                                }
-                              : null),
+                      : (widget.item != null)
+                      ? DropdownButton(
+                      isExpanded: true,
+                      menuMaxHeight: 200,
+                      hint: Text(Translate.of(context)
+                          .translate('input_city')),
+                      value: selectedCities.first,
+                      items: listCity.map((city) {
+                        return DropdownMenuItem(
+                            value: city['name'],
+                            child: Text(city['name']));
+                      }).toList(),
+                      onChanged: null)
+                      : (selectedCategory?.toLowerCase() ==
+                      "appointmentbooking")
+                      ? DropdownButton(
+                      isExpanded: true,
+                      menuMaxHeight: 200,
+                      hint: Text(Translate.of(context)
+                          .translate('input_city')),
+                      value: (selectedCities.isNotEmpty)
+                          ? selectedCities.first
+                          : listCity.first['name'],
+                      items: listCity.map((city) {
+                        return DropdownMenuItem(
+                            value: city['name'],
+                            child: Text(city['name']));
+                      }).toList(),
+                      onChanged: (value) async {
+                        setState(() {
+                          selectedCities = [];
+                          selectedCities.add(value as String);
+                          for (var element in listCity) {
+                            if (element["name"] == value) {
+                              cityIds = [];
+                              cityIds.add(element['id']);
+                            }
+                          }
+                        });
+                        selectedVillage = null;
+                        context
+                            .read<AddListingCubit>()
+                            .clearVillage();
+                        if (value != null) {
+                          final loadVillageResponse = await context
+                              .read<AddListingCubit>()
+                              .loadVillages(value);
+                          selectedVillage = loadVillageResponse
+                              .data.first['name'];
+                          villageId =
+                          loadVillageResponse.data.first['id'];
+                          setState(() {
+                            listVillage = loadVillageResponse.data;
+                          });
+                        }
+                      })
+                      : MultiSelectDropDown(
+                    //isExpanded: true,
+                      backgroundColor:
+                      Theme
+                          .of(context)
+                          .scaffoldBackgroundColor,
+                      borderColor: Theme
+                          .of(context)
+                          .textTheme
+                          .bodyLarge
+                          ?.color ??
+                          Colors.white,
+                      optionsBackgroundColor:
+                      Theme
+                          .of(context)
+                          .scaffoldBackgroundColor,
+                      optionTextStyle: TextStyle(
+                          color: Theme
+                              .of(context)
+                              .textTheme
+                              .bodyLarge
+                              ?.color ??
+                              Colors.white),
+                      selectedOptionBackgroundColor:
+                      Theme
+                          .of(context)
+                          .scaffoldBackgroundColor,
+                      dropdownHeight: 200,
+                      hint: Translate.of(context)
+                          .translate('input_city'),
+                      options: listCity.map((city) {
+                        return ValueItem(
+                            value: city['name'],
+                            label: city['name']);
+                      }).toList(),
+                      onOptionSelected: widget.item == null
+                          ? (List<ValueItem>
+                      selectedOptions) async {
+                        List<String> options = [];
+                        for (var option in selectedOptions) {
+                          options.add(option.value!);
+                        }
+                        setState(() {
+                          selectedCities = options;
+                          for (var element in listCity) {
+                            if (element["name"] ==
+                                options.last) {
+                              cityIds.add(element["id"]);
+                            }
+                          }
+                        });
+                        selectedVillage = null;
+                        context
+                            .read<AddListingCubit>()
+                            .clearVillage();
+                        final loadVillageResponse =
+                        await context
+                            .read<AddListingCubit>()
+                            .loadVillages(options.last);
+                        selectedVillage = loadVillageResponse
+                            .data.first['name'];
+                        villageId = loadVillageResponse
+                            .data.first['id'];
+                        setState(() {
+                          listVillage =
+                              loadVillageResponse.data;
+                        });
+                      }
+                          : null),
                 ),
               ],
             ),
@@ -1197,14 +1313,16 @@ class _AddListingScreenState extends State<AddListingScreen> {
                               (_expiryDate == null || _expiryTime == null)) {
                             DateTime now = DateTime.now();
                             DateTime twoWeeksFromNow =
-                                now.add(const Duration(days: 14));
+                            now.add(const Duration(days: 14));
                             _expiryDate ??= DateFormat('yyyy-MM-dd')
                                 .format(twoWeeksFromNow);
                             _expiryTime ??= const TimeOfDay(hour: 0, minute: 0);
                           }
                         });
                       },
-                      activeColor: Theme.of(context).primaryColor,
+                      activeColor: Theme
+                          .of(context)
+                          .primaryColor,
                     ),
                     Expanded(
                       child: GestureDetector(
@@ -1215,7 +1333,10 @@ class _AddListingScreenState extends State<AddListingScreen> {
                         },
                         child: Text(
                           Translate.of(context).translate('enable_expiry_date'),
-                          style: Theme.of(context).textTheme.bodyMedium,
+                          style: Theme
+                              .of(context)
+                              .textTheme
+                              .bodyMedium,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -1235,7 +1356,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
                   Text.rich(
                     TextSpan(
                       text: Translate.of(context).translate('expiry_date'),
-                      style: Theme.of(context)
+                      style: Theme
+                          .of(context)
                           .textTheme
                           .titleMedium!
                           .copyWith(fontWeight: FontWeight.bold),
@@ -1254,7 +1376,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
                   AppPickerItem(
                     leading: Icon(
                       Icons.calendar_today_outlined,
-                      color: Theme.of(context).hintColor,
+                      color: Theme
+                          .of(context)
+                          .hintColor,
                     ),
                     value: _expiryDate,
                     title: Translate.of(context).translate(
@@ -1268,7 +1392,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
                   AppPickerItem(
                       leading: Icon(
                         Icons.access_time,
-                        color: Theme.of(context).hintColor,
+                        color: Theme
+                            .of(context)
+                            .hintColor,
                       ),
                       value: _expiryTime?.format(context),
                       title: Translate.of(context).translate(
@@ -1304,10 +1430,11 @@ class _AddListingScreenState extends State<AddListingScreen> {
                                   .translate('appointmentDetails'),
                               style: TextStyle(
                                   fontSize: 16,
-                                  color: Theme.of(context)
-                                          .textTheme
-                                          .bodyLarge
-                                          ?.color ??
+                                  color: Theme
+                                      .of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.color ??
                                       Colors.white),
                             ),
                             const SizedBox(
@@ -1340,7 +1467,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
               },
               leading: Icon(
                 Icons.home_outlined,
-                color: Theme.of(context).hintColor,
+                color: Theme
+                    .of(context)
+                    .hintColor,
               ),
             ),
             const SizedBox(height: 8),
@@ -1370,7 +1499,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
               },
               leading: Icon(
                 Icons.wallet_travel_outlined,
-                color: Theme.of(context).hintColor,
+                color: Theme
+                    .of(context)
+                    .hintColor,
               ),
             ),
             const SizedBox(height: 8),
@@ -1400,7 +1531,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
               },
               leading: Icon(
                 Icons.phone_outlined,
-                color: Theme.of(context).hintColor,
+                color: Theme
+                    .of(context)
+                    .hintColor,
               ),
             ),
             const SizedBox(height: 8),
@@ -1428,7 +1561,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
               },
               leading: Icon(
                 Icons.email_outlined,
-                color: Theme.of(context).hintColor,
+                color: Theme
+                    .of(context)
+                    .hintColor,
               ),
             ),
             const SizedBox(height: 8),
@@ -1448,7 +1583,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
               },
               leading: Icon(
                 Icons.language_outlined,
-                color: Theme.of(context).hintColor,
+                color: Theme
+                    .of(context)
+                    .hintColor,
               ),
             ),
             Visibility(
@@ -1460,7 +1597,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
                   Text.rich(
                     TextSpan(
                       text: Translate.of(context).translate('start_date'),
-                      style: Theme.of(context)
+                      style: Theme
+                          .of(context)
                           .textTheme
                           .titleMedium!
                           .copyWith(fontWeight: FontWeight.bold),
@@ -1479,7 +1617,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
                   AppPickerItem(
                     leading: Icon(
                       Icons.calendar_today_outlined,
-                      color: Theme.of(context).hintColor,
+                      color: Theme
+                          .of(context)
+                          .hintColor,
                     ),
                     value: _startDate,
                     title: Translate.of(context).translate(
@@ -1493,7 +1633,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
                   Text.rich(
                     TextSpan(
                       text: Translate.of(context).translate('start_time'),
-                      style: Theme.of(context)
+                      style: Theme
+                          .of(context)
                           .textTheme
                           .titleMedium!
                           .copyWith(fontWeight: FontWeight.bold),
@@ -1512,7 +1653,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
                   AppPickerItem(
                       leading: Icon(
                         Icons.access_time,
-                        color: Theme.of(context).hintColor,
+                        color: Theme
+                            .of(context)
+                            .hintColor,
                       ),
                       value: _startTime?.format(context),
                       title: Translate.of(context).translate(
@@ -1525,7 +1668,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
                   Text.rich(
                     TextSpan(
                       text: Translate.of(context).translate('end_date'),
-                      style: Theme.of(context)
+                      style: Theme
+                          .of(context)
                           .textTheme
                           .titleMedium!
                           .copyWith(fontWeight: FontWeight.bold),
@@ -1535,7 +1679,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
                   AppPickerItem(
                     leading: Icon(
                       Icons.calendar_today_outlined,
-                      color: Theme.of(context).hintColor,
+                      color: Theme
+                          .of(context)
+                          .hintColor,
                     ),
                     value: _endDate,
                     title: Translate.of(context).translate(
@@ -1549,7 +1695,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
                   Text.rich(
                     TextSpan(
                       text: Translate.of(context).translate('end_time'),
-                      style: Theme.of(context)
+                      style: Theme
+                          .of(context)
                           .textTheme
                           .titleMedium!
                           .copyWith(fontWeight: FontWeight.bold),
@@ -1559,7 +1706,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
                   AppPickerItem(
                     leading: Icon(
                       Icons.access_time,
-                      color: Theme.of(context).hintColor,
+                      color: Theme
+                          .of(context)
+                          .hintColor,
                     ),
                     value: _endTime?.format(context),
                     title: Translate.of(context).translate(
@@ -1596,7 +1745,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
                   DottedBorder(
                     borderType: BorderType.RRect,
                     radius: const Radius.circular(8),
-                    color: Theme.of(context).primaryColor,
+                    color: Theme
+                        .of(context)
+                        .primaryColor,
                     child: Container(
                       width: 100,
                       height: 100,

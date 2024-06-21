@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -39,10 +37,9 @@ class AddListingCubit extends Cubit<AddListingState> {
   Future<bool> onSubmit({
     required String title,
     required String description,
-    required int cityId,
     CategoryModel? country,
     CategoryModel? state,
-    String? city,
+    List<String>? city,
     int? statusId,
     int? sourceId,
     required String address,
@@ -55,6 +52,7 @@ class AddListingCubit extends Cubit<AddListingState> {
     String? expiryDate,
     String? startDate,
     String? endDate,
+    String? createdAt,
     String? price,
     TimeOfDay? expiryTime,
     int? timeless,
@@ -65,31 +63,31 @@ class AddListingCubit extends Cubit<AddListingState> {
   }) async {
     try {
       final response = await _repo.saveProduct(
-        title,
-        description,
-        place,
-        country,
-        state,
-        city,
-        statusId,
-        sourceId,
-        address,
-        zipcode,
-        phone,
-        email,
-        website,
-        status,
-        expiryDate,
-        startDate,
-        endDate,
-        expiryTime,
-        timeless,
-        startTime,
-        endTime,
-        imagesList,
-        isImageChanged,
-      );
-
+          title,
+          description,
+          place,
+          country,
+          state,
+          city,
+          statusId,
+          sourceId,
+          address,
+          zipcode,
+          phone,
+          email,
+          website,
+          status,
+          expiryDate,
+          startDate,
+          endDate,
+          createdAt,
+          expiryTime,
+          timeless,
+          startTime,
+          price,
+          endTime,
+          imagesList,
+          isImageChanged);
       if (response.success) {
         return true;
       } else {
@@ -188,7 +186,7 @@ class AddListingCubit extends Cubit<AddListingState> {
 
     try {
       final response =
-          await _repo.editProductStatus(listingId, cityId, statusId);
+      await _repo.editProductStatus(listingId, cityId, statusId);
       if (response.success) {
         return true;
       } else {
@@ -342,9 +340,9 @@ class AddListingCubit extends Cubit<AddListingState> {
 
   Future<bool> onSubmitAppointment(
       {List<OpenTimeModel>? openHours,
-      List<HolidayModel>? holidays,
-      List<AppointmentServiceModel>? services,
-      required String city}) async {
+        List<HolidayModel>? holidays,
+        List<AppointmentServiceModel>? services,
+        required String city}) async {
     try {
       final prefs = await Preferences.openBox();
       final listindId = prefs.getKeyValue(Preferences.listingId, 1);
