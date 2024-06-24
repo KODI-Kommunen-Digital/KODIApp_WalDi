@@ -1,7 +1,12 @@
-DEFAULT_API_URL=https://waldi.app/api/
-FORUM_API_URL=https://waldi.app/forumapi/
-APPOINTMENT_API_URL=https://waldi.app/appointmentapi/v1/
-IMAGE_URL=https://unsa1heidi.obs.eu-de.otc.t-systems.com/
+; DEFAULT_API_URL=https://waldi.app/api/
+; FORUM_API_URL=https://waldi.app/forumapi/
+; APPOINTMENT_API_URL=https://waldi.app/appointmentapi/v1/
+; IMAGE_URL=https://unsa1heidi.obs.eu-de.otc.t-systems.com/
+; DEFAULT_PROFILE_IMAGE_URL=https://smrauf1heidi.obs.eu-de.otc.t-systems.com/admin/ProfilePicture.png
+DEFAULT_API_URL=https://test.smartregion-auf.de/api/
+FORUM_API_URL=https://test.smartregion-auf.de/forumapi/
+APPOINTMENT_API_URL=https://test.smartregion-auf.de/appointmentapi/v1/
+IMAGE_URL=https://test1heidi.obs.eu-de.otc.t-systems.com/
 DEFAULT_PROFILE_IMAGE_URL=https://smrauf1heidi.obs.eu-de.otc.t-systems.com/admin/ProfilePicture.png
 CATEGORIES_JSON=assets/data/categories_config.json
 SUBCATEGORIES_JSON=assets/data/subcategories_config.json
