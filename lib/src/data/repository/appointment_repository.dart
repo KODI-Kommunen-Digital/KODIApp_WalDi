@@ -466,15 +466,20 @@ class AppointmentRepository {
     return response;
   }
 
-  Future<bool> deleteBooking(
-      int cityId, int listingId, int appointmentId, int bookingId) async {
-    final response = await Api.requestDeleteBooking(
-        cityId, listingId, appointmentId, bookingId);
+  Future<bool> deleteBooking(int appointmentId, int bookingId) async {
+    final ProductModel? listing = await getProductForAppointment(appointmentId);
+    if (listing != null) {
+      final response = await Api.requestCancelBookingUser(
+          listing.cityId, listing.id, appointmentId, bookingId);
 
-    if (response.success) {
-      return true;
+      if (response.success) {
+        return true;
+      } else {
+        logError('Delete Booking error', response.message);
+        return false;
+      }
     } else {
-      logError('Delete Booking error', response.message);
+      logError('Delete Booking error, no product found');
       return false;
     }
   }

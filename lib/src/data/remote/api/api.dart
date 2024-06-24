@@ -792,7 +792,7 @@ class Api {
     var list =
         '/cities/$cityId/listings/$listingId/appointments/$appointmentId/booking/$bookingId';
     final result =
-    await HTTPManager(apiType: APIType.appointment).delete(url: list);
+    await HTTPManager(apiType: APIType.appointment).delete(url: list, loading: true);
     return ResultApiModel.fromJson(result);
   }
 

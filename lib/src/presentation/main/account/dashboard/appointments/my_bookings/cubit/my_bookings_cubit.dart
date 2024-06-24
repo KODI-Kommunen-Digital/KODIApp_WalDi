@@ -101,8 +101,8 @@ class MyBookingsCubit extends Cubit<MyBookingsState> {
     if (userId == -1) {
       logError("Failed loading product for booking, can't fetch userId");
     } else {
-      bool success = await repo.deleteBookingUser(
-          userId, booking.appointmentId, booking.id);
+      bool success =
+          await repo.deleteBooking(booking.appointmentId, booking.id);
 
       if (success) {
         return true;
