@@ -12,7 +12,7 @@ part of 'member_request_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$MemberRequestState {
@@ -24,7 +24,6 @@ mixin _$MemberRequestState {
     required TResult Function(String error) error,
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
@@ -42,7 +41,6 @@ mixin _$MemberRequestState {
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(MemberRequestStateInitial value) initial,
@@ -51,7 +49,6 @@ mixin _$MemberRequestState {
     required TResult Function(MemberRequestError value) error,
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(MemberRequestStateInitial value)? initial,
@@ -83,33 +80,35 @@ class _$MemberRequestStateCopyWithImpl<$Res, $Val extends MemberRequestState>
     implements $MemberRequestStateCopyWith<$Res> {
   _$MemberRequestStateCopyWithImpl(this._value, this._then);
 
-// ignore: unused_field
+  // ignore: unused_field
   final $Val _value;
-// ignore: unused_field
+  // ignore: unused_field
   final $Res Function($Val) _then;
 }
 
 /// @nodoc
-abstract class _$$MemberRequestStateInitialCopyWith<$Res> {
-  factory _$$MemberRequestStateInitialCopyWith(
-          _$MemberRequestStateInitial value,
-          $Res Function(_$MemberRequestStateInitial) then) =
-      __$$MemberRequestStateInitialCopyWithImpl<$Res>;
+abstract class _$$MemberRequestStateInitialImplCopyWith<$Res> {
+  factory _$$MemberRequestStateInitialImplCopyWith(
+          _$MemberRequestStateInitialImpl value,
+          $Res Function(_$MemberRequestStateInitialImpl) then) =
+      __$$MemberRequestStateInitialImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$MemberRequestStateInitialCopyWithImpl<$Res>
-    extends _$MemberRequestStateCopyWithImpl<$Res, _$MemberRequestStateInitial>
-    implements _$$MemberRequestStateInitialCopyWith<$Res> {
-  __$$MemberRequestStateInitialCopyWithImpl(_$MemberRequestStateInitial _value,
-      $Res Function(_$MemberRequestStateInitial) _then)
+class __$$MemberRequestStateInitialImplCopyWithImpl<$Res>
+    extends _$MemberRequestStateCopyWithImpl<$Res,
+        _$MemberRequestStateInitialImpl>
+    implements _$$MemberRequestStateInitialImplCopyWith<$Res> {
+  __$$MemberRequestStateInitialImplCopyWithImpl(
+      _$MemberRequestStateInitialImpl _value,
+      $Res Function(_$MemberRequestStateInitialImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$MemberRequestStateInitial implements MemberRequestStateInitial {
-  const _$MemberRequestStateInitial();
+class _$MemberRequestStateInitialImpl implements MemberRequestStateInitial {
+  const _$MemberRequestStateInitialImpl();
 
   @override
   String toString() {
@@ -117,10 +116,10 @@ class _$MemberRequestStateInitial implements MemberRequestStateInitial {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$MemberRequestStateInitial);
+            other is _$MemberRequestStateInitialImpl);
   }
 
   @override
@@ -202,29 +201,29 @@ class _$MemberRequestStateInitial implements MemberRequestStateInitial {
 }
 
 abstract class MemberRequestStateInitial implements MemberRequestState {
-  const factory MemberRequestStateInitial() = _$MemberRequestStateInitial;
+  const factory MemberRequestStateInitial() = _$MemberRequestStateInitialImpl;
 }
 
 /// @nodoc
-abstract class _$$MemberRequestLoadingCopyWith<$Res> {
-  factory _$$MemberRequestLoadingCopyWith(_$MemberRequestLoading value,
-          $Res Function(_$MemberRequestLoading) then) =
-      __$$MemberRequestLoadingCopyWithImpl<$Res>;
+abstract class _$$MemberRequestLoadingImplCopyWith<$Res> {
+  factory _$$MemberRequestLoadingImplCopyWith(_$MemberRequestLoadingImpl value,
+          $Res Function(_$MemberRequestLoadingImpl) then) =
+      __$$MemberRequestLoadingImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$MemberRequestLoadingCopyWithImpl<$Res>
-    extends _$MemberRequestStateCopyWithImpl<$Res, _$MemberRequestLoading>
-    implements _$$MemberRequestLoadingCopyWith<$Res> {
-  __$$MemberRequestLoadingCopyWithImpl(_$MemberRequestLoading _value,
-      $Res Function(_$MemberRequestLoading) _then)
+class __$$MemberRequestLoadingImplCopyWithImpl<$Res>
+    extends _$MemberRequestStateCopyWithImpl<$Res, _$MemberRequestLoadingImpl>
+    implements _$$MemberRequestLoadingImplCopyWith<$Res> {
+  __$$MemberRequestLoadingImplCopyWithImpl(_$MemberRequestLoadingImpl _value,
+      $Res Function(_$MemberRequestLoadingImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$MemberRequestLoading implements MemberRequestLoading {
-  const _$MemberRequestLoading();
+class _$MemberRequestLoadingImpl implements MemberRequestLoading {
+  const _$MemberRequestLoadingImpl();
 
   @override
   String toString() {
@@ -232,9 +231,10 @@ class _$MemberRequestLoading implements MemberRequestLoading {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$MemberRequestLoading);
+        (other.runtimeType == runtimeType &&
+            other is _$MemberRequestLoadingImpl);
   }
 
   @override
@@ -316,24 +316,24 @@ class _$MemberRequestLoading implements MemberRequestLoading {
 }
 
 abstract class MemberRequestLoading implements MemberRequestState {
-  const factory MemberRequestLoading() = _$MemberRequestLoading;
+  const factory MemberRequestLoading() = _$MemberRequestLoadingImpl;
 }
 
 /// @nodoc
-abstract class _$$MemberRequestLoadedCopyWith<$Res> {
-  factory _$$MemberRequestLoadedCopyWith(_$MemberRequestLoaded value,
-          $Res Function(_$MemberRequestLoaded) then) =
-      __$$MemberRequestLoadedCopyWithImpl<$Res>;
+abstract class _$$MemberRequestLoadedImplCopyWith<$Res> {
+  factory _$$MemberRequestLoadedImplCopyWith(_$MemberRequestLoadedImpl value,
+          $Res Function(_$MemberRequestLoadedImpl) then) =
+      __$$MemberRequestLoadedImplCopyWithImpl<$Res>;
   @useResult
   $Res call({List<MemberRequestModel> list});
 }
 
 /// @nodoc
-class __$$MemberRequestLoadedCopyWithImpl<$Res>
-    extends _$MemberRequestStateCopyWithImpl<$Res, _$MemberRequestLoaded>
-    implements _$$MemberRequestLoadedCopyWith<$Res> {
-  __$$MemberRequestLoadedCopyWithImpl(
-      _$MemberRequestLoaded _value, $Res Function(_$MemberRequestLoaded) _then)
+class __$$MemberRequestLoadedImplCopyWithImpl<$Res>
+    extends _$MemberRequestStateCopyWithImpl<$Res, _$MemberRequestLoadedImpl>
+    implements _$$MemberRequestLoadedImplCopyWith<$Res> {
+  __$$MemberRequestLoadedImplCopyWithImpl(_$MemberRequestLoadedImpl _value,
+      $Res Function(_$MemberRequestLoadedImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -341,7 +341,7 @@ class __$$MemberRequestLoadedCopyWithImpl<$Res>
   $Res call({
     Object? list = null,
   }) {
-    return _then(_$MemberRequestLoaded(
+    return _then(_$MemberRequestLoadedImpl(
       null == list
           ? _value._list
           : list // ignore: cast_nullable_to_non_nullable
@@ -352,15 +352,15 @@ class __$$MemberRequestLoadedCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$MemberRequestLoaded implements MemberRequestLoaded {
-  const _$MemberRequestLoaded(final List<MemberRequestModel> list)
+class _$MemberRequestLoadedImpl implements MemberRequestLoaded {
+  const _$MemberRequestLoadedImpl(final List<MemberRequestModel> list)
       : _list = list;
 
   final List<MemberRequestModel> _list;
   @override
   List<MemberRequestModel> get list {
     if (_list is EqualUnmodifiableListView) return _list;
-// ignore: implicit_dynamic_type
+    // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_list);
   }
 
@@ -370,10 +370,10 @@ class _$MemberRequestLoaded implements MemberRequestLoaded {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$MemberRequestLoaded &&
+            other is _$MemberRequestLoadedImpl &&
             const DeepCollectionEquality().equals(other._list, _list));
   }
 
@@ -384,8 +384,8 @@ class _$MemberRequestLoaded implements MemberRequestLoaded {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$MemberRequestLoadedCopyWith<_$MemberRequestLoaded> get copyWith =>
-      __$$MemberRequestLoadedCopyWithImpl<_$MemberRequestLoaded>(
+  _$$MemberRequestLoadedImplCopyWith<_$MemberRequestLoadedImpl> get copyWith =>
+      __$$MemberRequestLoadedImplCopyWithImpl<_$MemberRequestLoadedImpl>(
           this, _$identity);
 
   @override
@@ -465,29 +465,29 @@ class _$MemberRequestLoaded implements MemberRequestLoaded {
 
 abstract class MemberRequestLoaded implements MemberRequestState {
   const factory MemberRequestLoaded(final List<MemberRequestModel> list) =
-      _$MemberRequestLoaded;
+      _$MemberRequestLoadedImpl;
 
   List<MemberRequestModel> get list;
   @JsonKey(ignore: true)
-  _$$MemberRequestLoadedCopyWith<_$MemberRequestLoaded> get copyWith =>
+  _$$MemberRequestLoadedImplCopyWith<_$MemberRequestLoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$MemberRequestErrorCopyWith<$Res> {
-  factory _$$MemberRequestErrorCopyWith(_$MemberRequestError value,
-          $Res Function(_$MemberRequestError) then) =
-      __$$MemberRequestErrorCopyWithImpl<$Res>;
+abstract class _$$MemberRequestErrorImplCopyWith<$Res> {
+  factory _$$MemberRequestErrorImplCopyWith(_$MemberRequestErrorImpl value,
+          $Res Function(_$MemberRequestErrorImpl) then) =
+      __$$MemberRequestErrorImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String error});
 }
 
 /// @nodoc
-class __$$MemberRequestErrorCopyWithImpl<$Res>
-    extends _$MemberRequestStateCopyWithImpl<$Res, _$MemberRequestError>
-    implements _$$MemberRequestErrorCopyWith<$Res> {
-  __$$MemberRequestErrorCopyWithImpl(
-      _$MemberRequestError _value, $Res Function(_$MemberRequestError) _then)
+class __$$MemberRequestErrorImplCopyWithImpl<$Res>
+    extends _$MemberRequestStateCopyWithImpl<$Res, _$MemberRequestErrorImpl>
+    implements _$$MemberRequestErrorImplCopyWith<$Res> {
+  __$$MemberRequestErrorImplCopyWithImpl(_$MemberRequestErrorImpl _value,
+      $Res Function(_$MemberRequestErrorImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -495,7 +495,7 @@ class __$$MemberRequestErrorCopyWithImpl<$Res>
   $Res call({
     Object? error = null,
   }) {
-    return _then(_$MemberRequestError(
+    return _then(_$MemberRequestErrorImpl(
       null == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
@@ -506,8 +506,8 @@ class __$$MemberRequestErrorCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$MemberRequestError implements MemberRequestError {
-  const _$MemberRequestError(this.error);
+class _$MemberRequestErrorImpl implements MemberRequestError {
+  const _$MemberRequestErrorImpl(this.error);
 
   @override
   final String error;
@@ -518,10 +518,10 @@ class _$MemberRequestError implements MemberRequestError {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$MemberRequestError &&
+            other is _$MemberRequestErrorImpl &&
             (identical(other.error, error) || other.error == error));
   }
 
@@ -531,8 +531,8 @@ class _$MemberRequestError implements MemberRequestError {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$MemberRequestErrorCopyWith<_$MemberRequestError> get copyWith =>
-      __$$MemberRequestErrorCopyWithImpl<_$MemberRequestError>(
+  _$$MemberRequestErrorImplCopyWith<_$MemberRequestErrorImpl> get copyWith =>
+      __$$MemberRequestErrorImplCopyWithImpl<_$MemberRequestErrorImpl>(
           this, _$identity);
 
   @override
@@ -611,10 +611,11 @@ class _$MemberRequestError implements MemberRequestError {
 }
 
 abstract class MemberRequestError implements MemberRequestState {
-  const factory MemberRequestError(final String error) = _$MemberRequestError;
+  const factory MemberRequestError(final String error) =
+      _$MemberRequestErrorImpl;
 
   String get error;
   @JsonKey(ignore: true)
-  _$$MemberRequestErrorCopyWith<_$MemberRequestError> get copyWith =>
+  _$$MemberRequestErrorImplCopyWith<_$MemberRequestErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

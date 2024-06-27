@@ -12,7 +12,7 @@ part of 'all_requests_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$AllRequestsState {
@@ -24,7 +24,6 @@ mixin _$AllRequestsState {
         loaded,
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
@@ -40,7 +39,6 @@ mixin _$AllRequestsState {
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(AllRequestsStateInitial value) initial,
@@ -48,7 +46,6 @@ mixin _$AllRequestsState {
     required TResult Function(AllRequestsStateLoaded value) loaded,
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(AllRequestsStateInitial value)? initial,
@@ -78,32 +75,34 @@ class _$AllRequestsStateCopyWithImpl<$Res, $Val extends AllRequestsState>
     implements $AllRequestsStateCopyWith<$Res> {
   _$AllRequestsStateCopyWithImpl(this._value, this._then);
 
-// ignore: unused_field
+  // ignore: unused_field
   final $Val _value;
-// ignore: unused_field
+  // ignore: unused_field
   final $Res Function($Val) _then;
 }
 
 /// @nodoc
-abstract class _$$AllRequestsStateInitialCopyWith<$Res> {
-  factory _$$AllRequestsStateInitialCopyWith(_$AllRequestsStateInitial value,
-          $Res Function(_$AllRequestsStateInitial) then) =
-      __$$AllRequestsStateInitialCopyWithImpl<$Res>;
+abstract class _$$AllRequestsStateInitialImplCopyWith<$Res> {
+  factory _$$AllRequestsStateInitialImplCopyWith(
+          _$AllRequestsStateInitialImpl value,
+          $Res Function(_$AllRequestsStateInitialImpl) then) =
+      __$$AllRequestsStateInitialImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$AllRequestsStateInitialCopyWithImpl<$Res>
-    extends _$AllRequestsStateCopyWithImpl<$Res, _$AllRequestsStateInitial>
-    implements _$$AllRequestsStateInitialCopyWith<$Res> {
-  __$$AllRequestsStateInitialCopyWithImpl(_$AllRequestsStateInitial _value,
-      $Res Function(_$AllRequestsStateInitial) _then)
+class __$$AllRequestsStateInitialImplCopyWithImpl<$Res>
+    extends _$AllRequestsStateCopyWithImpl<$Res, _$AllRequestsStateInitialImpl>
+    implements _$$AllRequestsStateInitialImplCopyWith<$Res> {
+  __$$AllRequestsStateInitialImplCopyWithImpl(
+      _$AllRequestsStateInitialImpl _value,
+      $Res Function(_$AllRequestsStateInitialImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$AllRequestsStateInitial implements AllRequestsStateInitial {
-  const _$AllRequestsStateInitial();
+class _$AllRequestsStateInitialImpl implements AllRequestsStateInitial {
+  const _$AllRequestsStateInitialImpl();
 
   @override
   String toString() {
@@ -111,10 +110,10 @@ class _$AllRequestsStateInitial implements AllRequestsStateInitial {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$AllRequestsStateInitial);
+            other is _$AllRequestsStateInitialImpl);
   }
 
   @override
@@ -191,29 +190,31 @@ class _$AllRequestsStateInitial implements AllRequestsStateInitial {
 }
 
 abstract class AllRequestsStateInitial implements AllRequestsState {
-  const factory AllRequestsStateInitial() = _$AllRequestsStateInitial;
+  const factory AllRequestsStateInitial() = _$AllRequestsStateInitialImpl;
 }
 
 /// @nodoc
-abstract class _$$AllRequestsStateLoadingCopyWith<$Res> {
-  factory _$$AllRequestsStateLoadingCopyWith(_$AllRequestsStateLoading value,
-          $Res Function(_$AllRequestsStateLoading) then) =
-      __$$AllRequestsStateLoadingCopyWithImpl<$Res>;
+abstract class _$$AllRequestsStateLoadingImplCopyWith<$Res> {
+  factory _$$AllRequestsStateLoadingImplCopyWith(
+          _$AllRequestsStateLoadingImpl value,
+          $Res Function(_$AllRequestsStateLoadingImpl) then) =
+      __$$AllRequestsStateLoadingImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$AllRequestsStateLoadingCopyWithImpl<$Res>
-    extends _$AllRequestsStateCopyWithImpl<$Res, _$AllRequestsStateLoading>
-    implements _$$AllRequestsStateLoadingCopyWith<$Res> {
-  __$$AllRequestsStateLoadingCopyWithImpl(_$AllRequestsStateLoading _value,
-      $Res Function(_$AllRequestsStateLoading) _then)
+class __$$AllRequestsStateLoadingImplCopyWithImpl<$Res>
+    extends _$AllRequestsStateCopyWithImpl<$Res, _$AllRequestsStateLoadingImpl>
+    implements _$$AllRequestsStateLoadingImplCopyWith<$Res> {
+  __$$AllRequestsStateLoadingImplCopyWithImpl(
+      _$AllRequestsStateLoadingImpl _value,
+      $Res Function(_$AllRequestsStateLoadingImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$AllRequestsStateLoading implements AllRequestsStateLoading {
-  const _$AllRequestsStateLoading();
+class _$AllRequestsStateLoadingImpl implements AllRequestsStateLoading {
+  const _$AllRequestsStateLoadingImpl();
 
   @override
   String toString() {
@@ -221,10 +222,10 @@ class _$AllRequestsStateLoading implements AllRequestsStateLoading {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$AllRequestsStateLoading);
+            other is _$AllRequestsStateLoadingImpl);
   }
 
   @override
@@ -301,24 +302,26 @@ class _$AllRequestsStateLoading implements AllRequestsStateLoading {
 }
 
 abstract class AllRequestsStateLoading implements AllRequestsState {
-  const factory AllRequestsStateLoading() = _$AllRequestsStateLoading;
+  const factory AllRequestsStateLoading() = _$AllRequestsStateLoadingImpl;
 }
 
 /// @nodoc
-abstract class _$$AllRequestsStateLoadedCopyWith<$Res> {
-  factory _$$AllRequestsStateLoadedCopyWith(_$AllRequestsStateLoaded value,
-          $Res Function(_$AllRequestsStateLoaded) then) =
-      __$$AllRequestsStateLoadedCopyWithImpl<$Res>;
+abstract class _$$AllRequestsStateLoadedImplCopyWith<$Res> {
+  factory _$$AllRequestsStateLoadedImplCopyWith(
+          _$AllRequestsStateLoadedImpl value,
+          $Res Function(_$AllRequestsStateLoadedImpl) then) =
+      __$$AllRequestsStateLoadedImplCopyWithImpl<$Res>;
   @useResult
   $Res call({List<ProductModel> recent, bool isRefreshLoader});
 }
 
 /// @nodoc
-class __$$AllRequestsStateLoadedCopyWithImpl<$Res>
-    extends _$AllRequestsStateCopyWithImpl<$Res, _$AllRequestsStateLoaded>
-    implements _$$AllRequestsStateLoadedCopyWith<$Res> {
-  __$$AllRequestsStateLoadedCopyWithImpl(_$AllRequestsStateLoaded _value,
-      $Res Function(_$AllRequestsStateLoaded) _then)
+class __$$AllRequestsStateLoadedImplCopyWithImpl<$Res>
+    extends _$AllRequestsStateCopyWithImpl<$Res, _$AllRequestsStateLoadedImpl>
+    implements _$$AllRequestsStateLoadedImplCopyWith<$Res> {
+  __$$AllRequestsStateLoadedImplCopyWithImpl(
+      _$AllRequestsStateLoadedImpl _value,
+      $Res Function(_$AllRequestsStateLoadedImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -327,7 +330,7 @@ class __$$AllRequestsStateLoadedCopyWithImpl<$Res>
     Object? recent = null,
     Object? isRefreshLoader = null,
   }) {
-    return _then(_$AllRequestsStateLoaded(
+    return _then(_$AllRequestsStateLoadedImpl(
       null == recent
           ? _value._recent
           : recent // ignore: cast_nullable_to_non_nullable
@@ -342,8 +345,8 @@ class __$$AllRequestsStateLoadedCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$AllRequestsStateLoaded implements AllRequestsStateLoaded {
-  const _$AllRequestsStateLoaded(
+class _$AllRequestsStateLoadedImpl implements AllRequestsStateLoaded {
+  const _$AllRequestsStateLoadedImpl(
       final List<ProductModel> recent, this.isRefreshLoader)
       : _recent = recent;
 
@@ -351,7 +354,7 @@ class _$AllRequestsStateLoaded implements AllRequestsStateLoaded {
   @override
   List<ProductModel> get recent {
     if (_recent is EqualUnmodifiableListView) return _recent;
-// ignore: implicit_dynamic_type
+    // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_recent);
   }
 
@@ -364,10 +367,10 @@ class _$AllRequestsStateLoaded implements AllRequestsStateLoaded {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$AllRequestsStateLoaded &&
+            other is _$AllRequestsStateLoadedImpl &&
             const DeepCollectionEquality().equals(other._recent, _recent) &&
             (identical(other.isRefreshLoader, isRefreshLoader) ||
                 other.isRefreshLoader == isRefreshLoader));
@@ -380,9 +383,9 @@ class _$AllRequestsStateLoaded implements AllRequestsStateLoaded {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$AllRequestsStateLoadedCopyWith<_$AllRequestsStateLoaded> get copyWith =>
-      __$$AllRequestsStateLoadedCopyWithImpl<_$AllRequestsStateLoaded>(
-          this, _$identity);
+  _$$AllRequestsStateLoadedImplCopyWith<_$AllRequestsStateLoadedImpl>
+      get copyWith => __$$AllRequestsStateLoadedImplCopyWithImpl<
+          _$AllRequestsStateLoadedImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -457,11 +460,11 @@ class _$AllRequestsStateLoaded implements AllRequestsStateLoaded {
 abstract class AllRequestsStateLoaded implements AllRequestsState {
   const factory AllRequestsStateLoaded(
           final List<ProductModel> recent, final bool isRefreshLoader) =
-      _$AllRequestsStateLoaded;
+      _$AllRequestsStateLoadedImpl;
 
   List<ProductModel> get recent;
   bool get isRefreshLoader;
   @JsonKey(ignore: true)
-  _$$AllRequestsStateLoadedCopyWith<_$AllRequestsStateLoaded> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$AllRequestsStateLoadedImplCopyWith<_$AllRequestsStateLoadedImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }

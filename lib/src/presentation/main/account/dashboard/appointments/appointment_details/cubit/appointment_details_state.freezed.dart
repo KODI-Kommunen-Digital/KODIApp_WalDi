@@ -29,7 +29,6 @@ mixin _$AppointmentDetailsState {
     required TResult Function(String msg) error,
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
@@ -57,7 +56,6 @@ mixin _$AppointmentDetailsState {
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(AppointmentDetailsStateInitial value) initial,
@@ -66,7 +64,6 @@ mixin _$AppointmentDetailsState {
     required TResult Function(AppointmentDetailsStateError value) error,
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(AppointmentDetailsStateInitial value)? initial,
@@ -99,9 +96,9 @@ class _$AppointmentDetailsStateCopyWithImpl<$Res,
     implements $AppointmentDetailsStateCopyWith<$Res> {
   _$AppointmentDetailsStateCopyWithImpl(this._value, this._then);
 
-// ignore: unused_field
+  // ignore: unused_field
   final $Val _value;
-// ignore: unused_field
+  // ignore: unused_field
   final $Res Function($Val) _then;
 }
 
@@ -443,7 +440,7 @@ class _$AppointmentDetailsStateLoadedImpl
   @override
   List<BookingModel> get bookings {
     if (_bookings is EqualUnmodifiableListView) return _bookings;
-// ignore: implicit_dynamic_type
+    // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_bookings);
   }
 
@@ -451,7 +448,7 @@ class _$AppointmentDetailsStateLoadedImpl
   @override
   List<BookingGuestModel> get guests {
     if (_guests is EqualUnmodifiableListView) return _guests;
-// ignore: implicit_dynamic_type
+    // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_guests);
   }
 

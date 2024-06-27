@@ -129,7 +129,8 @@ class _HeidiAppState extends State<HeidiApp> {
                     ),
                     builder: (context, child) {
                       final data = MediaQuery.of(context).copyWith(
-                        textScaleFactor: theme.textScaleFactor,
+                        textScaler:
+                            TextScaler.linear(theme.textScaleFactor ?? 1),
                       );
                       return MediaQuery(
                         data: data,

@@ -12,7 +12,7 @@ part of 'account_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$AccountState {
@@ -23,7 +23,6 @@ mixin _$AccountState {
     required TResult Function(String errorMessage) error,
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
@@ -39,7 +38,6 @@ mixin _$AccountState {
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(AccountLoading value) loading,
@@ -47,7 +45,6 @@ mixin _$AccountState {
     required TResult Function(AccountError value) error,
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(AccountLoading value)? loading,
@@ -77,32 +74,32 @@ class _$AccountStateCopyWithImpl<$Res, $Val extends AccountState>
     implements $AccountStateCopyWith<$Res> {
   _$AccountStateCopyWithImpl(this._value, this._then);
 
-// ignore: unused_field
+  // ignore: unused_field
   final $Val _value;
-// ignore: unused_field
+  // ignore: unused_field
   final $Res Function($Val) _then;
 }
 
 /// @nodoc
-abstract class _$$AccountLoadingCopyWith<$Res> {
-  factory _$$AccountLoadingCopyWith(
-          _$AccountLoading value, $Res Function(_$AccountLoading) then) =
-      __$$AccountLoadingCopyWithImpl<$Res>;
+abstract class _$$AccountLoadingImplCopyWith<$Res> {
+  factory _$$AccountLoadingImplCopyWith(_$AccountLoadingImpl value,
+          $Res Function(_$AccountLoadingImpl) then) =
+      __$$AccountLoadingImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$AccountLoadingCopyWithImpl<$Res>
-    extends _$AccountStateCopyWithImpl<$Res, _$AccountLoading>
-    implements _$$AccountLoadingCopyWith<$Res> {
-  __$$AccountLoadingCopyWithImpl(
-      _$AccountLoading _value, $Res Function(_$AccountLoading) _then)
+class __$$AccountLoadingImplCopyWithImpl<$Res>
+    extends _$AccountStateCopyWithImpl<$Res, _$AccountLoadingImpl>
+    implements _$$AccountLoadingImplCopyWith<$Res> {
+  __$$AccountLoadingImplCopyWithImpl(
+      _$AccountLoadingImpl _value, $Res Function(_$AccountLoadingImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$AccountLoading implements AccountLoading {
-  const _$AccountLoading();
+class _$AccountLoadingImpl implements AccountLoading {
+  const _$AccountLoadingImpl();
 
   @override
   String toString() {
@@ -110,9 +107,9 @@ class _$AccountLoading implements AccountLoading {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$AccountLoading);
+        (other.runtimeType == runtimeType && other is _$AccountLoadingImpl);
   }
 
   @override
@@ -188,29 +185,29 @@ class _$AccountLoading implements AccountLoading {
 }
 
 abstract class AccountLoading implements AccountState {
-  const factory AccountLoading() = _$AccountLoading;
+  const factory AccountLoading() = _$AccountLoadingImpl;
 }
 
 /// @nodoc
-abstract class _$$AccountLoadedCopyWith<$Res> {
-  factory _$$AccountLoadedCopyWith(
-          _$AccountLoaded value, $Res Function(_$AccountLoaded) then) =
-      __$$AccountLoadedCopyWithImpl<$Res>;
+abstract class _$$AccountLoadedImplCopyWith<$Res> {
+  factory _$$AccountLoadedImplCopyWith(
+          _$AccountLoadedImpl value, $Res Function(_$AccountLoadedImpl) then) =
+      __$$AccountLoadedImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$AccountLoadedCopyWithImpl<$Res>
-    extends _$AccountStateCopyWithImpl<$Res, _$AccountLoaded>
-    implements _$$AccountLoadedCopyWith<$Res> {
-  __$$AccountLoadedCopyWithImpl(
-      _$AccountLoaded _value, $Res Function(_$AccountLoaded) _then)
+class __$$AccountLoadedImplCopyWithImpl<$Res>
+    extends _$AccountStateCopyWithImpl<$Res, _$AccountLoadedImpl>
+    implements _$$AccountLoadedImplCopyWith<$Res> {
+  __$$AccountLoadedImplCopyWithImpl(
+      _$AccountLoadedImpl _value, $Res Function(_$AccountLoadedImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$AccountLoaded implements AccountLoaded {
-  const _$AccountLoaded();
+class _$AccountLoadedImpl implements AccountLoaded {
+  const _$AccountLoadedImpl();
 
   @override
   String toString() {
@@ -218,9 +215,9 @@ class _$AccountLoaded implements AccountLoaded {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$AccountLoaded);
+        (other.runtimeType == runtimeType && other is _$AccountLoadedImpl);
   }
 
   @override
@@ -296,24 +293,24 @@ class _$AccountLoaded implements AccountLoaded {
 }
 
 abstract class AccountLoaded implements AccountState {
-  const factory AccountLoaded() = _$AccountLoaded;
+  const factory AccountLoaded() = _$AccountLoadedImpl;
 }
 
 /// @nodoc
-abstract class _$$AccountErrorCopyWith<$Res> {
-  factory _$$AccountErrorCopyWith(
-          _$AccountError value, $Res Function(_$AccountError) then) =
-      __$$AccountErrorCopyWithImpl<$Res>;
+abstract class _$$AccountErrorImplCopyWith<$Res> {
+  factory _$$AccountErrorImplCopyWith(
+          _$AccountErrorImpl value, $Res Function(_$AccountErrorImpl) then) =
+      __$$AccountErrorImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String errorMessage});
 }
 
 /// @nodoc
-class __$$AccountErrorCopyWithImpl<$Res>
-    extends _$AccountStateCopyWithImpl<$Res, _$AccountError>
-    implements _$$AccountErrorCopyWith<$Res> {
-  __$$AccountErrorCopyWithImpl(
-      _$AccountError _value, $Res Function(_$AccountError) _then)
+class __$$AccountErrorImplCopyWithImpl<$Res>
+    extends _$AccountStateCopyWithImpl<$Res, _$AccountErrorImpl>
+    implements _$$AccountErrorImplCopyWith<$Res> {
+  __$$AccountErrorImplCopyWithImpl(
+      _$AccountErrorImpl _value, $Res Function(_$AccountErrorImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -321,7 +318,7 @@ class __$$AccountErrorCopyWithImpl<$Res>
   $Res call({
     Object? errorMessage = null,
   }) {
-    return _then(_$AccountError(
+    return _then(_$AccountErrorImpl(
       null == errorMessage
           ? _value.errorMessage
           : errorMessage // ignore: cast_nullable_to_non_nullable
@@ -332,8 +329,8 @@ class __$$AccountErrorCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$AccountError implements AccountError {
-  const _$AccountError(this.errorMessage);
+class _$AccountErrorImpl implements AccountError {
+  const _$AccountErrorImpl(this.errorMessage);
 
   @override
   final String errorMessage;
@@ -344,10 +341,10 @@ class _$AccountError implements AccountError {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$AccountError &&
+            other is _$AccountErrorImpl &&
             (identical(other.errorMessage, errorMessage) ||
                 other.errorMessage == errorMessage));
   }
@@ -358,8 +355,8 @@ class _$AccountError implements AccountError {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$AccountErrorCopyWith<_$AccountError> get copyWith =>
-      __$$AccountErrorCopyWithImpl<_$AccountError>(this, _$identity);
+  _$$AccountErrorImplCopyWith<_$AccountErrorImpl> get copyWith =>
+      __$$AccountErrorImplCopyWithImpl<_$AccountErrorImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -431,10 +428,10 @@ class _$AccountError implements AccountError {
 }
 
 abstract class AccountError implements AccountState {
-  const factory AccountError(final String errorMessage) = _$AccountError;
+  const factory AccountError(final String errorMessage) = _$AccountErrorImpl;
 
   String get errorMessage;
   @JsonKey(ignore: true)
-  _$$AccountErrorCopyWith<_$AccountError> get copyWith =>
+  _$$AccountErrorImplCopyWith<_$AccountErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

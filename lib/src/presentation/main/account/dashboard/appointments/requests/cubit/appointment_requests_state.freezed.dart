@@ -24,7 +24,6 @@ mixin _$AppointmentRequestsState {
     required TResult Function(String error) error,
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
@@ -40,7 +39,6 @@ mixin _$AppointmentRequestsState {
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(AppointmentRequestsStateLoading value) loading,
@@ -48,7 +46,6 @@ mixin _$AppointmentRequestsState {
     required TResult Function(AppointmentRequestsStateError value) error,
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(AppointmentRequestsStateLoading value)? loading,
@@ -79,9 +76,9 @@ class _$AppointmentRequestsStateCopyWithImpl<$Res,
     implements $AppointmentRequestsStateCopyWith<$Res> {
   _$AppointmentRequestsStateCopyWithImpl(this._value, this._then);
 
-// ignore: unused_field
+  // ignore: unused_field
   final $Val _value;
-// ignore: unused_field
+  // ignore: unused_field
   final $Res Function($Val) _then;
 }
 
@@ -252,7 +249,7 @@ class _$AppointmentRequestsStateLoadedImpl
   @override
   List<String> get appointments {
     if (_appointments is EqualUnmodifiableListView) return _appointments;
-// ignore: implicit_dynamic_type
+    // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_appointments);
   }
 

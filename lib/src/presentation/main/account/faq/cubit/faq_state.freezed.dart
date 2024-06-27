@@ -12,7 +12,7 @@ part of 'faq_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$FaqState {
@@ -23,7 +23,6 @@ mixin _$FaqState {
     required TResult Function() error,
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
@@ -39,7 +38,6 @@ mixin _$FaqState {
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(FaqStateLoading value) loading,
@@ -47,7 +45,6 @@ mixin _$FaqState {
     required TResult Function(FaqStateError value) error,
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(FaqStateLoading value)? loading,
@@ -76,32 +73,32 @@ class _$FaqStateCopyWithImpl<$Res, $Val extends FaqState>
     implements $FaqStateCopyWith<$Res> {
   _$FaqStateCopyWithImpl(this._value, this._then);
 
-// ignore: unused_field
+  // ignore: unused_field
   final $Val _value;
-// ignore: unused_field
+  // ignore: unused_field
   final $Res Function($Val) _then;
 }
 
 /// @nodoc
-abstract class _$$FaqStateLoadingCopyWith<$Res> {
-  factory _$$FaqStateLoadingCopyWith(
-          _$FaqStateLoading value, $Res Function(_$FaqStateLoading) then) =
-      __$$FaqStateLoadingCopyWithImpl<$Res>;
+abstract class _$$FaqStateLoadingImplCopyWith<$Res> {
+  factory _$$FaqStateLoadingImplCopyWith(_$FaqStateLoadingImpl value,
+          $Res Function(_$FaqStateLoadingImpl) then) =
+      __$$FaqStateLoadingImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$FaqStateLoadingCopyWithImpl<$Res>
-    extends _$FaqStateCopyWithImpl<$Res, _$FaqStateLoading>
-    implements _$$FaqStateLoadingCopyWith<$Res> {
-  __$$FaqStateLoadingCopyWithImpl(
-      _$FaqStateLoading _value, $Res Function(_$FaqStateLoading) _then)
+class __$$FaqStateLoadingImplCopyWithImpl<$Res>
+    extends _$FaqStateCopyWithImpl<$Res, _$FaqStateLoadingImpl>
+    implements _$$FaqStateLoadingImplCopyWith<$Res> {
+  __$$FaqStateLoadingImplCopyWithImpl(
+      _$FaqStateLoadingImpl _value, $Res Function(_$FaqStateLoadingImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$FaqStateLoading implements FaqStateLoading {
-  const _$FaqStateLoading();
+class _$FaqStateLoadingImpl implements FaqStateLoading {
+  const _$FaqStateLoadingImpl();
 
   @override
   String toString() {
@@ -109,9 +106,9 @@ class _$FaqStateLoading implements FaqStateLoading {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$FaqStateLoading);
+        (other.runtimeType == runtimeType && other is _$FaqStateLoadingImpl);
   }
 
   @override
@@ -187,29 +184,29 @@ class _$FaqStateLoading implements FaqStateLoading {
 }
 
 abstract class FaqStateLoading implements FaqState {
-  const factory FaqStateLoading() = _$FaqStateLoading;
+  const factory FaqStateLoading() = _$FaqStateLoadingImpl;
 }
 
 /// @nodoc
-abstract class _$$FaqStateLoadedCopyWith<$Res> {
-  factory _$$FaqStateLoadedCopyWith(
-          _$FaqStateLoaded value, $Res Function(_$FaqStateLoaded) then) =
-      __$$FaqStateLoadedCopyWithImpl<$Res>;
+abstract class _$$FaqStateLoadedImplCopyWith<$Res> {
+  factory _$$FaqStateLoadedImplCopyWith(_$FaqStateLoadedImpl value,
+          $Res Function(_$FaqStateLoadedImpl) then) =
+      __$$FaqStateLoadedImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$FaqStateLoadedCopyWithImpl<$Res>
-    extends _$FaqStateCopyWithImpl<$Res, _$FaqStateLoaded>
-    implements _$$FaqStateLoadedCopyWith<$Res> {
-  __$$FaqStateLoadedCopyWithImpl(
-      _$FaqStateLoaded _value, $Res Function(_$FaqStateLoaded) _then)
+class __$$FaqStateLoadedImplCopyWithImpl<$Res>
+    extends _$FaqStateCopyWithImpl<$Res, _$FaqStateLoadedImpl>
+    implements _$$FaqStateLoadedImplCopyWith<$Res> {
+  __$$FaqStateLoadedImplCopyWithImpl(
+      _$FaqStateLoadedImpl _value, $Res Function(_$FaqStateLoadedImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$FaqStateLoaded implements FaqStateLoaded {
-  const _$FaqStateLoaded();
+class _$FaqStateLoadedImpl implements FaqStateLoaded {
+  const _$FaqStateLoadedImpl();
 
   @override
   String toString() {
@@ -217,9 +214,9 @@ class _$FaqStateLoaded implements FaqStateLoaded {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$FaqStateLoaded);
+        (other.runtimeType == runtimeType && other is _$FaqStateLoadedImpl);
   }
 
   @override
@@ -295,29 +292,29 @@ class _$FaqStateLoaded implements FaqStateLoaded {
 }
 
 abstract class FaqStateLoaded implements FaqState {
-  const factory FaqStateLoaded() = _$FaqStateLoaded;
+  const factory FaqStateLoaded() = _$FaqStateLoadedImpl;
 }
 
 /// @nodoc
-abstract class _$$FaqStateErrorCopyWith<$Res> {
-  factory _$$FaqStateErrorCopyWith(
-          _$FaqStateError value, $Res Function(_$FaqStateError) then) =
-      __$$FaqStateErrorCopyWithImpl<$Res>;
+abstract class _$$FaqStateErrorImplCopyWith<$Res> {
+  factory _$$FaqStateErrorImplCopyWith(
+          _$FaqStateErrorImpl value, $Res Function(_$FaqStateErrorImpl) then) =
+      __$$FaqStateErrorImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$FaqStateErrorCopyWithImpl<$Res>
-    extends _$FaqStateCopyWithImpl<$Res, _$FaqStateError>
-    implements _$$FaqStateErrorCopyWith<$Res> {
-  __$$FaqStateErrorCopyWithImpl(
-      _$FaqStateError _value, $Res Function(_$FaqStateError) _then)
+class __$$FaqStateErrorImplCopyWithImpl<$Res>
+    extends _$FaqStateCopyWithImpl<$Res, _$FaqStateErrorImpl>
+    implements _$$FaqStateErrorImplCopyWith<$Res> {
+  __$$FaqStateErrorImplCopyWithImpl(
+      _$FaqStateErrorImpl _value, $Res Function(_$FaqStateErrorImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$FaqStateError implements FaqStateError {
-  const _$FaqStateError();
+class _$FaqStateErrorImpl implements FaqStateError {
+  const _$FaqStateErrorImpl();
 
   @override
   String toString() {
@@ -325,9 +322,9 @@ class _$FaqStateError implements FaqStateError {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$FaqStateError);
+        (other.runtimeType == runtimeType && other is _$FaqStateErrorImpl);
   }
 
   @override
@@ -403,5 +400,5 @@ class _$FaqStateError implements FaqStateError {
 }
 
 abstract class FaqStateError implements FaqState {
-  const factory FaqStateError() = _$FaqStateError;
+  const factory FaqStateError() = _$FaqStateErrorImpl;
 }

@@ -25,7 +25,6 @@ mixin _$CreateAppointmentState {
     required TResult Function(String error) error,
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
@@ -45,7 +44,6 @@ mixin _$CreateAppointmentState {
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(CreateAppointmentLoading value) loading,
@@ -53,7 +51,6 @@ mixin _$CreateAppointmentState {
     required TResult Function(CreateAppointmentError value) error,
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(CreateAppointmentLoading value)? loading,
@@ -84,9 +81,9 @@ class _$CreateAppointmentStateCopyWithImpl<$Res,
     implements $CreateAppointmentStateCopyWith<$Res> {
   _$CreateAppointmentStateCopyWithImpl(this._value, this._then);
 
-// ignore: unused_field
+  // ignore: unused_field
   final $Val _value;
-// ignore: unused_field
+  // ignore: unused_field
   final $Res Function($Val) _then;
 }
 
@@ -262,7 +259,7 @@ class _$CreateAppointmentLoadedImpl implements CreateAppointmentLoaded {
     final value = _loadedEntries;
     if (value == null) return null;
     if (_loadedEntries is EqualUnmodifiableListView) return _loadedEntries;
-// ignore: implicit_dynamic_type
+    // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(value);
   }
 

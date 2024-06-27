@@ -12,7 +12,7 @@ part of 'contact_us_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$ContactUsState {
@@ -23,7 +23,6 @@ mixin _$ContactUsState {
     required TResult Function() error,
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
@@ -39,7 +38,6 @@ mixin _$ContactUsState {
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(ContactUsStateLoading value) loading,
@@ -47,7 +45,6 @@ mixin _$ContactUsState {
     required TResult Function(ContactUsStateError value) error,
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(ContactUsStateLoading value)? loading,
@@ -77,32 +74,33 @@ class _$ContactUsStateCopyWithImpl<$Res, $Val extends ContactUsState>
     implements $ContactUsStateCopyWith<$Res> {
   _$ContactUsStateCopyWithImpl(this._value, this._then);
 
-// ignore: unused_field
+  // ignore: unused_field
   final $Val _value;
-// ignore: unused_field
+  // ignore: unused_field
   final $Res Function($Val) _then;
 }
 
 /// @nodoc
-abstract class _$$ContactUsStateLoadingCopyWith<$Res> {
-  factory _$$ContactUsStateLoadingCopyWith(_$ContactUsStateLoading value,
-          $Res Function(_$ContactUsStateLoading) then) =
-      __$$ContactUsStateLoadingCopyWithImpl<$Res>;
+abstract class _$$ContactUsStateLoadingImplCopyWith<$Res> {
+  factory _$$ContactUsStateLoadingImplCopyWith(
+          _$ContactUsStateLoadingImpl value,
+          $Res Function(_$ContactUsStateLoadingImpl) then) =
+      __$$ContactUsStateLoadingImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$ContactUsStateLoadingCopyWithImpl<$Res>
-    extends _$ContactUsStateCopyWithImpl<$Res, _$ContactUsStateLoading>
-    implements _$$ContactUsStateLoadingCopyWith<$Res> {
-  __$$ContactUsStateLoadingCopyWithImpl(_$ContactUsStateLoading _value,
-      $Res Function(_$ContactUsStateLoading) _then)
+class __$$ContactUsStateLoadingImplCopyWithImpl<$Res>
+    extends _$ContactUsStateCopyWithImpl<$Res, _$ContactUsStateLoadingImpl>
+    implements _$$ContactUsStateLoadingImplCopyWith<$Res> {
+  __$$ContactUsStateLoadingImplCopyWithImpl(_$ContactUsStateLoadingImpl _value,
+      $Res Function(_$ContactUsStateLoadingImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$ContactUsStateLoading implements ContactUsStateLoading {
-  const _$ContactUsStateLoading();
+class _$ContactUsStateLoadingImpl implements ContactUsStateLoading {
+  const _$ContactUsStateLoadingImpl();
 
   @override
   String toString() {
@@ -110,9 +108,10 @@ class _$ContactUsStateLoading implements ContactUsStateLoading {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$ContactUsStateLoading);
+        (other.runtimeType == runtimeType &&
+            other is _$ContactUsStateLoadingImpl);
   }
 
   @override
@@ -188,29 +187,29 @@ class _$ContactUsStateLoading implements ContactUsStateLoading {
 }
 
 abstract class ContactUsStateLoading implements ContactUsState {
-  const factory ContactUsStateLoading() = _$ContactUsStateLoading;
+  const factory ContactUsStateLoading() = _$ContactUsStateLoadingImpl;
 }
 
 /// @nodoc
-abstract class _$$ContactUsStateLoadedCopyWith<$Res> {
-  factory _$$ContactUsStateLoadedCopyWith(_$ContactUsStateLoaded value,
-          $Res Function(_$ContactUsStateLoaded) then) =
-      __$$ContactUsStateLoadedCopyWithImpl<$Res>;
+abstract class _$$ContactUsStateLoadedImplCopyWith<$Res> {
+  factory _$$ContactUsStateLoadedImplCopyWith(_$ContactUsStateLoadedImpl value,
+          $Res Function(_$ContactUsStateLoadedImpl) then) =
+      __$$ContactUsStateLoadedImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$ContactUsStateLoadedCopyWithImpl<$Res>
-    extends _$ContactUsStateCopyWithImpl<$Res, _$ContactUsStateLoaded>
-    implements _$$ContactUsStateLoadedCopyWith<$Res> {
-  __$$ContactUsStateLoadedCopyWithImpl(_$ContactUsStateLoaded _value,
-      $Res Function(_$ContactUsStateLoaded) _then)
+class __$$ContactUsStateLoadedImplCopyWithImpl<$Res>
+    extends _$ContactUsStateCopyWithImpl<$Res, _$ContactUsStateLoadedImpl>
+    implements _$$ContactUsStateLoadedImplCopyWith<$Res> {
+  __$$ContactUsStateLoadedImplCopyWithImpl(_$ContactUsStateLoadedImpl _value,
+      $Res Function(_$ContactUsStateLoadedImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$ContactUsStateLoaded implements ContactUsStateLoaded {
-  const _$ContactUsStateLoaded();
+class _$ContactUsStateLoadedImpl implements ContactUsStateLoaded {
+  const _$ContactUsStateLoadedImpl();
 
   @override
   String toString() {
@@ -218,9 +217,10 @@ class _$ContactUsStateLoaded implements ContactUsStateLoaded {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$ContactUsStateLoaded);
+        (other.runtimeType == runtimeType &&
+            other is _$ContactUsStateLoadedImpl);
   }
 
   @override
@@ -296,29 +296,29 @@ class _$ContactUsStateLoaded implements ContactUsStateLoaded {
 }
 
 abstract class ContactUsStateLoaded implements ContactUsState {
-  const factory ContactUsStateLoaded() = _$ContactUsStateLoaded;
+  const factory ContactUsStateLoaded() = _$ContactUsStateLoadedImpl;
 }
 
 /// @nodoc
-abstract class _$$ContactUsStateErrorCopyWith<$Res> {
-  factory _$$ContactUsStateErrorCopyWith(_$ContactUsStateError value,
-          $Res Function(_$ContactUsStateError) then) =
-      __$$ContactUsStateErrorCopyWithImpl<$Res>;
+abstract class _$$ContactUsStateErrorImplCopyWith<$Res> {
+  factory _$$ContactUsStateErrorImplCopyWith(_$ContactUsStateErrorImpl value,
+          $Res Function(_$ContactUsStateErrorImpl) then) =
+      __$$ContactUsStateErrorImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$ContactUsStateErrorCopyWithImpl<$Res>
-    extends _$ContactUsStateCopyWithImpl<$Res, _$ContactUsStateError>
-    implements _$$ContactUsStateErrorCopyWith<$Res> {
-  __$$ContactUsStateErrorCopyWithImpl(
-      _$ContactUsStateError _value, $Res Function(_$ContactUsStateError) _then)
+class __$$ContactUsStateErrorImplCopyWithImpl<$Res>
+    extends _$ContactUsStateCopyWithImpl<$Res, _$ContactUsStateErrorImpl>
+    implements _$$ContactUsStateErrorImplCopyWith<$Res> {
+  __$$ContactUsStateErrorImplCopyWithImpl(_$ContactUsStateErrorImpl _value,
+      $Res Function(_$ContactUsStateErrorImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$ContactUsStateError implements ContactUsStateError {
-  const _$ContactUsStateError();
+class _$ContactUsStateErrorImpl implements ContactUsStateError {
+  const _$ContactUsStateErrorImpl();
 
   @override
   String toString() {
@@ -326,9 +326,10 @@ class _$ContactUsStateError implements ContactUsStateError {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$ContactUsStateError);
+        (other.runtimeType == runtimeType &&
+            other is _$ContactUsStateErrorImpl);
   }
 
   @override
@@ -404,5 +405,5 @@ class _$ContactUsStateError implements ContactUsStateError {
 }
 
 abstract class ContactUsStateError implements ContactUsState {
-  const factory ContactUsStateError() = _$ContactUsStateError;
+  const factory ContactUsStateError() = _$ContactUsStateErrorImpl;
 }

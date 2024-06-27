@@ -44,7 +44,7 @@ class _MitredenWebviewState extends State<MitredenWebview> {
           Center(
               child: (isLoading)
                   ? Container(
-                      color: Theme.of(context).colorScheme.background,
+                      color: Theme.of(context).colorScheme.surface,
                       child: Center(
                         child: Column(
                           mainAxisSize: MainAxisSize.max,

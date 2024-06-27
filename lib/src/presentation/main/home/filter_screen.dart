@@ -36,8 +36,8 @@ class _FilterScreenState extends State<FilterScreen> {
         title: const Text("Filter"),
       ),
       body: SingleChildScrollView(
-        child: WillPopScope(
-          onWillPop: () async {
+        child: PopScope(
+          onPopInvoked: (pop) async {
             Navigator.pop(
                 context,
                 MultiFilter(
@@ -51,7 +51,6 @@ class _FilterScreenState extends State<FilterScreen> {
                     hasListingStatusFilter:
                         widget.multiFilter.hasListingStatusFilter,
                     hasCategoryFilter: widget.multiFilter.hasCategoryFilter));
-            return false;
           },
           child: Column(
             children: [

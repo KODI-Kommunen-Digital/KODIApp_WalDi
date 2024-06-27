@@ -12,7 +12,7 @@ part of 'list_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$ListState {
@@ -27,7 +27,6 @@ mixin _$ListState {
     required TResult Function(String error) error,
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
@@ -47,7 +46,6 @@ mixin _$ListState {
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(ListStateInitial value) initial,
@@ -57,7 +55,6 @@ mixin _$ListState {
     required TResult Function(ListStateError value) error,
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(ListStateInitial value)? initial,
@@ -90,32 +87,32 @@ class _$ListStateCopyWithImpl<$Res, $Val extends ListState>
     implements $ListStateCopyWith<$Res> {
   _$ListStateCopyWithImpl(this._value, this._then);
 
-// ignore: unused_field
+  // ignore: unused_field
   final $Val _value;
-// ignore: unused_field
+  // ignore: unused_field
   final $Res Function($Val) _then;
 }
 
 /// @nodoc
-abstract class _$$ListStateInitialCopyWith<$Res> {
-  factory _$$ListStateInitialCopyWith(
-          _$ListStateInitial value, $Res Function(_$ListStateInitial) then) =
-      __$$ListStateInitialCopyWithImpl<$Res>;
+abstract class _$$ListStateInitialImplCopyWith<$Res> {
+  factory _$$ListStateInitialImplCopyWith(_$ListStateInitialImpl value,
+          $Res Function(_$ListStateInitialImpl) then) =
+      __$$ListStateInitialImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$ListStateInitialCopyWithImpl<$Res>
-    extends _$ListStateCopyWithImpl<$Res, _$ListStateInitial>
-    implements _$$ListStateInitialCopyWith<$Res> {
-  __$$ListStateInitialCopyWithImpl(
-      _$ListStateInitial _value, $Res Function(_$ListStateInitial) _then)
+class __$$ListStateInitialImplCopyWithImpl<$Res>
+    extends _$ListStateCopyWithImpl<$Res, _$ListStateInitialImpl>
+    implements _$$ListStateInitialImplCopyWith<$Res> {
+  __$$ListStateInitialImplCopyWithImpl(_$ListStateInitialImpl _value,
+      $Res Function(_$ListStateInitialImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$ListStateInitial implements ListStateInitial {
-  const _$ListStateInitial();
+class _$ListStateInitialImpl implements ListStateInitial {
+  const _$ListStateInitialImpl();
 
   @override
   String toString() {
@@ -123,9 +120,9 @@ class _$ListStateInitial implements ListStateInitial {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$ListStateInitial);
+        (other.runtimeType == runtimeType && other is _$ListStateInitialImpl);
   }
 
   @override
@@ -215,29 +212,29 @@ class _$ListStateInitial implements ListStateInitial {
 }
 
 abstract class ListStateInitial implements ListState {
-  const factory ListStateInitial() = _$ListStateInitial;
+  const factory ListStateInitial() = _$ListStateInitialImpl;
 }
 
 /// @nodoc
-abstract class _$$ListStateLoadingCopyWith<$Res> {
-  factory _$$ListStateLoadingCopyWith(
-          _$ListStateLoading value, $Res Function(_$ListStateLoading) then) =
-      __$$ListStateLoadingCopyWithImpl<$Res>;
+abstract class _$$ListStateLoadingImplCopyWith<$Res> {
+  factory _$$ListStateLoadingImplCopyWith(_$ListStateLoadingImpl value,
+          $Res Function(_$ListStateLoadingImpl) then) =
+      __$$ListStateLoadingImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$ListStateLoadingCopyWithImpl<$Res>
-    extends _$ListStateCopyWithImpl<$Res, _$ListStateLoading>
-    implements _$$ListStateLoadingCopyWith<$Res> {
-  __$$ListStateLoadingCopyWithImpl(
-      _$ListStateLoading _value, $Res Function(_$ListStateLoading) _then)
+class __$$ListStateLoadingImplCopyWithImpl<$Res>
+    extends _$ListStateCopyWithImpl<$Res, _$ListStateLoadingImpl>
+    implements _$$ListStateLoadingImplCopyWith<$Res> {
+  __$$ListStateLoadingImplCopyWithImpl(_$ListStateLoadingImpl _value,
+      $Res Function(_$ListStateLoadingImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$ListStateLoading implements ListStateLoading {
-  const _$ListStateLoading();
+class _$ListStateLoadingImpl implements ListStateLoading {
+  const _$ListStateLoadingImpl();
 
   @override
   String toString() {
@@ -245,9 +242,9 @@ class _$ListStateLoading implements ListStateLoading {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$ListStateLoading);
+        (other.runtimeType == runtimeType && other is _$ListStateLoadingImpl);
   }
 
   @override
@@ -337,24 +334,24 @@ class _$ListStateLoading implements ListStateLoading {
 }
 
 abstract class ListStateLoading implements ListState {
-  const factory ListStateLoading() = _$ListStateLoading;
+  const factory ListStateLoading() = _$ListStateLoadingImpl;
 }
 
 /// @nodoc
-abstract class _$$ListStateLoadedCopyWith<$Res> {
-  factory _$$ListStateLoadedCopyWith(
-          _$ListStateLoaded value, $Res Function(_$ListStateLoaded) then) =
-      __$$ListStateLoadedCopyWithImpl<$Res>;
+abstract class _$$ListStateLoadedImplCopyWith<$Res> {
+  factory _$$ListStateLoadedImplCopyWith(_$ListStateLoadedImpl value,
+          $Res Function(_$ListStateLoadedImpl) then) =
+      __$$ListStateLoadedImplCopyWithImpl<$Res>;
   @useResult
   $Res call({List<ProductModel> list, List<dynamic> cityList});
 }
 
 /// @nodoc
-class __$$ListStateLoadedCopyWithImpl<$Res>
-    extends _$ListStateCopyWithImpl<$Res, _$ListStateLoaded>
-    implements _$$ListStateLoadedCopyWith<$Res> {
-  __$$ListStateLoadedCopyWithImpl(
-      _$ListStateLoaded _value, $Res Function(_$ListStateLoaded) _then)
+class __$$ListStateLoadedImplCopyWithImpl<$Res>
+    extends _$ListStateCopyWithImpl<$Res, _$ListStateLoadedImpl>
+    implements _$$ListStateLoadedImplCopyWith<$Res> {
+  __$$ListStateLoadedImplCopyWithImpl(
+      _$ListStateLoadedImpl _value, $Res Function(_$ListStateLoadedImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -363,7 +360,7 @@ class __$$ListStateLoadedCopyWithImpl<$Res>
     Object? list = null,
     Object? cityList = null,
   }) {
-    return _then(_$ListStateLoaded(
+    return _then(_$ListStateLoadedImpl(
       null == list
           ? _value._list
           : list // ignore: cast_nullable_to_non_nullable
@@ -378,8 +375,8 @@ class __$$ListStateLoadedCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$ListStateLoaded implements ListStateLoaded {
-  const _$ListStateLoaded(
+class _$ListStateLoadedImpl implements ListStateLoaded {
+  const _$ListStateLoadedImpl(
       final List<ProductModel> list, final List<dynamic> cityList)
       : _list = list,
         _cityList = cityList;
@@ -388,7 +385,7 @@ class _$ListStateLoaded implements ListStateLoaded {
   @override
   List<ProductModel> get list {
     if (_list is EqualUnmodifiableListView) return _list;
-// ignore: implicit_dynamic_type
+    // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_list);
   }
 
@@ -396,7 +393,7 @@ class _$ListStateLoaded implements ListStateLoaded {
   @override
   List<dynamic> get cityList {
     if (_cityList is EqualUnmodifiableListView) return _cityList;
-// ignore: implicit_dynamic_type
+    // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_cityList);
   }
 
@@ -406,10 +403,10 @@ class _$ListStateLoaded implements ListStateLoaded {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ListStateLoaded &&
+            other is _$ListStateLoadedImpl &&
             const DeepCollectionEquality().equals(other._list, _list) &&
             const DeepCollectionEquality().equals(other._cityList, _cityList));
   }
@@ -423,8 +420,9 @@ class _$ListStateLoaded implements ListStateLoaded {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$ListStateLoadedCopyWith<_$ListStateLoaded> get copyWith =>
-      __$$ListStateLoadedCopyWithImpl<_$ListStateLoaded>(this, _$identity);
+  _$$ListStateLoadedImplCopyWith<_$ListStateLoadedImpl> get copyWith =>
+      __$$ListStateLoadedImplCopyWithImpl<_$ListStateLoadedImpl>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -512,30 +510,30 @@ class _$ListStateLoaded implements ListStateLoaded {
 abstract class ListStateLoaded implements ListState {
   const factory ListStateLoaded(
           final List<ProductModel> list, final List<dynamic> cityList) =
-      _$ListStateLoaded;
+      _$ListStateLoadedImpl;
 
   List<ProductModel> get list;
   List<dynamic> get cityList;
   @JsonKey(ignore: true)
-  _$$ListStateLoadedCopyWith<_$ListStateLoaded> get copyWith =>
+  _$$ListStateLoadedImplCopyWith<_$ListStateLoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$ListStateUpdatedCopyWith<$Res> {
-  factory _$$ListStateUpdatedCopyWith(
-          _$ListStateUpdated value, $Res Function(_$ListStateUpdated) then) =
-      __$$ListStateUpdatedCopyWithImpl<$Res>;
+abstract class _$$ListStateUpdatedImplCopyWith<$Res> {
+  factory _$$ListStateUpdatedImplCopyWith(_$ListStateUpdatedImpl value,
+          $Res Function(_$ListStateUpdatedImpl) then) =
+      __$$ListStateUpdatedImplCopyWithImpl<$Res>;
   @useResult
   $Res call({List<ProductModel> list, List<dynamic> cityList});
 }
 
 /// @nodoc
-class __$$ListStateUpdatedCopyWithImpl<$Res>
-    extends _$ListStateCopyWithImpl<$Res, _$ListStateUpdated>
-    implements _$$ListStateUpdatedCopyWith<$Res> {
-  __$$ListStateUpdatedCopyWithImpl(
-      _$ListStateUpdated _value, $Res Function(_$ListStateUpdated) _then)
+class __$$ListStateUpdatedImplCopyWithImpl<$Res>
+    extends _$ListStateCopyWithImpl<$Res, _$ListStateUpdatedImpl>
+    implements _$$ListStateUpdatedImplCopyWith<$Res> {
+  __$$ListStateUpdatedImplCopyWithImpl(_$ListStateUpdatedImpl _value,
+      $Res Function(_$ListStateUpdatedImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -544,7 +542,7 @@ class __$$ListStateUpdatedCopyWithImpl<$Res>
     Object? list = null,
     Object? cityList = null,
   }) {
-    return _then(_$ListStateUpdated(
+    return _then(_$ListStateUpdatedImpl(
       null == list
           ? _value._list
           : list // ignore: cast_nullable_to_non_nullable
@@ -559,8 +557,8 @@ class __$$ListStateUpdatedCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$ListStateUpdated implements ListStateUpdated {
-  const _$ListStateUpdated(
+class _$ListStateUpdatedImpl implements ListStateUpdated {
+  const _$ListStateUpdatedImpl(
       final List<ProductModel> list, final List<dynamic> cityList)
       : _list = list,
         _cityList = cityList;
@@ -569,7 +567,7 @@ class _$ListStateUpdated implements ListStateUpdated {
   @override
   List<ProductModel> get list {
     if (_list is EqualUnmodifiableListView) return _list;
-// ignore: implicit_dynamic_type
+    // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_list);
   }
 
@@ -577,7 +575,7 @@ class _$ListStateUpdated implements ListStateUpdated {
   @override
   List<dynamic> get cityList {
     if (_cityList is EqualUnmodifiableListView) return _cityList;
-// ignore: implicit_dynamic_type
+    // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_cityList);
   }
 
@@ -587,10 +585,10 @@ class _$ListStateUpdated implements ListStateUpdated {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ListStateUpdated &&
+            other is _$ListStateUpdatedImpl &&
             const DeepCollectionEquality().equals(other._list, _list) &&
             const DeepCollectionEquality().equals(other._cityList, _cityList));
   }
@@ -604,8 +602,9 @@ class _$ListStateUpdated implements ListStateUpdated {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$ListStateUpdatedCopyWith<_$ListStateUpdated> get copyWith =>
-      __$$ListStateUpdatedCopyWithImpl<_$ListStateUpdated>(this, _$identity);
+  _$$ListStateUpdatedImplCopyWith<_$ListStateUpdatedImpl> get copyWith =>
+      __$$ListStateUpdatedImplCopyWithImpl<_$ListStateUpdatedImpl>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -693,30 +692,30 @@ class _$ListStateUpdated implements ListStateUpdated {
 abstract class ListStateUpdated implements ListState {
   const factory ListStateUpdated(
           final List<ProductModel> list, final List<dynamic> cityList) =
-      _$ListStateUpdated;
+      _$ListStateUpdatedImpl;
 
   List<ProductModel> get list;
   List<dynamic> get cityList;
   @JsonKey(ignore: true)
-  _$$ListStateUpdatedCopyWith<_$ListStateUpdated> get copyWith =>
+  _$$ListStateUpdatedImplCopyWith<_$ListStateUpdatedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$ListStateErrorCopyWith<$Res> {
-  factory _$$ListStateErrorCopyWith(
-          _$ListStateError value, $Res Function(_$ListStateError) then) =
-      __$$ListStateErrorCopyWithImpl<$Res>;
+abstract class _$$ListStateErrorImplCopyWith<$Res> {
+  factory _$$ListStateErrorImplCopyWith(_$ListStateErrorImpl value,
+          $Res Function(_$ListStateErrorImpl) then) =
+      __$$ListStateErrorImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String error});
 }
 
 /// @nodoc
-class __$$ListStateErrorCopyWithImpl<$Res>
-    extends _$ListStateCopyWithImpl<$Res, _$ListStateError>
-    implements _$$ListStateErrorCopyWith<$Res> {
-  __$$ListStateErrorCopyWithImpl(
-      _$ListStateError _value, $Res Function(_$ListStateError) _then)
+class __$$ListStateErrorImplCopyWithImpl<$Res>
+    extends _$ListStateCopyWithImpl<$Res, _$ListStateErrorImpl>
+    implements _$$ListStateErrorImplCopyWith<$Res> {
+  __$$ListStateErrorImplCopyWithImpl(
+      _$ListStateErrorImpl _value, $Res Function(_$ListStateErrorImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -724,7 +723,7 @@ class __$$ListStateErrorCopyWithImpl<$Res>
   $Res call({
     Object? error = null,
   }) {
-    return _then(_$ListStateError(
+    return _then(_$ListStateErrorImpl(
       null == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
@@ -735,8 +734,8 @@ class __$$ListStateErrorCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$ListStateError implements ListStateError {
-  const _$ListStateError(this.error);
+class _$ListStateErrorImpl implements ListStateError {
+  const _$ListStateErrorImpl(this.error);
 
   @override
   final String error;
@@ -747,10 +746,10 @@ class _$ListStateError implements ListStateError {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ListStateError &&
+            other is _$ListStateErrorImpl &&
             (identical(other.error, error) || other.error == error));
   }
 
@@ -760,8 +759,9 @@ class _$ListStateError implements ListStateError {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$ListStateErrorCopyWith<_$ListStateError> get copyWith =>
-      __$$ListStateErrorCopyWithImpl<_$ListStateError>(this, _$identity);
+  _$$ListStateErrorImplCopyWith<_$ListStateErrorImpl> get copyWith =>
+      __$$ListStateErrorImplCopyWithImpl<_$ListStateErrorImpl>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -847,10 +847,10 @@ class _$ListStateError implements ListStateError {
 }
 
 abstract class ListStateError implements ListState {
-  const factory ListStateError(final String error) = _$ListStateError;
+  const factory ListStateError(final String error) = _$ListStateErrorImpl;
 
   String get error;
   @JsonKey(ignore: true)
-  _$$ListStateErrorCopyWith<_$ListStateError> get copyWith =>
+  _$$ListStateErrorImplCopyWith<_$ListStateErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

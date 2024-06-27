@@ -12,7 +12,7 @@ part of 'edit_profile_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$EditProfileState {
@@ -23,7 +23,6 @@ mixin _$EditProfileState {
     required TResult Function() error,
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
@@ -39,7 +38,6 @@ mixin _$EditProfileState {
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(EditProfileStateLoading value) loading,
@@ -47,7 +45,6 @@ mixin _$EditProfileState {
     required TResult Function(EditProfileStateError value) error,
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(EditProfileStateLoading value)? loading,
@@ -77,32 +74,34 @@ class _$EditProfileStateCopyWithImpl<$Res, $Val extends EditProfileState>
     implements $EditProfileStateCopyWith<$Res> {
   _$EditProfileStateCopyWithImpl(this._value, this._then);
 
-// ignore: unused_field
+  // ignore: unused_field
   final $Val _value;
-// ignore: unused_field
+  // ignore: unused_field
   final $Res Function($Val) _then;
 }
 
 /// @nodoc
-abstract class _$$EditProfileStateLoadingCopyWith<$Res> {
-  factory _$$EditProfileStateLoadingCopyWith(_$EditProfileStateLoading value,
-          $Res Function(_$EditProfileStateLoading) then) =
-      __$$EditProfileStateLoadingCopyWithImpl<$Res>;
+abstract class _$$EditProfileStateLoadingImplCopyWith<$Res> {
+  factory _$$EditProfileStateLoadingImplCopyWith(
+          _$EditProfileStateLoadingImpl value,
+          $Res Function(_$EditProfileStateLoadingImpl) then) =
+      __$$EditProfileStateLoadingImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$EditProfileStateLoadingCopyWithImpl<$Res>
-    extends _$EditProfileStateCopyWithImpl<$Res, _$EditProfileStateLoading>
-    implements _$$EditProfileStateLoadingCopyWith<$Res> {
-  __$$EditProfileStateLoadingCopyWithImpl(_$EditProfileStateLoading _value,
-      $Res Function(_$EditProfileStateLoading) _then)
+class __$$EditProfileStateLoadingImplCopyWithImpl<$Res>
+    extends _$EditProfileStateCopyWithImpl<$Res, _$EditProfileStateLoadingImpl>
+    implements _$$EditProfileStateLoadingImplCopyWith<$Res> {
+  __$$EditProfileStateLoadingImplCopyWithImpl(
+      _$EditProfileStateLoadingImpl _value,
+      $Res Function(_$EditProfileStateLoadingImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$EditProfileStateLoading implements EditProfileStateLoading {
-  const _$EditProfileStateLoading();
+class _$EditProfileStateLoadingImpl implements EditProfileStateLoading {
+  const _$EditProfileStateLoadingImpl();
 
   @override
   String toString() {
@@ -110,10 +109,10 @@ class _$EditProfileStateLoading implements EditProfileStateLoading {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$EditProfileStateLoading);
+            other is _$EditProfileStateLoadingImpl);
   }
 
   @override
@@ -189,29 +188,31 @@ class _$EditProfileStateLoading implements EditProfileStateLoading {
 }
 
 abstract class EditProfileStateLoading implements EditProfileState {
-  const factory EditProfileStateLoading() = _$EditProfileStateLoading;
+  const factory EditProfileStateLoading() = _$EditProfileStateLoadingImpl;
 }
 
 /// @nodoc
-abstract class _$$EditProfileStateLoadedCopyWith<$Res> {
-  factory _$$EditProfileStateLoadedCopyWith(_$EditProfileStateLoaded value,
-          $Res Function(_$EditProfileStateLoaded) then) =
-      __$$EditProfileStateLoadedCopyWithImpl<$Res>;
+abstract class _$$EditProfileStateLoadedImplCopyWith<$Res> {
+  factory _$$EditProfileStateLoadedImplCopyWith(
+          _$EditProfileStateLoadedImpl value,
+          $Res Function(_$EditProfileStateLoadedImpl) then) =
+      __$$EditProfileStateLoadedImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$EditProfileStateLoadedCopyWithImpl<$Res>
-    extends _$EditProfileStateCopyWithImpl<$Res, _$EditProfileStateLoaded>
-    implements _$$EditProfileStateLoadedCopyWith<$Res> {
-  __$$EditProfileStateLoadedCopyWithImpl(_$EditProfileStateLoaded _value,
-      $Res Function(_$EditProfileStateLoaded) _then)
+class __$$EditProfileStateLoadedImplCopyWithImpl<$Res>
+    extends _$EditProfileStateCopyWithImpl<$Res, _$EditProfileStateLoadedImpl>
+    implements _$$EditProfileStateLoadedImplCopyWith<$Res> {
+  __$$EditProfileStateLoadedImplCopyWithImpl(
+      _$EditProfileStateLoadedImpl _value,
+      $Res Function(_$EditProfileStateLoadedImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$EditProfileStateLoaded implements EditProfileStateLoaded {
-  const _$EditProfileStateLoaded();
+class _$EditProfileStateLoadedImpl implements EditProfileStateLoaded {
+  const _$EditProfileStateLoadedImpl();
 
   @override
   String toString() {
@@ -219,9 +220,10 @@ class _$EditProfileStateLoaded implements EditProfileStateLoaded {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$EditProfileStateLoaded);
+        (other.runtimeType == runtimeType &&
+            other is _$EditProfileStateLoadedImpl);
   }
 
   @override
@@ -297,29 +299,30 @@ class _$EditProfileStateLoaded implements EditProfileStateLoaded {
 }
 
 abstract class EditProfileStateLoaded implements EditProfileState {
-  const factory EditProfileStateLoaded() = _$EditProfileStateLoaded;
+  const factory EditProfileStateLoaded() = _$EditProfileStateLoadedImpl;
 }
 
 /// @nodoc
-abstract class _$$EditProfileStateErrorCopyWith<$Res> {
-  factory _$$EditProfileStateErrorCopyWith(_$EditProfileStateError value,
-          $Res Function(_$EditProfileStateError) then) =
-      __$$EditProfileStateErrorCopyWithImpl<$Res>;
+abstract class _$$EditProfileStateErrorImplCopyWith<$Res> {
+  factory _$$EditProfileStateErrorImplCopyWith(
+          _$EditProfileStateErrorImpl value,
+          $Res Function(_$EditProfileStateErrorImpl) then) =
+      __$$EditProfileStateErrorImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$EditProfileStateErrorCopyWithImpl<$Res>
-    extends _$EditProfileStateCopyWithImpl<$Res, _$EditProfileStateError>
-    implements _$$EditProfileStateErrorCopyWith<$Res> {
-  __$$EditProfileStateErrorCopyWithImpl(_$EditProfileStateError _value,
-      $Res Function(_$EditProfileStateError) _then)
+class __$$EditProfileStateErrorImplCopyWithImpl<$Res>
+    extends _$EditProfileStateCopyWithImpl<$Res, _$EditProfileStateErrorImpl>
+    implements _$$EditProfileStateErrorImplCopyWith<$Res> {
+  __$$EditProfileStateErrorImplCopyWithImpl(_$EditProfileStateErrorImpl _value,
+      $Res Function(_$EditProfileStateErrorImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$EditProfileStateError implements EditProfileStateError {
-  const _$EditProfileStateError();
+class _$EditProfileStateErrorImpl implements EditProfileStateError {
+  const _$EditProfileStateErrorImpl();
 
   @override
   String toString() {
@@ -327,9 +330,10 @@ class _$EditProfileStateError implements EditProfileStateError {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$EditProfileStateError);
+        (other.runtimeType == runtimeType &&
+            other is _$EditProfileStateErrorImpl);
   }
 
   @override
@@ -405,5 +409,5 @@ class _$EditProfileStateError implements EditProfileStateError {
 }
 
 abstract class EditProfileStateError implements EditProfileState {
-  const factory EditProfileStateError() = _$EditProfileStateError;
+  const factory EditProfileStateError() = _$EditProfileStateErrorImpl;
 }

@@ -12,7 +12,7 @@ part of 'add_post_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$AddPostState {
@@ -23,7 +23,6 @@ mixin _$AddPostState {
     required TResult Function(String error) error,
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
@@ -39,7 +38,6 @@ mixin _$AddPostState {
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(AddPostLoading value) loading,
@@ -47,7 +45,6 @@ mixin _$AddPostState {
     required TResult Function(AddPostError value) error,
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(AddPostLoading value)? loading,
@@ -77,32 +74,32 @@ class _$AddPostStateCopyWithImpl<$Res, $Val extends AddPostState>
     implements $AddPostStateCopyWith<$Res> {
   _$AddPostStateCopyWithImpl(this._value, this._then);
 
-// ignore: unused_field
+  // ignore: unused_field
   final $Val _value;
-// ignore: unused_field
+  // ignore: unused_field
   final $Res Function($Val) _then;
 }
 
 /// @nodoc
-abstract class _$$AddPostLoadingCopyWith<$Res> {
-  factory _$$AddPostLoadingCopyWith(
-          _$AddPostLoading value, $Res Function(_$AddPostLoading) then) =
-      __$$AddPostLoadingCopyWithImpl<$Res>;
+abstract class _$$AddPostLoadingImplCopyWith<$Res> {
+  factory _$$AddPostLoadingImplCopyWith(_$AddPostLoadingImpl value,
+          $Res Function(_$AddPostLoadingImpl) then) =
+      __$$AddPostLoadingImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$AddPostLoadingCopyWithImpl<$Res>
-    extends _$AddPostStateCopyWithImpl<$Res, _$AddPostLoading>
-    implements _$$AddPostLoadingCopyWith<$Res> {
-  __$$AddPostLoadingCopyWithImpl(
-      _$AddPostLoading _value, $Res Function(_$AddPostLoading) _then)
+class __$$AddPostLoadingImplCopyWithImpl<$Res>
+    extends _$AddPostStateCopyWithImpl<$Res, _$AddPostLoadingImpl>
+    implements _$$AddPostLoadingImplCopyWith<$Res> {
+  __$$AddPostLoadingImplCopyWithImpl(
+      _$AddPostLoadingImpl _value, $Res Function(_$AddPostLoadingImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$AddPostLoading implements AddPostLoading {
-  const _$AddPostLoading();
+class _$AddPostLoadingImpl implements AddPostLoading {
+  const _$AddPostLoadingImpl();
 
   @override
   String toString() {
@@ -110,9 +107,9 @@ class _$AddPostLoading implements AddPostLoading {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$AddPostLoading);
+        (other.runtimeType == runtimeType && other is _$AddPostLoadingImpl);
   }
 
   @override
@@ -188,29 +185,29 @@ class _$AddPostLoading implements AddPostLoading {
 }
 
 abstract class AddPostLoading implements AddPostState {
-  const factory AddPostLoading() = _$AddPostLoading;
+  const factory AddPostLoading() = _$AddPostLoadingImpl;
 }
 
 /// @nodoc
-abstract class _$$AddPostLoadedCopyWith<$Res> {
-  factory _$$AddPostLoadedCopyWith(
-          _$AddPostLoaded value, $Res Function(_$AddPostLoaded) then) =
-      __$$AddPostLoadedCopyWithImpl<$Res>;
+abstract class _$$AddPostLoadedImplCopyWith<$Res> {
+  factory _$$AddPostLoadedImplCopyWith(
+          _$AddPostLoadedImpl value, $Res Function(_$AddPostLoadedImpl) then) =
+      __$$AddPostLoadedImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$AddPostLoadedCopyWithImpl<$Res>
-    extends _$AddPostStateCopyWithImpl<$Res, _$AddPostLoaded>
-    implements _$$AddPostLoadedCopyWith<$Res> {
-  __$$AddPostLoadedCopyWithImpl(
-      _$AddPostLoaded _value, $Res Function(_$AddPostLoaded) _then)
+class __$$AddPostLoadedImplCopyWithImpl<$Res>
+    extends _$AddPostStateCopyWithImpl<$Res, _$AddPostLoadedImpl>
+    implements _$$AddPostLoadedImplCopyWith<$Res> {
+  __$$AddPostLoadedImplCopyWithImpl(
+      _$AddPostLoadedImpl _value, $Res Function(_$AddPostLoadedImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$AddPostLoaded implements AddPostLoaded {
-  const _$AddPostLoaded();
+class _$AddPostLoadedImpl implements AddPostLoaded {
+  const _$AddPostLoadedImpl();
 
   @override
   String toString() {
@@ -218,9 +215,9 @@ class _$AddPostLoaded implements AddPostLoaded {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$AddPostLoaded);
+        (other.runtimeType == runtimeType && other is _$AddPostLoadedImpl);
   }
 
   @override
@@ -296,24 +293,24 @@ class _$AddPostLoaded implements AddPostLoaded {
 }
 
 abstract class AddPostLoaded implements AddPostState {
-  const factory AddPostLoaded() = _$AddPostLoaded;
+  const factory AddPostLoaded() = _$AddPostLoadedImpl;
 }
 
 /// @nodoc
-abstract class _$$AddPostErrorCopyWith<$Res> {
-  factory _$$AddPostErrorCopyWith(
-          _$AddPostError value, $Res Function(_$AddPostError) then) =
-      __$$AddPostErrorCopyWithImpl<$Res>;
+abstract class _$$AddPostErrorImplCopyWith<$Res> {
+  factory _$$AddPostErrorImplCopyWith(
+          _$AddPostErrorImpl value, $Res Function(_$AddPostErrorImpl) then) =
+      __$$AddPostErrorImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String error});
 }
 
 /// @nodoc
-class __$$AddPostErrorCopyWithImpl<$Res>
-    extends _$AddPostStateCopyWithImpl<$Res, _$AddPostError>
-    implements _$$AddPostErrorCopyWith<$Res> {
-  __$$AddPostErrorCopyWithImpl(
-      _$AddPostError _value, $Res Function(_$AddPostError) _then)
+class __$$AddPostErrorImplCopyWithImpl<$Res>
+    extends _$AddPostStateCopyWithImpl<$Res, _$AddPostErrorImpl>
+    implements _$$AddPostErrorImplCopyWith<$Res> {
+  __$$AddPostErrorImplCopyWithImpl(
+      _$AddPostErrorImpl _value, $Res Function(_$AddPostErrorImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -321,7 +318,7 @@ class __$$AddPostErrorCopyWithImpl<$Res>
   $Res call({
     Object? error = null,
   }) {
-    return _then(_$AddPostError(
+    return _then(_$AddPostErrorImpl(
       null == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
@@ -332,8 +329,8 @@ class __$$AddPostErrorCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$AddPostError implements AddPostError {
-  const _$AddPostError(this.error);
+class _$AddPostErrorImpl implements AddPostError {
+  const _$AddPostErrorImpl(this.error);
 
   @override
   final String error;
@@ -344,10 +341,10 @@ class _$AddPostError implements AddPostError {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$AddPostError &&
+            other is _$AddPostErrorImpl &&
             (identical(other.error, error) || other.error == error));
   }
 
@@ -357,8 +354,8 @@ class _$AddPostError implements AddPostError {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$AddPostErrorCopyWith<_$AddPostError> get copyWith =>
-      __$$AddPostErrorCopyWithImpl<_$AddPostError>(this, _$identity);
+  _$$AddPostErrorImplCopyWith<_$AddPostErrorImpl> get copyWith =>
+      __$$AddPostErrorImplCopyWithImpl<_$AddPostErrorImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -430,10 +427,10 @@ class _$AddPostError implements AddPostError {
 }
 
 abstract class AddPostError implements AddPostState {
-  const factory AddPostError(final String error) = _$AddPostError;
+  const factory AddPostError(final String error) = _$AddPostErrorImpl;
 
   String get error;
   @JsonKey(ignore: true)
-  _$$AddPostErrorCopyWith<_$AddPostError> get copyWith =>
+  _$$AddPostErrorImplCopyWith<_$AddPostErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

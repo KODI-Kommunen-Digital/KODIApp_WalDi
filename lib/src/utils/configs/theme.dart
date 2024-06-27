@@ -85,12 +85,12 @@ class AppTheme {
         foregroundColor: isDark ? Colors.white : Colors.black,
         shadowColor: isDark ? null : colorScheme.onSurface.withOpacity(0.2),
       ),
-      canvasColor: colorScheme.background,
-      scaffoldBackgroundColor: colorScheme.background,
+      canvasColor: colorScheme.surface,
+      scaffoldBackgroundColor: colorScheme.surface,
       // bottomAppBarColor: colorScheme.surface,
       cardColor: colorScheme.surface,
       dividerColor: colorScheme.onSurface.withOpacity(0.12),
-      dialogBackgroundColor: colorScheme.background,
+      dialogBackgroundColor: colorScheme.surface,
       indicatorColor: indicatorColor,
       applyElevationOverlayColor: isDark,
 
@@ -119,7 +119,7 @@ class AppTheme {
         shape: CircularNotchedRectangle(),
       ),
       colorScheme: colorScheme
-          .copyWith(background: colorScheme.background)
+          .copyWith(surface: colorScheme.surface)
           .copyWith(error: colorScheme.error)
           .copyWith(surface: colorScheme.surface),
     );

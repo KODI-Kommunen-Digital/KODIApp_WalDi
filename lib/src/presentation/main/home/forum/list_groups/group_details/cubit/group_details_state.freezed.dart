@@ -12,7 +12,7 @@ part of 'group_details_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$GroupDetailsState {
@@ -26,7 +26,6 @@ mixin _$GroupDetailsState {
     required TResult Function(String error) error,
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
@@ -48,7 +47,6 @@ mixin _$GroupDetailsState {
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(GroupDetailsStateInitial value) initial,
@@ -57,7 +55,6 @@ mixin _$GroupDetailsState {
     required TResult Function(GroupDetailsStateError value) error,
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(GroupDetailsStateInitial value)? initial,
@@ -89,32 +86,35 @@ class _$GroupDetailsStateCopyWithImpl<$Res, $Val extends GroupDetailsState>
     implements $GroupDetailsStateCopyWith<$Res> {
   _$GroupDetailsStateCopyWithImpl(this._value, this._then);
 
-// ignore: unused_field
+  // ignore: unused_field
   final $Val _value;
-// ignore: unused_field
+  // ignore: unused_field
   final $Res Function($Val) _then;
 }
 
 /// @nodoc
-abstract class _$$GroupDetailsStateInitialCopyWith<$Res> {
-  factory _$$GroupDetailsStateInitialCopyWith(_$GroupDetailsStateInitial value,
-          $Res Function(_$GroupDetailsStateInitial) then) =
-      __$$GroupDetailsStateInitialCopyWithImpl<$Res>;
+abstract class _$$GroupDetailsStateInitialImplCopyWith<$Res> {
+  factory _$$GroupDetailsStateInitialImplCopyWith(
+          _$GroupDetailsStateInitialImpl value,
+          $Res Function(_$GroupDetailsStateInitialImpl) then) =
+      __$$GroupDetailsStateInitialImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$GroupDetailsStateInitialCopyWithImpl<$Res>
-    extends _$GroupDetailsStateCopyWithImpl<$Res, _$GroupDetailsStateInitial>
-    implements _$$GroupDetailsStateInitialCopyWith<$Res> {
-  __$$GroupDetailsStateInitialCopyWithImpl(_$GroupDetailsStateInitial _value,
-      $Res Function(_$GroupDetailsStateInitial) _then)
+class __$$GroupDetailsStateInitialImplCopyWithImpl<$Res>
+    extends _$GroupDetailsStateCopyWithImpl<$Res,
+        _$GroupDetailsStateInitialImpl>
+    implements _$$GroupDetailsStateInitialImplCopyWith<$Res> {
+  __$$GroupDetailsStateInitialImplCopyWithImpl(
+      _$GroupDetailsStateInitialImpl _value,
+      $Res Function(_$GroupDetailsStateInitialImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$GroupDetailsStateInitial implements GroupDetailsStateInitial {
-  const _$GroupDetailsStateInitial();
+class _$GroupDetailsStateInitialImpl implements GroupDetailsStateInitial {
+  const _$GroupDetailsStateInitialImpl();
 
   @override
   String toString() {
@@ -122,10 +122,10 @@ class _$GroupDetailsStateInitial implements GroupDetailsStateInitial {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$GroupDetailsStateInitial);
+            other is _$GroupDetailsStateInitialImpl);
   }
 
   @override
@@ -213,29 +213,32 @@ class _$GroupDetailsStateInitial implements GroupDetailsStateInitial {
 }
 
 abstract class GroupDetailsStateInitial implements GroupDetailsState {
-  const factory GroupDetailsStateInitial() = _$GroupDetailsStateInitial;
+  const factory GroupDetailsStateInitial() = _$GroupDetailsStateInitialImpl;
 }
 
 /// @nodoc
-abstract class _$$GroupDetailsStateLoadingCopyWith<$Res> {
-  factory _$$GroupDetailsStateLoadingCopyWith(_$GroupDetailsStateLoading value,
-          $Res Function(_$GroupDetailsStateLoading) then) =
-      __$$GroupDetailsStateLoadingCopyWithImpl<$Res>;
+abstract class _$$GroupDetailsStateLoadingImplCopyWith<$Res> {
+  factory _$$GroupDetailsStateLoadingImplCopyWith(
+          _$GroupDetailsStateLoadingImpl value,
+          $Res Function(_$GroupDetailsStateLoadingImpl) then) =
+      __$$GroupDetailsStateLoadingImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$GroupDetailsStateLoadingCopyWithImpl<$Res>
-    extends _$GroupDetailsStateCopyWithImpl<$Res, _$GroupDetailsStateLoading>
-    implements _$$GroupDetailsStateLoadingCopyWith<$Res> {
-  __$$GroupDetailsStateLoadingCopyWithImpl(_$GroupDetailsStateLoading _value,
-      $Res Function(_$GroupDetailsStateLoading) _then)
+class __$$GroupDetailsStateLoadingImplCopyWithImpl<$Res>
+    extends _$GroupDetailsStateCopyWithImpl<$Res,
+        _$GroupDetailsStateLoadingImpl>
+    implements _$$GroupDetailsStateLoadingImplCopyWith<$Res> {
+  __$$GroupDetailsStateLoadingImplCopyWithImpl(
+      _$GroupDetailsStateLoadingImpl _value,
+      $Res Function(_$GroupDetailsStateLoadingImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$GroupDetailsStateLoading implements GroupDetailsStateLoading {
-  const _$GroupDetailsStateLoading();
+class _$GroupDetailsStateLoadingImpl implements GroupDetailsStateLoading {
+  const _$GroupDetailsStateLoadingImpl();
 
   @override
   String toString() {
@@ -243,10 +246,10 @@ class _$GroupDetailsStateLoading implements GroupDetailsStateLoading {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$GroupDetailsStateLoading);
+            other is _$GroupDetailsStateLoadingImpl);
   }
 
   @override
@@ -334,14 +337,15 @@ class _$GroupDetailsStateLoading implements GroupDetailsStateLoading {
 }
 
 abstract class GroupDetailsStateLoading implements GroupDetailsState {
-  const factory GroupDetailsStateLoading() = _$GroupDetailsStateLoading;
+  const factory GroupDetailsStateLoading() = _$GroupDetailsStateLoadingImpl;
 }
 
 /// @nodoc
-abstract class _$$GroupDetailsStateLoadedCopyWith<$Res> {
-  factory _$$GroupDetailsStateLoadedCopyWith(_$GroupDetailsStateLoaded value,
-          $Res Function(_$GroupDetailsStateLoaded) then) =
-      __$$GroupDetailsStateLoadedCopyWithImpl<$Res>;
+abstract class _$$GroupDetailsStateLoadedImplCopyWith<$Res> {
+  factory _$$GroupDetailsStateLoadedImplCopyWith(
+          _$GroupDetailsStateLoadedImpl value,
+          $Res Function(_$GroupDetailsStateLoadedImpl) then) =
+      __$$GroupDetailsStateLoadedImplCopyWithImpl<$Res>;
   @useResult
   $Res call(
       {List<GroupPostsModel> list,
@@ -351,11 +355,12 @@ abstract class _$$GroupDetailsStateLoadedCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$GroupDetailsStateLoadedCopyWithImpl<$Res>
-    extends _$GroupDetailsStateCopyWithImpl<$Res, _$GroupDetailsStateLoaded>
-    implements _$$GroupDetailsStateLoadedCopyWith<$Res> {
-  __$$GroupDetailsStateLoadedCopyWithImpl(_$GroupDetailsStateLoaded _value,
-      $Res Function(_$GroupDetailsStateLoaded) _then)
+class __$$GroupDetailsStateLoadedImplCopyWithImpl<$Res>
+    extends _$GroupDetailsStateCopyWithImpl<$Res, _$GroupDetailsStateLoadedImpl>
+    implements _$$GroupDetailsStateLoadedImplCopyWith<$Res> {
+  __$$GroupDetailsStateLoadedImplCopyWithImpl(
+      _$GroupDetailsStateLoadedImpl _value,
+      $Res Function(_$GroupDetailsStateLoadedImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -366,7 +371,7 @@ class __$$GroupDetailsStateLoadedCopyWithImpl<$Res>
     Object? isAdmin = null,
     Object? userId = null,
   }) {
-    return _then(_$GroupDetailsStateLoaded(
+    return _then(_$GroupDetailsStateLoadedImpl(
       null == list
           ? _value._list
           : list // ignore: cast_nullable_to_non_nullable
@@ -389,8 +394,8 @@ class __$$GroupDetailsStateLoadedCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$GroupDetailsStateLoaded implements GroupDetailsStateLoaded {
-  const _$GroupDetailsStateLoaded(final List<GroupPostsModel> list,
+class _$GroupDetailsStateLoadedImpl implements GroupDetailsStateLoaded {
+  const _$GroupDetailsStateLoadedImpl(final List<GroupPostsModel> list,
       this.arguments, this.isAdmin, this.userId)
       : _list = list;
 
@@ -398,7 +403,7 @@ class _$GroupDetailsStateLoaded implements GroupDetailsStateLoaded {
   @override
   List<GroupPostsModel> get list {
     if (_list is EqualUnmodifiableListView) return _list;
-// ignore: implicit_dynamic_type
+    // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_list);
   }
 
@@ -415,10 +420,10 @@ class _$GroupDetailsStateLoaded implements GroupDetailsStateLoaded {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$GroupDetailsStateLoaded &&
+            other is _$GroupDetailsStateLoadedImpl &&
             const DeepCollectionEquality().equals(other._list, _list) &&
             (identical(other.arguments, arguments) ||
                 other.arguments == arguments) &&
@@ -433,9 +438,9 @@ class _$GroupDetailsStateLoaded implements GroupDetailsStateLoaded {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$GroupDetailsStateLoadedCopyWith<_$GroupDetailsStateLoaded> get copyWith =>
-      __$$GroupDetailsStateLoadedCopyWithImpl<_$GroupDetailsStateLoaded>(
-          this, _$identity);
+  _$$GroupDetailsStateLoadedImplCopyWith<_$GroupDetailsStateLoadedImpl>
+      get copyWith => __$$GroupDetailsStateLoadedImplCopyWithImpl<
+          _$GroupDetailsStateLoadedImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -523,32 +528,34 @@ abstract class GroupDetailsStateLoaded implements GroupDetailsState {
       final List<GroupPostsModel> list,
       final ForumGroupModel arguments,
       final bool isAdmin,
-      final int userId) = _$GroupDetailsStateLoaded;
+      final int userId) = _$GroupDetailsStateLoadedImpl;
 
   List<GroupPostsModel> get list;
   ForumGroupModel get arguments;
   bool get isAdmin;
   int get userId;
   @JsonKey(ignore: true)
-  _$$GroupDetailsStateLoadedCopyWith<_$GroupDetailsStateLoaded> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$GroupDetailsStateLoadedImplCopyWith<_$GroupDetailsStateLoadedImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$GroupDetailsStateErrorCopyWith<$Res> {
-  factory _$$GroupDetailsStateErrorCopyWith(_$GroupDetailsStateError value,
-          $Res Function(_$GroupDetailsStateError) then) =
-      __$$GroupDetailsStateErrorCopyWithImpl<$Res>;
+abstract class _$$GroupDetailsStateErrorImplCopyWith<$Res> {
+  factory _$$GroupDetailsStateErrorImplCopyWith(
+          _$GroupDetailsStateErrorImpl value,
+          $Res Function(_$GroupDetailsStateErrorImpl) then) =
+      __$$GroupDetailsStateErrorImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String error});
 }
 
 /// @nodoc
-class __$$GroupDetailsStateErrorCopyWithImpl<$Res>
-    extends _$GroupDetailsStateCopyWithImpl<$Res, _$GroupDetailsStateError>
-    implements _$$GroupDetailsStateErrorCopyWith<$Res> {
-  __$$GroupDetailsStateErrorCopyWithImpl(_$GroupDetailsStateError _value,
-      $Res Function(_$GroupDetailsStateError) _then)
+class __$$GroupDetailsStateErrorImplCopyWithImpl<$Res>
+    extends _$GroupDetailsStateCopyWithImpl<$Res, _$GroupDetailsStateErrorImpl>
+    implements _$$GroupDetailsStateErrorImplCopyWith<$Res> {
+  __$$GroupDetailsStateErrorImplCopyWithImpl(
+      _$GroupDetailsStateErrorImpl _value,
+      $Res Function(_$GroupDetailsStateErrorImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -556,7 +563,7 @@ class __$$GroupDetailsStateErrorCopyWithImpl<$Res>
   $Res call({
     Object? error = null,
   }) {
-    return _then(_$GroupDetailsStateError(
+    return _then(_$GroupDetailsStateErrorImpl(
       null == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
@@ -567,8 +574,8 @@ class __$$GroupDetailsStateErrorCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$GroupDetailsStateError implements GroupDetailsStateError {
-  const _$GroupDetailsStateError(this.error);
+class _$GroupDetailsStateErrorImpl implements GroupDetailsStateError {
+  const _$GroupDetailsStateErrorImpl(this.error);
 
   @override
   final String error;
@@ -579,10 +586,10 @@ class _$GroupDetailsStateError implements GroupDetailsStateError {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$GroupDetailsStateError &&
+            other is _$GroupDetailsStateErrorImpl &&
             (identical(other.error, error) || other.error == error));
   }
 
@@ -592,9 +599,9 @@ class _$GroupDetailsStateError implements GroupDetailsStateError {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$GroupDetailsStateErrorCopyWith<_$GroupDetailsStateError> get copyWith =>
-      __$$GroupDetailsStateErrorCopyWithImpl<_$GroupDetailsStateError>(
-          this, _$identity);
+  _$$GroupDetailsStateErrorImplCopyWith<_$GroupDetailsStateErrorImpl>
+      get copyWith => __$$GroupDetailsStateErrorImplCopyWithImpl<
+          _$GroupDetailsStateErrorImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -679,10 +686,10 @@ class _$GroupDetailsStateError implements GroupDetailsStateError {
 
 abstract class GroupDetailsStateError implements GroupDetailsState {
   const factory GroupDetailsStateError(final String error) =
-      _$GroupDetailsStateError;
+      _$GroupDetailsStateErrorImpl;
 
   String get error;
   @JsonKey(ignore: true)
-  _$$GroupDetailsStateErrorCopyWith<_$GroupDetailsStateError> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$GroupDetailsStateErrorImplCopyWith<_$GroupDetailsStateErrorImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }

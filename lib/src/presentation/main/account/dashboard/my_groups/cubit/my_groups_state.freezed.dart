@@ -12,7 +12,7 @@ part of 'my_groups_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$MyGroupsState {
@@ -25,7 +25,6 @@ mixin _$MyGroupsState {
     required TResult Function(String error) error,
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
@@ -45,7 +44,6 @@ mixin _$MyGroupsState {
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(MyGroupsStateInitial value) initial,
@@ -55,7 +53,6 @@ mixin _$MyGroupsState {
     required TResult Function(MyGroupsStateError value) error,
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(MyGroupsStateInitial value)? initial,
@@ -89,32 +86,32 @@ class _$MyGroupsStateCopyWithImpl<$Res, $Val extends MyGroupsState>
     implements $MyGroupsStateCopyWith<$Res> {
   _$MyGroupsStateCopyWithImpl(this._value, this._then);
 
-// ignore: unused_field
+  // ignore: unused_field
   final $Val _value;
-// ignore: unused_field
+  // ignore: unused_field
   final $Res Function($Val) _then;
 }
 
 /// @nodoc
-abstract class _$$MyGroupsStateInitialCopyWith<$Res> {
-  factory _$$MyGroupsStateInitialCopyWith(_$MyGroupsStateInitial value,
-          $Res Function(_$MyGroupsStateInitial) then) =
-      __$$MyGroupsStateInitialCopyWithImpl<$Res>;
+abstract class _$$MyGroupsStateInitialImplCopyWith<$Res> {
+  factory _$$MyGroupsStateInitialImplCopyWith(_$MyGroupsStateInitialImpl value,
+          $Res Function(_$MyGroupsStateInitialImpl) then) =
+      __$$MyGroupsStateInitialImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$MyGroupsStateInitialCopyWithImpl<$Res>
-    extends _$MyGroupsStateCopyWithImpl<$Res, _$MyGroupsStateInitial>
-    implements _$$MyGroupsStateInitialCopyWith<$Res> {
-  __$$MyGroupsStateInitialCopyWithImpl(_$MyGroupsStateInitial _value,
-      $Res Function(_$MyGroupsStateInitial) _then)
+class __$$MyGroupsStateInitialImplCopyWithImpl<$Res>
+    extends _$MyGroupsStateCopyWithImpl<$Res, _$MyGroupsStateInitialImpl>
+    implements _$$MyGroupsStateInitialImplCopyWith<$Res> {
+  __$$MyGroupsStateInitialImplCopyWithImpl(_$MyGroupsStateInitialImpl _value,
+      $Res Function(_$MyGroupsStateInitialImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$MyGroupsStateInitial implements MyGroupsStateInitial {
-  const _$MyGroupsStateInitial();
+class _$MyGroupsStateInitialImpl implements MyGroupsStateInitial {
+  const _$MyGroupsStateInitialImpl();
 
   @override
   String toString() {
@@ -122,9 +119,10 @@ class _$MyGroupsStateInitial implements MyGroupsStateInitial {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$MyGroupsStateInitial);
+        (other.runtimeType == runtimeType &&
+            other is _$MyGroupsStateInitialImpl);
   }
 
   @override
@@ -212,29 +210,29 @@ class _$MyGroupsStateInitial implements MyGroupsStateInitial {
 }
 
 abstract class MyGroupsStateInitial implements MyGroupsState {
-  const factory MyGroupsStateInitial() = _$MyGroupsStateInitial;
+  const factory MyGroupsStateInitial() = _$MyGroupsStateInitialImpl;
 }
 
 /// @nodoc
-abstract class _$$MyGroupsStateLoadingCopyWith<$Res> {
-  factory _$$MyGroupsStateLoadingCopyWith(_$MyGroupsStateLoading value,
-          $Res Function(_$MyGroupsStateLoading) then) =
-      __$$MyGroupsStateLoadingCopyWithImpl<$Res>;
+abstract class _$$MyGroupsStateLoadingImplCopyWith<$Res> {
+  factory _$$MyGroupsStateLoadingImplCopyWith(_$MyGroupsStateLoadingImpl value,
+          $Res Function(_$MyGroupsStateLoadingImpl) then) =
+      __$$MyGroupsStateLoadingImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$MyGroupsStateLoadingCopyWithImpl<$Res>
-    extends _$MyGroupsStateCopyWithImpl<$Res, _$MyGroupsStateLoading>
-    implements _$$MyGroupsStateLoadingCopyWith<$Res> {
-  __$$MyGroupsStateLoadingCopyWithImpl(_$MyGroupsStateLoading _value,
-      $Res Function(_$MyGroupsStateLoading) _then)
+class __$$MyGroupsStateLoadingImplCopyWithImpl<$Res>
+    extends _$MyGroupsStateCopyWithImpl<$Res, _$MyGroupsStateLoadingImpl>
+    implements _$$MyGroupsStateLoadingImplCopyWith<$Res> {
+  __$$MyGroupsStateLoadingImplCopyWithImpl(_$MyGroupsStateLoadingImpl _value,
+      $Res Function(_$MyGroupsStateLoadingImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$MyGroupsStateLoading implements MyGroupsStateLoading {
-  const _$MyGroupsStateLoading();
+class _$MyGroupsStateLoadingImpl implements MyGroupsStateLoading {
+  const _$MyGroupsStateLoadingImpl();
 
   @override
   String toString() {
@@ -242,9 +240,10 @@ class _$MyGroupsStateLoading implements MyGroupsStateLoading {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$MyGroupsStateLoading);
+        (other.runtimeType == runtimeType &&
+            other is _$MyGroupsStateLoadingImpl);
   }
 
   @override
@@ -332,24 +331,24 @@ class _$MyGroupsStateLoading implements MyGroupsStateLoading {
 }
 
 abstract class MyGroupsStateLoading implements MyGroupsState {
-  const factory MyGroupsStateLoading() = _$MyGroupsStateLoading;
+  const factory MyGroupsStateLoading() = _$MyGroupsStateLoadingImpl;
 }
 
 /// @nodoc
-abstract class _$$MyGroupsStateLoadedCopyWith<$Res> {
-  factory _$$MyGroupsStateLoadedCopyWith(_$MyGroupsStateLoaded value,
-          $Res Function(_$MyGroupsStateLoaded) then) =
-      __$$MyGroupsStateLoadedCopyWithImpl<$Res>;
+abstract class _$$MyGroupsStateLoadedImplCopyWith<$Res> {
+  factory _$$MyGroupsStateLoadedImplCopyWith(_$MyGroupsStateLoadedImpl value,
+          $Res Function(_$MyGroupsStateLoadedImpl) then) =
+      __$$MyGroupsStateLoadedImplCopyWithImpl<$Res>;
   @useResult
   $Res call({List<ForumGroupModel> list, int userId});
 }
 
 /// @nodoc
-class __$$MyGroupsStateLoadedCopyWithImpl<$Res>
-    extends _$MyGroupsStateCopyWithImpl<$Res, _$MyGroupsStateLoaded>
-    implements _$$MyGroupsStateLoadedCopyWith<$Res> {
-  __$$MyGroupsStateLoadedCopyWithImpl(
-      _$MyGroupsStateLoaded _value, $Res Function(_$MyGroupsStateLoaded) _then)
+class __$$MyGroupsStateLoadedImplCopyWithImpl<$Res>
+    extends _$MyGroupsStateCopyWithImpl<$Res, _$MyGroupsStateLoadedImpl>
+    implements _$$MyGroupsStateLoadedImplCopyWith<$Res> {
+  __$$MyGroupsStateLoadedImplCopyWithImpl(_$MyGroupsStateLoadedImpl _value,
+      $Res Function(_$MyGroupsStateLoadedImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -358,7 +357,7 @@ class __$$MyGroupsStateLoadedCopyWithImpl<$Res>
     Object? list = null,
     Object? userId = null,
   }) {
-    return _then(_$MyGroupsStateLoaded(
+    return _then(_$MyGroupsStateLoadedImpl(
       null == list
           ? _value._list
           : list // ignore: cast_nullable_to_non_nullable
@@ -373,15 +372,15 @@ class __$$MyGroupsStateLoadedCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$MyGroupsStateLoaded implements MyGroupsStateLoaded {
-  const _$MyGroupsStateLoaded(final List<ForumGroupModel> list, this.userId)
+class _$MyGroupsStateLoadedImpl implements MyGroupsStateLoaded {
+  const _$MyGroupsStateLoadedImpl(final List<ForumGroupModel> list, this.userId)
       : _list = list;
 
   final List<ForumGroupModel> _list;
   @override
   List<ForumGroupModel> get list {
     if (_list is EqualUnmodifiableListView) return _list;
-// ignore: implicit_dynamic_type
+    // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_list);
   }
 
@@ -394,10 +393,10 @@ class _$MyGroupsStateLoaded implements MyGroupsStateLoaded {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$MyGroupsStateLoaded &&
+            other is _$MyGroupsStateLoadedImpl &&
             const DeepCollectionEquality().equals(other._list, _list) &&
             (identical(other.userId, userId) || other.userId == userId));
   }
@@ -409,8 +408,8 @@ class _$MyGroupsStateLoaded implements MyGroupsStateLoaded {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$MyGroupsStateLoadedCopyWith<_$MyGroupsStateLoaded> get copyWith =>
-      __$$MyGroupsStateLoadedCopyWithImpl<_$MyGroupsStateLoaded>(
+  _$$MyGroupsStateLoadedImplCopyWith<_$MyGroupsStateLoadedImpl> get copyWith =>
+      __$$MyGroupsStateLoadedImplCopyWithImpl<_$MyGroupsStateLoadedImpl>(
           this, _$identity);
 
   @override
@@ -497,30 +496,30 @@ class _$MyGroupsStateLoaded implements MyGroupsStateLoaded {
 abstract class MyGroupsStateLoaded implements MyGroupsState {
   const factory MyGroupsStateLoaded(
           final List<ForumGroupModel> list, final int userId) =
-      _$MyGroupsStateLoaded;
+      _$MyGroupsStateLoadedImpl;
 
   List<ForumGroupModel> get list;
   int get userId;
   @JsonKey(ignore: true)
-  _$$MyGroupsStateLoadedCopyWith<_$MyGroupsStateLoaded> get copyWith =>
+  _$$MyGroupsStateLoadedImplCopyWith<_$MyGroupsStateLoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$MyGroupsStateUpdatedCopyWith<$Res> {
-  factory _$$MyGroupsStateUpdatedCopyWith(_$MyGroupsStateUpdated value,
-          $Res Function(_$MyGroupsStateUpdated) then) =
-      __$$MyGroupsStateUpdatedCopyWithImpl<$Res>;
+abstract class _$$MyGroupsStateUpdatedImplCopyWith<$Res> {
+  factory _$$MyGroupsStateUpdatedImplCopyWith(_$MyGroupsStateUpdatedImpl value,
+          $Res Function(_$MyGroupsStateUpdatedImpl) then) =
+      __$$MyGroupsStateUpdatedImplCopyWithImpl<$Res>;
   @useResult
   $Res call({List<ForumGroupModel> list, int userId});
 }
 
 /// @nodoc
-class __$$MyGroupsStateUpdatedCopyWithImpl<$Res>
-    extends _$MyGroupsStateCopyWithImpl<$Res, _$MyGroupsStateUpdated>
-    implements _$$MyGroupsStateUpdatedCopyWith<$Res> {
-  __$$MyGroupsStateUpdatedCopyWithImpl(_$MyGroupsStateUpdated _value,
-      $Res Function(_$MyGroupsStateUpdated) _then)
+class __$$MyGroupsStateUpdatedImplCopyWithImpl<$Res>
+    extends _$MyGroupsStateCopyWithImpl<$Res, _$MyGroupsStateUpdatedImpl>
+    implements _$$MyGroupsStateUpdatedImplCopyWith<$Res> {
+  __$$MyGroupsStateUpdatedImplCopyWithImpl(_$MyGroupsStateUpdatedImpl _value,
+      $Res Function(_$MyGroupsStateUpdatedImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -529,7 +528,7 @@ class __$$MyGroupsStateUpdatedCopyWithImpl<$Res>
     Object? list = null,
     Object? userId = null,
   }) {
-    return _then(_$MyGroupsStateUpdated(
+    return _then(_$MyGroupsStateUpdatedImpl(
       null == list
           ? _value._list
           : list // ignore: cast_nullable_to_non_nullable
@@ -544,15 +543,16 @@ class __$$MyGroupsStateUpdatedCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$MyGroupsStateUpdated implements MyGroupsStateUpdated {
-  const _$MyGroupsStateUpdated(final List<ForumGroupModel> list, this.userId)
+class _$MyGroupsStateUpdatedImpl implements MyGroupsStateUpdated {
+  const _$MyGroupsStateUpdatedImpl(
+      final List<ForumGroupModel> list, this.userId)
       : _list = list;
 
   final List<ForumGroupModel> _list;
   @override
   List<ForumGroupModel> get list {
     if (_list is EqualUnmodifiableListView) return _list;
-// ignore: implicit_dynamic_type
+    // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_list);
   }
 
@@ -565,10 +565,10 @@ class _$MyGroupsStateUpdated implements MyGroupsStateUpdated {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$MyGroupsStateUpdated &&
+            other is _$MyGroupsStateUpdatedImpl &&
             const DeepCollectionEquality().equals(other._list, _list) &&
             (identical(other.userId, userId) || other.userId == userId));
   }
@@ -580,9 +580,10 @@ class _$MyGroupsStateUpdated implements MyGroupsStateUpdated {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$MyGroupsStateUpdatedCopyWith<_$MyGroupsStateUpdated> get copyWith =>
-      __$$MyGroupsStateUpdatedCopyWithImpl<_$MyGroupsStateUpdated>(
-          this, _$identity);
+  _$$MyGroupsStateUpdatedImplCopyWith<_$MyGroupsStateUpdatedImpl>
+      get copyWith =>
+          __$$MyGroupsStateUpdatedImplCopyWithImpl<_$MyGroupsStateUpdatedImpl>(
+              this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -668,30 +669,30 @@ class _$MyGroupsStateUpdated implements MyGroupsStateUpdated {
 abstract class MyGroupsStateUpdated implements MyGroupsState {
   const factory MyGroupsStateUpdated(
           final List<ForumGroupModel> list, final int userId) =
-      _$MyGroupsStateUpdated;
+      _$MyGroupsStateUpdatedImpl;
 
   List<ForumGroupModel> get list;
   int get userId;
   @JsonKey(ignore: true)
-  _$$MyGroupsStateUpdatedCopyWith<_$MyGroupsStateUpdated> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$MyGroupsStateUpdatedImplCopyWith<_$MyGroupsStateUpdatedImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$MyGroupsStateErrorCopyWith<$Res> {
-  factory _$$MyGroupsStateErrorCopyWith(_$MyGroupsStateError value,
-          $Res Function(_$MyGroupsStateError) then) =
-      __$$MyGroupsStateErrorCopyWithImpl<$Res>;
+abstract class _$$MyGroupsStateErrorImplCopyWith<$Res> {
+  factory _$$MyGroupsStateErrorImplCopyWith(_$MyGroupsStateErrorImpl value,
+          $Res Function(_$MyGroupsStateErrorImpl) then) =
+      __$$MyGroupsStateErrorImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String error});
 }
 
 /// @nodoc
-class __$$MyGroupsStateErrorCopyWithImpl<$Res>
-    extends _$MyGroupsStateCopyWithImpl<$Res, _$MyGroupsStateError>
-    implements _$$MyGroupsStateErrorCopyWith<$Res> {
-  __$$MyGroupsStateErrorCopyWithImpl(
-      _$MyGroupsStateError _value, $Res Function(_$MyGroupsStateError) _then)
+class __$$MyGroupsStateErrorImplCopyWithImpl<$Res>
+    extends _$MyGroupsStateCopyWithImpl<$Res, _$MyGroupsStateErrorImpl>
+    implements _$$MyGroupsStateErrorImplCopyWith<$Res> {
+  __$$MyGroupsStateErrorImplCopyWithImpl(_$MyGroupsStateErrorImpl _value,
+      $Res Function(_$MyGroupsStateErrorImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -699,7 +700,7 @@ class __$$MyGroupsStateErrorCopyWithImpl<$Res>
   $Res call({
     Object? error = null,
   }) {
-    return _then(_$MyGroupsStateError(
+    return _then(_$MyGroupsStateErrorImpl(
       null == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
@@ -710,8 +711,8 @@ class __$$MyGroupsStateErrorCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$MyGroupsStateError implements MyGroupsStateError {
-  const _$MyGroupsStateError(this.error);
+class _$MyGroupsStateErrorImpl implements MyGroupsStateError {
+  const _$MyGroupsStateErrorImpl(this.error);
 
   @override
   final String error;
@@ -722,10 +723,10 @@ class _$MyGroupsStateError implements MyGroupsStateError {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$MyGroupsStateError &&
+            other is _$MyGroupsStateErrorImpl &&
             (identical(other.error, error) || other.error == error));
   }
 
@@ -735,8 +736,8 @@ class _$MyGroupsStateError implements MyGroupsStateError {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$MyGroupsStateErrorCopyWith<_$MyGroupsStateError> get copyWith =>
-      __$$MyGroupsStateErrorCopyWithImpl<_$MyGroupsStateError>(
+  _$$MyGroupsStateErrorImplCopyWith<_$MyGroupsStateErrorImpl> get copyWith =>
+      __$$MyGroupsStateErrorImplCopyWithImpl<_$MyGroupsStateErrorImpl>(
           this, _$identity);
 
   @override
@@ -821,10 +822,11 @@ class _$MyGroupsStateError implements MyGroupsStateError {
 }
 
 abstract class MyGroupsStateError implements MyGroupsState {
-  const factory MyGroupsStateError(final String error) = _$MyGroupsStateError;
+  const factory MyGroupsStateError(final String error) =
+      _$MyGroupsStateErrorImpl;
 
   String get error;
   @JsonKey(ignore: true)
-  _$$MyGroupsStateErrorCopyWith<_$MyGroupsStateError> get copyWith =>
+  _$$MyGroupsStateErrorImplCopyWith<_$MyGroupsStateErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

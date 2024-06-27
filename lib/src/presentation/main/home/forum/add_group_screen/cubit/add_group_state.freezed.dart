@@ -12,7 +12,7 @@ part of 'add_group_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$AddGroupState {
@@ -23,7 +23,6 @@ mixin _$AddGroupState {
     required TResult Function(String error) error,
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
@@ -39,7 +38,6 @@ mixin _$AddGroupState {
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(AddGroupLoading value) loading,
@@ -47,7 +45,6 @@ mixin _$AddGroupState {
     required TResult Function(AddGroupError value) error,
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(AddGroupLoading value)? loading,
@@ -77,32 +74,32 @@ class _$AddGroupStateCopyWithImpl<$Res, $Val extends AddGroupState>
     implements $AddGroupStateCopyWith<$Res> {
   _$AddGroupStateCopyWithImpl(this._value, this._then);
 
-// ignore: unused_field
+  // ignore: unused_field
   final $Val _value;
-// ignore: unused_field
+  // ignore: unused_field
   final $Res Function($Val) _then;
 }
 
 /// @nodoc
-abstract class _$$AddGroupLoadingCopyWith<$Res> {
-  factory _$$AddGroupLoadingCopyWith(
-          _$AddGroupLoading value, $Res Function(_$AddGroupLoading) then) =
-      __$$AddGroupLoadingCopyWithImpl<$Res>;
+abstract class _$$AddGroupLoadingImplCopyWith<$Res> {
+  factory _$$AddGroupLoadingImplCopyWith(_$AddGroupLoadingImpl value,
+          $Res Function(_$AddGroupLoadingImpl) then) =
+      __$$AddGroupLoadingImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$AddGroupLoadingCopyWithImpl<$Res>
-    extends _$AddGroupStateCopyWithImpl<$Res, _$AddGroupLoading>
-    implements _$$AddGroupLoadingCopyWith<$Res> {
-  __$$AddGroupLoadingCopyWithImpl(
-      _$AddGroupLoading _value, $Res Function(_$AddGroupLoading) _then)
+class __$$AddGroupLoadingImplCopyWithImpl<$Res>
+    extends _$AddGroupStateCopyWithImpl<$Res, _$AddGroupLoadingImpl>
+    implements _$$AddGroupLoadingImplCopyWith<$Res> {
+  __$$AddGroupLoadingImplCopyWithImpl(
+      _$AddGroupLoadingImpl _value, $Res Function(_$AddGroupLoadingImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$AddGroupLoading implements AddGroupLoading {
-  const _$AddGroupLoading();
+class _$AddGroupLoadingImpl implements AddGroupLoading {
+  const _$AddGroupLoadingImpl();
 
   @override
   String toString() {
@@ -110,9 +107,9 @@ class _$AddGroupLoading implements AddGroupLoading {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$AddGroupLoading);
+        (other.runtimeType == runtimeType && other is _$AddGroupLoadingImpl);
   }
 
   @override
@@ -188,29 +185,29 @@ class _$AddGroupLoading implements AddGroupLoading {
 }
 
 abstract class AddGroupLoading implements AddGroupState {
-  const factory AddGroupLoading() = _$AddGroupLoading;
+  const factory AddGroupLoading() = _$AddGroupLoadingImpl;
 }
 
 /// @nodoc
-abstract class _$$AddGroupLoadedCopyWith<$Res> {
-  factory _$$AddGroupLoadedCopyWith(
-          _$AddGroupLoaded value, $Res Function(_$AddGroupLoaded) then) =
-      __$$AddGroupLoadedCopyWithImpl<$Res>;
+abstract class _$$AddGroupLoadedImplCopyWith<$Res> {
+  factory _$$AddGroupLoadedImplCopyWith(_$AddGroupLoadedImpl value,
+          $Res Function(_$AddGroupLoadedImpl) then) =
+      __$$AddGroupLoadedImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$AddGroupLoadedCopyWithImpl<$Res>
-    extends _$AddGroupStateCopyWithImpl<$Res, _$AddGroupLoaded>
-    implements _$$AddGroupLoadedCopyWith<$Res> {
-  __$$AddGroupLoadedCopyWithImpl(
-      _$AddGroupLoaded _value, $Res Function(_$AddGroupLoaded) _then)
+class __$$AddGroupLoadedImplCopyWithImpl<$Res>
+    extends _$AddGroupStateCopyWithImpl<$Res, _$AddGroupLoadedImpl>
+    implements _$$AddGroupLoadedImplCopyWith<$Res> {
+  __$$AddGroupLoadedImplCopyWithImpl(
+      _$AddGroupLoadedImpl _value, $Res Function(_$AddGroupLoadedImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$AddGroupLoaded implements AddGroupLoaded {
-  const _$AddGroupLoaded();
+class _$AddGroupLoadedImpl implements AddGroupLoaded {
+  const _$AddGroupLoadedImpl();
 
   @override
   String toString() {
@@ -218,9 +215,9 @@ class _$AddGroupLoaded implements AddGroupLoaded {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$AddGroupLoaded);
+        (other.runtimeType == runtimeType && other is _$AddGroupLoadedImpl);
   }
 
   @override
@@ -296,24 +293,24 @@ class _$AddGroupLoaded implements AddGroupLoaded {
 }
 
 abstract class AddGroupLoaded implements AddGroupState {
-  const factory AddGroupLoaded() = _$AddGroupLoaded;
+  const factory AddGroupLoaded() = _$AddGroupLoadedImpl;
 }
 
 /// @nodoc
-abstract class _$$AddGroupErrorCopyWith<$Res> {
-  factory _$$AddGroupErrorCopyWith(
-          _$AddGroupError value, $Res Function(_$AddGroupError) then) =
-      __$$AddGroupErrorCopyWithImpl<$Res>;
+abstract class _$$AddGroupErrorImplCopyWith<$Res> {
+  factory _$$AddGroupErrorImplCopyWith(
+          _$AddGroupErrorImpl value, $Res Function(_$AddGroupErrorImpl) then) =
+      __$$AddGroupErrorImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String error});
 }
 
 /// @nodoc
-class __$$AddGroupErrorCopyWithImpl<$Res>
-    extends _$AddGroupStateCopyWithImpl<$Res, _$AddGroupError>
-    implements _$$AddGroupErrorCopyWith<$Res> {
-  __$$AddGroupErrorCopyWithImpl(
-      _$AddGroupError _value, $Res Function(_$AddGroupError) _then)
+class __$$AddGroupErrorImplCopyWithImpl<$Res>
+    extends _$AddGroupStateCopyWithImpl<$Res, _$AddGroupErrorImpl>
+    implements _$$AddGroupErrorImplCopyWith<$Res> {
+  __$$AddGroupErrorImplCopyWithImpl(
+      _$AddGroupErrorImpl _value, $Res Function(_$AddGroupErrorImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -321,7 +318,7 @@ class __$$AddGroupErrorCopyWithImpl<$Res>
   $Res call({
     Object? error = null,
   }) {
-    return _then(_$AddGroupError(
+    return _then(_$AddGroupErrorImpl(
       null == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
@@ -332,8 +329,8 @@ class __$$AddGroupErrorCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$AddGroupError implements AddGroupError {
-  const _$AddGroupError(this.error);
+class _$AddGroupErrorImpl implements AddGroupError {
+  const _$AddGroupErrorImpl(this.error);
 
   @override
   final String error;
@@ -344,10 +341,10 @@ class _$AddGroupError implements AddGroupError {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$AddGroupError &&
+            other is _$AddGroupErrorImpl &&
             (identical(other.error, error) || other.error == error));
   }
 
@@ -357,8 +354,8 @@ class _$AddGroupError implements AddGroupError {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$AddGroupErrorCopyWith<_$AddGroupError> get copyWith =>
-      __$$AddGroupErrorCopyWithImpl<_$AddGroupError>(this, _$identity);
+  _$$AddGroupErrorImplCopyWith<_$AddGroupErrorImpl> get copyWith =>
+      __$$AddGroupErrorImplCopyWithImpl<_$AddGroupErrorImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -430,10 +427,10 @@ class _$AddGroupError implements AddGroupError {
 }
 
 abstract class AddGroupError implements AddGroupState {
-  const factory AddGroupError(final String error) = _$AddGroupError;
+  const factory AddGroupError(final String error) = _$AddGroupErrorImpl;
 
   String get error;
   @JsonKey(ignore: true)
-  _$$AddGroupErrorCopyWith<_$AddGroupError> get copyWith =>
+  _$$AddGroupErrorImplCopyWith<_$AddGroupErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

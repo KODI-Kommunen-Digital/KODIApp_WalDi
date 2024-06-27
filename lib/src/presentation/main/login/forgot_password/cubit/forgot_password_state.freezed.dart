@@ -12,7 +12,7 @@ part of 'forgot_password_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$ForgotPasswordState {
@@ -23,7 +23,6 @@ mixin _$ForgotPasswordState {
     required TResult Function() error,
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
@@ -39,7 +38,6 @@ mixin _$ForgotPasswordState {
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(ForgotPasswordStateLoading value) loading,
@@ -47,7 +45,6 @@ mixin _$ForgotPasswordState {
     required TResult Function(ForgotPasswordStateError value) error,
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(ForgotPasswordStateLoading value)? loading,
@@ -77,35 +74,35 @@ class _$ForgotPasswordStateCopyWithImpl<$Res, $Val extends ForgotPasswordState>
     implements $ForgotPasswordStateCopyWith<$Res> {
   _$ForgotPasswordStateCopyWithImpl(this._value, this._then);
 
-// ignore: unused_field
+  // ignore: unused_field
   final $Val _value;
-// ignore: unused_field
+  // ignore: unused_field
   final $Res Function($Val) _then;
 }
 
 /// @nodoc
-abstract class _$$ForgotPasswordStateLoadingCopyWith<$Res> {
-  factory _$$ForgotPasswordStateLoadingCopyWith(
-          _$ForgotPasswordStateLoading value,
-          $Res Function(_$ForgotPasswordStateLoading) then) =
-      __$$ForgotPasswordStateLoadingCopyWithImpl<$Res>;
+abstract class _$$ForgotPasswordStateLoadingImplCopyWith<$Res> {
+  factory _$$ForgotPasswordStateLoadingImplCopyWith(
+          _$ForgotPasswordStateLoadingImpl value,
+          $Res Function(_$ForgotPasswordStateLoadingImpl) then) =
+      __$$ForgotPasswordStateLoadingImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$ForgotPasswordStateLoadingCopyWithImpl<$Res>
+class __$$ForgotPasswordStateLoadingImplCopyWithImpl<$Res>
     extends _$ForgotPasswordStateCopyWithImpl<$Res,
-        _$ForgotPasswordStateLoading>
-    implements _$$ForgotPasswordStateLoadingCopyWith<$Res> {
-  __$$ForgotPasswordStateLoadingCopyWithImpl(
-      _$ForgotPasswordStateLoading _value,
-      $Res Function(_$ForgotPasswordStateLoading) _then)
+        _$ForgotPasswordStateLoadingImpl>
+    implements _$$ForgotPasswordStateLoadingImplCopyWith<$Res> {
+  __$$ForgotPasswordStateLoadingImplCopyWithImpl(
+      _$ForgotPasswordStateLoadingImpl _value,
+      $Res Function(_$ForgotPasswordStateLoadingImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$ForgotPasswordStateLoading implements ForgotPasswordStateLoading {
-  const _$ForgotPasswordStateLoading();
+class _$ForgotPasswordStateLoadingImpl implements ForgotPasswordStateLoading {
+  const _$ForgotPasswordStateLoadingImpl();
 
   @override
   String toString() {
@@ -113,10 +110,10 @@ class _$ForgotPasswordStateLoading implements ForgotPasswordStateLoading {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ForgotPasswordStateLoading);
+            other is _$ForgotPasswordStateLoadingImpl);
   }
 
   @override
@@ -192,30 +189,32 @@ class _$ForgotPasswordStateLoading implements ForgotPasswordStateLoading {
 }
 
 abstract class ForgotPasswordStateLoading implements ForgotPasswordState {
-  const factory ForgotPasswordStateLoading() = _$ForgotPasswordStateLoading;
+  const factory ForgotPasswordStateLoading() = _$ForgotPasswordStateLoadingImpl;
 }
 
 /// @nodoc
-abstract class _$$ForgotPasswordStateLoadedCopyWith<$Res> {
-  factory _$$ForgotPasswordStateLoadedCopyWith(
-          _$ForgotPasswordStateLoaded value,
-          $Res Function(_$ForgotPasswordStateLoaded) then) =
-      __$$ForgotPasswordStateLoadedCopyWithImpl<$Res>;
+abstract class _$$ForgotPasswordStateLoadedImplCopyWith<$Res> {
+  factory _$$ForgotPasswordStateLoadedImplCopyWith(
+          _$ForgotPasswordStateLoadedImpl value,
+          $Res Function(_$ForgotPasswordStateLoadedImpl) then) =
+      __$$ForgotPasswordStateLoadedImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$ForgotPasswordStateLoadedCopyWithImpl<$Res>
-    extends _$ForgotPasswordStateCopyWithImpl<$Res, _$ForgotPasswordStateLoaded>
-    implements _$$ForgotPasswordStateLoadedCopyWith<$Res> {
-  __$$ForgotPasswordStateLoadedCopyWithImpl(_$ForgotPasswordStateLoaded _value,
-      $Res Function(_$ForgotPasswordStateLoaded) _then)
+class __$$ForgotPasswordStateLoadedImplCopyWithImpl<$Res>
+    extends _$ForgotPasswordStateCopyWithImpl<$Res,
+        _$ForgotPasswordStateLoadedImpl>
+    implements _$$ForgotPasswordStateLoadedImplCopyWith<$Res> {
+  __$$ForgotPasswordStateLoadedImplCopyWithImpl(
+      _$ForgotPasswordStateLoadedImpl _value,
+      $Res Function(_$ForgotPasswordStateLoadedImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$ForgotPasswordStateLoaded implements ForgotPasswordStateLoaded {
-  const _$ForgotPasswordStateLoaded();
+class _$ForgotPasswordStateLoadedImpl implements ForgotPasswordStateLoaded {
+  const _$ForgotPasswordStateLoadedImpl();
 
   @override
   String toString() {
@@ -223,10 +222,10 @@ class _$ForgotPasswordStateLoaded implements ForgotPasswordStateLoaded {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ForgotPasswordStateLoaded);
+            other is _$ForgotPasswordStateLoadedImpl);
   }
 
   @override
@@ -302,29 +301,32 @@ class _$ForgotPasswordStateLoaded implements ForgotPasswordStateLoaded {
 }
 
 abstract class ForgotPasswordStateLoaded implements ForgotPasswordState {
-  const factory ForgotPasswordStateLoaded() = _$ForgotPasswordStateLoaded;
+  const factory ForgotPasswordStateLoaded() = _$ForgotPasswordStateLoadedImpl;
 }
 
 /// @nodoc
-abstract class _$$ForgotPasswordStateErrorCopyWith<$Res> {
-  factory _$$ForgotPasswordStateErrorCopyWith(_$ForgotPasswordStateError value,
-          $Res Function(_$ForgotPasswordStateError) then) =
-      __$$ForgotPasswordStateErrorCopyWithImpl<$Res>;
+abstract class _$$ForgotPasswordStateErrorImplCopyWith<$Res> {
+  factory _$$ForgotPasswordStateErrorImplCopyWith(
+          _$ForgotPasswordStateErrorImpl value,
+          $Res Function(_$ForgotPasswordStateErrorImpl) then) =
+      __$$ForgotPasswordStateErrorImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$ForgotPasswordStateErrorCopyWithImpl<$Res>
-    extends _$ForgotPasswordStateCopyWithImpl<$Res, _$ForgotPasswordStateError>
-    implements _$$ForgotPasswordStateErrorCopyWith<$Res> {
-  __$$ForgotPasswordStateErrorCopyWithImpl(_$ForgotPasswordStateError _value,
-      $Res Function(_$ForgotPasswordStateError) _then)
+class __$$ForgotPasswordStateErrorImplCopyWithImpl<$Res>
+    extends _$ForgotPasswordStateCopyWithImpl<$Res,
+        _$ForgotPasswordStateErrorImpl>
+    implements _$$ForgotPasswordStateErrorImplCopyWith<$Res> {
+  __$$ForgotPasswordStateErrorImplCopyWithImpl(
+      _$ForgotPasswordStateErrorImpl _value,
+      $Res Function(_$ForgotPasswordStateErrorImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$ForgotPasswordStateError implements ForgotPasswordStateError {
-  const _$ForgotPasswordStateError();
+class _$ForgotPasswordStateErrorImpl implements ForgotPasswordStateError {
+  const _$ForgotPasswordStateErrorImpl();
 
   @override
   String toString() {
@@ -332,10 +334,10 @@ class _$ForgotPasswordStateError implements ForgotPasswordStateError {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ForgotPasswordStateError);
+            other is _$ForgotPasswordStateErrorImpl);
   }
 
   @override
@@ -411,5 +413,5 @@ class _$ForgotPasswordStateError implements ForgotPasswordStateError {
 }
 
 abstract class ForgotPasswordStateError implements ForgotPasswordState {
-  const factory ForgotPasswordStateError() = _$ForgotPasswordStateError;
+  const factory ForgotPasswordStateError() = _$ForgotPasswordStateErrorImpl;
 }

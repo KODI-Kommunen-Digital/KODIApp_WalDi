@@ -1,4 +1,4 @@
-// ignore_for_file: unused_local_variable, unused_catch_stack
+// ignore_for_file: unused_local_variable, unused_catch_stack, use_build_context_synchronously
 
 import 'dart:io';
 

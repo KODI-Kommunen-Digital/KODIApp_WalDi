@@ -12,7 +12,7 @@ part of 'wish_list_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$WishListState {
@@ -24,7 +24,6 @@ mixin _$WishListState {
     required TResult Function(String errorMessage) error,
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
@@ -42,7 +41,6 @@ mixin _$WishListState {
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(WishListInitial value) initial,
@@ -51,7 +49,6 @@ mixin _$WishListState {
     required TResult Function(WishListError value) error,
   }) =>
       throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(WishListInitial value)? initial,
@@ -83,32 +80,32 @@ class _$WishListStateCopyWithImpl<$Res, $Val extends WishListState>
     implements $WishListStateCopyWith<$Res> {
   _$WishListStateCopyWithImpl(this._value, this._then);
 
-// ignore: unused_field
+  // ignore: unused_field
   final $Val _value;
-// ignore: unused_field
+  // ignore: unused_field
   final $Res Function($Val) _then;
 }
 
 /// @nodoc
-abstract class _$$WishListInitialCopyWith<$Res> {
-  factory _$$WishListInitialCopyWith(
-          _$WishListInitial value, $Res Function(_$WishListInitial) then) =
-      __$$WishListInitialCopyWithImpl<$Res>;
+abstract class _$$WishListInitialImplCopyWith<$Res> {
+  factory _$$WishListInitialImplCopyWith(_$WishListInitialImpl value,
+          $Res Function(_$WishListInitialImpl) then) =
+      __$$WishListInitialImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$WishListInitialCopyWithImpl<$Res>
-    extends _$WishListStateCopyWithImpl<$Res, _$WishListInitial>
-    implements _$$WishListInitialCopyWith<$Res> {
-  __$$WishListInitialCopyWithImpl(
-      _$WishListInitial _value, $Res Function(_$WishListInitial) _then)
+class __$$WishListInitialImplCopyWithImpl<$Res>
+    extends _$WishListStateCopyWithImpl<$Res, _$WishListInitialImpl>
+    implements _$$WishListInitialImplCopyWith<$Res> {
+  __$$WishListInitialImplCopyWithImpl(
+      _$WishListInitialImpl _value, $Res Function(_$WishListInitialImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$WishListInitial implements WishListInitial {
-  const _$WishListInitial();
+class _$WishListInitialImpl implements WishListInitial {
+  const _$WishListInitialImpl();
 
   @override
   String toString() {
@@ -116,9 +113,9 @@ class _$WishListInitial implements WishListInitial {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$WishListInitial);
+        (other.runtimeType == runtimeType && other is _$WishListInitialImpl);
   }
 
   @override
@@ -200,29 +197,29 @@ class _$WishListInitial implements WishListInitial {
 }
 
 abstract class WishListInitial implements WishListState {
-  const factory WishListInitial() = _$WishListInitial;
+  const factory WishListInitial() = _$WishListInitialImpl;
 }
 
 /// @nodoc
-abstract class _$$WishListLoadingCopyWith<$Res> {
-  factory _$$WishListLoadingCopyWith(
-          _$WishListLoading value, $Res Function(_$WishListLoading) then) =
-      __$$WishListLoadingCopyWithImpl<$Res>;
+abstract class _$$WishListLoadingImplCopyWith<$Res> {
+  factory _$$WishListLoadingImplCopyWith(_$WishListLoadingImpl value,
+          $Res Function(_$WishListLoadingImpl) then) =
+      __$$WishListLoadingImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$WishListLoadingCopyWithImpl<$Res>
-    extends _$WishListStateCopyWithImpl<$Res, _$WishListLoading>
-    implements _$$WishListLoadingCopyWith<$Res> {
-  __$$WishListLoadingCopyWithImpl(
-      _$WishListLoading _value, $Res Function(_$WishListLoading) _then)
+class __$$WishListLoadingImplCopyWithImpl<$Res>
+    extends _$WishListStateCopyWithImpl<$Res, _$WishListLoadingImpl>
+    implements _$$WishListLoadingImplCopyWith<$Res> {
+  __$$WishListLoadingImplCopyWithImpl(
+      _$WishListLoadingImpl _value, $Res Function(_$WishListLoadingImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$WishListLoading implements WishListLoading {
-  const _$WishListLoading();
+class _$WishListLoadingImpl implements WishListLoading {
+  const _$WishListLoadingImpl();
 
   @override
   String toString() {
@@ -230,9 +227,9 @@ class _$WishListLoading implements WishListLoading {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$WishListLoading);
+        (other.runtimeType == runtimeType && other is _$WishListLoadingImpl);
   }
 
   @override
@@ -314,24 +311,24 @@ class _$WishListLoading implements WishListLoading {
 }
 
 abstract class WishListLoading implements WishListState {
-  const factory WishListLoading() = _$WishListLoading;
+  const factory WishListLoading() = _$WishListLoadingImpl;
 }
 
 /// @nodoc
-abstract class _$$WishListLoadedCopyWith<$Res> {
-  factory _$$WishListLoadedCopyWith(
-          _$WishListLoaded value, $Res Function(_$WishListLoaded) then) =
-      __$$WishListLoadedCopyWithImpl<$Res>;
+abstract class _$$WishListLoadedImplCopyWith<$Res> {
+  factory _$$WishListLoadedImplCopyWith(_$WishListLoadedImpl value,
+          $Res Function(_$WishListLoadedImpl) then) =
+      __$$WishListLoadedImplCopyWithImpl<$Res>;
   @useResult
   $Res call({List<FavoriteDetailsModel> favorites});
 }
 
 /// @nodoc
-class __$$WishListLoadedCopyWithImpl<$Res>
-    extends _$WishListStateCopyWithImpl<$Res, _$WishListLoaded>
-    implements _$$WishListLoadedCopyWith<$Res> {
-  __$$WishListLoadedCopyWithImpl(
-      _$WishListLoaded _value, $Res Function(_$WishListLoaded) _then)
+class __$$WishListLoadedImplCopyWithImpl<$Res>
+    extends _$WishListStateCopyWithImpl<$Res, _$WishListLoadedImpl>
+    implements _$$WishListLoadedImplCopyWith<$Res> {
+  __$$WishListLoadedImplCopyWithImpl(
+      _$WishListLoadedImpl _value, $Res Function(_$WishListLoadedImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -339,7 +336,7 @@ class __$$WishListLoadedCopyWithImpl<$Res>
   $Res call({
     Object? favorites = null,
   }) {
-    return _then(_$WishListLoaded(
+    return _then(_$WishListLoadedImpl(
       null == favorites
           ? _value._favorites
           : favorites // ignore: cast_nullable_to_non_nullable
@@ -350,15 +347,15 @@ class __$$WishListLoadedCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$WishListLoaded implements WishListLoaded {
-  const _$WishListLoaded(final List<FavoriteDetailsModel> favorites)
+class _$WishListLoadedImpl implements WishListLoaded {
+  const _$WishListLoadedImpl(final List<FavoriteDetailsModel> favorites)
       : _favorites = favorites;
 
   final List<FavoriteDetailsModel> _favorites;
   @override
   List<FavoriteDetailsModel> get favorites {
     if (_favorites is EqualUnmodifiableListView) return _favorites;
-// ignore: implicit_dynamic_type
+    // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_favorites);
   }
 
@@ -368,10 +365,10 @@ class _$WishListLoaded implements WishListLoaded {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$WishListLoaded &&
+            other is _$WishListLoadedImpl &&
             const DeepCollectionEquality()
                 .equals(other._favorites, _favorites));
   }
@@ -383,8 +380,9 @@ class _$WishListLoaded implements WishListLoaded {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$WishListLoadedCopyWith<_$WishListLoaded> get copyWith =>
-      __$$WishListLoadedCopyWithImpl<_$WishListLoaded>(this, _$identity);
+  _$$WishListLoadedImplCopyWith<_$WishListLoadedImpl> get copyWith =>
+      __$$WishListLoadedImplCopyWithImpl<_$WishListLoadedImpl>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -463,29 +461,29 @@ class _$WishListLoaded implements WishListLoaded {
 
 abstract class WishListLoaded implements WishListState {
   const factory WishListLoaded(final List<FavoriteDetailsModel> favorites) =
-      _$WishListLoaded;
+      _$WishListLoadedImpl;
 
   List<FavoriteDetailsModel> get favorites;
   @JsonKey(ignore: true)
-  _$$WishListLoadedCopyWith<_$WishListLoaded> get copyWith =>
+  _$$WishListLoadedImplCopyWith<_$WishListLoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$WishListErrorCopyWith<$Res> {
-  factory _$$WishListErrorCopyWith(
-          _$WishListError value, $Res Function(_$WishListError) then) =
-      __$$WishListErrorCopyWithImpl<$Res>;
+abstract class _$$WishListErrorImplCopyWith<$Res> {
+  factory _$$WishListErrorImplCopyWith(
+          _$WishListErrorImpl value, $Res Function(_$WishListErrorImpl) then) =
+      __$$WishListErrorImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String errorMessage});
 }
 
 /// @nodoc
-class __$$WishListErrorCopyWithImpl<$Res>
-    extends _$WishListStateCopyWithImpl<$Res, _$WishListError>
-    implements _$$WishListErrorCopyWith<$Res> {
-  __$$WishListErrorCopyWithImpl(
-      _$WishListError _value, $Res Function(_$WishListError) _then)
+class __$$WishListErrorImplCopyWithImpl<$Res>
+    extends _$WishListStateCopyWithImpl<$Res, _$WishListErrorImpl>
+    implements _$$WishListErrorImplCopyWith<$Res> {
+  __$$WishListErrorImplCopyWithImpl(
+      _$WishListErrorImpl _value, $Res Function(_$WishListErrorImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -493,7 +491,7 @@ class __$$WishListErrorCopyWithImpl<$Res>
   $Res call({
     Object? errorMessage = null,
   }) {
-    return _then(_$WishListError(
+    return _then(_$WishListErrorImpl(
       null == errorMessage
           ? _value.errorMessage
           : errorMessage // ignore: cast_nullable_to_non_nullable
@@ -504,8 +502,8 @@ class __$$WishListErrorCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$WishListError implements WishListError {
-  const _$WishListError(this.errorMessage);
+class _$WishListErrorImpl implements WishListError {
+  const _$WishListErrorImpl(this.errorMessage);
 
   @override
   final String errorMessage;
@@ -516,10 +514,10 @@ class _$WishListError implements WishListError {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$WishListError &&
+            other is _$WishListErrorImpl &&
             (identical(other.errorMessage, errorMessage) ||
                 other.errorMessage == errorMessage));
   }
@@ -530,8 +528,8 @@ class _$WishListError implements WishListError {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$WishListErrorCopyWith<_$WishListError> get copyWith =>
-      __$$WishListErrorCopyWithImpl<_$WishListError>(this, _$identity);
+  _$$WishListErrorImplCopyWith<_$WishListErrorImpl> get copyWith =>
+      __$$WishListErrorImplCopyWithImpl<_$WishListErrorImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -609,10 +607,10 @@ class _$WishListError implements WishListError {
 }
 
 abstract class WishListError implements WishListState {
-  const factory WishListError(final String errorMessage) = _$WishListError;
+  const factory WishListError(final String errorMessage) = _$WishListErrorImpl;
 
   String get errorMessage;
   @JsonKey(ignore: true)
-  _$$WishListErrorCopyWith<_$WishListError> get copyWith =>
+  _$$WishListErrorImplCopyWith<_$WishListErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

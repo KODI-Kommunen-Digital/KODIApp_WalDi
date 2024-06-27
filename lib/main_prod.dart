@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -109,7 +108,7 @@ class _HeidiAppState extends State<HeidiApp> {
                   ),
                   builder: (context, child) {
                     final data = MediaQuery.of(context).copyWith(
-                      textScaleFactor: theme.textScaleFactor,
+                      textScaler: TextScaler.linear(theme.textScaleFactor ?? 1),
                     );
                     return MediaQuery(
                       data: data,

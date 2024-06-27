@@ -203,10 +203,9 @@ class _ListProductScreenState extends State<ListProductScreen> {
     String? searchRequest = await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return WillPopScope(
-          onWillPop: () async {
+        return PopScope(
+          onPopInvoked: (pop) async {
             Navigator.pop(context, context.read<ListCubit>().searchTerm);
-            return false;
           },
           child: SimpleDialog(
               title: Center(
