@@ -12,7 +12,7 @@ part of 'add_listing_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$AddListingState {
@@ -81,25 +81,25 @@ class _$AddListingStateCopyWithImpl<$Res, $Val extends AddListingState>
 }
 
 /// @nodoc
-abstract class _$$AddListingLoadingCopyWith<$Res> {
-  factory _$$AddListingLoadingCopyWith(
-          _$AddListingLoading value, $Res Function(_$AddListingLoading) then) =
-      __$$AddListingLoadingCopyWithImpl<$Res>;
+abstract class _$$AddListingLoadingImplCopyWith<$Res> {
+  factory _$$AddListingLoadingImplCopyWith(_$AddListingLoadingImpl value,
+          $Res Function(_$AddListingLoadingImpl) then) =
+      __$$AddListingLoadingImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$AddListingLoadingCopyWithImpl<$Res>
-    extends _$AddListingStateCopyWithImpl<$Res, _$AddListingLoading>
-    implements _$$AddListingLoadingCopyWith<$Res> {
-  __$$AddListingLoadingCopyWithImpl(
-      _$AddListingLoading _value, $Res Function(_$AddListingLoading) _then)
+class __$$AddListingLoadingImplCopyWithImpl<$Res>
+    extends _$AddListingStateCopyWithImpl<$Res, _$AddListingLoadingImpl>
+    implements _$$AddListingLoadingImplCopyWith<$Res> {
+  __$$AddListingLoadingImplCopyWithImpl(_$AddListingLoadingImpl _value,
+      $Res Function(_$AddListingLoadingImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$AddListingLoading implements AddListingLoading {
-  const _$AddListingLoading();
+class _$AddListingLoadingImpl implements AddListingLoading {
+  const _$AddListingLoadingImpl();
 
   @override
   String toString() {
@@ -107,9 +107,9 @@ class _$AddListingLoading implements AddListingLoading {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$AddListingLoading);
+        (other.runtimeType == runtimeType && other is _$AddListingLoadingImpl);
   }
 
   @override
@@ -185,29 +185,29 @@ class _$AddListingLoading implements AddListingLoading {
 }
 
 abstract class AddListingLoading implements AddListingState {
-  const factory AddListingLoading() = _$AddListingLoading;
+  const factory AddListingLoading() = _$AddListingLoadingImpl;
 }
 
 /// @nodoc
-abstract class _$$AddListingLoadedCopyWith<$Res> {
-  factory _$$AddListingLoadedCopyWith(
-          _$AddListingLoaded value, $Res Function(_$AddListingLoaded) then) =
-      __$$AddListingLoadedCopyWithImpl<$Res>;
+abstract class _$$AddListingLoadedImplCopyWith<$Res> {
+  factory _$$AddListingLoadedImplCopyWith(_$AddListingLoadedImpl value,
+          $Res Function(_$AddListingLoadedImpl) then) =
+      __$$AddListingLoadedImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$AddListingLoadedCopyWithImpl<$Res>
-    extends _$AddListingStateCopyWithImpl<$Res, _$AddListingLoaded>
-    implements _$$AddListingLoadedCopyWith<$Res> {
-  __$$AddListingLoadedCopyWithImpl(
-      _$AddListingLoaded _value, $Res Function(_$AddListingLoaded) _then)
+class __$$AddListingLoadedImplCopyWithImpl<$Res>
+    extends _$AddListingStateCopyWithImpl<$Res, _$AddListingLoadedImpl>
+    implements _$$AddListingLoadedImplCopyWith<$Res> {
+  __$$AddListingLoadedImplCopyWithImpl(_$AddListingLoadedImpl _value,
+      $Res Function(_$AddListingLoadedImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$AddListingLoaded implements AddListingLoaded {
-  const _$AddListingLoaded();
+class _$AddListingLoadedImpl implements AddListingLoaded {
+  const _$AddListingLoadedImpl();
 
   @override
   String toString() {
@@ -215,9 +215,9 @@ class _$AddListingLoaded implements AddListingLoaded {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$AddListingLoaded);
+        (other.runtimeType == runtimeType && other is _$AddListingLoadedImpl);
   }
 
   @override
@@ -293,24 +293,24 @@ class _$AddListingLoaded implements AddListingLoaded {
 }
 
 abstract class AddListingLoaded implements AddListingState {
-  const factory AddListingLoaded() = _$AddListingLoaded;
+  const factory AddListingLoaded() = _$AddListingLoadedImpl;
 }
 
 /// @nodoc
-abstract class _$$AddListingErrorCopyWith<$Res> {
-  factory _$$AddListingErrorCopyWith(
-          _$AddListingError value, $Res Function(_$AddListingError) then) =
-      __$$AddListingErrorCopyWithImpl<$Res>;
+abstract class _$$AddListingErrorImplCopyWith<$Res> {
+  factory _$$AddListingErrorImplCopyWith(_$AddListingErrorImpl value,
+          $Res Function(_$AddListingErrorImpl) then) =
+      __$$AddListingErrorImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String error});
 }
 
 /// @nodoc
-class __$$AddListingErrorCopyWithImpl<$Res>
-    extends _$AddListingStateCopyWithImpl<$Res, _$AddListingError>
-    implements _$$AddListingErrorCopyWith<$Res> {
-  __$$AddListingErrorCopyWithImpl(
-      _$AddListingError _value, $Res Function(_$AddListingError) _then)
+class __$$AddListingErrorImplCopyWithImpl<$Res>
+    extends _$AddListingStateCopyWithImpl<$Res, _$AddListingErrorImpl>
+    implements _$$AddListingErrorImplCopyWith<$Res> {
+  __$$AddListingErrorImplCopyWithImpl(
+      _$AddListingErrorImpl _value, $Res Function(_$AddListingErrorImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -318,7 +318,7 @@ class __$$AddListingErrorCopyWithImpl<$Res>
   $Res call({
     Object? error = null,
   }) {
-    return _then(_$AddListingError(
+    return _then(_$AddListingErrorImpl(
       null == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
@@ -329,8 +329,8 @@ class __$$AddListingErrorCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$AddListingError implements AddListingError {
-  const _$AddListingError(this.error);
+class _$AddListingErrorImpl implements AddListingError {
+  const _$AddListingErrorImpl(this.error);
 
   @override
   final String error;
@@ -341,10 +341,10 @@ class _$AddListingError implements AddListingError {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$AddListingError &&
+            other is _$AddListingErrorImpl &&
             (identical(other.error, error) || other.error == error));
   }
 
@@ -354,8 +354,9 @@ class _$AddListingError implements AddListingError {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$AddListingErrorCopyWith<_$AddListingError> get copyWith =>
-      __$$AddListingErrorCopyWithImpl<_$AddListingError>(this, _$identity);
+  _$$AddListingErrorImplCopyWith<_$AddListingErrorImpl> get copyWith =>
+      __$$AddListingErrorImplCopyWithImpl<_$AddListingErrorImpl>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -427,10 +428,10 @@ class _$AddListingError implements AddListingError {
 }
 
 abstract class AddListingError implements AddListingState {
-  const factory AddListingError(final String error) = _$AddListingError;
+  const factory AddListingError(final String error) = _$AddListingErrorImpl;
 
   String get error;
   @JsonKey(ignore: true)
-  _$$AddListingErrorCopyWith<_$AddListingError> get copyWith =>
+  _$$AddListingErrorImplCopyWith<_$AddListingErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

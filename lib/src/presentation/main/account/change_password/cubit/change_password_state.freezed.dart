@@ -12,7 +12,7 @@ part of 'change_password_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$ChangePasswordState {
@@ -81,28 +81,28 @@ class _$ChangePasswordStateCopyWithImpl<$Res, $Val extends ChangePasswordState>
 }
 
 /// @nodoc
-abstract class _$$ChangePasswordStateLoadingCopyWith<$Res> {
-  factory _$$ChangePasswordStateLoadingCopyWith(
-          _$ChangePasswordStateLoading value,
-          $Res Function(_$ChangePasswordStateLoading) then) =
-      __$$ChangePasswordStateLoadingCopyWithImpl<$Res>;
+abstract class _$$ChangePasswordStateLoadingImplCopyWith<$Res> {
+  factory _$$ChangePasswordStateLoadingImplCopyWith(
+          _$ChangePasswordStateLoadingImpl value,
+          $Res Function(_$ChangePasswordStateLoadingImpl) then) =
+      __$$ChangePasswordStateLoadingImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$ChangePasswordStateLoadingCopyWithImpl<$Res>
+class __$$ChangePasswordStateLoadingImplCopyWithImpl<$Res>
     extends _$ChangePasswordStateCopyWithImpl<$Res,
-        _$ChangePasswordStateLoading>
-    implements _$$ChangePasswordStateLoadingCopyWith<$Res> {
-  __$$ChangePasswordStateLoadingCopyWithImpl(
-      _$ChangePasswordStateLoading _value,
-      $Res Function(_$ChangePasswordStateLoading) _then)
+        _$ChangePasswordStateLoadingImpl>
+    implements _$$ChangePasswordStateLoadingImplCopyWith<$Res> {
+  __$$ChangePasswordStateLoadingImplCopyWithImpl(
+      _$ChangePasswordStateLoadingImpl _value,
+      $Res Function(_$ChangePasswordStateLoadingImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$ChangePasswordStateLoading implements ChangePasswordStateLoading {
-  const _$ChangePasswordStateLoading();
+class _$ChangePasswordStateLoadingImpl implements ChangePasswordStateLoading {
+  const _$ChangePasswordStateLoadingImpl();
 
   @override
   String toString() {
@@ -110,10 +110,10 @@ class _$ChangePasswordStateLoading implements ChangePasswordStateLoading {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ChangePasswordStateLoading);
+            other is _$ChangePasswordStateLoadingImpl);
   }
 
   @override
@@ -189,30 +189,32 @@ class _$ChangePasswordStateLoading implements ChangePasswordStateLoading {
 }
 
 abstract class ChangePasswordStateLoading implements ChangePasswordState {
-  const factory ChangePasswordStateLoading() = _$ChangePasswordStateLoading;
+  const factory ChangePasswordStateLoading() = _$ChangePasswordStateLoadingImpl;
 }
 
 /// @nodoc
-abstract class _$$ChangePasswordStateLoadedCopyWith<$Res> {
-  factory _$$ChangePasswordStateLoadedCopyWith(
-          _$ChangePasswordStateLoaded value,
-          $Res Function(_$ChangePasswordStateLoaded) then) =
-      __$$ChangePasswordStateLoadedCopyWithImpl<$Res>;
+abstract class _$$ChangePasswordStateLoadedImplCopyWith<$Res> {
+  factory _$$ChangePasswordStateLoadedImplCopyWith(
+          _$ChangePasswordStateLoadedImpl value,
+          $Res Function(_$ChangePasswordStateLoadedImpl) then) =
+      __$$ChangePasswordStateLoadedImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$ChangePasswordStateLoadedCopyWithImpl<$Res>
-    extends _$ChangePasswordStateCopyWithImpl<$Res, _$ChangePasswordStateLoaded>
-    implements _$$ChangePasswordStateLoadedCopyWith<$Res> {
-  __$$ChangePasswordStateLoadedCopyWithImpl(_$ChangePasswordStateLoaded _value,
-      $Res Function(_$ChangePasswordStateLoaded) _then)
+class __$$ChangePasswordStateLoadedImplCopyWithImpl<$Res>
+    extends _$ChangePasswordStateCopyWithImpl<$Res,
+        _$ChangePasswordStateLoadedImpl>
+    implements _$$ChangePasswordStateLoadedImplCopyWith<$Res> {
+  __$$ChangePasswordStateLoadedImplCopyWithImpl(
+      _$ChangePasswordStateLoadedImpl _value,
+      $Res Function(_$ChangePasswordStateLoadedImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$ChangePasswordStateLoaded implements ChangePasswordStateLoaded {
-  const _$ChangePasswordStateLoaded();
+class _$ChangePasswordStateLoadedImpl implements ChangePasswordStateLoaded {
+  const _$ChangePasswordStateLoadedImpl();
 
   @override
   String toString() {
@@ -220,10 +222,10 @@ class _$ChangePasswordStateLoaded implements ChangePasswordStateLoaded {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ChangePasswordStateLoaded);
+            other is _$ChangePasswordStateLoadedImpl);
   }
 
   @override
@@ -299,29 +301,32 @@ class _$ChangePasswordStateLoaded implements ChangePasswordStateLoaded {
 }
 
 abstract class ChangePasswordStateLoaded implements ChangePasswordState {
-  const factory ChangePasswordStateLoaded() = _$ChangePasswordStateLoaded;
+  const factory ChangePasswordStateLoaded() = _$ChangePasswordStateLoadedImpl;
 }
 
 /// @nodoc
-abstract class _$$ChangePasswordStateErrorCopyWith<$Res> {
-  factory _$$ChangePasswordStateErrorCopyWith(_$ChangePasswordStateError value,
-          $Res Function(_$ChangePasswordStateError) then) =
-      __$$ChangePasswordStateErrorCopyWithImpl<$Res>;
+abstract class _$$ChangePasswordStateErrorImplCopyWith<$Res> {
+  factory _$$ChangePasswordStateErrorImplCopyWith(
+          _$ChangePasswordStateErrorImpl value,
+          $Res Function(_$ChangePasswordStateErrorImpl) then) =
+      __$$ChangePasswordStateErrorImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$ChangePasswordStateErrorCopyWithImpl<$Res>
-    extends _$ChangePasswordStateCopyWithImpl<$Res, _$ChangePasswordStateError>
-    implements _$$ChangePasswordStateErrorCopyWith<$Res> {
-  __$$ChangePasswordStateErrorCopyWithImpl(_$ChangePasswordStateError _value,
-      $Res Function(_$ChangePasswordStateError) _then)
+class __$$ChangePasswordStateErrorImplCopyWithImpl<$Res>
+    extends _$ChangePasswordStateCopyWithImpl<$Res,
+        _$ChangePasswordStateErrorImpl>
+    implements _$$ChangePasswordStateErrorImplCopyWith<$Res> {
+  __$$ChangePasswordStateErrorImplCopyWithImpl(
+      _$ChangePasswordStateErrorImpl _value,
+      $Res Function(_$ChangePasswordStateErrorImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$ChangePasswordStateError implements ChangePasswordStateError {
-  const _$ChangePasswordStateError();
+class _$ChangePasswordStateErrorImpl implements ChangePasswordStateError {
+  const _$ChangePasswordStateErrorImpl();
 
   @override
   String toString() {
@@ -329,10 +334,10 @@ class _$ChangePasswordStateError implements ChangePasswordStateError {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ChangePasswordStateError);
+            other is _$ChangePasswordStateErrorImpl);
   }
 
   @override
@@ -408,5 +413,5 @@ class _$ChangePasswordStateError implements ChangePasswordStateError {
 }
 
 abstract class ChangePasswordStateError implements ChangePasswordState {
-  const factory ChangePasswordStateError() = _$ChangePasswordStateError;
+  const factory ChangePasswordStateError() = _$ChangePasswordStateErrorImpl;
 }

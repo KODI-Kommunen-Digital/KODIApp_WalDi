@@ -12,7 +12,7 @@ part of 'login_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$LoginState {
@@ -87,25 +87,25 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
 }
 
 /// @nodoc
-abstract class _$$LoginStateInitialCopyWith<$Res> {
-  factory _$$LoginStateInitialCopyWith(
-          _$LoginStateInitial value, $Res Function(_$LoginStateInitial) then) =
-      __$$LoginStateInitialCopyWithImpl<$Res>;
+abstract class _$$LoginStateInitialImplCopyWith<$Res> {
+  factory _$$LoginStateInitialImplCopyWith(_$LoginStateInitialImpl value,
+          $Res Function(_$LoginStateInitialImpl) then) =
+      __$$LoginStateInitialImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$LoginStateInitialCopyWithImpl<$Res>
-    extends _$LoginStateCopyWithImpl<$Res, _$LoginStateInitial>
-    implements _$$LoginStateInitialCopyWith<$Res> {
-  __$$LoginStateInitialCopyWithImpl(
-      _$LoginStateInitial _value, $Res Function(_$LoginStateInitial) _then)
+class __$$LoginStateInitialImplCopyWithImpl<$Res>
+    extends _$LoginStateCopyWithImpl<$Res, _$LoginStateInitialImpl>
+    implements _$$LoginStateInitialImplCopyWith<$Res> {
+  __$$LoginStateInitialImplCopyWithImpl(_$LoginStateInitialImpl _value,
+      $Res Function(_$LoginStateInitialImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$LoginStateInitial implements LoginStateInitial {
-  const _$LoginStateInitial();
+class _$LoginStateInitialImpl implements LoginStateInitial {
+  const _$LoginStateInitialImpl();
 
   @override
   String toString() {
@@ -113,9 +113,9 @@ class _$LoginStateInitial implements LoginStateInitial {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$LoginStateInitial);
+        (other.runtimeType == runtimeType && other is _$LoginStateInitialImpl);
   }
 
   @override
@@ -197,29 +197,29 @@ class _$LoginStateInitial implements LoginStateInitial {
 }
 
 abstract class LoginStateInitial implements LoginState {
-  const factory LoginStateInitial() = _$LoginStateInitial;
+  const factory LoginStateInitial() = _$LoginStateInitialImpl;
 }
 
 /// @nodoc
-abstract class _$$LoginStateLoadingCopyWith<$Res> {
-  factory _$$LoginStateLoadingCopyWith(
-          _$LoginStateLoading value, $Res Function(_$LoginStateLoading) then) =
-      __$$LoginStateLoadingCopyWithImpl<$Res>;
+abstract class _$$LoginStateLoadingImplCopyWith<$Res> {
+  factory _$$LoginStateLoadingImplCopyWith(_$LoginStateLoadingImpl value,
+          $Res Function(_$LoginStateLoadingImpl) then) =
+      __$$LoginStateLoadingImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$LoginStateLoadingCopyWithImpl<$Res>
-    extends _$LoginStateCopyWithImpl<$Res, _$LoginStateLoading>
-    implements _$$LoginStateLoadingCopyWith<$Res> {
-  __$$LoginStateLoadingCopyWithImpl(
-      _$LoginStateLoading _value, $Res Function(_$LoginStateLoading) _then)
+class __$$LoginStateLoadingImplCopyWithImpl<$Res>
+    extends _$LoginStateCopyWithImpl<$Res, _$LoginStateLoadingImpl>
+    implements _$$LoginStateLoadingImplCopyWith<$Res> {
+  __$$LoginStateLoadingImplCopyWithImpl(_$LoginStateLoadingImpl _value,
+      $Res Function(_$LoginStateLoadingImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$LoginStateLoading implements LoginStateLoading {
-  const _$LoginStateLoading();
+class _$LoginStateLoadingImpl implements LoginStateLoading {
+  const _$LoginStateLoadingImpl();
 
   @override
   String toString() {
@@ -227,9 +227,9 @@ class _$LoginStateLoading implements LoginStateLoading {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$LoginStateLoading);
+        (other.runtimeType == runtimeType && other is _$LoginStateLoadingImpl);
   }
 
   @override
@@ -311,29 +311,29 @@ class _$LoginStateLoading implements LoginStateLoading {
 }
 
 abstract class LoginStateLoading implements LoginState {
-  const factory LoginStateLoading() = _$LoginStateLoading;
+  const factory LoginStateLoading() = _$LoginStateLoadingImpl;
 }
 
 /// @nodoc
-abstract class _$$LoginStateLoadedCopyWith<$Res> {
-  factory _$$LoginStateLoadedCopyWith(
-          _$LoginStateLoaded value, $Res Function(_$LoginStateLoaded) then) =
-      __$$LoginStateLoadedCopyWithImpl<$Res>;
+abstract class _$$LoginStateLoadedImplCopyWith<$Res> {
+  factory _$$LoginStateLoadedImplCopyWith(_$LoginStateLoadedImpl value,
+          $Res Function(_$LoginStateLoadedImpl) then) =
+      __$$LoginStateLoadedImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$LoginStateLoadedCopyWithImpl<$Res>
-    extends _$LoginStateCopyWithImpl<$Res, _$LoginStateLoaded>
-    implements _$$LoginStateLoadedCopyWith<$Res> {
-  __$$LoginStateLoadedCopyWithImpl(
-      _$LoginStateLoaded _value, $Res Function(_$LoginStateLoaded) _then)
+class __$$LoginStateLoadedImplCopyWithImpl<$Res>
+    extends _$LoginStateCopyWithImpl<$Res, _$LoginStateLoadedImpl>
+    implements _$$LoginStateLoadedImplCopyWith<$Res> {
+  __$$LoginStateLoadedImplCopyWithImpl(_$LoginStateLoadedImpl _value,
+      $Res Function(_$LoginStateLoadedImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$LoginStateLoaded implements LoginStateLoaded {
-  const _$LoginStateLoaded();
+class _$LoginStateLoadedImpl implements LoginStateLoaded {
+  const _$LoginStateLoadedImpl();
 
   @override
   String toString() {
@@ -341,9 +341,9 @@ class _$LoginStateLoaded implements LoginStateLoaded {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$LoginStateLoaded);
+        (other.runtimeType == runtimeType && other is _$LoginStateLoadedImpl);
   }
 
   @override
@@ -425,24 +425,24 @@ class _$LoginStateLoaded implements LoginStateLoaded {
 }
 
 abstract class LoginStateLoaded implements LoginState {
-  const factory LoginStateLoaded() = _$LoginStateLoaded;
+  const factory LoginStateLoaded() = _$LoginStateLoadedImpl;
 }
 
 /// @nodoc
-abstract class _$$LoginStateErrorCopyWith<$Res> {
-  factory _$$LoginStateErrorCopyWith(
-          _$LoginStateError value, $Res Function(_$LoginStateError) then) =
-      __$$LoginStateErrorCopyWithImpl<$Res>;
+abstract class _$$LoginStateErrorImplCopyWith<$Res> {
+  factory _$$LoginStateErrorImplCopyWith(_$LoginStateErrorImpl value,
+          $Res Function(_$LoginStateErrorImpl) then) =
+      __$$LoginStateErrorImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String error});
 }
 
 /// @nodoc
-class __$$LoginStateErrorCopyWithImpl<$Res>
-    extends _$LoginStateCopyWithImpl<$Res, _$LoginStateError>
-    implements _$$LoginStateErrorCopyWith<$Res> {
-  __$$LoginStateErrorCopyWithImpl(
-      _$LoginStateError _value, $Res Function(_$LoginStateError) _then)
+class __$$LoginStateErrorImplCopyWithImpl<$Res>
+    extends _$LoginStateCopyWithImpl<$Res, _$LoginStateErrorImpl>
+    implements _$$LoginStateErrorImplCopyWith<$Res> {
+  __$$LoginStateErrorImplCopyWithImpl(
+      _$LoginStateErrorImpl _value, $Res Function(_$LoginStateErrorImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -450,7 +450,7 @@ class __$$LoginStateErrorCopyWithImpl<$Res>
   $Res call({
     Object? error = null,
   }) {
-    return _then(_$LoginStateError(
+    return _then(_$LoginStateErrorImpl(
       null == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
@@ -461,8 +461,8 @@ class __$$LoginStateErrorCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$LoginStateError implements LoginStateError {
-  const _$LoginStateError(this.error);
+class _$LoginStateErrorImpl implements LoginStateError {
+  const _$LoginStateErrorImpl(this.error);
 
   @override
   final String error;
@@ -473,10 +473,10 @@ class _$LoginStateError implements LoginStateError {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$LoginStateError &&
+            other is _$LoginStateErrorImpl &&
             (identical(other.error, error) || other.error == error));
   }
 
@@ -486,8 +486,9 @@ class _$LoginStateError implements LoginStateError {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$LoginStateErrorCopyWith<_$LoginStateError> get copyWith =>
-      __$$LoginStateErrorCopyWithImpl<_$LoginStateError>(this, _$identity);
+  _$$LoginStateErrorImplCopyWith<_$LoginStateErrorImpl> get copyWith =>
+      __$$LoginStateErrorImplCopyWithImpl<_$LoginStateErrorImpl>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -565,10 +566,10 @@ class _$LoginStateError implements LoginStateError {
 }
 
 abstract class LoginStateError implements LoginState {
-  const factory LoginStateError(final String error) = _$LoginStateError;
+  const factory LoginStateError(final String error) = _$LoginStateErrorImpl;
 
   String get error;
   @JsonKey(ignore: true)
-  _$$LoginStateErrorCopyWith<_$LoginStateError> get copyWith =>
+  _$$LoginStateErrorImplCopyWith<_$LoginStateErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

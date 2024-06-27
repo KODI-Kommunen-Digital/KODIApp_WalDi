@@ -8,10 +8,10 @@ part of 'model_favorite.dart';
 
 FavoriteModel _$FavoriteModelFromJson(Map<String, dynamic> json) =>
     FavoriteModel(
-      json['favoriteId'] as int,
-      json['userId'] as int,
-      json['cityId'] as int,
-      json['listingsId'] as int,
+      (json['favoriteId'] as num).toInt(),
+      (json['userId'] as num).toInt(),
+      (json['cityId'] as num).toInt(),
+      (json['listingsId'] as num).toInt(),
     );
 
 Map<String, dynamic> _$FavoriteModelToJson(FavoriteModel instance) =>

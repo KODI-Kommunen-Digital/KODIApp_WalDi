@@ -13,7 +13,7 @@ BaseResponse<T> _$BaseResponseFromJson<T>(
     BaseResponse<T>(
       json['status'] as String?,
       json['message'] as String?,
-      json['code'] as int?,
+      (json['code'] as num?)?.toInt(),
       fromJsonT(json['data']),
     );
 

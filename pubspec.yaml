@@ -18,7 +18,7 @@ dependencies:
   sentry_flutter: ^7.13.2
 
   ### l10n
-  intl: ^0.18.0
+  intl: ^0.19.0
 
   ### State Management
   bloc: 8.1.0
@@ -72,8 +72,8 @@ dependencies:
   multi_dropdown: ^2.0.0
 
   ### Firebase
-  firebase_core: ^2.24.2
-  firebase_messaging: ^14.7.10
+  firebase_core: ^3.1.0
+  firebase_messaging: ^15.0.1
 
   ### File Reading
   open_filex: 4.3.1

@@ -12,7 +12,7 @@ part of 'application_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$ApplicationState {
@@ -81,25 +81,25 @@ class _$ApplicationStateCopyWithImpl<$Res, $Val extends ApplicationState>
 }
 
 /// @nodoc
-abstract class _$$ApplicationLoadingCopyWith<$Res> {
-  factory _$$ApplicationLoadingCopyWith(_$ApplicationLoading value,
-          $Res Function(_$ApplicationLoading) then) =
-      __$$ApplicationLoadingCopyWithImpl<$Res>;
+abstract class _$$ApplicationLoadingImplCopyWith<$Res> {
+  factory _$$ApplicationLoadingImplCopyWith(_$ApplicationLoadingImpl value,
+          $Res Function(_$ApplicationLoadingImpl) then) =
+      __$$ApplicationLoadingImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$ApplicationLoadingCopyWithImpl<$Res>
-    extends _$ApplicationStateCopyWithImpl<$Res, _$ApplicationLoading>
-    implements _$$ApplicationLoadingCopyWith<$Res> {
-  __$$ApplicationLoadingCopyWithImpl(
-      _$ApplicationLoading _value, $Res Function(_$ApplicationLoading) _then)
+class __$$ApplicationLoadingImplCopyWithImpl<$Res>
+    extends _$ApplicationStateCopyWithImpl<$Res, _$ApplicationLoadingImpl>
+    implements _$$ApplicationLoadingImplCopyWith<$Res> {
+  __$$ApplicationLoadingImplCopyWithImpl(_$ApplicationLoadingImpl _value,
+      $Res Function(_$ApplicationLoadingImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$ApplicationLoading implements ApplicationLoading {
-  const _$ApplicationLoading();
+class _$ApplicationLoadingImpl implements ApplicationLoading {
+  const _$ApplicationLoadingImpl();
 
   @override
   String toString() {
@@ -107,9 +107,9 @@ class _$ApplicationLoading implements ApplicationLoading {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$ApplicationLoading);
+        (other.runtimeType == runtimeType && other is _$ApplicationLoadingImpl);
   }
 
   @override
@@ -185,29 +185,29 @@ class _$ApplicationLoading implements ApplicationLoading {
 }
 
 abstract class ApplicationLoading implements ApplicationState {
-  const factory ApplicationLoading() = _$ApplicationLoading;
+  const factory ApplicationLoading() = _$ApplicationLoadingImpl;
 }
 
 /// @nodoc
-abstract class _$$ApplicationLoadedCopyWith<$Res> {
-  factory _$$ApplicationLoadedCopyWith(
-          _$ApplicationLoaded value, $Res Function(_$ApplicationLoaded) then) =
-      __$$ApplicationLoadedCopyWithImpl<$Res>;
+abstract class _$$ApplicationLoadedImplCopyWith<$Res> {
+  factory _$$ApplicationLoadedImplCopyWith(_$ApplicationLoadedImpl value,
+          $Res Function(_$ApplicationLoadedImpl) then) =
+      __$$ApplicationLoadedImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$ApplicationLoadedCopyWithImpl<$Res>
-    extends _$ApplicationStateCopyWithImpl<$Res, _$ApplicationLoaded>
-    implements _$$ApplicationLoadedCopyWith<$Res> {
-  __$$ApplicationLoadedCopyWithImpl(
-      _$ApplicationLoaded _value, $Res Function(_$ApplicationLoaded) _then)
+class __$$ApplicationLoadedImplCopyWithImpl<$Res>
+    extends _$ApplicationStateCopyWithImpl<$Res, _$ApplicationLoadedImpl>
+    implements _$$ApplicationLoadedImplCopyWith<$Res> {
+  __$$ApplicationLoadedImplCopyWithImpl(_$ApplicationLoadedImpl _value,
+      $Res Function(_$ApplicationLoadedImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$ApplicationLoaded implements ApplicationLoaded {
-  const _$ApplicationLoaded();
+class _$ApplicationLoadedImpl implements ApplicationLoaded {
+  const _$ApplicationLoadedImpl();
 
   @override
   String toString() {
@@ -215,9 +215,9 @@ class _$ApplicationLoaded implements ApplicationLoaded {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$ApplicationLoaded);
+        (other.runtimeType == runtimeType && other is _$ApplicationLoadedImpl);
   }
 
   @override
@@ -293,29 +293,29 @@ class _$ApplicationLoaded implements ApplicationLoaded {
 }
 
 abstract class ApplicationLoaded implements ApplicationState {
-  const factory ApplicationLoaded() = _$ApplicationLoaded;
+  const factory ApplicationLoaded() = _$ApplicationLoadedImpl;
 }
 
 /// @nodoc
-abstract class _$$ApplicationErrorCopyWith<$Res> {
-  factory _$$ApplicationErrorCopyWith(
-          _$ApplicationError value, $Res Function(_$ApplicationError) then) =
-      __$$ApplicationErrorCopyWithImpl<$Res>;
+abstract class _$$ApplicationErrorImplCopyWith<$Res> {
+  factory _$$ApplicationErrorImplCopyWith(_$ApplicationErrorImpl value,
+          $Res Function(_$ApplicationErrorImpl) then) =
+      __$$ApplicationErrorImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$ApplicationErrorCopyWithImpl<$Res>
-    extends _$ApplicationStateCopyWithImpl<$Res, _$ApplicationError>
-    implements _$$ApplicationErrorCopyWith<$Res> {
-  __$$ApplicationErrorCopyWithImpl(
-      _$ApplicationError _value, $Res Function(_$ApplicationError) _then)
+class __$$ApplicationErrorImplCopyWithImpl<$Res>
+    extends _$ApplicationStateCopyWithImpl<$Res, _$ApplicationErrorImpl>
+    implements _$$ApplicationErrorImplCopyWith<$Res> {
+  __$$ApplicationErrorImplCopyWithImpl(_$ApplicationErrorImpl _value,
+      $Res Function(_$ApplicationErrorImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$ApplicationError implements ApplicationError {
-  const _$ApplicationError();
+class _$ApplicationErrorImpl implements ApplicationError {
+  const _$ApplicationErrorImpl();
 
   @override
   String toString() {
@@ -323,9 +323,9 @@ class _$ApplicationError implements ApplicationError {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$ApplicationError);
+        (other.runtimeType == runtimeType && other is _$ApplicationErrorImpl);
   }
 
   @override
@@ -401,5 +401,5 @@ class _$ApplicationError implements ApplicationError {
 }
 
 abstract class ApplicationError implements ApplicationState {
-  const factory ApplicationError() = _$ApplicationError;
+  const factory ApplicationError() = _$ApplicationErrorImpl;
 }
