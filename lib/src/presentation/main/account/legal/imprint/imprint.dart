@@ -4,7 +4,7 @@ import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class ImprintScreen extends StatefulWidget {
-  const ImprintScreen({Key? key}) : super(key: key);
+  const ImprintScreen({super.key});
 
   @override
   State<ImprintScreen> createState() => _ImprintScreenState();

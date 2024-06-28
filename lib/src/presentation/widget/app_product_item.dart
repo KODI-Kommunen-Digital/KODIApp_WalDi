@@ -14,14 +14,13 @@ import 'package:path_provider/path_provider.dart';
 
 class AppProductItem extends StatelessWidget {
   const AppProductItem(
-      {Key? key,
+      {super.key,
       this.item,
       this.onPressed,
       required this.type,
       this.trailing,
       required this.isRefreshLoader,
-      this.cityName})
-      : super(key: key);
+      this.cityName});
 
   final ProductModel? item;
   final ProductViewType type;

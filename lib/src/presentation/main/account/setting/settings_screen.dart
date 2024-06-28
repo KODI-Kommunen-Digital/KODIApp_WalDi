@@ -16,7 +16,7 @@ import 'package:heidi/src/utils/translate.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({Key? key, this.user}) : super(key: key);
+  const SettingsScreen({super.key, this.user});
 
   final UserModel? user;
 

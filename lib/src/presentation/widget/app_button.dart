@@ -16,7 +16,7 @@ class AppButton extends StatelessWidget {
 
   const AppButton(
     this.text, {
-    Key? key,
+    super.key,
     required this.onPressed,
     this.icon,
     this.loading = false,
@@ -24,7 +24,7 @@ class AppButton extends StatelessWidget {
     this.type = ButtonType.normal,
     this.mainAxisSize = MainAxisSize.min,
     this.size = ButtonSize.large,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -146,6 +146,7 @@ class AppButton extends StatelessWidget {
         return ElevatedButton(
           onPressed: disabled ? null : onPressed,
           style: ElevatedButton.styleFrom(
+            backgroundColor: Theme.of(context).primaryColor,
             minimumSize: buttonSize,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),

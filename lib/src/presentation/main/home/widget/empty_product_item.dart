@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 
 class EmptyProductItem extends StatelessWidget {
-  const EmptyProductItem({Key? key}) : super(key: key);
+  const EmptyProductItem({super.key});
 
   @override
   Widget build(BuildContext context) {

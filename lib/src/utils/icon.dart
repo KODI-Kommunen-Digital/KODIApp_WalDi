@@ -369,7 +369,7 @@ class UtilIcon {
     'solid child': FontAwesomeIcons.child,
     'solid child-dress': FontAwesomeIcons.childDress,
     'solid child-reaching': FontAwesomeIcons.childReaching,
-    'solid child-rifle': FontAwesomeIcons.childRifle,
+    'solid child-combatant': FontAwesomeIcons.childCombatant,
     'solid children': FontAwesomeIcons.children,
     'brands chrome': FontAwesomeIcons.chrome,
     'brands chromecast': FontAwesomeIcons.chromecast,

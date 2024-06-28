@@ -25,7 +25,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class ProductDetailScreen extends StatefulWidget {
-  const ProductDetailScreen({Key? key, required this.item}) : super(key: key);
+  const ProductDetailScreen({super.key, required this.item});
 
   final ProductModel item;
 

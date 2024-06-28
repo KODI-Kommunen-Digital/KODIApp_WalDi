@@ -12,7 +12,7 @@ import 'package:heidi/src/utils/translate.dart';
 import 'package:heidi/src/utils/validate.dart';
 
 class SignInScreen extends StatefulWidget {
-  const SignInScreen({Key? key}) : super(key: key);
+  const SignInScreen({super.key});
 
   @override
   State<SignInScreen> createState() => _SignInScreenState();
@@ -68,7 +68,7 @@ class _SignInScreenState extends State<SignInScreen> {
 }
 
 class SignInLoading extends StatelessWidget {
-  const SignInLoading({Key? key}) : super(key: key);
+  const SignInLoading({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +79,7 @@ class SignInLoading extends StatelessWidget {
 }
 
 class SignInLoaded extends StatefulWidget {
-  const SignInLoaded({Key? key}) : super(key: key);
+  const SignInLoaded({super.key});
 
   @override
   State<SignInLoaded> createState() => _SignInLoadedState();

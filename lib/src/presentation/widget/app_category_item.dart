@@ -10,11 +10,11 @@ enum CategoryView { full, icon, cardLarge }
 
 class AppCategory extends StatelessWidget {
   const AppCategory({
-    Key? key,
+    super.key,
     this.type = CategoryView.full,
     this.item,
     this.onPressed,
-  }) : super(key: key);
+  });
 
   final CategoryView type;
   final CategoryModel? item;

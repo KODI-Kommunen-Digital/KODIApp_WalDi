@@ -10,10 +10,10 @@ class HomeSwipe extends StatelessWidget {
   final String? images;
 
   const HomeSwipe({
-    Key? key,
+    super.key,
     this.images,
     required this.height,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
