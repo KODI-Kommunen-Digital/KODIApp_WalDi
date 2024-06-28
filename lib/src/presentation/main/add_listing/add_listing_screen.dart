@@ -30,10 +30,10 @@ class AddListingScreen extends StatefulWidget {
   final bool isNewList;
 
   const AddListingScreen({
-    Key? key,
+    super.key,
     this.item,
     required this.isNewList,
-  }) : super(key: key);
+  });
 
   @override
   State<AddListingScreen> createState() => _AddListingScreenState();

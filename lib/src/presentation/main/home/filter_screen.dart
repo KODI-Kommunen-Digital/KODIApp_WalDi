@@ -102,7 +102,7 @@ class _FilterScreenState extends State<FilterScreen> {
                 });
               },
             );
-          }).toList(),
+          }),
         ]),
       )
     ];
@@ -270,7 +270,7 @@ class _FilterScreenState extends State<FilterScreen> {
                 });
               },
             );
-          }).toList(),
+          }),
         ]),
       )
     ];

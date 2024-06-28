@@ -32,14 +32,14 @@ class AppUploadImage extends StatefulWidget {
   final bool profile;
 
   const AppUploadImage({
-    Key? key,
+    super.key,
     this.title,
     this.image,
     required this.onChange,
     this.type = UploadImageType.square,
     required this.profile,
     this.onDelete,
-  }) : super(key: key);
+  });
 
   @override
   State<AppUploadImage> createState() => _AppUploadImageState();

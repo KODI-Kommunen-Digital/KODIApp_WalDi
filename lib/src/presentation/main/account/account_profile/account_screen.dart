@@ -16,7 +16,7 @@ import 'package:heidi/src/utils/logger.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class AccountScreen extends StatefulWidget {
-  const AccountScreen({Key? key}) : super(key: key);
+  const AccountScreen({super.key});
 
   @override
   State<AccountScreen> createState() => _AccountScreenState();
@@ -49,7 +49,7 @@ class _AccountScreenState extends State<AccountScreen> {
 }
 
 class AccountLoading extends StatelessWidget {
-  const AccountLoading({Key? key}) : super(key: key);
+  const AccountLoading({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +60,7 @@ class AccountLoading extends StatelessWidget {
 }
 
 class AccountLoaded extends StatefulWidget {
-  const AccountLoaded({Key? key}) : super(key: key);
+  const AccountLoaded({super.key});
 
   @override
   State<AccountLoaded> createState() => _AccountLoadedState();

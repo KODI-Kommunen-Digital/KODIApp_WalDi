@@ -8,10 +8,10 @@ class HomeCategoryItem extends StatelessWidget {
   final Function(CategoryModel)? onPressed;
 
   const HomeCategoryItem({
-    Key? key,
+    super.key,
     this.item,
     this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class ContactUsSuccessScreen extends StatefulWidget {
-  const ContactUsSuccessScreen({Key? key}) : super(key: key);
+  const ContactUsSuccessScreen({super.key});
 
   @override
   State<ContactUsSuccessScreen> createState() => _ContactUsSuccessScreenState();
