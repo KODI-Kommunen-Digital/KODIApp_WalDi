@@ -1094,7 +1094,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
                               onChanged: null)
                           : MultiSelectDropDown(
                               //isExpanded: true,
-                              searchBackgroundColor:
+                              fieldBackgroundColor:
                                   Theme.of(context).scaffoldBackgroundColor,
                               borderColor: Theme.of(context)
                                       .textTheme
