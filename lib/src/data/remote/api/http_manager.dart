@@ -19,8 +19,8 @@ class HTTPManager {
       BaseOptions(
         //baseUrl: 'https://test.smartregion-auf.de/api/',
         baseUrl: 'https://waldi.app/api',
-        connectTimeout: 30000,
-        receiveTimeout: 30000,
+        connectTimeout: const Duration(milliseconds: 30000),
+        receiveTimeout: const Duration(milliseconds: 30000),
         contentType: Headers.formUrlEncodedContentType,
         responseType: ResponseType.json,
       ),
@@ -125,7 +125,7 @@ class HTTPManager {
         },
       );
       return response.data;
-    } on DioError catch (error, stackTrace) {
+    } on DioException catch (error, stackTrace) {
       await Sentry.captureException(error, stackTrace: stackTrace);
       return _errorHandle(error);
     } finally {
