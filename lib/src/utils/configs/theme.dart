@@ -81,7 +81,7 @@ class AppTheme {
       brightness: colorScheme.brightness,
       primaryColor: colorScheme.primary,
       appBarTheme: AppBarTheme(
-        backgroundColor: colorScheme.surface,
+        backgroundColor: Colors.white.withAlpha(30),
         foregroundColor: isDark ? Colors.white : Colors.black,
         shadowColor: isDark ? null : colorScheme.onSurface.withOpacity(0.2),
       ),
