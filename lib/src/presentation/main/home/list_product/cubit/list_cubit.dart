@@ -62,6 +62,12 @@ class ListCubit extends Cubit<ListState> {
     }
   }
 
+  Future<void> setCity(int cityId) async {
+    final prefs = await Preferences.openBox();
+
+    prefs.setKeyValue(Preferences.cityId, cityId);
+  }
+
   Future<List<ProductModel>> newListings(int pageNo, cityId) async {
     final prefs = await Preferences.openBox();
     final categoryId = prefs.getKeyValue(Preferences.categoryId, 0);
@@ -245,14 +251,11 @@ class ListCubit extends Cubit<ListState> {
     return (daysSinceStartOfYear / 7).ceil();
   }
 
-  Future<bool?> categoryPreferencesCall() async {
+  Future<List<int>> getIds() async {
     final prefs = await Preferences.openBox();
-    final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
-    if (categoryId == 3) {
-      return true;
-    } else {
-      return null;
-    }
+    final categoryId = prefs.getKeyValue(Preferences.categoryId, 0);
+    final cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    return [categoryId, cityId];
   }
 
   Future<String?> getCategory() async {

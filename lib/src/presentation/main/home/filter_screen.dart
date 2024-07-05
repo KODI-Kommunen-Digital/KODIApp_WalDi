@@ -37,13 +37,17 @@ class _FilterScreenState extends State<FilterScreen> {
       ),
       body: SingleChildScrollView(
         child: PopScope(
+          canPop: false,
           onPopInvoked: (pop) async {
+            if (pop) return;
             Navigator.pop(
                 context,
                 MultiFilter(
                     currentProductEventFilter: currentProductEventFilter,
                     currentListingStatus: currentListingStatus,
                     currentCategory: currentCategory,
+                    currentLocation: currentCity,
+                    hasLocationFilter: widget.multiFilter.hasLocationFilter,
                     hasProductEventFilter:
                         widget.multiFilter.hasProductEventFilter,
                     hasListingStatusFilter:

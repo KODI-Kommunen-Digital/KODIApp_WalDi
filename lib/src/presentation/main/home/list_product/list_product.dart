@@ -53,7 +53,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
         .onLoad(selectedFilter?.currentLocation ?? widget.arguments['id']);
   }
 
-  MultiFilter whatCanFilter(bool isEvent) {
+  MultiFilter whatCanFilter(bool isEvent, int cityId) {
     if (isCity) {
       return MultiFilter(
           hasCategoryFilter: true,
@@ -67,28 +67,30 @@ class _ListProductScreenState extends State<ListProductScreen> {
           currentProductEventFilter: selectedFilter?.currentProductEventFilter,
           hasLocationFilter: true,
           currentLocation:
-              selectedFilter?.currentLocation ?? widget.arguments['id'],
+              selectedFilter?.currentLocation ?? cityId,
           cities: AppBloc.discoveryCubit.location);
     } else {
       return MultiFilter(
           hasLocationFilter: true,
           currentLocation:
-              selectedFilter?.currentLocation ?? widget.arguments['id'],
+              selectedFilter?.currentLocation ?? cityId,
           cities: AppBloc.discoveryCubit.location);
     }
   }
 
-  void _updateSelectedFilter(MultiFilter? filter) {
+  void _updateSelectedFilter(MultiFilter? filter) async {
     selectedFilter = filter;
     final loadedList = context.read<ListCubit>().getLoadedList();
-    setState(() {
+    setState(() async {
       if (filter?.hasProductEventFilter ?? false) {
         context.read<ListCubit>().onDateProductFilter(
             filter?.currentProductEventFilter,
             loadedList,
             filter?.hasLocationFilter ?? false,
             filter?.currentLocation);
-      } else if (filter?.hasLocationFilter ?? false) {
+      }
+      if (filter?.hasLocationFilter ?? false) {
+        await context.read<ListCubit>().setCity(filter!.currentLocation ?? 0);
         loadListingsList();
       }
       if (filter?.hasCategoryFilter ?? false) {
@@ -120,19 +122,20 @@ class _ListProductScreenState extends State<ListProductScreen> {
                     }
                   }),
           actions: [
-            FutureBuilder<bool?>(
-              future: context.read<ListCubit>().categoryPreferencesCall(),
+            FutureBuilder<List<int>>(
+              future: context.read<ListCubit>().getIds(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const CircularProgressIndicator.adaptive();
                 } else if (snapshot.hasError) {
                   return Container();
                 } else {
-                  bool isEvent = snapshot.data ?? false;
+                  bool isEvent = snapshot.data!.first == 3;
+                  int cityId = snapshot.data!.last;
                   return Row(
                     children: [
                       AppFilterButton(
-                          multiFilter: whatCanFilter(isEvent),
+                          multiFilter: whatCanFilter(isEvent, cityId),
                           filterCallBack: (filter) {
                             _updateSelectedFilter(filter);
                           }),
