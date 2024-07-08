@@ -66,14 +66,12 @@ class _ListProductScreenState extends State<ListProductScreen> {
           hasProductEventFilter: true,
           currentProductEventFilter: selectedFilter?.currentProductEventFilter,
           hasLocationFilter: true,
-          currentLocation:
-              selectedFilter?.currentLocation ?? cityId,
+          currentLocation: selectedFilter?.currentLocation ?? cityId,
           cities: AppBloc.discoveryCubit.location);
     } else {
       return MultiFilter(
           hasLocationFilter: true,
-          currentLocation:
-              selectedFilter?.currentLocation ?? cityId,
+          currentLocation: selectedFilter?.currentLocation ?? cityId,
           cities: AppBloc.discoveryCubit.location);
     }
   }
@@ -498,7 +496,7 @@ class _ListLoadedState extends State<ListLoaded> {
                     padding: const EdgeInsets.all(4.0),
                     child: Text(
                       Translate.of(context).translate('list_is_empty'),
-                      style: Theme.of(context).textTheme.bodyLarge,
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ),
                 ],

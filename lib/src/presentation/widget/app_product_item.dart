@@ -126,7 +126,7 @@ class AppProductItem extends StatelessWidget {
                       maxLines: 2,
                       style: Theme.of(context)
                           .textTheme
-                          .bodyLarge!
+                          .bodyMedium!
                           .copyWith(fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 2),
