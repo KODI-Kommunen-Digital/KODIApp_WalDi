@@ -79,24 +79,22 @@ class _ListProductScreenState extends State<ListProductScreen> {
   void _updateSelectedFilter(MultiFilter? filter) async {
     selectedFilter = filter;
     final loadedList = context.read<ListCubit>().getLoadedList();
-    setState(() async {
-      if (filter?.hasProductEventFilter ?? false) {
-        context.read<ListCubit>().onDateProductFilter(
-            filter?.currentProductEventFilter,
-            loadedList,
-            filter?.hasLocationFilter ?? false,
-            filter?.currentLocation);
-      }
-      if (filter?.hasLocationFilter ?? false) {
-        await context.read<ListCubit>().setCity(filter!.currentLocation ?? 0);
-        loadListingsList();
-      }
-      if (filter?.hasCategoryFilter ?? false) {
-        context.read<ListCubit>().setCategoryFilter(
-            filter?.currentCategory ?? 0,
-            selectedFilter?.currentLocation ?? widget.arguments['id']);
-      }
-    });
+    if (filter?.hasProductEventFilter ?? false) {
+      context.read<ListCubit>().onDateProductFilter(
+          filter?.currentProductEventFilter,
+          loadedList,
+          filter?.hasLocationFilter ?? false,
+          filter?.currentLocation);
+    }
+    if (filter?.hasLocationFilter ?? false) {
+      await context.read<ListCubit>().setCity(filter!.currentLocation ?? 0);
+      loadListingsList();
+    }
+    if (filter?.hasCategoryFilter ?? false) {
+      context.read<ListCubit>().setCategoryFilter(filter?.currentCategory ?? 0,
+          selectedFilter?.currentLocation ?? widget.arguments['id']);
+    }
+    setState(() {});
   }
 
   @override
