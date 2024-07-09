@@ -49,6 +49,7 @@
   "value_not_website": "Eingabe ungültige Website",
   "value_not_username": "Eingabe ungültige Benutzernamen ",
   "value_not_valid_phone": "Eingabe ungültiges Telefon",
+  "value_only_one_phone": "Bitte nur eine Telefonnummer eingeben",
   "value_not_valid_password": "Eingabe ungültiges Passwort",
   "value_not_valid_id": "Eingabe ungültige ID",
   "value_not_date_empty": "Eintrittsdatum leer. Bitte Startdatum eingeben",

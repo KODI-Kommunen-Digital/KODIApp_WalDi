@@ -57,6 +57,7 @@
   "value_not_valid_email": "Input not valid email",
   "value_not_website": "Input not valid website",
   "value_not_valid_phone": "Input not valid phone",
+  "value_only_one_phone": "Please enter just one phone number",
   "value_not_username": "value_not_username",
   "value_not_valid_password": "Input not valid password",
   "value_not_date_empty": "Input for date empty. Please enter a start date",

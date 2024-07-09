@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:loggy/loggy.dart';
@@ -1305,7 +1306,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
               errorText: _errorPhone,
               controller: _textPhoneController,
               focusNode: _focusPhone,
-              maxLength: 15,
+              maxLength: 16,
+              maxLengthEnforcement: MaxLengthEnforcement.none,
               keyboardType: TextInputType.phone,
               textInputAction: TextInputAction.next,
               onChanged: (text) {
@@ -1315,6 +1317,11 @@ class _AddListingScreenState extends State<AddListingScreen> {
                     type: ValidateType.phone,
                     allowEmpty: true,
                   );
+
+                  if(text.length > 16) {
+                    _textPhoneController.text = text.substring(0, text.length-1);
+                    _errorPhone = "value_only_one_phone";
+                  }
                 });
               },
               onSubmitted: (text) {
