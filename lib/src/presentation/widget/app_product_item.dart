@@ -199,6 +199,9 @@ class AppProductItem extends StatelessWidget {
                         ),
                       ),
                     ),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     if (item?.sourceId == 3)
                       Text(
                         "${Translate.of(context).translate('quelle')} ${item?.externalId ?? ''}",
@@ -474,6 +477,9 @@ class AppProductItem extends StatelessWidget {
                               Theme.of(context).textTheme.bodySmall!.copyWith(
                                     fontWeight: FontWeight.bold,
                                   ),
+                        ),
+                        const SizedBox(
+                          height: 5,
                         ),
                         if (item?.sourceId == 3)
                           Text(
