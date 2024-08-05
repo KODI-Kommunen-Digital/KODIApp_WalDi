@@ -8,10 +8,7 @@ import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'cubit.dart';
 
-enum ProductFilter {
-  week,
-  month,
-}
+enum ProductFilter { week, month, day }
 
 class ListCubit extends Cubit<ListState> {
   final ListRepository repo;
@@ -68,7 +65,8 @@ class ListCubit extends Cubit<ListState> {
     prefs.setKeyValue(Preferences.cityId, cityId);
   }
 
-  Future<List<ProductModel>> newListings(int pageNo, cityId) async {
+  Future<List<ProductModel>> newListings(
+      int pageNo, cityId, MultiFilter? filter) async {
     final prefs = await Preferences.openBox();
     final categoryId = prefs.getKeyValue(Preferences.categoryId, 0);
     final type = prefs.getKeyValue(Preferences.type, '');
@@ -82,8 +80,16 @@ class ListCubit extends Cubit<ListState> {
 
     final listUpdated = result?[0];
     if (listUpdated.isNotEmpty) {
-      list.addAll(listUpdated);
-      return list;
+      List<ProductModel>? filteredList;
+      if (filter != null && filter.hasProductEventFilter) {
+        filteredList = onDateProductFilter(
+            filter.currentProductEventFilter,
+            listUpdated,
+            filter.hasLocationFilter,
+            filter.currentLocation,
+            false);
+      }
+      list.addAll(filteredList ?? listUpdated);
     }
     return list;
   }
@@ -157,8 +163,12 @@ class ListCubit extends Cubit<ListState> {
     onLoad(cityId);
   }
 
-  void onDateProductFilter(ProductFilter? type, List<ProductModel> loadedList,
-      bool filterLocation, int? currentCity) {
+  List<ProductModel> onDateProductFilter(
+      ProductFilter? type,
+      List<ProductModel> loadedList,
+      bool filterLocation,
+      int? currentCity,
+      bool initial) {
     final currentDate = DateTime.now();
     if (type == ProductFilter.month) {
       filteredList = loadedList.where((product) {
@@ -175,7 +185,6 @@ class ListCubit extends Cubit<ListState> {
         }
         return false;
       }).toList();
-      emit(ListStateUpdated(filteredList, listCity));
     } else if (type == ProductFilter.week) {
       filteredList = loadedList.where((product) {
         final startDate = _parseDate(product.startDate);
@@ -191,16 +200,30 @@ class ListCubit extends Cubit<ListState> {
         }
         return false;
       }).toList();
-      emit(ListStateUpdated(filteredList, listCity));
+    } else if (type == ProductFilter.day) {
+      filteredList = loadedList.where((product) {
+        final startDate = _parseDate(product.startDate);
+        if (startDate != null) {
+          final startDay = _getDayNumber(startDate);
+          final currentDay = _getDayNumber(currentDate) - 1;
+          if (filterLocation && (currentCity ?? 0) != 0) {
+            return (startDay == currentDay) && (product.cityId == currentCity);
+          } else {
+            return startDay == currentDay;
+          }
+        }
+        return false;
+      }).toList();
     } else if (type == null && filterLocation && (currentCity ?? 0) != 0) {
       filteredList = loadedList.where((product) {
         return product.cityId == currentCity;
       }).toList();
-
-      emit(ListStateUpdated(filteredList, listCity));
-    } else {
-      emit(ListStateUpdated(loadedList, listCity));
     }
+    if (initial) {
+      list = filteredList;
+      emit(ListStateUpdated(filteredList, listCity));
+    }
+    return filteredList;
   }
 
   DateTime? _parseDate(String dateTimeString) {
@@ -249,6 +272,12 @@ class ListCubit extends Cubit<ListState> {
     final startOfYear = DateTime(date.year, 1, 1);
     final daysSinceStartOfYear = date.difference(startOfYear).inDays;
     return (daysSinceStartOfYear / 7).ceil();
+  }
+
+  int _getDayNumber(DateTime date) {
+    final startOfYear = DateTime(date.year, 1, 1);
+    final daysSinceStartOfYear = date.difference(startOfYear).inDays;
+    return daysSinceStartOfYear;
   }
 
   Future<List<int>> getIds() async {

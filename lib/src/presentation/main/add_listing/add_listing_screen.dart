@@ -819,6 +819,16 @@ class _AddListingScreenState extends State<AddListingScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Text(
+              Translate.of(context).translate('policy_notification'),
+              style: Theme.of(context)
+                  .textTheme
+                  .bodySmall!
+                  .copyWith(fontStyle: FontStyle.italic, fontSize: 9),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
             SizedBox(
               height: 180,
               child: AppUploadImage(
@@ -929,7 +939,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
               errorText: _errorContent,
               controller: _textContentController,
               focusNode: _focusContent,
-              textInputAction: TextInputAction.done,
+              textInputAction: TextInputAction.newline,
+              keyboardType: TextInputType.multiline,
               onChanged: (text) {
                 _errorContent = UtilValidator.validate(
                   _textContentController.text,
@@ -1318,8 +1329,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
                     allowEmpty: true,
                   );
 
-                  if(text.length > 16) {
-                    _textPhoneController.text = text.substring(0, text.length-1);
+                  if (text.length > 16) {
+                    _textPhoneController.text =
+                        text.substring(0, text.length - 1);
                     _errorPhone = "value_only_one_phone";
                   }
                 });

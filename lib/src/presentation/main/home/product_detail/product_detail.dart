@@ -927,6 +927,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           return '<img src="$href">';
         });
 
+        modifiedDescription = modifiedDescription.replaceAll('\n', '<br>');
+
         description = HtmlWidget(
           modifiedDescription,
           textStyle: TextStyle(

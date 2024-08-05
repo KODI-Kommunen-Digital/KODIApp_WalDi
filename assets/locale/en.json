@@ -279,7 +279,7 @@
   "icon_require": "Icon is required",
   "input_zipcode": "Zipcode",
   "upload_feature_image": "Upload feature image",
-  "upload_feature_image_pdf": "Upload feature image or pdf\nMultiple possible",
+  "upload_feature_image_pdf": "Upload feature image or pdf\nMultiple possible\nOnly pdf or image",
   "edit": "Edit",
   "add_new_listing": "Add New Listing",
   "edit_listing": "Update Listing",
@@ -393,6 +393,7 @@
   "listing_link_copied": "Listing link already copy to clipboard",
   "imprint": "Imprint",
   "privacy_policy": "Privacy Policy",
+  "policy_notification": "By uploading, I confirm that I have read and agree to the terms of use, in particular that I have the rights to publish the content.",
   "legal": "Legal",
   "input_city": "Select City",
   "input_village": "Select Village",
@@ -465,5 +466,7 @@
   "all": "All",
   "expiry_date": "Ablaufdatum",
   "enable_expiry_date":"Ein Ablaufdatum hinzufügen, an dem der Beitrag gelöscht wird",
-  "error_message": "An error occured, please try again later."
+  "error_message": "An error occured, please try again later.",
+  "this_day": "Specific day",
+  "today": "Today"
 }

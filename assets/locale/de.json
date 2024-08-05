@@ -281,7 +281,7 @@
   "icon_require": "Symbol ist erforderlich",
   "input_zipcode": "Postleitzahl",
   "upload_feature_image": "Bild oder PDF hochladen,\nMehrfachauswahl möglich",
-  "upload_feature_image_pdf": "Bild oder PDF hochladen,\nMehrfachauswahl möglich",
+  "upload_feature_image_pdf": "Bild oder PDF hochladen,\nMehrfachauswahl möglich\nJeweils nur PDF oder Bild",
   "edit": "Bearbeiten",
   "add_new_listing": "Neuer Beitrag",
   "edit_listing": "Eintrag aktualisieren",
@@ -389,6 +389,7 @@
   "file": "Datei",
   "imprint": "Impressum",
   "privacy_policy": "Datenschutz",
+  "policy_notification": "Mit dem Upload bestätige ich die Nutzungsbedingungen, insbesondere, dass ich die Rechte habe, die Inhalte zu veröffentlichen.",
   "legal": "Rechtliches",
   "input_city": "Stadt auswählen",
   "input_village": "Dorf auswählen",
@@ -464,5 +465,7 @@
   "choose_time_period": "Zeitraum auswählen",
   "choose_listing_status": "Beitragsstatus auswählen",
   "all": "Alle",
-  "error_message": "Es ist ein Fehler aufgetreten, versuchen Sie es später erneut."
+  "error_message": "Es ist ein Fehler aufgetreten, versuchen Sie es später erneut.",
+  "this_day": "Bestimmter Tag",
+  "today": "Heute"
 }
