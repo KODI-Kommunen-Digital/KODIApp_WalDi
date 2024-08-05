@@ -80,13 +80,16 @@ class _ListProductScreenState extends State<ListProductScreen> {
     selectedFilter = filter;
     final loadedList = context.read<ListCubit>().getLoadedList();
     if (filter?.hasProductEventFilter ?? false) {
-      context.read<ListCubit>().onDateProductFilter(
-          filter?.currentProductEventFilter,
-          loadedList,
-          filter?.hasLocationFilter ?? false,
-          filter?.currentLocation);
-    }
-    if (filter?.hasLocationFilter ?? false) {
+      await loadListingsList();
+      if (filter?.currentProductEventFilter != null) {
+        context.read<ListCubit>().onDateProductFilter(
+            filter?.currentProductEventFilter,
+            loadedList,
+            filter?.hasLocationFilter ?? false,
+            filter?.currentLocation,
+            true);
+      }
+    } else if (filter?.hasLocationFilter ?? false) {
       await context.read<ListCubit>().setCity(filter!.currentLocation ?? 0);
       loadListingsList();
     }
@@ -160,6 +163,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
             loaded: (list, listCity) => ListLoaded(
               list: list,
               listCity: listCity,
+              filter: selectedFilter,
               selectedId:
                   selectedFilter?.currentLocation ?? widget.arguments['id'],
             ),
@@ -169,6 +173,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
                   listCity: listCity,
                   selectedId:
                       selectedFilter?.currentLocation ?? widget.arguments['id'],
+                  filter: selectedFilter,
                   updated: true);
             },
             error: (e) => ErrorWidget('Failed to load listings.'),
@@ -258,12 +263,14 @@ class ListLoaded extends StatefulWidget {
   final List listCity;
   final int selectedId;
   final bool updated;
+  final MultiFilter? filter;
 
   const ListLoaded(
       {super.key,
       required this.list,
       required this.selectedId,
       required this.listCity,
+      this.filter,
       this.updated = false});
 
   @override
@@ -305,17 +312,19 @@ class _ListLoadedState extends State<ListLoaded> {
           isLoadingMore = true;
           //previousScrollPosition = _scrollController.position.pixels;
         });
+        List<ProductModel>? newList;
         if (context.read<ListCubit>().isSearching) {
           context
               .read<ListCubit>()
               .searchListing(context.read<ListCubit>().searchTerm, false);
         } else {
-          list = await context
+          newList = await context
               .read<ListCubit>()
-              .newListings(++pageNo, widget.selectedId);
+              .newListings(++pageNo, widget.selectedId, widget.filter);
         }
         setState(() {
           isLoadingMore = false;
+          if (newList != null) list = newList;
         });
       }
     }
@@ -462,7 +471,7 @@ class _ListLoadedState extends State<ListLoaded> {
   }
 
   Widget _buildContent() {
-    list = widget.list;
+    list = context.read<ListCubit>().list;
     return BlocBuilder<ListCubit, ListState>(
       builder: (context, state) {
         if (_pageType == PageType.list) {

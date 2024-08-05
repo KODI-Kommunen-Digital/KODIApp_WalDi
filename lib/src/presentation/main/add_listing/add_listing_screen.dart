@@ -570,6 +570,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
   void _onSubmit() async {
     final success = _validData();
     if (success) {
+      String content = _textContentController.text.replaceAll('\n', '<br>');
       if (widget.item != null) {
         if (isImageChanged) {
           await context
@@ -591,7 +592,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
               listingId: widget.item?.id,
               title: _textTitleController.text,
               place: _textPlaceController.text,
-              description: _textContentController.text,
+              description: content,
               address: _textAddressController.text,
               email: _textEmailController.text,
               phone: _textPhoneController.text,
@@ -629,7 +630,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
               title: _textTitleController.text,
               city: selectedCities,
               place: _textPlaceController.text,
-              description: _textContentController.text,
+              description: content,
               address: _textAddressController.text,
               email: _textEmailController.text,
               phone: _textPhoneController.text,
@@ -819,6 +820,16 @@ class _AddListingScreenState extends State<AddListingScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Text(
+              Translate.of(context).translate('policy_notification'),
+              style: Theme.of(context)
+                  .textTheme
+                  .bodySmall!
+                  .copyWith(fontStyle: FontStyle.italic, fontSize: 9),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
             SizedBox(
               height: 180,
               child: AppUploadImage(
@@ -929,7 +940,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
               errorText: _errorContent,
               controller: _textContentController,
               focusNode: _focusContent,
-              textInputAction: TextInputAction.done,
+              textInputAction: TextInputAction.newline,
+              keyboardType: TextInputType.multiline,
               onChanged: (text) {
                 _errorContent = UtilValidator.validate(
                   _textContentController.text,
@@ -1318,8 +1330,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
                     allowEmpty: true,
                   );
 
-                  if(text.length > 16) {
-                    _textPhoneController.text = text.substring(0, text.length-1);
+                  if (text.length > 16) {
+                    _textPhoneController.text =
+                        text.substring(0, text.length - 1);
                     _errorPhone = "value_only_one_phone";
                   }
                 });

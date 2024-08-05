@@ -234,6 +234,26 @@ class _FilterScreenState extends State<FilterScreen> {
               });
             },
           ),
+          ChoiceChip(
+            label: Wrap(
+              spacing: 4.0,
+              children: [
+                Text(Translate.of(context).translate('today')),
+                Icon(
+                  Icons.calendar_today,
+                  color: Theme.of(context).textTheme.bodyLarge?.color ??
+                      Colors.white,
+                  size: 18,
+                )
+              ],
+            ),
+            selected: currentProductEventFilter == ProductFilter.day,
+            onSelected: (selected) {
+              setState(() {
+                currentProductEventFilter = ProductFilter.day;
+              });
+            },
+          ),
         ]),
       )
     ];
