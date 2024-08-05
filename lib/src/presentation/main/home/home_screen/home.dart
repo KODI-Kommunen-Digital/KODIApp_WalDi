@@ -1,7 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages, use_build_context_synchronously
 import 'dart:async';
 import 'dart:io';
-import 'package:connectivity/connectivity.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -27,7 +27,7 @@ import 'cubit/home_cubit.dart';
 import 'cubit/home_state.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -73,7 +73,9 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void connectivityInternet() {
-    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+    Connectivity()
+        .onConnectivityChanged
+        .listen((List<ConnectivityResult>? result) {
       AppBloc.homeCubit.onLoad(false);
     });
   }
@@ -250,7 +252,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         String? minAppVersion}) {
                       if (display != null) {
                         setState(() {
-                          latestAppStoreVersion = appStoreVersion ?? '1.12.1';
+                          latestAppStoreVersion = appStoreVersion ?? '1.13.0';
                         });
                       }
                     },
@@ -529,10 +531,9 @@ class _HomeScreenState extends State<HomeScreen> {
     String? searchRequest = await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return WillPopScope(
-          onWillPop: () async {
+        return PopScope(
+          onPopInvoked: (pop) async {
             Navigator.pop(context, searchTerm);
-            return false;
           },
           child: SimpleDialog(
               title: Center(
@@ -697,14 +698,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 style: Theme.of(context)
                     .textTheme
-                    .titleLarge!
+                    .titleMedium!
                     .copyWith(fontWeight: FontWeight.bold),
               ),
               Text(
                 Translate.of(context).translate(
                   'let_find_interesting',
                 ),
-                style: Theme.of(context).textTheme.bodyLarge,
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
             ],
           ),
@@ -787,14 +788,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 Translate.of(context).translate('recent_listings'),
                 style: Theme.of(context)
                     .textTheme
-                    .titleLarge!
+                    .titleMedium!
                     .copyWith(fontWeight: FontWeight.bold),
               ),
               Text(
                 Translate.of(context).translate(
                   'what_happen',
                 ),
-                style: Theme.of(context).textTheme.bodyLarge,
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
             ],
           ),

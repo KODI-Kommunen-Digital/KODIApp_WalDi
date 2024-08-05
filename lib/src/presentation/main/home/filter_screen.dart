@@ -36,22 +36,23 @@ class _FilterScreenState extends State<FilterScreen> {
         title: const Text("Filter"),
       ),
       body: SingleChildScrollView(
-        child: WillPopScope(
-          onWillPop: () async {
+        child: PopScope(
+          canPop: false,
+          onPopInvoked: (pop) async {
+            if (pop) return;
             Navigator.pop(
                 context,
                 MultiFilter(
-                    currentLocation: currentCity,
                     currentProductEventFilter: currentProductEventFilter,
                     currentListingStatus: currentListingStatus,
                     currentCategory: currentCategory,
+                    currentLocation: currentCity,
+                    hasLocationFilter: widget.multiFilter.hasLocationFilter,
                     hasProductEventFilter:
                         widget.multiFilter.hasProductEventFilter,
-                    hasLocationFilter: widget.multiFilter.hasLocationFilter,
                     hasListingStatusFilter:
                         widget.multiFilter.hasListingStatusFilter,
                     hasCategoryFilter: widget.multiFilter.hasCategoryFilter));
-            return false;
           },
           child: Column(
             children: [
@@ -105,7 +106,7 @@ class _FilterScreenState extends State<FilterScreen> {
                 });
               },
             );
-          }).toList(),
+          }),
         ]),
       )
     ];
@@ -233,6 +234,26 @@ class _FilterScreenState extends State<FilterScreen> {
               });
             },
           ),
+          ChoiceChip(
+            label: Wrap(
+              spacing: 4.0,
+              children: [
+                Text(Translate.of(context).translate('today')),
+                Icon(
+                  Icons.calendar_today,
+                  color: Theme.of(context).textTheme.bodyLarge?.color ??
+                      Colors.white,
+                  size: 18,
+                )
+              ],
+            ),
+            selected: currentProductEventFilter == ProductFilter.day,
+            onSelected: (selected) {
+              setState(() {
+                currentProductEventFilter = ProductFilter.day;
+              });
+            },
+          ),
         ]),
       )
     ];
@@ -273,7 +294,7 @@ class _FilterScreenState extends State<FilterScreen> {
                 });
               },
             );
-          }).toList(),
+          }),
         ]),
       )
     ];

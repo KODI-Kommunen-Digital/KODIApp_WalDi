@@ -27,35 +27,10 @@
             "categoryType" : "category"
         },
         {
-            "id": 5,
-            "name": "Produkte",
-            "noOfSubcategories": 0,                
-            "icon": "fas fa-cart-shopping",
-            "color": "#4a90a4",
-            "categoryType" : "category"
-        },
-        {
             "id": 6,
             "name": "Biete/Suche",
             "noOfSubcategories": 0,
             "icon": "fas fa-magnifying-glass",
-            "color": "#58d68d",
-            "categoryType" : "category"
-        },
-        {
-            "id": 7,
-            "name": "Bürgerinfo",
-            "noOfSubcategories": 0,                
-            "icon": "fas fa-circle-info",
-            "color": "#fdc60a",
-            "categoryType" : "category"
-        },
-        
-        {
-            "id": 9,
-            "name": "Fundbüro",
-            "noOfSubcategories": 0,
-            "icon": "fas fa-search",
             "color": "#58d68d",
             "categoryType" : "category"
         },
@@ -65,22 +40,6 @@
             "noOfSubcategories": 0,
             "icon": "fas fa-briefcase",
             "color": "#fdc60a",
-            "categoryType" : "category"
-        },
-        {
-            "id": 11,
-            "name": "Mitfahrbank",
-            "noOfSubcategories": 0,
-            "icon": "fas fa-bus",
-            "color": "#ff8a65",
-            "categoryType" : "category"
-        },
-        {
-            "id": 12,
-            "name": "Angebote",
-            "noOfSubcategories": 0,
-            "icon": "fas fa-gift",
-            "color": "#6B2213",
             "categoryType" : "category"
         },
         {
@@ -102,6 +61,14 @@
         {
             "id": 15,
             "name": "Mitteilungsblatt",
+            "noOfSubcategories": 0,
+            "icon": "fas fa-newspaper",
+            "color": "#58d68d",
+            "categoryType" : "category"
+        },
+        {
+            "id": 16,
+            "name": "Amtliche Mitteilungen",
             "noOfSubcategories": 0,
             "icon": "fas fa-newspaper",
             "color": "#58d68d",

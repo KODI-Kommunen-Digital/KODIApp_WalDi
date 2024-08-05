@@ -103,13 +103,18 @@ class ListRepository {
     return null;
   }
 
-  Future<int> getCityId(cityName) async {
+  Future<List<int>> getCityIds(List<String> cityName) async {
     final response = await Api.requestSubmitCities();
+    cityName = cityName.toSet().toList();
     var jsonCategory = response.data;
-    final item = jsonCategory.firstWhere((item) => item['name'] == cityName);
-    final itemId = item['id'];
-    final cityId = itemId;
-    return cityId;
+    List<int> cityIds = [];
+    for (var city in cityName) {
+      final item = jsonCategory.firstWhere((item) => item['name'] == city);
+      final itemId = item['id'];
+      cityIds.add(itemId);
+    }
+
+    return cityIds;
   }
 
   static Future<bool> addWishList(int? userId, ProductModel items) async {
@@ -248,7 +253,7 @@ class ListRepository {
     String place,
     CategoryModel? country,
     CategoryModel? state,
-    String? city,
+    List<String>? city,
     int? statusId,
     int? sourceId,
     String address,
@@ -260,6 +265,7 @@ class ListRepository {
     String? expiryDate,
     String? startDate,
     String? endDate,
+    String? createdAt,
     TimeOfDay? expiryTime,
     int? timeless,
     TimeOfDay? startTime,
@@ -272,7 +278,7 @@ class ListRepository {
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
     final villageId = prefs.getKeyValue(Preferences.villageId, null);
     final userId = prefs.getKeyValue(Preferences.userId, '');
-    final cityId = await getCityId(city);
+    final cityId = await getCityIds(city ?? []);
     String? combinedStartDateTime;
     String? combinedEndDateTime;
     String? combinedExpiryDateTime;
@@ -341,23 +347,52 @@ class ListRepository {
       "longitude": 245.65, //dummy data
       "latitude": 22.456, //dummy data
       "villageId": villageId ?? 0,
-      "cityId": cityId,
+      "cityIds": cityId,
       "subcategoryId": subCategoryId,
       "expiryDate": combinedExpiryDateTime,
       "startDate": combinedStartDateTime,
       "endDate": combinedEndDateTime, "timeless": timeless
     };
-    final response =
-        await Api.requestSaveProduct(cityId, params, isImageChanged);
+    final response = await Api.requestSaveProduct(params, isImageChanged);
     if (response.success) {
       final prefs = await Preferences.openBox();
       FormData? pickedFile = prefs.getPickedFile();
-      final id = response.id;
+      final List<dynamic> responseData = response.data;
       var formData = FormData();
 
       if (pickedFile != null && pickedFile.files.isNotEmpty) {
         if (pickedFile.files[0].key == 'pdf') {
-          await Api.requestListingUploadMedia(id, cityId, pickedFile);
+          for (var listing in responseData) {
+            await editProduct(
+                listing['listingId'],
+                categoryId,
+                listing['cityId'],
+                title,
+                description,
+                place,
+                country,
+                state,
+                null,
+                statusId,
+                sourceId,
+                address,
+                zipcode,
+                phone,
+                email,
+                website,
+                status,
+                expiryDate,
+                startDate,
+                endDate,
+                createdAt,
+                price,
+                true,
+                expiryTime,
+                timeless,
+                startTime,
+                endTime,
+                imagesList);
+          }
         } else {
           if (imagesList!.isNotEmpty) {
             for (final image in imagesList) {
@@ -377,7 +412,37 @@ class ListRepository {
                 ),
               ));
             }
-            await Api.requestListingUploadMedia(id, cityId, formData);
+            for (var listing in responseData) {
+              await editProduct(
+                  listing['listingId'],
+                  categoryId,
+                  listing['cityId'],
+                  title,
+                  description,
+                  place,
+                  country,
+                  state,
+                  null,
+                  statusId,
+                  sourceId,
+                  address,
+                  zipcode,
+                  phone,
+                  email,
+                  website,
+                  status,
+                  expiryDate,
+                  startDate,
+                  endDate,
+                  createdAt,
+                  price,
+                  true,
+                  expiryTime,
+                  timeless,
+                  startTime,
+                  endTime,
+                  imagesList);
+            }
           }
         }
       }
@@ -516,7 +581,23 @@ class ListRepository {
       FormData? pickedFile = prefs.getPickedFile();
       // if (pickedFile!.files.isNotEmpty) {
       if (pickedFile?.files[0].key == 'pdf') {
-        await Api.requestListingUploadMedia(listingId, cityId, pickedFile);
+        var formData = FormData();
+
+        formData.files.add(MapEntry(
+          'pdf',
+          await MultipartFile.fromFile(
+            pickedFile!.files[0].value.filename!,
+            filename: pickedFile.files[0].value.filename!,
+            contentType:
+                MediaType('application', 'pdf'), // Set the correct content type
+          ),
+        ));
+
+        formData.fields.addAll(pickedFile.fields);
+
+        final result =
+            await Api.requestListingUploadMedia(listingId, cityId, formData);
+        logInfo(result);
       } else {
         if (isImageChanged) {
           var formData = FormData();
@@ -565,7 +646,9 @@ class ListRepository {
                 ));
               }
             }
-            await Api.requestListingUploadMedia(listingId, cityId, formData);
+            final result = await Api.requestListingUploadMedia(
+                listingId, cityId, formData);
+            logInfo(result);
           }
           // if (pickedFile!.files.isNotEmpty) {
           //   await Api.requestListingUploadMedia(listingId, cityId, pickedFile);

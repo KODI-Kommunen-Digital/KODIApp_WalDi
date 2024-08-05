@@ -10,10 +10,10 @@ class HomeSwipe extends StatelessWidget {
   final String? images;
 
   const HomeSwipe({
-    Key? key,
+    super.key,
     this.images,
     required this.height,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +67,7 @@ class HomeSwipe extends StatelessWidget {
     }
 
     return Container(
-      color: Theme.of(context).colorScheme.background,
+      color: Theme.of(context).colorScheme.surface,
       child: AppPlaceholder(
         child: Container(
           margin: const EdgeInsets.only(bottom: 2),

@@ -227,8 +227,9 @@ class Api {
 
   ///Save Product
   static Future<ResultApiModel> requestSaveProduct(
-      cityId, params, isImageChanged) async {
-    final filePath = '/cities/$cityId/listings';
+      params, isImageChanged) async {
+    //final filePath = '/cities/$cityId/listings';
+    const filePath = '/listings';
     final result = await httpManager.post(
       url: filePath,
       data: params,
@@ -338,7 +339,7 @@ class Api {
     return ResultApiModel.fromJson(convertResponse);
   }
 
-  static Future<void> requestListingUploadMedia(
+  static Future<dynamic> requestListingUploadMedia(
       listingId, cityId, pickedFile) async {
     var filePath = '';
     if (pickedFile?.files.length != 0) {
@@ -349,10 +350,11 @@ class Api {
         filePath = '/cities/$cityId/listings/$listingId/imageUpload';
       }
 
-      await httpManager.post(
+      final result = await httpManager.post(
         url: filePath,
         formData: pickedFile,
       );
+      return result;
     }
   }
 

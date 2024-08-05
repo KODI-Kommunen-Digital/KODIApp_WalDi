@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class AppTextInput extends StatefulWidget {
@@ -21,9 +22,10 @@ class AppTextInput extends StatefulWidget {
   final int? maxLength;
   final bool readOnly;
   final bool hasDelete;
+  final MaxLengthEnforcement maxLengthEnforcement;
 
   const AppTextInput(
-      {Key? key,
+      {super.key,
       this.hintText,
       this.controller,
       this.focusNode,
@@ -41,8 +43,8 @@ class AppTextInput extends StatefulWidget {
       this.maxLength,
       this.readOnly = false,
       this.hasDelete = true,
-      this.autofillHint})
-      : super(key: key);
+      this.autofillHint,
+      this.maxLengthEnforcement = MaxLengthEnforcement.enforced});
 
   @override
   State<AppTextInput> createState() => _AppTextInputState();
@@ -162,6 +164,9 @@ class _AppTextInputState extends State<AppTextInput> {
                   textInputAction: widget.textInputAction,
                   maxLines: widget.maxLines,
                   maxLength: widget.maxLength,
+                  maxLengthEnforcement: (widget.maxLength != null)
+                      ? widget.maxLengthEnforcement
+                      : null,
                   decoration: InputDecoration(
                     counterText: "",
                     hintText: widget.hintText,

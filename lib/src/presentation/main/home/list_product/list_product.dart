@@ -24,8 +24,7 @@ import 'cubit/cubit.dart';
 class ListProductScreen extends StatefulWidget {
   final Map<String, dynamic> arguments;
 
-  const ListProductScreen({Key? key, required this.arguments})
-      : super(key: key);
+  const ListProductScreen({super.key, required this.arguments});
 
   @override
   State<ListProductScreen> createState() => _ListProductScreenState();
@@ -54,7 +53,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
         .onLoad(selectedFilter?.currentLocation ?? widget.arguments['id']);
   }
 
-  MultiFilter whatCanFilter(bool isEvent) {
+  MultiFilter whatCanFilter(bool isEvent, int cityId) {
     if (isCity) {
       return MultiFilter(
           hasCategoryFilter: true,
@@ -67,37 +66,38 @@ class _ListProductScreenState extends State<ListProductScreen> {
           hasProductEventFilter: true,
           currentProductEventFilter: selectedFilter?.currentProductEventFilter,
           hasLocationFilter: true,
-          currentLocation:
-              selectedFilter?.currentLocation ?? widget.arguments['id'],
+          currentLocation: selectedFilter?.currentLocation ?? cityId,
           cities: AppBloc.discoveryCubit.location);
     } else {
       return MultiFilter(
           hasLocationFilter: true,
-          currentLocation:
-              selectedFilter?.currentLocation ?? widget.arguments['id'],
+          currentLocation: selectedFilter?.currentLocation ?? cityId,
           cities: AppBloc.discoveryCubit.location);
     }
   }
 
-  void _updateSelectedFilter(MultiFilter? filter) {
+  void _updateSelectedFilter(MultiFilter? filter) async {
     selectedFilter = filter;
     final loadedList = context.read<ListCubit>().getLoadedList();
-    setState(() {
-      if (filter?.hasProductEventFilter ?? false) {
+    if (filter?.hasProductEventFilter ?? false) {
+      await loadListingsList();
+      if (filter?.currentProductEventFilter != null) {
         context.read<ListCubit>().onDateProductFilter(
             filter?.currentProductEventFilter,
             loadedList,
             filter?.hasLocationFilter ?? false,
-            filter?.currentLocation);
-      } else if (filter?.hasLocationFilter ?? false) {
-        loadListingsList();
+            filter?.currentLocation,
+            true);
       }
-      if (filter?.hasCategoryFilter ?? false) {
-        context.read<ListCubit>().setCategoryFilter(
-            filter?.currentCategory ?? 0,
-            selectedFilter?.currentLocation ?? widget.arguments['id']);
-      }
-    });
+    } else if (filter?.hasLocationFilter ?? false) {
+      await context.read<ListCubit>().setCity(filter!.currentLocation ?? 0);
+      loadListingsList();
+    }
+    if (filter?.hasCategoryFilter ?? false) {
+      context.read<ListCubit>().setCategoryFilter(filter?.currentCategory ?? 0,
+          selectedFilter?.currentLocation ?? widget.arguments['id']);
+    }
+    setState(() {});
   }
 
   @override
@@ -121,19 +121,20 @@ class _ListProductScreenState extends State<ListProductScreen> {
                     }
                   }),
           actions: [
-            FutureBuilder<bool?>(
-              future: context.read<ListCubit>().categoryPreferencesCall(),
+            FutureBuilder<List<int>>(
+              future: context.read<ListCubit>().getIds(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const CircularProgressIndicator.adaptive();
                 } else if (snapshot.hasError) {
                   return Container();
                 } else {
-                  bool isEvent = snapshot.data ?? false;
+                  bool isEvent = snapshot.data!.first == 3;
+                  int cityId = snapshot.data!.last;
                   return Row(
                     children: [
                       AppFilterButton(
-                          multiFilter: whatCanFilter(isEvent),
+                          multiFilter: whatCanFilter(isEvent, cityId),
                           filterCallBack: (filter) {
                             _updateSelectedFilter(filter);
                           }),
@@ -162,6 +163,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
             loaded: (list, listCity) => ListLoaded(
               list: list,
               listCity: listCity,
+              filter: selectedFilter,
               selectedId:
                   selectedFilter?.currentLocation ?? widget.arguments['id'],
             ),
@@ -171,6 +173,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
                   listCity: listCity,
                   selectedId:
                       selectedFilter?.currentLocation ?? widget.arguments['id'],
+                  filter: selectedFilter,
                   updated: true);
             },
             error: (e) => ErrorWidget('Failed to load listings.'),
@@ -198,10 +201,9 @@ class _ListProductScreenState extends State<ListProductScreen> {
     String? searchRequest = await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return WillPopScope(
-          onWillPop: () async {
+        return PopScope(
+          onPopInvoked: (pop) async {
             Navigator.pop(context, context.read<ListCubit>().searchTerm);
-            return false;
           },
           child: SimpleDialog(
               title: Center(
@@ -246,7 +248,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
 }
 
 class ListLoading extends StatelessWidget {
-  const ListLoading({Key? key}) : super(key: key);
+  const ListLoading({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -261,14 +263,15 @@ class ListLoaded extends StatefulWidget {
   final List listCity;
   final int selectedId;
   final bool updated;
+  final MultiFilter? filter;
 
   const ListLoaded(
-      {Key? key,
+      {super.key,
       required this.list,
       required this.selectedId,
       required this.listCity,
-      this.updated = false})
-      : super(key: key);
+      this.filter,
+      this.updated = false});
 
   @override
   State<ListLoaded> createState() => _ListLoadedState();
@@ -309,17 +312,19 @@ class _ListLoadedState extends State<ListLoaded> {
           isLoadingMore = true;
           //previousScrollPosition = _scrollController.position.pixels;
         });
+        List<ProductModel>? newList;
         if (context.read<ListCubit>().isSearching) {
           context
               .read<ListCubit>()
               .searchListing(context.read<ListCubit>().searchTerm, false);
         } else {
-          list = await context
+          newList = await context
               .read<ListCubit>()
-              .newListings(++pageNo, widget.selectedId);
+              .newListings(++pageNo, widget.selectedId, widget.filter);
         }
         setState(() {
           isLoadingMore = false;
+          if (newList != null) list = newList;
         });
       }
     }
@@ -466,7 +471,7 @@ class _ListLoadedState extends State<ListLoaded> {
   }
 
   Widget _buildContent() {
-    list = widget.list;
+    list = context.read<ListCubit>().list;
     return BlocBuilder<ListCubit, ListState>(
       builder: (context, state) {
         if (_pageType == PageType.list) {
@@ -498,7 +503,7 @@ class _ListLoadedState extends State<ListLoaded> {
                     padding: const EdgeInsets.all(4.0),
                     child: Text(
                       Translate.of(context).translate('list_is_empty'),
-                      style: Theme.of(context).textTheme.bodyLarge,
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ),
                 ],

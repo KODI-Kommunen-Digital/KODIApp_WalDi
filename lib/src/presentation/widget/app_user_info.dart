@@ -14,12 +14,12 @@ class AppUserInfo extends StatelessWidget {
   final bool showDirectionIcon;
 
   const AppUserInfo({
-    Key? key,
+    super.key,
     this.user,
     this.onPressed,
     this.type = UserViewType.basic,
     required this.showDirectionIcon,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
