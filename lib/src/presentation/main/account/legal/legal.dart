@@ -5,7 +5,7 @@ import 'package:heidi/src/utils/translate.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LegalScreen extends StatefulWidget {
-  const LegalScreen({Key? key}) : super(key: key);
+  const LegalScreen({super.key});
 
   @override
   State<LegalScreen> createState() => _LegalScreenState();

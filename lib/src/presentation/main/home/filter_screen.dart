@@ -37,13 +37,17 @@ class _FilterScreenState extends State<FilterScreen> {
       ),
       body: SingleChildScrollView(
         child: PopScope(
+          canPop: false,
           onPopInvoked: (pop) async {
+            if (pop) return;
             Navigator.pop(
                 context,
                 MultiFilter(
                     currentProductEventFilter: currentProductEventFilter,
                     currentListingStatus: currentListingStatus,
                     currentCategory: currentCategory,
+                    currentLocation: currentCity,
+                    hasLocationFilter: widget.multiFilter.hasLocationFilter,
                     hasProductEventFilter:
                         widget.multiFilter.hasProductEventFilter,
                     hasListingStatusFilter:
@@ -102,7 +106,7 @@ class _FilterScreenState extends State<FilterScreen> {
                 });
               },
             );
-          }).toList(),
+          }),
         ]),
       )
     ];
@@ -230,6 +234,26 @@ class _FilterScreenState extends State<FilterScreen> {
               });
             },
           ),
+          ChoiceChip(
+            label: Wrap(
+              spacing: 4.0,
+              children: [
+                Text(Translate.of(context).translate('today')),
+                Icon(
+                  Icons.calendar_today,
+                  color: Theme.of(context).textTheme.bodyLarge?.color ??
+                      Colors.white,
+                  size: 18,
+                )
+              ],
+            ),
+            selected: currentProductEventFilter == ProductFilter.day,
+            onSelected: (selected) {
+              setState(() {
+                currentProductEventFilter = ProductFilter.day;
+              });
+            },
+          ),
         ]),
       )
     ];
@@ -270,7 +294,7 @@ class _FilterScreenState extends State<FilterScreen> {
                 });
               },
             );
-          }).toList(),
+          }),
         ]),
       )
     ];

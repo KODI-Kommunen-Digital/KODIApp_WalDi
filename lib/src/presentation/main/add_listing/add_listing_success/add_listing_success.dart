@@ -4,7 +4,7 @@ import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class AddListingSuccessScreen extends StatefulWidget {
-  const AddListingSuccessScreen({Key? key}) : super(key: key);
+  const AddListingSuccessScreen({super.key});
 
   @override
   State<AddListingSuccessScreen> createState() =>

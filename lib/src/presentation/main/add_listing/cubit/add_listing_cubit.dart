@@ -9,12 +9,12 @@ import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/presentation/main/add_listing/cubit/add_listing_state.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
-import 'package:multiple_images_picker/multiple_images_picker.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 class AddListingCubit extends Cubit<AddListingState> {
   final ListRepository _repo;
-  List<Asset> selectedAssets = [];
+  List<XFile> selectedAssets = [];
 
   AddListingCubit(this._repo) : super(const AddListingState.loaded());
 
@@ -218,7 +218,7 @@ class AddListingCubit extends Cubit<AddListingState> {
     selectedAssets.clear();
   }
 
-  List<Asset> getSelectedAssets() {
+  List<XFile> getSelectedAssets() {
     return selectedAssets;
   }
 

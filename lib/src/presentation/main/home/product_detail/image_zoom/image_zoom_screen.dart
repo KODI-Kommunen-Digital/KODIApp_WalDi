@@ -12,11 +12,10 @@ class ImageZoomScreen extends StatefulWidget {
   final int sourceId;
 
   const ImageZoomScreen(
-      {Key? key,
+      {super.key,
       required this.imageList,
       required this.pdf,
-      required this.sourceId})
-      : super(key: key);
+      required this.sourceId});
 
   @override
   State<ImageZoomScreen> createState() => _ImageZoomScreenState();

@@ -44,7 +44,7 @@ class ProfileScreen extends StatelessWidget {
 }
 
 class ProfileLoading extends StatelessWidget {
-  const ProfileLoading({Key? key}) : super(key: key);
+  const ProfileLoading({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -59,8 +59,7 @@ class ProfileLoaded extends StatefulWidget {
   final List<ProductModel> userListings;
   final bool isEditable;
 
-  const ProfileLoaded(this.user, this.userListings, this.isEditable, {Key? key})
-      : super(key: key);
+  const ProfileLoaded(this.user, this.userListings, this.isEditable, {super.key});
 
   @override
   State<ProfileLoaded> createState() => _ProfileLoadedState();

@@ -14,14 +14,13 @@ import 'package:path_provider/path_provider.dart';
 
 class AppProductItem extends StatelessWidget {
   const AppProductItem(
-      {Key? key,
+      {super.key,
       this.item,
       this.onPressed,
       required this.type,
       this.trailing,
       required this.isRefreshLoader,
-      this.cityName})
-      : super(key: key);
+      this.cityName});
 
   final ProductModel? item;
   final ProductViewType type;
@@ -127,7 +126,7 @@ class AppProductItem extends StatelessWidget {
                       maxLines: 2,
                       style: Theme.of(context)
                           .textTheme
-                          .bodyLarge!
+                          .bodyMedium!
                           .copyWith(fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 2),
@@ -199,6 +198,9 @@ class AppProductItem extends StatelessWidget {
                           ),
                         ),
                       ),
+                    ),
+                    const SizedBox(
+                      height: 10,
                     ),
                     if (item?.sourceId == 3)
                       Text(
@@ -475,6 +477,9 @@ class AppProductItem extends StatelessWidget {
                               Theme.of(context).textTheme.bodySmall!.copyWith(
                                     fontWeight: FontWeight.bold,
                                   ),
+                        ),
+                        const SizedBox(
+                          height: 5,
                         ),
                         if (item?.sourceId == 3)
                           Text(

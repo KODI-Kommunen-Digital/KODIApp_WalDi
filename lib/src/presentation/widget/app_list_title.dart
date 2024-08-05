@@ -9,14 +9,14 @@ class AppListTitle extends StatelessWidget {
   final bool border;
 
   const AppListTitle({
-    Key? key,
+    super.key,
     required this.title,
     this.subtitle,
     this.leading,
     this.trailing,
     this.onPressed,
     this.border = true,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -8,13 +8,13 @@ class AppPickerItem extends StatelessWidget {
   final VoidCallback onPressed;
 
   const AppPickerItem({
-    Key? key,
+    super.key,
     required this.title,
     this.value,
     this.leading,
     this.loading = false,
     required this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
