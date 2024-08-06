@@ -25,8 +25,13 @@ class ListCubit extends Cubit<ListState> {
   List<ProductModel> filteredList = [];
   bool isSearching = false;
   String? searchTerm;
+  MultiFilter? multiFilter;
 
-  Future<void> onLoad(cityId) async {
+  Future<void> onLoad(cityId, MultiFilter? filter, {isUpdate = false}) async {
+    if(filter != null) {
+      emit(const ListState.loading());
+    }
+    multiFilter = multiFilter;
     pageNo = 1;
     final prefs = await Preferences.openBox();
     final categoryId = prefs.getKeyValue(Preferences.categoryId, 0);
@@ -37,12 +42,15 @@ class ListCubit extends Cubit<ListState> {
       type: type,
       pageNo: pageNo,
       cityId: cityId,
+      currentEventFilter: filter?.currentProductEventFilter
     );
     if (result != null) {
       list = result[0];
       pagination = result[1];
       listLoaded = list;
-      emit(ListStateLoaded(list, listCity));
+      (isUpdate)
+      ? emit(ListStateUpdated(list, listCity))
+      : emit(ListStateLoaded(list, listCity));
     }
   }
 
@@ -55,7 +63,7 @@ class ListCubit extends Cubit<ListState> {
       prefs.setKeyValue(Preferences.categoryId, filter);
     }
     if (cityId != null) {
-      onLoad(cityId);
+      onLoad(cityId, multiFilter);
     }
   }
 
@@ -76,20 +84,12 @@ class ListCubit extends Cubit<ListState> {
       type: type,
       pageNo: pageNo,
       cityId: cityId,
+        currentEventFilter: filter?.currentProductEventFilter
     );
 
     final listUpdated = result?[0];
     if (listUpdated.isNotEmpty) {
-      List<ProductModel>? filteredList;
-      if (filter != null && filter.hasProductEventFilter) {
-        filteredList = onDateProductFilter(
-            filter.currentProductEventFilter,
-            listUpdated,
-            filter.hasLocationFilter,
-            filter.currentLocation,
-            false);
-      }
-      list.addAll(filteredList ?? listUpdated);
+      list.addAll(listUpdated);
     }
     return list;
   }
@@ -160,89 +160,7 @@ class ListCubit extends Cubit<ListState> {
     isSearching = true;
     searchTerm = "";
     pageNo = 0;
-    onLoad(cityId);
-  }
-
-  List<ProductModel> onDateProductFilter(
-      ProductFilter? type,
-      List<ProductModel> loadedList,
-      bool filterLocation,
-      int? currentCity,
-      bool initial) {
-    final currentDate = DateTime.now();
-    if (type == ProductFilter.month) {
-      filteredList = loadedList.where((product) {
-        final startDate = _parseDate(product.startDate);
-        if (startDate != null) {
-          final startMonth = startDate.month;
-          final currentMonth = currentDate.month;
-          if (filterLocation && (currentCity ?? 0) != 0) {
-            return (startMonth == currentMonth) &&
-                (product.cityId == currentCity);
-          } else {
-            return startMonth == currentMonth;
-          }
-        }
-        return false;
-      }).toList();
-    } else if (type == ProductFilter.week) {
-      filteredList = loadedList.where((product) {
-        final startDate = _parseDate(product.startDate);
-        if (startDate != null) {
-          final startWeek = _getWeekNumber(startDate);
-          final currentWeek = _getWeekNumber(currentDate);
-          if (filterLocation && (currentCity ?? 0) != 0) {
-            return (startWeek == currentWeek) &&
-                (product.cityId == currentCity);
-          } else {
-            return startWeek == currentWeek;
-          }
-        }
-        return false;
-      }).toList();
-    } else if (type == ProductFilter.day) {
-      filteredList = loadedList.where((product) {
-        final startDate = _parseDate(product.startDate);
-        if (startDate != null) {
-          final startDay = _getDayNumber(startDate);
-          final currentDay = _getDayNumber(currentDate) - 1;
-          if (filterLocation && (currentCity ?? 0) != 0) {
-            return (startDay == currentDay) && (product.cityId == currentCity);
-          } else {
-            return startDay == currentDay;
-          }
-        }
-        return false;
-      }).toList();
-    } else if (type == null && filterLocation && (currentCity ?? 0) != 0) {
-      filteredList = loadedList.where((product) {
-        return product.cityId == currentCity;
-      }).toList();
-    }
-    if (initial) {
-      list = filteredList;
-      emit(ListStateUpdated(filteredList, listCity));
-    }
-    return filteredList;
-  }
-
-  DateTime? _parseDate(String dateTimeString) {
-    try {
-      final dateAndTimeParts = dateTimeString.split(' ');
-      if (dateAndTimeParts.isNotEmpty) {
-        final datePart = dateAndTimeParts[0];
-        final dateParts = datePart.split('.');
-        if (dateParts.length == 3) {
-          final day = int.parse(dateParts[0]);
-          final month = int.parse(dateParts[1]);
-          final year = int.parse(dateParts[2]);
-          return DateTime(year, month, day);
-        }
-      }
-    } catch (e) {
-      logError("Error parsing date: $dateTimeString");
-    }
-    return null;
+    onLoad(cityId, multiFilter);
   }
 
   Future<List?> getCityList() async {
@@ -266,18 +184,6 @@ class ListCubit extends Cubit<ListState> {
       return city["name"];
     }
     return "";
-  }
-
-  int _getWeekNumber(DateTime date) {
-    final startOfYear = DateTime(date.year, 1, 1);
-    final daysSinceStartOfYear = date.difference(startOfYear).inDays;
-    return (daysSinceStartOfYear / 7).ceil();
-  }
-
-  int _getDayNumber(DateTime date) {
-    final startOfYear = DateTime(date.year, 1, 1);
-    final daysSinceStartOfYear = date.difference(startOfYear).inDays;
-    return daysSinceStartOfYear;
   }
 
   Future<List<int>> getIds() async {

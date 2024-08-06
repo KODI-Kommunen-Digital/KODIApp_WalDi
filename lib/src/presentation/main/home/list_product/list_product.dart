@@ -41,16 +41,16 @@ class _ListProductScreenState extends State<ListProductScreen> {
   void initState() {
     super.initState();
     isCity = widget.arguments['title'] != '';
-    loadListingsList();
+    loadListingsList(false);
   }
 
-  Future<void> loadListingsList() async {
+  Future<void> loadListingsList(bool isUpdate) async {
     if (isCity) {
       await context.read<ListCubit>().setCategoryFilter(0, null);
     }
     await context
         .read<ListCubit>()
-        .onLoad(selectedFilter?.currentLocation ?? widget.arguments['id']);
+        .onLoad(selectedFilter?.currentLocation ?? widget.arguments['id'], selectedFilter, isUpdate: isUpdate);
   }
 
   MultiFilter whatCanFilter(bool isEvent, int cityId) {
@@ -78,20 +78,14 @@ class _ListProductScreenState extends State<ListProductScreen> {
 
   void _updateSelectedFilter(MultiFilter? filter) async {
     selectedFilter = filter;
-    final loadedList = context.read<ListCubit>().getLoadedList();
     if (filter?.hasProductEventFilter ?? false) {
-      await loadListingsList();
       if (filter?.currentProductEventFilter != null) {
-        context.read<ListCubit>().onDateProductFilter(
-            filter?.currentProductEventFilter,
-            loadedList,
-            filter?.hasLocationFilter ?? false,
-            filter?.currentLocation,
-            true);
+        loadListingsList(true);
       }
-    } else if (filter?.hasLocationFilter ?? false) {
+    }
+    if (filter?.hasLocationFilter ?? false) {
       await context.read<ListCubit>().setCity(filter!.currentLocation ?? 0);
-      loadListingsList();
+      loadListingsList(true);
     }
     if (filter?.hasCategoryFilter ?? false) {
       context.read<ListCubit>().setCategoryFilter(filter?.currentCategory ?? 0,
@@ -345,7 +339,7 @@ class _ListLoadedState extends State<ListLoaded> {
     setState(() {
       isLoading = true;
     });
-    await context.read<ListCubit>().onLoad(widget.selectedId);
+    await context.read<ListCubit>().onLoad(widget.selectedId, widget.filter);
     setState(() {
       isLoading = false;
     });
