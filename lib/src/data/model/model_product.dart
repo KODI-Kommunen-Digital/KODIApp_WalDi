@@ -158,6 +158,8 @@ class ProductModel {
     String priceMax = '';
     int? timeless;
     String priceDisplay = '';
+    String imageUrl =
+        'admin/News/Defaultimage${json['id'].toString().substring(json['id'].toString().length - 1)}.png';
 
     if (json['author'] != null) {
       author = UserModel.fromJson(json['author']);
@@ -243,13 +245,36 @@ class ProductModel {
       priceDisplay = json['booking_price_display'];
     }
 
+    if (json['logo'] != null) {
+      var image = json['logo'];
+      if (image is List<dynamic> && json['logo'].isNotEmpty) {
+        image = json['logo'][0]?.toString();
+      } else {
+        image = json['logo']?.toString();
+      }
+      bool isEcmapsDomain = image.startsWith('img.ecmaps.de/remote/.jpg?');
+      bool isNaN = image ==
+          'https://unsa1heidi.obs.eu-de.otc.t-systems.com/admin/eatOrDrink/DefaultimageNaN.png';
+
+      if (isEcmapsDomain) {
+        final urlRegex = RegExp(r"https.*\.(jpg|png)");
+        final match = urlRegex.firstMatch(image);
+        final extractedUrl = match?.group(0);
+        if (extractedUrl != null) {
+          final parsedUrl =
+          extractedUrl.replaceAll("%3A", ":").replaceAll("%2F", "/");
+          imageUrl = parsedUrl;
+        }
+      } else if (!isNaN) {
+        imageUrl = image;
+      }
+    }
+
     return ProductModel(
       id: json['id'],
       userId: json['userId'] ?? 0,
       title: json['title'] ?? '',
-      image: (json['logo'] is List<dynamic> && json['logo'].isNotEmpty)
-          ? json['logo'][0]?.toString() ?? 'admin/News.jpeg'
-          : (json['logo']?.toString() ?? 'admin/News.jpeg'),
+      image: imageUrl,
       videoURL: videoURL,
       category: category ?? '',
       expiryDate: expiryDate,
@@ -387,10 +412,36 @@ class ImageListModel {
   ImageListModel({this.id, this.imageOrder, this.listingId, this.logo});
 
   ImageListModel.fromJson(Map<String, dynamic> json) {
+    String imageUrl = '';
+
+    if (json['logo'] != null) {
+      var image = json['logo'];
+      if (image is List<dynamic> && json['logo'].isNotEmpty) {
+        image = json['logo'][0]?.toString();
+      } else {
+        image = json['logo']?.toString();
+      }
+      bool isEcmapsDomain = image.startsWith('img.ecmaps.de/remote/.jpg?');
+      bool isNaN = image ==
+          'https://unsa1heidi.obs.eu-de.otc.t-systems.com/admin/eatOrDrink/DefaultimageNaN.png';
+
+      if (isEcmapsDomain) {
+        final urlRegex = RegExp(r"https.*\.(jpg|png)");
+        final match = urlRegex.firstMatch(image);
+        final extractedUrl = match?.group(0);
+        if (extractedUrl != null) {
+          final parsedUrl =
+          extractedUrl.replaceAll("%3A", ":").replaceAll("%2F", "/");
+          imageUrl = parsedUrl;
+        }
+      } else if (!isNaN) {
+        imageUrl = image;
+      }
+    }
     id = json['id'];
     imageOrder = json['imageOrder'];
     listingId = json['listingId'];
-    logo = json['logo'];
+    logo = imageUrl;
   }
 
   Map<String, dynamic> toJson() {
