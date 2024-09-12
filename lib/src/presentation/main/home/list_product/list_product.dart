@@ -48,9 +48,10 @@ class _ListProductScreenState extends State<ListProductScreen> {
     if (isCity) {
       await context.read<ListCubit>().setCategoryFilter(0, null);
     }
-    await context
-        .read<ListCubit>()
-        .onLoad(selectedFilter?.currentLocation ?? widget.arguments['id'], selectedFilter, isUpdate: isUpdate);
+    await context.read<ListCubit>().onLoad(
+        selectedFilter?.currentLocation ?? widget.arguments['id'],
+        selectedFilter,
+        isUpdate: isUpdate);
   }
 
   MultiFilter whatCanFilter(bool isEvent, int cityId) {
@@ -196,7 +197,8 @@ class _ListProductScreenState extends State<ListProductScreen> {
       context: context,
       builder: (BuildContext context) {
         return PopScope(
-          onPopInvoked: (pop) async {
+          onPopInvokedWithResult: (bool didPop, dynamic result) async {
+            if (didPop) return;
             Navigator.pop(context, context.read<ListCubit>().searchTerm);
           },
           child: SimpleDialog(

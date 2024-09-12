@@ -126,7 +126,7 @@ class AppProductItem extends StatelessWidget {
                       maxLines: 2,
                       style: Theme.of(context)
                           .textTheme
-                          .bodyMedium!
+                          .bodySmall!
                           .copyWith(fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 2),
@@ -399,11 +399,11 @@ class AppProductItem extends StatelessWidget {
                             imageBuilder: (context, imageProvider) {
                               return Container(
                                 width: 120,
-                                height: 140,
+                                height: 120,
                                 decoration: BoxDecoration(
                                   image: DecorationImage(
                                     image: imageProvider,
-                                    fit: BoxFit.fitHeight,
+                                    fit: BoxFit.fill,
                                   ),
                                 ),
                               );

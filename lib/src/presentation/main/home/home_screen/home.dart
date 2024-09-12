@@ -532,7 +532,8 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       builder: (BuildContext context) {
         return PopScope(
-          onPopInvoked: (pop) async {
+          onPopInvokedWithResult: (bool didPop, dynamic result) async {
+            if (didPop) return;
             Navigator.pop(context, searchTerm);
           },
           child: SimpleDialog(
