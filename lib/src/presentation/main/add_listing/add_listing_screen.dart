@@ -400,6 +400,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       initialDate: initialDate,
       firstDate: firstDate,
       lastDate: lastDate,
+      keyboardType: TextInputType.text
     );
     if (picked != null && mounted) {
       setState(() {
